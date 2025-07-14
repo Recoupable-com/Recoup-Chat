@@ -40,6 +40,7 @@ export const createArtistSegments = async ({
     }
 
     // Step 3: Generate segment names using AI
+    console.log("fans", fans);
     const segments = await generateSegments({ fans, prompt });
     console.log("segments", segments);
     if (segments.length === 0) {
