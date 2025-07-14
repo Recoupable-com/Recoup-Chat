@@ -15,7 +15,7 @@ const UserInfo = ({
     >
       {userData && (
         <button
-          className="flex gap-2 items-center"
+          className="flex gap-2 items-center flex-1 hover:bg-accent border border-transparent hover:border-grey rounded-xl py-1 pl-1"
           type="button"
           onClick={toggleModal}
         >
