@@ -1,5 +1,5 @@
 import { generateObject } from "ai";
-import { anthropic } from "@ai-sdk/anthropic";
+import { google } from "@ai-sdk/google";
 import { z } from "zod";
 import { GOOGLE_GEMINI_MODEL } from "../consts";
 
@@ -16,7 +16,7 @@ const generateArray = async ({
   prompt: string;
 }): Promise<GenerateArrayResult[]> => {
   const result = await generateObject({
-    model: anthropic(GOOGLE_GEMINI_MODEL),
+    model: google(GOOGLE_GEMINI_MODEL),
     system,
     prompt,
     output: "array",
