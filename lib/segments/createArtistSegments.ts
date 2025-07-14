@@ -41,7 +41,7 @@ export const createArtistSegments = async ({
 
     // Step 3: Generate segment names using AI
     const segments = await generateSegments({ fans, prompt });
-    console.log("segments", segments);
+
     if (segments.length === 0) {
       return errorResponse("Failed to generate segment names");
     }
