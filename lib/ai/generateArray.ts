@@ -1,7 +1,7 @@
 import { generateObject } from "ai";
 import { anthropic } from "@ai-sdk/anthropic";
 import { z } from "zod";
-import { ANTHROPIC_MODEL } from "../consts";
+import { GOOGLE_GEMINI_MODEL } from "../consts";
 
 export interface GenerateArrayResult {
   segmentName: string;
@@ -16,7 +16,7 @@ const generateArray = async ({
   prompt: string;
 }): Promise<GenerateArrayResult[]> => {
   const result = await generateObject({
-    model: anthropic(ANTHROPIC_MODEL),
+    model: anthropic(GOOGLE_GEMINI_MODEL),
     system,
     prompt,
     output: "array",
