@@ -4,6 +4,8 @@ import { createArtistSegments } from "@/lib/segments/createArtistSegments";
 export async function POST(req: NextRequest) {
   try {
     const { artist_account_id, prompt } = await req.json();
+    console.log("artist_account_id", artist_account_id);
+    console.log("prompt", prompt);
     if (!artist_account_id || !prompt) {
       return NextResponse.json(
         { error: "artist_account_id and prompt are required" },
