@@ -24,8 +24,8 @@ const generateArray = async ({
       segmentName: z.string().describe("Segment name."),
       fans: z.array(z.string()).describe(
         `Array of fan_social_id included in the segment. 
-          Do not make this up.
-          Only use the actual fan_social_id from the fan data prompt input.`
+          Do not make these up.
+          Only use the actual fan_social_id provided in the fan data prompt input.`
       ),
     }),
   });
