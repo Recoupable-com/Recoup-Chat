@@ -15,7 +15,7 @@ export const generateSegments = async ({
 }: GenerateSegmentsParams): Promise<GenerateArrayResult[]> => {
   try {
     const analysisPrompt = getAnalysisPrompt({ fans, prompt });
-
+    console.log("analysisPrompt", analysisPrompt);
     const result = await generateArray({
       system: SEGMENT_SYSTEM_PROMPT,
       prompt: analysisPrompt,
