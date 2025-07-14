@@ -1,4 +1,5 @@
 import { GenerateSegmentsParams } from "./generateSegments";
+import { SEGMENT_FAN_SOCIAL_ID_PROMPT } from "../consts";
 
 const getAnalysisPrompt = ({ fans, prompt }: GenerateSegmentsParams) => {
   const fanCount = fans.length;
@@ -21,9 +22,7 @@ const getAnalysisPrompt = ({ fans, prompt }: GenerateSegmentsParams) => {
   Artist's specific prompt: ${prompt}
   
   Generate segment names that align with the artist's requirements and the fan data characteristics.
-  You'll also need to return an array of fan_social_id included in the segment. 
-  Do not make these up.
-  Only use the actual fan_social_id provided in the fan data prompt input.
+  ${SEGMENT_FAN_SOCIAL_ID_PROMPT}
   `;
   return analysisPrompt;
 };

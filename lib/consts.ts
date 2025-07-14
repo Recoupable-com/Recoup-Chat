@@ -1788,6 +1788,12 @@ export const SPOTIFY_DEEP_RESEARCH_REQUIREMENTS = `
   - album name
   `;
 
+export const SEGMENT_FAN_SOCIAL_ID_PROMPT = `
+  For each Segment Name return an array of fan_social_id included in the segment. 
+  Do not make these up.
+  Only use the actual fan_social_id provided in the fan data prompt input.
+`;
+
 export const SEGMENT_SYSTEM_PROMPT = `You are an expert music industry analyst specializing in fan segmentation. 
     Your task is to analyze fan data and generate meaningful segment names that would be useful for marketing and engagement strategies.
     
@@ -1799,4 +1805,7 @@ export const SEGMENT_SYSTEM_PROMPT = `You are an expert music industry analyst s
     - Consider factors like engagement frequency, recency, and intensity
     - Generate 5-10 segment names that cover different aspects of the fan base
     
-    The segment names should help artists and managers understand their audience better for targeted marketing campaigns.`;
+    The segment names should help artists and managers understand their audience better for targeted marketing campaigns.
+    
+    ${SEGMENT_FAN_SOCIAL_ID_PROMPT}
+    `;
