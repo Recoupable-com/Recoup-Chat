@@ -10,6 +10,7 @@ import { Loader, Plus } from "lucide-react";
 import useIsMobile from "@/hooks/useIsMobile";
 import { useUserProvider } from "@/providers/UserProvder";
 import { useSidebarExpansion } from "@/providers/SidebarExpansionContext";
+import { cn } from "@/lib/utils";
 
 const ArtistsSidebar = () => {
   const {
@@ -78,7 +79,11 @@ const ArtistsSidebar = () => {
         {renderArtistList()}
       </div>
       <button
-        className={`${menuExpanded ? "flex px-2 py-1 gap-2 text-sm items-center text-grey-dark-1" : "flex justify-center"} ${!isArtistSelected ? "relative z-50 brightness-125" : ""}`}
+        className={cn(
+          "flex transition-colors hover:bg-accent border border-transparent hover:border-grey-dark-1 rounded-md",
+          menuExpanded ? "px-2 py-1 gap-2 text-sm items-center text-grey-dark-1" : "justify-center",
+          !isArtistSelected && "relative z-50 brightness-125"
+        )}
         onClick={handleCreate}
         type="button"
         disabled={isCreatingArtist}
