@@ -13,10 +13,7 @@ const NoSegmentsFound = ({ refetch }: NoSegmentsFoundProps) => {
   return (
     <div className="text-lg text-center py-8 flex flex-col items-center gap-4">
       <div>No segments found for this artist.</div>
-      <Button
-        onClick={() => createSegments(undefined, refetch)}
-        disabled={loading}
-      >
+      <Button onClick={() => createSegments(refetch)} disabled={loading}>
         {loading && (
           <div className="inline-block animate-spin">
             <SpinnerIcon />
