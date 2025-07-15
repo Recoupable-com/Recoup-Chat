@@ -36,11 +36,12 @@ import getScheduledActions from "./scheduled_actions/getScheduledActions";
 import updateScheduledAction from "./scheduled_actions/updateScheduledActions";
 import deleteScheduledAction from "./scheduled_actions/deleteScheduledActions";
 import getSocialFans from "./getSocialFans";
-import createArtistSegments from "./createArtistSegments";
+import createSegments from "./createSegments";
 
 export async function getMcpTools() {
   const tools = {
     contact_team: contactTeam,
+    create_segments: createSegments,
     get_artist_segments: getArtistSegments,
     get_segment_fans: getSegmentFans,
     get_artist_socials: getArtistSocials,
@@ -78,7 +79,6 @@ export async function getMcpTools() {
     update_scheduled_action: updateScheduledAction,
     delete_scheduled_actions: deleteScheduledAction,
     get_social_fans: getSocialFans,
-    create_artist_segments: createArtistSegments,
   };
 
   return tools;

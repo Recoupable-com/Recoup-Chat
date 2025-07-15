@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import { createArtistSegments } from "@/lib/segments/createArtistSegments";
+import { createSegments } from "@/lib/segments/createSegments";
 
 export async function POST(req: NextRequest) {
   try {
@@ -10,15 +10,13 @@ export async function POST(req: NextRequest) {
         { status: 400 }
       );
     }
-    const result = await createArtistSegments({ artist_account_id, prompt });
+    const result = await createSegments({ artist_account_id, prompt });
     return NextResponse.json(result);
   } catch (error) {
     return NextResponse.json(
       {
         error:
-          error instanceof Error
-            ? error.message
-            : "Failed to create artist segments",
+          error instanceof Error ? error.message : "Failed to create segments",
       },
       { status: 500 }
     );
