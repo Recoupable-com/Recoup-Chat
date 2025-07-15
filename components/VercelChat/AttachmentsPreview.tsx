@@ -1,5 +1,6 @@
 import { useVercelChatContext } from "@/providers/VercelChatProvider";
 import { PreviewAttachment } from "./preview-attachment";
+import { PhotoProvider } from "react-photo-view";
 
 function AttachmentsPreview() {
     const { attachments, pendingAttachments, removeAttachment } = useVercelChatContext();
@@ -8,6 +9,7 @@ function AttachmentsPreview() {
 
     return (
         <div className="flex gap-2 mb-2 overflow-visible">
+            <PhotoProvider>
             {attachments.map((attachment, index) => (
                 <div key={index} className="relative group">
                     <PreviewAttachment
@@ -23,6 +25,7 @@ function AttachmentsPreview() {
                     </button>
                 </div>
             ))}
+            </PhotoProvider>
         </div>
     );
 }
