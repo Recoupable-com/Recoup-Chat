@@ -1,8 +1,8 @@
-import React, { useState } from "react";
+import React from "react";
 import { Button } from "@/components/ui/button";
 import { useArtistProvider } from "@/providers/ArtistProvider";
-import { toast } from "react-toastify";
 import { SpinnerIcon } from "@/components/VercelChat/icons";
+import { useCreateSegments } from "@/hooks/useCreateSegments";
 
 interface NoSegmentsFoundProps {
   refetch?: () => void;
@@ -10,62 +10,35 @@ interface NoSegmentsFoundProps {
 
 const NoSegmentsFound = ({ refetch }: NoSegmentsFoundProps) => {
   const { selectedArtist } = useArtistProvider();
-  const [loading, setLoading] = useState(false);
-
-  const handleCreateSegments = async () => {
-    if (!selectedArtist?.account_id) return;
-    const artist_account_id = selectedArtist.account_id;
-    const prompt = "Segment my fans";
-    setLoading(true);
-    try {
-      const response = await fetch("/api/segments/create", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ artist_account_id, prompt }),
-      });
-      const data = await response.json();
-      if (!response.ok || data.error) {
-        throw new Error(data.error || "Failed to generate segments");
-      }
-      toast.success("Segments generated successfully!");
-      if (refetch) refetch();
-    } catch (error) {
-      toast.error(
-        error instanceof Error ? error.message : "Failed to generate segments"
-      );
-      console.error(error);
-    } finally {
-      setLoading(false);
-    }
-  };
+  const { loading, createSegments } = useCreateSegments();
 
   return (
     <div className="text-lg text-center py-8 flex flex-col items-center gap-4">
-      <ul className="mb-4 text-left">
-        <li>
-          <input type="checkbox" checked={false} readOnly />{" "}
-          <span>Missing IG</span>
-        </li>
-        <li>
-          <input type="checkbox" checked={false} readOnly />{" "}
-          <span>Missing posts</span>
-        </li>
-        <li>
-          <input type="checkbox" checked={false} readOnly />{" "}
-          <span>Missing post comments</span>
-        </li>
-        <li>
-          <input type="checkbox" checked={false} readOnly />{" "}
-          <span>Missing fans</span>
-        </li>
-        <li>
-          <input type="checkbox" checked={false} readOnly />{" "}
-          <span>Missing segments</span>
-        </li>
+      <ul className="mb-4 text-left w-full max-w-xs">
+        {[
+          "Missing IG",
+          "Missing posts",
+          "Missing post comments",
+          "Missing fans",
+          "Missing segments",
+        ].map((item) => (
+          <li
+            key={item}
+            className="flex items-center space-x-3 p-2 rounded bg-gray-50 border border-gray-200 my-1 text-gray-800"
+          >
+            <span className="h-6 w-6 rounded-full bg-gray-200 flex items-center justify-center shrink-0 border border-gray-300">
+              {/* Empty status indicator, similar to GenericSuccess but no checkmark */}
+            </span>
+            <span className="font-medium text-sm">{item}</span>
+          </li>
+        ))}
       </ul>
       <div>No segments found for this artist.</div>
       {selectedArtist?.account_id && (
-        <Button onClick={handleCreateSegments} disabled={loading}>
+        <Button
+          onClick={() => createSegments(undefined, refetch)}
+          disabled={loading}
+        >
           {loading && (
             <div className="inline-block animate-spin">
               <SpinnerIcon />
