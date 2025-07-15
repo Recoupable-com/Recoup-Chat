@@ -22,7 +22,6 @@ export const PreviewAttachment = ({
               <PhotoView key={url} src={url}>
                 {/* eslint-disable-next-line @next/next/no-img-element */}
                 <img
-                  key={url}
                   src={url}
                   alt={name ?? "An image attachment"}
                   className="rounded-md size-full object-cover cursor-pointer"
