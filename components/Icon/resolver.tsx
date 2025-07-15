@@ -276,4 +276,8 @@ export const Icons = {
       />
     </svg>
   ),
+  CheckIcon: () => <span className="text-sm font-medium text-gray-600">✓</span>,
+  UncheckedIcon: () => (
+    <span className="h-6 w-6 rounded-full bg-gray-200 flex items-center justify-center shrink-0 border border-gray-300"></span>
+  ),
 };
