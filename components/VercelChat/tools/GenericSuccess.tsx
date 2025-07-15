@@ -1,3 +1,5 @@
+import { Icons } from "@/components/Icon/resolver";
+
 const GenericSuccess = ({
   image,
   name,
@@ -22,7 +24,7 @@ const GenericSuccess = ({
             className="h-full w-full object-cover"
           />
         ) : (
-          <span className="text-sm font-medium text-gray-600">✓</span>
+          <Icons.CheckIcon />
         )}
       </div>
 

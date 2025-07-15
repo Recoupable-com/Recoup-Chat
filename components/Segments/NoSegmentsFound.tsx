@@ -2,12 +2,15 @@ import React from "react";
 import { Button } from "@/components/ui/button";
 import { SpinnerIcon } from "@/components/VercelChat/icons";
 import { useCreateSegments } from "@/hooks/useCreateSegments";
+import { Icons } from "@/components/Icon/resolver";
+import { useArtistSocials } from "@/hooks/useArtistSocials";
 
 interface NoSegmentsFoundProps {
   refetch?: () => void;
 }
 
 const NoSegmentsFound = ({ refetch }: NoSegmentsFoundProps) => {
+  const { hasInstagram } = useArtistSocials();
   const { loading, createSegments } = useCreateSegments();
 
   return (
@@ -21,10 +24,14 @@ const NoSegmentsFound = ({ refetch }: NoSegmentsFoundProps) => {
         )}
         Generate Segments
       </Button>
-
       <ul className="mb-4 text-left w-full max-w-xs">
+        <li className="flex items-center space-x-3 p-2 rounded bg-gray-50 border border-gray-200 my-1 text-gray-800">
+          {hasInstagram ? <Icons.CheckIcon /> : <Icons.UncheckedIcon />}
+          <span className="font-medium text-sm">
+            {hasInstagram ? "Instagram Connected" : "Missing Instagram"}
+          </span>
+        </li>
         {[
-          "Missing IG",
           "Missing posts",
           "Missing post comments",
           "Missing fans",
@@ -34,9 +41,7 @@ const NoSegmentsFound = ({ refetch }: NoSegmentsFoundProps) => {
             key={item}
             className="flex items-center space-x-3 p-2 rounded bg-gray-50 border border-gray-200 my-1 text-gray-800"
           >
-            <span className="h-6 w-6 rounded-full bg-gray-200 flex items-center justify-center shrink-0 border border-gray-300">
-              {/* Empty status indicator, similar to GenericSuccess but no checkmark */}
-            </span>
+            <Icons.UncheckedIcon />
             <span className="font-medium text-sm">{item}</span>
           </li>
         ))}
