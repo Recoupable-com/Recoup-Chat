@@ -1,6 +1,8 @@
 import type { Attachment } from 'ai';
 import { Loader2, FileIcon } from 'lucide-react';
 import { PDFIcon } from "./icons";
+import { PhotoView } from "react-photo-view";
+import "react-photo-view/dist/react-photo-view.css";
 
 export const PreviewAttachment = ({
   attachment,
@@ -16,14 +18,16 @@ export const PreviewAttachment = ({
       <div className="w-16 h-16 bg-transparent rounded-xl relative flex flex-col items-center justify-center overflow-hidden">
         {contentType ? (
           <>
-            {contentType.startsWith('image') && (
-              // eslint-disable-next-line @next/next/no-img-element
-              <img
-                key={url}
-                src={url}
-                alt={name ?? 'An image attachment'}
-                className="rounded-md size-full object-cover"
-              />
+            {contentType.startsWith("image") && (
+              <PhotoView key={url} src={url}>
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img
+                  key={url}
+                  src={url}
+                  alt={name ?? "An image attachment"}
+                  className="rounded-md size-full object-cover cursor-pointer"
+                />
+              </PhotoView>
             )}
             {contentType === 'application/pdf' && (
               <div className="flex items-center justify-center bg-transparent">
