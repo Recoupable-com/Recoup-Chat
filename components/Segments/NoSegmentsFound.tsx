@@ -1,8 +1,8 @@
+import React, { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { useArtistProvider } from "@/providers/ArtistProvider";
 import { toast } from "react-toastify";
 import { SpinnerIcon } from "@/components/VercelChat/icons";
-import React from "react";
 
 interface NoSegmentsFoundProps {
   refetch?: () => void;
@@ -10,7 +10,7 @@ interface NoSegmentsFoundProps {
 
 const NoSegmentsFound = ({ refetch }: NoSegmentsFoundProps) => {
   const { selectedArtist } = useArtistProvider();
-  const [loading, setLoading] = React.useState(false);
+  const [loading, setLoading] = useState(false);
 
   const handleCreateSegments = async () => {
     if (!selectedArtist?.account_id) return;
@@ -41,6 +41,28 @@ const NoSegmentsFound = ({ refetch }: NoSegmentsFoundProps) => {
 
   return (
     <div className="text-lg text-center py-8 flex flex-col items-center gap-4">
+      <ul className="mb-4 text-left">
+        <li>
+          <input type="checkbox" checked={false} readOnly />{" "}
+          <span>Missing IG</span>
+        </li>
+        <li>
+          <input type="checkbox" checked={false} readOnly />{" "}
+          <span>Missing posts</span>
+        </li>
+        <li>
+          <input type="checkbox" checked={false} readOnly />{" "}
+          <span>Missing post comments</span>
+        </li>
+        <li>
+          <input type="checkbox" checked={false} readOnly />{" "}
+          <span>Missing fans</span>
+        </li>
+        <li>
+          <input type="checkbox" checked={false} readOnly />{" "}
+          <span>Missing segments</span>
+        </li>
+      </ul>
       <div>No segments found for this artist.</div>
       {selectedArtist?.account_id && (
         <Button onClick={handleCreateSegments} disabled={loading}>
