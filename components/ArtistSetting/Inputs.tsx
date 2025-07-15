@@ -2,6 +2,7 @@ import { useArtistProvider } from "@/providers/ArtistProvider";
 import Input from "../Input";
 import { Textarea } from "../ui/textarea";
 import { Label } from "../ui/label";
+import StandaloneYoutubeComponent from "./YoutubeAccount";
 
 const Inputs = () => {
   const {
@@ -19,10 +20,9 @@ const Inputs = () => {
     setTikTok,
     instagram,
     setInstagram,
-    youtube,
-    setYoutube,
     twitter,
     setTwitter,
+    editableArtist,
   } = useArtistProvider();
   return (
     <>
@@ -99,14 +99,7 @@ const Inputs = () => {
         />
       </div>
       <div className="col-span-6 space-y-1 md:space-y-2">
-        <Input
-          value={youtube}
-          onChange={(e) => setYoutube(e.target.value)}
-          label="YouTube"
-          id="youtube"
-          name="youtube"
-          hookToForm
-        />
+        <StandaloneYoutubeComponent artistAccountId={editableArtist?.account_id} />
       </div>
       <div className="col-span-6 space-y-1 md:space-y-2">
         <Input
