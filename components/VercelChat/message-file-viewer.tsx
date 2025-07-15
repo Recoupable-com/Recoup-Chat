@@ -22,7 +22,7 @@ const MessageFileViewer = ({
                 <img
                 src={attachment.url}
                 alt={attachment.name}
-                className="w-full h-full object-cover"
+                className="w-full h-full object-cover cursor-pointer"
               />
               </PhotoView>
             </div>
