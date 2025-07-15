@@ -15,7 +15,7 @@ interface CreateArtistSegmentsParams {
   prompt: string;
 }
 
-export const createArtistSegments = async ({
+export const createSegments = async ({
   artist_account_id,
   prompt,
 }: CreateArtistSegmentsParams) => {
