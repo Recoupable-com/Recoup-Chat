@@ -2,6 +2,7 @@ import { Attachment } from "@ai-sdk/ui-utils";
 import { PDFIcon } from "./icons";
 import { FileIcon } from "lucide-react";
 import { PhotoProvider, PhotoView } from "react-photo-view";
+import Link from "next/link";
 
 const MessageFileViewer = ({
   experimentalAttachment,
@@ -30,9 +31,11 @@ const MessageFileViewer = ({
         }
         if (attachment.contentType === "application/pdf") {
           return (
-            <div key={attachment.url} className="w-16 h-16 rounded-xl">
-              <PDFIcon key={attachment.url} />{" "}
+            <Link key={attachment.url} href={attachment.url} target="_blank" passHref>
+            <div className="w-16 h-16 rounded-xl">
+              <PDFIcon />
             </div>
+            </Link>
           );
         }
         return <FileIcon key={attachment.url} />;
