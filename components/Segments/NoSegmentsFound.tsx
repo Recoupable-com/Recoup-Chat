@@ -1,6 +1,5 @@
 import React from "react";
 import { Button } from "@/components/ui/button";
-import { useArtistProvider } from "@/providers/ArtistProvider";
 import { SpinnerIcon } from "@/components/VercelChat/icons";
 import { useCreateSegments } from "@/hooks/useCreateSegments";
 
@@ -9,11 +8,23 @@ interface NoSegmentsFoundProps {
 }
 
 const NoSegmentsFound = ({ refetch }: NoSegmentsFoundProps) => {
-  const { selectedArtist } = useArtistProvider();
   const { loading, createSegments } = useCreateSegments();
 
   return (
     <div className="text-lg text-center py-8 flex flex-col items-center gap-4">
+      <div>No segments found for this artist.</div>
+      <Button
+        onClick={() => createSegments(undefined, refetch)}
+        disabled={loading}
+      >
+        {loading && (
+          <div className="inline-block animate-spin">
+            <SpinnerIcon />
+          </div>
+        )}
+        Generate Segments
+      </Button>
+
       <ul className="mb-4 text-left w-full max-w-xs">
         {[
           "Missing IG",
@@ -33,20 +44,6 @@ const NoSegmentsFound = ({ refetch }: NoSegmentsFoundProps) => {
           </li>
         ))}
       </ul>
-      <div>No segments found for this artist.</div>
-      {selectedArtist?.account_id && (
-        <Button
-          onClick={() => createSegments(undefined, refetch)}
-          disabled={loading}
-        >
-          {loading && (
-            <div className="inline-block animate-spin">
-              <SpinnerIcon />
-            </div>
-          )}
-          Generate Segments
-        </Button>
-      )}
     </div>
   );
 };
