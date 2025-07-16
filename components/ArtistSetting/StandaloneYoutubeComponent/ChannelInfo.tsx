@@ -1,4 +1,3 @@
-import { Tooltip } from "@/components/common/Tooltip";
 import { cn } from "@/lib/utils";
 import formatFollowerCount from "@/lib/utils/formatFollowerCount";
 import { useQuery } from "@tanstack/react-query";
@@ -16,11 +15,6 @@ const ChannelInfo = ({ dense, artistAccountId }: { dense?: boolean; artistAccoun
   const channel = data?.channels?.[0];
 
   return (
-    <Tooltip
-      content={
-        channel ? `Connected to ${channel.title}` : "Connected to YouTube"
-      }
-    >
       <div className="flex flex-col gap-1 cursor-pointer">
         <label className={cn("text-sm", { hidden: dense })}>
           YouTube
@@ -65,7 +59,6 @@ const ChannelInfo = ({ dense, artistAccountId }: { dense?: boolean; artistAccoun
           )}
         </div>
       </div>
-    </Tooltip>
   );
 };
 
