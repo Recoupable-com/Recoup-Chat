@@ -1,4 +1,3 @@
-import { Tooltip } from "@/components/common/Tooltip";
 import { cn } from "@/lib/utils";
 import formatFollowerCount from "@/lib/utils/formatFollowerCount";
 import { useQuery } from "@tanstack/react-query";
