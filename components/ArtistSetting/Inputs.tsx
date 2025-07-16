@@ -100,7 +100,7 @@ const Inputs = () => {
         />
       </div>
       <div className="col-span-6 space-y-1 md:space-y-2 flex gap-2 items-center w-full relative">
-        <StandaloneYoutubeComponent artistAccountId={editableArtist?.account_id as string} />
+        <StandaloneYoutubeComponent artistAccountId={editableArtist?.account_id as string} hideArrow={true}/>
         <YoutubeLogoutButton artistAccountId={editableArtist?.account_id as string} />
       </div>
       <div className="col-span-6 space-y-1 md:space-y-2">
