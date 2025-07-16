@@ -1,5 +1,5 @@
 import { Button } from "@/components/ui/button";
-import { LogOut, XIcon } from "lucide-react";
+import { XIcon } from "lucide-react";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import useYoutubeStatus from "@/hooks/useYoutubeStatus";
 
