@@ -3,6 +3,7 @@ import Input from "../Input";
 import { Textarea } from "../ui/textarea";
 import { Label } from "../ui/label";
 import StandaloneYoutubeComponent from "./StandaloneYoutubeComponent";
+import YoutubeLogoutButton from "./StandaloneYoutubeComponent/YoutubeLogoutButton";
 
 const Inputs = () => {
   const {
@@ -98,8 +99,9 @@ const Inputs = () => {
           hookToForm
         />
       </div>
-      <div className="col-span-6 space-y-1 md:space-y-2">
+      <div className="col-span-6 space-y-1 md:space-y-2 flex gap-2 items-center w-full relative">
         <StandaloneYoutubeComponent artistAccountId={editableArtist?.account_id as string} />
+        <YoutubeLogoutButton artistAccountId={editableArtist?.account_id as string} />
       </div>
       <div className="col-span-6 space-y-1 md:space-y-2">
         <Input
