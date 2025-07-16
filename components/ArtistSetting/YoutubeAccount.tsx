@@ -27,7 +27,14 @@ const StandaloneYoutubeComponent = ({
           >
             YouTube
           </label>
-          <div className="flex items-center p-2 rounded-full bg-gray-50 border border-gray-200">
+          <div
+            className={cn(
+              "flex items-center p-2 rounded-lg bg-gray-50 border border-gray-200",
+              {
+                "rounded-full": dense,
+              }
+            )}
+          >
             <Skeleton
               className={cn("h-4 w-4 mr-2 rounded", {
                 "mr-0": dense,
