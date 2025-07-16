@@ -1,11 +1,16 @@
 import { getArtistSegmentNames } from "./getArtistSegmentNames";
 import { getSegmentCounts } from "./getSegmentCounts";
+import { selectFanSegments } from "./fan_segments/selectFanSegments";
+import { Tables } from "@/types/database.types";
+
+type Social = Tables<"socials">;
 
 export interface Segment {
   id: string;
   name: string;
   size: number;
   icon?: string;
+  fans?: Social[];
 }
 
 export interface ArtistSegment {
@@ -47,10 +52,19 @@ export async function getArtistSegments(artistId: string): Promise<Segment[]> {
 
   const countMap = new Map(counts.map((c) => [c.segment_id, c.count]));
 
-  return segments.map((segment) => ({
-    id: segment.segment_id,
-    name: segment.segment.name,
-    size: countMap.get(segment.segment_id) || 0,
-    icon: undefined,
-  }));
+  // Get fans for each segment (limit to 5 for social proof)
+  const segmentsWithFans = await Promise.all(
+    segments.map(async (segment) => {
+      const fans = await selectFanSegments({ segment_id: segment.segment_id });
+      return {
+        id: segment.segment_id,
+        name: segment.segment.name,
+        size: countMap.get(segment.segment_id) || 0,
+        icon: undefined,
+        fans: fans.slice(0, 5), // Limit to 5 fans for social proof
+      };
+    })
+  );
+
+  return segmentsWithFans;
 }
