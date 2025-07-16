@@ -17,7 +17,7 @@ const StandaloneYoutubeComponent = ({
   const { data, isLoading } = useYoutubeStatus(artistAccountId);
 
   return (
-    <div>
+    <div className="w-full">
       {isLoading ? (
         <div className="flex flex-col gap-1">
           <label
