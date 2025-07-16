@@ -26,17 +26,21 @@ const StandaloneYoutubeComponent = ({
 }: StandaloneYoutubeComponentProps) => {
   const { data, isLoading } = useYoutubeStatus(artistAccountId);
 
+  const label = () => (
+    <label
+      className={cn("text-sm", {
+        hidden: dense,
+      })}
+    >
+      Youtube
+    </label>
+  );
+
   return (
     <div className="w-full relative">
       {isLoading ? (
         <div className="flex flex-col gap-1">
-          <label
-            className={cn("text-sm", {
-              hidden: dense,
-            })}
-          >
-            YouTube
-          </label>
+          {label()}
           <div
             className={cn(
               "flex items-center p-2 rounded-lg bg-gray-50 border border-gray-200",
@@ -62,13 +66,7 @@ const StandaloneYoutubeComponent = ({
       ) : (
         <Tooltip content="Connect YouTube Account">
           <div className="flex flex-col gap-1.5">
-            <label
-              className={cn("text-sm", {
-                hidden: dense,
-              })}
-            >
-              YouTube
-            </label>
+            {label()}
             <ConnectYouTubeButton
               accountId={artistAccountId}
               className="w-full"
