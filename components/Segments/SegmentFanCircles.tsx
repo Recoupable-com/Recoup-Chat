@@ -16,7 +16,7 @@ const SegmentFanCircles = ({ fans }: SegmentFanCirclesProps) => {
         <div key={fan.id} className="relative group" title={fan.username}>
           <ImageWithFallback
             src={fan.avatar!}
-            className="w-6 h-6 rounded-full object-cover border border-gray-200 hover:border-blue-400 transition-colors"
+            className="w-4 h-4 rounded-full object-cover border border-gray-200 hover:border-blue-400 transition-colors"
           />
           {fan.bio && (
             <div className="absolute bottom-full left-1/2 transform -translate-x-1/2 mb-1 w-32 p-1 bg-black/80 text-white text-xs rounded opacity-0 group-hover:opacity-100 transition-opacity duration-200 pointer-events-none z-10">
