@@ -1,7 +1,7 @@
 import { generateObject } from "ai";
 import { anthropic } from "@ai-sdk/anthropic";
 import { z } from "zod";
-import { ANTHROPIC_MODEL } from "../consts";
+import { ANTHROPIC_MODEL, SEGMENT_FAN_SOCIAL_ID_PROMPT } from "../consts";
 
 export interface GenerateArrayResult {
   segmentName: string;
@@ -22,11 +22,7 @@ const generateArray = async ({
     output: "array",
     schema: z.object({
       segmentName: z.string().describe("Segment name."),
-      fans: z.array(z.string()).describe(
-        `Array of fan_social_id included in the segment. 
-          Do not make this up.
-          Only use the actual fan_social_id from the fan data prompt input.`
-      ),
+      fans: z.array(z.string()).describe(SEGMENT_FAN_SOCIAL_ID_PROMPT),
     }),
   });
 
