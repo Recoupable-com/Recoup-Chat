@@ -3,14 +3,20 @@ import { GenerateSegmentsParams } from "./generateSegments";
 
 const getAnalysisPrompt = ({ fans, prompt }: GenerateSegmentsParams) => {
   const fanCount = fans.length;
-  const fanData = fans.map((fan) => ({
+  const fanData = fans.map((fan) => {
+    const obj = {
     fan_social_id: fan.fan_social_id,
     username: fan.fan_social.username,
     bio: fan.fan_social.bio,
     followerCount: fan.fan_social.followerCount,
     followingCount: fan.fan_social.followingCount,
     comment: fan.latest_engagement_comment?.comment || null,
-  }));
+    };
+    // Remove keys with null values
+    return Object.fromEntries(
+      Object.entries(obj).filter(([, value]) => value !== null)
+    );
+  });
 
   const maxFans = 10000;
   const slicedFanData = fanData.slice(0, maxFans);
