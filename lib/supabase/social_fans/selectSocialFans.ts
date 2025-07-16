@@ -12,16 +12,28 @@ export interface SocialFanWithDetails extends SocialFan {
   latest_engagement_comment: PostComment | null;
 }
 
+// Allowed top-level columns for ordering
+const SOCIAL_FANS_ORDERABLE_COLUMNS = [
+  "id",
+  "artist_social_id",
+  "fan_social_id",
+  "created_at",
+  "updated_at",
+  "latest_engagement",
+  "latest_engagement_id",
+] as const;
+type SocialFansOrderableColumn = (typeof SOCIAL_FANS_ORDERABLE_COLUMNS)[number];
+
 interface SelectSocialFansParams {
   social_ids?: string[];
+  orderBy?: SocialFansOrderableColumn;
+  orderDirection?: "asc" | "desc";
 }
 
 export const selectSocialFans = async (
   params?: SelectSocialFansParams
 ): Promise<SocialFanWithDetails[]> => {
-  let query = serverClient
-    .from("social_fans")
-    .select(`
+  let query = serverClient.from("social_fans").select(`
       *,
       artist_social:socials!social_fans_artist_social_id_fkey(
         id,
@@ -56,6 +68,17 @@ export const selectSocialFans = async (
 
   if (params?.social_ids && params.social_ids.length > 0) {
     query = query.in("artist_social_id", params.social_ids);
+  }
+
+  // Only allow ordering by top-level columns
+  if (
+    params?.orderBy &&
+    SOCIAL_FANS_ORDERABLE_COLUMNS.includes(params.orderBy)
+  ) {
+    query = query.order(params.orderBy, {
+      ascending: params.orderDirection !== "desc",
+      nullsFirst: false,
+    });
   }
 
   const { data, error } = await query;
