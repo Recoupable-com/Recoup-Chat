@@ -1,25 +1,34 @@
-import { useQuery } from "@tanstack/react-query";
+import { YoutubeStatus } from "@/types/youtube";
+import useYoutubeChannel from "./useYoutubeChannel";
 
 const useYoutubeStatus = (artistAccountId?: string) => {
-  const { data, isLoading, error } = useQuery({
-    queryKey: ["youtube-status", artistAccountId],
-    queryFn: () => {
-      return fetch(
-        `/api/youtube/status?artist_account_id=${artistAccountId}`
-      ).then((res) => res.json());
-    },
-    enabled: !!artistAccountId,
-  });
+  const {
+    data: channelResponse,
+    isLoading,
+    error,
+  } = useYoutubeChannel(artistAccountId || "");
 
-  return { data, isLoading, error } as {
-    data: {
-        status: 'valid' | 'invalid' | 'error';
-        artistAccountId: string;
-        error?: string;
-    } | null;
-    isLoading: boolean;
-    error: Error | null;
-  };
+  const data = artistAccountId
+    ? {
+        status: (() => {
+          if (error) return "error";
+          if (isLoading) return "invalid";
+          if (channelResponse) {
+            return channelResponse.tokenStatus === "valid"
+              ? "valid"
+              : "invalid";
+          }
+          return "invalid";
+        })(),
+        artistAccountId,
+      }
+    : null;
+
+  return {
+    data,
+    isLoading,
+    error: null,
+  } as YoutubeStatus;
 };
 
 export default useYoutubeStatus;

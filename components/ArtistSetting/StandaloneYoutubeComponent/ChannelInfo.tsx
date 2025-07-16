@@ -1,16 +1,10 @@
+import useYoutubeChannel from "@/hooks/useYoutubeChannel";
 import { cn } from "@/lib/utils";
 import formatFollowerCount from "@/lib/utils/formatFollowerCount";
-import { useQuery } from "@tanstack/react-query";
 import { Youtube } from "lucide-react";
 
 const ChannelInfo = ({ dense, artistAccountId }: { dense?: boolean; artistAccountId: string }) => {
-  const { data, isLoading } = useQuery({
-    queryKey: ["youtube-channel-info", artistAccountId],
-    queryFn: () =>
-      fetch(
-        `/api/youtube/channel-info?artist_account_id=${artistAccountId}`
-      ).then((res) => res.json()),
-  });
+  const { data, isLoading } = useYoutubeChannel(artistAccountId);
 
   const channel = data?.channels?.[0];
 
