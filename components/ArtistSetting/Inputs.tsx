@@ -2,7 +2,7 @@ import { useArtistProvider } from "@/providers/ArtistProvider";
 import Input from "../Input";
 import { Textarea } from "../ui/textarea";
 import { Label } from "../ui/label";
-import StandaloneYoutubeComponent from "./YoutubeAccount";
+import StandaloneYoutubeComponent from "./StandaloneYoutubeComponent";
 
 const Inputs = () => {
   const {
@@ -99,7 +99,7 @@ const Inputs = () => {
         />
       </div>
       <div className="col-span-6 space-y-1 md:space-y-2">
-        <StandaloneYoutubeComponent artistAccountId={editableArtist?.account_id} />
+        <StandaloneYoutubeComponent artistAccountId={editableArtist?.account_id as string} />
       </div>
       <div className="col-span-6 space-y-1 md:space-y-2">
         <Input
