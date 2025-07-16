@@ -6,7 +6,7 @@ import { cn } from "@/lib/utils";
 import { Tooltip } from "../common/Tooltip";
 
 interface StandaloneYoutubeComponentProps {
-  artistAccountId: string;
+  artistAccountId?: string;
   dense?: boolean;
 }
 
