@@ -7,7 +7,7 @@ import { Tooltip } from "../../common/Tooltip";
 import ChannelInfo from "./ChannelInfo";
 
 interface StandaloneYoutubeComponentProps {
-  artistAccountId?: string;
+  artistAccountId: string;
   dense?: boolean;
 }
 
@@ -49,7 +49,7 @@ const StandaloneYoutubeComponent = ({
           </div>
         </div>
       ) : data?.status === "valid" ? (
-        <ChannelInfo dense={dense} />
+        <ChannelInfo dense={dense} artistAccountId={artistAccountId} />
       ) : (
         <Tooltip content="Connect YouTube Account">
           <div className="flex flex-col gap-1.5">
