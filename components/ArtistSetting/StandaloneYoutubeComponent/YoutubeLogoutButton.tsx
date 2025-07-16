@@ -17,7 +17,6 @@ const YoutubeLogoutButton = ({
         method: "DELETE",
       }).then((res) => res.json()),
     onSuccess: () => {
-      // Invalidate YouTube-related queries to refresh the UI
       queryClient.invalidateQueries({ queryKey: ["youtube-status", artistAccountId] });
       queryClient.invalidateQueries({ queryKey: ["youtube-channel-info", artistAccountId] });
     },
@@ -27,7 +26,7 @@ const YoutubeLogoutButton = ({
     return null;
   }
 
-  if (youtubeStatus?.status === "invalid") {
+  if (youtubeStatus?.status === "invalid" || youtubeStatus?.status === "error") {
     return null;
   }
 
