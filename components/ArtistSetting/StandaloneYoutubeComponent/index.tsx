@@ -4,6 +4,14 @@ import { Skeleton } from "../../ui/skeleton";
 import { cn } from "@/lib/utils";
 import { Tooltip } from "../../common/Tooltip";
 import ChannelInfo from "./ChannelInfo";
+import Arrow from "@/public/youtube-arrow.png";
+import Image from "next/image";
+import { Caveat } from "next/font/google";
+
+const caveat = Caveat({
+  subsets: ["latin"],
+  weight: ["400"],
+});
 
 interface StandaloneYoutubeComponentProps {
   artistAccountId: string;
@@ -17,7 +25,7 @@ const StandaloneYoutubeComponent = ({
   const { data, isLoading } = useYoutubeStatus(artistAccountId);
 
   return (
-    <div className="w-full">
+    <div className="w-full relative">
       {isLoading ? (
         <div className="flex flex-col gap-1">
           <label
@@ -69,6 +77,13 @@ const StandaloneYoutubeComponent = ({
           </div>
         </Tooltip>
       )}
+      {/* Graphic Arrow */}
+      <div className="absolute w-[10rem] right-[-8rem] top-[-2.5rem] opacity-[0.8] pointer-events-none">
+        <Image src={Arrow} alt="Youtube Arrow" className="w-full rotate-[10deg] scale-y-[0.8] opacity-[0.8]" />
+        <span className={cn("text-black absolute top-[4rem] left-[7rem] whitespace-nowrap rotate-[351deg] text-[1rem]", caveat.className)}>
+          Get Youtube Insights
+        </span>
+      </div>
     </div>
   );
 };
