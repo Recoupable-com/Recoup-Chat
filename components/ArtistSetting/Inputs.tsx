@@ -99,7 +99,7 @@ const Inputs = () => {
         />
       </div>
       <div className="col-span-6 space-y-1 md:space-y-2">
-        <StandaloneYoutubeComponent artistAccountId={editableArtist?.account_id} />
+        <StandaloneYoutubeComponent artistAccountId={editableArtist?.account_id as string} />
       </div>
       <div className="col-span-6 space-y-1 md:space-y-2">
         <Input
