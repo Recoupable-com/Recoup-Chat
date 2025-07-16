@@ -16,11 +16,13 @@ const caveat = Caveat({
 interface StandaloneYoutubeComponentProps {
   artistAccountId: string;
   dense?: boolean;
+  hideArrow?: boolean;
 }
 
 const StandaloneYoutubeComponent = ({
   artistAccountId,
   dense,
+  hideArrow = false,
 }: StandaloneYoutubeComponentProps) => {
   const { data, isLoading } = useYoutubeStatus(artistAccountId);
 
@@ -78,12 +80,14 @@ const StandaloneYoutubeComponent = ({
         </Tooltip>
       )}
       {/* Graphic Arrow */}
+      {data?.status === "invalid" && !isLoading && !hideArrow && (
       <div className="absolute w-[10rem] right-[-8rem] top-[-2.5rem] opacity-[0.8] pointer-events-none">
         <Image src={Arrow} alt="Youtube Arrow" className="w-full rotate-[10deg] scale-y-[0.8] opacity-[0.8]" />
         <span className={cn("text-black absolute top-[4rem] left-[7rem] whitespace-nowrap rotate-[351deg] text-[1rem]", caveat.className)}>
           Get Youtube Insights
-        </span>
-      </div>
+          </span>
+        </div>
+      )}
     </div>
   );
 };
