@@ -5,12 +5,12 @@ const getAnalysisPrompt = ({ fans, prompt }: GenerateSegmentsParams) => {
   const fanCount = fans.length;
   const fanData = fans.map((fan) => {
     const obj = {
-    fan_social_id: fan.fan_social_id,
-    username: fan.fan_social.username,
-    bio: fan.fan_social.bio,
-    followerCount: fan.fan_social.followerCount,
-    followingCount: fan.fan_social.followingCount,
-    comment: fan.latest_engagement_comment?.comment || null,
+      fan_social_id: fan.fan_social_id,
+      username: fan.fan_social.username,
+      bio: fan.fan_social.bio,
+      followerCount: fan.fan_social.followerCount,
+      followingCount: fan.fan_social.followingCount,
+      comment: fan.latest_engagement_comment?.comment || null,
     };
     // Remove keys with null values
     return Object.fromEntries(
@@ -18,7 +18,7 @@ const getAnalysisPrompt = ({ fans, prompt }: GenerateSegmentsParams) => {
     );
   });
 
-  const maxFans = 555;
+  const maxFans = 111;
   const slicedFanData = fanData.slice(0, maxFans);
 
   const fanDataString = JSON.stringify(slicedFanData, null, 2);
