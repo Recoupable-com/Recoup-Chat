@@ -2,7 +2,7 @@ import { useArtistProvider } from "@/providers/ArtistProvider";
 import Input from "../Input";
 import { Textarea } from "../ui/textarea";
 import { Label } from "../ui/label";
-import StandaloneYoutubeComponent from "./YoutubeAccount";
+import StandaloneYoutubeComponent from "./StandaloneYoutubeComponent";
 
 const Inputs = () => {
   const {

@@ -1,9 +1,9 @@
 import useYoutubeStatus from "@/hooks/useYoutubeStatus";
-import { ConnectYouTubeButton } from "../common/ConnectYouTubeButton";
+import { ConnectYouTubeButton } from "../../common/ConnectYouTubeButton";
 import { Youtube } from "lucide-react";
-import { Skeleton } from "../ui/skeleton";
+import { Skeleton } from "../../ui/skeleton";
 import { cn } from "@/lib/utils";
-import { Tooltip } from "../common/Tooltip";
+import { Tooltip } from "../../common/Tooltip";
 
 interface StandaloneYoutubeComponentProps {
   artistAccountId?: string;

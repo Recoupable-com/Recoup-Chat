@@ -1,7 +1,7 @@
 "use client";
 
 import { useArtistProvider } from "@/providers/ArtistProvider";
-import StandaloneYoutubeComponent from "../ArtistSetting/YoutubeAccount";
+import StandaloneYoutubeComponent from "../ArtistSetting/StandaloneYoutubeComponent";
 
 export function ChatInputYoutubeButton() {
     const { selectedArtist } = useArtistProvider();
