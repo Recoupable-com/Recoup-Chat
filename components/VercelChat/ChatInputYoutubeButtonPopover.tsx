@@ -6,7 +6,7 @@ import {
 import formatFollowerCount from "@/lib/utils/formatFollowerCount";
 import useYoutubeStatus from "@/hooks/useYoutubeStatus";
 import { useQuery } from "@tanstack/react-query";
-import { Youtube, Calendar, Eye, Video, LucideIcon } from "lucide-react";
+import { Youtube, Eye, Video } from "lucide-react";
 import StatCard from "./StatCard";
 
 const ChatInputYoutubeButtonPopover = ({
