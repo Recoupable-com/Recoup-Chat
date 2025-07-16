@@ -6,8 +6,8 @@ import {
 import formatFollowerCount from "@/lib/utils/formatFollowerCount";
 import useYoutubeStatus from "@/hooks/useYoutubeStatus";
 import { Youtube, Eye, Video } from "lucide-react";
-import StatCard from "./StatCard";
 import useYoutubeChannel from "@/hooks/useYoutubeChannel";
+import StatCard from "./StatCard";
 
 const ChatInputYoutubeButtonPopover = ({
   children,
