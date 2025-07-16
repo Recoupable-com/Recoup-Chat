@@ -5,9 +5,9 @@ import {
 } from "@/components/ui/hover-card";
 import formatFollowerCount from "@/lib/utils/formatFollowerCount";
 import useYoutubeStatus from "@/hooks/useYoutubeStatus";
-import { useQuery } from "@tanstack/react-query";
 import { Youtube, Eye, Video } from "lucide-react";
 import StatCard from "./StatCard";
+import useYoutubeChannel from "@/hooks/useYoutubeChannel";
 
 const ChatInputYoutubeButtonPopover = ({
   children,
@@ -17,15 +17,7 @@ const ChatInputYoutubeButtonPopover = ({
   artistAccountId: string;
 }) => {
   const { data: youtubeStatus, isLoading } = useYoutubeStatus(artistAccountId);
-  const { data: channelInfo, isLoading: isChannelInfoLoading } = useQuery({
-    queryKey: ["youtube-channel-info", artistAccountId],
-    queryFn: () =>
-      fetch(
-        `/api/youtube/channel-info?artist_account_id=${artistAccountId}`
-      ).then((res) => res.json()),
-    enabled:
-      !!artistAccountId && youtubeStatus?.status === "valid" && !isLoading,
-  });
+  const { data: channelInfo, isLoading: isChannelInfoLoading } = useYoutubeChannel(artistAccountId)
 
   const channel = channelInfo?.channels?.[0];
 
