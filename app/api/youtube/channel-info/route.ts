@@ -9,7 +9,11 @@ export async function GET(request: NextRequest) {
 
     if (!artistAccountId) {
       return NextResponse.json(
-        { error: "Missing artist_account_id parameter" },
+        { 
+          success: false,
+          error: "Missing artist_account_id parameter",
+          tokenStatus: "missing_param"
+        },
         { status: 400 }
       );
     }
@@ -17,8 +21,13 @@ export async function GET(request: NextRequest) {
     const tokenValidation = await validateYouTubeTokens(artistAccountId);
     if (!tokenValidation.success) {
       return NextResponse.json(
-        { error: "YouTube authentication required" },
-        { status: 401 }
+        { 
+          success: false,
+          error: "YouTube authentication required",
+          tokenStatus: "invalid",
+          channels: null
+        },
+        { status: 200 }
       );
     }
 
@@ -31,14 +40,20 @@ export async function GET(request: NextRequest) {
 
     if (!channelResult.success) {
       return NextResponse.json(
-        { error: channelResult.error!.message },
-        { status: 400 }
+        { 
+          success: false,
+          error: channelResult.error!.message,
+          tokenStatus: "api_error",
+          channels: null
+        },
+        { status: 200 }
       );
     }
 
     return NextResponse.json({
       success: true,
       channels: channelResult.channelData,
+      tokenStatus: "valid"
     });
   } catch (error) {
     console.error("❌ Error in YouTube channel info API:", error);
@@ -48,8 +63,10 @@ export async function GET(request: NextRequest) {
         success: false,
         error: "Failed to fetch YouTube channel information",
         details: error instanceof Error ? error.message : "Unknown error",
+        tokenStatus: "error",
+        channels: null
       },
-      { status: 500 }
+      { status: 200 } // Return 200 so frontend can parse the response
     );
   }
 }
