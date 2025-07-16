@@ -33,7 +33,11 @@ export const createSegments = async ({
     }
 
     // Step 2: Get all fans for the artist
-    const fans = await selectSocialFans({ social_ids: socialIds });
+    const fans = await selectSocialFans({
+      social_ids: socialIds,
+      orderBy: "latest_engagement",
+      orderDirection: "desc",
+    });
 
     if (fans.length === 0) {
       return errorResponse("No fans found for this artist");

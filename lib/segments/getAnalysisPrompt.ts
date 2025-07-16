@@ -18,7 +18,7 @@ const getAnalysisPrompt = ({ fans, prompt }: GenerateSegmentsParams) => {
     );
   });
 
-  const maxFans = 10000;
+  const maxFans = 555;
   const slicedFanData = fanData.slice(0, maxFans);
 
   const fanDataString = JSON.stringify(slicedFanData, null, 2);
