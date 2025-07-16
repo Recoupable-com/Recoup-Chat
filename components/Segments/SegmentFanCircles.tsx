@@ -11,12 +11,17 @@ const SegmentFanCircles = ({ fans }: SegmentFanCirclesProps) => {
   const displayedFans = fans.slice(0, 5);
 
   return (
-    <div className="flex items-center gap-1 mr-2">
-      {displayedFans.map((fan) => (
-        <div key={fan.id} className="relative group" title={fan.username}>
+    <div className="flex items-center mr-2">
+      {displayedFans.map((fan, index) => (
+        <div
+          key={fan.id}
+          className="relative group"
+          title={fan.username}
+          style={{ marginLeft: index > 0 ? "-18px" : "0" }}
+        >
           <ImageWithFallback
             src={fan.avatar!}
-            className="w-4 h-4 rounded-full object-cover border border-gray-200 hover:border-blue-400 transition-colors"
+            className="w-[25px] h-[25px] md:w-[50px] md:h-[50px] rounded-full object-cover border-2 border-white hover:border-blue-400 transition-colors"
           />
           {fan.bio && (
             <div className="absolute bottom-full left-1/2 transform -translate-x-1/2 mb-1 w-32 p-1 bg-black/80 text-white text-xs rounded opacity-0 group-hover:opacity-100 transition-opacity duration-200 pointer-events-none z-10">
