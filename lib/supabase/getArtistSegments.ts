@@ -61,7 +61,7 @@ export async function getArtistSegments(artistId: string): Promise<Segment[]> {
         name: segment.segment.name,
         size: countMap.get(segment.segment_id) || 0,
         icon: undefined,
-        fans: fans.slice(0, 5), // Limit to 5 fans for social proof
+        fans,
       };
     })
   );
