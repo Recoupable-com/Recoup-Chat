@@ -78,8 +78,13 @@ export function ChatPrompt({ isVisible }: { isVisible: boolean }) {
             wordComponent("Youtube", <Image src={YoutubeIcon} alt="Youtube" className="w-6 h-6" />),
             wordComponent("Fans"),
             wordComponent("Instagram", <Image src={InstagramIcon} alt="Instagram" className="w-6 h-6" />),
+            wordComponent("Analytics"),
             wordComponent("Tiktok", <Image src={TiktokIcon} alt="Tiktok" className="w-6 h-6" />),
+            wordComponent("Songs"),
             wordComponent("Spotify", <Image src={SpotifyIcon} alt="Spotify" className="w-6 h-6" />),
+            wordComponent("Growth"),
+            wordComponent("Revenue"),
+            wordComponent("Trends")
           ]}
         />
         <span className="hidden">
