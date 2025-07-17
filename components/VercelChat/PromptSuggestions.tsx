@@ -1,17 +1,40 @@
 import { Button } from "@/components/ui/button";
+import { useVercelChatContext } from "@/providers/VercelChatProvider";
+import { useEffect, useState } from "react";
 
 const PromptSuggestions = () => {
-  const suggestions = [
+  const { messages, status } = useVercelChatContext();
+  const isLoading = status === "submitted" || status === "streaming";
+  const [suggestions, setSuggestions] = useState<string[]>([
     "Analyze my fan engagement trends",
     "Create a social media strategy",
     "Generate content ideas for next week",
     "Review my latest campaign performance",
-  ];
+  ]);
+  const lastMessage = messages[messages.length - 1];
+  const isAssistantMessage = lastMessage?.role === "assistant";
 
-  const handleSuggestionClick = (suggestion: string) => {
-    // TODO: Handle suggestion selection
-    console.log("Selected suggestion:", suggestion);
-  };
+  const content = lastMessage?.content;
+
+  useEffect(() => {
+    const fetchSuggestions = async () => {
+      const response = await fetch("/api/prompts/suggestions", {
+        method: "POST",
+        body: JSON.stringify({ content }),
+      });
+      const data = await response.json();
+      setSuggestions(data.suggestions);
+    };
+    if (!isLoading && content) {
+      fetchSuggestions();
+    }
+    if (isLoading) {
+      setSuggestions([]);
+    }
+  }, [content, isLoading]);
+
+  if (messages.length <= 0) return null;
+  if (!isAssistantMessage) return null;
 
   return (
     <div className="prompt-suggestions w-full bg-transparent rounded-lg absolute top-[-2.7rem] left-0 right-0 mx-auto no-scrollbar pb-2">
@@ -21,7 +44,6 @@ const PromptSuggestions = () => {
             key={index}
             variant="outline"
             size="sm"
-            onClick={() => handleSuggestionClick(suggestion)}
             className="text-xs h-8 px-3 flex-shrink-0 rounded-full bg-white/50 backdrop-blur-sm hover:bg-white transition-all duration-300 border"
           >
             {suggestion}
