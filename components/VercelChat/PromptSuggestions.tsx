@@ -3,10 +3,10 @@ import usePromptSuggestions from "@/hooks/usePromptSuggestions";
 import SkeletonShimmer from "@/components/ui/SkeletonShimmer";
 
 const PromptSuggestions = () => {
-  const { handleSuggestionClick, isLoading, suggestions, isAssistantMessage } =
+  const { handleSuggestionClick, isLoading, suggestions, hidden } =
     usePromptSuggestions();
 
-  if (!isAssistantMessage) return null;
+  if (hidden) return null;
 
   return (
     <div className="prompt-suggestions w-full bg-transparent rounded-lg absolute top-[-2.7rem] left-0 right-0 mx-auto no-scrollbar pb-2">
