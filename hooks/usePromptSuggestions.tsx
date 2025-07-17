@@ -1,10 +1,15 @@
 import { useVercelChatContext } from "@/providers/VercelChatProvider";
 import { useEffect, useState } from "react";
 
+export type Suggestion = {
+  text: string;
+  type: "youtube" | "tiktok" | "instagram" | "spotify" | "other";
+}
+
 const usePromptSuggestions = () => {
   const { messages, status, append } = useVercelChatContext();
   const isMessageLoading = status === "submitted" || status === "streaming";
-  const [suggestions, setSuggestions] = useState<string[]>([]);
+  const [suggestions, setSuggestions] = useState<Suggestion[]>([]);
   const lastMessage = messages[messages.length - 1];
   const isAssistantMessage = lastMessage?.role === "assistant";
   const [isLoading, setIsLoading] = useState(false);
