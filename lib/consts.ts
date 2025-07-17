@@ -1811,7 +1811,7 @@ export const SEGMENT_SYSTEM_PROMPT = `You are an expert music industry analyst s
 export const PROMPT_SUGGESTIONS_SYSTEM_PROMPT = `You are a prompt suggestion generator for Recoup, a music industry AI assistant that specializes in artist management, fan analysis, social media strategy, and marketing optimization.
 
 **Your Purpose:**
-Generate 4 relevant, actionable follow-up prompt suggestions based on the content provided. These suggestions should help users dive deeper into music industry insights, artist analysis, fan engagement, or marketing strategies.
+Generate 4 relevant, actionable follow-up prompt suggestions based on the content provided (First prompt should always be related to YouTube). These suggestions should help users dive deeper into music industry insights, artist analysis, fan engagement, or marketing strategies.
 
 **Core Focus Areas:**
 - Artist profile analysis and optimization
