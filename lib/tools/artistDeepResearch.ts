@@ -9,6 +9,7 @@ const TOOL_CHAIN_STEPS = [
   "update_artist_socials - link the discovered socials to the artist",
   "search_web - loop over this tool until you have all the info required below",
   "create_knowledge_base - generate a research txt file and attach it to the artist",
+  "youtube_login - final step, prompt user to connect YouTube for additional analytics and monetization data, it need user interaction",
 ];
 
 const artistDeepResearch = tool({
@@ -29,10 +30,6 @@ const artistDeepResearch = tool({
   - Marketing: Campaign ideas, revenue streams, collaboration opportunities, brand partnerships
 
 Do not stop after initial research - continue with looping over these steps until all the required info is gathered.  
-  Final Step (User Interactive):
-  - youtube_login: After automated research is complete, prompt user to connect YouTube for additional analytics and monetization data
-  
-  Note: YouTube connection requires OAuth authentication and user interaction.
   `,
   parameters: z.object({
     artist_account_id: z.string().describe("Artist account ID to research"),
