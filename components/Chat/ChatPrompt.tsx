@@ -23,7 +23,6 @@ export function ChatPrompt({ isVisible }: { isVisible: boolean }) {
   const words = ["artist?", "campaign?", "fans?"];
   const { currentWord } = useTypingAnimation(words, isVisible);
   const artistName = selectedArtist?.name || "";
-
   // Check if an artist is selected
   const isArtistSelected = !!selectedArtist;
 
