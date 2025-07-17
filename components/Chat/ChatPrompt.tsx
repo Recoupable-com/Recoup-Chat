@@ -61,9 +61,9 @@ export function ChatPrompt({ isVisible }: { isVisible: boolean }) {
         <span className="text-[#A0A0A8]">
           Ask me about your{" "}
           {isArtistSelected ? (
-            <span className="text-[#A0A0A8]">{artistName}'s </span>
+            <span className="text-[#A0A0A8]">{artistName}&apos;s </span>
           ) : (
-            <span className="text-[#A0A0A8]">artist's </span>
+            <span className="text-[#A0A0A8]">artist&apos;s </span>
           )}
         </span>
         <span>&nbsp;</span>
