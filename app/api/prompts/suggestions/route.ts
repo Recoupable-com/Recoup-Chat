@@ -1,5 +1,5 @@
 import { PROMPT_SUGGESTIONS_SYSTEM_PROMPT } from "@/lib/consts";
-import { anthropic } from "@ai-sdk/anthropic";
+import { openai } from "@ai-sdk/openai";
 import { generateObject } from "ai";
 import { NextRequest, NextResponse } from "next/server";
 import { z } from "zod";
@@ -8,7 +8,7 @@ export const POST = async (req: NextRequest) => {
   const { content } = await req.json();
 
   const { object } = await generateObject({
-    model: anthropic("claude-3-5-sonnet-20240620"),
+    model: openai("gpt-4.1-nano"),
     system: PROMPT_SUGGESTIONS_SYSTEM_PROMPT,
     schema: z.object({
       suggestions: z.array(
