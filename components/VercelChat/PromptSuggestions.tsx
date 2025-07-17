@@ -12,7 +12,6 @@ const PromptSuggestions = () => {
     <div className="prompt-suggestions w-full bg-transparent rounded-lg absolute top-[-2.7rem] left-0 right-0 mx-auto no-scrollbar pb-2">
       <div className="flex gap-2 overflow-x-auto scrollbar-hide pb-[0.8rem] bg-transparent">
         {isLoading ? (
-          // Loading skeleton with shimmer effect
           Array.from({ length: 4 }).map((_, index) => (
             <SkeletonShimmer
               key={`skeleton-${index}`}
@@ -20,7 +19,6 @@ const PromptSuggestions = () => {
             />
           ))
         ) : (
-          // Actual suggestions
           suggestions.map((suggestion, index) => (
             <Button
               key={index}
