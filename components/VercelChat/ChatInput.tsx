@@ -10,6 +10,7 @@ import AttachmentsPreview from "./AttachmentsPreview";
 import PureAttachmentsButton from "./PureAttachmentsButton";
 import { motion } from "framer-motion";
 import { ChatInputYoutubeButton } from "./ChatInputYoutubeButton";
+import PromptSuggestions from "./PromptSuggestions";
 
 interface ChatInputProps {
   onSendMessage: (event: React.FormEvent<HTMLFormElement>) => void;
@@ -51,8 +52,9 @@ export function ChatInput({
   };
 
   return (
-    <div>
-      <div className="w-full">
+    <div className="relative">
+      <div className="w-full absolute bottom-[100%] mx-auto">
+        <PromptSuggestions />
         <AttachmentsPreview />
       </div>
       <motion.form
