@@ -73,7 +73,7 @@ export function ChatPrompt({ isVisible }: { isVisible: boolean }) {
         </span>
         <WordRotate
           duration={3000}
-          className="block md:inline text-[#A0A0A8]"
+          className="block md:inline text-[#000]/70 font-bold"
           words={[
             wordComponent("Youtube", <Image src={YoutubeIcon} alt="Youtube" className="w-6 h-6" />),
             wordComponent("Fans"),
