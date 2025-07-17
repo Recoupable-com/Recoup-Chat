@@ -29,7 +29,7 @@ export function ChatInput({
 }: ChatInputProps) {
   // Access the artist state to check if an artist is selected
   const { selectedArtist, sorted } = useArtistProvider();
-  const { hasPendingUploads } = useVercelChatContext();
+  const { hasPendingUploads, messages } = useVercelChatContext();
   const isDisabled = !selectedArtist && sorted.length > 0;
 
   // Create a form ref to submit the form programmatically
@@ -53,7 +53,9 @@ export function ChatInput({
 
   return (
     <div className="relative">
-      <div className="w-full absolute bottom-[100%] mx-auto">
+      <div className={cn("w-full mx-auto", {
+        "absolute bottom-[100%]": messages.length > 0,
+      })}>
         <PromptSuggestions />
         <AttachmentsPreview />
       </div>
