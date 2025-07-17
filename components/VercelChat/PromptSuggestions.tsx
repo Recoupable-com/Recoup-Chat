@@ -3,35 +3,47 @@ import { useVercelChatContext } from "@/providers/VercelChatProvider";
 import { useEffect, useState } from "react";
 
 const PromptSuggestions = () => {
-  const { messages, status } = useVercelChatContext();
+  const { messages, status, append } = useVercelChatContext();
   const isLoading = status === "submitted" || status === "streaming";
-  const [suggestions, setSuggestions] = useState<string[]>([
-    "Analyze my fan engagement trends",
-    "Create a social media strategy",
-    "Generate content ideas for next week",
-    "Review my latest campaign performance",
-  ]);
+  const [suggestions, setSuggestions] = useState<string[]>([]);
   const lastMessage = messages[messages.length - 1];
   const isAssistantMessage = lastMessage?.role === "assistant";
 
   const content = lastMessage?.content;
 
+  const handleSuggestionClick = (suggestion: string) => {
+    append({
+        role: "user",
+        content: suggestion,
+    });
+  };
+
   useEffect(() => {
     const fetchSuggestions = async () => {
-      const response = await fetch("/api/prompts/suggestions", {
-        method: "POST",
-        body: JSON.stringify({ content }),
-      });
-      const data = await response.json();
-      setSuggestions(data.suggestions);
+      try {
+        const response = await fetch("/api/prompts/suggestions", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ content }),
+        });
+        const data = await response.json();
+        if (data.suggestions && data.suggestions.length > 0) {
+          setSuggestions(data.suggestions);
+        }
+      } catch (error) {
+        console.error("Failed to fetch suggestions:", error);
+      }
     };
-    if (!isLoading && content) {
+    
+    if (!isLoading && content && isAssistantMessage) {
       fetchSuggestions();
     }
     if (isLoading) {
       setSuggestions([]);
     }
-  }, [content, isLoading]);
+  }, [content, isLoading, isAssistantMessage]);
 
   if (messages.length <= 0) return null;
   if (!isAssistantMessage) return null;
@@ -44,6 +56,7 @@ const PromptSuggestions = () => {
             key={index}
             variant="outline"
             size="sm"
+            onClick={() => handleSuggestionClick(suggestion)}
             className="text-xs h-8 px-3 flex-shrink-0 rounded-full bg-white/50 backdrop-blur-sm hover:bg-white transition-all duration-300 border"
           >
             {suggestion}

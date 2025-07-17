@@ -1,3 +1,4 @@
+import { PROMPT_SUGGESTIONS_SYSTEM_PROMPT } from "@/lib/consts";
 import { anthropic } from "@ai-sdk/anthropic";
 import { generateObject } from "ai";
 import { NextRequest, NextResponse } from "next/server";
@@ -8,6 +9,7 @@ export const POST = async (req: NextRequest) => {
 
   const { object } = await generateObject({
     model: anthropic("claude-3-5-sonnet-20240620"),
+    system: PROMPT_SUGGESTIONS_SYSTEM_PROMPT,
     schema: z.object({
       suggestions: z.array(z.string()),
     }),
