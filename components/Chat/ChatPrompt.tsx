@@ -1,6 +1,13 @@
 import { Plus_Jakarta_Sans } from "next/font/google";
 import { useArtistProvider } from "@/providers/ArtistProvider";
 import useTypingAnimation from "@/hooks/useTypingAnimation";
+import WordRotate from "../ui/word-rotate";
+import { ReactNode } from "react";
+import YoutubeIcon from "@/public/brand-logos/youtube.png";
+import InstagramIcon from "@/public/brand-logos/instagram.png";
+import Image from "next/image";
+import TiktokIcon from "@/public/brand-logos/tiktok.png";
+import SpotifyIcon from "@/public/brand-logos/spotify.png";
 
 const plusJakartaSans = Plus_Jakarta_Sans({
   subsets: ["latin"],
@@ -16,7 +23,7 @@ export function ChatPrompt({ isVisible }: { isVisible: boolean }) {
   const words = ["artist?", "campaign?", "fans?"];
   const { currentWord } = useTypingAnimation(words, isVisible);
   const artistName = selectedArtist?.name || "";
-  
+
   // Check if an artist is selected
   const isArtistSelected = !!selectedArtist;
 
@@ -37,6 +44,15 @@ export function ChatPrompt({ isVisible }: { isVisible: boolean }) {
   const fadeStart = "opacity-0";
   const fadeEnd = "opacity-100";
 
+  const wordComponent = (word: string, icon?: ReactNode) => {
+    return (
+      <span className="inline-flex items-center gap-1 border-b-2 border-dotted border-pink-500/30">
+        {icon}
+        {word}
+      </span>
+    );
+  };
+
   return (
     <div
       className={`
@@ -45,20 +61,32 @@ export function ChatPrompt({ isVisible }: { isVisible: boolean }) {
         transition-delay-[100ms]
       `}
     >
-      {isArtistSelected ? (
-        <span>
-          Ask me <span className="hidden sm:inline">anything</span> about{" "}
-          {artistName}
+      <span>
+        <span className="text-[#A0A0A8]">
+          Ask me about your{" "}
+          {isArtistSelected && (
+            <span className="text-[#A0A0A8]">{artistName}'s </span>
+          )}
         </span>
-      ) : (
         <span>
-          <span className="text-[#A0A0A8]">Ask me about your artist</span>
-          <span className="hidden">
-            {/* This hidden span ensures currentWord is "used" to fix linter warnings */}
-            {currentWord}
-          </span>
+          &nbsp;
         </span>
-      )}
+        <WordRotate
+          duration={3000}
+          className="block md:inline text-[#A0A0A8]"
+          words={[
+            wordComponent("Youtube", <Image src={YoutubeIcon} alt="Youtube" className="w-6 h-6" />),
+            wordComponent("Fans"),
+            wordComponent("Instagram", <Image src={InstagramIcon} alt="Instagram" className="w-6 h-6" />),
+            wordComponent("Tiktok", <Image src={TiktokIcon} alt="Tiktok" className="w-6 h-6" />),
+            wordComponent("Spotify", <Image src={SpotifyIcon} alt="Spotify" className="w-6 h-6" />),
+          ]}
+        />
+        <span className="hidden">
+          {/* This hidden span ensures currentWord is "used" to fix linter warnings */}
+          {currentWord}
+        </span>
+      </span>
     </div>
   );
 }
