@@ -9,6 +9,8 @@ import { useVercelChatContext } from "@/providers/VercelChatProvider";
 import AttachmentsPreview from "./AttachmentsPreview";
 import PureAttachmentsButton from "./PureAttachmentsButton";
 import { motion } from "framer-motion";
+import { ChatInputYoutubeButton } from "./ChatInputYoutubeButton";
+import PromptSuggestions from "./PromptSuggestions";
 
 interface ChatInputProps {
   onSendMessage: (event: React.FormEvent<HTMLFormElement>) => void;
@@ -50,8 +52,9 @@ export function ChatInput({
   };
 
   return (
-    <div>
-      <div className="w-full">
+    <div className="relative">
+      <div className="w-full absolute bottom-[100%] mx-auto">
+        <PromptSuggestions />
         <AttachmentsPreview />
       </div>
       <motion.form
@@ -62,8 +65,9 @@ export function ChatInput({
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.3, ease: "easeOut" }}
       >
-        <div className="absolute bottom-2.5 left-2.5 z-10">
+        <div className="absolute bottom-2.5 left-2.5 z-10 flex flex-row gap-1 items-center">
           <PureAttachmentsButton />
+          <ChatInputYoutubeButton />
         </div>
         <Input
           input={input}
