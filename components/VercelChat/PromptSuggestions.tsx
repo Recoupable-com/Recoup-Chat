@@ -1,52 +1,15 @@
 import { Button } from "@/components/ui/button";
+import usePromptSuggestions from "@/hooks/usePromptSuggestions";
 import { useVercelChatContext } from "@/providers/VercelChatProvider";
 import { useEffect, useState } from "react";
 
 const PromptSuggestions = () => {
-  const { messages, status, append } = useVercelChatContext();
-  const isLoading = status === "submitted" || status === "streaming";
-  const [suggestions, setSuggestions] = useState<string[]>([]);
-  const lastMessage = messages[messages.length - 1];
-  const isAssistantMessage = lastMessage?.role === "assistant";
-
-  const content = lastMessage?.content;
-
-  const handleSuggestionClick = (suggestion: string) => {
-    append({
-        role: "user",
-        content: suggestion,
-    });
-  };
-
-  useEffect(() => {
-    const fetchSuggestions = async () => {
-      try {
-        const response = await fetch("/api/prompts/suggestions", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({ content }),
-        });
-        const data = await response.json();
-        if (data.suggestions && data.suggestions.length > 0) {
-          setSuggestions(data.suggestions);
-        }
-      } catch (error) {
-        console.error("Failed to fetch suggestions:", error);
-      }
-    };
+  const { handleSuggestionClick, isLoading, suggestions, isAssistantMessage } =
+    usePromptSuggestions();
     
-    if (!isLoading && content && isAssistantMessage) {
-      fetchSuggestions();
-    }
-    if (isLoading) {
-      setSuggestions([]);
-    }
-  }, [content, isLoading, isAssistantMessage]);
-
-  if (messages.length <= 0) return null;
   if (!isAssistantMessage) return null;
+
+  if (suggestions.length <= 0) return null;
 
   return (
     <div className="prompt-suggestions w-full bg-transparent rounded-lg absolute top-[-2.7rem] left-0 right-0 mx-auto no-scrollbar pb-2">
