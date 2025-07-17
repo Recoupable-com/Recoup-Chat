@@ -1,6 +1,5 @@
 import { Plus_Jakarta_Sans } from "next/font/google";
 import { useArtistProvider } from "@/providers/ArtistProvider";
-import useTypingAnimation from "@/hooks/useTypingAnimation";
 import WordRotate from "../ui/word-rotate";
 import { ReactNode } from "react";
 import YoutubeIcon from "@/public/brand-logos/youtube.png";
@@ -20,8 +19,6 @@ const plusJakartaSans = Plus_Jakarta_Sans({
  */
 export function ChatPrompt({ isVisible }: { isVisible: boolean }) {
   const { selectedArtist } = useArtistProvider();
-  const words = ["artist?", "campaign?", "fans?"];
-  const { currentWord } = useTypingAnimation(words, isVisible);
   const artistName = selectedArtist?.name || "";
   // Check if an artist is selected
   const isArtistSelected = !!selectedArtist;

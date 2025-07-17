@@ -110,7 +110,7 @@ function ChatContentMemoized({ reportId, id }: {reportId?: string; id: string;})
           <div className="w-full">
             <ChatGreeting isVisible={isVisible} />
             <ChatPrompt isVisible={isVisible} />
-            <div className="mt-6">
+            <div className="mt-1 md:mt-6">
               <ChatInput
                 input={input}
                 setInput={setInput}
