@@ -1,6 +1,7 @@
 import { Button } from "@/components/ui/button";
 import usePromptSuggestions from "@/hooks/usePromptSuggestions";
 import SkeletonShimmer from "@/components/ui/SkeletonShimmer";
+import PromptIcon from "./PromptIcon";
 
 const PromptSuggestions = () => {
   const { handleSuggestionClick, isLoading, suggestions, isHidden } =
@@ -24,10 +25,11 @@ const PromptSuggestions = () => {
               key={index}
               variant="outline"
               size="sm"
-              onClick={() => handleSuggestionClick(suggestion)}
+              onClick={() => handleSuggestionClick(suggestion.text)}
               className="text-xs h-8 px-3 flex-shrink-0 rounded-full bg-white/50 backdrop-blur-sm hover:bg-white transition-all duration-300 border"
             >
-              {suggestion}
+              <PromptIcon type={suggestion.type} />
+              {suggestion.text}
             </Button>
           ))
         )}

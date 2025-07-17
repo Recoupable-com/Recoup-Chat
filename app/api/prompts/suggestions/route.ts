@@ -11,7 +11,16 @@ export const POST = async (req: NextRequest) => {
     model: anthropic("claude-3-5-sonnet-20240620"),
     system: PROMPT_SUGGESTIONS_SYSTEM_PROMPT,
     schema: z.object({
-      suggestions: z.array(z.string()),
+      suggestions: z.array(
+        z.object({
+          text: z.string(),
+          type: z
+            .enum(["youtube", "tiktok", "instagram", "spotify", "other"])
+            .describe(
+              "The type of suggestion. This will be used to determine the type of suggestion to display."
+            ),
+        })
+      ),
     }),
     prompt: `Generate 4 suggestions for the following prompt: ${content}`,
   });
