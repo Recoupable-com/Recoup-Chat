@@ -67,9 +67,7 @@ export function ChatPrompt({ isVisible }: { isVisible: boolean }) {
             <span className="text-[#A0A0A8]">{artistName}'s </span>
           )}
         </span>
-        <span>
-          &nbsp;
-        </span>
+        <span>&nbsp;</span>
         <WordRotate
           duration={3000}
           className="block md:inline text-[#000]/70 font-bold"
@@ -86,10 +84,6 @@ export function ChatPrompt({ isVisible }: { isVisible: boolean }) {
             wordComponent("Trends")
           ]}
         />
-        <span className="hidden">
-          {/* This hidden span ensures currentWord is "used" to fix linter warnings */}
-          {currentWord}
-        </span>
       </span>
     </div>
   );
