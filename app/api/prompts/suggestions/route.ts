@@ -8,7 +8,7 @@ export const POST = async (req: NextRequest) => {
   const { content } = await req.json();
 
   const { object } = await generateObject({
-    model: openai("gpt-4.1-nano"),
+    model: openai("gpt-4.1-mini"),
     system: PROMPT_SUGGESTIONS_SYSTEM_PROMPT,
     schema: z.object({
       suggestions: z.array(
