@@ -52,7 +52,7 @@ const usePromptSuggestions = () => {
     suggestions: messages.length <= 0 ? [] : suggestions,
     handleSuggestionClick,
     isLoading,
-    hidden: !isAssistantMessage,
+    isHidden: !isAssistantMessage,
   };
 };
 
