@@ -15,9 +15,8 @@ const SegmentFanCircles = ({ fans }: SegmentFanCirclesProps) => {
       {displayedFans.map((fan, index) => (
         <div
           key={fan.id}
-          className="relative group w-[25px] h-[25px] md:w-[50px] md:h-[50px]"
+          className={`relative group ${index > 0 ? "-ml-[12px] md:-ml-[18px]" : ""}`}
           title={fan.username}
-          style={{ marginLeft: index > 0 ? "-18px" : "0" }}
         >
           <ImageWithFallback
             src={fan.avatar!}
