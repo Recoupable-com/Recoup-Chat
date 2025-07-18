@@ -12,6 +12,7 @@ import { sendErrorNotification } from "@/lib/telegram/errors/sendErrorNotificati
 import {
   setupChatRequest,
   handleChatCompletion,
+  createChatConfig,
   getCorsHeaders,
   getMaxMessages,
   type ChatRequest,
@@ -33,19 +34,19 @@ export async function POST(request: NextRequest) {
     const selectedModelId = "sonnet-3.7";
 
     // Use shared setup function
-    const { messagesWithRichFiles, system, tools } =
-      await setupChatRequest(body);
+    const setupResult = await setupChatRequest(body);
 
     return createDataStreamResponse({
       execute: (dataStream) => {
+        const chatConfig = createChatConfig(
+          setupResult,
+          myProvider.languageModel(selectedModelId),
+          generateUUID
+        );
+
         const result = streamText({
-          model: myProvider.languageModel(selectedModelId),
-          system,
-          messages: messagesWithRichFiles.slice(-getMaxMessages()),
-          maxSteps: 111,
+          ...chatConfig,
           experimental_transform: smoothStream({ chunking: "word" }),
-          experimental_generateMessageId: generateUUID,
-          tools,
           onFinish: async ({ response }) => {
             await handleChatCompletion(
               body,

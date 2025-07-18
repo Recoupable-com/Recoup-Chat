@@ -7,9 +7,10 @@ import { sendErrorNotification } from "@/lib/telegram/errors/sendErrorNotificati
 import {
   setupChatRequest,
   handleChatCompletion,
+  createChatConfig,
   getCorsHeaders,
-  getMaxMessages,
   type ChatRequest,
+  ResponseMessages,
 } from "@/lib/chat/sharedChatHandler";
 
 // Handle OPTIONS preflight requests
@@ -27,21 +28,23 @@ export async function POST(request: NextRequest) {
     const selectedModelId = "sonnet-3.7";
 
     // Use shared setup function
-    const { messagesWithRichFiles, system, tools } =
-      await setupChatRequest(body);
+    const setupResult = await setupChatRequest(body);
+
+    // Use shared configuration for generateText
+    const chatConfig = createChatConfig(
+      setupResult,
+      myProvider.languageModel(selectedModelId),
+      generateUUID
+    );
 
     // Use generateText instead of streamText for non-streaming response
-    const result = await generateText({
-      model: myProvider.languageModel(selectedModelId),
-      system,
-      messages: messagesWithRichFiles.slice(-getMaxMessages()),
-      maxSteps: 111,
-      experimental_generateMessageId: generateUUID,
-      tools,
-    });
+    const result = await generateText(chatConfig);
 
     // Handle chat completion using shared function
-    await handleChatCompletion(body, result.response.messages);
+    await handleChatCompletion(
+      body,
+      result.response.messages as ResponseMessages[]
+    );
 
     // Return the complete response with all the data
     return new Response(

@@ -30,6 +30,15 @@ export interface ChatSetupResult {
   email: string;
 }
 
+export interface ChatConfig {
+  model: any;
+  system: string;
+  messages: CoreMessage[];
+  maxSteps: number;
+  experimental_generateMessageId: () => string;
+  tools: any;
+}
+
 export async function setupChatRequest(
   body: ChatRequest
 ): Promise<ChatSetupResult> {
@@ -62,6 +71,21 @@ export async function setupChatRequest(
     system,
     tools,
     email: email || "",
+  };
+}
+
+export function createChatConfig(
+  setupResult: ChatSetupResult,
+  model: any,
+  generateMessageId: () => string
+): ChatConfig {
+  return {
+    model,
+    system: setupResult.system,
+    messages: setupResult.messagesWithRichFiles.slice(-getMaxMessages()),
+    maxSteps: 111,
+    experimental_generateMessageId: generateMessageId,
+    tools: setupResult.tools,
   };
 }
 
