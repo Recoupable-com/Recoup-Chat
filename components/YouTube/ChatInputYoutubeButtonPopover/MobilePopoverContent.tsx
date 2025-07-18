@@ -1,6 +1,7 @@
 import formatFollowerCount from "@/lib/utils/formatFollowerCount";
+import { YouTubeChannelData } from "@/types/youtube";
 
-export const MobilePopoverContent = ({ channel }: { channel: any }) => (
+export const MobilePopoverContent = ({ channel }: { channel: YouTubeChannelData }) => (
   <div className="bg-white border border-gray-200 rounded-lg shadow-lg overflow-hidden">
     {channel ? (
       <div className="bg-white">
@@ -22,9 +23,10 @@ export const MobilePopoverContent = ({ channel }: { channel: any }) => (
             <img
               src={
                 channel.thumbnails?.default?.url ||
-                channel.thumbnails?.medium?.url
+                channel.thumbnails?.medium?.url ||
+                ""
               }
-              alt={channel.title}
+              alt={channel.title || "YouTube Channel"}
               className="h-8 w-8 rounded-full object-cover border border-gray-200"
             />
             <div className="flex-1 min-w-0">
@@ -35,11 +37,11 @@ export const MobilePopoverContent = ({ channel }: { channel: any }) => (
           </div>
           <div className="flex justify-between text-xs text-gray-600">
             <span>
-              {formatFollowerCount(channel.statistics?.subscriberCount || "0")}{" "}
+              {formatFollowerCount(Number(channel.statistics?.subscriberCount || "0"))}{" "}
               subs
             </span>
             <span>
-              {formatFollowerCount(channel.statistics?.videoCount || "0")}{" "}
+              {formatFollowerCount(Number(channel.statistics?.videoCount || "0"))}{" "}
               videos
             </span>
           </div>

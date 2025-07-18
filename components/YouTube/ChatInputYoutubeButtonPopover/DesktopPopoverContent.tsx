@@ -1,8 +1,9 @@
 import { Youtube, Eye, Video } from "lucide-react";
 import formatFollowerCount from "@/lib/utils/formatFollowerCount";
 import StatCard from "./StatCard";
+import { YouTubeChannelData } from "@/types/youtube";
 
-export const DesktopPopoverContent = ({ channel }: { channel: any }) => (
+export const DesktopPopoverContent = ({ channel }: { channel: YouTubeChannelData }) => (
   <div className="w-80 p-0 rounded-xl overflow-hidden bg-white border border-gray-200 shadow-md">
     {channel ? (
       <div className="bg-white">
@@ -24,9 +25,10 @@ export const DesktopPopoverContent = ({ channel }: { channel: any }) => (
               src={
                 channel.thumbnails?.high?.url ||
                 channel.thumbnails?.medium?.url ||
-                channel.thumbnails?.default?.url
+                channel.thumbnails?.default?.url ||
+                ""
               }
-              alt={channel.title}
+              alt={channel.title || "YouTube Channel"}
               className="h-16 w-16 rounded-full object-cover border-2 border-gray-200"
             />
             <div className="flex-1 min-w-0">
@@ -54,18 +56,18 @@ export const DesktopPopoverContent = ({ channel }: { channel: any }) => (
               icon={Youtube}
               label="Subscribers"
               value={formatFollowerCount(
-                channel.statistics?.subscriberCount || "0"
+                Number(channel.statistics?.subscriberCount || "0")
               )}
             />
             <StatCard
               icon={Video}
               label="Videos"
-              value={formatFollowerCount(channel.statistics?.videoCount || "0")}
+              value={formatFollowerCount(Number(channel.statistics?.videoCount || "0"))}
             />
             <StatCard
               icon={Eye}
               label="Total Views"
-              value={formatFollowerCount(channel.statistics?.viewCount || "0")}
+              value={formatFollowerCount(Number(channel.statistics?.viewCount || "0"))}
             />
           </div>
         </div>
