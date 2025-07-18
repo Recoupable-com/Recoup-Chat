@@ -1,10 +1,5 @@
 import { myProvider } from "@/lib/models";
-import {
-  createDataStreamResponse,
-  Message,
-  smoothStream,
-  streamText,
-} from "ai";
+import { createDataStreamResponse, smoothStream, streamText } from "ai";
 import { NextRequest } from "next/server";
 import generateUUID from "@/lib/generateUUID";
 import { serializeError } from "@/lib/errors/serializeError";
@@ -14,7 +9,6 @@ import {
   handleChatCompletion,
   createChatConfig,
   getCorsHeaders,
-  getMaxMessages,
   type ChatRequest,
   ResponseMessages,
 } from "@/lib/chat/sharedChatHandler";
