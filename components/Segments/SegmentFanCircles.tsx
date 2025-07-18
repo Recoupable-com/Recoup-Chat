@@ -19,10 +19,9 @@ const SegmentFanCircles = ({ fans }: SegmentFanCirclesProps) => {
           title={fan.username}
           style={{ marginLeft: index > 0 ? "-18px" : "0" }}
         >
-          <ImageWithFallback
-            src={fan.avatar!}
-            className="w-[25px] h-[25px] md:w-[50px] md:h-[50px] rounded-full object-cover border-2 border-white hover:border-blue-400 transition-colors box-border"
-          />
+          <div className="w-[25px] h-[25px] md:w-[50px] md:h-[50px] rounded-full object-cover border-2 border-white hover:border-blue-400 transition-colors box-border">
+            <ImageWithFallback src={fan.avatar!} />
+          </div>
           {fan.bio && (
             <div className="absolute bottom-full left-1/2 transform -translate-x-1/2 mb-1 w-32 p-1 bg-black/80 text-white text-xs rounded opacity-0 group-hover:opacity-100 transition-opacity duration-200 pointer-events-none z-10">
               {fan.bio}
