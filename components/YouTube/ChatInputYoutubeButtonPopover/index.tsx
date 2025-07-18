@@ -9,13 +9,7 @@ import useIsMobile from "@/hooks/useIsMobile";
 import { useState } from "react";
 import { PopoverContent } from "./PopoverContent";
 
-const ChatInputYoutubeButtonPopover = ({
-  children,
-  artistAccountId,
-}: {
-  children: React.ReactNode;
-  artistAccountId: string;
-}) => {
+const ChatInputYoutubeButtonPopover = ({ children, artistAccountId }: { children: React.ReactNode; artistAccountId: string }) => {
   const { data: youtubeStatus, isLoading } = useYoutubeStatus(artistAccountId);
   const { data: channelInfo, isLoading: isChannelInfoLoading } = useYoutubeChannel(artistAccountId);
   const isMobile = useIsMobile();

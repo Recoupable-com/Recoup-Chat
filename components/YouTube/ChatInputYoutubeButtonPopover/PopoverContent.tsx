@@ -3,15 +3,10 @@ import formatFollowerCount from "@/lib/utils/formatFollowerCount";
 import { Youtube, Eye, Video } from "lucide-react";
 import StatCard from "./StatCard";
 
-export const PopoverContent = ({
-  channel,
-}: {
-  channel: YouTubeChannelData;
-}) => (
+export const PopoverContent = ({ channel }: { channel: YouTubeChannelData }) => (
   <div className="w-56 md:w-80 p-0 rounded-lg md:rounded-xl overflow-hidden bg-white border border-gray-200 shadow-lg">
     {channel ? (
       <div className="bg-white">
-        {/* Header with YouTube branding */}
         <div className="flex items-center gap-2 px-3 md:px-4 py-2 md:py-3 border-b border-gray-100">
           <img
             src="/brand-logos/youtube.png"
@@ -23,7 +18,6 @@ export const PopoverContent = ({
           </span>
         </div>
 
-        {/* Channel info */}
         <div className="p-3 md:p-4">
           <div className="flex items-start gap-2 md:gap-3 mb-2 md:mb-4">
             <img
@@ -54,8 +48,6 @@ export const PopoverContent = ({
               )}
             </div>
           </div>
-
-          {/* Stats Grid - Same design for both mobile and desktop */}
           <div className="grid grid-cols-2 gap-2 md:gap-3 mb-2 md:mb-3">
             <StatCard
               icon={Youtube}
