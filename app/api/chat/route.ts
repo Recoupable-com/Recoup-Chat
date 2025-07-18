@@ -1,17 +1,11 @@
-import { myProvider } from "@/lib/models";
 import { createDataStreamResponse, smoothStream, streamText } from "ai";
 import { NextRequest } from "next/server";
-import generateUUID from "@/lib/generateUUID";
 import { serializeError } from "@/lib/errors/serializeError";
 import { sendErrorNotification } from "@/lib/telegram/errors/sendErrorNotification";
-import {
-  setupChatRequest,
-  handleChatCompletion,
-  createChatConfig,
-  getCorsHeaders,
-  type ChatRequest,
-  ResponseMessages,
-} from "@/lib/chat/sharedChatHandler";
+import { setupChatRequest } from "@/lib/chat/setupChatRequest";
+import { handleChatCompletion } from "@/lib/chat/handleChatCompletion";
+import { getCorsHeaders } from "@/lib/chat/getCorsHeaders";
+import { type ChatRequest, type ResponseMessages } from "@/lib/chat/types";
 
 // Handle OPTIONS preflight requests
 export async function OPTIONS() {
@@ -25,19 +19,10 @@ export async function POST(request: NextRequest) {
   const body: ChatRequest = await request.json();
 
   try {
-    const selectedModelId = "sonnet-3.7";
-
-    // Use shared setup function
-    const setupResult = await setupChatRequest(body);
+    const chatConfig = await setupChatRequest(body);
 
     return createDataStreamResponse({
       execute: (dataStream) => {
-        const chatConfig = createChatConfig(
-          setupResult,
-          myProvider.languageModel(selectedModelId),
-          generateUUID
-        );
-
         const result = streamText({
           ...chatConfig,
           experimental_transform: smoothStream({ chunking: "word" }),

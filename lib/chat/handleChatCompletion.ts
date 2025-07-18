@@ -1,103 +1,15 @@
-import {
-  CoreAssistantMessage,
-  CoreMessage,
-  LanguageModel,
-  Message,
-  ToolSet,
-} from "ai";
-import { getMcpTools } from "@/lib/tools/getMcpTools";
+import { appendResponseMessages } from "ai";
 import createMemories from "@/lib/supabase/createMemories";
 import { validateMessages } from "@/lib/chat/validateMessages";
-import getSystemPrompt from "@/lib/prompts/getSystemPrompt";
 import getRoom from "@/lib/supabase/getRoom";
 import { createRoomWithReport } from "@/lib/supabase/createRoomWithReport";
 import { generateChatTitle } from "@/lib/chat/generateChatTitle";
 import { sendNewConversationNotification } from "@/lib/telegram/sendNewConversationNotification";
 import filterMessageContentForMemories from "@/lib/messages/filterMessageContentForMemories";
 import { serializeError } from "@/lib/errors/serializeError";
-import attachRichFiles from "@/lib/chat/attachRichFiles";
 import { sendErrorNotification } from "@/lib/telegram/errors/sendErrorNotification";
 import { getAccountEmails } from "@/lib/supabase/account_emails/getAccountEmails";
-
-const MAX_MESSAGES = 55;
-
-export interface ChatRequest {
-  messages: Array<Message>;
-  roomId: string;
-  artistId?: string;
-  accountId: string;
-  email?: string;
-}
-
-export interface ChatSetupResult {
-  messagesWithRichFiles: CoreMessage[];
-  system: string;
-  tools: ToolSet;
-  email: string;
-}
-
-export interface ChatConfig {
-  model: LanguageModel;
-  system: string;
-  messages: CoreMessage[];
-  maxSteps: number;
-  experimental_generateMessageId: () => string;
-  tools: ToolSet;
-}
-
-export async function setupChatRequest(
-  body: ChatRequest
-): Promise<ChatSetupResult> {
-  let { email } = body;
-  const { accountId, artistId } = body;
-
-  if (!email && accountId) {
-    const emails = await getAccountEmails(accountId);
-    if (emails.length > 0 && emails[0].email) {
-      email = emails[0].email;
-    }
-  }
-
-  const tools = await getMcpTools();
-
-  // Attach files like PDFs and images
-  const messagesWithRichFiles = await attachRichFiles(body.messages, {
-    artistId: artistId as string,
-  });
-
-  const system = await getSystemPrompt({
-    roomId: body.roomId,
-    artistId,
-    accountId,
-    email,
-  });
-
-  return {
-    messagesWithRichFiles,
-    system,
-    tools,
-    email: email || "",
-  };
-}
-
-export function createChatConfig(
-  setupResult: ChatSetupResult,
-  model: LanguageModel,
-  generateMessageId: () => string
-): ChatConfig {
-  return {
-    model,
-    system: setupResult.system,
-    messages: setupResult.messagesWithRichFiles.slice(-getMaxMessages()),
-    maxSteps: 111,
-    experimental_generateMessageId: generateMessageId,
-    tools: setupResult.tools,
-  };
-}
-
-export interface ResponseMessages extends CoreAssistantMessage {
-  id: string;
-}
+import { type ChatRequest, type ResponseMessages } from "./types";
 
 export async function handleChatCompletion(
   body: ChatRequest,
@@ -164,20 +76,3 @@ export async function handleChatCompletion(
     console.error("Failed to save chat", error);
   }
 }
-
-export function getCorsHeaders() {
-  return {
-    "Access-Control-Allow-Origin": "*",
-    "Access-Control-Allow-Methods": "GET, POST, PUT, DELETE, OPTIONS",
-    "Access-Control-Allow-Headers":
-      "Content-Type, Authorization, X-Requested-With",
-    "Access-Control-Allow-Credentials": "true",
-  };
-}
-
-export function getMaxMessages() {
-  return MAX_MESSAGES;
-}
-
-// Helper function to append response messages (imported from ai)
-import { appendResponseMessages } from "ai";
