@@ -15,16 +15,14 @@ const SegmentFanCircles = ({ fans }: SegmentFanCirclesProps) => {
       {displayedFans.map((fan, index) => (
         <div
           key={fan.id}
-          className="relative group"
+          className="relative group w-[25px] h-[25px] md:w-[50px] md:h-[50px]"
           title={fan.username}
           style={{ marginLeft: index > 0 ? "-18px" : "0" }}
         >
-          <div className="w-[25px] h-[25px] md:w-[50px] md:h-[50px]">
-            <ImageWithFallback
-              src={fan.avatar!}
-              className="rounded-full object-cover border-2 border-white hover:border-blue-400 transition-colors"
-            />
-          </div>
+          <ImageWithFallback
+            src={fan.avatar!}
+            className="rounded-full object-cover border-2 border-white hover:border-blue-400 transition-colors"
+          />
           {fan.bio && (
             <div className="absolute bottom-full left-1/2 transform -translate-x-1/2 mb-1 w-32 p-1 bg-black/80 text-white text-xs rounded opacity-0 group-hover:opacity-100 transition-opacity duration-200 pointer-events-none z-10">
               {fan.bio}
