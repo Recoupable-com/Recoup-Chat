@@ -33,10 +33,11 @@ export async function handleChatCompletion(
     });
 
     const room = await getRoom(roomId);
-    const conversationName = await generateChatTitle(messages[0].content);
 
     // Create room and send notification if this is a new conversation
     if (!room) {
+      const conversationName = await generateChatTitle(messages[0].content);
+
       await Promise.all([
         createRoomWithReport({
           account_id: accountId,
