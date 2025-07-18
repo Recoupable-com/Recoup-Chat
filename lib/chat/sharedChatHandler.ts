@@ -1,4 +1,10 @@
-import { CoreAssistantMessage, CoreMessage, Message } from "ai";
+import {
+  CoreAssistantMessage,
+  CoreMessage,
+  LanguageModel,
+  Message,
+  ToolSet,
+} from "ai";
 import { getMcpTools } from "@/lib/tools/getMcpTools";
 import createMemories from "@/lib/supabase/createMemories";
 import { validateMessages } from "@/lib/chat/validateMessages";
@@ -26,17 +32,17 @@ export interface ChatRequest {
 export interface ChatSetupResult {
   messagesWithRichFiles: CoreMessage[];
   system: string;
-  tools: any;
+  tools: ToolSet;
   email: string;
 }
 
 export interface ChatConfig {
-  model: any;
+  model: LanguageModel;
   system: string;
   messages: CoreMessage[];
   maxSteps: number;
   experimental_generateMessageId: () => string;
-  tools: any;
+  tools: ToolSet;
 }
 
 export async function setupChatRequest(
@@ -76,7 +82,7 @@ export async function setupChatRequest(
 
 export function createChatConfig(
   setupResult: ChatSetupResult,
-  model: any,
+  model: LanguageModel,
   generateMessageId: () => string
 ): ChatConfig {
   return {
