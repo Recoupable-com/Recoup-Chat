@@ -3,11 +3,8 @@ import {
   HoverCardContent,
   HoverCardTrigger,
 } from "@/components/ui/hover-card";
-import formatFollowerCount from "@/lib/utils/formatFollowerCount";
 import useYoutubeStatus from "@/hooks/useYoutubeStatus";
-import { Eye, Video, Youtube } from "lucide-react";
 import useYoutubeChannel from "@/hooks/useYoutubeChannel";
-import StatCard from "./StatCard";
 import useIsMobile from "@/hooks/useIsMobile";
 import { useState } from "react";
 import { DesktopPopoverContent } from "./DesktopPopoverContent";
