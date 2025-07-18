@@ -1,26 +1,25 @@
-import { Youtube, Eye, Video } from "lucide-react";
-import formatFollowerCount from "@/lib/utils/formatFollowerCount";
-import StatCard from "./StatCard";
 import { YouTubeChannelData } from "@/types/youtube";
+import formatFollowerCount from "@/lib/utils/formatFollowerCount";
+import { Youtube, Eye, Video } from "lucide-react";
+import StatCard from "./StatCard";
 
-export const DesktopPopoverContent = ({ channel }: { channel: YouTubeChannelData }) => (
-  <div className="w-80 p-0 rounded-xl overflow-hidden bg-white border border-gray-200 shadow-md">
+export const PopoverContent = ({ channel }: { channel: YouTubeChannelData }) => (
+  <div className="w-56 md:w-80 p-0 rounded-lg md:rounded-xl overflow-hidden bg-white border border-gray-200 shadow-lg">
     {channel ? (
       <div className="bg-white">
-        {/* Header with YouTube branding */}
-        <div className="flex items-center gap-2 px-4 py-3 border-b border-gray-100">
+        <div className="flex items-center gap-2 px-3 md:px-4 py-2 md:py-3 border-b border-gray-100">
           <img
             src="/brand-logos/youtube.png"
             alt="YouTube"
-            className="h-5 w-5"
+            className="h-4 w-4 md:h-5 md:w-5"
           />
-          <span className="font-medium text-gray-900 text-sm">
+          <span className="font-medium text-gray-900 text-xs md:text-sm">
             YouTube Channel
           </span>
         </div>
 
-        <div className="p-4">
-          <div className="flex items-start gap-3 mb-4">
+        <div className="p-3 md:p-4">
+          <div className="flex items-start gap-2 md:gap-3 mb-2 md:mb-4">
             <img
               src={
                 channel.thumbnails?.high?.url ||
@@ -29,14 +28,14 @@ export const DesktopPopoverContent = ({ channel }: { channel: YouTubeChannelData
                 ""
               }
               alt={channel.title || "YouTube Channel"}
-              className="h-16 w-16 rounded-full object-cover border-2 border-gray-200"
+              className="h-8 w-8 md:h-16 md:w-16 rounded-full object-cover border border-gray-200 md:border-2"
             />
             <div className="flex-1 min-w-0">
-              <h3 className="font-semibold text-gray-900 text-base truncate">
+              <h3 className="font-medium md:font-semibold text-gray-900 text-sm md:text-base truncate">
                 {channel.title}
               </h3>
               {channel.customUrl && (
-                <p className="text-red-600 text-sm font-medium">
+                <p className="text-red-600 text-xs md:text-sm font-medium">
                   {channel.customUrl}
                 </p>
               )}
@@ -49,9 +48,7 @@ export const DesktopPopoverContent = ({ channel }: { channel: YouTubeChannelData
               )}
             </div>
           </div>
-
-          {/* Stats Grid */}
-          <div className="grid grid-cols-2 gap-3 mb-3">
+          <div className="grid grid-cols-2 gap-2 md:gap-3 mb-2 md:mb-3">
             <StatCard
               icon={Youtube}
               label="Subscribers"
@@ -62,20 +59,26 @@ export const DesktopPopoverContent = ({ channel }: { channel: YouTubeChannelData
             <StatCard
               icon={Video}
               label="Videos"
-              value={formatFollowerCount(Number(channel.statistics?.videoCount || "0"))}
+              value={formatFollowerCount(
+                Number(channel.statistics?.videoCount || "0")
+              )}
             />
-            <StatCard
-              icon={Eye}
-              label="Total Views"
-              value={formatFollowerCount(Number(channel.statistics?.viewCount || "0"))}
-            />
+            <div className="col-span-2">
+              <StatCard
+                icon={Eye}
+                label="Total Views"
+                value={formatFollowerCount(
+                  Number(channel.statistics?.viewCount || "0")
+                )}
+              />
+            </div>
           </div>
         </div>
       </div>
     ) : (
-      <div className="p-4 text-sm text-gray-600 flex items-center gap-2">
+      <div className="p-3 md:p-4 text-sm text-gray-600 flex items-center gap-2">
         <img src="/brand-logos/youtube.png" alt="YouTube" className="h-4 w-4" />
-        Loading channel info...
+        Loading{window.innerWidth >= 768 ? " channel info..." : "..."}
       </div>
     )}
   </div>
