@@ -46,7 +46,6 @@ export async function GET(request: NextRequest) {
     // Return the tokens (they will be null if not found)
     return NextResponse.json({
       success: true,
-      tokens: tokens,
       hasValidTokens: !!(tokens && tokens.access_token)
     });
 
