@@ -46,8 +46,8 @@ export function useYouTubeLoginSuccess() {
     hasCheckedOAuth.current = true;
 
     // Check for valid YouTube tokens via API
-    if (selectedArtist?.account_id && userData?.id) {
-      fetchYouTubeTokens(selectedArtist.account_id, userData.id)
+    if (selectedArtist?.account_id) {
+      fetchYouTubeTokens(selectedArtist.account_id)
         .then(data => {
           if (data.success && data.hasValidTokens) {
             const successMessage = {
@@ -63,5 +63,5 @@ export function useYouTubeLoginSuccess() {
           // Silently handle errors - user can retry manually if needed
         });
     }
-  }, [selectedArtist?.account_id, userData?.id, messages, append]);
+  }, [selectedArtist?.account_id, messages, append]);
 }
