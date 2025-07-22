@@ -7,7 +7,7 @@ export interface ReasoningDetail {
 
 export interface ReasoningPart {
   type: "reasoning";
-  reasoning: string;
+  reasoningText: string;
   details: ReasoningDetail[];
 }
 

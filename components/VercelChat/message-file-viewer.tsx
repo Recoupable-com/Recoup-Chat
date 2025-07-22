@@ -1,4 +1,4 @@
-import { Attachment } from "@ai-sdk/ui-utils";
+import { Attachment } from 'ai';
 import { PDFIcon } from "./icons";
 import { FileIcon } from "lucide-react";
 import { PhotoProvider, PhotoView } from "react-photo-view";

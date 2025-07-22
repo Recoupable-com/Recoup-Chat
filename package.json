@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "next dev",
+    "dev": "next dev --turbopack",
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
@@ -11,11 +11,11 @@
     "update-types": "npx supabase gen types typescript --project-id godremdqwajrwazhbrue --schema public > types/database.types.ts"
   },
   "dependencies": {
-    "@ai-sdk/anthropic": "^1.2.0",
-    "@ai-sdk/openai": "^1.3.21",
-    "@ai-sdk/react": "^1.2.11",
+    "@ai-sdk/anthropic": "2.0.0-beta.8",
+    "@ai-sdk/openai": "2.0.0-beta.11",
+    "@ai-sdk/react": "2.0.0-beta.25",
     "@ai-sdk/ui-utils": "^1.1.15",
-    "@ai-sdk/xai": "^1.2.14",
+    "@ai-sdk/xai": "2.0.0-beta.10",
     "@ardrive/turbo-sdk": "^1.22.1",
     "@coinbase/cdp-sdk": "^1.4.0",
     "@coinbase/onchainkit": "^0.38.8",
@@ -39,7 +39,7 @@
     "@types/uuid": "^10.0.0",
     "@uiw/react-heat-map": "^2.3.2",
     "@vercel/analytics": "^1.5.0",
-    "ai": "^4.3.13",
+    "ai": "5.0.0-beta.25",
     "apify-client": "^2.9.7",
     "autoevals": "^0.0.129",
     "braintrust": "^0.0.205",
@@ -89,7 +89,7 @@
     "uuid": "^10.0.0",
     "viem": "2.x",
     "wagmi": "^2.15.4",
-    "zod": "^3.23.8"
+    "zod": "^3.25.0"
   },
   "devDependencies": {
     "@types/node": "^20",

@@ -1,4 +1,3 @@
-import { appendResponseMessages } from "ai";
 import createMemories from "@/lib/supabase/createMemories";
 import { validateMessages } from "@/lib/chat/validateMessages";
 import getRoom from "@/lib/supabase/getRoom";
@@ -11,10 +10,7 @@ import { sendErrorNotification } from "@/lib/telegram/errors/sendErrorNotificati
 import { getAccountEmails } from "@/lib/supabase/account_emails/getAccountEmails";
 import { type ChatRequest, type ResponseMessages } from "./types";
 
-export async function handleChatCompletion(
-  body: ChatRequest,
-  responseMessages: ResponseMessages[]
-): Promise<void> {
+export async function handleChatCompletion(body: ChatRequest): Promise<void> {
   try {
     const { messages, roomId, accountId, artistId } = body;
     let email = body.email || "";
@@ -27,16 +23,14 @@ export async function handleChatCompletion(
     }
 
     const { lastMessage } = validateMessages(messages);
-    const [, assistantMessage] = appendResponseMessages({
-      messages: [lastMessage],
-      responseMessages,
-    });
 
     const room = await getRoom(roomId);
 
     // Create room and send notification if this is a new conversation
     if (!room) {
-      const conversationName = await generateChatTitle(messages[0].content);
+      const latestMessageText =
+        lastMessage.parts.find((part) => part.type === "text")?.text || "";
+      const conversationName = await generateChatTitle(latestMessageText);
 
       await Promise.all([
         createRoomWithReport({
@@ -50,7 +44,7 @@ export async function handleChatCompletion(
           email,
           conversationId: roomId,
           topic: conversationName,
-          firstMessage: messages[0].content,
+          firstMessage: latestMessageText,
         }),
       ]);
     }
@@ -63,11 +57,12 @@ export async function handleChatCompletion(
       content: filterMessageContentForMemories(lastMessage),
     });
 
-    await createMemories({
-      id: assistantMessage.id,
-      room_id: roomId,
-      content: filterMessageContentForMemories(assistantMessage),
-    });
+    // TODO: save assistant memory
+    // await createMemories({
+    //   id: assistantMessage.id,
+    //   room_id: roomId,
+    //   content: filterMessageContentForMemories((assistantMessage)),
+    // });
   } catch (error) {
     sendErrorNotification({
       ...body,

@@ -1,4 +1,4 @@
-import { Message } from "ai/react";
+import { Message } from '@ai-sdk/react';
 import { useParams, useRouter } from "next/navigation";
 import { useUserProvider } from "@/providers/UserProvder";
 import { useMessagesProvider } from "@/providers/MessagesProvider";

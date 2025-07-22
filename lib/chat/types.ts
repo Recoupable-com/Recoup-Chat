@@ -1,13 +1,7 @@
-import {
-  CoreAssistantMessage,
-  CoreMessage,
-  LanguageModel,
-  Message,
-  ToolSet,
-} from "ai";
+import { ModelMessage, LanguageModel, UIMessage, ToolSet } from "ai";
 
 export interface ChatRequest {
-  messages: Array<Message>;
+  messages: Array<UIMessage>;
   roomId: string;
   artistId?: string;
   accountId: string;
@@ -17,12 +11,12 @@ export interface ChatRequest {
 export interface ChatConfig {
   model: LanguageModel;
   system: string;
-  messages: CoreMessage[];
+  messages: ModelMessage[];
   maxSteps: number;
   experimental_generateMessageId: () => string;
   tools: ToolSet;
 }
 
-export interface ResponseMessages extends CoreAssistantMessage {
+export type ResponseMessages = ModelMessage & {
   id: string;
-}
+};

@@ -1,4 +1,4 @@
-import { Message } from "ai";
+import { UIMessage } from "ai";
 import generateUUID from "@/lib/generateUUID";
 
 /**
@@ -8,7 +8,7 @@ import generateUUID from "@/lib/generateUUID";
  * @param content The text content of the message
  * @returns An array of properly formatted message objects
  */
-export function getMessages(content?: string): Message[] {
+export function getMessages(content?: string): UIMessage[] {
   if (!content) {
     return [];
   }
@@ -18,6 +18,7 @@ export function getMessages(content?: string): Message[] {
       id: generateUUID(),
       role: "user",
       content,
+      parts: [{ type: "text", text: content }],
     },
   ];
 }

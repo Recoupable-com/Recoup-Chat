@@ -25,16 +25,13 @@ export async function POST(request: NextRequest) {
     const result = await generateText(chatConfig);
 
     // Handle chat completion using shared function
-    await handleChatCompletion(
-      body,
-      result.response.messages as ResponseMessages[]
-    );
+    await handleChatCompletion(body);
 
     // Return the complete response with all the data
     return new Response(
       JSON.stringify({
-        text: result.text,
-        reasoning: result.reasoning,
+        text: result.text.text,
+        reasoningText: result.reasoningText,
         sources: result.sources,
         finishReason: result.finishReason,
         usage: result.usage,

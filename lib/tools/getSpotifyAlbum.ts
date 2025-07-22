@@ -84,7 +84,7 @@ const schema = z.object({
 const getSpotifyAlbum = tool({
   description:
     "Retrieve Spotify catalog information for a single album. You should call get_spotify_artist_albums or get_spotify_search first in order to get an album ID to use in the tool call.",
-  parameters: schema,
+  inputSchema: schema,
   execute: async ({ id, market }): Promise<SpotifyAlbum> => {
     const url = new URL("https://api.recoupable.com/api/spotify/album");
     url.searchParams.append("id", id);

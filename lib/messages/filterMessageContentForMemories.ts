@@ -1,6 +1,6 @@
-import { Message } from "ai";
+import { UIMessage } from "ai";
 
-const filterMessageContentForMemories = (message: Message) => {
+const filterMessageContentForMemories = (message: UIMessage) => {
   return {
     role: message.role,
     parts: message.parts,

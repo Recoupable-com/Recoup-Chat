@@ -5,13 +5,16 @@ import { RECOUP_FROM_EMAIL } from "../consts";
 
 const sendEmailTool = tool({
   description: `Send an email using the Resend API. Requires 'to' and 'subject'. Optionally include 'text', 'html', and custom headers.\n\nNotes:\n- Emails are sent from ${RECOUP_FROM_EMAIL}.\n- Use context to make the email creative and engaging.\n- Use this tool to send transactional or notification emails to users or admins.`,
-  parameters: z.object({
+  inputSchema: z.object({
     to: z
       .union([z.string().email(), z.array(z.string().email())])
       .describe("Recipient email address or array of addresses"),
     cc: z
       .union([
-        z.string().email().transform((email) => [email]),
+        z
+          .string()
+          .email()
+          .transform((email) => [email]),
         z.array(z.string().email()),
       ])
       .optional()
@@ -36,7 +39,14 @@ const sendEmailTool = tool({
       .optional()
       .describe("Optional custom headers for the email"),
   }),
-  execute: async ({ to, cc = [], subject, text, html, headers }: {
+  execute: async ({
+    to,
+    cc = [],
+    subject,
+    text,
+    html,
+    headers,
+  }: {
     to: string | string[];
     cc?: string[];
     subject: string;

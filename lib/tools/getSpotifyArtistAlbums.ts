@@ -60,11 +60,18 @@ const schema = z.object({
 const getSpotifyArtistAlbums = tool({
   description:
     "Retrieve Spotify catalog information about an artist's albums. You should call get_artist_socials or get_spotify_search first to obtain the artist ID before using this tool.",
-  parameters: schema,
-  execute: async ({ id, include_groups, market, limit = 20, offset = 0 }): Promise<ArtistAlbumsResponse> => {
+  inputSchema: schema,
+  execute: async ({
+    id,
+    include_groups,
+    market,
+    limit = 20,
+    offset = 0,
+  }): Promise<ArtistAlbumsResponse> => {
     const url = new URL("https://api.recoupable.com/api/spotify/artist/albums");
     url.searchParams.append("id", id);
-    if (include_groups) url.searchParams.append("include_groups", include_groups);
+    if (include_groups)
+      url.searchParams.append("include_groups", include_groups);
     if (market) url.searchParams.append("market", market);
     if (limit) url.searchParams.append("limit", limit.toString());
     if (offset) url.searchParams.append("offset", offset.toString());

@@ -1,5 +1,5 @@
 import { SUGGESTIONS } from "@/lib/consts";
-import { Message } from "ai";
+import { UIMessage } from "ai";
 import { useEffect, useState } from "react";
 import { usePathname } from "next/navigation";
 import { useArtistProvider } from "@/providers/ArtistProvider";
@@ -8,7 +8,9 @@ import { useFunnelReportProvider } from "@/providers/FunnelReportProvider";
 const usePrompts = () => {
   const { selectedArtist, isLoading } = useArtistProvider();
   const [prompts, setPrompts] = useState<string[]>([]);
-  const [currentQuestion, setCurrentQuestion] = useState<Message | null>(null);
+  const [currentQuestion, setCurrentQuestion] = useState<UIMessage | null>(
+    null
+  );
   const pathname = usePathname();
   const { funnelRawReportContent } = useFunnelReportProvider();
   const isNewChat = pathname === "/chat" || pathname === "/";

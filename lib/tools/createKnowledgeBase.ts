@@ -18,7 +18,7 @@ const createKnowledgeBase = tool({
   If you're unsure, use your tools, don't guess.
   Plan thoroughly before every tool call and reflect on the outcome after each tool call.
   `,
-  parameters: z.object({
+  inputSchema: z.object({
     knowledgeBaseText: z.string().describe("Text to add to the knowledge base"),
   }),
   execute: async ({ knowledgeBaseText }) => {

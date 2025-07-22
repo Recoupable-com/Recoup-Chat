@@ -33,7 +33,7 @@ export interface TxtFileGenerationResult {
 const createTxtFile = tool({
   description:
     "Create a downloadable TXT file from provided contents. The file will be stored onchain with Arweave and a collection will be created onchain with Base.",
-  parameters: schema,
+  inputSchema: schema,
   execute: async ({
     contents,
     active_account_email,

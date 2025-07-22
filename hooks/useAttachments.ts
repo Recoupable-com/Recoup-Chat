@@ -1,5 +1,5 @@
 import { useState, useCallback } from "react";
-import { Attachment } from '@ai-sdk/ui-utils';
+import { Attachment } from 'ai';
 
 /**
  * Hook for managing file attachments in chat

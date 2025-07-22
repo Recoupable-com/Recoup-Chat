@@ -85,7 +85,7 @@ const schema = z.object({
 const getSpotifyArtistTopTracks = tool({
   description:
     "Retrieve an artist's top tracks by country using the Spotify API. You should call get_artist_socials or get_spotify_search first in order to get an artist ID to use in the tool call.",
-  parameters: schema,
+  inputSchema: schema,
   execute: async ({
     id,
     market,

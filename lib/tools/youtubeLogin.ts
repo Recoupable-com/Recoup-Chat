@@ -6,9 +6,7 @@ import { YouTubeErrorBuilder } from "@/lib/youtube/error-builder";
 const schema = z.object({
   artist_account_id: z
     .string()
-    .describe(
-      "artist_account_id from the system prompt of the active artist."
-    ),
+    .describe("artist_account_id from the system prompt of the active artist."),
 });
 
 export interface YouTubeLoginResultType {
@@ -25,8 +23,12 @@ const youtubeLoginTool = tool({
   description: `Check YouTube authentication status for a specific account. 
 Returns authentication status and token expiry if authenticated, or clear instructions if not. 
 IMPORTANT: This tool requires the artist_account_id parameter. Never ask the user for this parameter. It is always passed in the system prompt.`,
-  parameters: schema,
-  execute: async ({ artist_account_id }: { artist_account_id: string }): Promise<YouTubeLoginResultType> => {
+  inputSchema: schema,
+  execute: async ({
+    artist_account_id,
+  }: {
+    artist_account_id: string;
+  }): Promise<YouTubeLoginResultType> => {
     if (!artist_account_id || artist_account_id.trim() === "") {
       return YouTubeErrorBuilder.createToolError(
         "No artist_account_id provided to YouTube login tool. The LLM must pass the artist_account_id parameter. Please ensure you're passing the current artist's artist_account_id."
@@ -40,7 +42,9 @@ IMPORTANT: This tool requires the artist_account_id parameter. Never ask the use
         );
       }
 
-      return YouTubeErrorBuilder.createToolSuccess("YouTube is connected for this account.");
+      return YouTubeErrorBuilder.createToolSuccess(
+        "YouTube is connected for this account."
+      );
     } catch (error) {
       return YouTubeErrorBuilder.createToolError(
         error instanceof Error

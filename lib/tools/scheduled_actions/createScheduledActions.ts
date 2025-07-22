@@ -23,7 +23,7 @@ const createScheduledActions = tool({
   
   The schedule parameter must be a valid cron expression (e.g. "0 0 * * *" for daily at midnight).
   `,
-  parameters: z.object({
+  inputSchema: z.object({
     actions: z
       .array(
         z.object({

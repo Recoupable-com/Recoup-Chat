@@ -1,4 +1,4 @@
-import { Message } from "ai";
+import { UIMessage } from "ai";
 import { sendMessage } from "@/lib/telegram/sendMessage";
 import { SerializedError } from "@/lib/errors/serializeError";
 import { formatErrorMessage } from "./formatErrorMessage";
@@ -7,7 +7,7 @@ import { createErrorLog } from "@/lib/supabase/error_logs/createErrorLog";
 export interface ErrorContext {
   email?: string;
   roomId?: string;
-  messages?: Message[];
+  messages?: UIMessage[];
   path: string;
   error: SerializedError;
 }

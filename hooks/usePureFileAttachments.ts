@@ -1,5 +1,5 @@
 import { useRef } from 'react';
-import { Attachment } from '@ai-sdk/ui-utils';
+import { Attachment } from 'ai';
 import { useVercelChatContext } from '@/providers/VercelChatProvider';
 import { CHAT_INPUT_SUPPORTED_FILE } from '@/lib/chat/config';
 

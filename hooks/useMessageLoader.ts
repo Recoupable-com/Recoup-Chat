@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { Message } from "ai";
+import { UIMessage } from "ai";
 import getClientMessages from "@/lib/supabase/getClientMessages";
 
 /**
@@ -12,7 +12,7 @@ import getClientMessages from "@/lib/supabase/getClientMessages";
 export function useMessageLoader(
   roomId: string | undefined,
   userId: string | undefined,
-  setMessages: (messages: Message[]) => void
+  setMessages: (messages: UIMessage[]) => void
 ) {
   const [isLoading, setIsLoading] = useState(!!roomId);
   const [error, setError] = useState<Error | null>(null);
@@ -30,7 +30,7 @@ export function useMessageLoader(
       try {
         const initialMessages = await getClientMessages(roomId);
         if (initialMessages.length > 0) {
-          setMessages(initialMessages as Message[]);
+          setMessages(initialMessages as UIMessage[]);
         }
       } catch (err) {
         console.error("Error loading messages:", err);

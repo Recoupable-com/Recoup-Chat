@@ -11,7 +11,7 @@ const searchWeb = tool({
     "Engages in a conversation using the Sonar API. " +
     "Accepts an array of messages (each with a role and content) " +
     "and returns a ask completion response from the Perplexity model.",
-  parameters: z.object({
+  inputSchema: z.object({
     messages: z.array(
       z.object({
         role: z.string(),

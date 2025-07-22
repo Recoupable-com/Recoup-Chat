@@ -11,7 +11,7 @@ export interface GenerateMermaidDiagramResult {
 export const generateMermaidDiagram = tool({
   description:
     "Generate a Mermaid diagram (Flow chart, Sequence diagram, etc.) based on the provided context and sends it directly to the frontend for rendering. Does not return the diagram in the response.",
-  parameters: z.object({
+  inputSchema: z.object({
     context: z
       .string()
       .describe(

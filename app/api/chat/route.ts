@@ -1,4 +1,9 @@
-import { createDataStreamResponse, smoothStream, streamText } from "ai";
+import {
+  createUIMessageStream,
+  createUIMessageStreamResponse,
+  smoothStream,
+  streamText,
+} from "ai";
 import { NextRequest } from "next/server";
 import { serializeError } from "@/lib/errors/serializeError";
 import { sendErrorNotification } from "@/lib/telegram/errors/sendErrorNotification";
@@ -21,16 +26,13 @@ export async function POST(request: NextRequest) {
   try {
     const chatConfig = await setupChatRequest(body);
 
-    return createDataStreamResponse({
-      execute: (dataStream) => {
+    const stream = createUIMessageStream({
+      execute: ({ writer }) => {
         const result = streamText({
           ...chatConfig,
           experimental_transform: smoothStream({ chunking: "word" }),
           onFinish: async ({ response }) => {
-            await handleChatCompletion(
-              body,
-              response.messages as ResponseMessages[]
-            );
+            await handleChatCompletion(body);
           },
           experimental_telemetry: {
             isEnabled: true,
@@ -40,9 +42,7 @@ export async function POST(request: NextRequest) {
 
         result.consumeStream();
 
-        result.mergeIntoDataStream(dataStream, {
-          sendReasoning: true,
-        });
+        writer.merge(result.toUIMessageStream());
       },
       onError: (e) => {
         sendErrorNotification({
@@ -53,8 +53,9 @@ export async function POST(request: NextRequest) {
         console.error("Error in chat API:", e);
         return JSON.stringify(serializeError(e));
       },
-      headers: getCorsHeaders(),
     });
+
+    return createUIMessageStreamResponse({ stream });
   } catch (e) {
     sendErrorNotification({
       ...body,

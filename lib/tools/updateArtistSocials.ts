@@ -25,7 +25,7 @@ const updateArtistSocialsTool = tool({
   description: `
     Update the artist_socials records for an artist. Provide the artistId and an array of social profile URLs. The tool will infer the platform for each URL and update the artist's socials accordingly.
   `,
-  parameters: schema,
+  inputSchema: schema,
   execute: async ({ artistId, urls }): Promise<UpdateArtistSocialsResult> => {
     try {
       // Map each URL to its platform type

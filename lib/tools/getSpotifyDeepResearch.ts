@@ -28,10 +28,12 @@ const getSpotifyDeepResearch = tool({
   If you're unsure, use your tools, don't guess.
   Plan thoroughly before every tool call and reflect on the outcome after each tool call.
   `,
-  parameters: z.object({
+  inputSchema: z.object({
     artist_account_id: z.string().describe("Artist account ID to research"),
   }),
-  execute: async ({ artist_account_id }): Promise<SpotifyDeepResearchResultUIType> => {
+  execute: async ({
+    artist_account_id,
+  }): Promise<SpotifyDeepResearchResultUIType> => {
     const data = await getArtistSocials(artist_account_id);
     return {
       artistSocials: data,

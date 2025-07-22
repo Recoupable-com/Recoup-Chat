@@ -8,7 +8,7 @@ import React, {
 import { useVercelChat } from "@/hooks/useVercelChat";
 import { Message, UseChatHelpers } from "@ai-sdk/react";
 import useAttachments from "@/hooks/useAttachments";
-import { Attachment } from "@ai-sdk/ui-utils";
+import { Attachment } from 'ai';
 import { useArtistProvider } from "./ArtistProvider";
 
 // Interface for the context data

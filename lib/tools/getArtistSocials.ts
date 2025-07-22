@@ -10,7 +10,7 @@ const schema = z.object({
 const getArtistSocialsTool = tool({
   description:
     "Retrieve all socials associated with an artist. This endpoint should be called before using the Social Posts endpoint to obtain the necessary social IDs.",
-  parameters: schema,
+  inputSchema: schema,
   execute: async ({ artist_account_id }) => {
     try {
       const data = await getArtistSocials(artist_account_id);

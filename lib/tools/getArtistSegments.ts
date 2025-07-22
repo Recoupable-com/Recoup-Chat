@@ -32,7 +32,7 @@ const schema = z.object({
 const getArtistSegments = tool({
   description:
     "Retrieve all segments associated with an artist. This endpoint should be called before using the Segment Fans endpoint to obtain the necessary segment IDs.",
-  parameters: schema,
+  inputSchema: schema,
   execute: async ({ artist_account_id, page, limit }) => {
     try {
       // Construct URL with query parameters

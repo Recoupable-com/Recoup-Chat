@@ -15,7 +15,7 @@ const schema = z.object({
 const contactTeam = tool({
   description:
     "Send a message to the team. Use this when users need to contact support or have questions for the team.",
-  parameters: schema,
+  inputSchema: schema,
   execute: async ({
     message,
     active_account_email,
