@@ -2,7 +2,7 @@ import { useEffect, useRef } from "react";
 import { useArtistProvider } from "@/providers/ArtistProvider";
 import { useVercelChatContext } from "@/providers/VercelChatProvider";
 import { generateUUID } from "@/lib/generateUUID";
-import useYoutubeChannel from "./useYoutubeChannel";
+import fetchYouTubeChannel from "@/lib/youtube/fetchYouTubeChannel";
 
 /**
  * Hook that detects YouTube login success and automatically continues the conversation
@@ -11,9 +11,6 @@ import useYoutubeChannel from "./useYoutubeChannel";
  */
 export function useYouTubeLoginSuccess() {
   const { selectedArtist } = useArtistProvider();
-  const { data: youtubeChannel } = useYoutubeChannel(
-    selectedArtist?.account_id || ""
-  );
   const { append, messages } = useVercelChatContext();
   const hasCheckedOAuth = useRef(false);
 
@@ -46,15 +43,19 @@ export function useYouTubeLoginSuccess() {
 
     hasCheckedOAuth.current = true;
 
-    if (youtubeChannel) {
-      const successMessage = {
-        id: generateUUID(),
-        role: "user" as const,
-        content:
-          "Great! I've successfully connected my YouTube account. Please continue with what you were helping me with.",
-      };
+    if (selectedArtist?.account_id) {
+      fetchYouTubeChannel(selectedArtist.account_id).then((youtubeChannel) => {
+        if (youtubeChannel.success) {
+          const successMessage = {
+            id: generateUUID(),
+            role: "user" as const,
+            content:
+              "Great! I've successfully connected my YouTube account. Please continue with what you were helping me with.",
+          };
 
-      append(successMessage);
+          append(successMessage);
+        }
+      });
     }
-  }, [messages, append, youtubeChannel]);
+  }, [messages, append, selectedArtist?.account_id]);
 }

@@ -1,24 +1,13 @@
+import fetchYouTubeChannel from "@/lib/youtube/fetchYouTubeChannel";
 import { YouTubeChannelResponse } from "@/types/youtube";
 import { useQuery } from "@tanstack/react-query";
 
 const useYoutubeChannel = (artistAccountId: string) => {
-  const { data, isLoading, error } = useQuery<YouTubeChannelResponse>({
+  return useQuery<YouTubeChannelResponse>({
     queryKey: ["youtube-channel-info", artistAccountId],
-    queryFn: async () => {
-      const response = await fetch(
-        `/api/youtube/channel-info?artist_account_id=${artistAccountId}`
-      );
-      
-      if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`);
-      }
-      
-      return response.json();
-    },
+    queryFn: () => fetchYouTubeChannel(artistAccountId),
     enabled: !!artistAccountId, // Only run query if artistAccountId is provided
   });
-
-  return { data, isLoading, error };
 };
 
 export default useYoutubeChannel;
