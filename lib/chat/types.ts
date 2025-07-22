@@ -1,3 +1,4 @@
+import { OpenAIResponsesProviderOptions } from "@ai-sdk/openai";
 import {
   CoreAssistantMessage,
   CoreMessage,
@@ -21,6 +22,7 @@ export interface ChatConfig {
   maxSteps: number;
   experimental_generateMessageId: () => string;
   tools: ToolSet;
+  providerOptions?: { openai: OpenAIResponsesProviderOptions };
 }
 
 export interface ResponseMessages extends CoreAssistantMessage {
