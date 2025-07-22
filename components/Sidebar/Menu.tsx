@@ -61,7 +61,7 @@ const Menu = ({ toggleMenuExpanded }: { toggleMenuExpanded: () => void }) => {
           )}
         >
           <MenuItemIcon name="segments" />
-          Segments
+          Fan Groups
         </Button>
       </div>
 
