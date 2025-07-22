@@ -21,26 +21,14 @@ import { validateYouTubeTokens } from "../youtube/token-validator";
 const schema = z.object({
   artist_account_id: z
     .string()
-    .describe(
-      "artist_account_id from the system prompt of the active artist."
-    ),
+    .describe("artist_account_id from the system prompt of the active artist."),
   startDate: z
     .string()
-    .default(() => {
-      const date = new Date();
-      date.setDate(date.getDate() - 30); // 30 days ago
-      return date.toISOString().split("T")[0];
-    })
     .describe(
       "Start date for revenue data in YYYY-MM-DD format. Example: '2024-01-01'. If not provided, defaults to 30 days ago."
     ),
   endDate: z
     .string()
-    .default(() => {
-      const date = new Date();
-      date.setDate(date.getDate() - 1); // Yesterday
-      return date.toISOString().split("T")[0];
-    })
     .describe(
       "End date for revenue data in YYYY-MM-DD format. Example: '2024-01-31'. Should be after startDate. If not provided, defaults to yesterday."
     ),
@@ -57,7 +45,11 @@ IMPORTANT: Always call the youtube_login tool first to obtain the required authe
     artist_account_id,
     startDate,
     endDate,
-  }: { artist_account_id: string, startDate: string, endDate: string }): Promise<YouTubeRevenueResult> => {
+  }: {
+    artist_account_id: string;
+    startDate: string;
+    endDate: string;
+  }): Promise<YouTubeRevenueResult> => {
     if (!artist_account_id || artist_account_id.trim() === "") {
       return YouTubeErrorBuilder.createToolError(
         "No artist_account_id provided to YouTube login tool. The LLM must pass the artist_account_id parameter. Please ensure you're passing the current artist's artist_account_id."

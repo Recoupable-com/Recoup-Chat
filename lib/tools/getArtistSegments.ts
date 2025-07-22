@@ -25,8 +25,11 @@ interface SegmentResponse {
 // Zod schema for parameter validation
 const schema = z.object({
   artist_account_id: z.string().min(1, "Artist account ID is required"),
-  page: z.number().min(1).optional().default(1),
-  limit: z.number().min(1).max(100).optional().default(20),
+  page: z.number().min(1, "Page number (minimum 1) is required"),
+  limit: z
+    .number()
+    .min(1, "Limit must be at least 1")
+    .max(100, "Limit must be at most 100"),
 });
 
 const getArtistSegments = tool({

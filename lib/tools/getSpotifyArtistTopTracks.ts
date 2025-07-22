@@ -79,7 +79,7 @@ export interface GetSpotifyArtistTopTracksResponse {
 
 const schema = z.object({
   id: z.string().min(1, "Artist ID is required"),
-  market: z.string().length(2).optional(),
+  market: z.string().length(2),
 });
 
 const getSpotifyArtistTopTracks = tool({

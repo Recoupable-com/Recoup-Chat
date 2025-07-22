@@ -27,7 +27,6 @@ const schema = z.object({
     .describe("Maximum number of tweets to return (1-1000)"),
   searchMode: z
     .enum(SEARCH_MODES)
-    .optional()
     .describe("Optional search mode: Top, Latest, Photos, Videos, Users"),
 });
 

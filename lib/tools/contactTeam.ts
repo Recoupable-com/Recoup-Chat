@@ -7,9 +7,15 @@ const schema = z.object({
     .string()
     .min(1, "Message cannot be empty")
     .max(1000, "Message too long"),
-  active_account_email: z.string().optional(),
-  active_conversation_id: z.string().optional(),
-  active_conversation_name: z.string().optional(),
+  active_account_email: z
+    .string()
+    .describe("the active_account_email pulled from the system prompt "),
+  active_conversation_id: z
+    .string()
+    .describe("The id of the conversation pulled from the system prompt"),
+  active_conversation_name: z
+    .string()
+    .describe("The name of the conversation pulled from the system prompt"),
 });
 
 const contactTeam = tool({

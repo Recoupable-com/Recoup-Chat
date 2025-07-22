@@ -36,7 +36,7 @@ const MessagesComponent = ({
 }: MessagesProps) => {
   const messagesRef = useRef<HTMLDivElement>(null);
   const messagesLength = useMemo(() => messages.length, [messages]);
-
+  console.log("messages", messages);
   useEffect(() => {
     if (messagesRef.current) {
       messagesRef.current.scrollTop = messagesRef.current.scrollHeight;

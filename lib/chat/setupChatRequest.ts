@@ -1,4 +1,3 @@
-import { myProvider } from "@/lib/models";
 import generateUUID from "@/lib/generateUUID";
 import { getMcpTools } from "@/lib/tools/getMcpTools";
 import attachRichFiles from "@/lib/chat/attachRichFiles";
@@ -6,6 +5,7 @@ import getSystemPrompt from "@/lib/prompts/getSystemPrompt";
 import { getAccountEmails } from "@/lib/supabase/account_emails/getAccountEmails";
 import { MAX_MESSAGES } from "./const";
 import { type ChatRequest, type ChatConfig } from "./types";
+import { openai } from "@ai-sdk/openai";
 
 export async function setupChatRequest(body: ChatRequest): Promise<ChatConfig> {
   let { email } = body;
@@ -32,14 +32,22 @@ export async function setupChatRequest(body: ChatRequest): Promise<ChatConfig> {
     email,
   });
 
-  const selectedModelId = "sonnet-3.7";
-
   return {
-    model: myProvider.languageModel(selectedModelId),
+    model: openai("o4-mini"),
     system,
     messages: messagesWithRichFiles.slice(-MAX_MESSAGES),
     maxSteps: 111,
     experimental_generateMessageId: generateUUID,
     tools,
+    providerOptions: {
+      openai: {
+        reasoningEffort: "medium",
+      },
+      google: {
+        thinkingConfig: {
+          thinkingBudget: 5000,
+        },
+      },
+    },
   };
 }
