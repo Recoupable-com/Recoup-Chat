@@ -7,7 +7,7 @@ import {
   defaultSettingsMiddleware,
 } from "ai";
 import { ANTHROPIC_MODEL, GEMINI_MODEL } from "./consts";
-import { google } from "@ai-sdk/google";
+import { google, GoogleGenerativeAIProviderOptions } from "@ai-sdk/google";
 
 // custom provider with different model settings:
 export const myProvider = customProvider({
@@ -25,7 +25,20 @@ export const myProvider = customProvider({
       model: anthropic(ANTHROPIC_MODEL),
     }),
     "grok-3-mini": xai("grok-3-mini"),
-    "gemini-2.5-flash": google(GEMINI_MODEL),
+    "gemini-2.5-flash": wrapLanguageModel({
+      middleware: defaultSettingsMiddleware({
+        settings: {
+          providerMetadata: {
+            google: {
+              thinkingConfig: {
+                thinkingBudget: 5000,
+              },
+            } satisfies GoogleGenerativeAIProviderOptions,
+          },
+        },
+      }),
+      model: google(GEMINI_MODEL),
+    }),
   },
   fallbackProvider: xai,
 });
