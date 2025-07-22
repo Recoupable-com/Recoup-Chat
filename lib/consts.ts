@@ -37,7 +37,8 @@ export const APIFY_WEBHOOKS_VALUE =
 // Vercel AI SDK
 export const AI_MODEL = "o3-mini";
 export const ANTHROPIC_MODEL = "claude-3-7-sonnet-20250219";
-export const GEMINI_MODEL = "gemini-2.5-flash-preview-04-17";
+// Use the stable Gemini 2.5 Flash model (preview version requires a different API, causing 404 errors)
+export const GEMINI_MODEL = "gemini-2.5-flash";
 
 export const TITLE = "Recoup";
 
