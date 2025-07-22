@@ -5,8 +5,8 @@ import { CommentResponse } from "@/types/Comment";
 // Zod schema for parameter validation
 const schema = z.object({
   post_id: z.string().min(1, "Post ID is required"),
-  page: z.number().min(1).default(1),
-  limit: z.number().min(1).max(100).default(20),
+  page: z.number().min(1),
+  limit: z.number().min(1).max(100),
 });
 
 const getPostComments = tool({

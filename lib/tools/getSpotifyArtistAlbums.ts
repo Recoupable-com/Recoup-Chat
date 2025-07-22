@@ -48,8 +48,8 @@ const schema = z.object({
       "Comma separated values of album types: album, single, appears_on, compilation"
     ),
   market: z.string().length(2).describe("ISO 3166-1 alpha-2 country code"),
-  limit: z.number().min(1).max(50).default(20),
-  offset: z.number().min(0).default(0),
+  limit: z.number().min(1).max(50),
+  offset: z.number().min(0),
 });
 
 const getSpotifyArtistAlbums = tool({

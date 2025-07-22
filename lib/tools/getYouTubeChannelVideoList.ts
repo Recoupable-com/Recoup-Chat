@@ -17,7 +17,6 @@ const schema = z.object({
     .number()
     .min(1)
     .max(50)
-    .default(25)
     .describe(
       "Maximum number of videos to return per page (1-50, default 25)."
     ),
