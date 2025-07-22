@@ -6,6 +6,8 @@ import getSystemPrompt from "@/lib/prompts/getSystemPrompt";
 import { getAccountEmails } from "@/lib/supabase/account_emails/getAccountEmails";
 import { MAX_MESSAGES } from "./const";
 import { type ChatRequest, type ChatConfig } from "./types";
+import { google } from "@ai-sdk/google";
+import { GEMINI_MODEL } from "../consts";
 
 export async function setupChatRequest(body: ChatRequest): Promise<ChatConfig> {
   let { email } = body;
@@ -32,10 +34,8 @@ export async function setupChatRequest(body: ChatRequest): Promise<ChatConfig> {
     email,
   });
 
-  const selectedModelId = "gemini-2.5-flash";
-
   return {
-    model: myProvider.languageModel(selectedModelId),
+    model: google(GEMINI_MODEL),
     system,
     messages: messagesWithRichFiles.slice(-MAX_MESSAGES),
     maxSteps: 111,
