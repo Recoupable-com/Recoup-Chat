@@ -1,4 +1,3 @@
-import { myProvider } from "@/lib/models";
 import generateUUID from "@/lib/generateUUID";
 import { getMcpTools } from "@/lib/tools/getMcpTools";
 import attachRichFiles from "@/lib/chat/attachRichFiles";
