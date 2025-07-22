@@ -6,7 +6,7 @@ import {
   wrapLanguageModel,
   defaultSettingsMiddleware,
 } from "ai";
-import { ANTHROPIC_MODEL } from "./consts";
+import { ANTHROPIC_MODEL, GEMINI_MODEL } from "./consts";
 import { google } from "@ai-sdk/google";
 
 // custom provider with different model settings:
@@ -25,7 +25,7 @@ export const myProvider = customProvider({
       model: anthropic(ANTHROPIC_MODEL),
     }),
     "grok-3-mini": xai("grok-3-mini"),
-    "gemini-2.5-flash": google("gemini-2.5-flash-preview-04-17"),
+    "gemini-2.5-flash": google(GEMINI_MODEL),
   },
   fallbackProvider: xai,
 });
