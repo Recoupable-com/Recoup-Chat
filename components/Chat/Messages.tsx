@@ -20,6 +20,7 @@ const Messages = ({
   children?: React.ReactNode;
 }) => {
   const { messages, pending } = useMessagesProvider();
+  console.log("messages", messages);
   const { prompts } = usePromptsProvider();
   const scrollTo = () => scroll({ smooth: true, y: Number.MAX_SAFE_INTEGER });
 
@@ -50,28 +51,31 @@ const Messages = ({
           )}
           <div
             className={cn("flex flex-col", {
-              "flex items-start bg-secondary/70 rounded-xl px-12 py-8 max-w-[75%] md:max-w-[65%] break-words border-4 border-red-500": message.role === "user" 
+              "flex items-start bg-secondary/70 rounded-xl px-12 py-8 max-w-[75%] md:max-w-[65%] break-words border-4 border-red-500":
+                message.role === "user",
             })}
           >
             {message.role === "user" ? (
-              <ChatMarkdown>
-                {message.content}
-              </ChatMarkdown>
-            ) : message.parts?.map((part, i) => {
-              if (part.type === "reasoning") {
-                return (
-                  <ReasoningMessagePart
-                    key={i}
-                    part={part}
-                    isReasoning={
-                      pending && i === (message.parts?.length ?? 0) - 1
-                    }
-                  />
-                );
-              }
-              return <TextMessagePart key={i} part={part} />;
-            }) || (
-              <TextMessagePart part={{ type: "text", text: message.content }} />
+              <ChatMarkdown>{message.content}</ChatMarkdown>
+            ) : (
+              message.parts?.map((part, i) => {
+                if (part.type === "reasoning") {
+                  return (
+                    <ReasoningMessagePart
+                      key={i}
+                      part={part}
+                      isReasoning={
+                        pending && i === (message.parts?.length ?? 0) - 1
+                      }
+                    />
+                  );
+                }
+                return <TextMessagePart key={i} part={part} />;
+              }) || (
+                <TextMessagePart
+                  part={{ type: "text", text: message.content }}
+                />
+              )
             )}
           </div>
         </div>

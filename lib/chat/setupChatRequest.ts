@@ -33,7 +33,7 @@ export async function setupChatRequest(body: ChatRequest): Promise<ChatConfig> {
   });
 
   return {
-    model: openai("o3-mini"),
+    model: openai("o4-mini"),
     system,
     messages: messagesWithRichFiles.slice(-MAX_MESSAGES),
     maxSteps: 111,
@@ -42,6 +42,11 @@ export async function setupChatRequest(body: ChatRequest): Promise<ChatConfig> {
     providerOptions: {
       openai: {
         reasoningEffort: "medium",
+      },
+      google: {
+        thinkingConfig: {
+          thinkingBudget: 5000,
+        },
       },
     },
   };

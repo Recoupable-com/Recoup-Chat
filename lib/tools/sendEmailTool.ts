@@ -25,9 +25,6 @@ const sendEmailTool = tool({
       .describe(
         "HTML body of the email. Use context to make this creative and engaging."
       ),
-    headers: z
-      .record(z.string(), z.string())
-      .describe("Optional custom headers for the email"),
   }),
   execute: async ({
     to,
