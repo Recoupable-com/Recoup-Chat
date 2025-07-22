@@ -33,7 +33,7 @@ export async function setupChatRequest(body: ChatRequest): Promise<ChatConfig> {
     email,
   });
 
-  const selectedModelId = GEMINI_MODEL;
+  const selectedModelId = "o4";
 
   return {
     model: myProvider.languageModel(selectedModelId),

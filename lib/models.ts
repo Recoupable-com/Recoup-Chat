@@ -8,6 +8,7 @@ import {
 } from "ai";
 import { ANTHROPIC_MODEL, GEMINI_MODEL } from "./consts";
 import { google, GoogleGenerativeAIProviderOptions } from "@ai-sdk/google";
+import { openai } from "@ai-sdk/openai";
 
 // custom provider with different model settings:
 export const myProvider = customProvider({
@@ -39,6 +40,18 @@ export const myProvider = customProvider({
       }),
       model: google(GEMINI_MODEL),
     }),
+    o4: wrapLanguageModel({
+      middleware: defaultSettingsMiddleware({
+        settings: {
+          providerMetadata: {
+            openai: {
+              reasoningEffort: "medium",
+            },
+          },
+        },
+      }),
+      model: openai("o4-mini"),
+    }),
   },
   fallbackProvider: xai,
 });
@@ -49,4 +62,5 @@ export const models: Record<modelID, string> = {
   "sonnet-3.7": "Claude Sonnet 3.7",
   "grok-3-mini": "Grok 3 Mini",
   "gemini-2.5-flash": "Gemini 2.5 Flash",
+  o4: "OpenAI o4",
 };
