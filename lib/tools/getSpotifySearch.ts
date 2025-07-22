@@ -26,7 +26,7 @@ export type GetSpotifySearchResult =
 const schema = z.object({
   name: z.string().min(1, "Search query is required"),
   type: z.array(z.enum(SPOTIFY_TYPES)).min(1, "At least one type is required"),
-  limit: z.number().min(1).max(50).optional().default(5),
+  limit: z.number().min(1).max(50).default(5),
 });
 
 const getSpotifySearch = tool({

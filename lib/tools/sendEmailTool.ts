@@ -11,26 +11,22 @@ const sendEmailTool = tool({
       .describe("Recipient email address or array of addresses"),
     cc: z
       .union([z.string().transform((email) => [email]), z.array(z.string())])
-      .optional()
       .describe(
         "Optional array of CC email addresses. active_account_email should always be included unless already in 'to'."
       ),
     subject: z.string().min(1).describe("Email subject line"),
     text: z
       .string()
-      .optional()
       .describe(
         "Plain text body of the email. Use context to make this creative and engaging."
       ),
     html: z
       .string()
-      .optional()
       .describe(
         "HTML body of the email. Use context to make this creative and engaging."
       ),
     headers: z
       .record(z.string(), z.string())
-      .optional()
       .describe("Optional custom headers for the email"),
   }),
   execute: async ({

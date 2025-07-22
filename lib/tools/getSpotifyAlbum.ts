@@ -74,11 +74,7 @@ export interface SpotifyTrack {
 
 const schema = z.object({
   id: z.string().min(1, "Album ID is required"),
-  market: z
-    .string()
-    .length(2)
-    .optional()
-    .describe("ISO 3166-1 alpha-2 country code"),
+  market: z.string().length(2).describe("ISO 3166-1 alpha-2 country code"),
 });
 
 const getSpotifyAlbum = tool({

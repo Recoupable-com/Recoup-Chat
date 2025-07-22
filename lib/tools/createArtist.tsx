@@ -47,7 +47,6 @@ IMPORTANT: After creating the artist, you MUST continue with these steps in orde
       ),
     active_conversation_id: z
       .string()
-      .optional()
       .describe(
         "The ID of the room/conversation to copy for this artist's first conversation. " +
           "If not provided, use the active_conversation_id from the system prompt."

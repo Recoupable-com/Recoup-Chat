@@ -22,24 +22,15 @@ const schema = z.object({
     ),
   email: z
     .string()
-    .optional()
     .describe("(Optional) The new email address for the artist."),
   image: z
     .string()
-    .optional()
     .describe("(Optional) The new profile image URL for the artist."),
-  name: z
-    .string()
-    .optional()
-    .describe("(Optional) The display name for the artist."),
+  name: z.string().describe("(Optional) The display name for the artist."),
   instruction: z
     .string()
-    .optional()
     .describe("(Optional) Custom instructions for the artist's account."),
-  label: z
-    .string()
-    .optional()
-    .describe("(Optional) The label or role for the artist."),
+  label: z.string().describe("(Optional) The label or role for the artist."),
   knowledges: z
     .array(
       z.object({
@@ -52,7 +43,6 @@ const schema = z.object({
           ),
       })
     )
-    .optional()
     .describe(
       "(Optional) Array of knowledge objects ({ url, name, type }) to be stored as the knowledge base or notes for the artist. The 'type' field must be a valid MIME type (e.g., 'text/plain' for TXT files)."
     ),

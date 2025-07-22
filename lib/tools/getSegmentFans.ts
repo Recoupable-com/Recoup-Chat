@@ -6,8 +6,8 @@ import { FanResponse } from "@/types/fans";
 // Zod schema for parameter validation
 const schema = z.object({
   segment_id: z.string().min(1, "Segment ID is required"),
-  page: z.number().min(1).optional().default(1),
-  limit: z.number().min(1).max(100).optional().default(20),
+  page: z.number().min(1).default(1),
+  limit: z.number().min(1).max(100).default(20),
 });
 
 const getSegmentFans = tool({

@@ -25,19 +25,16 @@ const getScheduledActions = tool({
   parameters: z.object({
     account_id: z
       .string()
-      .optional()
       .describe(
         "Optional: Filter actions by the account ID of the user who created them. Get this from the system prompt. Do not ask for this."
       ),
     artist_account_ids: z
       .array(z.string())
-      .optional()
       .describe(
         "Optional: Filter actions by an array of artist account IDs. If not provided, get the active artist id from the system prompt."
       ),
     enabled: z
       .boolean()
-      .optional()
       .describe("Optional: Filter actions by their enabled status"),
   }),
   execute: async ({

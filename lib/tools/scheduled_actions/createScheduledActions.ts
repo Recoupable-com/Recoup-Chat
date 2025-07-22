@@ -46,7 +46,6 @@ const createScheduledActions = tool({
             ),
           enabled: z
             .boolean()
-            .optional()
             .describe("Whether the action is enabled (defaults to true)"),
         })
       )

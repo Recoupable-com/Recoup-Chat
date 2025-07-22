@@ -44,27 +44,29 @@ const schema = z.object({
   id: z.string().min(1, "Artist ID is required"),
   include_groups: z
     .string()
-    .optional()
     .describe(
       "Comma separated values of album types: album, single, appears_on, compilation"
     ),
-  market: z
-    .string()
-    .length(2)
-    .optional()
-    .describe("ISO 3166-1 alpha-2 country code"),
-  limit: z.number().min(1).max(50).optional().default(20),
-  offset: z.number().min(0).optional().default(0),
+  market: z.string().length(2).describe("ISO 3166-1 alpha-2 country code"),
+  limit: z.number().min(1).max(50).default(20),
+  offset: z.number().min(0).default(0),
 });
 
 const getSpotifyArtistAlbums = tool({
   description:
     "Retrieve Spotify catalog information about an artist's albums. You should call get_artist_socials or get_spotify_search first to obtain the artist ID before using this tool.",
   parameters: schema,
-  execute: async ({ id, include_groups, market, limit = 20, offset = 0 }): Promise<ArtistAlbumsResponse> => {
+  execute: async ({
+    id,
+    include_groups,
+    market,
+    limit = 20,
+    offset = 0,
+  }): Promise<ArtistAlbumsResponse> => {
     const url = new URL("https://api.recoupable.com/api/spotify/artist/albums");
     url.searchParams.append("id", id);
-    if (include_groups) url.searchParams.append("include_groups", include_groups);
+    if (include_groups)
+      url.searchParams.append("include_groups", include_groups);
     if (market) url.searchParams.append("market", market);
     if (limit) url.searchParams.append("limit", limit.toString());
     if (offset) url.searchParams.append("offset", offset.toString());

@@ -37,29 +37,21 @@ const updateScheduledAction = tool({
       .describe("Array of IDs of the scheduled actions to update"),
     updates: z
       .object({
-        title: z
-          .string()
-          .optional()
-          .describe("The new title for the scheduled actions"),
+        title: z.string().describe("The new title for the scheduled actions"),
         prompt: z
           .string()
-          .optional()
           .describe("The new instruction or prompt to be executed"),
         schedule: z
           .string()
-          .optional()
           .describe("New cron expression for when the actions should run"),
         enabled: z
           .boolean()
-          .optional()
           .describe("Whether the actions should be enabled or disabled"),
         account_id: z
           .string()
-          .optional()
           .describe("The new account ID of the user who owns the actions"),
         artist_account_id: z
           .string()
-          .optional()
           .describe("The new artist account ID these actions are for"),
       })
       .describe("The fields to update on the scheduled actions"),

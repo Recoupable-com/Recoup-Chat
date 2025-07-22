@@ -24,9 +24,9 @@ interface PostResponse {
 // Zod schema for parameter validation
 const schema = z.object({
   social_id: z.string().min(1, "Social ID is required"),
-  latestFirst: z.boolean().optional().default(true),
-  page: z.number().min(1).optional().default(1),
-  limit: z.number().min(1).max(100).optional().default(20),
+  latestFirst: z.boolean().default(true),
+  page: z.number().min(1).default(1),
+  limit: z.number().min(1).max(100).default(20),
 });
 
 const getSocialPosts = tool({
