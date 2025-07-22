@@ -15,14 +15,14 @@ const NoSegmentsFound = ({ refetch }: NoSegmentsFoundProps) => {
 
   return (
     <div className="text-lg text-center py-8 flex flex-col items-center gap-4">
-      <div>No segments found for this artist.</div>
+      <div>No fan groups found for this artist.</div>
       <Button onClick={() => createSegments(refetch)} disabled={loading}>
         {loading && (
           <div className="inline-block animate-spin">
             <SpinnerIcon />
           </div>
         )}
-        Generate Segments
+        Create Fan Groups
       </Button>
       <ul className="mb-4 text-left w-full max-w-xs">
         <li className="flex items-center space-x-3 p-2 rounded bg-gray-50 border border-gray-200 my-1 text-gray-800">
