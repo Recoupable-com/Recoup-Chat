@@ -1,9 +1,8 @@
 import { useEffect, useRef } from "react";
 import { useArtistProvider } from "@/providers/ArtistProvider";
-import { useUserProvider } from "@/providers/UserProvder";
 import { useVercelChatContext } from "@/providers/VercelChatProvider";
 import { generateUUID } from "@/lib/generateUUID";
-import { fetchYouTubeTokens } from "@/lib/youtube/fetchYouTubeTokens";
+import fetchYouTubeChannel from "@/lib/youtube/fetchYouTubeChannel";
 
 /**
  * Hook that detects YouTube login success and automatically continues the conversation
@@ -12,7 +11,6 @@ import { fetchYouTubeTokens } from "@/lib/youtube/fetchYouTubeTokens";
  */
 export function useYouTubeLoginSuccess() {
   const { selectedArtist } = useArtistProvider();
-  const { userData } = useUserProvider();
   const { append, messages } = useVercelChatContext();
   const hasCheckedOAuth = useRef(false);
 
@@ -24,20 +22,20 @@ export function useYouTubeLoginSuccess() {
 
     // Check if this component is part of the latest message with YouTube tool call
     const latestMessage = messages[messages.length - 1];
-    if (!latestMessage || latestMessage.role !== 'assistant') {
+    if (!latestMessage || latestMessage.role !== "assistant") {
       return;
     }
 
     // Check if the FINAL tool call in the latest message is YouTube (meaning it failed)
     const parts = latestMessage.parts || [];
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const toolParts = parts.filter((part: any) => part.type === 'tool-invocation');
+    const toolParts = parts.filter((part) => part.type === "tool-invocation");
     const lastToolPart = toolParts[toolParts.length - 1];
-    
+
     // Type guard to check if it's a tool invocation with the right structure
-    const isLastToolYouTube = lastToolPart && 
-      'toolInvocation' in lastToolPart && 
-      lastToolPart.toolInvocation?.toolName === 'youtube_login';
+    const isLastToolYouTube =
+      lastToolPart &&
+      "toolInvocation" in lastToolPart &&
+      lastToolPart.toolInvocation?.toolName === "youtube_login";
 
     if (!isLastToolYouTube) {
       return;
@@ -45,23 +43,19 @@ export function useYouTubeLoginSuccess() {
 
     hasCheckedOAuth.current = true;
 
-    // Check for valid YouTube tokens via API
-    if (selectedArtist?.account_id && userData?.id) {
-      fetchYouTubeTokens(selectedArtist.account_id, userData.id)
-        .then(data => {
-          if (data.success && data.hasValidTokens) {
-            const successMessage = {
-              id: generateUUID(),
-              role: "user" as const,
-              content: "Great! I've successfully connected my YouTube account. Please continue with what you were helping me with.",
-            };
-            
-            append(successMessage);
-          }
-        })
-        .catch(() => {
-          // Silently handle errors - user can retry manually if needed
-        });
+    if (selectedArtist?.account_id) {
+      fetchYouTubeChannel(selectedArtist.account_id).then((youtubeChannel) => {
+        if (youtubeChannel.success) {
+          const successMessage = {
+            id: generateUUID(),
+            role: "user" as const,
+            content:
+              "Great! I've successfully connected my YouTube account. Please continue with what you were helping me with.",
+          };
+
+          append(successMessage);
+        }
+      });
     }
-  }, [selectedArtist?.account_id, userData?.id, messages, append]);
+  }, [messages, append, selectedArtist?.account_id]);
 }
