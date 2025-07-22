@@ -5,8 +5,7 @@ import getSystemPrompt from "@/lib/prompts/getSystemPrompt";
 import { getAccountEmails } from "@/lib/supabase/account_emails/getAccountEmails";
 import { MAX_MESSAGES } from "./const";
 import { type ChatRequest, type ChatConfig } from "./types";
-import { google } from "@ai-sdk/google";
-import { GEMINI_MODEL } from "../consts";
+import { openai } from "@ai-sdk/openai";
 
 export async function setupChatRequest(body: ChatRequest): Promise<ChatConfig> {
   let { email } = body;
@@ -34,7 +33,7 @@ export async function setupChatRequest(body: ChatRequest): Promise<ChatConfig> {
   });
 
   return {
-    model: google(GEMINI_MODEL),
+    model: openai("gpt-4.1-nano"),
     system,
     messages: messagesWithRichFiles.slice(-MAX_MESSAGES),
     maxSteps: 111,
