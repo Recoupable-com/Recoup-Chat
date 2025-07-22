@@ -17,7 +17,7 @@ const SegmentButton = ({ segment, onGenerateReport }: SegmentButtonProps) => {
       onClick={() => onGenerateReport(segment.id, segment.name)}
     >
       <CardHeader className="pb-2 p-4">
-        <h3 className="text-lg font-semibold group-hover:text-primary transition-colors leading-tight min-h-[3rem] flex items-start">
+        <h3 className="text-lg font-plus_jakarta_sans_bold group-hover:text-primary transition-colors leading-tight min-h-[3rem] flex items-start">
           {segment.name}
         </h3>
       </CardHeader>
