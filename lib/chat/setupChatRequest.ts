@@ -6,7 +6,6 @@ import getSystemPrompt from "@/lib/prompts/getSystemPrompt";
 import { getAccountEmails } from "@/lib/supabase/account_emails/getAccountEmails";
 import { MAX_MESSAGES } from "./const";
 import { type ChatRequest, type ChatConfig } from "./types";
-import { GEMINI_MODEL } from "../consts";
 
 export async function setupChatRequest(body: ChatRequest): Promise<ChatConfig> {
   let { email } = body;
