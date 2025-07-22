@@ -32,7 +32,7 @@ export async function setupChatRequest(body: ChatRequest): Promise<ChatConfig> {
     email,
   });
 
-  const selectedModelId = "sonnet-3.7";
+  const selectedModelId = "gemini-2.5-flash";
 
   return {
     model: myProvider.languageModel(selectedModelId),
