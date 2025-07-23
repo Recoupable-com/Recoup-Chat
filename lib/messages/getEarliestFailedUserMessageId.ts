@@ -38,7 +38,9 @@ const getEarliestFailedUserMessageId = (
 
     // For assistant messages, check if it's successful
     if (currentMessage.role === "assistant") {
-      const isContentEmpty = !currentMessage.content;
+      const isContentEmpty = !currentMessage.parts
+        .filter((part) => part.type === "text")
+        .join("");
       if (isContentEmpty) {
         return earliestUserMessageSinceLastSuccess;
       }
@@ -50,7 +52,7 @@ const getEarliestFailedUserMessageId = (
 
       if (toolParts && toolParts.length > 0) {
         const allToolsSuccessful = toolParts.every(
-          (part) => part.toolInvocation?.state === "result"
+          (part) => part.state === "output-available"
         );
         if (!allToolsSuccessful) {
           return earliestUserMessageSinceLastSuccess;
