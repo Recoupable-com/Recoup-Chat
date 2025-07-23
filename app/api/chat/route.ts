@@ -45,7 +45,6 @@ export async function POST(request: NextRequest) {
         return JSON.stringify(serializeError(e));
       },
       onFinish: async ({ messages }) => {
-        console.log("messages", messages);
         await handleChatCompletion(body, messages);
       },
     });
