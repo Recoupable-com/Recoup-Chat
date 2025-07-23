@@ -10,7 +10,7 @@ import { sendErrorNotification } from "@/lib/telegram/errors/sendErrorNotificati
 import { setupChatRequest } from "@/lib/chat/setupChatRequest";
 import { handleChatCompletion } from "@/lib/chat/handleChatCompletion";
 import { getCorsHeaders } from "@/lib/chat/getCorsHeaders";
-import { type ChatRequest, type ResponseMessages } from "@/lib/chat/types";
+import { type ChatRequest } from "@/lib/chat/types";
 
 // Handle OPTIONS preflight requests
 export async function OPTIONS() {
