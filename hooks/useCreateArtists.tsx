@@ -1,4 +1,4 @@
-import { UIMessage } from "ai";
+import { TextUIPart, UIMessage } from "ai";
 import { useCallback, useEffect, useState } from "react";
 
 const useCreateArtists = () => {
@@ -16,7 +16,7 @@ const useCreateArtists = () => {
     }
 
     if (chatMessages.length <= 2) {
-      const firstMessage = chatMessages[0].parts[0].text;
+      const firstMessage = (chatMessages[0].parts[0] as TextUIPart).text;
       const isCreatingArtist = firstMessage === "create a new artist";
 
       if (isCreatingArtist && chatStatus) {
