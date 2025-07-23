@@ -17,7 +17,6 @@ export function getMessages(content?: string): UIMessage[] {
     {
       id: generateUUID(),
       role: "user",
-      content,
       parts: [{ type: "text", text: content }],
     },
   ];
