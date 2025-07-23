@@ -15,7 +15,3 @@ export interface ChatConfig {
   experimental_generateMessageId: () => string;
   tools: ToolSet;
 }
-
-export type ResponseMessages = ModelMessage & {
-  id: string;
-};
