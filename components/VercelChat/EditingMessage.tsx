@@ -3,7 +3,7 @@ import { UIMessage } from "ai";
 import { MessageEditor } from "./message-editor";
 import { UseChatHelpers } from "@ai-sdk/react";
 
-interface EditingMessageProps {
+export interface EditingMessageProps {
   message: UIMessage;
   setMode: Dispatch<SetStateAction<"view" | "edit">>;
   setMessages: UseChatHelpers<UIMessage>["setMessages"];

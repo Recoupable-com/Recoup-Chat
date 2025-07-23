@@ -1,28 +1,21 @@
 "use client";
 
-import { UIMessage } from "ai";
 import { Button } from "@/components/ui/button";
-import { Dispatch, SetStateAction, useEffect, useRef, useState, useCallback } from "react";
+import { useEffect, useRef, useState, useCallback } from "react";
 import { Textarea } from "@/components/ui/textarea";
-import { UseChatHelpers } from "@ai-sdk/react";
 import { clientDeleteTrailingMessages } from "@/lib/messages/clientDeleteTrailingMessages";
-
-export type MessageEditorProps = {
-  message: UIMessage;
-  setMode: Dispatch<SetStateAction<"view" | "edit">>;
-  setMessages: UseChatHelpers["setMessages"];
-  reload: UseChatHelpers["reload"];
-};
+import { EditingMessageProps } from "./EditingMessage";
+import { TextUIPart } from "ai";
 
 export function MessageEditor({
   message,
   setMode,
   setMessages,
   reload,
-}: MessageEditorProps) {
+}: EditingMessageProps) {
   const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
-
-  const [draftContent, setDraftContent] = useState<string>(message.content);
+  const text = (message.parts[0] as TextUIPart).text;
+  const [draftContent, setDraftContent] = useState<string>(text);
   const textareaRef = useRef<HTMLTextAreaElement>(null);
 
   useEffect(() => {
@@ -69,12 +62,12 @@ export function MessageEditor({
     });
 
     setMode("view");
-    
+
     // Only reload if the content has actually changed
-    if (message.content !== draftContent) {
+    if (text !== draftContent) {
       reload();
     }
-  }, [message.id, message.content, draftContent, setMessages, setMode, reload]);
+  }, [message.id, text, draftContent, setMessages, setMode, reload]);
 
   return (
     <div className="flex flex-col gap-2 w-full">
