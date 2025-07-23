@@ -17,7 +17,7 @@ import {
   SpotifySearchResponse,
 } from "@/types/spotify";
 import { ArtistSocialsResultType } from "@/types/ArtistSocials";
-import { ToolInvocation } from "ai";
+import { ToolUIPart } from "ai";
 import UpdateArtistInfoSuccess from "./tools/UpdateArtistInfoSuccess";
 import { UpdateAccountInfoResult } from "@/lib/tools/updateAccountInfo";
 import UpdateArtistSocialsSuccess from "./tools/UpdateArtistSocialsSuccess";
@@ -80,50 +80,12 @@ import { UpdateScheduledActionResult } from "./tools/UpdateScheduledActionSucces
 import UpdateScheduledActionSkeleton from "./tools/UpdateScheduledActionSkeleton";
 
 /**
- * Interface for tool call props
- */
-interface ToolCallProps {
-  toolName: string;
-  toolCallId: string;
-}
-
-/**
- * Union type for all possible tool results
- */
-export type ToolResult =
-  | ImageGenerationResult
-  | GenerateMermaidDiagramResult
-  | CreateArtistResult
-  | DeleteArtistResult
-  | GetSpotifyPlayButtonClickedResult
-  | CommentsResultData
-  | SegmentFansResult
-  | YouTubeChannelInfoResult
-  | YouTubeRevenueResultType
-  | YouTubeLoginResultType
-  | SearchWebResultType
-  | ArtistSocialsResultType
-  | SpotifyDeepResearchResultUIType
-  | SpotifyArtistAlbumsResultUIType
-  | SpotifyArtistTopTracksResultType
-  | GetScheduledActionsResult
-  | CreateScheduledActionsResult
-  | SpotifyAlbum
-  | DeleteScheduledActionsResult
-  | UpdateScheduledActionResult
-  | Record<string, unknown>;
-
-/**
- * Interface for tool result props
- */
-interface ToolResultProps extends ToolCallProps {
-  result: ToolResult;
-}
-
-/**
  * Helper function to get the appropriate UI component for a tool call
  */
-export function getToolCallComponent({ toolName, toolCallId }: ToolInvocation) {
+export function getToolCallComponent(part: ToolUIPart) {
+  const { toolCallId, type } = part as ToolUIPart;
+  const toolName = type.split("-")[1];
+
   // Handle generate_image tool call
   if (toolName === "generate_image") {
     return (
@@ -262,11 +224,10 @@ export function getToolCallComponent({ toolName, toolCallId }: ToolInvocation) {
 /**
  * Helper function to get the appropriate UI component for a tool result
  */
-export function getToolResultComponent({
-  toolName,
-  toolCallId,
-  result,
-}: ToolResultProps) {
+export function getToolResultComponent(part: ToolUIPart) {
+  const { type, toolCallId, output: result } = part as ToolUIPart;
+  const toolName = type.split("-")[1];
+
   if (toolName === "generate_image") {
     return (
       <div key={toolCallId}>

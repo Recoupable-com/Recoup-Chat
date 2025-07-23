@@ -7,11 +7,7 @@ import { AnimatePresence } from "framer-motion";
 import { cn } from "@/lib/utils";
 import ViewingMessage from "./ViewingMessage";
 import EditingMessage from "./EditingMessage";
-import {
-  getToolCallComponent,
-  getToolResultComponent,
-  ToolResult,
-} from "./ToolComponents";
+import { getToolCallComponent, getToolResultComponent } from "./ToolComponents";
 import MessageFileViewer from "./message-file-viewer";
 
 const Message = ({
@@ -94,17 +90,11 @@ const Message = ({
               }
 
               if (type.includes("tool")) {
-                const toolName = type.split("-")[1];
-                const { toolCallId, state, output } = part as ToolUIPart;
-
+                const { state } = part as ToolUIPart;
                 if (state !== "output-available") {
-                  return getToolCallComponent({ toolName });
+                  return getToolCallComponent(part as ToolUIPart);
                 } else {
-                  return getToolResultComponent({
-                    toolName,
-                    toolCallId,
-                    result: output as ToolResult,
-                  });
+                  return getToolResultComponent(part as ToolUIPart);
                 }
               }
             })}
