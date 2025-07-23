@@ -1,3 +1,4 @@
+import { AnthropicProviderOptions } from "@ai-sdk/anthropic";
 import { ModelMessage, LanguageModel, UIMessage, ToolSet } from "ai";
 
 export interface ChatRequest {
@@ -14,4 +15,7 @@ export interface ChatConfig {
   messages: ModelMessage[];
   experimental_generateMessageId: () => string;
   tools: ToolSet;
+  providerOptions?: {
+    anthropic: AnthropicProviderOptions;
+  };
 }
