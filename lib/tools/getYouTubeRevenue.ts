@@ -31,21 +31,11 @@ IMPORTANT: Always call the youtube_login tool first to obtain the required authe
       ),
     startDate: z
       .string()
-      .default(() => {
-        const date = new Date();
-        date.setDate(date.getDate() - 30); // 30 days ago
-        return date.toISOString().split("T")[0];
-      })
       .describe(
         "Start date for revenue data in YYYY-MM-DD format. Example: '2024-01-01'. If not provided, defaults to 30 days ago."
       ),
     endDate: z
       .string()
-      .default(() => {
-        const date = new Date();
-        date.setDate(date.getDate() - 1); // Yesterday
-        return date.toISOString().split("T")[0];
-      })
       .describe(
         "End date for revenue data in YYYY-MM-DD format. Example: '2024-01-31'. Should be after startDate. If not provided, defaults to yesterday."
       ),
