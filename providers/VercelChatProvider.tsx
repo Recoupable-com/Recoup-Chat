@@ -6,31 +6,31 @@ import React, {
   useCallback,
 } from "react";
 import { useVercelChat } from "@/hooks/useVercelChat";
-import { Message, UseChatHelpers } from "@ai-sdk/react";
+import { UseChatHelpers } from "@ai-sdk/react";
 import useAttachments from "@/hooks/useAttachments";
-import { Attachment } from 'ai';
+import { ChatStatus, FileUIPart, UIMessage } from "ai";
 import { useArtistProvider } from "./ArtistProvider";
 
 // Interface for the context data
 interface VercelChatContextType {
   id: string | undefined;
-  messages: UseChatHelpers["messages"];
-  status: UseChatHelpers["status"];
+  messages: UseChatHelpers<UIMessage>["messages"];
+  status: ChatStatus;
   isLoading: boolean;
   hasError: boolean;
   isGeneratingResponse: boolean;
   handleSendMessage: (event: React.FormEvent<HTMLFormElement>) => Promise<void>;
-  stop: UseChatHelpers["stop"];
-  setInput: UseChatHelpers["setInput"];
-  input: UseChatHelpers["input"];
-  setMessages: UseChatHelpers["setMessages"];
-  reload: UseChatHelpers["reload"];
-  append: UseChatHelpers["append"];
-  attachments: Attachment[];
-  pendingAttachments: Attachment[];
-  uploadedAttachments: Attachment[];
+  stop: UseChatHelpers<UIMessage>["stop"];
+  setInput: (input: string) => void;
+  input: string;
+  setMessages: UseChatHelpers<UIMessage>["setMessages"];
+  reload: () => void;
+  append: (message: UIMessage) => void;
+  attachments: FileUIPart[];
+  pendingAttachments: FileUIPart[];
+  uploadedAttachments: FileUIPart[];
   setAttachments: (
-    attachments: Attachment[] | ((prev: Attachment[]) => Attachment[])
+    attachments: FileUIPart[] | ((prev: FileUIPart[]) => FileUIPart[])
   ) => void;
   removeAttachment: (index: number) => void;
   clearAttachments: () => void;
@@ -46,7 +46,7 @@ const VercelChatContext = createContext<VercelChatContextType | undefined>(
 interface VercelChatProviderProps {
   children: ReactNode;
   chatId: string;
-  initialMessages?: Message[];
+  initialMessages?: UIMessage[];
 }
 
 /**

@@ -1,5 +1,5 @@
-import type { Attachment } from 'ai';
-import { Loader2, FileIcon } from 'lucide-react';
+import type { FileUIPart } from "ai";
+import { Loader2, FileIcon } from "lucide-react";
 import { PDFIcon } from "./icons";
 import { PhotoView } from "react-photo-view";
 import "react-photo-view/dist/react-photo-view.css";
@@ -8,10 +8,10 @@ export const PreviewAttachment = ({
   attachment,
   isUploading = false,
 }: {
-  attachment: Attachment;
+  attachment: FileUIPart;
   isUploading?: boolean;
 }) => {
-  const { name, url, contentType } = attachment;
+  const { filename: name, url, mediaType: contentType } = attachment;
 
   return (
     <div data-testid="input-attachment-preview" className="flex flex-col gap-2">
@@ -28,7 +28,7 @@ export const PreviewAttachment = ({
                 />
               </PhotoView>
             )}
-            {contentType === 'application/pdf' && (
+            {contentType === "application/pdf" && (
               <div className="flex items-center justify-center bg-transparent">
                 <PDFIcon />
               </div>

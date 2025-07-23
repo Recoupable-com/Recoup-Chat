@@ -9,12 +9,12 @@ import getEarliestFailedUserMessageId from "@/lib/messages/getEarliestFailedUser
 import { clientDeleteTrailingMessages } from "@/lib/messages/clientDeleteTrailingMessages";
 import { generateUUID } from "@/lib/generateUUID";
 import { useConversationsProvider } from "@/providers/ConversationsProvider";
-import { Attachment, UIMessage } from "ai";
+import { FileUIPart, UIMessage } from "ai";
 
 interface UseVercelChatProps {
   id: string;
   initialMessages?: UIMessage[];
-  uploadedAttachments?: Attachment[]; // Accept attachments from provider
+  uploadedAttachments?: FileUIPart[]; // Accept attachments from provider
 }
 
 /**
