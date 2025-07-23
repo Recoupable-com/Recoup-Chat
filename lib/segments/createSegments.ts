@@ -9,6 +9,7 @@ import { Tables } from "@/types/database.types";
 import { successResponse, errorResponse } from "./createSegmentResponses";
 import { GenerateArrayResult } from "../ai/generateArray";
 import { getFanSegmentsToInsert } from "./getFanSegmentsToInsert";
+import { getArtistById } from "../supabase/artist/getArtistById";
 
 interface CreateArtistSegmentsParams {
   artist_account_id: string;
@@ -20,6 +21,10 @@ export const createSegments = async ({
   prompt,
 }: CreateArtistSegmentsParams) => {
   try {
+    // Get artist info for better error messages
+    const artistInfo = await getArtistById(artist_account_id);
+    const artistName = artistInfo?.name || "this artist";
+
     // Step 1: Get all social IDs for the artist
     const accountSocials = await getAccountSocials({
       accountId: artist_account_id,
@@ -29,7 +34,15 @@ export const createSegments = async ({
     );
 
     if (socialIds.length === 0) {
-      return errorResponse("No social accounts found for this artist");
+      return {
+        ...errorResponse("No social accounts found for this artist"),
+        feedback: `No social accounts found for ${artistName}. To automatically set up social accounts, please follow these steps:\n` +
+        `1. Call 'get_spotify_search' with "${artistName}" to find their Spotify profile\n` +
+        `2. Call 'search_web' to search for "${artistName} social media handles" (Instagram, Twitter, TikTok)\n` +
+        "3. Call 'update_artist_socials' with any discovered social profile URLs\n" +
+        "4. Call 'create_segments' again to retry segment creation\n" +
+        "This will establish the social connections needed for fan segmentation."
+      }
     }
 
     // Step 2: Get all fans for the artist
@@ -40,7 +53,16 @@ export const createSegments = async ({
     });
 
     if (fans.length === 0) {
-      return errorResponse("No fans found for this artist");
+      return {
+        ...errorResponse("No fans found for this artist"),
+        feedback: `No fan engagement data found for ${artistName}'s social accounts. To populate fan data, please follow these steps:\n` +
+        "1. Call 'scrape_instagram_profile' with the artist's Instagram handles to gather fan engagement\n" +
+        "2. Call 'search_twitter' to find Twitter engagement and followers\n" +
+        "3. Call 'get_social_posts' to retrieve social media posts for each connected platform\n" +
+        "4. Wait for the scraping operations to complete and populate the fan database\n" +
+        "5. Call 'create_segments' again to retry segment creation\n" +
+        "Note: Fan data collection may take some time as it involves scraping social platforms."
+      }
     }
 
     // Step 3: Generate segment names using AI
