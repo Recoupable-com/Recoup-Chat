@@ -27,11 +27,7 @@ const Providers = ({ children }: { children: React.ReactNode }) => (
                 <ArtistProvider>
                   <SidebarExpansionProvider>
                     <ConversationsProvider>
-                      <MessagesProvider>
-                        <ChatProvider>
-                          <PaymentProvider>{children}</PaymentProvider>
-                        </ChatProvider>
-                      </MessagesProvider>
+                      <PaymentProvider>{children}</PaymentProvider>
                     </ConversationsProvider>
                   </SidebarExpansionProvider>
                 </ArtistProvider>
