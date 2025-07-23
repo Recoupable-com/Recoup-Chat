@@ -1,4 +1,4 @@
-import { ChatStatus, ToolUIPart, UIMessage } from "ai";
+import { ChatStatus, ToolUIPart, UIMessage, isToolUIPart } from "ai";
 import ReasoningMessagePart from "./ReasoningMessagePart";
 import { useState } from "react";
 import { UseChatHelpers } from "@ai-sdk/react";
@@ -89,7 +89,7 @@ const Message = ({
                 }
               }
 
-              if (type.includes("tool")) {
+              if (isToolUIPart(part)) {
                 const { state } = part as ToolUIPart;
                 if (state !== "output-available") {
                   return getToolCallComponent(part as ToolUIPart);

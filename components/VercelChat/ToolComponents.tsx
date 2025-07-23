@@ -78,6 +78,7 @@ import { DeleteScheduledActionsResult } from "@/lib/tools/scheduled_actions/dele
 import UpdateScheduledActionSuccess from "./tools/UpdateScheduledActionSuccess";
 import { UpdateScheduledActionResult } from "./tools/UpdateScheduledActionSuccess";
 import UpdateScheduledActionSkeleton from "./tools/UpdateScheduledActionSkeleton";
+import { getToolName } from "ai";
 
 /**
  * Helper function to get the appropriate UI component for a tool call
@@ -225,8 +226,8 @@ export function getToolCallComponent(part: ToolUIPart) {
  * Helper function to get the appropriate UI component for a tool result
  */
 export function getToolResultComponent(part: ToolUIPart) {
-  const { type, toolCallId, output: result } = part as ToolUIPart;
-  const toolName = type.split("-")[1];
+  const { toolCallId, output: result } = part as ToolUIPart;
+  const toolName = getToolName(part);
 
   if (toolName === "generate_image") {
     return (

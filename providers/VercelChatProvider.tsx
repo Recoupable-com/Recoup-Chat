@@ -14,7 +14,7 @@ import { useArtistProvider } from "./ArtistProvider";
 // Interface for the context data
 interface VercelChatContextType {
   id: string | undefined;
-  messages: UseChatHelpers<UIMessage>["messages"];
+  messages: UIMessage[];
   status: ChatStatus;
   isLoading: boolean;
   hasError: boolean;
