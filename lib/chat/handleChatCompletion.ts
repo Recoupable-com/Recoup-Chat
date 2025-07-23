@@ -9,7 +9,7 @@ import { serializeError } from "@/lib/errors/serializeError";
 import { sendErrorNotification } from "@/lib/telegram/errors/sendErrorNotification";
 import { getAccountEmails } from "@/lib/supabase/account_emails/getAccountEmails";
 import { type ChatRequest } from "./types";
-import { AssistantModelMessage, ToolModelMessage, UIMessage } from "ai";
+import { UIMessage } from "ai";
 import generateUUID from "../generateUUID";
 
 export async function handleChatCompletion(
@@ -62,9 +62,6 @@ export async function handleChatCompletion(
       content: filterMessageContentForMemories(lastMessage),
     });
 
-    console.log("SAVE RESPONSE IN MEMORIES", responseMessages);
-
-    // TODO: save assistant memory
     await createMemories({
       id: generateUUID(),
       room_id: roomId,
