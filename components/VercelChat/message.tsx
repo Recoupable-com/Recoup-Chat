@@ -1,13 +1,16 @@
-import { UIMessage } from "ai";
+import { ToolUIPart, UIMessage } from "ai";
 import ReasoningMessagePart from "./ReasoningMessagePart";
 import { useState } from "react";
 import { motion } from "framer-motion";
 import { AnimatePresence } from "framer-motion";
 import { cn } from "@/lib/utils";
-import { UseChatHelpers } from "@ai-sdk/react";
 import ViewingMessage from "./ViewingMessage";
 import EditingMessage from "./EditingMessage";
-import { getToolCallComponent, getToolResultComponent } from "./ToolComponents";
+import {
+  getToolCallComponent,
+  getToolResultComponent,
+  ToolResult,
+} from "./ToolComponents";
 import MessageFileViewer from "./message-file-viewer";
 
 const Message = ({
@@ -89,20 +92,17 @@ const Message = ({
                 }
               }
 
-              if (type === "tool-invocation") {
-                const { toolInvocation } = part;
-                const { toolName, toolCallId, state } = toolInvocation;
+              if (type.includes("tool")) {
+                const toolName = type.split("-")[1];
+                const { toolCallId, state, output } = part as ToolUIPart;
 
-                if (state === "call") {
-                  return getToolCallComponent(toolInvocation);
-                }
-
-                if (state === "result") {
-                  const { result } = toolInvocation;
+                if (state !== "output-available") {
+                  return getToolCallComponent({ toolName });
+                } else {
                   return getToolResultComponent({
                     toolName,
                     toolCallId,
-                    result,
+                    result: output as ToolResult,
                   });
                 }
               }
