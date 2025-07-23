@@ -1,4 +1,4 @@
-import { ToolUIPart, UIMessage } from "ai";
+import { ChatStatus, ToolUIPart, UIMessage } from "ai";
 import ReasoningMessagePart from "./ReasoningMessagePart";
 import { useState } from "react";
 import { UseChatHelpers } from "@ai-sdk/react";
@@ -23,7 +23,7 @@ const Message = ({
   message: UIMessage;
   setMessages: UseChatHelpers<UIMessage>["setMessages"];
   reload: () => void;
-  status: "idle" | "submitted" | "streaming" | "error";
+  status: ChatStatus;
 }) => {
   const [mode, setMode] = useState<"view" | "edit">("view");
 
