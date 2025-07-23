@@ -1,11 +1,6 @@
 import { anthropic } from "@ai-sdk/anthropic";
 import { xai } from "@ai-sdk/xai";
-
-import {
-  customProvider,
-  wrapLanguageModel,
-  defaultSettingsMiddleware,
-} from "ai";
+import { customProvider } from "ai";
 import { ANTHROPIC_MODEL } from "./consts";
 
 // custom provider with different model settings:
