@@ -78,7 +78,7 @@ const ReasoningMessagePart: React.FC<ReasoningMessagePartProps> = ({
             variants={variants}
             transition={{ duration: 0.2, ease: "easeInOut" }}
           >
-            <ChatMarkdown>{part.text || ""}</ChatMarkdown>
+            <ChatMarkdown>{part?.text || ""}</ChatMarkdown>
           </motion.div>
         )}
       </AnimatePresence>
