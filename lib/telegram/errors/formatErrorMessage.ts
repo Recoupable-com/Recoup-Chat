@@ -38,8 +38,11 @@ export function formatErrorMessage(params: ErrorContext): string {
 
   if (messages && messages.length > 0) {
     const lastMessage = messages[messages.length - 1];
-    if (lastMessage?.content) {
-      message += `\nLast Message:\n${lastMessage.content}`;
+    const lastMessageText = lastMessage?.parts
+      .filter((part) => part.type === "text")
+      .join("");
+    if (lastMessageText) {
+      message += `\nLast Message:\n${lastMessageText}`;
     }
   }
 
