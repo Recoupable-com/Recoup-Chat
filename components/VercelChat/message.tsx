@@ -1,6 +1,7 @@
 import { ToolUIPart, UIMessage } from "ai";
 import ReasoningMessagePart from "./ReasoningMessagePart";
 import { useState } from "react";
+import { UseChatHelpers } from "@ai-sdk/react";
 import { motion } from "framer-motion";
 import { AnimatePresence } from "framer-motion";
 import { cn } from "@/lib/utils";
@@ -20,7 +21,7 @@ const Message = ({
   status,
 }: {
   message: UIMessage;
-  setMessages: (messages: UIMessage[]) => void;
+  setMessages: UseChatHelpers<UIMessage>["setMessages"];
   reload: () => void;
   status: "idle" | "submitted" | "streaming" | "error";
 }) => {

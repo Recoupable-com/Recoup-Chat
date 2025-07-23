@@ -30,8 +30,10 @@ const EditingMessageComponent: React.FC<EditingMessageProps> = ({
   );
 };
 
-const EditingMessage = memo(EditingMessageComponent, (prevProps, nextProps) => {
-  return prevProps.message.id === nextProps.message.id;
-});
+const EditingMessage = memo(
+  EditingMessageComponent,
+  (prevProps: EditingMessageProps, nextProps: EditingMessageProps) =>
+    prevProps.message.id === nextProps.message.id
+);
 
 export default EditingMessage;
