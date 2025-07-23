@@ -50,9 +50,13 @@ export function useYouTubeLoginSuccess() {
           const successMessage = {
             id: generateUUID(),
             role: "user" as const,
-            content:
-              "Great! I've successfully connected my YouTube account. Please continue with what you were helping me with.",
-          };
+            parts: [
+              {
+                type: "text",
+                text: "Great! I've successfully connected my YouTube account. Please continue with what you were helping me with.",
+              },
+            ],
+          } as UIMessage;
 
           append(successMessage);
         }

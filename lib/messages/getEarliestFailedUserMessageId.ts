@@ -1,4 +1,4 @@
-import { UIMessage } from "ai";
+import { isToolUIPart, UIMessage } from "ai";
 
 const getEarliestFailedUserMessageId = (
   messages: UIMessage[]
@@ -44,8 +44,8 @@ const getEarliestFailedUserMessageId = (
       }
 
       // Check if all tool invocations in parts have state: "result"
-      const toolParts = currentMessage.parts?.filter(
-        (part) => part.type === "tool-invocation"
+      const toolParts = currentMessage.parts?.filter((part) =>
+        isToolUIPart(part)
       );
 
       if (toolParts && toolParts.length > 0) {
