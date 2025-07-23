@@ -1,4 +1,4 @@
-import { myProvider } from "@/lib/models";
+// import { myProvider } from "@/lib/models";
 import generateUUID from "@/lib/generateUUID";
 import { getMcpTools } from "@/lib/tools/getMcpTools";
 import attachRichFiles from "@/lib/chat/attachRichFiles";
@@ -6,6 +6,7 @@ import getSystemPrompt from "@/lib/prompts/getSystemPrompt";
 import { getAccountEmails } from "@/lib/supabase/account_emails/getAccountEmails";
 import { MAX_MESSAGES } from "./const";
 import { type ChatRequest, type ChatConfig } from "./types";
+import { openai } from "@ai-sdk/openai";
 
 export async function setupChatRequest(body: ChatRequest): Promise<ChatConfig> {
   let { email } = body;
@@ -32,10 +33,11 @@ export async function setupChatRequest(body: ChatRequest): Promise<ChatConfig> {
     email,
   });
 
-  const selectedModelId = "claude-3-5-sonnet-20241022";
+  // const selectedModelId = "claude-3-5-sonnet-20241022";
 
   return {
-    model: myProvider.languageModel(selectedModelId),
+    // model: myProvider.languageModel(selectedModelId),
+    model: openai("o3"),
     system,
     messages: messagesWithRichFiles.slice(-MAX_MESSAGES),
     maxSteps: 111,
