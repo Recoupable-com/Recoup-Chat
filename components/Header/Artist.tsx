@@ -29,7 +29,7 @@ const Artist = ({
   const shouldHighlight = !isAnyArtistSelected; // Highlight when no artist is selected
 
   const pathname = usePathname();
-  const { push, replace } = useRouter();
+  const { replace } = useRouter();
 
   const handleClick = () => {
     toggleDropDown();
