@@ -35,13 +35,12 @@ export const createSegments = async ({
 
     if (socialIds.length === 0) {
       return {
-        ...errorResponse("No social accounts found for this artist"),
-        feedback: `No social accounts found for ${artistName}. To automatically set up social accounts, please follow these steps:\n` +
-        `1. Call 'get_spotify_search' with "${artistName}" to find their Spotify profile\n` +
-        `2. Call 'search_web' to search for "${artistName} social media handles" (Instagram, Twitter, TikTok)\n` +
-        "3. Call 'update_artist_socials' with any discovered social profile URLs\n" +
-        "4. Call 'create_segments' again to retry segment creation\n" +
-        "This will establish the social connections needed for fan segmentation."
+        ...errorResponse("No social account found for this artist"),
+        feedback: `No Instagram accounts found for ${artistName}. To automatically set up Instagram accounts, please follow these steps:\n` +
+        `1. Call 'search_web' to search for "${artistName} Instagram handle"\n` +
+        "2. Call 'update_artist_socials' with the discovered Instagram profile URL\n" +
+        "3. Call 'create_segments' again to retry segment creation\n" +
+        "Instagram is required for fan segmentation as it's the primary social platform configured for segments."
       }
     }
 
@@ -55,13 +54,12 @@ export const createSegments = async ({
     if (fans.length === 0) {
       return {
         ...errorResponse("No fans found for this artist"),
-        feedback: `No fan engagement data found for ${artistName}'s social accounts. To populate fan data, please follow these steps:\n` +
-        "1. Call 'scrape_instagram_profile' with the artist's Instagram handles to gather fan engagement\n" +
-        "2. Call 'search_twitter' to find Twitter engagement and followers\n" +
-        "3. Call 'get_social_posts' to retrieve social media posts for each connected platform\n" +
-        "4. Wait for the scraping operations to complete and populate the fan database\n" +
-        "5. Call 'create_segments' again to retry segment creation\n" +
-        "Note: Fan data collection may take some time as it involves scraping social platforms."
+        feedback: `No social_fans records found for ${artistName}. Before creating segments, you need social_fans data. Follow these steps:\n` +
+        "1. Call 'scrape_instagram_profile' with the artist's Instagram handles to get posts\n" +
+        "2. Call 'scrape_instagram_comments' with Instagram post URLs to scrape comment data\n" +
+        "3. Wait for the scraping jobs to complete and process into social_fans records\n" +
+        "4. Call 'create_segments' again once social_fans records are populated\n" +
+        "Note: Scraping jobs may take several minutes to complete."
       }
     }
 
