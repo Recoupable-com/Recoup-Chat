@@ -43,12 +43,6 @@ export default function useAttachments() {
       attachment.url?.startsWith("blob:") || !attachment.url
   );
 
-  // Get only the uploaded attachments (not pending)
-  const uploadedAttachments = attachments.filter(
-    (attachment: FileUIPart) =>
-      !attachment.url?.startsWith("blob:") && attachment.url
-  );
-
   // Check if there are any pending uploads
   const hasPendingUploads = pendingAttachments.length > 0;
 
@@ -56,7 +50,6 @@ export default function useAttachments() {
     attachments,
     setAttachments,
     pendingAttachments,
-    uploadedAttachments,
     removeAttachment,
     clearAttachments,
     hasPendingUploads,

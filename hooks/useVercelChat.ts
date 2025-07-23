@@ -14,7 +14,6 @@ import { FileUIPart, UIMessage } from "ai";
 interface UseVercelChatProps {
   id: string;
   initialMessages?: UIMessage[];
-  uploadedAttachments?: FileUIPart[]; // Accept attachments from provider
 }
 
 /**
@@ -22,11 +21,7 @@ interface UseVercelChatProps {
  * Combines useChat, and useMessageLoader
  * Accesses user and artist data directly from providers
  */
-export function useVercelChat({
-  id,
-  initialMessages,
-  uploadedAttachments = [], // Default to empty array
-}: UseVercelChatProps) {
+export function useVercelChat({ id, initialMessages }: UseVercelChatProps) {
   const { userData } = useUserProvider();
   const { selectedArtist } = useArtistProvider();
   const { roomId } = useParams();
@@ -139,14 +134,8 @@ export function useVercelChat({
       await deleteTrailingMessages();
     }
 
-    // Only send successfully uploaded attachments
-    const messageOptions =
-      uploadedAttachments.length > 0
-        ? { experimental_attachments: uploadedAttachments }
-        : undefined;
-
     // Submit the message
-    handleSubmit(event, messageOptions);
+    handleSubmit(event);
 
     if (!roomId) {
       silentlyUpdateUrl();

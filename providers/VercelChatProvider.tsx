@@ -28,7 +28,6 @@ interface VercelChatContextType {
   append: (message: UIMessage) => void;
   attachments: FileUIPart[];
   pendingAttachments: FileUIPart[];
-  uploadedAttachments: FileUIPart[];
   setAttachments: (
     attachments: FileUIPart[] | ((prev: FileUIPart[]) => FileUIPart[])
   ) => void;
@@ -61,7 +60,6 @@ export function VercelChatProvider({
   const {
     attachments,
     pendingAttachments,
-    uploadedAttachments,
     setAttachments,
     removeAttachment,
     clearAttachments,
@@ -86,7 +84,6 @@ export function VercelChatProvider({
   } = useVercelChat({
     id: chatId,
     initialMessages,
-    uploadedAttachments, // Pass attachments to useVercelChat
   });
 
   const reload = useCallback(() => {
@@ -120,7 +117,6 @@ export function VercelChatProvider({
     append,
     attachments,
     pendingAttachments,
-    uploadedAttachments,
     setAttachments,
     removeAttachment,
     clearAttachments,
