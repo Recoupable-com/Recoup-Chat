@@ -33,9 +33,6 @@ const Artist = ({
 
   const handleClick = () => {
     toggleDropDown();
-    if (pathname.includes("/funnels") && selectedArtist) {
-      if (selectedArtist.account_id !== artist?.account_id) push("/");
-    }
     if (pathname.includes("/chat/") && selectedArtist) {
       if (selectedArtist.account_id !== artist?.account_id) {
         replace("/chat");
@@ -67,7 +64,7 @@ const Artist = ({
               isAnyArtistSelected && "hover:bg-grey-light-1",
               isSelectedArtist && "!bg-primary/10",
             ],
-        shouldHighlight && "z-50 relative",
+        shouldHighlight && "z-50 relative"
       )}
       type="button"
       onClick={handleClick}
@@ -80,7 +77,7 @@ const Artist = ({
             "w-8 h-8 aspect-1/1 rounded-full overflow-hidden flex items-center justify-center p-0.5 border-2 border-transparent transition-colors min-w-8 min-h-8 box-content",
             isSelectedArtist &&
               "shadow-[1px_1px_1px_1px_#E6E6E6] border-primary",
-            shouldHighlight && "brightness-110 shadow-md ring-1 ring-white/30",
+            shouldHighlight && "brightness-110 shadow-md ring-1 ring-white/30"
           )}
         >
           <ImageWithFallback
@@ -95,7 +92,7 @@ const Artist = ({
             key={artist?.account_id}
             className={cn(
               "text-left grow text-grey-dark",
-              shouldHighlight && "font-medium",
+              shouldHighlight && "font-medium"
             )}
             title={artist?.name || ""}
           >
@@ -108,9 +105,12 @@ const Artist = ({
               if (artist) toggleUpdate(artist);
               toggleSettingModal();
             }}
-            className={cn("ml-auto flex-shrink-0 opacity-0 pointer-events-none", {
-              "opacity-1 pointer-events-auto": isHovered || isSelectedArtist,
-            })}
+            className={cn(
+              "ml-auto flex-shrink-0 opacity-0 pointer-events-none",
+              {
+                "opacity-1 pointer-events-auto": isHovered || isSelectedArtist,
+              }
+            )}
             title="Edit artist settings"
             aria-label="Edit artist settings"
           >

@@ -9,8 +9,6 @@ import { ConversationsProvider } from "./ConversationsProvider";
 import { FunnelReportProvider } from "./FunnelReportProvider";
 import { PaymentProvider } from "./PaymentProvider";
 import { MessagesProvider } from "./MessagesProvider";
-import { PromptsProvider } from "./PromptsProvider";
-import { FunnelAnalysisProvider } from "./FunnelAnalysisProvider";
 import { SidebarExpansionProvider } from "./SidebarExpansionContext";
 import { MiniKitProvider } from "./MiniKitProvider";
 import WagmiProvider from "./WagmiProvider";
@@ -29,17 +27,11 @@ const Providers = ({ children }: { children: React.ReactNode }) => (
                 <ArtistProvider>
                   <SidebarExpansionProvider>
                     <ConversationsProvider>
-                      <PromptsProvider>
-                        <MessagesProvider>
-                          <ChatProvider>
-                            <PaymentProvider>
-                              <FunnelAnalysisProvider>
-                                {children}
-                              </FunnelAnalysisProvider>
-                            </PaymentProvider>
-                          </ChatProvider>
-                        </MessagesProvider>
-                      </PromptsProvider>
+                      <MessagesProvider>
+                        <ChatProvider>
+                          <PaymentProvider>{children}</PaymentProvider>
+                        </ChatProvider>
+                      </MessagesProvider>
                     </ConversationsProvider>
                   </SidebarExpansionProvider>
                 </ArtistProvider>
