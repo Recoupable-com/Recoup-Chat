@@ -32,7 +32,7 @@ export async function setupChatRequest(body: ChatRequest): Promise<ChatConfig> {
     email,
   });
 
-  const selectedModelId = "sonnet-3.7";
+  const selectedModelId = "claude-3-5-sonnet-20241022";
 
   return {
     model: myProvider.languageModel(selectedModelId),
