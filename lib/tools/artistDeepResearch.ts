@@ -9,6 +9,7 @@ const TOOL_CHAIN_STEPS = [
   "update_artist_socials - link the discovered socials to the artist",
   "search_web - loop over this tool until you have all the info required below",
   "create_knowledge_base - generate a research txt file and attach it to the artist",
+  "create_segments - generate fan segments based on the research data",
   "youtube_login - final step, prompt user to connect YouTube for additional analytics and monetization data, it need user interaction",
 ];
 
