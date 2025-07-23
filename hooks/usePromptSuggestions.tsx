@@ -1,3 +1,4 @@
+import generateUUID from "@/lib/generateUUID";
 import { useVercelChatContext } from "@/providers/VercelChatProvider";
 import { TextUIPart } from "ai";
 import { useEffect, useState } from "react";
@@ -19,8 +20,9 @@ const usePromptSuggestions = () => {
 
   const handleSuggestionClick = (suggestion: string) => {
     append({
+      id: generateUUID(),
       role: "user",
-      content: suggestion,
+      parts: [{ type: "text", text: suggestion }],
     });
   };
 
