@@ -53,12 +53,12 @@ export function usePureFileAttachments() {
         prev.map((attachment: FileUIPart) =>
           // Compare by URL since object references won't match
           attachment.url === tempUrl
-            ? {
-                name: data.fileName,
-                contentType: data.fileType,
+            ? ({
+                type: "file",
+                filename: data.fileName,
+                mediaType: data.fileType,
                 url: data.url,
-                id: data.id, // Store the Arweave transaction ID
-              }
+              } as FileUIPart)
             : attachment
         )
       );
