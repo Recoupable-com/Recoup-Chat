@@ -25,8 +25,6 @@ IMPORTANT: Always call the youtube_login tool first to obtain the required authe
       .number()
       .min(1)
       .max(50)
-      .default(25)
-      .optional()
       .describe(
         "Maximum number of videos to return per page (1-50, default 25)."
       ),
