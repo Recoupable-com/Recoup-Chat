@@ -12,7 +12,6 @@ export interface ChatConfig {
   model: LanguageModel;
   system: string;
   messages: ModelMessage[];
-  maxSteps: number;
   experimental_generateMessageId: () => string;
   tools: ToolSet;
 }
