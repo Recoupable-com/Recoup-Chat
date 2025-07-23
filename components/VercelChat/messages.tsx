@@ -2,7 +2,7 @@
 
 import { useEffect, useMemo, useRef, memo } from "react";
 import { SpinnerIcon } from "./icons";
-import { UIMessage } from "ai";
+import { ChatStatus, UIMessage } from "ai";
 import { UseChatHelpers } from "@ai-sdk/react";
 import ChatMarkdown from "../Chat/ChatMarkdown";
 import Message from "./message";
@@ -21,7 +21,7 @@ export function TextMessagePart({ text }: TextMessagePartProps) {
 
 interface MessagesProps {
   messages: Array<UIMessage>;
-  status: "submitted" | "streaming" | "error" | "idle";
+  status: ChatStatus;
   setMessages: UseChatHelpers<UIMessage>["setMessages"];
   reload: () => void;
   children?: React.ReactNode;
