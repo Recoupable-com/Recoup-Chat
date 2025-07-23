@@ -68,7 +68,9 @@ export async function handleChatCompletion(
     await createMemories({
       id: generateUUID(),
       room_id: roomId,
-      content: responseMessages,
+      content: filterMessageContentForMemories(
+        responseMessages[responseMessages.length - 1]
+      ),
     });
   } catch (error) {
     sendErrorNotification({
