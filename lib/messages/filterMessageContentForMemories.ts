@@ -4,8 +4,7 @@ const filterMessageContentForMemories = (message: UIMessage) => {
   return {
     role: message.role,
     parts: message.parts,
-    content: message.content,
-    experimental_attachments: message.experimental_attachments,
+    content: message.parts.filter((part) => part.type === "text").join(""),
   };
 };
 
