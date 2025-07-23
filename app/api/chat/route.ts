@@ -1,7 +1,6 @@
 import {
   createUIMessageStream,
   createUIMessageStreamResponse,
-  smoothStream,
   streamText,
 } from "ai";
 import { NextRequest } from "next/server";
