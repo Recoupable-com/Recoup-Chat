@@ -8,5 +8,5 @@ interface TextMessagePartProps {
 }
 
 export function TextMessagePart({ part }: TextMessagePartProps) {
-  return <ChatMarkdown>{part.text}</ChatMarkdown>;
+  return <ChatMarkdown>{part?.text || ""}</ChatMarkdown>;
 }

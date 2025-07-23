@@ -70,7 +70,7 @@ const Message = ({
                     <ViewingMessage
                       key={key}
                       message={message}
-                      partText={part.text}
+                      partText={part?.text || ""}
                       setMode={setMode}
                     />
                   );
