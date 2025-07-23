@@ -64,7 +64,7 @@ const Message = ({
               }
 
               if (type === "file") {
-                return <MessageFileViewer part={part} />;
+                return <MessageFileViewer key={key} part={part} />;
               }
 
               if (type === "text") {
