@@ -6,8 +6,8 @@ import { UseChatHelpers } from "@ai-sdk/react";
 interface EditingMessageProps {
   message: UIMessage;
   setMode: Dispatch<SetStateAction<"view" | "edit">>;
-  setMessages: UseChatHelpers["setMessages"];
-  reload: UseChatHelpers["reload"];
+  setMessages: UseChatHelpers<UIMessage>["setMessages"];
+  reload: () => void;
 }
 
 const EditingMessageComponent: React.FC<EditingMessageProps> = ({
@@ -15,7 +15,7 @@ const EditingMessageComponent: React.FC<EditingMessageProps> = ({
   setMode,
   setMessages,
   reload,
-}) => {
+}: EditingMessageProps) => {
   return (
     <div className="flex flex-row gap-2 items-start">
       <div className="size-8" />
