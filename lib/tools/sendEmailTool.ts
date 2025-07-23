@@ -7,36 +7,26 @@ const sendEmailTool = tool({
   description: `Send an email using the Resend API. Requires 'to' and 'subject'. Optionally include 'text', 'html', and custom headers.\n\nNotes:\n- Emails are sent from ${RECOUP_FROM_EMAIL}.\n- Use context to make the email creative and engaging.\n- Use this tool to send transactional or notification emails to users or admins.`,
   inputSchema: z.object({
     to: z
-      .union([z.string().email(), z.array(z.string().email())])
+      .array(z.string())
       .describe("Recipient email address or array of addresses"),
     cc: z
-      .union([
-        z
-          .string()
-          .email()
-          .transform((email) => [email]),
-        z.array(z.string().email()),
-      ])
-      .optional()
+      .array(z.string())
       .describe(
         "Optional array of CC email addresses. active_account_email should always be included unless already in 'to'."
       ),
-    subject: z.string().min(1).describe("Email subject line"),
+    subject: z.string().describe("Email subject line"),
     text: z
       .string()
-      .optional()
       .describe(
         "Plain text body of the email. Use context to make this creative and engaging."
       ),
     html: z
       .string()
-      .optional()
       .describe(
         "HTML body of the email. Use context to make this creative and engaging."
       ),
     headers: z
       .record(z.string(), z.string())
-      .optional()
       .describe("Optional custom headers for the email"),
   }),
   execute: async ({
