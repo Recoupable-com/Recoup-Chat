@@ -30,14 +30,6 @@ export async function POST(request: NextRequest) {
       execute: ({ writer }) => {
         const result = streamText({
           ...chatConfig,
-          experimental_transform: smoothStream({ chunking: "word" }),
-          onFinish: async ({ response }) => {
-            await handleChatCompletion(body);
-          },
-          experimental_telemetry: {
-            isEnabled: true,
-            functionId: "stream-text",
-          },
         });
 
         result.consumeStream();
@@ -52,6 +44,10 @@ export async function POST(request: NextRequest) {
         });
         console.error("Error in chat API:", e);
         return JSON.stringify(serializeError(e));
+      },
+      onFinish: async ({ messages }) => {
+        console.log("messages", messages);
+        await handleChatCompletion(body, messages);
       },
     });
 

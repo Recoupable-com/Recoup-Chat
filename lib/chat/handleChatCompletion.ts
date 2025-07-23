@@ -8,9 +8,14 @@ import filterMessageContentForMemories from "@/lib/messages/filterMessageContent
 import { serializeError } from "@/lib/errors/serializeError";
 import { sendErrorNotification } from "@/lib/telegram/errors/sendErrorNotification";
 import { getAccountEmails } from "@/lib/supabase/account_emails/getAccountEmails";
-import { type ChatRequest, type ResponseMessages } from "./types";
+import { type ChatRequest } from "./types";
+import { AssistantModelMessage, ToolModelMessage, UIMessage } from "ai";
+import generateUUID from "../generateUUID";
 
-export async function handleChatCompletion(body: ChatRequest): Promise<void> {
+export async function handleChatCompletion(
+  body: ChatRequest,
+  responseMessages: UIMessage[]
+): Promise<void> {
   try {
     const { messages, roomId, accountId, artistId } = body;
     let email = body.email || "";
@@ -57,12 +62,14 @@ export async function handleChatCompletion(body: ChatRequest): Promise<void> {
       content: filterMessageContentForMemories(lastMessage),
     });
 
+    console.log("SAVE RESPONSE IN MEMORIES", responseMessages);
+
     // TODO: save assistant memory
-    // await createMemories({
-    //   id: assistantMessage.id,
-    //   room_id: roomId,
-    //   content: filterMessageContentForMemories((assistantMessage)),
-    // });
+    await createMemories({
+      id: generateUUID(),
+      room_id: roomId,
+      content: responseMessages,
+    });
   } catch (error) {
     sendErrorNotification({
       ...body,

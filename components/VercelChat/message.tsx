@@ -17,9 +17,9 @@ const Message = ({
   status,
 }: {
   message: UIMessage;
-  setMessages: UseChatHelpers["setMessages"];
-  reload: UseChatHelpers["reload"];
-  status: UseChatHelpers["status"];
+  setMessages: (messages: UIMessage[]) => void;
+  reload: () => void;
+  status: "idle" | "submitted" | "streaming" | "error";
 }) => {
   const [mode, setMode] = useState<"view" | "edit">("view");
 
@@ -43,12 +43,11 @@ const Message = ({
           )}
         >
           <div className={cn("flex flex-col gap-4 w-full")}>
-            <MessageFileViewer experimentalAttachment={message.experimental_attachments} />
             {message.parts?.map((part, partIndex) => {
               const { type } = part;
               const key = `message-${message.id}-part-${partIndex}`;
 
-              if (part.type === "reasoning") {
+              if (type === "reasoning") {
                 return (
                   <ReasoningMessagePart
                     key={key}
@@ -59,6 +58,10 @@ const Message = ({
                     }
                   />
                 );
+              }
+
+              if (type === "file") {
+                return <MessageFileViewer part={part} />;
               }
 
               if (type === "text") {

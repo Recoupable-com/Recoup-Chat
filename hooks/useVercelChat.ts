@@ -41,6 +41,7 @@ export function useVercelChat({
     useChat({
       id,
       experimental_throttle: 100,
+      maxSteps: 111,
       generateId: generateUUID,
       onError: (e) => {
         console.error("An error occurred, please try again!", e);
@@ -54,12 +55,12 @@ export function useVercelChat({
         // 2. Second just streamed message
         // When messages length is 2, it means second message has been streamed successfully and should also have been updated on backend
         // So we trigger the fetchConversations to update the conversation list
-
         if (messagesLengthRef.current === 2) {
           fetchConversations();
         }
       },
     });
+  console.log("messages", messages);
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();

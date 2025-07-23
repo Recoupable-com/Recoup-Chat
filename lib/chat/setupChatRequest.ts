@@ -38,7 +38,6 @@ export async function setupChatRequest(body: ChatRequest): Promise<ChatConfig> {
     model: myProvider.languageModel(selectedModelId),
     system,
     messages: messagesWithRichFiles.slice(-MAX_MESSAGES),
-    maxSteps: 111,
     experimental_generateMessageId: generateUUID,
     tools,
   };
