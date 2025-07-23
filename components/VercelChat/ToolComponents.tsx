@@ -17,7 +17,7 @@ import {
   SpotifySearchResponse,
 } from "@/types/spotify";
 import { ArtistSocialsResultType } from "@/types/ArtistSocials";
-import { ToolUIPart } from "ai";
+import { ToolUIPart, getToolName } from "ai";
 import UpdateArtistInfoSuccess from "./tools/UpdateArtistInfoSuccess";
 import { UpdateAccountInfoResult } from "@/lib/tools/updateAccountInfo";
 import UpdateArtistSocialsSuccess from "./tools/UpdateArtistSocialsSuccess";
@@ -78,7 +78,6 @@ import { DeleteScheduledActionsResult } from "@/lib/tools/scheduled_actions/dele
 import UpdateScheduledActionSuccess from "./tools/UpdateScheduledActionSuccess";
 import { UpdateScheduledActionResult } from "./tools/UpdateScheduledActionSuccess";
 import UpdateScheduledActionSkeleton from "./tools/UpdateScheduledActionSkeleton";
-import { getToolName } from "ai";
 
 /**
  * Helper function to get the appropriate UI component for a tool call
