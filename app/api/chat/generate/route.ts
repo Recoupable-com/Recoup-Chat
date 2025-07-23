@@ -1,4 +1,4 @@
-import { generateText } from "ai";
+import { generateText, UIMessage } from "ai";
 import { NextRequest } from "next/server";
 import { serializeError } from "@/lib/errors/serializeError";
 import { sendErrorNotification } from "@/lib/telegram/errors/sendErrorNotification";
@@ -6,6 +6,7 @@ import { setupChatRequest } from "@/lib/chat/setupChatRequest";
 import { handleChatCompletion } from "@/lib/chat/handleChatCompletion";
 import { getCorsHeaders } from "@/lib/chat/getCorsHeaders";
 import { type ChatRequest } from "@/lib/chat/types";
+import generateUUID from "@/lib/generateUUID";
 
 // Handle OPTIONS preflight requests
 export async function OPTIONS() {
@@ -24,13 +25,24 @@ export async function POST(request: NextRequest) {
     // Use generateText instead of streamText for non-streaming response
     const result = await generateText(chatConfig);
 
+    const responseUIMessage = {
+      id: generateUUID(),
+      role: "assistant",
+      parts: [
+        {
+          type: "text",
+          text: result.text,
+        },
+      ],
+    } as UIMessage;
+
     // Handle chat completion using shared function
-    await handleChatCompletion(body);
+    await handleChatCompletion(body, [responseUIMessage]);
 
     // Return the complete response with all the data
     return new Response(
       JSON.stringify({
-        text: result.text.text,
+        text: result.content,
         reasoningText: result.reasoningText,
         sources: result.sources,
         finishReason: result.finishReason,
