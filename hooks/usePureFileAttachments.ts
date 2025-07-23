@@ -49,8 +49,8 @@ export function usePureFileAttachments() {
       }
 
       // Update the attachment with the Arweave URL
-      setAttachments((prev: Attachment[]) =>
-        prev.map((attachment: Attachment) =>
+      setAttachments((prev: FileUIPart[]) =>
+        prev.map((attachment: FileUIPart) =>
           // Compare by URL since object references won't match
           attachment.url === tempUrl
             ? {
