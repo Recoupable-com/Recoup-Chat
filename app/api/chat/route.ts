@@ -26,12 +26,9 @@ export async function POST(request: NextRequest) {
     const chatConfig = await setupChatRequest(body);
 
     const stream = createUIMessageStream({
+      originalMessages: body.messages,
       execute: ({ writer }) => {
-        const result = streamText({
-          ...chatConfig,
-        });
-
-        result.consumeStream();
+        const result = streamText(chatConfig);
 
         writer.merge(result.toUIMessageStream());
       },
