@@ -3,6 +3,7 @@ import { User } from "lucide-react";
 import { useState } from "react";
 import Image from "next/image";
 import FanProfileHover from "./FanProfileHover";
+import Link from "next/link";
 
 type Social = Tables<"socials">;
 
@@ -31,6 +32,17 @@ const SegmentFanCircles = ({
       {displayedFans.map((fan, index) => (
         <FanProfileHover key={fan.id} fan={fan}>
           <div className="relative group">
+            <Link
+              href={
+                fan.profile_url.startsWith("http")
+                  ? fan.profile_url
+                  : `https://${fan.profile_url}`
+              }
+              target="_blank"
+              rel="noopener noreferrer"
+              onClick={(e) => e.stopPropagation()}
+              className="block"
+            >
             {!imageErrors.has(fan.id) && fan.avatar ? (
               // eslint-disable-next-line @next/next/no-img-element
               <img
@@ -45,6 +57,7 @@ const SegmentFanCircles = ({
                 <User className="w-5 h-5 text-gray-500" />
               </div>
             )}
+            </Link>
             {fan.profile_url.includes("tiktok.com") && (
               <div className="absolute -bottom-0.5 -right-0.5 w-4 h-4 rounded-full bg-white border border-gray-200 flex items-center justify-center">
                 <Image
