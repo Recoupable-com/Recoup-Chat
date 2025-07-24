@@ -1,3 +1,4 @@
+import Legal from "@/components/Home/Legal";
 import { Chat } from "@/components/VercelChat/chat";
 import generateUUID from "@/lib/generateUUID";
 import { getMessages } from "@/lib/messages/getMessages";
@@ -16,6 +17,7 @@ export default async function ChatPage({ searchParams }: ChatPageProps) {
   return (
     <div className="flex flex-col size-full items-center">
       <Chat id={id} initialMessages={initialMessages} />
+      <Legal />
     </div>
   );
 }
