@@ -16,7 +16,7 @@ const usePromptSuggestions = () => {
   const isAssistantMessage = lastMessage?.role === "assistant";
   const [isLoading, setIsLoading] = useState(false);
 
-  const content = (lastMessage?.parts[0] as TextUIPart).text;
+  const content = (lastMessage?.parts[0] as TextUIPart)?.text || "";
 
   const handleSuggestionClick = (suggestion: string) => {
     append({
