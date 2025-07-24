@@ -14,7 +14,7 @@ export function MessageEditor({
   reload,
 }: EditingMessageProps) {
   const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
-  const text = (message.parts[0] as TextUIPart).text;
+  const text = (message.parts[0] as TextUIPart)?.text || "";
   const [draftContent, setDraftContent] = useState<string>(text);
   const textareaRef = useRef<HTMLTextAreaElement>(null);
 

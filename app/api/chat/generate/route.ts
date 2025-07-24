@@ -31,7 +31,7 @@ export async function POST(request: NextRequest) {
       parts: [
         {
           type: "text",
-          text: result.text,
+          text: result?.text || "",
         },
       ],
     } as UIMessage;
