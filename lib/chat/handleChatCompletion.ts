@@ -10,7 +10,6 @@ import { sendErrorNotification } from "@/lib/telegram/errors/sendErrorNotificati
 import { getAccountEmails } from "@/lib/supabase/account_emails/getAccountEmails";
 import { type ChatRequest } from "./types";
 import { UIMessage } from "ai";
-import generateUUID from "../generateUUID";
 
 export async function handleChatCompletion(
   body: ChatRequest,
@@ -63,7 +62,7 @@ export async function handleChatCompletion(
     });
 
     await createMemories({
-      id: generateUUID(),
+      id: responseMessages[responseMessages.length - 1].id,
       room_id: roomId,
       content: filterMessageContentForMemories(
         responseMessages[responseMessages.length - 1]

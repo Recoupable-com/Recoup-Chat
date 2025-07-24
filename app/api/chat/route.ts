@@ -10,6 +10,7 @@ import { setupChatRequest } from "@/lib/chat/setupChatRequest";
 import { handleChatCompletion } from "@/lib/chat/handleChatCompletion";
 import { getCorsHeaders } from "@/lib/chat/getCorsHeaders";
 import { type ChatRequest } from "@/lib/chat/types";
+import generateUUID from "@/lib/generateUUID";
 
 // Handle OPTIONS preflight requests
 export async function OPTIONS() {
@@ -27,6 +28,7 @@ export async function POST(request: NextRequest) {
 
     const stream = createUIMessageStream({
       originalMessages: body.messages,
+      generateId: generateUUID,
       execute: ({ writer }) => {
         const result = streamText(chatConfig);
 
