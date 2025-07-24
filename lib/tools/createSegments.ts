@@ -19,8 +19,8 @@ const schema = z.object({
 
 const createSegmentsTool = tool({
   description:
-    "Create segments by analyzing fan data and generating segment names. This tool fetches all fans for an artist, generates segment names based on the provided prompt, and saves the segments to the database.",
-  inputSchema: schema,
+    "Create segments by analyzing fan data and generating segment names. This tool fetches all fans for an artist, generates segment names based on the provided prompt, and saves the segments to the database. If required information is missing (social accounts or fan data), the tool will provide step-by-step instructions to gather the missing prerequisites using other available tools.",
+  parameters: schema,
   execute: async ({ artist_account_id, prompt }) => {
     return await createSegments({ artist_account_id, prompt });
   },
