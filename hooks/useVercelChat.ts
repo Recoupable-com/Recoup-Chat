@@ -4,7 +4,7 @@ import { useUserProvider } from "@/providers/UserProvder";
 import { useArtistProvider } from "@/providers/ArtistProvider";
 import { useParams } from "next/navigation";
 import { toast } from "react-toastify";
-import { useEffect, useState, useRef } from "react";
+import { useEffect, useState, useRef, useMemo } from "react";
 import getEarliestFailedUserMessageId from "@/lib/messages/getEarliestFailedUserMessageId";
 import { clientDeleteTrailingMessages } from "@/lib/messages/clientDeleteTrailingMessages";
 import { generateUUID } from "@/lib/generateUUID";
@@ -31,6 +31,14 @@ export function useVercelChat({ id, initialMessages }: UseVercelChatProps) {
   const messagesLengthRef = useRef<number>();
   const { fetchConversations } = useConversationsProvider();
   const [input, setInput] = useState("");
+  const body = useMemo(
+    () => ({
+      roomId: id,
+      artistId,
+      accountId: userId,
+    }),
+    [id, artistId, userId]
+  );
 
   const { messages, status, stop, sendMessage, setMessages, regenerate } =
     useChat({
@@ -61,11 +69,7 @@ export function useVercelChat({ id, initialMessages }: UseVercelChatProps) {
     sendMessage(
       { text: input },
       {
-        body: {
-          roomId: id,
-          artistId,
-          accountId: userId,
-        },
+        body,
       }
     );
     setInput("");
@@ -73,11 +77,7 @@ export function useVercelChat({ id, initialMessages }: UseVercelChatProps) {
 
   const append = (message: UIMessage) => {
     sendMessage(message, {
-      body: {
-        roomId: id,
-        artistId,
-        accountId: userId,
-      },
+      body,
     });
   };
 
@@ -143,7 +143,9 @@ export function useVercelChat({ id, initialMessages }: UseVercelChatProps) {
 
   const handleSendQueryMessages = async (initialMessage: UIMessage) => {
     silentlyUpdateUrl();
-    sendMessage(initialMessage);
+    sendMessage(initialMessage, {
+      body,
+    });
   };
 
   useEffect(() => {
