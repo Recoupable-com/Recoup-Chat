@@ -4,10 +4,10 @@ import { useState, useEffect } from "react";
 import cn from "classnames";
 import Markdown from "react-markdown";
 import { motion, AnimatePresence } from "framer-motion";
-import { ReasoningPart } from "@/types/reasoning";
+import { ReasoningUIPart } from "ai";
 
 interface ReasoningMessagePartProps {
-  part: ReasoningPart;
+  part: ReasoningUIPart;
   isReasoning: boolean;
 }
 
@@ -93,11 +93,7 @@ export function ReasoningMessagePart({
             variants={variants}
             transition={{ duration: 0.2, ease: "easeInOut" }}
           >
-            {part.details.map((detail, detailIndex) =>
-              detail.type === "text" ? (
-                <Markdown key={detailIndex}>{detail.text}</Markdown>
-              ) : null
-            )}
+            <Markdown>{part?.text || ""}</Markdown>
           </motion.div>
         )}
       </AnimatePresence>

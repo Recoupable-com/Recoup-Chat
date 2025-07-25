@@ -1,13 +1,8 @@
-import {
-  CoreAssistantMessage,
-  CoreMessage,
-  LanguageModel,
-  Message,
-  ToolSet,
-} from "ai";
+import { AnthropicProviderOptions } from "@ai-sdk/anthropic";
+import { ModelMessage, LanguageModel, UIMessage, ToolSet } from "ai";
 
 export interface ChatRequest {
-  messages: Array<Message>;
+  messages: Array<UIMessage>;
   roomId: string;
   artistId?: string;
   accountId: string;
@@ -17,12 +12,10 @@ export interface ChatRequest {
 export interface ChatConfig {
   model: LanguageModel;
   system: string;
-  messages: CoreMessage[];
-  maxSteps: number;
+  messages: ModelMessage[];
   experimental_generateMessageId: () => string;
   tools: ToolSet;
-}
-
-export interface ResponseMessages extends CoreAssistantMessage {
-  id: string;
+  providerOptions?: {
+    anthropic: AnthropicProviderOptions;
+  };
 }

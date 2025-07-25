@@ -32,7 +32,7 @@ const artistDeepResearch = tool({
 
 Do not stop after initial research - continue with looping over these steps until all the required info is gathered.  
   `,
-  parameters: z.object({
+  inputSchema: z.object({
     artist_account_id: z.string().describe("Artist account ID to research"),
   }),
   execute: async ({ artist_account_id }) => {

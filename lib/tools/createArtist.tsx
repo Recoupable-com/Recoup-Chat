@@ -38,7 +38,7 @@ IMPORTANT: After creating the artist, you MUST continue with these steps in orde
   
   Do not stop after creating the artist - continue with all these steps to complete the setup.  
   `,
-  parameters: z.object({
+  inputSchema: z.object({
     name: z.string().describe("The name of the artist to be created"),
     account_id: z
       .string()

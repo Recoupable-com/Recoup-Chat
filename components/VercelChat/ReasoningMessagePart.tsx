@@ -3,26 +3,17 @@ import { motion, AnimatePresence } from "framer-motion";
 import { cn } from "@/lib/utils";
 import { SpinnerIcon, ChevronDownIcon, ChevronUpIcon } from "./icons";
 import ChatMarkdown from "../Chat/ChatMarkdown";
-
-interface ReasoningDetail {
-  type: string;
-  text?: string;
-}
-
-interface ReasoningPart {
-  type: "reasoning";
-  details: ReasoningDetail[];
-}
+import { ReasoningUIPart } from "ai";
 
 interface ReasoningMessagePartProps {
-  part: ReasoningPart;
+  part: ReasoningUIPart;
   isReasoning: boolean;
 }
 
 const ReasoningMessagePart: React.FC<ReasoningMessagePartProps> = ({
   part,
   isReasoning,
-}) => {
+}: ReasoningMessagePartProps) => {
   const [isExpanded, setIsExpanded] = useState(false);
 
   const variants = {
@@ -87,15 +78,7 @@ const ReasoningMessagePart: React.FC<ReasoningMessagePartProps> = ({
             variants={variants}
             transition={{ duration: 0.2, ease: "easeInOut" }}
           >
-            {part.details.map((detail, detailIndex) =>
-              detail.type === "text" ? (
-                <ChatMarkdown key={detailIndex}>
-                  {detail.text || ""}
-                </ChatMarkdown>
-              ) : (
-                "<redacted>"
-              )
-            )}
+            <ChatMarkdown>{part?.text || ""}</ChatMarkdown>
           </motion.div>
         )}
       </AnimatePresence>

@@ -1,4 +1,4 @@
-import { UIMessage } from "ai";
+import { isToolUIPart, UIMessage } from "ai";
 
 const getEarliestFailedUserMessageId = (
   messages: UIMessage[]
@@ -38,19 +38,21 @@ const getEarliestFailedUserMessageId = (
 
     // For assistant messages, check if it's successful
     if (currentMessage.role === "assistant") {
-      const isContentEmpty = !currentMessage.content;
+      const isContentEmpty = !currentMessage.parts
+        .filter((part) => part.type === "text")
+        .join("");
       if (isContentEmpty) {
         return earliestUserMessageSinceLastSuccess;
       }
 
       // Check if all tool invocations in parts have state: "result"
-      const toolParts = currentMessage.parts?.filter(
-        (part) => part.type === "tool-invocation"
+      const toolParts = currentMessage.parts?.filter((part) =>
+        isToolUIPart(part)
       );
 
       if (toolParts && toolParts.length > 0) {
         const allToolsSuccessful = toolParts.every(
-          (part) => part.toolInvocation?.state === "result"
+          (part) => part.state === "output-available"
         );
         if (!allToolsSuccessful) {
           return earliestUserMessageSinceLastSuccess;

@@ -1,10 +1,10 @@
-import { UIMessage } from "ai";
+import { ChatStatus, ToolUIPart, UIMessage, isToolUIPart } from "ai";
 import ReasoningMessagePart from "./ReasoningMessagePart";
 import { useState } from "react";
+import { UseChatHelpers } from "@ai-sdk/react";
 import { motion } from "framer-motion";
 import { AnimatePresence } from "framer-motion";
 import { cn } from "@/lib/utils";
-import { UseChatHelpers } from "@ai-sdk/react";
 import ViewingMessage from "./ViewingMessage";
 import EditingMessage from "./EditingMessage";
 import { getToolCallComponent, getToolResultComponent } from "./ToolComponents";
@@ -17,9 +17,9 @@ const Message = ({
   status,
 }: {
   message: UIMessage;
-  setMessages: UseChatHelpers["setMessages"];
-  reload: UseChatHelpers["reload"];
-  status: UseChatHelpers["status"];
+  setMessages: UseChatHelpers<UIMessage>["setMessages"];
+  reload: () => void;
+  status: ChatStatus;
 }) => {
   const [mode, setMode] = useState<"view" | "edit">("view");
 
@@ -43,12 +43,11 @@ const Message = ({
           )}
         >
           <div className={cn("flex flex-col gap-4 w-full")}>
-            <MessageFileViewer experimentalAttachment={message.experimental_attachments} />
             {message.parts?.map((part, partIndex) => {
               const { type } = part;
               const key = `message-${message.id}-part-${partIndex}`;
 
-              if (part.type === "reasoning") {
+              if (type === "reasoning") {
                 return (
                   <ReasoningMessagePart
                     key={key}
@@ -61,13 +60,17 @@ const Message = ({
                 );
               }
 
+              if (type === "file") {
+                return <MessageFileViewer key={key} part={part} />;
+              }
+
               if (type === "text") {
                 if (mode === "view") {
                   return (
                     <ViewingMessage
                       key={key}
                       message={message}
-                      partText={part.text}
+                      partText={part?.text || ""}
                       setMode={setMode}
                     />
                   );
@@ -86,21 +89,12 @@ const Message = ({
                 }
               }
 
-              if (type === "tool-invocation") {
-                const { toolInvocation } = part;
-                const { toolName, toolCallId, state } = toolInvocation;
-
-                if (state === "call") {
-                  return getToolCallComponent(toolInvocation);
-                }
-
-                if (state === "result") {
-                  const { result } = toolInvocation;
-                  return getToolResultComponent({
-                    toolName,
-                    toolCallId,
-                    result,
-                  });
+              if (isToolUIPart(part)) {
+                const { state } = part as ToolUIPart;
+                if (state !== "output-available") {
+                  return getToolCallComponent(part as ToolUIPart);
+                } else {
+                  return getToolResultComponent(part as ToolUIPart);
                 }
               }
             })}

@@ -11,7 +11,7 @@ export interface GetTwitterTrendsResponse {
 const getTwitterTrends = tool({
   description:
     "Retrieve the current trending topics from Twitter using the Recoup API. Returns an array of trending topic strings.",
-  parameters: z.object({}),
+  inputSchema: z.object({}),
   execute: async (): Promise<GetTwitterTrendsResponse> => {
     try {
       const url = "https://api.recoupable.com/api/x/trends";

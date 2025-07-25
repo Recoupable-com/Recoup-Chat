@@ -28,7 +28,7 @@ export interface ImageGenerationResult {
 const generateImage = tool({
   description:
     "Generate an image based on a text prompt. The image will be stored onchain with Arweave and a collection will be created onchain with Base.",
-  parameters: schema,
+  inputSchema: schema,
   execute: async ({ prompt }): Promise<ImageGenerationResult> => {
     try {
       // Generate the image with the provided prompt

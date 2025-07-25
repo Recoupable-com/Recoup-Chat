@@ -22,7 +22,7 @@ const getScheduledActions = tool({
   If no filters are provided, returns all scheduled actions the user has access to.
   If artist_account_ids is provided, returns actions for any of the specified artists.
   `,
-  parameters: z.object({
+  inputSchema: z.object({
     account_id: z
       .string()
       .optional()

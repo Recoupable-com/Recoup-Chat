@@ -1,13 +1,12 @@
-import { Message } from "@ai-sdk/react";
+import { TextUIPart, UIMessage } from "ai";
 import { useCallback, useEffect, useState } from "react";
 
 const useCreateArtists = () => {
-  const [isCreatingArtist, setIsCreatingArtist] =
-    useState(false);
+  const [isCreatingArtist, setIsCreatingArtist] = useState(false);
 
   // Add chat monitoring state
   const [chatStatus, setChatStatus] = useState<string | null>(null);
-  const [chatMessages, setChatMessages] = useState<Message[]>([]);
+  const [chatMessages, setChatMessages] = useState<UIMessage[]>([]);
 
   // Monitor chat for artist creation
   useEffect(() => {
@@ -17,7 +16,8 @@ const useCreateArtists = () => {
     }
 
     if (chatMessages.length <= 2) {
-      const firstMessage = chatMessages[0]?.content;
+      const firstMessage =
+        (chatMessages?.[0]?.parts?.[0] as TextUIPart)?.text || "";
       const isCreatingArtist = firstMessage === "create a new artist";
 
       if (isCreatingArtist && chatStatus) {
@@ -33,10 +33,13 @@ const useCreateArtists = () => {
   }, [chatStatus, chatMessages]);
 
   // Function to update chat state from VercelChatProvider
-  const updateChatState = useCallback((status: string, messages: Message[]) => {
-    setChatStatus(status);
-    setChatMessages(messages);
-  }, []);
+  const updateChatState = useCallback(
+    (status: string, messages: UIMessage[]) => {
+      setChatStatus(status);
+      setChatMessages(messages);
+    },
+    []
+  );
 
   return {
     setIsCreatingArtist,

@@ -15,7 +15,7 @@ const deleteScheduledAction = tool({
   description: `
   Delete one or more scheduled actions from the system. Requires an array of action IDs to delete.
   `,
-  parameters: z.object({
+  inputSchema: z.object({
     ids: z
       .array(z.string())
       .min(1)

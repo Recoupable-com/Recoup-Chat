@@ -16,7 +16,9 @@ type ErrorLogInsert = Database["public"]["Tables"]["error_logs"]["Insert"];
  * Maps ErrorContext data to appropriate database columns
  * Handles account lookup and graceful error handling
  */
-export async function createErrorLog(params: CreateErrorLogParams): Promise<void> {
+export async function createErrorLog(
+  params: CreateErrorLogParams
+): Promise<void> {
   try {
     // Look up account_id from email if provided
     let account_id: string | null = null;
@@ -31,18 +33,21 @@ export async function createErrorLog(params: CreateErrorLogParams): Promise<void
     }
 
     // Extract last message content
-    const last_message = params.messages && params.messages.length > 0 
-      ? params.messages[params.messages.length - 1]?.content 
-      : null;
+    const last_message =
+      params.messages && params.messages.length > 0
+        ? params.messages[params.messages.length - 1]?.parts
+            .filter((part) => part.type === "text")
+            .join("")
+        : null;
 
     // Generate raw message using existing formatter
     const raw_message = formatErrorMessage(params);
 
     // Use robust tool/error type extraction
     const tool_name = extractToolNameFromError(
-      params.error.message || '',
-      params.error.stack || '',
-      params.error.name || ''
+      params.error.message || "",
+      params.error.stack || "",
+      params.error.name || ""
     );
 
     // Insert error log record
@@ -59,9 +64,7 @@ export async function createErrorLog(params: CreateErrorLogParams): Promise<void
       tool_name,
     };
 
-    const { error } = await supabase
-      .from("error_logs")
-      .insert(errorLogData);
+    const { error } = await supabase.from("error_logs").insert(errorLogData);
 
     if (error) {
       console.error("Failed to insert error log:", error);
@@ -70,4 +73,4 @@ export async function createErrorLog(params: CreateErrorLogParams): Promise<void
     console.error("Error in createErrorLog:", error);
     // Don't throw - this should not break the calling flow
   }
-} 
+}

@@ -6,6 +6,7 @@ import getSystemPrompt from "@/lib/prompts/getSystemPrompt";
 import { getAccountEmails } from "@/lib/supabase/account_emails/getAccountEmails";
 import { MAX_MESSAGES } from "./const";
 import { type ChatRequest, type ChatConfig } from "./types";
+import { AnthropicProviderOptions } from "@ai-sdk/anthropic";
 
 export async function setupChatRequest(body: ChatRequest): Promise<ChatConfig> {
   let { email } = body;
@@ -38,8 +39,12 @@ export async function setupChatRequest(body: ChatRequest): Promise<ChatConfig> {
     model: myProvider.languageModel(selectedModelId),
     system,
     messages: messagesWithRichFiles.slice(-MAX_MESSAGES),
-    maxSteps: 111,
     experimental_generateMessageId: generateUUID,
     tools,
+    providerOptions: {
+      anthropic: {
+        thinking: { type: "enabled", budgetTokens: 12000 },
+      } satisfies AnthropicProviderOptions,
+    },
   };
 }

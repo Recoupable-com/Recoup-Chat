@@ -3,6 +3,7 @@ import { useArtistProvider } from "@/providers/ArtistProvider";
 import { useVercelChatContext } from "@/providers/VercelChatProvider";
 import { generateUUID } from "@/lib/generateUUID";
 import fetchYouTubeChannel from "@/lib/youtube/fetchYouTubeChannel";
+import { UIMessage, isToolUIPart, getToolName } from "ai";
 
 /**
  * Hook that detects YouTube login success and automatically continues the conversation
@@ -21,21 +22,21 @@ export function useYouTubeLoginSuccess() {
     }
 
     // Check if this component is part of the latest message with YouTube tool call
-    const latestMessage = messages[messages.length - 1];
+    const latestMessage = messages[messages.length - 1] as UIMessage;
     if (!latestMessage || latestMessage.role !== "assistant") {
       return;
     }
 
     // Check if the FINAL tool call in the latest message is YouTube (meaning it failed)
     const parts = latestMessage.parts || [];
-    const toolParts = parts.filter((part) => part.type === "tool-invocation");
+    const toolParts = parts.filter((part) => isToolUIPart(part));
     const lastToolPart = toolParts[toolParts.length - 1];
 
     // Type guard to check if it's a tool invocation with the right structure
     const isLastToolYouTube =
       lastToolPart &&
-      "toolInvocation" in lastToolPart &&
-      lastToolPart.toolInvocation?.toolName === "youtube_login";
+      isToolUIPart(lastToolPart) &&
+      getToolName(lastToolPart) === "youtube_login";
 
     if (!isLastToolYouTube) {
       return;
@@ -49,9 +50,13 @@ export function useYouTubeLoginSuccess() {
           const successMessage = {
             id: generateUUID(),
             role: "user" as const,
-            content:
-              "Great! I've successfully connected my YouTube account. Please continue with what you were helping me with.",
-          };
+            parts: [
+              {
+                type: "text",
+                text: "Great! I've successfully connected my YouTube account. Please continue with what you were helping me with.",
+              },
+            ],
+          } as UIMessage;
 
           append(successMessage);
         }

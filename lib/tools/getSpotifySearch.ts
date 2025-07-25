@@ -32,7 +32,7 @@ const schema = z.object({
 const getSpotifySearch = tool({
   description:
     "Search for Spotify items (artist, album, track, playlist, etc.) by name. Returns results for each requested type.",
-  parameters: schema,
+  inputSchema: schema,
   // Type the execute function to return only the requested result keys
   execute: async ({
     name,

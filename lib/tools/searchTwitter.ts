@@ -93,7 +93,7 @@ You can combine these operators to create powerful search queries. For example:
 "from:artistname min_faves:1000 filter:links" will find popular tweets with links from a specific artist.
 
 Note: The tool will automatically use get_artist_socials to find the correct Twitter handle before searching.`,
-  parameters: schema,
+  inputSchema: schema,
   execute: async ({
     query,
     maxTweets,

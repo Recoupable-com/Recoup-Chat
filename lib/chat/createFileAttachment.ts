@@ -1,21 +1,22 @@
-import { MessageFileAttachment } from "@/types/Chat";
+import { FileUIPart } from "ai";
 
 const createMessageFileAttachment = (file: {
   url: string;
   type: string;
-}): MessageFileAttachment | null => {
+}): FileUIPart | null => {
   if (file.type === "application/pdf") {
     return {
       type: "file" as const,
-      data: new URL(file.url),
-      mimeType: file.type,
+      url: file.url,
+      mediaType: file.type,
     };
   }
 
   if (file.type.startsWith("image")) {
     return {
-      type: "image",
-      image: file.url,
+      type: "file" as const,
+      url: file.url,
+      mediaType: file.type,
     };
   }
 
