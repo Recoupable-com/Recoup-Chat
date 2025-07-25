@@ -9,7 +9,7 @@ import getEarliestFailedUserMessageId from "@/lib/messages/getEarliestFailedUser
 import { clientDeleteTrailingMessages } from "@/lib/messages/clientDeleteTrailingMessages";
 import { generateUUID } from "@/lib/generateUUID";
 import { useConversationsProvider } from "@/providers/ConversationsProvider";
-import { FileUIPart, UIMessage } from "ai";
+import { UIMessage } from "ai";
 
 interface UseVercelChatProps {
   id: string;
@@ -31,11 +31,13 @@ export function useVercelChat({ id, initialMessages }: UseVercelChatProps) {
   const messagesLengthRef = useRef<number>();
   const { fetchConversations } = useConversationsProvider();
   const [input, setInput] = useState("");
-  const body = useMemo(
+  const chatRequestOptions = useMemo(
     () => ({
-      roomId: id,
-      artistId,
-      accountId: userId,
+      body: {
+        roomId: id,
+        artistId,
+        accountId: userId,
+      },
     }),
     [id, artistId, userId]
   );
@@ -66,19 +68,12 @@ export function useVercelChat({ id, initialMessages }: UseVercelChatProps) {
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    sendMessage(
-      { text: input },
-      {
-        body,
-      }
-    );
+    sendMessage({ text: input }, chatRequestOptions);
     setInput("");
   };
 
   const append = (message: UIMessage) => {
-    sendMessage(message, {
-      body,
-    });
+    sendMessage(message, chatRequestOptions);
   };
 
   // Keep messagesRef in sync with messages
@@ -143,9 +138,7 @@ export function useVercelChat({ id, initialMessages }: UseVercelChatProps) {
 
   const handleSendQueryMessages = async (initialMessage: UIMessage) => {
     silentlyUpdateUrl();
-    sendMessage(initialMessage, {
-      body,
-    });
+    sendMessage(initialMessage, chatRequestOptions);
   };
 
   useEffect(() => {
