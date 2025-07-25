@@ -10,13 +10,9 @@ interface LegalProps {
 const Legal = ({ className = "mt-6 mb-4" }: LegalProps) => {
   const pathname = usePathname();
   
-  // Hide Legal component when on a specific chat room route (/chat/[roomId])
-  // But show it on the base /chat route
   const isOnChatRoom = pathname?.startsWith('/chat/') && pathname !== '/chat';
   
-  if (isOnChatRoom) {
-    return null;
-  }
+  if (isOnChatRoom) return null;
 
   return (
     <div className={`text-xs text-gray-500 ${className}`.trim()}>
