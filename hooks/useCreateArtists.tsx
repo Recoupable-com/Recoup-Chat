@@ -16,7 +16,8 @@ const useCreateArtists = () => {
     }
 
     if (chatMessages.length <= 2) {
-      const firstMessage = (chatMessages[0].parts[0] as TextUIPart)?.text || "";
+      const firstMessage =
+        (chatMessages?.[0]?.parts?.[0] as TextUIPart)?.text || "";
       const isCreatingArtist = firstMessage === "create a new artist";
 
       if (isCreatingArtist && chatStatus) {
