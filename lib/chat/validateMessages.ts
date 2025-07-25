@@ -8,9 +8,7 @@ export function validateMessages(messages: UIMessage[]) {
   return {
     lastMessage: messages[messages.length - 1],
     validMessages: messages.filter(
-      (m) =>
-        m.parts.find((part) => part.type === "text")?.text?.length &&
-        m.parts.length > 0
+      (m) => m.parts.find((part) => part.type === "text")?.text?.length
     ),
   };
 }
