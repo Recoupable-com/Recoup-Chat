@@ -7,10 +7,7 @@ const useGenerateSegmentReport = () => {
   const { setIsLoadingReport } = useFunnelReportProvider();
   const { push } = useRouter();
 
-  const handleGenerateReport = async (
-    segmentId: string,
-    segmentName: string
-  ) => {
+  const handleGenerateReport = async (segmentId: string) => {
     if (!isPrepared()) return;
 
     setIsLoadingReport(true);
