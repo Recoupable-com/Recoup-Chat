@@ -83,8 +83,8 @@ import UpdateScheduledActionSkeleton from "./tools/UpdateScheduledActionSkeleton
  * Helper function to get the appropriate UI component for a tool call
  */
 export function getToolCallComponent(part: ToolUIPart) {
-  const { toolCallId, type } = part as ToolUIPart;
-  const toolName = type.split("-")[1];
+  const { toolCallId } = part as ToolUIPart;
+  const toolName = getToolName(part);
 
   // Handle generate_image tool call
   if (toolName === "generate_image") {
