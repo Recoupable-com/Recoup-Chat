@@ -29,21 +29,7 @@ const sendEmailTool = tool({
       .record(z.string(), z.string())
       .describe("Optional custom headers for the email"),
   }),
-  execute: async ({
-    to,
-    cc = [],
-    subject,
-    text,
-    html,
-    headers,
-  }: {
-    to: string | string[];
-    cc?: string[];
-    subject: string;
-    text?: string;
-    html?: string;
-    headers?: Record<string, string>;
-  }) => {
+  execute: async ({ to, cc = [], subject, text, html, headers }) => {
     try {
       const response = await sendEmail({
         from: RECOUP_FROM_EMAIL,
