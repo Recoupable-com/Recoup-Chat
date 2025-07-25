@@ -4,12 +4,12 @@ import { useUserProvider } from "@/providers/UserProvder";
 import { useArtistProvider } from "@/providers/ArtistProvider";
 import { useParams } from "next/navigation";
 import { toast } from "react-toastify";
-import { useEffect, useState, useRef } from "react";
+import { useEffect, useState, useRef, useMemo } from "react";
 import getEarliestFailedUserMessageId from "@/lib/messages/getEarliestFailedUserMessageId";
 import { clientDeleteTrailingMessages } from "@/lib/messages/clientDeleteTrailingMessages";
 import { generateUUID } from "@/lib/generateUUID";
 import { useConversationsProvider } from "@/providers/ConversationsProvider";
-import { FileUIPart, UIMessage } from "ai";
+import { UIMessage } from "ai";
 
 interface UseVercelChatProps {
   id: string;
@@ -31,6 +31,16 @@ export function useVercelChat({ id, initialMessages }: UseVercelChatProps) {
   const messagesLengthRef = useRef<number>();
   const { fetchConversations } = useConversationsProvider();
   const [input, setInput] = useState("");
+  const chatRequestOptions = useMemo(
+    () => ({
+      body: {
+        roomId: id,
+        artistId,
+        accountId: userId,
+      },
+    }),
+    [id, artistId, userId]
+  );
 
   const { messages, status, stop, sendMessage, setMessages, regenerate } =
     useChat({
@@ -58,27 +68,12 @@ export function useVercelChat({ id, initialMessages }: UseVercelChatProps) {
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    sendMessage(
-      { text: input },
-      {
-        body: {
-          roomId: id,
-          artistId,
-          accountId: userId,
-        },
-      }
-    );
+    sendMessage({ text: input }, chatRequestOptions);
     setInput("");
   };
 
   const append = (message: UIMessage) => {
-    sendMessage(message, {
-      body: {
-        roomId: id,
-        artistId,
-        accountId: userId,
-      },
-    });
+    sendMessage(message, chatRequestOptions);
   };
 
   // Keep messagesRef in sync with messages
@@ -143,7 +138,7 @@ export function useVercelChat({ id, initialMessages }: UseVercelChatProps) {
 
   const handleSendQueryMessages = async (initialMessage: UIMessage) => {
     silentlyUpdateUrl();
-    sendMessage(initialMessage);
+    sendMessage(initialMessage, chatRequestOptions);
   };
 
   useEffect(() => {
