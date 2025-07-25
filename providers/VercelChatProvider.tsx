@@ -56,7 +56,6 @@ export function VercelChatProvider({
   chatId,
   initialMessages,
 }: VercelChatProviderProps) {
-  // Use the useAttachments hook to get attachment state and functions
   const {
     attachments,
     pendingAttachments,

@@ -55,7 +55,6 @@ export function useVercelChat({ id, initialMessages }: UseVercelChatProps) {
         }
       },
     });
-  console.log("messages", messages);
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
