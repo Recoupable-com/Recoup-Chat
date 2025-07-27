@@ -9,11 +9,19 @@ import getEarliestFailedUserMessageId from "@/lib/messages/getEarliestFailedUser
 import { clientDeleteTrailingMessages } from "@/lib/messages/clientDeleteTrailingMessages";
 import { generateUUID } from "@/lib/generateUUID";
 import { useConversationsProvider } from "@/providers/ConversationsProvider";
-import { UIMessage } from "ai";
+import { UIMessage, FileUIPart } from "ai";
 
 interface UseVercelChatProps {
   id: string;
   initialMessages?: UIMessage[];
+  /**
+   * List of file attachments to send along with the next user message.
+   * This should be an array of `FileUIPart`s that already point to an
+   * accessible URL (e.g. an uploaded image on Arweave).
+   * The list will be cleared from the calling component once the send
+   * operation succeeds, therefore we treat it as a fire-and-forget value.
+   */
+  attachments?: FileUIPart[];
 }
 
 /**
@@ -21,7 +29,11 @@ interface UseVercelChatProps {
  * Combines useChat, and useMessageLoader
  * Accesses user and artist data directly from providers
  */
-export function useVercelChat({ id, initialMessages }: UseVercelChatProps) {
+export function useVercelChat({
+  id,
+  initialMessages,
+  attachments = [],
+}: UseVercelChatProps) {
   const { userData } = useUserProvider();
   const { selectedArtist } = useArtistProvider();
   const { roomId } = useParams();
@@ -68,7 +80,25 @@ export function useVercelChat({ id, initialMessages }: UseVercelChatProps) {
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    sendMessage({ text: input }, chatRequestOptions);
+
+    // Build the message payload. Attach files only when we actually have
+    // successfully uploaded ones (i.e. the array is non-empty and all URLs
+    // are permanent, not blob URLs).
+    if (attachments && attachments.length > 0) {
+      const payload = {
+        // text content of the user message
+        text: input,
+        // file attachments to send along
+        files: attachments,
+      } as unknown as UIMessage;
+
+      sendMessage(payload, chatRequestOptions);
+    } else {
+      sendMessage({ text: input }, chatRequestOptions);
+    }
+
+    // Clear the text input – attachments will be cleared by the caller so we
+    // don’t touch them here.
     setInput("");
   };
 

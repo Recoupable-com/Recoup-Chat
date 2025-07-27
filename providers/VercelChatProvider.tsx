@@ -83,6 +83,7 @@ export function VercelChatProvider({
   } = useVercelChat({
     id: chatId,
     initialMessages,
+    attachments,
   });
 
   const reload = useCallback(() => {
