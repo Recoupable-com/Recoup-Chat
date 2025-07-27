@@ -9,7 +9,7 @@ import getEarliestFailedUserMessageId from "@/lib/messages/getEarliestFailedUser
 import { clientDeleteTrailingMessages } from "@/lib/messages/clientDeleteTrailingMessages";
 import { generateUUID } from "@/lib/generateUUID";
 import { useConversationsProvider } from "@/providers/ConversationsProvider";
-import { UIMessage, FileUIPart, UIDataTypes } from "ai";
+import { UIMessage, FileUIPart } from "ai";
 
 interface UseVercelChatProps {
   id: string;
