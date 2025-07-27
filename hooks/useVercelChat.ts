@@ -14,13 +14,6 @@ import { UIMessage, FileUIPart } from "ai";
 interface UseVercelChatProps {
   id: string;
   initialMessages?: UIMessage[];
-  /**
-   * List of file attachments to send along with the next user message.
-   * This should be an array of `FileUIPart`s that already point to an
-   * accessible URL (e.g. an uploaded image on Arweave).
-   * The list will be cleared from the calling component once the send
-   * operation succeeds, therefore we treat it as a fire-and-forget value.
-   */
   attachments?: FileUIPart[];
 }
 
