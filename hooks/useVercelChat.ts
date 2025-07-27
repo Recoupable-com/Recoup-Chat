@@ -9,7 +9,7 @@ import getEarliestFailedUserMessageId from "@/lib/messages/getEarliestFailedUser
 import { clientDeleteTrailingMessages } from "@/lib/messages/clientDeleteTrailingMessages";
 import { generateUUID } from "@/lib/generateUUID";
 import { useConversationsProvider } from "@/providers/ConversationsProvider";
-import { UIMessage, FileUIPart } from "ai";
+import { UIMessage, FileUIPart, UIDataTypes } from "ai";
 
 interface UseVercelChatProps {
   id: string;
@@ -77,18 +77,12 @@ export function useVercelChat({
     // Build the message payload. Attach files only when we actually have
     // successfully uploaded ones (i.e. the array is non-empty and all URLs
     // are permanent, not blob URLs).
-    if (attachments && attachments.length > 0) {
-      const payload = {
-        // text content of the user message
-        text: input,
-        // file attachments to send along
-        files: attachments,
-      } as unknown as UIMessage;
-
-      sendMessage(payload, chatRequestOptions);
-    } else {
-      sendMessage({ text: input }, chatRequestOptions);
-    }
+    const payload = {
+      text: input,
+      files: undefined as FileUIPart[] | undefined,
+    };
+    if (attachments && attachments.length > 0) payload.files = attachments;
+    sendMessage(payload, chatRequestOptions);
 
     // Clear the text input – attachments will be cleared by the caller so we
     // don’t touch them here.
