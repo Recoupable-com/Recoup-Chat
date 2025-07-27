@@ -9,11 +9,12 @@ import getEarliestFailedUserMessageId from "@/lib/messages/getEarliestFailedUser
 import { clientDeleteTrailingMessages } from "@/lib/messages/clientDeleteTrailingMessages";
 import { generateUUID } from "@/lib/generateUUID";
 import { useConversationsProvider } from "@/providers/ConversationsProvider";
-import { UIMessage } from "ai";
+import { UIMessage, FileUIPart } from "ai";
 
 interface UseVercelChatProps {
   id: string;
   initialMessages?: UIMessage[];
+  attachments?: FileUIPart[];
 }
 
 /**
@@ -21,7 +22,11 @@ interface UseVercelChatProps {
  * Combines useChat, and useMessageLoader
  * Accesses user and artist data directly from providers
  */
-export function useVercelChat({ id, initialMessages }: UseVercelChatProps) {
+export function useVercelChat({
+  id,
+  initialMessages,
+  attachments = [],
+}: UseVercelChatProps) {
   const { userData } = useUserProvider();
   const { selectedArtist } = useArtistProvider();
   const { roomId } = useParams();
@@ -68,7 +73,12 @@ export function useVercelChat({ id, initialMessages }: UseVercelChatProps) {
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    sendMessage({ text: input }, chatRequestOptions);
+    const payload = {
+      text: input,
+      files: undefined as FileUIPart[] | undefined,
+    };
+    if (attachments && attachments.length > 0) payload.files = attachments;
+    sendMessage(payload, chatRequestOptions);
     setInput("");
   };
 
