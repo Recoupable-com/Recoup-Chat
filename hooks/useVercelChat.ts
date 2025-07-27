@@ -79,9 +79,6 @@ export function useVercelChat({
     };
     if (attachments && attachments.length > 0) payload.files = attachments;
     sendMessage(payload, chatRequestOptions);
-
-    // Clear the text input – attachments will be cleared by the caller so we
-    // don’t touch them here.
     setInput("");
   };
 
