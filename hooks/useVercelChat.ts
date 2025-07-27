@@ -73,10 +73,6 @@ export function useVercelChat({
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-
-    // Build the message payload. Attach files only when we actually have
-    // successfully uploaded ones (i.e. the array is non-empty and all URLs
-    // are permanent, not blob URLs).
     const payload = {
       text: input,
       files: undefined as FileUIPart[] | undefined,
