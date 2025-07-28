@@ -8,13 +8,11 @@ import ChannelInfo from "./ChannelInfo";
 interface StandaloneYoutubeComponentProps {
   artistAccountId: string;
   dense?: boolean;
-  hideArrow?: boolean;
 }
 
 const StandaloneYoutubeComponent = ({
   artistAccountId,
   dense,
-  hideArrow = false,
 }: StandaloneYoutubeComponentProps) => {
   const { data, isLoading } = useYoutubeStatus(artistAccountId);
 

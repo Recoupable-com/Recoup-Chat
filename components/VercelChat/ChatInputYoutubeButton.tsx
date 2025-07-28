@@ -8,14 +8,12 @@ import { useVercelChatContext } from "@/providers/VercelChatProvider";
 export function ChatInputYoutubeButton() {
   const { selectedArtist } = useArtistProvider();
   const { messages } = useVercelChatContext();
-  const hideArrow = messages.length > 0;
   
   return (
     <ChatInputYoutubeButtonPopover artistAccountId={selectedArtist?.account_id as string}>
       <StandaloneYoutubeComponent
         artistAccountId={selectedArtist?.account_id as string}
         dense={true}
-        hideArrow={hideArrow}
       />
     </ChatInputYoutubeButtonPopover>
   );
