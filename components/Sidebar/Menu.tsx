@@ -4,16 +4,15 @@ import RecentChats from "../Sidebar/RecentChats";
 import UnlockPro from "./UnlockPro";
 import UserInfo from "../Sidebar/UserInfo";
 import Logo from "../Logo";
-import MenuItemIcon from "../MenuItemIcon";
 import { v4 as uuidV4 } from "uuid";
 import { Button } from "../ui/button";
-import { cn } from "@/lib/utils";
+import FanGroupNavItem from "./FanGroupNavItem";
+import AgentsNavItem from "./AgentsNavItem";
 
 const Menu = ({ toggleMenuExpanded }: { toggleMenuExpanded: () => void }) => {
   const { push } = useRouter();
   const pathname = usePathname();
   const { email, isPrepared } = useUserProvider();
-  const activeClasses = "bg-grey";
   const isAgents = pathname.includes("/agents");
   const isSegments = pathname.includes("/segments");
 
@@ -41,28 +40,8 @@ const Menu = ({ toggleMenuExpanded }: { toggleMenuExpanded: () => void }) => {
         >
           {email ? "New Chat" : "Sign In"}
         </Button>
-        <Button
-          variant="ghost"
-          className={cn(
-            "rounded-xl w-full flex justify-start",
-            isAgents && activeClasses
-          )}
-          onClick={() => goToItem("agents")}
-        >
-          <MenuItemIcon name="robot" />
-          Agents
-        </Button>
-        <Button
-          variant="ghost"
-          onClick={() => goToItem("segments")}
-          className={cn(
-            "rounded-xl w-full flex justify-start",
-            isSegments && activeClasses
-          )}
-        >
-          <MenuItemIcon name="segments" />
-          Fan Groups
-        </Button>
+        <AgentsNavItem isActive={isAgents} onClick={() => goToItem("agents")} />
+        <FanGroupNavItem isActive={isSegments} onClick={() => goToItem("segments")} />
       </div>
 
       <div className="flex flex-col flex-grow min-h-0">

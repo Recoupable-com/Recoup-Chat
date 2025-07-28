@@ -5,11 +5,13 @@ import RecentChats from "../Sidebar/RecentChats";
 import UnlockPro from "../Sidebar/UnlockPro";
 import UserInfo from "../Sidebar/UserInfo";
 import Logo from "../Logo";
-import MenuItemIcon from "../MenuItemIcon";
 import { v4 as uuidV4 } from "uuid";
 import { useArtistProvider } from "@/providers/ArtistProvider";
 import { PointerIcon } from "lucide-react";
 import { Button } from "../ui/button";
+import FanGroupNavItem from "../Sidebar/FanGroupNavItem";
+import AgentsNavItem from "../Sidebar/AgentsNavItem";
+import { usePathname } from "next/navigation";
 
 const SideMenu = ({
   isVisible,
@@ -21,10 +23,13 @@ const SideMenu = ({
   onOpenArtists?: () => void;
 }) => {
   const { push } = useRouter();
+  const pathname = usePathname();
   const { address, isPrepared } = useUserProvider();
   const { selectedArtist, sorted, toggleCreation } = useArtistProvider();
   const hasArtists = sorted.length > 0;
   const isArtistSelected = !!selectedArtist;
+  const isAgents = pathname.includes("/agents");
+  const isSegments = pathname.includes("/segments");
 
   const goToItem = (link?: string) => {
     if (isPrepared()) {
@@ -75,24 +80,8 @@ const SideMenu = ({
             {hasArtists ? "Select Your Artist" : "Add Your Artist"}
           </Button>
         )}
-        <Button
-          variant="ghost"
-          onClick={() => goToItem("agents")}
-          className="rounded-xl w-full flex justify-start"
-          aria-label="View agents"
-        >
-          <MenuItemIcon name="robot" />
-          Agents
-        </Button>
-        <Button
-          variant="ghost"
-          onClick={() => goToItem("segments")}
-          className="flex justify-start rounded-xl w-full"
-          aria-label="View segments"
-        >
-          <MenuItemIcon name="segments" />
-          Segments
-        </Button>
+        <AgentsNavItem isActive={isAgents} onClick={() => goToItem("agents")} />
+        <FanGroupNavItem isActive={isSegments} onClick={() => goToItem("segments")} />
       </div>
       {address && <RecentChats toggleModal={toggleModal} />}
       <div className="grow flex flex-col gap-1 md:gap-3 justify-end">
