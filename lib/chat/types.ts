@@ -17,7 +17,7 @@ export interface ChatConfig {
   experimental_generateMessageId: () => string;
   tools: ToolSet;
   providerOptions?: {
-    anthropic: AnthropicProviderOptions;
-    google: GoogleGenerativeAIProviderOptions;
+    anthropic?: AnthropicProviderOptions;
+    google?: GoogleGenerativeAIProviderOptions;
   };
 }
