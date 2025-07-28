@@ -8,6 +8,7 @@ import MenuItemIcon from "../MenuItemIcon";
 import { v4 as uuidV4 } from "uuid";
 import { Button } from "../ui/button";
 import { cn } from "@/lib/utils";
+import FanGroupNavItem from "./FanGroupNevItem";
 
 const Menu = ({ toggleMenuExpanded }: { toggleMenuExpanded: () => void }) => {
   const { push } = useRouter();
@@ -52,17 +53,7 @@ const Menu = ({ toggleMenuExpanded }: { toggleMenuExpanded: () => void }) => {
           <MenuItemIcon name="robot" />
           Agents
         </Button>
-        <Button
-          variant="ghost"
-          onClick={() => goToItem("segments")}
-          className={cn(
-            "rounded-xl w-full flex justify-start",
-            isSegments && activeClasses
-          )}
-        >
-          <MenuItemIcon name="segments" />
-          Fan Groups
-        </Button>
+        <FanGroupNavItem isActive={isSegments} onClick={() => goToItem("segments")} />
       </div>
 
       <div className="flex flex-col flex-grow min-h-0">
