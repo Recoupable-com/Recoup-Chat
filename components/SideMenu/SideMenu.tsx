@@ -5,12 +5,12 @@ import RecentChats from "../Sidebar/RecentChats";
 import UnlockPro from "../Sidebar/UnlockPro";
 import UserInfo from "../Sidebar/UserInfo";
 import Logo from "../Logo";
-import MenuItemIcon from "../MenuItemIcon";
 import { v4 as uuidV4 } from "uuid";
 import { useArtistProvider } from "@/providers/ArtistProvider";
 import { PointerIcon } from "lucide-react";
 import { Button } from "../ui/button";
 import FanGroupNavItem from "../Sidebar/FanGroupNavItem";
+import AgentsNavItem from "../Sidebar/AgentsNavItem";
 import { usePathname } from "next/navigation";
 
 const SideMenu = ({
@@ -28,6 +28,7 @@ const SideMenu = ({
   const { selectedArtist, sorted, toggleCreation } = useArtistProvider();
   const hasArtists = sorted.length > 0;
   const isArtistSelected = !!selectedArtist;
+  const isAgents = pathname.includes("/agents");
   const isSegments = pathname.includes("/segments");
 
   const goToItem = (link?: string) => {
@@ -79,15 +80,7 @@ const SideMenu = ({
             {hasArtists ? "Select Your Artist" : "Add Your Artist"}
           </Button>
         )}
-        <Button
-          variant="ghost"
-          onClick={() => goToItem("agents")}
-          className="rounded-xl w-full flex justify-start"
-          aria-label="View agents"
-        >
-          <MenuItemIcon name="robot" />
-          Agents
-        </Button>
+        <AgentsNavItem isActive={isAgents} onClick={() => goToItem("agents")} />
         <FanGroupNavItem isActive={isSegments} onClick={() => goToItem("segments")} />
       </div>
       {address && <RecentChats toggleModal={toggleModal} />}

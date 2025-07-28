@@ -1,8 +1,6 @@
-import { cn } from "@/lib/utils";
-import { Button } from "../ui/button";
-import MenuItemIcon from "../MenuItemIcon";
 import { useArtistProvider } from "@/providers/ArtistProvider";
 import { useArtistSegments } from "@/hooks/useArtistSegments";
+import NavButton from "./NavButton";
 
 const FanGroupNavItem = ({
   isActive,
@@ -13,23 +11,17 @@ const FanGroupNavItem = ({
 }) => {
   const { selectedArtist } = useArtistProvider();
   const { data: segments, isLoading } = useArtistSegments(selectedArtist?.account_id);
-
-  // Don't render if no artist is selected, still loading, or no segments exist
-  if (!selectedArtist || isLoading || !segments || segments.length === 0) {
-    return null;
-  }
+  
+  const shouldRender = !!(selectedArtist && !isLoading && segments && segments.length > 0);
 
   return (
-    <Button
-      variant="ghost"
+    <NavButton
+      icon="segments"
+      label="Fan Groups"
+      isActive={isActive}
       onClick={onClick}
-      className={cn("rounded-xl w-full flex justify-start", {
-        "bg-gray-200 hover:bg-gray-200/70": isActive,
-      })}
-    >
-      <MenuItemIcon name="segments" />
-      Fan Groups
-    </Button>
+      shouldRender={shouldRender}
+    />
   );
 };
 
