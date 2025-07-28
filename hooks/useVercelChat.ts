@@ -1,21 +1,20 @@
-import { Message, useChat } from "@ai-sdk/react";
+import { useChat } from "@ai-sdk/react";
 import { useMessageLoader } from "./useMessageLoader";
 import { useUserProvider } from "@/providers/UserProvder";
 import { useArtistProvider } from "@/providers/ArtistProvider";
 import { useParams } from "next/navigation";
 import { toast } from "react-toastify";
-import { useEffect, useState, useRef } from "react";
+import { useEffect, useState, useRef, useMemo } from "react";
 import getEarliestFailedUserMessageId from "@/lib/messages/getEarliestFailedUserMessageId";
 import { clientDeleteTrailingMessages } from "@/lib/messages/clientDeleteTrailingMessages";
 import { generateUUID } from "@/lib/generateUUID";
-import { usePrivy } from "@privy-io/react-auth";
 import { useConversationsProvider } from "@/providers/ConversationsProvider";
-import { Attachment } from "@ai-sdk/ui-utils";
+import { UIMessage, FileUIPart } from "ai";
 
 interface UseVercelChatProps {
   id: string;
-  initialMessages?: Message[];
-  uploadedAttachments?: Attachment[]; // Accept attachments from provider
+  initialMessages?: UIMessage[];
+  attachments?: FileUIPart[];
 }
 
 /**
@@ -26,9 +25,8 @@ interface UseVercelChatProps {
 export function useVercelChat({
   id,
   initialMessages,
-  uploadedAttachments = [], // Default to empty array
+  attachments = [],
 }: UseVercelChatProps) {
-  const { authenticated } = usePrivy();
   const { userData } = useUserProvider();
   const { selectedArtist } = useArtistProvider();
   const { roomId } = useParams();
@@ -37,45 +35,56 @@ export function useVercelChat({
   const [hasChatApiError, setHasChatApiError] = useState(false);
   const messagesLengthRef = useRef<number>();
   const { fetchConversations } = useConversationsProvider();
+  const [input, setInput] = useState("");
+  const chatRequestOptions = useMemo(
+    () => ({
+      body: {
+        roomId: id,
+        artistId,
+        accountId: userId,
+      },
+    }),
+    [id, artistId, userId]
+  );
 
-  const {
-    messages,
-    handleSubmit,
-    input,
-    status,
-    stop,
-    setMessages,
-    setInput,
-    reload,
-    append,
-  } = useChat({
-    id,
-    body: {
-      roomId: id,
-      artistId,
-      accountId: userId,
-    },
-    experimental_throttle: 100,
-    sendExtraMessageFields: true,
-    generateId: generateUUID,
-    onError: (e) => {
-      console.error("An error occurred, please try again!", e);
-      toast.error("An error occurred, please try again!");
-      setHasChatApiError(true);
-    },
-    onFinish: () => {
-      // As onFinish triggers when a message is streamed successfully.
-      // On a new chat, usually there are 2 messages:
-      // 1. First user message
-      // 2. Second just streamed message
-      // When messages length is 2, it means second message has been streamed successfully and should also have been updated on backend
-      // So we trigger the fetchConversations to update the conversation list
+  const { messages, status, stop, sendMessage, setMessages, regenerate } =
+    useChat({
+      id,
+      experimental_throttle: 100,
+      maxSteps: 111,
+      generateId: generateUUID,
+      onError: (e) => {
+        console.error("An error occurred, please try again!", e);
+        toast.error("An error occurred, please try again!");
+        setHasChatApiError(true);
+      },
+      onFinish: () => {
+        // As onFinish triggers when a message is streamed successfully.
+        // On a new chat, usually there are 2 messages:
+        // 1. First user message
+        // 2. Second just streamed message
+        // When messages length is 2, it means second message has been streamed successfully and should also have been updated on backend
+        // So we trigger the fetchConversations to update the conversation list
+        if (messagesLengthRef.current === 2) {
+          fetchConversations();
+        }
+      },
+    });
 
-      if (messagesLengthRef.current === 2) {
-        fetchConversations();
-      }
-    },
-  });
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    const payload = {
+      text: input,
+      files: undefined as FileUIPart[] | undefined,
+    };
+    if (attachments && attachments.length > 0) payload.files = attachments;
+    sendMessage(payload, chatRequestOptions);
+    setInput("");
+  };
+
+  const append = (message: UIMessage) => {
+    sendMessage(message, chatRequestOptions);
+  };
 
   // Keep messagesRef in sync with messages
   messagesLengthRef.current = messages.length;
@@ -129,23 +138,17 @@ export function useVercelChat({
       await deleteTrailingMessages();
     }
 
-    // Only send successfully uploaded attachments
-    const messageOptions =
-      uploadedAttachments.length > 0
-        ? { experimental_attachments: uploadedAttachments }
-        : undefined;
-
     // Submit the message
-    handleSubmit(event, messageOptions);
+    handleSubmit(event);
 
     if (!roomId) {
       silentlyUpdateUrl();
     }
   };
 
-  const handleSendQueryMessages = async (initialMessage: Message) => {
+  const handleSendQueryMessages = async (initialMessage: UIMessage) => {
     silentlyUpdateUrl();
-    append(initialMessage);
+    sendMessage(initialMessage, chatRequestOptions);
   };
 
   useEffect(() => {
@@ -172,7 +175,7 @@ export function useVercelChat({
     setInput,
     setMessages,
     stop,
-    reload,
+    reload: regenerate,
     append,
   };
 }

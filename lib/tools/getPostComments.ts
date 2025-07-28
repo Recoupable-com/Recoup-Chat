@@ -12,7 +12,7 @@ const schema = z.object({
 const getPostComments = tool({
   description:
     "Retrieve comments for a specific social media post. This endpoint should be called after obtaining post IDs from the Social Posts endpoint.",
-  parameters: schema,
+  inputSchema: schema,
   execute: async ({ post_id, page = 1, limit = 20 }) => {
     try {
       // Construct URL with query parameters

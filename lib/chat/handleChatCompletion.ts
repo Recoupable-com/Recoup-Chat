@@ -1,4 +1,3 @@
-import { appendResponseMessages } from "ai";
 import createMemories from "@/lib/supabase/createMemories";
 import { validateMessages } from "@/lib/chat/validateMessages";
 import getRoom from "@/lib/supabase/getRoom";
@@ -9,11 +8,12 @@ import filterMessageContentForMemories from "@/lib/messages/filterMessageContent
 import { serializeError } from "@/lib/errors/serializeError";
 import { sendErrorNotification } from "@/lib/telegram/errors/sendErrorNotification";
 import { getAccountEmails } from "@/lib/supabase/account_emails/getAccountEmails";
-import { type ChatRequest, type ResponseMessages } from "./types";
+import { type ChatRequest } from "./types";
+import { UIMessage } from "ai";
 
 export async function handleChatCompletion(
   body: ChatRequest,
-  responseMessages: ResponseMessages[]
+  responseMessages: UIMessage[]
 ): Promise<void> {
   try {
     const { messages, roomId, accountId, artistId } = body;
@@ -27,16 +27,14 @@ export async function handleChatCompletion(
     }
 
     const { lastMessage } = validateMessages(messages);
-    const [, assistantMessage] = appendResponseMessages({
-      messages: [lastMessage],
-      responseMessages,
-    });
 
     const room = await getRoom(roomId);
 
     // Create room and send notification if this is a new conversation
     if (!room) {
-      const conversationName = await generateChatTitle(messages[0].content);
+      const latestMessageText =
+        lastMessage.parts.find((part) => part.type === "text")?.text || "";
+      const conversationName = await generateChatTitle(latestMessageText);
 
       await Promise.all([
         createRoomWithReport({
@@ -50,7 +48,7 @@ export async function handleChatCompletion(
           email,
           conversationId: roomId,
           topic: conversationName,
-          firstMessage: messages[0].content,
+          firstMessage: latestMessageText,
         }),
       ]);
     }
@@ -64,9 +62,11 @@ export async function handleChatCompletion(
     });
 
     await createMemories({
-      id: assistantMessage.id,
+      id: responseMessages[responseMessages.length - 1].id,
       room_id: roomId,
-      content: filterMessageContentForMemories(assistantMessage),
+      content: filterMessageContentForMemories(
+        responseMessages[responseMessages.length - 1]
+      ),
     });
   } catch (error) {
     sendErrorNotification({

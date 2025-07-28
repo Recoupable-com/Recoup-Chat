@@ -9,9 +9,7 @@ import { validateYouTubeTokens } from "../youtube/token-validator";
 const schema = z.object({
   artist_account_id: z
     .string()
-    .describe(
-      "artist_account_id from the system prompt of the active artist."
-    ),
+    .describe("artist_account_id from the system prompt of the active artist."),
   video_id: z
     .string()
     .describe("The YouTube video ID to set the thumbnail for."),
@@ -26,12 +24,16 @@ const schema = z.object({
 const setYouTubeThumbnail = tool({
   description: `Set a custom thumbnail for a YouTube video. Requires the artist_account_id parameter from the system prompt of the active artist, video_id, and a thumbnail_url. Downloads the image, resizes/compresses if needed, and uploads it to YouTube using the Data API thumbnails.set endpoint.
 IMPORTANT: Always call the youtube_login tool first to obtain the required authentication before calling this tool.`,
-  parameters: schema,
+  inputSchema: schema,
   execute: async ({
     artist_account_id,
     video_id,
     thumbnail_url,
-  }: { artist_account_id: string, video_id: string, thumbnail_url: string }): Promise<YouTubeSetThumbnailResult> => {
+  }: {
+    artist_account_id: string;
+    video_id: string;
+    thumbnail_url: string;
+  }): Promise<YouTubeSetThumbnailResult> => {
     if (!artist_account_id || artist_account_id.trim() === "") {
       return YouTubeErrorBuilder.createToolError(
         "No artist_account_id provided to YouTube login tool. The LLM must pass the artist_account_id parameter. Please ensure you're passing the current artist's artist_account_id."
@@ -65,7 +67,8 @@ IMPORTANT: Always call the youtube_login tool first to obtain the required authe
         success: true,
         status: "success",
         message: `Thumbnail set for video ${video_id}`,
-        thumbnails: response.data.items as YouTubeSetThumbnailResult["thumbnails"],
+        thumbnails: response.data
+          .items as YouTubeSetThumbnailResult["thumbnails"],
       };
     } catch (error) {
       return YouTubeErrorBuilder.createToolError(

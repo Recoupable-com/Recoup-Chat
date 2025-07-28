@@ -3,7 +3,7 @@
 import { useMiniKit } from "@coinbase/onchainkit/minikit";
 import { Chat } from "../VercelChat/chat";
 import { useEffect } from "react";
-import { Message } from "ai";
+import { UIMessage } from "ai";
 import Legal from "./Legal";
 
 const HomePage = ({
@@ -11,7 +11,7 @@ const HomePage = ({
   initialMessages,
 }: {
   id: string;
-  initialMessages?: Message[];
+  initialMessages?: UIMessage[];
 }) => {
   const { setFrameReady, isFrameReady } = useMiniKit();
 

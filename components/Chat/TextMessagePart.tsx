@@ -1,16 +1,12 @@
 "use client";
 
-import { TextPart } from "@/types/reasoning";
 import ChatMarkdown from "./ChatMarkdown";
+import { TextUIPart } from "ai";
 
 interface TextMessagePartProps {
-  part: TextPart;
+  part: TextUIPart;
 }
 
 export function TextMessagePart({ part }: TextMessagePartProps) {
-  return (
-    <ChatMarkdown>
-      {part.text}
-    </ChatMarkdown>
-  );
+  return <ChatMarkdown>{part?.text || ""}</ChatMarkdown>;
 }

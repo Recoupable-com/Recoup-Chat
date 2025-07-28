@@ -1,7 +1,6 @@
 import { generateText, tool } from "ai";
 import { z } from "zod";
-import { myProvider } from "../models";
-import { MERMAID_INSTRUCTIONS_PROMPT } from "../consts";
+import { ANTHROPIC_MODEL, MERMAID_INSTRUCTIONS_PROMPT } from "../consts";
 
 export interface GenerateMermaidDiagramResult {
   content: { type: "text"; text: string }[];
@@ -11,7 +10,7 @@ export interface GenerateMermaidDiagramResult {
 export const generateMermaidDiagram = tool({
   description:
     "Generate a Mermaid diagram (Flow chart, Sequence diagram, etc.) based on the provided context and sends it directly to the frontend for rendering. Does not return the diagram in the response.",
-  parameters: z.object({
+  inputSchema: z.object({
     context: z
       .string()
       .describe(
@@ -23,7 +22,7 @@ export const generateMermaidDiagram = tool({
   }),
   execute: async ({ context }) => {
     const result = await generateText({
-      model: myProvider.languageModel("sonnet-3.7"),
+      model: ANTHROPIC_MODEL,
       system: MERMAID_INSTRUCTIONS_PROMPT,
       prompt: `Generate a Mermaid diagram for the following context: ${context}
             `,

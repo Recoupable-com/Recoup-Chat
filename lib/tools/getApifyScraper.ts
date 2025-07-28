@@ -24,7 +24,7 @@ const getApifyScraper = tool({
   description: `Check the status and retrieve results from Apify scraper runs.
   
 This tool uses the Apify API Client to fetch the current status of a scraper run and its results if available.`,
-  parameters: schema,
+  inputSchema: schema,
   execute: async ({ runId }): Promise<ApifyScraperResponse> => {
     try {
       const response = await fetch(

@@ -62,7 +62,7 @@ const updateAccountInfo = tool({
   description: `
   Update the account_info record for an artist. All fields are optional except for artistId. This tool is used to update the artist's profile image, name, instructions, label, and knowledge base. If artistId is not provided, use the active artist_account_id from the system prompt.
   `,
-  parameters: schema,
+  inputSchema: schema,
   execute: async ({
     artistId,
     email,

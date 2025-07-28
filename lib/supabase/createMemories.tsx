@@ -8,7 +8,10 @@ interface MemoryInput {
 
 const createMemories = async (memory: MemoryInput) => {
   try {
-    await supabase.from("memories").insert(memory).select("*");
+    await supabase
+      .from("memories")
+      .upsert(memory, { onConflict: "id" })
+      .select("*");
   } catch (error) {
     console.error(error);
   }

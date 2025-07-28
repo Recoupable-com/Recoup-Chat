@@ -4,18 +4,15 @@ import { Skeleton } from "../../ui/skeleton";
 import { cn } from "@/lib/utils";
 import { Tooltip } from "../../common/Tooltip";
 import ChannelInfo from "./ChannelInfo";
-import GraphicArrow from "@/components/YouTube/GraphicArrow";
 
 interface StandaloneYoutubeComponentProps {
   artistAccountId: string;
   dense?: boolean;
-  hideArrow?: boolean;
 }
 
 const StandaloneYoutubeComponent = ({
   artistAccountId,
   dense,
-  hideArrow = false,
 }: StandaloneYoutubeComponentProps) => {
   const { data, isLoading } = useYoutubeStatus(artistAccountId);
 
@@ -70,7 +67,6 @@ const StandaloneYoutubeComponent = ({
           </div>
         </Tooltip>
       )}
-      <GraphicArrow data={data} isLoading={isLoading} hideArrow={hideArrow}/>
     </div>
   );
 };

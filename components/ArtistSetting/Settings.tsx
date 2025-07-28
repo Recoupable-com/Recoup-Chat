@@ -11,8 +11,6 @@ import KnowledgeSelect from "./KnowledgeSelect";
 import Inputs from "./Inputs";
 import DeleteModal from "./DeleteModal";
 import { useState } from "react";
-import { useAgentsProvider } from "@/providers/AgentsProvider";
-import { useFunnelAnalysisProvider } from "@/providers/FunnelAnalysisProvider";
 import AccountIdDisplay from "./AccountIdDisplay";
 
 const Settings = () => {
@@ -26,17 +24,12 @@ const Settings = () => {
     editableArtist,
   } = useArtistProvider();
   const [isVisibleDeleteModal, setIsVisibleDeleteModal] = useState(false);
-  const { lookupProfiles } = useAgentsProvider();
-  const { setIsLoading } = useFunnelAnalysisProvider();
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const handleSave = async () => {
     const artistInfo = await saveSetting();
     setSelectedArtist(artistInfo);
     toggleSettingModal();
-    if (editableArtist) return;
-    setIsLoading(true);
-    lookupProfiles("wrapped", artistInfo);
   };
 
   return (

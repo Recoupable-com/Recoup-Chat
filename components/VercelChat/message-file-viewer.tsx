@@ -1,45 +1,40 @@
-import { Attachment } from "@ai-sdk/ui-utils";
+import { FileUIPart } from "ai";
 import { PDFIcon } from "./icons";
 import { FileIcon } from "lucide-react";
 import { PhotoProvider, PhotoView } from "react-photo-view";
 import Link from "next/link";
 
-const MessageFileViewer = ({
-  experimentalAttachment,
-}: {
-  experimentalAttachment: Attachment[] | undefined;
-}) => {
-  if (!experimentalAttachment || experimentalAttachment.length === 0)
-    return null;
+const MessageFileViewer = ({ part }: { part: FileUIPart }) => {
+  const isImage = part.mediaType.startsWith("image");
+  const isPdf = part.mediaType === "application/pdf";
+  const isDefault = !isImage && !isPdf;
   return (
     <div className="max-w-[17rem] flex gap-2 flex-wrap justify-end ml-auto">
       <PhotoProvider>
-      {experimentalAttachment?.map((attachment) => {
-        if (attachment.contentType?.startsWith("image")) {
-          return (
-            <div key={attachment.url} className="w-16 h-16 rounded-xl overflow-hidden shadow-sm border">
-              <PhotoView key={attachment.url} src={attachment.url}>
-                {/* eslint-disable-next-line @next/next/no-img-element */}
-                <img
-                src={attachment.url}
-                alt={attachment.name}
+        {isImage && (
+          <div
+            key={part.url}
+            className="w-16 h-16 rounded-xl overflow-hidden shadow-sm border"
+          >
+            <PhotoView key={part.url} src={part.url}>
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img
+                src={part.url}
+                alt={part.filename}
                 className="w-full h-full object-cover cursor-pointer"
               />
-              </PhotoView>
-            </div>
-          );
-        }
-        if (attachment.contentType === "application/pdf") {
-          return (
-            <Link key={attachment.url} href={attachment.url} target="_blank" passHref>
+            </PhotoView>
+          </div>
+        )}
+        {isPdf && (
+          <Link key={part.url} href={part.url} target="_blank" passHref>
             <div className="w-16 h-16 rounded-xl">
               <PDFIcon />
             </div>
-            </Link>
-          );
-        }
-        return <FileIcon key={attachment.url} />;
-      })}
+          </Link>
+        )}
+
+        {isDefault && <FileIcon key={part.url} />}
       </PhotoProvider>
     </div>
   );

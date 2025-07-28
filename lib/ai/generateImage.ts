@@ -22,7 +22,7 @@ const generateImage = async (
 
   const imageData = {
     base64Data,
-    mimeType: response.image.mimeType,
+    mimeType: response.image.mediaType,
   };
 
   // Upload the generated image to Arweave

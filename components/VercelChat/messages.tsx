@@ -2,7 +2,7 @@
 
 import { useEffect, useMemo, useRef, memo } from "react";
 import { SpinnerIcon } from "./icons";
-import { UIMessage } from "ai";
+import { ChatStatus, UIMessage } from "ai";
 import { UseChatHelpers } from "@ai-sdk/react";
 import ChatMarkdown from "../Chat/ChatMarkdown";
 import Message from "./message";
@@ -21,9 +21,9 @@ export function TextMessagePart({ text }: TextMessagePartProps) {
 
 interface MessagesProps {
   messages: Array<UIMessage>;
-  status: UseChatHelpers["status"];
-  setMessages: UseChatHelpers["setMessages"];
-  reload: UseChatHelpers["reload"];
+  status: ChatStatus;
+  setMessages: UseChatHelpers<UIMessage>["setMessages"];
+  reload: () => void;
   children?: React.ReactNode;
 }
 
@@ -71,10 +71,13 @@ const MessagesComponent = ({
   );
 };
 
-export const Messages = memo(MessagesComponent, (prevProps, nextProps) => {
-  return (
-    prevProps.status === nextProps.status &&
-    prevProps.messages === nextProps.messages &&
-    prevProps.children === nextProps.children
-  );
-});
+export const Messages = memo(
+  MessagesComponent,
+  (prevProps: MessagesProps, nextProps: MessagesProps) => {
+    return (
+      prevProps.status === nextProps.status &&
+      prevProps.messages === nextProps.messages &&
+      prevProps.children === nextProps.children
+    );
+  }
+);

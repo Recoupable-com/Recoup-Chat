@@ -11,9 +11,13 @@ import DeleteArtistToolCall from "./tools/DeleteArtistToolCall";
 import DeleteArtistToolResult from "./tools/DeleteArtistToolResult";
 import { DeleteArtistResult } from "@/lib/tools/deleteArtist";
 import GetSpotifySearchToolResult from "./tools/GetSpotifySearchToolResult";
-import { SpotifyDeepResearchResultUIType, SpotifyArtistTopTracksResultType, SpotifySearchResponse } from "@/types/spotify";
+import {
+  SpotifyDeepResearchResultUIType,
+  SpotifyArtistTopTracksResultType,
+  SpotifySearchResponse,
+} from "@/types/spotify";
 import { ArtistSocialsResultType } from "@/types/ArtistSocials";
-import { ToolInvocation } from "ai";
+import { ToolUIPart, getToolName } from "ai";
 import UpdateArtistInfoSuccess from "./tools/UpdateArtistInfoSuccess";
 import { UpdateAccountInfoResult } from "@/lib/tools/updateAccountInfo";
 import UpdateArtistSocialsSuccess from "./tools/UpdateArtistSocialsSuccess";
@@ -76,50 +80,12 @@ import { UpdateScheduledActionResult } from "./tools/UpdateScheduledActionSucces
 import UpdateScheduledActionSkeleton from "./tools/UpdateScheduledActionSkeleton";
 
 /**
- * Interface for tool call props
- */
-interface ToolCallProps {
-  toolName: string;
-  toolCallId: string;
-}
-
-/**
- * Union type for all possible tool results
- */
-type ToolResult =
-  | ImageGenerationResult
-  | GenerateMermaidDiagramResult
-  | CreateArtistResult
-  | DeleteArtistResult
-  | GetSpotifyPlayButtonClickedResult
-  | CommentsResultData
-  | SegmentFansResult
-  | YouTubeChannelInfoResult
-  | YouTubeRevenueResultType
-  | YouTubeLoginResultType
-  | SearchWebResultType
-  | ArtistSocialsResultType
-  | SpotifyDeepResearchResultUIType
-  | SpotifyArtistAlbumsResultUIType
-  | SpotifyArtistTopTracksResultType
-  | GetScheduledActionsResult
-  | CreateScheduledActionsResult
-  | SpotifyAlbum
-  | DeleteScheduledActionsResult
-  | UpdateScheduledActionResult
-  | Record<string, unknown>;
-
-/**
- * Interface for tool result props
- */
-interface ToolResultProps extends ToolCallProps {
-  result: ToolResult;
-}
-
-/**
  * Helper function to get the appropriate UI component for a tool call
  */
-export function getToolCallComponent({ toolName, toolCallId }: ToolInvocation) {
+export function getToolCallComponent(part: ToolUIPart) {
+  const { toolCallId } = part as ToolUIPart;
+  const toolName = getToolName(part);
+
   // Handle generate_image tool call
   if (toolName === "generate_image") {
     return (
@@ -229,7 +195,7 @@ export function getToolCallComponent({ toolName, toolCallId }: ToolInvocation) {
         <CreateScheduledActionsSkeleton />
       </div>
     );
-  }   else if (toolName === "delete_scheduled_actions") {
+  } else if (toolName === "delete_scheduled_actions") {
     return (
       <div key={toolCallId}>
         <DeleteScheduledActionsSkeleton />
@@ -258,11 +224,10 @@ export function getToolCallComponent({ toolName, toolCallId }: ToolInvocation) {
 /**
  * Helper function to get the appropriate UI component for a tool result
  */
-export function getToolResultComponent({
-  toolName,
-  toolCallId,
-  result,
-}: ToolResultProps) {
+export function getToolResultComponent(part: ToolUIPart) {
+  const { toolCallId, output: result } = part as ToolUIPart;
+  const toolName = getToolName(part);
+
   if (toolName === "generate_image") {
     return (
       <div key={toolCallId}>
@@ -354,13 +319,17 @@ export function getToolResultComponent({
   } else if (toolName === "get_youtube_channel_video_list") {
     return (
       <div key={toolCallId}>
-        <YoutubeChannelVideosListResult result={result as YouTubeChannelVideoListResult} />
+        <YoutubeChannelVideosListResult
+          result={result as YouTubeChannelVideoListResult}
+        />
       </div>
     );
   } else if (toolName === "set_youtube_thumbnail") {
     return (
       <div key={toolCallId}>
-        <YouTubeSetThumbnailResult result={result as YouTubeSetThumbnailResultType} />
+        <YouTubeSetThumbnailResult
+          result={result as YouTubeSetThumbnailResultType}
+        />
       </div>
     );
   } else if (toolName === "search_web") {
@@ -372,7 +341,9 @@ export function getToolResultComponent({
   } else if (toolName === "spotify_deep_research") {
     return (
       <div key={toolCallId}>
-        <SpotifyDeepResearchResult result={result as SpotifyDeepResearchResultUIType} />
+        <SpotifyDeepResearchResult
+          result={result as SpotifyDeepResearchResultUIType}
+        />
       </div>
     );
   } else if (toolName === "get_artist_socials") {
@@ -384,25 +355,33 @@ export function getToolResultComponent({
   } else if (toolName === "get_spotify_artist_albums") {
     return (
       <div key={toolCallId}>
-        <GetSpotifyArtistAlbumsResult result={result as SpotifyArtistAlbumsResultUIType} />
+        <GetSpotifyArtistAlbumsResult
+          result={result as SpotifyArtistAlbumsResultUIType}
+        />
       </div>
     );
   } else if (toolName === "get_spotify_artist_top_tracks") {
     return (
       <div key={toolCallId}>
-        <SpotifyArtistTopTracksResult result={result as SpotifyArtistTopTracksResultType} />
+        <SpotifyArtistTopTracksResult
+          result={result as SpotifyArtistTopTracksResultType}
+        />
       </div>
     );
   } else if (toolName === "get_scheduled_actions") {
     return (
       <div key={toolCallId}>
-        <GetScheduledActionsSuccess result={result as GetScheduledActionsResult} />
+        <GetScheduledActionsSuccess
+          result={result as GetScheduledActionsResult}
+        />
       </div>
     );
   } else if (toolName === "create_scheduled_actions") {
     return (
       <div key={toolCallId}>
-        <CreateScheduledActionsSuccess result={result as CreateScheduledActionsResult} />
+        <CreateScheduledActionsSuccess
+          result={result as CreateScheduledActionsResult}
+        />
       </div>
     );
   } else if (toolName === "get_spotify_album") {
@@ -414,13 +393,17 @@ export function getToolResultComponent({
   } else if (toolName === "delete_scheduled_actions") {
     return (
       <div key={toolCallId}>
-        <DeleteScheduledActionsSuccess result={result as DeleteScheduledActionsResult} />
+        <DeleteScheduledActionsSuccess
+          result={result as DeleteScheduledActionsResult}
+        />
       </div>
     );
-  }   else if (toolName === "update_scheduled_action") {
+  } else if (toolName === "update_scheduled_action") {
     return (
       <div key={toolCallId}>
-        <UpdateScheduledActionSuccess result={result as UpdateScheduledActionResult} />
+        <UpdateScheduledActionSuccess
+          result={result as UpdateScheduledActionResult}
+        />
       </div>
     );
   }

@@ -20,7 +20,7 @@ const deleteArtist = tool({
   If called without an artist_account_id parameter, it will use the active_artist_account_id from the conversation context.
   After calling this tool, reply with the result of the deletion.
   `,
-  parameters: z.object({
+  inputSchema: z.object({
     artist_account_id: z
       .string()
       .describe(

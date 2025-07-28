@@ -32,7 +32,7 @@ const schema = z.object({
 const getSocialPosts = tool({
   description:
     "Retrieve all social media posts from a specific social profile. This endpoint should be called after obtaining social IDs from the Artist Socials endpoint.",
-  parameters: schema,
+  inputSchema: schema,
   execute: async ({ social_id, latestFirst = true, page = 1, limit = 20 }) => {
     try {
       // Construct URL with query parameters

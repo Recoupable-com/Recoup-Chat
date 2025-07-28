@@ -20,9 +20,7 @@ import { validateYouTubeTokens } from "../youtube/token-validator";
 const schema = z.object({
   artist_account_id: z
     .string()
-    .describe(
-      "artist_account_id from the system prompt of the active artist."
-    ),
+    .describe("artist_account_id from the system prompt of the active artist."),
 });
 
 const getYouTubeChannels = tool({
@@ -30,10 +28,12 @@ const getYouTubeChannels = tool({
 This tool requires the artist_account_id parameter from the system prompt of the active artist.
 Returns an array of comprehensive channel data including statistics, thumbnails, and branding if the artist has valid YouTube authentication.
 IMPORTANT: Always call the youtube_login tool first to obtain the required authentication before calling this tool.`,
-  parameters: schema,
+  inputSchema: schema,
   execute: async ({
-    artist_account_id
-  }: { artist_account_id: string }): Promise<YouTubeChannelInfoResult> => {
+    artist_account_id,
+  }: {
+    artist_account_id: string;
+  }): Promise<YouTubeChannelInfoResult> => {
     if (!artist_account_id || artist_account_id.trim() === "") {
       return YouTubeErrorBuilder.createToolError(
         "No artist_account_id provided to YouTube login tool. The LLM must pass the artist_account_id parameter. Please ensure you're passing the current artist's artist_account_id."

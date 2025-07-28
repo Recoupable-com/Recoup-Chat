@@ -30,7 +30,7 @@ const updateScheduledAction = tool({
   All specified actions will receive the same updates. If you need different updates for different actions,
   make multiple calls to this tool.
   `,
-  parameters: z.object({
+  inputSchema: z.object({
     ids: z
       .array(z.string())
       .min(1)

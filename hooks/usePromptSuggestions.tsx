@@ -1,10 +1,12 @@
+import generateUUID from "@/lib/generateUUID";
 import { useVercelChatContext } from "@/providers/VercelChatProvider";
+import { TextUIPart } from "ai";
 import { useEffect, useState } from "react";
 
 export type Suggestion = {
   text: string;
   type: "youtube" | "tiktok" | "instagram" | "spotify" | "other";
-}
+};
 
 const usePromptSuggestions = () => {
   const { messages, status, append } = useVercelChatContext();
@@ -14,12 +16,13 @@ const usePromptSuggestions = () => {
   const isAssistantMessage = lastMessage?.role === "assistant";
   const [isLoading, setIsLoading] = useState(false);
 
-  const content = lastMessage?.content;
+  const content = (lastMessage?.parts[0] as TextUIPart)?.text || "";
 
   const handleSuggestionClick = (suggestion: string) => {
     append({
+      id: generateUUID(),
       role: "user",
-      content: suggestion,
+      parts: [{ type: "text", text: suggestion }],
     });
   };
 

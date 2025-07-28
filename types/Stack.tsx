@@ -1,6 +1,6 @@
-import { Message } from "ai";
+import { UIMessage } from "ai";
 
-export type StackMessage = Message & {
+export type StackMessage = UIMessage & {
   questionId?: string;
 };
 

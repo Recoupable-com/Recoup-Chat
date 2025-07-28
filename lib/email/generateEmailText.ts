@@ -24,7 +24,7 @@ no headers or subject`;
     : greeting;
   try {
     const generated = await generateText({ system, prompt });
-    return generated.text;
+    return generated?.text || "";
   } catch {
     return `${greeting}Thank you for reaching out to Recoup. We have received your message and will get back to you soon.`;
   }

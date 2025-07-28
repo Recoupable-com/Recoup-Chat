@@ -13,7 +13,7 @@ const schema = z.object({
 const getSegmentFans = tool({
   description:
     "Retrieve all social profiles from fans within a specific segment. This endpoint should be called after obtaining segment IDs from the Artist Segments endpoint.",
-  parameters: schema,
+  inputSchema: schema,
   execute: async ({ segment_id, page, limit }) => {
     try {
       // Construct URL with query parameters

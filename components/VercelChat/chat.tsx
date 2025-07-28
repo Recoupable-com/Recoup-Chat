@@ -16,7 +16,7 @@ import {
   VercelChatProvider,
   useVercelChatContext,
 } from "@/providers/VercelChatProvider";
-import { Message } from "ai";
+import { UIMessage } from "ai";
 import { useDropzone } from "@/hooks/useDropzone";
 import FileDragOverlay from "./FileDragOverlay";
 import { Loader } from "lucide-react";
@@ -25,7 +25,7 @@ import { memo, useCallback } from "react";
 interface ChatProps {
   id: string;
   reportId?: string;
-  initialMessages?: Message[];
+  initialMessages?: UIMessage[];
 }
 
 export function Chat({ id, reportId, initialMessages }: ChatProps) {
