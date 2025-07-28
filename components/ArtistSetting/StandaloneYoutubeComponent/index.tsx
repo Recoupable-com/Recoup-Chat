@@ -4,7 +4,6 @@ import { Skeleton } from "../../ui/skeleton";
 import { cn } from "@/lib/utils";
 import { Tooltip } from "../../common/Tooltip";
 import ChannelInfo from "./ChannelInfo";
-import GraphicArrow from "@/components/YouTube/GraphicArrow";
 
 interface StandaloneYoutubeComponentProps {
   artistAccountId: string;
@@ -70,7 +69,6 @@ const StandaloneYoutubeComponent = ({
           </div>
         </Tooltip>
       )}
-      <GraphicArrow data={data} isLoading={isLoading} hideArrow={hideArrow}/>
     </div>
   );
 };
