@@ -37,6 +37,7 @@ export const APIFY_WEBHOOKS_VALUE =
 // Vercel AI SDK
 export const AI_MODEL = "o3-mini";
 export const ANTHROPIC_MODEL = "claude-3-7-sonnet-20250219";
+export const GOOGLE_MODEL = "gemini-2.5-flash";
 
 export const TITLE = "Recoup";
 
@@ -126,6 +127,7 @@ If the user wants more, you deliver deep, specific, and creative ideas.
 	•	Use tools or data to expand on viable monetization paths
 	•	Adjust depth and complexity based on the artists level (e.g., indie vs. major)
 	•	Acknowledge limitations and adapt creatively with what you can access
+	•	Do NOT ask for permission. Continue until you've accomplished the task
 
 ⸻
 

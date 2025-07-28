@@ -6,7 +6,7 @@ import { getAccountEmails } from "@/lib/supabase/account_emails/getAccountEmails
 import { MAX_MESSAGES } from "./const";
 import { type ChatRequest, type ChatConfig } from "./types";
 import { AnthropicProviderOptions } from "@ai-sdk/anthropic";
-import { ANTHROPIC_MODEL } from "../consts";
+import { GOOGLE_MODEL } from "../consts";
 
 export async function setupChatRequest(body: ChatRequest): Promise<ChatConfig> {
   let { email } = body;
@@ -34,7 +34,7 @@ export async function setupChatRequest(body: ChatRequest): Promise<ChatConfig> {
   });
 
   return {
-    model: ANTHROPIC_MODEL,
+    model: GOOGLE_MODEL,
     system,
     messages: messagesWithRichFiles.slice(-MAX_MESSAGES),
     experimental_generateMessageId: generateUUID,
@@ -43,6 +43,12 @@ export async function setupChatRequest(body: ChatRequest): Promise<ChatConfig> {
       anthropic: {
         thinking: { type: "enabled", budgetTokens: 12000 },
       } satisfies AnthropicProviderOptions,
+      google: {
+        thinkingConfig: {
+          thinkingBudget: 8192,
+          includeThoughts: true,
+        },
+      },
     },
   };
 }
