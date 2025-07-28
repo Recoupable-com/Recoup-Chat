@@ -10,7 +10,7 @@ import { v4 as uuidV4 } from "uuid";
 import { useArtistProvider } from "@/providers/ArtistProvider";
 import { PointerIcon } from "lucide-react";
 import { Button } from "../ui/button";
-import FanGroupNavItem from "../Sidebar/FanGroupNevItem";
+import FanGroupNavItem from "../Sidebar/FanGroupNavItem";
 import { usePathname } from "next/navigation";
 
 const SideMenu = ({

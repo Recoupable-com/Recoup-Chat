@@ -8,7 +8,7 @@ import MenuItemIcon from "../MenuItemIcon";
 import { v4 as uuidV4 } from "uuid";
 import { Button } from "../ui/button";
 import { cn } from "@/lib/utils";
-import FanGroupNavItem from "./FanGroupNevItem";
+import FanGroupNavItem from "./FanGroupNavItem";
 
 const Menu = ({ toggleMenuExpanded }: { toggleMenuExpanded: () => void }) => {
   const { push } = useRouter();
