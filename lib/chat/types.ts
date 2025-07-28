@@ -1,4 +1,5 @@
 import { AnthropicProviderOptions } from "@ai-sdk/anthropic";
+import { GoogleGenerativeAIProviderOptions } from "@ai-sdk/google";
 import { ModelMessage, LanguageModel, UIMessage, ToolSet } from "ai";
 
 export interface ChatRequest {
@@ -17,5 +18,6 @@ export interface ChatConfig {
   tools: ToolSet;
   providerOptions?: {
     anthropic: AnthropicProviderOptions;
+    google: GoogleGenerativeAIProviderOptions;
   };
 }
