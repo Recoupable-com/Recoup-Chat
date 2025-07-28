@@ -19,7 +19,6 @@ const MiniMenu = ({
     if (isPrepared()) push(`/${link || ""}`);
   };
 
-  // Check if segments should be shown
   const showSegments = selectedArtist && !isLoading && segments && segments.length > 0;
 
   return (

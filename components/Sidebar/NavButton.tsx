@@ -20,7 +20,6 @@ const NavButton = ({
   shouldRender = true,
   "aria-label": ariaLabel,
 }: NavButtonProps) => {
-  // Don't render if shouldRender is false
   if (!shouldRender) {
     return null;
   }
