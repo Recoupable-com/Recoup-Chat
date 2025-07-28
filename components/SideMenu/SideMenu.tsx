@@ -10,6 +10,8 @@ import { v4 as uuidV4 } from "uuid";
 import { useArtistProvider } from "@/providers/ArtistProvider";
 import { PointerIcon } from "lucide-react";
 import { Button } from "../ui/button";
+import FanGroupNavItem from "../Sidebar/FanGroupNevItem";
+import { usePathname } from "next/navigation";
 
 const SideMenu = ({
   isVisible,
@@ -21,10 +23,12 @@ const SideMenu = ({
   onOpenArtists?: () => void;
 }) => {
   const { push } = useRouter();
+  const pathname = usePathname();
   const { address, isPrepared } = useUserProvider();
   const { selectedArtist, sorted, toggleCreation } = useArtistProvider();
   const hasArtists = sorted.length > 0;
   const isArtistSelected = !!selectedArtist;
+  const isSegments = pathname.includes("/segments");
 
   const goToItem = (link?: string) => {
     if (isPrepared()) {
@@ -84,15 +88,7 @@ const SideMenu = ({
           <MenuItemIcon name="robot" />
           Agents
         </Button>
-        <Button
-          variant="ghost"
-          onClick={() => goToItem("segments")}
-          className="flex justify-start rounded-xl w-full"
-          aria-label="View segments"
-        >
-          <MenuItemIcon name="segments" />
-          Segments
-        </Button>
+        <FanGroupNavItem isActive={isSegments} onClick={() => goToItem("segments")} />
       </div>
       {address && <RecentChats toggleModal={toggleModal} />}
       <div className="grow flex flex-col gap-1 md:gap-3 justify-end">
