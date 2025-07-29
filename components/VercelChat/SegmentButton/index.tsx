@@ -24,7 +24,7 @@ const ChatInputSegmentCreationButton = () => {
         <Button
           variant="outline"
           size="icon"
-          className="rounded-full w-8 h-8"
+          className="rounded-full w-7 h-7"
           onClick={handleSegmentClick}
         >
           <MenuItemIcon name="segments" />
