@@ -37,10 +37,7 @@ export function useArtistFromRoom(roomId: string) {
         if (artist) {
           setSelectedArtist(artist);
         } else {
-          await getArtists();
-          const updatedArtistList = artists as ArtistRecord[];
-          const updatedArtist = updatedArtistList.find(a => a.account_id === data.artist_id);
-          if (updatedArtist) setSelectedArtist(updatedArtist);
+          await getArtists(data.artist_id);
         }
       } catch (error) {
         console.error("Error selecting artist for room:", error);
