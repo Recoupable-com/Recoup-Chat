@@ -27,7 +27,7 @@ const StandaloneYoutubeComponent = ({
   );
 
   return (
-    <div className="relative w-8 h-8 flex items-center justify-center">
+    <div className="relative w-full">
       {isLoading ? (
         <div className="flex flex-col gap-1">
           {label()}
