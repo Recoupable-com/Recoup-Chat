@@ -4,13 +4,14 @@ import { Button } from "@/components/ui/button";
 import GraphicArrow from "./GraphicArrow";
 import { useRouter } from "next/navigation";
 import { useVercelChatContext } from "@/providers/VercelChatProvider";
+import { FAN_GROUPS_PROMPT } from "@/lib/consts";
 
 const ChatInputSegmentCreationButton = () => {
   const { push } = useRouter();
   const { messages } = useVercelChatContext();
 
   const handleSegmentClick = () => {
-    push(`/chat?q=${encodeURIComponent("Create a fan group")}`);
+    push(`/chat?q=${encodeURIComponent(FAN_GROUPS_PROMPT)}`);
   };
 
   const shouldVisible = messages.length === 0;
