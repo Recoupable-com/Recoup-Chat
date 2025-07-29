@@ -36,7 +36,7 @@ const ChannelInfo = ({ dense, artistAccountId }: { dense?: boolean; artistAccoun
                 <img
                   src={channel.thumbnails.default.url}
                   alt={channel.title}
-                  className={cn("h-4 w-4 mr-2 rounded-full object-cover", { "mr-0": dense })}
+                  className={cn("h-4 min-w-4 mr-2 rounded-full object-cover", { "mr-0": dense })}
                 />
               ) : (
                 <Youtube className={cn("h-4 w-4 mr-2 text-red-600", { "mr-0": dense })} />

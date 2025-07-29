@@ -95,10 +95,22 @@ export const createSegments = async ({
     );
 
     // Step 7: Associate fans with the new segments
+    // Build a set of valid IDs from the fetched fan list
+    const validFanIds = new Set(fans.map(f => f.fan_social_id));
+
     const fanSegmentsToInsert = getFanSegmentsToInsert(
       segments,
       insertedSegments
-    );
+    ).filter(fs => {
+      const ok = validFanIds.has(fs.fan_social_id);
+      if (!ok) console.warn(`Skipping unknown fan_social_id: ${fs.fan_social_id}`);
+      return ok;
+    });
+
+    if (fanSegmentsToInsert.length === 0) {
+      return errorResponse("No valid fan IDs matched any segment.");
+    }
+
     const insertedFanSegments = await insertFanSegments(fanSegmentsToInsert);
 
     return successResponse(
