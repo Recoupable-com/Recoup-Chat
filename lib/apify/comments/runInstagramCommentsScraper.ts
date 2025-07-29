@@ -9,7 +9,7 @@ import { ApifyScraperResult } from "@/lib/apify/types";
  */
 export default async function runInstagramCommentsScraper(
   postUrls: string[],
-  resultsLimit?: number
+  resultsLimit: number = 100
 ): Promise<ApifyScraperResult> {
   try {
     if (!postUrls || postUrls.length === 0) {
@@ -29,10 +29,8 @@ export default async function runInstagramCommentsScraper(
     // Add webhooks parameter with shared constant
     url.searchParams.append("webhooks", APIFY_WEBHOOKS_VALUE);
 
-    // Add resultsLimit parameter if provided
-    if (resultsLimit !== undefined) {
-      url.searchParams.append("resultsLimit", resultsLimit.toString());
-    }
+    // Add resultsLimit parameter (defaults to 100)
+    url.searchParams.append("resultsLimit", resultsLimit.toString());
 
     const response = await fetch(url.toString(), {
       method: "GET",
