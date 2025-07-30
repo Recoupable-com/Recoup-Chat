@@ -11,7 +11,6 @@ import PureAttachmentsButton from "./PureAttachmentsButton";
 import { motion } from "framer-motion";
 import { ChatInputYoutubeButton } from "./ChatInputYoutubeButton";
 import PromptSuggestions from "./PromptSuggestions";
-import ChatInputSegmentCreationButton from "./SegmentButton";
 
 interface ChatInputProps {
   onSendMessage: (event: React.FormEvent<HTMLFormElement>) => void;
@@ -71,7 +70,6 @@ export function ChatInput({
         <div className="absolute bottom-2.5 left-2.5 z-10 flex flex-row gap-1 items-center">
           <PureAttachmentsButton />
           <ChatInputYoutubeButton />
-          <ChatInputSegmentCreationButton />
         </div>
         <Input
           input={input}
