@@ -1,7 +1,6 @@
 import { Tooltip } from "@/components/common/Tooltip";
 import MenuItemIcon from "@/components/MenuItemIcon";
 import { Button } from "@/components/ui/button";
-import GraphicArrow from "./GraphicArrow";
 import { useRouter } from "next/navigation";
 import { useVercelChatContext } from "@/providers/VercelChatProvider";
 import { FAN_GROUPS_PROMPT } from "@/lib/consts";
@@ -31,7 +30,6 @@ const ChatInputSegmentCreationButton = () => {
           <span className="sr-only">Create Segment</span>
         </Button>
       </Tooltip>
-      <GraphicArrow />
     </div>
   );
 };
