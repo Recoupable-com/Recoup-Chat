@@ -7,13 +7,11 @@ import { MAX_MESSAGES } from "./const";
 import { type ChatRequest, type ChatConfig } from "./types";
 import { AnthropicProviderOptions } from "@ai-sdk/anthropic";
 import { GOOGLE_MODEL } from "../consts";
-import { hasToolCall, stepCountIs } from "ai";
 
 export async function setupChatRequest(body: ChatRequest): Promise<ChatConfig> {
   let { email } = body;
   const { accountId, artistId } = body;
-  const isCreatingArtist = hasToolCall("create_new_artist");
-  console.log("isCreatingArtist", isCreatingArtist);
+
   if (!email && accountId) {
     const emails = await getAccountEmails(accountId);
     if (emails.length > 0 && emails[0].email) {
@@ -41,7 +39,6 @@ export async function setupChatRequest(body: ChatRequest): Promise<ChatConfig> {
     messages: messagesWithRichFiles.slice(-MAX_MESSAGES),
     experimental_generateMessageId: generateUUID,
     tools,
-    stopWhen: stepCountIs(11),
     providerOptions: {
       anthropic: {
         thinking: { type: "enabled", budgetTokens: 12000 },

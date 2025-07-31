@@ -1,12 +1,6 @@
 import { AnthropicProviderOptions } from "@ai-sdk/anthropic";
 import { GoogleGenerativeAIProviderOptions } from "@ai-sdk/google";
-import {
-  ModelMessage,
-  LanguageModel,
-  UIMessage,
-  ToolSet,
-  StopCondition,
-} from "ai";
+import { ModelMessage, LanguageModel, UIMessage, ToolSet } from "ai";
 
 export interface ChatRequest {
   messages: Array<UIMessage>;
@@ -22,7 +16,6 @@ export interface ChatConfig {
   messages: ModelMessage[];
   experimental_generateMessageId: () => string;
   tools: ToolSet;
-  stopWhen: StopCondition<ToolSet>;
   providerOptions?: {
     anthropic?: AnthropicProviderOptions;
     google?: GoogleGenerativeAIProviderOptions;
