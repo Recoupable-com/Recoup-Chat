@@ -15,19 +15,11 @@ const TOOL_CHAIN_STEPS = [
 
 const artistDeepResearch = tool({
   description: `
-  Conduct comprehensive cross-platform research on the artist and produce a rich knowledge base.
-
-  You MUST execute **every** step in the following TOOL CHAIN, in the exact order, before finishing. Never skip a step, never ask the user for confirmation, and never end "thinking" early.
-
+  Conducts comprehensive research on an artist across multiple platforms and generates a detailed report.
+  Follows this tool loop:
   <tool_loop>
   ${TOOL_CHAIN_STEPS.join("\n")}
   </tool_loop>
-
-  Execution rules:
-  1. Sequential: Execute the next tool only after the previous one succeeds.
-  2. Retry logic: If a step fails, retry up to 3 times with adjusted parameters before moving on.
-  3. Completion: Only finish when the final step (youtube_login) has been successfully called.
-  4. No user prompts: Make all decisions automatically. Never ask the user which socials to choose or whether to proceed.
 
   Spotify research requirements:
   ${SPOTIFY_DEEP_RESEARCH_REQUIREMENTS}
@@ -38,7 +30,7 @@ const artistDeepResearch = tool({
   - YouTube: Consistency, video quality, viewership, contact info
   - Marketing: Campaign ideas, revenue streams, collaboration opportunities, brand partnerships
 
-Continue looping over the tool chain until **all** data requirements are completely satisfied.  
+Do not stop after initial research - continue with looping over these steps until all the required info is gathered.  
   `,
   inputSchema: z.object({
     artist_account_id: z.string().describe("Artist account ID to research"),
