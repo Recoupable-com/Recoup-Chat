@@ -22,9 +22,6 @@ export async function OPTIONS() {
 
 export async function POST(request: NextRequest) {
   const body: ChatRequest = await request.json();
-  
-  // Keep only the last 60 messages
-  body.messages = body.messages.slice(-60);
 
   try {
     const chatConfig = await setupChatRequest(body);
