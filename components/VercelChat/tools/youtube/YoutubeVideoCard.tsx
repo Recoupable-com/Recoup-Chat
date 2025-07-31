@@ -16,7 +16,7 @@ const YoutubeVideoCard = ({ video }: { video: YouTubeVideo }) => {
           className="w-full h-full object-cover"
         />
         <div className="absolute bottom-1 right-1 bg-black/80 text-white text-[10px] px-1 rounded">
-          {video.contentDetails?.duration?.replace("PT", "").toLowerCase() || ""}
+          {video.contentDetails?.duration?.replace("PT", "")?.toLowerCase() || ""}
         </div>
       </div>
 
