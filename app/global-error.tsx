@@ -55,6 +55,7 @@ export default function GlobalError({ error, reset }: GlobalErrorProps) {
     </>
   );
 
+  // Global errors require full HTML structure since the entire app layout may be broken
   return (
     <html lang="en">
       <body>
