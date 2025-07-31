@@ -13,21 +13,27 @@ const sendEmailTool = tool({
       .array(z.string())
       .describe(
         "Optional array of CC email addresses. active_account_email should always be included unless already in 'to'."
-      ),
+      )
+      .default([])
+      .optional(),
     subject: z.string().describe("Email subject line"),
     text: z
       .string()
       .describe(
         "Plain text body of the email. Use context to make this creative and engaging."
-      ),
+      )
+      .optional(),
     html: z
       .string()
       .describe(
         "HTML body of the email. Use context to make this creative and engaging."
-      ),
+      )
+      .optional(),
     headers: z
       .record(z.string(), z.string())
-      .describe("Optional custom headers for the email"),
+      .describe("Optional custom headers for the email")
+      .default({})
+      .optional(),
   }),
   execute: async ({ to, cc = [], subject, text, html, headers }) => {
     try {
