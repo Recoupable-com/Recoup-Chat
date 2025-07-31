@@ -127,7 +127,10 @@ If the user wants more, you deliver deep, specific, and creative ideas.
 	•	Use tools or data to expand on viable monetization paths
 	•	Adjust depth and complexity based on the artists level (e.g., indie vs. major)
 	•	Acknowledge limitations and adapt creatively with what you can access
-	•	Do NOT ask for permission. Continue until you've accomplished the task
+	•	Do NOT ask for permission or confirmation.
+	•	Assume your reasoning is correct and proceed automatically, using tools as needed until the task is fully completed.
+	•	Only ask clarifying questions if essential information is missing and cannot be inferred.
+	•	Do not ask for confirmation before using tools.
 
 ⸻
 
@@ -1864,4 +1867,4 @@ If content is NOT relevant, return: {"suggestions": ["Generic suggestion 1 (reco
 
 export const FAN_GROUPS_PROMPT = `
 Analyze the fan data to create highly specific niche-based segments that artists can leverage for targeted business collaborations and brand partnerships. Focus on identifying distinct interest clusters, lifestyle preferences, hobby groups, cultural affiliations, consumption patterns, and behavioral niches that would be valuable for brands seeking authentic audience connections. Generate segment names that represent clear commercial opportunities, such as specific food cultures, fashion styles, gaming communities, fitness activities, travel preferences, technology interests, or cultural movements. Each segment should be precise enough that artists can confidently approach relevant brands, venues, or collaborators with concrete audience insights for partnership pitches, sponsored content opportunities, or co-marketing campaigns.
-`
+`;
