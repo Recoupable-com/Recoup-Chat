@@ -31,12 +31,17 @@ const createArtist = tool({
   </tool_loop>
 
 IMPORTANT: After creating the artist, you MUST continue with these steps in order:
-  1. Call get_spotify_search with the artist's name to find their Spotify profile
-  2. When a Spotify result is selected, call update_account_info to set their profile picture
-  3. Call update_artist_socials to add their social profiles
-  4. Call artist_deep_research to gather comprehensive data
+  1. Call get_spotify_search with the artist's name to find their Spotify profile.
+          •  Choose the best match AUTOMATICALLY using these heuristics (without asking the user):
+              – Exact name match over partial matches.
+              – If no exact match, choose the result with the highest popularity score.
+          •  NEVER ask the user which result to choose — pick the most likely candidate yourself.
+          •  Extract the profile image URL and Spotify URLs from the chosen result for the next steps.
+  2. Call update_account_info to set their profile picture and name based on the chosen Spotify artist.
+  3. Call update_artist_socials to add their Spotify profile URL (and any other socials discovered).
+  4. Call artist_deep_research to gather comprehensive data.
   
-  Do not stop after creating the artist - continue with all these steps to complete the setup.  
+  Do not stop after creating the artist — continue with all these steps to complete the setup automatically.  
   `,
   inputSchema: z.object({
     name: z.string().describe("The name of the artist to be created"),
