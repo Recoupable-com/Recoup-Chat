@@ -7,6 +7,7 @@ import { MAX_MESSAGES } from "./const";
 import { type ChatRequest, type ChatConfig } from "./types";
 import { AnthropicProviderOptions } from "@ai-sdk/anthropic";
 import { GOOGLE_MODEL } from "../consts";
+import { stepCountIs } from "ai";
 
 export async function setupChatRequest(body: ChatRequest): Promise<ChatConfig> {
   let { email } = body;
@@ -39,6 +40,7 @@ export async function setupChatRequest(body: ChatRequest): Promise<ChatConfig> {
     messages: messagesWithRichFiles.slice(-MAX_MESSAGES),
     experimental_generateMessageId: generateUUID,
     tools,
+    stopWhen: stepCountIs(111),
     providerOptions: {
       anthropic: {
         thinking: { type: "enabled", budgetTokens: 12000 },

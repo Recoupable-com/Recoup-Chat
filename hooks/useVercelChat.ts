@@ -51,7 +51,6 @@ export function useVercelChat({
     useChat({
       id,
       experimental_throttle: 100,
-      maxSteps: 111,
       generateId: generateUUID,
       onError: (e) => {
         console.error("An error occurred, please try again!", e);
