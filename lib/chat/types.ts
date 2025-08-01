@@ -1,6 +1,6 @@
 import { AnthropicProviderOptions } from "@ai-sdk/anthropic";
 import { GoogleGenerativeAIProviderOptions } from "@ai-sdk/google";
-import { ModelMessage, LanguageModel, UIMessage, ToolSet } from "ai";
+import { ModelMessage, LanguageModel, UIMessage, ToolSet, StopCondition } from "ai";
 
 export interface ChatRequest {
   messages: Array<UIMessage>;
@@ -20,4 +20,5 @@ export interface ChatConfig {
     anthropic?: AnthropicProviderOptions;
     google?: GoogleGenerativeAIProviderOptions;
   };
+  stopWhen?: StopCondition<NoInfer<ToolSet>> | StopCondition<NoInfer<ToolSet>>[] | undefined
 }
