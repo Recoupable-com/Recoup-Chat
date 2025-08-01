@@ -18,8 +18,13 @@ export function useMessageLoader(
   const [error, setError] = useState<Error | null>(null);
 
   useEffect(() => {
-    if (!roomId || !userId) {
+    if (!roomId) {
       setIsLoading(false);
+      return;
+    }
+
+    if (!userId) {
+      setIsLoading(true);
       return;
     }
 
