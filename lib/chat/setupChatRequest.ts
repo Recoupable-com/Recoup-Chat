@@ -41,6 +41,10 @@ export async function setupChatRequest(body: ChatRequest): Promise<ChatConfig> {
     experimental_generateMessageId: generateUUID,
     tools,
     stopWhen: stepCountIs(111),
+    prepareStep: (options) => {
+      console.log("prepareStep", options);
+      return options;
+    },
     providerOptions: {
       anthropic: {
         thinking: { type: "enabled", budgetTokens: 12000 },
