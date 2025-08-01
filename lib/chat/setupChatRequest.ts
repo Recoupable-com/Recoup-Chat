@@ -40,7 +40,7 @@ export async function setupChatRequest(body: ChatRequest): Promise<ChatConfig> {
     messages: messagesWithRichFiles.slice(-MAX_MESSAGES),
     experimental_generateMessageId: generateUUID,
     tools,
-    stopWhen: stepCountIs(100),
+    stopWhen: stepCountIs(111),
     providerOptions: {
       anthropic: {
         thinking: { type: "enabled", budgetTokens: 12000 },
