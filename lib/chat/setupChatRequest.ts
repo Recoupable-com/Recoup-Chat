@@ -8,6 +8,7 @@ import { type ChatRequest, type ChatConfig } from "./types";
 import { AnthropicProviderOptions } from "@ai-sdk/anthropic";
 import { GOOGLE_MODEL } from "../consts";
 import { stepCountIs } from "ai";
+import { getNextToolByChains } from "@/lib/chat/toolChains";
 
 export async function setupChatRequest(body: ChatRequest): Promise<ChatConfig> {
   let { email } = body;
@@ -40,10 +41,13 @@ export async function setupChatRequest(body: ChatRequest): Promise<ChatConfig> {
     messages: messagesWithRichFiles.slice(-MAX_MESSAGES),
     experimental_generateMessageId: generateUUID,
     tools,
-    stopWhen: stepCountIs(111),
-    prepareStep: (options) => {
-      console.log("prepareStep", options);
-      return options;
+    stopWhen: [stepCountIs(15)],
+    prepareStep: ({ steps, ...rest }) => {
+      const next = getNextToolByChains(steps);
+      if (next) {
+        return { ...rest, ...next } as typeof rest & typeof next;
+      }
+      return rest;
     },
     providerOptions: {
       anthropic: {
