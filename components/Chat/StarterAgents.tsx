@@ -42,7 +42,7 @@ export function StarterAgents({ isVisible }: StarterAgentsProps) {
             <TooltipContent side="top" className="max-w-sm text-xs p-2">
               <div className="space-y-1">
                 <p className="font-medium">Examples:</p>
-                <p>• &ldquo;Analyze my artist's fan segments&rdquo;</p>
+                <p>• &ldquo;Analyze my artist&apos;s fan segments&rdquo;</p>
                 <p>• &ldquo;Give me a social media health check&rdquo;</p>
                 <p>• &ldquo;Find collaboration opportunities&rdquo;</p>
               </div>
