@@ -26,8 +26,8 @@ export const ConnectYouTubeButton = ({
     size={size}
     disabled={disabled || !accountId}
   >
-    <Youtube className={cn("h-4 w-4 mr-0.5 md:mr-2", {
-        "mr-0": dense,
+    <Youtube className={cn("h-4 w-4", {
+        "mr-0 md:mr-0": dense,
     })} />
     <span className={cn("text-xs md:text-sm", {
         "hidden": dense,
