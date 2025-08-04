@@ -6,7 +6,7 @@ import ChatInput from "./ChatInput";
 import ChatSkeleton from "../Chat/ChatSkeleton";
 import ChatGreeting from "../Chat/ChatGreeting";
 import ChatPrompt from "../Chat/ChatPrompt";
-import StarterAgents from "../Chat/StarterAgents";
+// import StarterAgents from "../Chat/StarterAgents";
 import useVisibilityDelay from "@/hooks/useVisibilityDelay";
 import { ChatReport } from "../Chat/ChatReport";
 import { useParams } from "next/navigation";
@@ -123,7 +123,7 @@ function ChatContentMemoized({ reportId, id }: {reportId?: string; id: string;})
 
           {/* Spacer to balance and bottom section */}
           <div className="flex-1">
-            <StarterAgents isVisible={isVisible} />
+            {/* <StarterAgents isVisible={isVisible} /> */}
           </div>
         </>
       ) : (
