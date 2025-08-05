@@ -41,7 +41,7 @@ export async function setupChatRequest(body: ChatRequest): Promise<ChatConfig> {
     messages: messagesWithRichFiles.slice(-MAX_MESSAGES),
     experimental_generateMessageId: generateUUID,
     tools,
-    stopWhen: [stepCountIs(15)],
+    stopWhen: [stepCountIs(111)],
     prepareStep: ({ steps, ...rest }) => {
       const next = getNextToolByChains(steps);
       if (next) {
