@@ -41,10 +41,6 @@ export function getNextToolByChains(
   steps: StepLike[],
   toolCallsContent: ToolCallContent[]
 ): ToolChoice | undefined {
-  console.log("[TOOL TIMELINE]", toolCallsContent.map((call, i) => 
-    `${i}: ${call.toolName}`
-  ));
-
   // Build timeline of executed tools from toolCallsContent
   const executedTimeline = toolCallsContent.map(call => call.toolName);
   
@@ -73,7 +69,6 @@ export function getNextToolByChains(
     // Return next tool in sequence if available
     if (sequencePosition < fullSequence.length) {
       const nextTool = fullSequence[sequencePosition];
-      console.log(`[NEXT TOOL] ${nextTool} (position ${sequencePosition})`);
       return { toolChoice: { type: "tool", toolName: nextTool } };
     }
   }
