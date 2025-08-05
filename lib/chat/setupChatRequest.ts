@@ -43,8 +43,19 @@ export async function setupChatRequest(body: ChatRequest): Promise<ChatConfig> {
     tools,
     stopWhen: stepCountIs(111),
     prepareStep: ({ steps, ...rest }) => {
-      const next = getNextToolByChains(steps);
+      // Extract tool calls timeline from steps
+      const toolCallsContent = steps.flatMap(step =>
+        step.toolResults?.map(result => ({
+          type: 'tool-result' as const,
+          toolCallId: result.toolCallId || '',
+          toolName: result.toolName,
+          output: { type: 'json' as const, value: result.output }
+        })) || []
+      );
+
+      const next = getNextToolByChains(steps, toolCallsContent);
       if (next) {
+        console.log("[NEXT TOOL]", next.toolChoice.toolName);
         return { ...rest, ...next } as typeof rest & typeof next;
       }
       return rest;

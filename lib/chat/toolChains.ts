@@ -1,16 +1,19 @@
 export type ToolChoice = { toolChoice: { type: "tool"; toolName: string } };
 
-// Map trigger tool -> sequence AFTER trigger
+// Map trigger tool -> sequence AFTER trigger  
 export const TOOL_CHAINS: Record<string, readonly string[]> = {
   create_new_artist: [
     "get_spotify_search",
     "update_account_info",
     "update_artist_socials",
-    "artist_deep_research",
+    "artist_deep_research", 
     "spotify_deep_research",
     "search_web",
     "update_artist_socials",
+    "search_web", // repeat for new socials found
     "create_knowledge_base",
+    "generate_txt_file",
+    "update_account_info", // attach generated file
     "create_segments",
     "youtube_login",
   ],
@@ -23,21 +26,57 @@ type StepLike = {
   toolResults?: { toolName: string }[];
 };
 
-/**
- * Returns the next tool to run for any registered chain.
- */
-export function getNextToolByChains(steps: StepLike[]): ToolChoice | undefined {
-  const executed = new Set<string>();
-  steps.forEach((s) => {
-    s.toolCalls?.forEach((c) => executed.add(c.toolName));
-    s.toolResults?.forEach((r) => executed.add(r.toolName));
-  });
+type ToolCallContent = {
+  type: 'tool-result';
+  toolCallId: string;
+  toolName: string;
+  output: { type: 'json'; value: unknown };
+};
 
+/**
+ * Returns the next tool to run based on timeline progression through tool chains.
+ * Uses toolCallsContent to track exact execution order and position in sequence.
+ */
+export function getNextToolByChains(
+  steps: StepLike[],
+  toolCallsContent: ToolCallContent[]
+): ToolChoice | undefined {
+  console.log("[TOOL TIMELINE]", toolCallsContent.map((call, i) => 
+    `${i}: ${call.toolName}`
+  ));
+
+  // Build timeline of executed tools from toolCallsContent
+  const executedTimeline = toolCallsContent.map(call => call.toolName);
+  
   for (const [trigger, sequenceAfter] of Object.entries(TOOL_CHAINS)) {
-    if (!executed.has(trigger)) continue; // this chain has not started yet
+    // Check if this chain has been triggered
+    const triggerIndex = executedTimeline.indexOf(trigger);
+    if (triggerIndex === -1) continue; // Chain not started
+    
     const fullSequence = [trigger, ...sequenceAfter];
-    const next = fullSequence.find((tool) => !executed.has(tool));
-    if (next) return { toolChoice: { type: "tool", toolName: next } };
+    
+    // Find our current position in the sequence by matching timeline
+    let sequencePosition = 0;
+    let timelinePosition = triggerIndex;
+    
+    // Walk through the timeline starting from trigger
+    while (timelinePosition < executedTimeline.length && sequencePosition < fullSequence.length) {
+      const currentTool = executedTimeline[timelinePosition];
+      const expectedTool = fullSequence[sequencePosition];
+      
+      if (currentTool === expectedTool) {
+        sequencePosition++;
+      }
+      timelinePosition++;
+    }
+    
+    // Return next tool in sequence if available
+    if (sequencePosition < fullSequence.length) {
+      const nextTool = fullSequence[sequencePosition];
+      console.log(`[NEXT TOOL] ${nextTool} (position ${sequencePosition})`);
+      return { toolChoice: { type: "tool", toolName: nextTool } };
+    }
   }
+  
   return undefined;
-} 
+}
