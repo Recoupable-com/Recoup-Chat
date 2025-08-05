@@ -6,6 +6,7 @@ import { getAccountEmails } from "@/lib/supabase/account_emails/getAccountEmails
 import { MAX_MESSAGES } from "./const";
 import { type ChatRequest, type ChatConfig } from "./types";
 import { AnthropicProviderOptions } from "@ai-sdk/anthropic";
+import { GOOGLE_MODEL } from "../consts";
 import { stepCountIs } from "ai";
 import { getNextToolByChains } from "@/lib/chat/toolChains";
 
@@ -35,7 +36,7 @@ export async function setupChatRequest(body: ChatRequest): Promise<ChatConfig> {
   });
 
   return {
-    model: "claude-3-7-sonnet-20250219",
+    model: GOOGLE_MODEL,
     system,
     messages: messagesWithRichFiles.slice(-MAX_MESSAGES),
     experimental_generateMessageId: generateUUID,
