@@ -34,7 +34,7 @@ export function getNextToolByChains(steps: StepLike[]): ToolChoice | undefined {
   });
 
   for (const [trigger, sequenceAfter] of Object.entries(TOOL_CHAINS)) {
-    if (!executed.has(trigger)) continue; // this chain not started yet
+    if (!executed.has(trigger)) continue; // this chain has not started yet
     const fullSequence = [trigger, ...sequenceAfter];
     const next = fullSequence.find((tool) => !executed.has(tool));
     if (next) return { toolChoice: { type: "tool", toolName: next } };
