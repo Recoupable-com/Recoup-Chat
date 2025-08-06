@@ -42,7 +42,7 @@ export function ChatPrompt({ isVisible }: { isVisible: boolean }) {
 
   const wordComponent = (word: string, icon?: ReactNode) => {
     return (
-      <span className="inline-flex items-center gap-1 border-b-2 border-dotted border-pink-500/30">
+      <span className="inline-flex items-center gap-1">
         {icon}
         {word}
       </span>
