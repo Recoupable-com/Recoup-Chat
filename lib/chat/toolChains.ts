@@ -1,4 +1,14 @@
-export type ToolChoice = { toolChoice: { type: "tool"; toolName: string } };
+export type ToolChoice = { 
+  toolChoice: { type: "tool"; toolName: string };
+  model?: string;
+};
+
+// Map specific tools to their required models
+export const TOOL_MODEL_MAP: Record<string, string> = {
+  update_account_info: "gemini-2.5-pro",
+  // Add other tools that need specific models here
+  // e.g., create_segments: "gpt-4-turbo",
+};
 
 // Map trigger tool -> sequence AFTER trigger  
 export const TOOL_CHAINS: Record<string, readonly string[]> = {
@@ -69,7 +79,17 @@ export function getNextToolByChains(
     // Return next tool in sequence if available
     if (sequencePosition < fullSequence.length) {
       const nextTool = fullSequence[sequencePosition];
-      return { toolChoice: { type: "tool", toolName: nextTool } };
+      const toolChoice: ToolChoice = { 
+        toolChoice: { type: "tool", toolName: nextTool }
+      };
+      
+      // Add model if specified for this tool
+      const model = TOOL_MODEL_MAP[nextTool];
+      if (model) {
+        toolChoice.model = model;
+      }
+      
+      return toolChoice;
     }
   }
   

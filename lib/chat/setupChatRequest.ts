@@ -55,7 +55,7 @@ export async function setupChatRequest(body: ChatRequest): Promise<ChatConfig> {
 
       const next = getNextToolByChains(steps, toolCallsContent);
       if (next) {
-        return { ...rest, ...next } as typeof rest & typeof next;
+        return { ...rest, ...next, } as typeof rest & typeof next;
       }
       return rest;
     },
