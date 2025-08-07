@@ -1,5 +1,4 @@
 import { useEffect, useState } from "react";
-import { useArtistProvider } from "@/providers/ArtistProvider";
 import { useVercelChatContext } from "@/providers/VercelChatProvider";
 import { useConversationsProvider } from "@/providers/ConversationsProvider";
 import { CreateArtistResult } from "@/lib/tools/createArtist";
@@ -10,7 +9,6 @@ import copyMessagesClient from "@/lib/copyMessagesClient";
  * Handles refreshing artists, copying messages, and navigation
  */
 export function useCreateArtistTool(result: CreateArtistResult) {
-  const { getArtists } = useArtistProvider();
   const { status, id } = useVercelChatContext();
   const { fetchConversations } = useConversationsProvider();
   const [isProcessing, setIsProcessing] = useState(false);
@@ -35,10 +33,7 @@ export function useCreateArtistTool(result: CreateArtistResult) {
       try {
         setIsProcessing(true);
 
-        // Step 1: Refresh the artists list
-        await getArtists(result.artist!.account_id);
-
-        // Step 2: Check if we need to copy messages and redirect
+        // Step 1: Check if we need to copy messages and redirect
         const needsRedirect = id !== result.newRoomId && !!result.newRoomId;
 
         if (needsRedirect) {
@@ -71,7 +66,7 @@ export function useCreateArtistTool(result: CreateArtistResult) {
     };
 
     processCreateArtistResult();
-  }, [status, result, id, isProcessing, getArtists, fetchConversations]);
+  }, [status, result, id, isProcessing]);
 
   return {
     isProcessing,
