@@ -11,17 +11,12 @@ import PromptSuggestions from "./PromptSuggestions";
 import {
   PromptInput,
   PromptInputButton,
-  PromptInputModelSelect,
-  PromptInputModelSelectContent,
-  PromptInputModelSelectItem,
-  PromptInputModelSelectTrigger,
-  PromptInputModelSelectValue,
   PromptInputSubmit,
   PromptInputTextarea,
   PromptInputToolbar,
   PromptInputTools,
 } from "../ai-elements/prompt-input";
-import { LLM_MODELS } from "@/lib/consts";
+import ModelSelect from "./ModelSelect";
 
 interface ChatInputProps {
   onSendMessage: (event: React.FormEvent<HTMLFormElement>) => void;
@@ -39,8 +34,7 @@ export function ChatInput({
   input,
 }: ChatInputProps) {
   const { selectedArtist, sorted } = useArtistProvider();
-  const { hasPendingUploads, messages, status, model, setModel } =
-    useVercelChatContext();
+  const { hasPendingUploads, messages, status } = useVercelChatContext();
   const isDisabled = !selectedArtist && sorted.length > 0;
 
   const handleSend = (event: React.FormEvent<HTMLFormElement>) => {
@@ -86,23 +80,7 @@ export function ChatInput({
               <PromptInputButton className="rounded-full hover:scale-105 active:scale-95 transition-all">
                 <ChatInputYoutubeButton />
               </PromptInputButton>
-              <PromptInputModelSelect
-                onValueChange={(value) => {
-                  setModel(value);
-                }}
-                value={model}
-              >
-                <PromptInputModelSelectTrigger>
-                  <PromptInputModelSelectValue />
-                </PromptInputModelSelectTrigger>
-                <PromptInputModelSelectContent>
-                  {LLM_MODELS.map((model) => (
-                    <PromptInputModelSelectItem key={model.id} value={model.id}>
-                      {model.name}
-                    </PromptInputModelSelectItem>
-                  ))}
-                </PromptInputModelSelectContent>
-              </PromptInputModelSelect>
+              <ModelSelect />
             </PromptInputTools>
             <PromptInputSubmit
               disabled={isDisabled || hasPendingUploads}
