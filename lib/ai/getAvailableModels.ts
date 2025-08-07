@@ -1,19 +1,20 @@
-// Returns available Large Language Models (LLMs) supported by the application.
-// This utility lives in the `@ai` namespace to group AI-related helpers.
-
-export interface LlmModel {
-  id: string;
-  name: string;
-}
-
-const MODELS: LlmModel[] = [
-  { id: "gemini-2.5-flash", name: "Gemini 2.5 Flash" },
-  { id: "openai/gpt-oss-120b", name: "OpenAI GPT-OSS 120B" },
-  { id: "xai/grok-3-mini", name: "XAI Grok 3 Mini" },
-  { id: "alibaba/qwen-3-235b", name: "Alibaba Qwen 3 235B" },
-];
+import { gateway, GatewayLanguageModelEntry } from "@ai-sdk/gateway";
 
 /**
- * Returns the list of available LLMs that a user can pick from.
+ * Returns the list of available LLMs.
+ * Internally uses `gateway.getAvailableModels()` and memoises the result.
  */
-export const getAvailableModels = (): LlmModel[] => MODELS;
+export const getAvailableModels = async (): Promise<
+  GatewayLanguageModelEntry[]
+> => {
+  try {
+    const apiResponse = await gateway.getAvailableModels();
+    return apiResponse.models;
+  } catch (err) {
+    console.error(
+      "Failed to fetch models from Vercel AI Gateway, using fallback list.",
+      err
+    );
+    return [];
+  }
+};

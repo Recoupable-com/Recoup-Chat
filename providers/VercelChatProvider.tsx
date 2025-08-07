@@ -9,14 +9,14 @@ import { useVercelChat } from "@/hooks/useVercelChat";
 import { UseChatHelpers } from "@ai-sdk/react";
 import useAttachments from "@/hooks/useAttachments";
 import { ChatStatus, FileUIPart, UIMessage } from "ai";
-import type { LlmModel } from "@ai/getAvailableModels";
 import { useArtistProvider } from "./ArtistProvider";
+import { GatewayLanguageModelEntry } from "@ai-sdk/gateway";
 
 // Interface for the context data
 interface VercelChatContextType {
   id: string | undefined;
   messages: UIMessage[];
-  availableModels: LlmModel[];
+  availableModels: GatewayLanguageModelEntry[];
   status: ChatStatus;
   isLoading: boolean;
   hasError: boolean;
