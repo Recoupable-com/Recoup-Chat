@@ -18,7 +18,7 @@ const UpdateArtistInfoSuccess: React.FC<UpdateArtistInfoSuccessProps> = ({
 
   useEffect(() => {
     getArtists();
-  }, [getArtists]);
+  }, []);
 
   if (!artistProfile) {
     return (
