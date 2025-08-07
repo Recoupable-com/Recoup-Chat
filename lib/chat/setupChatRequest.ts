@@ -8,7 +8,7 @@ import { type ChatRequest, type ChatConfig } from "./types";
 import { AnthropicProviderOptions } from "@ai-sdk/anthropic";
 import { GOOGLE_MODEL } from "../consts";
 import { stepCountIs } from "ai";
-import { getNextToolByChains } from "@/lib/chat/toolChains";
+import { getNextToolByChains } from "./toolChains";
 
 export async function setupChatRequest(body: ChatRequest): Promise<ChatConfig> {
   let { email } = body;
@@ -55,7 +55,7 @@ export async function setupChatRequest(body: ChatRequest): Promise<ChatConfig> {
 
       const next = getNextToolByChains(steps, toolCallsContent);
       if (next) {
-        return { ...rest, ...next } as typeof rest & typeof next;
+        return { ...rest, ...next };
       }
       return rest;
     },

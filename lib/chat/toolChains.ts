@@ -1,24 +1,51 @@
-export type ToolChoice = { toolChoice: { type: "tool"; toolName: string } };
+import { LanguageModel } from "ai";
 
-// Map trigger tool -> sequence AFTER trigger  
-export const TOOL_CHAINS: Record<string, readonly string[]> = {
+export type ToolChainItem = {
+  toolName: string;
+  system?: string;
+};
+
+export type PrepareStepResult = {
+  toolChoice?: { type: "tool"; toolName: string };
+  model?: LanguageModel;
+  system?: string;
+};
+
+// Map specific tools to their required models
+export const TOOL_MODEL_MAP: Record<string, LanguageModel> = {
+  update_account_info: "gemini-2.5-pro",
+  // Add other tools that need specific models here
+  // e.g., create_segments: "gpt-4-turbo",
+};
+
+// Map trigger tool -> sequence AFTER trigger
+export const TOOL_CHAINS: Record<string, readonly ToolChainItem[]> = {
   create_new_artist: [
-    "get_spotify_search",
-    "update_account_info",
-    "update_artist_socials",
-    "artist_deep_research", 
-    "spotify_deep_research",
-    "search_web",
-    "update_artist_socials",
-    "search_web", // repeat for new socials found
-    "create_knowledge_base",
-    "generate_txt_file",
-    "update_account_info", // attach generated file
-    "create_segments",
-    "youtube_login",
+    { toolName: "get_spotify_search" },
+    {
+      toolName: "update_account_info",
+      system:
+        "Read first artist's information from the result of the get_spotify_search tool and update the account using the update_account_info tool with the artist's basic information. Information you should get is: name, image, label etc.",
+    },
+    { toolName: "update_artist_socials" },
+    { toolName: "artist_deep_research" },
+    { toolName: "spotify_deep_research" },
+    { toolName: "search_web" },
+    { toolName: "update_artist_socials" },
+    { toolName: "search_web" },
+    { toolName: "create_knowledge_base" },
+    { toolName: "generate_txt_file" },
+    { toolName: "update_account_info" },
+    { toolName: "create_segments" },
+    { toolName: "youtube_login" },
   ],
   // You can add other chains here, e.g.:
-  // create_campaign: ["fetch_posts", "analyze_funnel", "generate_email_copy", "schedule_campaign"],
+  // create_campaign: [
+  //   { toolName: "fetch_posts" },
+  //   { toolName: "analyze_funnel" },
+  //   { toolName: "generate_email_copy" },
+  //   { toolName: "schedule_campaign" }
+  // ],
 };
 
 type StepLike = {
@@ -27,10 +54,10 @@ type StepLike = {
 };
 
 type ToolCallContent = {
-  type: 'tool-result';
+  type: "tool-result";
   toolCallId: string;
   toolName: string;
-  output: { type: 'json'; value: unknown };
+  output: { type: "json"; value: unknown };
 };
 
 /**
@@ -40,38 +67,56 @@ type ToolCallContent = {
 export function getNextToolByChains(
   steps: StepLike[],
   toolCallsContent: ToolCallContent[]
-): ToolChoice | undefined {
+): PrepareStepResult | undefined {
   // Build timeline of executed tools from toolCallsContent
-  const executedTimeline = toolCallsContent.map(call => call.toolName);
-  
+  const executedTimeline = toolCallsContent.map((call) => call.toolName);
+
   for (const [trigger, sequenceAfter] of Object.entries(TOOL_CHAINS)) {
     // Check if this chain has been triggered
     const triggerIndex = executedTimeline.indexOf(trigger);
     if (triggerIndex === -1) continue; // Chain not started
-    
-    const fullSequence = [trigger, ...sequenceAfter];
-    
+
+    const fullSequence = [{ toolName: trigger }, ...sequenceAfter];
+
     // Find our current position in the sequence by matching timeline
     let sequencePosition = 0;
     let timelinePosition = triggerIndex;
-    
+
     // Walk through the timeline starting from trigger
-    while (timelinePosition < executedTimeline.length && sequencePosition < fullSequence.length) {
+    while (
+      timelinePosition < executedTimeline.length &&
+      sequencePosition < fullSequence.length
+    ) {
       const currentTool = executedTimeline[timelinePosition];
-      const expectedTool = fullSequence[sequencePosition];
-      
+      const expectedTool = fullSequence[sequencePosition].toolName;
+
       if (currentTool === expectedTool) {
         sequencePosition++;
       }
       timelinePosition++;
     }
-    
+
     // Return next tool in sequence if available
     if (sequencePosition < fullSequence.length) {
-      const nextTool = fullSequence[sequencePosition];
-      return { toolChoice: { type: "tool", toolName: nextTool } };
+      const nextToolItem = fullSequence[sequencePosition];
+      const result: PrepareStepResult = {
+        toolChoice: { type: "tool", toolName: nextToolItem.toolName },
+      };
+
+      // Add system prompt if available
+      if (nextToolItem.system) {
+        result.system = nextToolItem.system;
+      }
+
+      // Add model if specified for this tool
+      const model = TOOL_MODEL_MAP[nextToolItem.toolName];
+      if (model) {
+        result.model = model;
+      }
+
+      return result;
     }
   }
-  
+
   return undefined;
 }
