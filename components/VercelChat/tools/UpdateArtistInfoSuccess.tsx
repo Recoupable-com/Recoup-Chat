@@ -1,10 +1,9 @@
 import { UpdateAccountInfoResult } from "@/lib/tools/updateAccountInfo";
-import React, { useEffect } from "react";
+import React from "react";
 import ArtistHeroSection from "./ArtistHeroSection";
 import KnowledgeBaseSection from "./KnowledgeBaseSection";
 import { Knowledge } from "@/lib/supabase/artist/updateArtistProfile";
 import { CheckCircle, FileText } from "lucide-react";
-import { useArtistProvider } from "@/providers/ArtistProvider";
 
 interface UpdateArtistInfoSuccessProps {
   result: UpdateAccountInfoResult;
@@ -13,12 +12,7 @@ interface UpdateArtistInfoSuccessProps {
 const UpdateArtistInfoSuccess: React.FC<UpdateArtistInfoSuccessProps> = ({
   result,
 }) => {
-  const { getArtists } = useArtistProvider();
   const { artistProfile, message } = result;
-
-  useEffect(() => {
-    getArtists();
-  }, []);
 
   if (!artistProfile) {
     return (
