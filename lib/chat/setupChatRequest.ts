@@ -12,7 +12,7 @@ import { getNextToolByChains } from "./toolChains";
 
 export async function setupChatRequest(body: ChatRequest): Promise<ChatConfig> {
   let { email } = body;
-  const { accountId, artistId } = body;
+  const { accountId, artistId, model } = body;
 
   if (!email && accountId) {
     const emails = await getAccountEmails(accountId);
@@ -21,6 +21,7 @@ export async function setupChatRequest(body: ChatRequest): Promise<ChatConfig> {
     }
   }
 
+  console.log("model", model);
   const tools = await getMcpTools();
 
   // Attach files like PDFs and images
@@ -36,7 +37,7 @@ export async function setupChatRequest(body: ChatRequest): Promise<ChatConfig> {
   });
 
   return {
-    model: GOOGLE_MODEL,
+    model: model || GOOGLE_MODEL,
     system,
     messages: messagesWithRichFiles.slice(-MAX_MESSAGES),
     experimental_generateMessageId: generateUUID,
@@ -44,13 +45,14 @@ export async function setupChatRequest(body: ChatRequest): Promise<ChatConfig> {
     stopWhen: stepCountIs(111),
     prepareStep: ({ steps, ...rest }) => {
       // Extract tool calls timeline (history) from steps
-      const toolCallsContent = steps.flatMap(step =>
-        step.toolResults?.map(result => ({
-          type: 'tool-result' as const,
-          toolCallId: result.toolCallId || '',
-          toolName: result.toolName,
-          output: { type: 'json' as const, value: result.output }
-        })) || []
+      const toolCallsContent = steps.flatMap(
+        (step) =>
+          step.toolResults?.map((result) => ({
+            type: "tool-result" as const,
+            toolCallId: result.toolCallId || "",
+            toolName: result.toolName,
+            output: { type: "json" as const, value: result.output },
+          })) || []
       );
 
       const next = getNextToolByChains(steps, toolCallsContent);

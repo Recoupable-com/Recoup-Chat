@@ -34,6 +34,8 @@ interface VercelChatContextType {
   removeAttachment: (index: number) => void;
   clearAttachments: () => void;
   hasPendingUploads: boolean;
+  model: string;
+  setModel: (model: string) => void;
 }
 
 // Create the context
@@ -80,6 +82,8 @@ export function VercelChatProvider({
     setMessages,
     reload: originalReload,
     append,
+    model,
+    setModel,
   } = useVercelChat({
     id: chatId,
     initialMessages,
@@ -104,6 +108,7 @@ export function VercelChatProvider({
   const contextValue: VercelChatContextType = {
     id: chatId,
     messages,
+    model,
     status,
     isLoading,
     hasError,
@@ -113,6 +118,7 @@ export function VercelChatProvider({
     setInput,
     input,
     setMessages,
+    setModel,
     reload,
     append,
     attachments,
