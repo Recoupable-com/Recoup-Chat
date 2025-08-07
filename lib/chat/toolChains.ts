@@ -1,11 +1,14 @@
+import { anthropic } from "@ai-sdk/anthropic";
+import { LanguageModel } from "ai";
+
 export type ToolChoice = { 
   toolChoice: { type: "tool"; toolName: string };
-  model?: string;
+  model?: LanguageModel;
 };
 
 // Map specific tools to their required models
-export const TOOL_MODEL_MAP: Record<string, string> = {
-  update_account_info: "gemini-2.5-pro",
+export const TOOL_MODEL_MAP: Record<string, LanguageModel> = {
+  update_account_info: anthropic("claude-3-7-sonnet-20250219"),
   // Add other tools that need specific models here
   // e.g., create_segments: "gpt-4-turbo",
 };
