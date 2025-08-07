@@ -21,7 +21,6 @@ export async function setupChatRequest(body: ChatRequest): Promise<ChatConfig> {
     }
   }
 
-  console.log("model", model);
   const tools = await getMcpTools();
 
   // Attach files like PDFs and images
