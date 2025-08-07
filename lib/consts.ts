@@ -38,7 +38,6 @@ export const APIFY_WEBHOOKS_VALUE =
 export const AI_MODEL = "o3-mini";
 export const ANTHROPIC_MODEL = "claude-3-7-sonnet-20250219";
 export const GOOGLE_MODEL = "gemini-2.5-flash";
-export const OPENAI_MODEL = "gpt-oss-120b";
 
 export const TITLE = "Recoup";
 
