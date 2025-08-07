@@ -1,4 +1,3 @@
-import { google } from "@ai-sdk/google";
 import { LanguageModel } from "ai";
 
 export type ToolChoice = { 
@@ -8,7 +7,7 @@ export type ToolChoice = {
 
 // Map specific tools to their required models
 export const TOOL_MODEL_MAP: Record<string, LanguageModel> = {
-  update_account_info: google("gemini-2.5-pro"),
+  update_account_info: "gemini-2.5-pro",
   // Add other tools that need specific models here
   // e.g., create_segments: "gpt-4-turbo",
 };
