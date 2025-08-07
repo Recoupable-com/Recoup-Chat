@@ -5,6 +5,7 @@ import { ArtistProfile } from "@/lib/supabase/artist/updateArtistProfile";
 import Link from "next/link";
 import { ExternalLink, Globe } from "lucide-react";
 import getSocialPlatformByLink from "@/lib/getSocialPlatformByLink";
+import { useEffect } from "react";
 
 export interface UpdateArtistSocialsSuccessProps {
   result: UpdateArtistSocialsResult;
@@ -13,7 +14,12 @@ export interface UpdateArtistSocialsSuccessProps {
 const UpdateArtistSocialsSuccess: React.FC<UpdateArtistSocialsSuccessProps> = ({
   result,
 }) => {
+  const { getArtists } = useArtistProvider();
   const { selectedArtist } = useArtistProvider();
+
+  useEffect(() => {
+    getArtists();
+  }, []);
 
   return (
     <div className="bg-gradient-to-b from-gray-900 to-black rounded-2xl overflow-hidden max-w-2xl w-full my-4">
