@@ -16,6 +16,7 @@ import {
   PromptInputToolbar,
   PromptInputTools,
 } from "../ai-elements/prompt-input";
+import ModelSelect from "./ModelSelect";
 
 interface ChatInputProps {
   onSendMessage: (event: React.FormEvent<HTMLFormElement>) => void;
@@ -79,6 +80,7 @@ export function ChatInput({
               <PromptInputButton className="rounded-full hover:scale-105 active:scale-95 transition-all">
                 <ChatInputYoutubeButton />
               </PromptInputButton>
+              <ModelSelect />
             </PromptInputTools>
             <PromptInputSubmit
               disabled={isDisabled || hasPendingUploads}

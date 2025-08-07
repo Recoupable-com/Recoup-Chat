@@ -10,6 +10,7 @@ import { clientDeleteTrailingMessages } from "@/lib/messages/clientDeleteTrailin
 import { generateUUID } from "@/lib/generateUUID";
 import { useConversationsProvider } from "@/providers/ConversationsProvider";
 import { UIMessage, FileUIPart } from "ai";
+import { LLM_MODELS } from "@/lib/consts";
 
 interface UseVercelChatProps {
   id: string;
@@ -36,15 +37,18 @@ export function useVercelChat({
   const messagesLengthRef = useRef<number>();
   const { fetchConversations } = useConversationsProvider();
   const [input, setInput] = useState("");
+  const [model, setModel] = useState<string>(LLM_MODELS[0].id);
+
   const chatRequestOptions = useMemo(
     () => ({
       body: {
         roomId: id,
         artistId,
         accountId: userId,
+        model,
       },
     }),
-    [id, artistId, userId]
+    [id, artistId, userId, model]
   );
 
   const { messages, status, stop, sendMessage, setMessages, regenerate } =
@@ -168,11 +172,13 @@ export function useVercelChat({
     isLoading,
     hasError,
     isGeneratingResponse,
+    model,
 
     // Actions
     handleSendMessage,
     setInput,
     setMessages,
+    setModel,
     stop,
     reload: regenerate,
     append,

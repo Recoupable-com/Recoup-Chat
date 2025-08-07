@@ -15,6 +15,7 @@ export interface ChatRequest {
   artistId?: string;
   accountId: string;
   email?: string;
+  model?: string;
 }
 
 export interface ChatConfig {
