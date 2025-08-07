@@ -6,7 +6,7 @@ import { getAccountEmails } from "@/lib/supabase/account_emails/getAccountEmails
 import { MAX_MESSAGES } from "./const";
 import { type ChatRequest, type ChatConfig } from "./types";
 import { AnthropicProviderOptions } from "@ai-sdk/anthropic";
-import { OPENAI_MODEL } from "../consts";
+import { GOOGLE_MODEL } from "../consts";
 import { stepCountIs } from "ai";
 
 export async function setupChatRequest(body: ChatRequest): Promise<ChatConfig> {
@@ -35,7 +35,7 @@ export async function setupChatRequest(body: ChatRequest): Promise<ChatConfig> {
   });
 
   return {
-    model: OPENAI_MODEL,
+    model: GOOGLE_MODEL,
     system,
     messages: messagesWithRichFiles.slice(-MAX_MESSAGES),
     experimental_generateMessageId: generateUUID,
