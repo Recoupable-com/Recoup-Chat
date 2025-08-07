@@ -10,7 +10,7 @@ import { clientDeleteTrailingMessages } from "@/lib/messages/clientDeleteTrailin
 import { generateUUID } from "@/lib/generateUUID";
 import { useConversationsProvider } from "@/providers/ConversationsProvider";
 import { UIMessage, FileUIPart } from "ai";
-import { LLM_MODELS } from "@/lib/consts";
+import useAvailableModels from "./useAvailableModels";
 
 interface UseVercelChatProps {
   id: string;
@@ -36,8 +36,11 @@ export function useVercelChat({
   const [hasChatApiError, setHasChatApiError] = useState(false);
   const messagesLengthRef = useRef<number>();
   const { fetchConversations } = useConversationsProvider();
+  const { data: availableModels = [] } = useAvailableModels();
   const [input, setInput] = useState("");
-  const [model, setModel] = useState<string>(LLM_MODELS[0].id);
+  const [model, setModel] = useState<string>(
+    () => availableModels[0]?.id ?? ""
+  );
 
   const chatRequestOptions = useMemo(
     () => ({
@@ -164,6 +167,13 @@ export function useVercelChat({
     handleSendQueryMessages(initialMessages[0]);
   }, [initialMessages, status, userId]);
 
+  // Sync state when models first load
+  useEffect(() => {
+    if (!model && availableModels.length) {
+      setModel(availableModels[0].id);
+    }
+  }, [availableModels, model]);
+
   return {
     // States
     messages,
@@ -179,6 +189,7 @@ export function useVercelChat({
     setInput,
     setMessages,
     setModel,
+    availableModels,
     stop,
     reload: regenerate,
     append,

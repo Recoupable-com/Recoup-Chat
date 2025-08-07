@@ -9,12 +9,14 @@ import { useVercelChat } from "@/hooks/useVercelChat";
 import { UseChatHelpers } from "@ai-sdk/react";
 import useAttachments from "@/hooks/useAttachments";
 import { ChatStatus, FileUIPart, UIMessage } from "ai";
+import type { LlmModel } from "@ai/getAvailableModels";
 import { useArtistProvider } from "./ArtistProvider";
 
 // Interface for the context data
 interface VercelChatContextType {
   id: string | undefined;
   messages: UIMessage[];
+  availableModels: LlmModel[];
   status: ChatStatus;
   isLoading: boolean;
   hasError: boolean;
@@ -84,6 +86,7 @@ export function VercelChatProvider({
     append,
     model,
     setModel,
+    availableModels,
   } = useVercelChat({
     id: chatId,
     initialMessages,
@@ -109,6 +112,7 @@ export function VercelChatProvider({
     id: chatId,
     messages,
     model,
+    availableModels,
     status,
     isLoading,
     hasError,

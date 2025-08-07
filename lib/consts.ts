@@ -38,12 +38,6 @@ export const APIFY_WEBHOOKS_VALUE =
 export const AI_MODEL = "o3-mini";
 export const ANTHROPIC_MODEL = "claude-3-7-sonnet-20250219";
 export const GOOGLE_MODEL = "gemini-2.5-flash";
-export const LLM_MODELS = [
-  { id: "gemini-2.5-flash", name: "Gemini 2.5 Flash" },
-  { id: "openai/gpt-oss-120b", name: "OpenAI GPT-OSS 120B" },
-  { id: "xai/grok-3-mini", name: "XAI Grok 3 Mini" },
-  { id: "alibaba/qwen-3-235b", name: "Alibaba Qwen 3 235B" },
-];
 
 export const TITLE = "Recoup";
 
