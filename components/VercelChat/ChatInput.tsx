@@ -73,16 +73,23 @@ export function ChatInput({
           />
           <PromptInputToolbar>
             <PromptInputTools>
-              <PromptInputButton>
+              <PromptInputButton className="hover:scale-105 active:scale-95 transition-all">
                 <PureAttachmentsButton />
               </PromptInputButton>
-              <PromptInputButton>
+              <PromptInputButton className="rounded-full hover:scale-105 active:scale-95 transition-all">
                 <ChatInputYoutubeButton />
               </PromptInputButton>
             </PromptInputTools>
             <PromptInputSubmit
               disabled={isDisabled || hasPendingUploads}
               status={status}
+              className={cn(
+                "rounded-full hover:scale-105 active:scale-95 transition-all",
+                {
+                  "cursor-not-allowed opacity-50":
+                    isDisabled || hasPendingUploads,
+                }
+              )}
             />
           </PromptInputToolbar>
         </PromptInput>
