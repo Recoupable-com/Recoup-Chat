@@ -33,10 +33,7 @@ export function useCreateArtistTool(result: CreateArtistResult) {
       try {
         setIsProcessing(true);
 
-        // Step 1: Refresh the artists list
-        // await getArtists(result.artist!.account_id);
-
-        // Step 2: Check if we need to copy messages and redirect
+        // Step 1: Check if we need to copy messages and redirect
         const needsRedirect = id !== result.newRoomId && !!result.newRoomId;
 
         if (needsRedirect) {
