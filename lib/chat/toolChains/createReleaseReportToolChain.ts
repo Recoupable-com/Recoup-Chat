@@ -1,4 +1,26 @@
 import { ToolChainItem } from "./toolChains";
+import { ModelMessage } from "ai";
+
+/**
+ * Creates a reference message with the release report example
+ */
+const getReleaseReportReferenceMessage = (): ModelMessage => {
+  return {
+    role: "user",
+    content: [
+      {
+        type: "text" as const,
+        text: "Here is an example release report for reference. Use this as a template for creating your own release reports:",
+      },
+      {
+        type: "file" as const,
+        data: "https://arweave.net/SBPL1Sp_kwTAg5q2gIsPrGzcx1aorpqNBsIv1svLOLQ",
+        mediaType: "text/markdown",
+        filename: "release-report-reference.md",
+      },
+    ],
+  };
+};
 
 export const createReleaseReportToolChain: ToolChainItem[] = [
   { toolName: "search_web" },
@@ -12,6 +34,7 @@ export const createReleaseReportToolChain: ToolChainItem[] = [
     toolName: "generate_txt_file",
     system:
       "Create a Release Report with the information you have gathered about the release across spotify, youtube and web search.",
+    messages: [getReleaseReportReferenceMessage()],
   },
   {
     toolName: "update_account_info",

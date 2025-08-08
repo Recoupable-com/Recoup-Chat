@@ -1,16 +1,18 @@
-import { LanguageModel } from "ai";
+import { LanguageModel, ModelMessage } from "ai";
 import { createReleaseReportToolChain } from "./createReleaseReportToolChain";
 import { createNewArtistToolChain } from "./createNewArtistToolChain";
 
 export type ToolChainItem = {
   toolName: string;
   system?: string;
+  messages?: ModelMessage[];
 };
 
 export type PrepareStepResult = {
   toolChoice?: { type: "tool"; toolName: string };
   model?: LanguageModel;
   system?: string;
+  messages?: ModelMessage[];
 };
 
 // Map specific tools to their required models
