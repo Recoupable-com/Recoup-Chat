@@ -1,5 +1,6 @@
 import { AnthropicProviderOptions } from "@ai-sdk/anthropic";
 import { GoogleGenerativeAIProviderOptions } from "@ai-sdk/google";
+import { OpenAIResponsesProviderOptions } from "@ai-sdk/openai";
 import {
   type ModelMessage,
   type LanguageModel,
@@ -28,6 +29,7 @@ export interface ChatConfig {
   providerOptions?: {
     anthropic?: AnthropicProviderOptions;
     google?: GoogleGenerativeAIProviderOptions;
+    openai?: OpenAIResponsesProviderOptions;
   };
   stopWhen?:
     | StopCondition<NoInfer<ToolSet>>
