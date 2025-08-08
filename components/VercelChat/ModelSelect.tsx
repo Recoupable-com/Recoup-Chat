@@ -1,4 +1,3 @@
-import { LLM_MODELS } from "@/lib/consts";
 import {
   PromptInputModelSelect,
   PromptInputModelSelectTrigger,
@@ -9,7 +8,7 @@ import { PromptInputModelSelectItem } from "../ai-elements/prompt-input";
 import { useVercelChatContext } from "@/providers/VercelChatProvider";
 
 const ModelSelect = () => {
-  const { model, setModel } = useVercelChatContext();
+  const { model, setModel, availableModels } = useVercelChatContext();
 
   return (
     <PromptInputModelSelect
@@ -22,7 +21,7 @@ const ModelSelect = () => {
         <PromptInputModelSelectValue />
       </PromptInputModelSelectTrigger>
       <PromptInputModelSelectContent>
-        {LLM_MODELS.map((model) => (
+        {availableModels.map((model) => (
           <PromptInputModelSelectItem key={model.id} value={model.id}>
             {model.name}
           </PromptInputModelSelectItem>
