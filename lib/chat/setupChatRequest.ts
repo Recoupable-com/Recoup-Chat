@@ -72,6 +72,7 @@ export async function setupChatRequest(body: ChatRequest): Promise<ChatConfig> {
       },
       openai: {
         reasoningEffort: "medium",
+        reasoningSummary: "detailed",
       },
     },
   };
