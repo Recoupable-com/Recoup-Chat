@@ -169,13 +169,11 @@ export function useVercelChat({
 
   // Sync state when models first load and prioritize preferred model
   useEffect(() => {
-    if (!availableModels.length) return;
+    if (!availableModels.length || model) return;
     const preferredId = "google/gemini-2.5-flash";
     const preferred = availableModels.find((m) => m.id === preferredId);
     const defaultId = preferred ? preferred.id : availableModels[0].id;
-    if (model !== defaultId) {
-      setModel(defaultId);
-    }
+    setModel(defaultId);
   }, [availableModels, model]);
 
   return {
