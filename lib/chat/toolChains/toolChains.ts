@@ -16,6 +16,8 @@ export type PrepareStepResult = {
 // Map specific tools to their required models
 export const TOOL_MODEL_MAP: Record<string, LanguageModel> = {
   update_account_info: "gemini-2.5-pro",
+  create_knowledge_base: "openai/gpt-5",
+  generate_txt_file: "openai/gpt-5-mini",
   // Add other tools that need specific models here
   // e.g., create_segments: "gpt-4-turbo",
 };
