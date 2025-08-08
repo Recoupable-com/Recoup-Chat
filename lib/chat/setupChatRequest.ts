@@ -8,7 +8,7 @@ import { type ChatRequest, type ChatConfig } from "./types";
 import { AnthropicProviderOptions } from "@ai-sdk/anthropic";
 import { DEFAULT_MODEL } from "../consts";
 import { stepCountIs } from "ai";
-import getNextToolByChains from "./toolChains/getNextToolByChains";
+import getPrepareStepResult from "./toolChains/getPrepareStepResult";
 
 export async function setupChatRequest(body: ChatRequest): Promise<ChatConfig> {
   let { email } = body;
@@ -42,23 +42,12 @@ export async function setupChatRequest(body: ChatRequest): Promise<ChatConfig> {
     experimental_generateMessageId: generateUUID,
     tools,
     stopWhen: stepCountIs(111),
-    prepareStep: ({ steps, ...rest }) => {
-      // Extract tool calls timeline (history) from steps
-      const toolCallsContent = steps.flatMap(
-        (step) =>
-          step.toolResults?.map((result) => ({
-            type: "tool-result" as const,
-            toolCallId: result.toolCallId || "",
-            toolName: result.toolName,
-            output: { type: "json" as const, value: result.output },
-          })) || []
-      );
-
-      const next = getNextToolByChains(steps, toolCallsContent);
+    prepareStep: (options) => {
+      const next = getPrepareStepResult(options);
       if (next) {
-        return { ...rest, ...next };
+        return { ...options, ...next };
       }
-      return rest;
+      return options;
     },
     providerOptions: {
       anthropic: {

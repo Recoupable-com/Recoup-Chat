@@ -1,27 +1,24 @@
+import { LanguageModel, ModelMessage, StepResult, ToolSet } from "ai";
 import { PrepareStepResult, TOOL_CHAINS, TOOL_MODEL_MAP } from "./toolChains";
+import getExecutedToolTimeline from "./getExecutedToolTimeline";
 
-type StepLike = {
-  toolCalls?: { toolName: string }[];
-  toolResults?: { toolName: string }[];
-};
-
-type ToolCallContent = {
-  type: "tool-result";
-  toolCallId: string;
-  toolName: string;
-  output: { type: "json"; value: unknown };
+type PrepareStepOptions = {
+  steps: Array<StepResult<NoInfer<ToolSet>>>;
+  stepNumber: number;
+  model: LanguageModel;
+  messages: Array<ModelMessage>;
 };
 
 /**
  * Returns the next tool to run based on timeline progression through tool chains.
  * Uses toolCallsContent to track exact execution order and position in sequence.
  */
-const getNextToolByChains = (
-  steps: StepLike[],
-  toolCallsContent: ToolCallContent[]
+const getPrepareStepResult = (
+  options: PrepareStepOptions
 ): PrepareStepResult | undefined => {
-  // Build timeline of executed tools from toolCallsContent
-  const executedTimeline = toolCallsContent.map((call) => call.toolName);
+  const { steps } = options;
+  // Extract tool calls timeline (history) from steps
+  const executedTimeline = getExecutedToolTimeline(steps);
 
   for (const [trigger, sequenceAfter] of Object.entries(TOOL_CHAINS)) {
     // Check if this chain has been triggered
@@ -60,6 +57,11 @@ const getNextToolByChains = (
         result.system = nextToolItem.system;
       }
 
+      // Add messages if available
+      if (nextToolItem.messages) {
+        result.messages = options.messages.concat(nextToolItem.messages);
+      }
+
       // Add model if specified for this tool
       const model = TOOL_MODEL_MAP[nextToolItem.toolName];
       if (model) {
@@ -73,4 +75,4 @@ const getNextToolByChains = (
   return undefined;
 };
 
-export default getNextToolByChains;
+export default getPrepareStepResult;
