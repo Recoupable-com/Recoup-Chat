@@ -13,7 +13,7 @@
 
 import React from "react";
 import { YouTubeErrorDisplay } from "./YouTubeErrorDisplay";
-import { YouTubeLoginResultType } from "@/lib/tools/youtubeLogin";
+import { YouTubeLoginResultType } from "@/lib/tools/youtube/youtubeLogin";
 import GenericSuccess from "@/components/VercelChat/tools/GenericSuccess";
 
 interface YouTubeLoginResultProps {
@@ -27,8 +27,7 @@ export function YouTubeLoginResult({ result }: YouTubeLoginResultProps) {
       <GenericSuccess
         name="YouTube Login Successful"
         message={result.message}
-      >
-      </GenericSuccess>
+      ></GenericSuccess>
     );
   }
 

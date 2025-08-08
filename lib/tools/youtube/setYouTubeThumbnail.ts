@@ -4,7 +4,7 @@ import { YouTubeErrorBuilder } from "@/lib/youtube/error-builder";
 import { createYouTubeAPIClient } from "@/lib/youtube/oauth-client";
 import { getResizedImageBuffer } from "@/lib/youtube/getResizedImageBuffer";
 import { YouTubeSetThumbnailResult } from "@/types/youtube";
-import { validateYouTubeTokens } from "../youtube/token-validator";
+import { validateYouTubeTokens } from "@/lib/youtube/token-validator";
 
 const schema = z.object({
   artist_account_id: z

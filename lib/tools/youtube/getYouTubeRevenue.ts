@@ -15,7 +15,7 @@ import { YouTubeErrorBuilder } from "@/lib/youtube/error-builder";
 import { YouTubeRevenueResult } from "@/types/youtube";
 import { queryAnalyticsReports } from "@/lib/youtube/queryAnalyticsReports";
 import { handleRevenueError } from "@/lib/youtube/revenue-error-handler";
-import { validateYouTubeTokens } from "../youtube/token-validator";
+import { validateYouTubeTokens } from "@/lib/youtube/token-validator";
 
 const getYouTubeRevenueTool = tool({
   description: `Youtube: Get estimated revenue data for a specific date range for a YouTube account.

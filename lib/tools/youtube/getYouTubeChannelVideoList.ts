@@ -2,7 +2,7 @@ import { z } from "zod";
 import { tool } from "ai";
 import { YouTubeErrorBuilder } from "@/lib/youtube/error-builder";
 import { getYoutubePlaylistVideos } from "@/lib/youtube/getYoutubePlaylistVideos";
-import { validateYouTubeTokens } from "../youtube/token-validator";
+import { validateYouTubeTokens } from "@/lib/youtube/token-validator";
 
 const getYouTubeChannelVideoList = tool({
   description: `Get a list of videos for a specific YouTube channel. 
