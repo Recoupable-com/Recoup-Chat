@@ -65,7 +65,7 @@ export function ChatInput({
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.3, ease: "easeOut" }}
       >
-        <PromptInput onSubmit={handleSend}>
+        <PromptInput onSubmit={handleSend} className="overflow-visible md:overflow-hidden">
           <PromptInputTextarea
             value={input}
             onChange={(e) => setInput(e.target.value)}
@@ -77,9 +77,7 @@ export function ChatInput({
               <PromptInputButton className="hover:scale-105 active:scale-95 transition-all">
                 <PureAttachmentsButton />
               </PromptInputButton>
-              <PromptInputButton className="rounded-full hover:scale-105 active:scale-95 transition-all w-8 h-8">
-                <ChatInputYoutubeButton />
-              </PromptInputButton>
+              <ChatInputYoutubeButton />
               <ModelSelect />
             </PromptInputTools>
             <PromptInputSubmit
