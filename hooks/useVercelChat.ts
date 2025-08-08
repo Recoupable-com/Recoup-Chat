@@ -12,6 +12,7 @@ import { useConversationsProvider } from "@/providers/ConversationsProvider";
 import { UIMessage, FileUIPart } from "ai";
 import useAvailableModels from "./useAvailableModels";
 import { useLocalStorage } from "usehooks-ts";
+import { DEFAULT_MODEL } from "@/lib/consts";
 
 interface UseVercelChatProps {
   id: string;
@@ -172,8 +173,7 @@ export function useVercelChat({
   // Sync state when models first load and prioritize preferred model
   useEffect(() => {
     if (!availableModels.length || model) return;
-    const preferredId = "google/gemini-2.5-flash";
-    const preferred = availableModels.find((m) => m.id === preferredId);
+    const preferred = availableModels.find((m) => m.id === DEFAULT_MODEL);
     const defaultId = preferred ? preferred.id : availableModels[0].id;
     setModel(defaultId);
   }, [availableModels, model]);
