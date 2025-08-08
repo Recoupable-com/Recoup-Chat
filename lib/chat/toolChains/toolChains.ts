@@ -1,5 +1,5 @@
 import { LanguageModel, ModelMessage } from "ai";
-import { createReleaseReportToolChain } from "./createReleaseReportToolChain";
+import { createReleaseReportToolChain } from "./create_release_report/createReleaseReportToolChain";
 import { createNewArtistToolChain } from "./createNewArtistToolChain";
 
 export type ToolChainItem = {
