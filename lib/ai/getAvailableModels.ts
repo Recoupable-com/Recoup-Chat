@@ -17,7 +17,11 @@ export const getAvailableModels = async (): Promise<
       if (Number.isNaN(input) || Number.isNaN(output)) return false;
       const inputPerMillion = input * 1_000_000;
       const outputPerMillion = output * 1_000_000;
-      return inputPerMillion <= 0.5 && outputPerMillion <= 2.5;
+      return (
+        inputPerMillion <= 0.5 &&
+        outputPerMillion > 0 &&
+        outputPerMillion <= 2.5
+      );
     });
 
     // Ensure preferred default appears first if available.
