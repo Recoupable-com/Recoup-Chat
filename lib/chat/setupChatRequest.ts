@@ -70,6 +70,10 @@ export async function setupChatRequest(body: ChatRequest): Promise<ChatConfig> {
           includeThoughts: true,
         },
       },
+      openai: {
+        reasoningEffort: "medium",
+        reasoningSummary: "detailed",
+      },
     },
   };
 }
