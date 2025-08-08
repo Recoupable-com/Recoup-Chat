@@ -60,12 +60,12 @@ export function ChatInput({
         <AttachmentsPreview />
       </div>
       <motion.div
-        className="w-full relative p-3 dark:bg-zinc-800 rounded-2xl flex flex-col gap-1 bg-zinc-100"
+        className="w-full relative"
         initial={{ opacity: 0, y: -16 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.3, ease: "easeOut" }}
       >
-        <PromptInput onSubmit={handleSend} className="overflow-visible md:overflow-hidden">
+        <PromptInput onSubmit={handleSend} className="overflow-visible md:overflow-hidden rounded-xl shadow">
           <PromptInputTextarea
             value={input}
             onChange={(e) => setInput(e.target.value)}
