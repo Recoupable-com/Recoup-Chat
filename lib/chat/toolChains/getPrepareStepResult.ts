@@ -1,18 +1,12 @@
 import { LanguageModel, ModelMessage, StepResult, ToolSet } from "ai";
 import { PrepareStepResult, TOOL_CHAINS, TOOL_MODEL_MAP } from "./toolChains";
+import getExecutedToolTimeline from "./getExecutedToolTimeline";
 
 type PrepareStepOptions = {
   steps: Array<StepResult<NoInfer<ToolSet>>>;
   stepNumber: number;
   model: LanguageModel;
   messages: Array<ModelMessage>;
-};
-
-type ToolCallContent = {
-  type: "tool-result";
-  toolCallId: string;
-  toolName: string;
-  output: { type: "json"; value: unknown };
 };
 
 /**
@@ -24,18 +18,7 @@ const getPrepareStepResult = (
 ): PrepareStepResult | undefined => {
   const { steps } = options;
   // Extract tool calls timeline (history) from steps
-  const toolCallsContent = steps.flatMap(
-    (step): ToolCallContent[] =>
-      step.toolResults?.map((result) => ({
-        type: "tool-result" as const,
-        toolCallId: result.toolCallId || "",
-        toolName: result.toolName,
-        output: { type: "json" as const, value: result.output },
-      })) || []
-  );
-
-  // Build timeline of executed tools from toolCallsContent
-  const executedTimeline = toolCallsContent.map((call) => call.toolName);
+  const executedTimeline = getExecutedToolTimeline(steps);
 
   for (const [trigger, sequenceAfter] of Object.entries(TOOL_CHAINS)) {
     // Check if this chain has been triggered
