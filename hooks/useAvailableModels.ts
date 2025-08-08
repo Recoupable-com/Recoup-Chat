@@ -1,5 +1,4 @@
 import { useQuery } from "@tanstack/react-query";
-import { getAvailableModels } from "@/lib/ai/getAvailableModels";
 import { GatewayLanguageModelEntry } from "@ai-sdk/gateway";
 
 /**
@@ -9,7 +8,15 @@ import { GatewayLanguageModelEntry } from "@ai-sdk/gateway";
 const useAvailableModels = () =>
   useQuery<GatewayLanguageModelEntry[]>({
     queryKey: ["available-models"],
-    queryFn: () => getAvailableModels(),
+    queryFn: async () => {
+      const res = await fetch("/api/ai/models");
+      if (!res.ok) throw new Error("Failed to load models");
+      const data = (await res.json()) as {
+        models: GatewayLanguageModelEntry[];
+      };
+      return data.models;
+    },
+    staleTime: 5 * 60 * 1000,
   });
 
 export default useAvailableModels;
