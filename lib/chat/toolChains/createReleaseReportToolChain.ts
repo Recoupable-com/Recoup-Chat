@@ -14,22 +14,34 @@ const getReleaseReportReferenceMessage = (): ModelMessage => {
       },
       {
         type: "file" as const,
-        data: "https://arweave.net/SBPL1Sp_kwTAg5q2gIsPrGzcx1aorpqNBsIv1svLOLQ",
-        mediaType: "text/markdown",
-        filename: "release-report-reference.md",
+        data: "https://arweave.net/Ai905mCZrs8P4CG76G7UPwk4ejR-JdfToowVMl0D6c4",
+        mediaType: "text/plain",
+        filename: "release-report-reference.txt",
       },
     ],
   };
 };
 
 export const createReleaseReportToolChain: ToolChainItem[] = [
-  { toolName: "search_web" },
-  { toolName: "youtube_login" },
-  { toolName: "get_youtube_channels" },
-  { toolName: "get_youtube_channel_video_list" },
-  { toolName: "get_spotify_artist_albums" },
-  { toolName: "search_web" },
-  { toolName: "create_knowledge_base" },
+  { toolName: "search_web", messages: [getReleaseReportReferenceMessage()] },
+  { toolName: "youtube_login", messages: [getReleaseReportReferenceMessage()] },
+  {
+    toolName: "get_youtube_channels",
+    messages: [getReleaseReportReferenceMessage()],
+  },
+  {
+    toolName: "get_youtube_channel_video_list",
+    messages: [getReleaseReportReferenceMessage()],
+  },
+  {
+    toolName: "get_spotify_artist_albums",
+    messages: [getReleaseReportReferenceMessage()],
+  },
+  { toolName: "search_web", messages: [getReleaseReportReferenceMessage()] },
+  {
+    toolName: "create_knowledge_base",
+    messages: [getReleaseReportReferenceMessage()],
+  },
   {
     toolName: "generate_txt_file",
     system:
@@ -43,5 +55,6 @@ export const createReleaseReportToolChain: ToolChainItem[] = [
   },
   {
     toolName: "send_email",
+    messages: [getReleaseReportReferenceMessage()],
   },
 ];
