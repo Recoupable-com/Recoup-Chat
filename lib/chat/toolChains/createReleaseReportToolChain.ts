@@ -11,7 +11,7 @@ export const createReleaseReportToolChain: ToolChainItem[] = [
   {
     toolName: "update_account_info",
     system:
-      "Attach the newly created release report to the artist's account info.",
+      "Attach the newly created release report to the artist's account info as a knowledge base.",
   },
   {
     toolName: "send_email",
