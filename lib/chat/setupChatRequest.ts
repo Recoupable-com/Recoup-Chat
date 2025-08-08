@@ -8,7 +8,7 @@ import { type ChatRequest, type ChatConfig } from "./types";
 import { AnthropicProviderOptions } from "@ai-sdk/anthropic";
 import { GOOGLE_MODEL } from "../consts";
 import { stepCountIs } from "ai";
-import { getNextToolByChains } from "./toolChains";
+import getNextToolByChains from "./toolChains/getNextToolByChains";
 
 export async function setupChatRequest(body: ChatRequest): Promise<ChatConfig> {
   let { email } = body;
