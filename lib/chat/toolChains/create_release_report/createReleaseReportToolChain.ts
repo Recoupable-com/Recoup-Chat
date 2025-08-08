@@ -41,8 +41,8 @@ export const createReleaseReportToolChain: ToolChainItem[] = [
   },
   {
     toolName: "generate_txt_file",
-    system: `Create a Release Report with the information you have gathered about the release across spotify, youtube and web search.
-      The following sections must be included in the report: 
+    system: `Create a Release Report TXT file matching the reference release report.
+      The following sections must be included in the report passed to the contents parameter in the generate_txt_file tool: 
       - {artwork title} Summary
       - Streaming headlines
       - Global streaming headlines
@@ -63,7 +63,8 @@ export const createReleaseReportToolChain: ToolChainItem[] = [
       - - {artwork title} Press Release: 
       - - {artwork title} Spotify Inventory: 
       - - {artwork title} Pseudo Video: 
-      - - {artwork title} Victory Lap Asset: `,
+      - - {artwork title} Victory Lap Asset: 
+      - Citations`,
     messages: [getReleaseReportReferenceMessage()],
   },
   {

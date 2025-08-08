@@ -7,7 +7,10 @@ import { ArweaveUploadResult } from "../arweave/uploadBase64ToArweave";
 
 // Define the schema for input validation
 const schema = z.object({
-  contents: z.string().min(1, "Contents are required"),
+  contents: z
+    .string()
+    .min(1, "Contents are required")
+    .describe("The contents of the TXT file"),
   active_account_email: z
     .string()
     .min(1, "Pull active_account_email from the system prompt"),
