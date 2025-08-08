@@ -46,7 +46,7 @@ import {
 } from "@/types/youtube";
 import YouTubeChannelsResult from "./tools/youtube/YouTubeChannelsResult";
 import YouTubeLoginResult from "./tools/youtube/YouTubeLoginResult";
-import { YouTubeLoginResultType } from "@/lib/tools/youtubeLogin";
+import { YouTubeLoginResultType } from "@/lib/tools/youtube/youtubeLogin";
 import YoutubeChannelVideosListResult from "./tools/youtube/YoutubeChannelVideosListResult";
 import YouTubeChannelVideosListSkeleton from "./tools/youtube/YouTubeChannelVideosListSkeleton";
 import YouTubeSetThumbnailResult from "./tools/youtube/YouTubeSetThumbnailResult";
