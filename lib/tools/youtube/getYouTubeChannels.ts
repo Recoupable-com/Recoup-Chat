@@ -14,7 +14,7 @@ import { tool } from "ai";
 import { YouTubeChannelInfoResult } from "@/types/youtube";
 import { fetchYouTubeChannelInfo } from "@/lib/youtube/channel-fetcher";
 import { YouTubeErrorBuilder } from "@/lib/youtube/error-builder";
-import { validateYouTubeTokens } from "../youtube/token-validator";
+import { validateYouTubeTokens } from "@/lib/youtube/token-validator";
 
 // Zod schema for parameter validation
 const schema = z.object({
