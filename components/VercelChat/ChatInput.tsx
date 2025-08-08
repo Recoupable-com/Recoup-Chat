@@ -77,7 +77,7 @@ export function ChatInput({
               <PromptInputButton className="hover:scale-105 active:scale-95 transition-all">
                 <PureAttachmentsButton />
               </PromptInputButton>
-              <PromptInputButton className="rounded-full hover:scale-105 active:scale-95 transition-all">
+              <PromptInputButton className="rounded-full hover:scale-105 active:scale-95 transition-all w-8 h-8">
                 <ChatInputYoutubeButton />
               </PromptInputButton>
               <ModelSelect />
