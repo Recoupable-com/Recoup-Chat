@@ -12,7 +12,7 @@ const getReleaseReportReferenceMessage = (): ModelMessage => {
       {
         type: "text" as const,
         text: `Here is an example release report for reference. Use this as a template for creating your own release reports:
-        
+
         ${referenceReleaseReport}`,
       },
     ],
@@ -41,8 +41,29 @@ export const createReleaseReportToolChain: ToolChainItem[] = [
   },
   {
     toolName: "generate_txt_file",
-    system:
-      "Create a Release Report with the information you have gathered about the release across spotify, youtube and web search.",
+    system: `Create a Release Report with the information you have gathered about the release across spotify, youtube and web search.
+      The following sections must be included in the report: 
+      - {artwork title} Summary
+      - Streaming headlines
+      - Global streaming headlines
+      - TikTok Story So Far
+      - {artwork title} Charts
+      - - Spotify
+      - - Apple Music
+      - - iTunes
+      - - Shazam
+      - - Deezer
+      - {artwork title} Toolkit
+      - - {artwork title} Official Artwork:
+      - - {artwork title} DSP Images: 
+      - - {artwork title} Official Video:
+      - - {artwork title} Cutdowns: 
+      - - {artwork title} Lyric Video: 
+      - - {artwork title} Audio Ad: 
+      - - {artwork title} Press Release: 
+      - - {artwork title} Spotify Inventory: 
+      - - {artwork title} Pseudo Video: 
+      - - {artwork title} Victory Lap Asset: `,
     messages: [getReleaseReportReferenceMessage()],
   },
   {
