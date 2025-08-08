@@ -57,17 +57,16 @@ const getPrepareStepResult = (
         result.system = nextToolItem.system;
       }
 
+      // Add messages if available
+      if (nextToolItem.messages) {
+        result.messages = options.messages.concat(nextToolItem.messages);
+      }
+
       // Add model if specified for this tool
       const model = TOOL_MODEL_MAP[nextToolItem.toolName];
       if (model) {
         result.model = model;
       }
-
-      // Add messages if available
-      if (nextToolItem.messages) {
-        result.messages = options.messages.concat(nextToolItem.messages);
-      }
-      console.log("result", result);
 
       return result;
     }
