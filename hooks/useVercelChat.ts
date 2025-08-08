@@ -11,6 +11,7 @@ import { generateUUID } from "@/lib/generateUUID";
 import { useConversationsProvider } from "@/providers/ConversationsProvider";
 import { UIMessage, FileUIPart } from "ai";
 import useAvailableModels from "./useAvailableModels";
+import { useLocalStorage } from "usehooks-ts";
 
 interface UseVercelChatProps {
   id: string;
@@ -38,8 +39,9 @@ export function useVercelChat({
   const { fetchConversations } = useConversationsProvider();
   const { data: availableModels = [] } = useAvailableModels();
   const [input, setInput] = useState("");
-  const [model, setModel] = useState<string>(
-    () => availableModels[0]?.id ?? ""
+  const [model, setModel] = useLocalStorage(
+    "RECOUP_MODEL",
+    availableModels[0]?.id ?? ""
   );
 
   const chatRequestOptions = useMemo(
