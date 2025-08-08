@@ -5,11 +5,11 @@ import getYouTubeChannelVideoList from "./getYouTubeChannelVideoList";
 import setYouTubeThumbnail from "./setYouTubeThumbnail";
 
 const youtubeTools = {
-  youtubeLoginTool,
-  getYouTubeChannels,
-  getYouTubeRevenue,
-  getYouTubeChannelVideoList,
-  setYouTubeThumbnail,
+  youtube_login: youtubeLoginTool,
+  get_youtube_channels: getYouTubeChannels,
+  get_youtube_revenue: getYouTubeRevenue,
+  get_youtube_channel_video_list: getYouTubeChannelVideoList,
+  set_youtube_thumbnail: setYouTubeThumbnail,
 };
 
 export default youtubeTools;
