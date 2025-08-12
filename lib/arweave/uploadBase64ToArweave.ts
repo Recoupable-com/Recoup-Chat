@@ -1,27 +1,22 @@
 import { Readable } from "node:stream";
 
-// Type declarations for global base64 helpers to satisfy TypeScript
-declare global {
-  // eslint-disable-next-line no-var
-  var atob: ((data: string) => string) | undefined;
-  // eslint-disable-next-line no-var
-  var btoa: ((data: string) => string) | undefined;
-}
-
 // Ensure Node.js has browser-like base64 helpers used by downstream deps (e.g., cosmjs)
 // This must run before importing packages that expect global atob/btoa.
 function ensureBase64Polyfills() {
-  if (typeof globalThis.atob === "undefined") {
+  const typedGlobal = globalThis as unknown as {
+    atob?: (data: string) => string;
+    btoa?: (data: string) => string;
+  };
+
+  if (typeof typedGlobal.atob === "undefined") {
     // Decode base64 → binary string
     // Note: Buffer is Node-only; safe on the server
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    (globalThis as any).atob = (data: string) =>
+    typedGlobal.atob = (data: string) =>
       Buffer.from(data, "base64").toString("binary");
   }
-  if (typeof globalThis.btoa === "undefined") {
+  if (typeof typedGlobal.btoa === "undefined") {
     // Encode binary string → base64
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    (globalThis as any).btoa = (data: string) =>
+    typedGlobal.btoa = (data: string) =>
       Buffer.from(data, "binary").toString("base64");
   }
 }
