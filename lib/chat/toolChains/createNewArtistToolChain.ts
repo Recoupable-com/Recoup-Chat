@@ -1,8 +1,5 @@
-import {
-  TOOL_CHAIN_CREATE_KNOWLEDGE_BASE_SYSTEM_PROMPT,
-  TOOL_CHAIN_SEARCH_WEB_FOR_KNOWLEDGE_BASE_SYSTEM_PROMPT,
-} from "@/lib/consts";
 import { ToolChainItem } from "./toolChains";
+import getKnowledgeBaseReportReferenceMessage from "./getKnowbaseReportReferenceMessage";
 
 export const createNewArtistToolChain: ToolChainItem[] = [
   { toolName: "get_spotify_search" },
@@ -22,13 +19,16 @@ export const createNewArtistToolChain: ToolChainItem[] = [
   { toolName: "update_artist_socials" },
   {
     toolName: "search_web",
-    system: TOOL_CHAIN_SEARCH_WEB_FOR_KNOWLEDGE_BASE_SYSTEM_PROMPT,
+    messages: [getKnowledgeBaseReportReferenceMessage()],
   },
   {
     toolName: "create_knowledge_base",
-    system: TOOL_CHAIN_CREATE_KNOWLEDGE_BASE_SYSTEM_PROMPT,
+    messages: [getKnowledgeBaseReportReferenceMessage()],
   },
-  { toolName: "generate_txt_file" },
+  {
+    toolName: "generate_txt_file",
+    messages: [getKnowledgeBaseReportReferenceMessage()],
+  },
   { toolName: "update_account_info" },
   { toolName: "create_segments" },
   { toolName: "youtube_login" },
