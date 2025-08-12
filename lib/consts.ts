@@ -1887,4 +1887,6 @@ Rules:
 ## Industry Connections
 ## Unique Selling Points
 ## Career Trajectory
-## Additional Notes`;
+## Additional Notes
+
+Note: Minimum 500 words.`;
