@@ -11,16 +11,16 @@
   hyphens: none;
 }
 
-/* Improved paragraph spacing */
+/* Improved paragraph spacing - more compact */
 .markdown p {
-  margin-bottom: 1em;
-  line-height: 1.65;
+  margin-bottom: 0.75em;
+  line-height: 1.6;
   max-width: 100%;
   text-align: left;
   word-break: break-word;
   overflow-wrap: break-word;
-  color: rgba(0, 0, 0, 0.8);
-  font-size: 0.975rem;
+  color: rgba(0, 0, 0, 0.85);
+  font-size: 0.95rem;
 }
 
 /* Remove margin for last paragraph to fix chat bubble spacing */
@@ -63,46 +63,57 @@
 
 /* Enhanced Visual Hierarchy - Headings */
 .markdown h1 {
-  font-size: 1.875rem;
+  font-size: 1.75rem;
   font-weight: 700;
-  margin: 1.75em 0 0.75em;
+  margin: 1.5em 0 0.5em;
   color: rgba(0, 0, 0, 0.9);
-  padding-bottom: 0.5em;
-  border-bottom: 2px solid rgba(0, 0, 0, 0.08);
+  padding-bottom: 0.3em;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.1);
   letter-spacing: -0.02em;
   line-height: 1.3;
 }
 
+/* First h1 needs less top margin */
+.markdown > h1:first-child {
+  margin-top: 0.5em;
+}
+
 .markdown h2 {
-  font-size: 1.5rem;
+  font-size: 1.375rem;
   font-weight: 700;
-  margin: 1.5em 0 0.6em;
-  padding-bottom: 0.25em;
+  margin: 1.75em 0 0.5em;
   color: rgba(0, 0, 0, 0.85);
   letter-spacing: -0.01em;
   line-height: 1.35;
-  position: relative;
 }
 
-/* Add subtle left accent for h2 */
-.markdown h2::before {
-  content: "";
-  position: absolute;
-  left: -12px;
-  top: 0.15em;
-  width: 3px;
-  height: 1.2em;
-  background: linear-gradient(180deg, rgba(59, 130, 246, 0.5), rgba(59, 130, 246, 0.1));
-  border-radius: 2px;
+/* First h2 after content needs less margin */
+.markdown > h2:first-child {
+  margin-top: 0.25em;
 }
 
 .markdown h3 {
-  font-size: 1.25rem;
+  font-size: 1.125rem;
   font-weight: 600;
-  margin: 1.25em 0 0.5em;
+  margin: 1em 0 0.4em;
   color: rgba(0, 0, 0, 0.8);
   letter-spacing: -0.005em;
   line-height: 1.4;
+}
+
+/* Add visual break between major sections */
+.markdown h2 + p,
+.markdown h2 + ul,
+.markdown h2 + ol {
+  margin-top: 0.5em;
+}
+
+/* Compact spacing when headers follow lists */
+.markdown ul + h2,
+.markdown ol + h2,
+.markdown ul + h3,
+.markdown ol + h3 {
+  margin-top: 1.25em;
 }
 
 /* Horizontal rule for section separation */
@@ -140,21 +151,27 @@
   overflow-wrap: break-word;
 }
 
-/* List improvements */
+/* List improvements - more compact and scannable */
 .markdown ul,
 .markdown ol {
-  margin: 1.25em 0;
-  padding-left: 1.75em;
+  margin: 0.75em 0 1em;
+  padding-left: 1.5em;
 }
 
 .markdown li {
-  margin-bottom: 0.75em;
-  line-height: 1.7;
+  margin-bottom: 0.5em;
+  line-height: 1.6;
   position: relative;
   word-break: break-word;
   overflow-wrap: break-word;
   max-width: 100%;
-  color: rgba(0, 0, 0, 0.8);
+  color: rgba(0, 0, 0, 0.85);
+  font-size: 0.95rem;
+}
+
+/* Last item needs no bottom margin */
+.markdown li:last-child {
+  margin-bottom: 0;
 }
 
 .markdown ul li {
@@ -162,19 +179,19 @@
   display: list-item;
 }
 
-/* Custom bullet points */
+/* Custom bullet points - subtle and clean */
 .markdown ul li::before {
   content: "•";
   position: absolute;
   left: -1.25em;
-  color: rgba(59, 130, 246, 0.7);
-  font-weight: 700;
-  font-size: 1.2em;
-  line-height: 1.3;
+  color: rgba(0, 0, 0, 0.4);
+  font-weight: 400;
+  font-size: 1.1em;
+  line-height: 1.4;
 }
 
 .markdown ol li::marker {
-  color: rgba(59, 130, 246, 0.8);
+  color: rgba(0, 0, 0, 0.6);
   font-weight: 600;
   font-size: 0.95em;
 }
