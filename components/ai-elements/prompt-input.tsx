@@ -79,7 +79,11 @@ export type PromptInputProps = HTMLAttributes<HTMLFormElement>;
 export const PromptInput = ({ className, ...props }: PromptInputProps) => (
   <form
     className={cn(
-      "w-full overflow-hidden rounded-xl border bg-background shadow-sm",
+      "w-full overflow-hidden rounded-2xl border border-[rgba(0,0,0,0.06)] bg-background",
+      "shadow-[0_1px_8px_rgba(0,0,0,0.06)] transition-all",
+      "focus-within:ring-2 focus-within:ring-[rgba(0,112,243,0.30)]",
+      "hover:shadow-[0_3px_12px_rgba(0,0,0,0.08)] hover:border-black/10",
+      "px-2 md:px-3",
       className
     )}
     {...props}
@@ -124,6 +128,8 @@ export const PromptInputTextarea = ({
     <Textarea
       className={cn(
         "w-full resize-none rounded-none border-none p-3 shadow-none outline-none ring-0",
+        "text-[15px] tracking-[0.01em]",
+        "placeholder:text-[15px] placeholder:text-muted-foreground/70",
         "bg-transparent dark:bg-transparent",
         "focus-visible:ring-0",
         className
@@ -148,7 +154,7 @@ export const PromptInputToolbar = ({
   ...props
 }: PromptInputToolbarProps) => (
   <div
-    className={cn("flex items-center justify-between p-1", className)}
+    className={cn("flex items-center justify-between p-1 px-2", className)}
     {...props}
   />
 );
@@ -184,7 +190,7 @@ export const PromptInputButton = ({
     <Button
       className={cn(
         "shrink-0 gap-1.5 rounded-lg",
-        variant === "ghost" && "text-muted-foreground",
+        variant === "ghost" && "text-muted-foreground opacity-70 hover:opacity-100 hover:scale-105 active:scale-95 transition-all",
         newSize === "default" && "px-3",
         className
       )}
@@ -247,8 +253,8 @@ export const PromptInputModelSelectTrigger = ({
 }: PromptInputModelSelectTriggerProps) => (
   <SelectTrigger
     className={cn(
-      "border-none bg-transparent font-medium text-muted-foreground shadow-none transition-colors",
-      'hover:bg-accent hover:text-foreground [&[aria-expanded="true"]]:bg-accent [&[aria-expanded="true"]]:text-foreground focus:ring-0',
+      "border-none rounded-full bg-muted/80 font-medium text-foreground shadow-none transition-colors px-3 py-1",
+      'hover:bg-accent/70 [&[aria-expanded="true"]]:bg-accent [&[aria-expanded="true"]]:text-foreground focus:ring-0',
       className
     )}
     {...props}
@@ -283,5 +289,5 @@ export const PromptInputModelSelectValue = ({
   className,
   ...props
 }: PromptInputModelSelectValueProps) => (
-  <SelectValue className={cn(className)} {...props} />
+  <SelectValue className={cn("text-[14px] font-medium", className)} {...props} />
 );
