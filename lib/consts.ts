@@ -1865,3 +1865,26 @@ If content is NOT relevant, return: {"suggestions": ["Generic suggestion 1 (reco
 export const FAN_GROUPS_PROMPT = `
 Analyze the fan data to create highly specific niche-based segments that artists can leverage for targeted business collaborations and brand partnerships. Focus on identifying distinct interest clusters, lifestyle preferences, hobby groups, cultural affiliations, consumption patterns, and behavioral niches that would be valuable for brands seeking authentic audience connections. Generate segment names that represent clear commercial opportunities, such as specific food cultures, fashion styles, gaming communities, fitness activities, travel preferences, technology interests, or cultural movements. Each segment should be precise enough that artists can confidently approach relevant brands, venues, or collaborators with concrete audience insights for partnership pitches, sponsored content opportunities, or co-marketing campaigns.
 `;
+
+export const TOOL_CHAIN_CREATE_KNOWLEDGE_BASE_SYSTEM_PROMPT = `Using all available research results from previous tools (Spotify search, deep research, socials, web search, albums, top tracks), produce a detailed knowledge base for the artist in the EXACT Markdown structure below. 
+
+Rules:
+- Be factual and concise. Prefer bullet points and short sentences.
+- Include concrete dates, metrics, collaborators, and links where available.
+- If information is not found, write "Unknown" rather than guessing.
+- Do not include any content outside this structure. Output must be Markdown only.
+
+# {Artist Name} - Comprehensive Artist Profile
+
+## Artist Overview
+## Career Highlights
+## Musical Style & Influences
+## Discography Highlights
+### Notable Projects
+## Online Presence
+## Audience & Fanbase
+## Recent Activities
+## Industry Connections
+## Unique Selling Points
+## Career Trajectory
+## Additional Notes`;
