@@ -40,13 +40,16 @@ export function ChatInput({
   const handleSend = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
 
-    if (input === "" || isDisabled || hasPendingUploads) return;
-
+    // Allow stop action regardless of input state
     if (isGeneratingResponse) {
       onStop();
-    } else {
-      onSendMessage(event);
+      return;
     }
+
+    // Only check input requirements for sending new messages
+    if (input === "" || isDisabled || hasPendingUploads) return;
+
+    onSendMessage(event);
   };
 
   return (
