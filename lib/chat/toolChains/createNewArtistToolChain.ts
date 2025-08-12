@@ -1,4 +1,7 @@
-import { TOOL_CHAIN_CREATE_KNOWLEDGE_BASE_SYSTEM_PROMPT } from "@/lib/consts";
+import {
+  TOOL_CHAIN_CREATE_KNOWLEDGE_BASE_SYSTEM_PROMPT,
+  TOOL_CHAIN_SEARCH_WEB_FOR_KNOWLEDGE_BASE_SYSTEM_PROMPT,
+} from "@/lib/consts";
 import { ToolChainItem } from "./toolChains";
 
 export const createNewArtistToolChain: ToolChainItem[] = [
@@ -17,7 +20,10 @@ export const createNewArtistToolChain: ToolChainItem[] = [
   { toolName: "get_spotify_album" },
   { toolName: "search_web" },
   { toolName: "update_artist_socials" },
-  { toolName: "search_web" },
+  {
+    toolName: "search_web",
+    system: TOOL_CHAIN_SEARCH_WEB_FOR_KNOWLEDGE_BASE_SYSTEM_PROMPT,
+  },
   {
     toolName: "create_knowledge_base",
     system: TOOL_CHAIN_CREATE_KNOWLEDGE_BASE_SYSTEM_PROMPT,
