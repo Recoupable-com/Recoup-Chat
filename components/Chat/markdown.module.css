@@ -116,6 +116,17 @@
   margin-bottom: 0.5em;
 }
 
+/* Labeled list rows (less bullets): if a list item starts with a bold label, render it as a paragraph row without a bullet */
+.markdown ul li:has(> strong:first-child) {
+  list-style: none;           /* remove bullet */
+  margin-left: 0;             /* align with list container */
+  padding-left: 0;            /* no extra indent */
+}
+
+.markdown ul li:has(> strong:first-child) p {
+  display: inline;            /* keep description on same line */
+}
+
 /* Add a little breathing room when a paragraph follows a list */
 .markdown ul + p,
 .markdown ol + p {
