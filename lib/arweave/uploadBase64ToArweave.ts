@@ -1,5 +1,26 @@
-import { TurboFactory } from "@ardrive/turbo-sdk";
 import { Readable } from "node:stream";
+
+// Ensure Node.js has browser-like base64 helpers used by downstream deps (e.g., cosmjs)
+// This must run before importing packages that expect global atob/btoa.
+function ensureBase64Polyfills() {
+  // @ts-ignore - augment global at runtime
+  if (typeof globalThis.atob === "undefined") {
+    // Decode base64 → binary string
+    // Note: Buffer is Node-only; safe on the server
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    (globalThis as any).atob = (data: string) =>
+      Buffer.from(data, "base64").toString("binary");
+  }
+  // @ts-ignore - augment global at runtime
+  if (typeof globalThis.btoa === "undefined") {
+    // Encode binary string → base64
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    (globalThis as any).btoa = (data: string) =>
+      Buffer.from(data, "binary").toString("base64");
+  }
+}
+
+ensureBase64Polyfills();
 
 // Load and parse the Arweave key
 if (!process.env.ARWEAVE_KEY) {
@@ -31,6 +52,8 @@ async function uploadBufferToArweave(
   fileName: string,
   fileType: string
 ): Promise<ArweaveUploadResult> {
+  // Lazy-load to ensure polyfills are applied before depending libs initialize
+  const { TurboFactory } = await import("@ardrive/turbo-sdk");
   const fileSize = fileBuffer.length;
 
   const turbo = TurboFactory.authenticated({
