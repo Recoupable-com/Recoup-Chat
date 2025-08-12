@@ -6,7 +6,6 @@ import { useVercelChatContext } from "@/providers/VercelChatProvider";
 import AttachmentsPreview from "./AttachmentsPreview";
 import PureAttachmentsButton from "./PureAttachmentsButton";
 import { motion } from "framer-motion";
-import { ChatInputYoutubeButton } from "./ChatInputYoutubeButton";
 import PromptSuggestions from "./PromptSuggestions";
 import {
   PromptInput,
@@ -80,7 +79,7 @@ export function ChatInput({
               <PromptInputButton className="hover:scale-105 active:scale-95 transition-all">
                 <PureAttachmentsButton />
               </PromptInputButton>
-              <ChatInputYoutubeButton />
+              {/* YouTube connect button removed from ChatInput UI intentionally; preserved for future reuse */}
               <ModelSelect />
             </PromptInputTools>
             <PromptInputSubmit
