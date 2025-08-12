@@ -127,6 +127,31 @@
   display: inline;            /* keep description on same line */
 }
 
+/* Suggestion blocks: top-level bullet with a nested list becomes a "card-like" section */
+.markdown ul > li:has(> ul) {
+  margin-top: 1.1em;              /* more space between suggestions */
+  padding-top: 0.9em;             /* breathing room before details */
+  border-top: 1px solid rgba(0, 0, 0, 0.08); /* subtle divider */
+}
+
+/* Title line of a suggestion block */
+.markdown ul > li:has(> ul) > p:first-child {
+  font-weight: 700;
+  font-size: 1.05rem;
+  color: rgba(0, 0, 0, 0.92);
+  margin-bottom: 0.45em;
+}
+
+/* Tighter spacing for nested bullets inside a suggestion block */
+.markdown ul > li > ul > li {
+  margin-bottom: 0.55em;
+}
+
+/* Reduce visual weight of nested bullet markers */
+.markdown ul > li > ul > li::marker {
+  color: rgba(0, 0, 0, 0.5);
+}
+
 /* Add a little breathing room when a paragraph follows a list */
 .markdown ul + p,
 .markdown ol + p {
