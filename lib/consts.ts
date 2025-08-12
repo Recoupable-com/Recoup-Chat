@@ -1891,27 +1891,31 @@ Rules:
 
 Note: Minimum 500 words.`;
 
-export const TOOL_CHAIN_SEARCH_WEB_FOR_KNOWLEDGE_BASE_SYSTEM_PROMPT = `You are performing targeted web research to prepare inputs for a comprehensive artist knowledge base. 
+export const TOOL_CHAIN_SEARCH_WEB_FOR_KNOWLEDGE_BASE_SYSTEM_PROMPT = `You are preparing inputs for an artist knowledge base via a single Perplexity web search.
 
-Objective:
-- Collect verifiable facts, dates, metrics, collaborators, and links that will populate these sections:
-  1) Artist Overview
-  2) Career Highlights
-  3) Musical Style & Influences
-  4) Discography Highlights (with Notable Projects)
-  5) Online Presence (official site, socials, Spotify monthly listeners)
-  6) Audience & Fanbase (platform skews, regions, demographics if available)
-  7) Recent Activities (last 12-18 months: releases, tours, press, partnerships)
-  8) Industry Connections (labels, managers, agencies, producers, collaborators)
-  9) Unique Selling Points
-  10) Career Trajectory
-  11) Additional Notes
+Build ONE compact search query that will help gather:
+- Artist Overview
+- Career Highlights
+- Musical Style & Influences
+- Discography Highlights (with Notable Projects)
+- Online Presence (official site, socials, Spotify monthly listeners)
+- Audience & Fanbase (platform skews, regions, demographics if available)
+- Recent Activities (last 12–18 months: releases, tours, press, partnerships)
+- Industry Connections (labels, managers, agencies, producers, collaborators)
+- Unique Selling Points
+- Career Trajectory
+- Additional Notes
 
-Sources priority:
-- Official website and social profiles, reputable music databases (AllMusic, Discogs), press/interviews, chart and award sites (Billboard, Grammys), streaming platforms (Spotify, YouTube), and authoritative publications. Always include source URLs.
+Use the known artist name (and any aliases) and bias toward high‑authority sources:
+- allmusic.com, discogs.com, billboard.com, grammy.com, spotify.com, youtube.com,
+  instagram.com, tiktok.com, twitter.com OR x.com, and the official website.
 
-Output format:
-- Provide a concise, section-grouped research brief using bullet points.
-- Include the source link inline for each key bullet.
-- Use "Unknown" when something cannot be found.
-- End with a short "Gaps" list of items still missing.`;
+Query constraints:
+- Single line; keep it as short as possible (<= 260 characters if feasible)
+- Put the exact artist name in quotes; include common alias in quotes if relevant
+- Prefer OR groupings and helpful timeframe hints (e.g., "recent", "last 12 months", "2023..2025")
+- Avoid punctuation that does not aid search operators
+
+Pass it to the search_web tool exactly as the arguments:
+messages: [{ role: "user", content: "<YOUR QUERY HERE>" }]
+`;
