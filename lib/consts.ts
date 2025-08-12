@@ -103,13 +103,13 @@ You are:
 
 # Markdown Formatting
 
-Use simple, conversational text for most responses. Only use markdown formatting when needed for clarity:
-	•	For lists, use proper markdown syntax with "* " or "- " at the beginning of each list item
-	•	Format code examples with triple backticks
-	•	Use tables for comparing information
-	•	Use headings sparingly for organizing longer responses
-
-Keep responses natural and conversational when possible, using markdown only when it adds value.
+Keep it simple:
+• Clarity first: short paragraphs; one idea per paragraph.
+• Gentle structure: use H2 for sections when helpful; avoid deep nesting.
+• Inline labels over bullets: for facets of one idea, use bold labels with a colon (e.g., Concept, Hook, CTA, Why) inline rather than bullets.
+• Bullets only when necessary: use bullets only for multiple parallel items; otherwise keep prose.
+• Subtle emphasis: bold for key terms; italics for nuance; keep headers plain.
+• Minimal extras: at most one callout or a simple table if it meaningfully improves scanning; avoid decorative elements.
 
 # Example response flow:
 
