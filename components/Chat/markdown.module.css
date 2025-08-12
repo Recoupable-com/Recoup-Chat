@@ -191,13 +191,7 @@
   margin-bottom: 0;
 }
 
-/* Add subtle background for lists to separate from paragraphs */
-.markdown ul {
-  background: rgba(0, 0, 0, 0.01);
-  padding: 0.75em 0.75em 0.5em 2em;
-  border-radius: 6px;
-  margin-left: -0.5em;
-}
+/* Keep lists clean without background */
 
 .markdown ul li {
   list-style-type: none;
@@ -216,15 +210,31 @@
 }
 
 .markdown ol li::marker {
-  color: rgba(0, 0, 0, 0.6);
+  color: rgba(0, 0, 0, 0.7);
   font-weight: 600;
   font-size: 0.95em;
 }
 
-/* Improved list within list */
+/* Numbered lists with better formatting */
+.markdown ol {
+  counter-reset: list-counter;
+}
+
+.markdown ol li {
+  list-style-type: decimal;
+}
+
+/* Indent nested lists properly */
 .markdown li ul,
 .markdown li ol {
-  margin: 0.7em 0 0.9em;
+  margin: 0.5em 0 0.5em;
+  padding-left: 1.25em;
+}
+
+/* Sub-bullets in lists should be smaller */
+.markdown li li {
+  font-size: 0.925rem;
+  margin-bottom: 0.4em;
 }
 
 /* Better spacing for paragraphs inside list items */
@@ -238,13 +248,19 @@
 
 /* Enhanced blockquotes for important notes */
 .markdown blockquote {
-  border-left: 4px solid rgba(0, 0, 0, 0.15);
-  padding: 0.8em 1.2em;
-  margin: 1.2em 0;
-  background-color: rgba(0, 0, 0, 0.03);
+  border-left: 3px solid rgba(0, 0, 0, 0.15);
+  padding: 0.75em 1em;
+  margin: 1.25em 0;
+  background-color: rgba(0, 0, 0, 0.02);
   border-radius: 0 4px 4px 0;
-  color: rgba(0, 0, 0, 0.7);
-  font-style: italic;
+  color: rgba(0, 0, 0, 0.75);
+  font-style: normal;
+}
+
+/* Make blockquote text slightly smaller for callout feel */
+.markdown blockquote p {
+  font-size: 0.925rem;
+  line-height: 1.6;
 }
 
 .markdown blockquote p {
