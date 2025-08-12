@@ -13,8 +13,8 @@
 
 /* Improved paragraph spacing */
 .markdown p {
-  margin-bottom: 0.6em;
-  line-height: 1.4;
+  margin-bottom: 0.75em;
+  line-height: 1.6;
   max-width: 100%;
   text-align: left;
   word-break: break-word;
@@ -45,28 +45,28 @@
 
 /* Enhanced Visual Hierarchy - Headings */
 .markdown h1 {
-  font-size: 1.8em;
+  font-size: 2rem; /* slightly larger */
   font-weight: 700;
   margin: 1.5em 0 0.8em;
-  color: rgba(0, 0, 0, 0.85);
+  color: rgba(0, 0, 0, 0.9);
   padding-bottom: 0.4em;
   border-bottom: 1px solid rgba(0, 0, 0, 0.1);
 }
 
 .markdown h2 {
-  font-size: 1.5em;
-  font-weight: 600;
-  margin: 1.5em 0 0.8em;
+  font-size: 1.6rem; /* slightly larger */
+  font-weight: 700;  /* clearer hierarchy */
+  margin: 1.5em 0 0.75em;
   padding-bottom: 0.3em;
   border-bottom: 1px solid rgba(0, 0, 0, 0.1);
-  color: rgba(0, 0, 0, 0.8);
+  color: rgba(0, 0, 0, 0.85);
 }
 
 .markdown h3 {
-  font-size: 1.3em;
+  font-size: 1.35em;
   font-weight: 600;
-  margin: 1.3em 0 0.7em;
-  color: rgba(0, 0, 0, 0.75);
+  margin: 1.25em 0 0.6em;
+  color: rgba(0, 0, 0, 0.8);
 }
 
 /* Horizontal rule for section separation */
@@ -79,8 +79,13 @@
 
 /* Highlight key numbers */
 .markdown strong {
-  font-weight: 600;
-  color: rgba(0, 0, 0, 0.9);
+  font-weight: 700; /* stronger emphasis */
+  color: rgba(0, 0, 0, 0.92);
+}
+
+/* Strong labels inside list items pop a bit more */
+.markdown li > strong:first-child {
+  font-weight: 700;
 }
 
 /* Monetary values and important numbers styling */
@@ -100,6 +105,12 @@
 .markdown ul,
 .markdown ol {
   @apply md:pl-7 md:my-5 md:mb-6;
+}
+
+/* Add a little breathing room when a paragraph follows a list */
+.markdown ul + p,
+.markdown ol + p {
+  margin-top: 0.8em;
 }
 
 .markdown li {
