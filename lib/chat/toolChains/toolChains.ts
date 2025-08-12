@@ -1,7 +1,6 @@
 import { LanguageModel, ModelMessage } from "ai";
 import { createReleaseReportToolChain } from "./create_release_report/createReleaseReportToolChain";
 import { createNewArtistToolChain } from "./createNewArtistToolChain";
-import { DEFAULT_MODEL } from "@/lib/consts";
 
 export type ToolChainItem = {
   toolName: string;
@@ -19,8 +18,6 @@ export type PrepareStepResult = {
 // Map specific tools to their required models
 export const TOOL_MODEL_MAP: Record<string, LanguageModel> = {
   update_account_info: "gemini-2.5-pro",
-  create_knowledge_base: DEFAULT_MODEL,
-  generate_txt_file: DEFAULT_MODEL,
   // Add other tools that need specific models here
   // e.g., create_segments: "gpt-4-turbo",
 };
