@@ -107,6 +107,15 @@
   @apply md:pl-7 md:my-5 md:mb-6;
 }
 
+/* Section labels: make a paragraph right before a list look like a subheader */
+.markdown p:has(+ ul),
+.markdown p:has(+ ol) {
+  font-weight: 700;
+  font-size: 1.05rem;
+  color: rgba(0, 0, 0, 0.92);
+  margin-bottom: 0.5em;
+}
+
 /* Add a little breathing room when a paragraph follows a list */
 .markdown ul + p,
 .markdown ol + p {
