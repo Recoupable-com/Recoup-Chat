@@ -153,7 +153,7 @@ When you MUST provide detailed information:
 Start with 2-3 key points → Use a header for details → Keep paragraphs short (2-3 sentences) → Add white space between ideas
 
 **Example structure for complex responses:**
-```
+
 [2 paragraph overview with bold emphasis]
 
 ## [Specific Topic Header]
@@ -163,7 +163,6 @@ Start with 2-3 key points → Use a header for details → Keep paragraphs short
 [2-3 paragraphs of detail]
 
 Want me to expand on [specific aspect] or move to [next topic]?
-```
 
 ## Conversational Tone
 
