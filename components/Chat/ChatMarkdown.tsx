@@ -7,11 +7,25 @@ import MarkdownPre from "./MarkdownPre";
 import MarkdownCode from "./MarkdownCode";
 import MarkdownImg from "./MarkdownImg";
 import MarkdownTable from "./MarkdownTable";
-import { markdownComponents } from "../VercelChat/markdown-components";
 
 interface ChatMarkdownProps {
   children: string;
 }
+
+// Custom header components that work with CSS module styles
+const markdownHeaders = {
+  h1: ({ children, ...props }: any) => <h1 {...props}>{children}</h1>,
+  h2: ({ children, ...props }: any) => <h2 {...props}>{children}</h2>,
+  h3: ({ children, ...props }: any) => <h3 {...props}>{children}</h3>,
+  h4: ({ children, ...props }: any) => <h4 {...props}>{children}</h4>,
+  h5: ({ children, ...props }: any) => <h5 {...props}>{children}</h5>,
+  h6: ({ children, ...props }: any) => <h6 {...props}>{children}</h6>,
+  strong: ({ children, ...props }: any) => <strong {...props}>{children}</strong>,
+  p: ({ children, ...props }: any) => <p {...props}>{children}</p>,
+  ul: ({ children, ...props }: any) => <ul {...props}>{children}</ul>,
+  ol: ({ children, ...props }: any) => <ol {...props}>{children}</ol>,
+  li: ({ children, ...props }: any) => <li {...props}>{children}</li>,
+};
 
 const ChatMarkdown: React.FC<ChatMarkdownProps> = ({ children }) => {
   return (
@@ -26,19 +40,19 @@ const ChatMarkdown: React.FC<ChatMarkdownProps> = ({ children }) => {
           code: MarkdownCode,
           img: MarkdownImg,
           table: MarkdownTable,
-          // Add header components from markdown-components for better formatting
-          h1: markdownComponents.h1,
-          h2: markdownComponents.h2,
-          h3: markdownComponents.h3,
-          h4: markdownComponents.h4,
-          h5: markdownComponents.h5,
-          h6: markdownComponents.h6,
-          // Add other formatting components for improved readability
-          strong: markdownComponents.strong,
-          ul: markdownComponents.ul,
-          ol: markdownComponents.ol,
-          li: markdownComponents.li,
-          p: markdownComponents.p,
+          // Use simple header components that let CSS module styles take precedence
+          h1: markdownHeaders.h1,
+          h2: markdownHeaders.h2,
+          h3: markdownHeaders.h3,
+          h4: markdownHeaders.h4,
+          h5: markdownHeaders.h5,
+          h6: markdownHeaders.h6,
+          // Add other formatting components
+          strong: markdownHeaders.strong,
+          ul: markdownHeaders.ul,
+          ol: markdownHeaders.ol,
+          li: markdownHeaders.li,
+          p: markdownHeaders.p,
         }}
       >
         {children}
