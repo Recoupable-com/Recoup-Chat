@@ -1,3 +1,5 @@
+// Ensure atob/btoa exist before any downstream imports that may rely on them
+import "@/lib/polyfills/base64";
 import {
   createUIMessageStream,
   createUIMessageStreamResponse,
