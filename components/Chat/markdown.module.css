@@ -33,6 +33,18 @@
   margin-top: 1em;
 }
 
+/* Add breathing room after paragraphs before lists */
+.markdown p + ul,
+.markdown p + ol {
+  margin-top: 1em;
+}
+
+/* Headers following paragraphs need clear separation */
+.markdown p + h2,
+.markdown p + h3 {
+  margin-top: 1.5em;
+}
+
 /* Add animation for headers appearing */
 @keyframes fadeInUp {
   from {
@@ -131,11 +143,11 @@
   letter-spacing: -0.01em;
 }
 
-/* Add subtle highlight to strong text in lists */
-.markdown li strong {
-  background: linear-gradient(180deg, transparent 60%, rgba(59, 130, 246, 0.08) 60%);
-  padding: 0 0.1em;
-  border-radius: 2px;
+/* Strong text at start of list items (labels) */
+.markdown li > strong:first-child {
+  color: rgba(0, 0, 0, 0.9);
+  font-weight: 600;
+  letter-spacing: -0.01em;
 }
 
 /* Monetary values and important numbers styling */
@@ -151,16 +163,16 @@
   overflow-wrap: break-word;
 }
 
-/* List improvements - more compact and scannable */
+/* List improvements - clear visual separation */
 .markdown ul,
 .markdown ol {
-  margin: 0.75em 0 1em;
+  margin: 1em 0 1.25em;
   padding-left: 1.5em;
 }
 
 .markdown li {
-  margin-bottom: 0.5em;
-  line-height: 1.6;
+  margin-bottom: 0.75em;
+  line-height: 1.65;
   position: relative;
   word-break: break-word;
   overflow-wrap: break-word;
@@ -169,9 +181,22 @@
   font-size: 0.95rem;
 }
 
+/* Dense single-line list items need less spacing */
+.markdown li:has(strong:first-child) {
+  margin-bottom: 0.6em;
+}
+
 /* Last item needs no bottom margin */
 .markdown li:last-child {
   margin-bottom: 0;
+}
+
+/* Add subtle background for lists to separate from paragraphs */
+.markdown ul {
+  background: rgba(0, 0, 0, 0.01);
+  padding: 0.75em 0.75em 0.5em 2em;
+  border-radius: 6px;
+  margin-left: -0.5em;
 }
 
 .markdown ul li {

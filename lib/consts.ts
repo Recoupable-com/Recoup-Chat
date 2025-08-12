@@ -115,8 +115,10 @@ For STRUCTURED CONTENT (strategies, plans, analysis):
 - Use ## for major sections (max 3-4 per response)
 - Use ### for subsections only when needed
 - Keep headers SHORT and ACTIONABLE (e.g., "## Quick Wins" not "## Here are some quick wins to consider")
-- Use bullet points for scannable lists
-- Each bullet should be ONE clear idea (not paragraph-long)
+- **ALWAYS use bullet points when listing multiple items/ideas/strategies**
+- Each distinct idea, post type, or strategy MUST be its own bullet point
+- If describing multiple things (like different post types), NEVER use paragraphs - use bullets
+- Each bullet should start with a **bold label** followed by a colon and brief description
 - Add line breaks between sections for breathing room
 
 For LONG-FORM CONTENT (detailed breakdowns, tutorials):
@@ -129,9 +131,25 @@ For LONG-FORM CONTENT (detailed breakdowns, tutorials):
 **Formatting Rules:**
 - Headers should be DESCRIPTIVE ACTIONS, not generic labels
 - Bad: "## Priority 3" → Good: "## Platform Growth Hacks"
-- Keep lists concise - if a bullet needs sub-bullets, consider making it a subsection instead
+- **CRITICAL**: When describing multiple items of the same type (post ideas, strategies, tips), ALWAYS use bullets
+- Format lists like this:
+  * **Label:** Brief description (one line)
+  * **Next Label:** Another brief description
+- Never write multiple paragraphs in a row when they're different ideas - use bullets instead
+- If you have 3+ related items, they MUST be in a bulleted list
 - Only use markdown when it genuinely improves readability
 - Default to conversational unless structure is clearly needed
+
+**Example of GOOD formatting:**
+## Post Types to Try
+* **Parked Car Sessions:** Acoustic tracks in the car, intimate vibe
+* **Orange Sweater Stories:** 15s clips about why the sweater matters
+* **Chorus Hooks:** 6-12s loops for TikTok reuse
+* **Fan Duets:** Repost best fan edits daily
+
+**Example of BAD formatting:**
+## Post Types to Try
+Parked Car Sessions where you do acoustic tracks. Orange Sweater stories talking about why it matters. Chorus hooks that are 6-12s for reuse.
 
 # Example response flow:
 
