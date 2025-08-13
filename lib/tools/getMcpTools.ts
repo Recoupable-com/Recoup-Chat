@@ -5,7 +5,8 @@ import getArtistSocials from "./getArtistSocials";
 import getSocialPosts from "./getSocialPosts";
 import getPostComments from "./getPostComments";
 import searchWeb from "./searchWeb";
-// import generateImage from "./generateImage";
+import generateImage from "./generateImage";
+import createTxtFile from "./createTxtFile";
 import generateMermaidDiagram from "./generateMermaidDiagram";
 import createArtist from "./createArtist";
 import deleteArtist from "./deleteArtist";
@@ -15,7 +16,6 @@ import getSpotifyArtistAlbums from "./getSpotifyArtistAlbums";
 import getSpotifyAlbum from "./getSpotifyAlbum";
 import updateAccountInfo from "./updateAccountInfo";
 import updateArtistSocialsTool from "./updateArtistSocials";
-// import createTxtFile from "./createTxtFile";
 import searchTwitter from "./searchTwitter";
 import getTwitterTrends from "./getTwitterTrends";
 import scrapeInstagramProfile from "./scrapeInstagramProfile";
@@ -46,9 +46,9 @@ export async function getMcpTools() {
     get_social_posts: getSocialPosts,
     get_post_comments: getPostComments,
     search_web: searchWeb,
-    // generate_image: generateImage,
+    generate_image: generateImage,
+    generate_txt_file: createTxtFile,
     generate_mermaid_diagram: generateMermaidDiagram,
-    // generate_txt_file: createTxtFile,
     create_new_artist: createArtist,
     delete_artist: deleteArtist,
     get_spotify_search: getSpotifySearch,
