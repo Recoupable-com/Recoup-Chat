@@ -10,6 +10,16 @@ type SearchResult = {
   last_updated: string;
 };
 
+type PerplexitySearchResults = {
+  citations: string[];
+  choices: {
+    message: {
+      content: string;
+    };
+  }[];
+  search_results: SearchResult[];
+};
+
 const generateSearchQueries = async (query: string, n: number = 3) => {
   const {
     object: { queries },
@@ -23,7 +33,7 @@ const generateSearchQueries = async (query: string, n: number = 3) => {
   return queries;
 };
 
-const searchWeb = async (query: string) => {
+const searchWeb = async (query: string): Promise<PerplexitySearchResults> => {
   const messages = [
     {
       role: "user",
@@ -31,54 +41,39 @@ const searchWeb = async (query: string) => {
     },
   ];
   const result = await fetchPerplexityApi(messages, "sonar-pro");
-  const data = await result.json();
-  console.log("perplexity result", data);
-  console.log(
-    "perplexity choices message",
-    data.choices.map((c: any) => c.message.content)
-  );
-  console.log(
-    "perplexity choices delta",
-    data.choices.map((c: any) => c.delta)
-  );
-
-  return data.search_results as SearchResult[];
+  const data = (await result.json()) as PerplexitySearchResults;
+  return data;
 };
 
 const searchAndProcess = async (
   query: string,
   accumulatedSources: SearchResult[]
 ) => {
-  const pendingSearchResults: SearchResult[] = [];
-  const finalSearchResults: SearchResult[] = [];
+  const finalSearchResults: PerplexitySearchResults[] = [];
   await generateText({
     model: DEFAULT_MODEL,
     prompt: `Search the web for information about ${query}`,
     system:
       "You are a researcher. For each query, search the web and then evaluate if the results are relevant and will help answer the following query",
     tools: {
-      searchWeb: tool({
+      searchWebAndEvaluate: tool({
         description: "Search the web for information about a given query",
         inputSchema: z.object({
           query: z.string().min(1),
         }),
         execute: async ({ query }) => {
           const results = await searchWeb(query);
-          pendingSearchResults.push(...results);
-          return results;
-        },
-      }),
-      evaluate: tool({
-        description: "Evaluate the search results",
-        inputSchema: z.object({}),
-        execute: async () => {
-          const pendingResult = pendingSearchResults.pop()!;
+          console.log("SEARCH WEB RESULTS", results.search_results);
           const { object: evaluation } = await generateObject({
             model: DEFAULT_MODEL,
             prompt: `Evaluate whether the search results are relevant and will help answer the following query: ${query}. If the page already exists in the existing results, mark it as irrelevant.
 
             <search_results>
-            ${JSON.stringify(pendingResult)}
+            Main content:
+            ${results.choices[0].message.content}
+
+            Citations:
+            ${JSON.stringify(results.search_results)}
             </search_results>
 
             <existing_results>
@@ -89,14 +84,23 @@ const searchAndProcess = async (
             output: "enum",
             enum: ["relevant", "irrelevant"],
           });
+          console.log("EVALUATION", evaluation);
           if (evaluation === "relevant") {
-            finalSearchResults.push(pendingResult);
+            finalSearchResults.push(results);
           }
-          console.log("Found:", pendingResult.url);
+          console.log("Found:", results.search_results);
           console.log("Evaluation completed:", evaluation);
           return evaluation === "irrelevant"
-            ? "Search results are irrelevant. Please search again with a more specific query."
-            : "Search results are relevant. End research for this query.";
+            ? `Search results are irrelevant. Please search again with a more specific query.
+            <search_results>
+            ${JSON.stringify(results.search_results)}
+            </search_results>
+            `
+            : `Search results are relevant. End research for this query.
+            <search_results>
+            ${JSON.stringify(results.search_results)}
+            </search_results>
+            `;
         },
       }),
     },
@@ -104,14 +108,17 @@ const searchAndProcess = async (
   return finalSearchResults;
 };
 
-const generateLearnings = async (query: string, searchResult: SearchResult) => {
+const generateLearnings = async (
+  query: string,
+  searchResult: PerplexitySearchResults
+) => {
   const { object } = await generateObject({
     model: DEFAULT_MODEL,
     prompt: `The user is researching "${query}". The following search result were deemed relevant.
     Generate a learning and a follow-up question from the following search result:
 
     <search_result>
-    ${JSON.stringify(searchResult)}
+    ${searchResult.choices[0].message.content}
     </search_result>
       `,
     schema: z.object({
@@ -158,6 +165,7 @@ const deepResearch = async ({
   }
 
   if (depth === 0) {
+    console.log("EARLY EXIT ACCUMULATED RESEARCH", accumulatedResearch);
     return accumulatedResearch;
   }
 
@@ -166,14 +174,20 @@ const deepResearch = async ({
 
   for (const query of queries) {
     console.log(`Searching the web for: ${query}`);
-    const searchResults = await searchAndProcess(
+    const perplexitySearchResults = await searchAndProcess(
       query,
       accumulatedResearch.searchResults
     );
+    const searchResults = perplexitySearchResults.flatMap(
+      (r) => r.search_results
+    );
     accumulatedResearch.searchResults.push(...searchResults);
-    for (const searchResult of searchResults) {
-      console.log(`Processing search result: ${searchResult.url}`);
+    for (const searchResult of perplexitySearchResults) {
+      console.log(
+        `Processing search result: ${JSON.stringify(searchResult.search_results)}`
+      );
       const learnings = await generateLearnings(query, searchResult);
+      console.log("NEW LEARNINGS", learnings);
       accumulatedResearch.learnings.push(learnings);
       accumulatedResearch.completedQueries.push(query);
 
@@ -189,6 +203,7 @@ const deepResearch = async ({
       });
     }
   }
+  console.log("FINAL ACCUMULATED RESEARCH", accumulatedResearch);
   return accumulatedResearch;
 };
 
@@ -196,9 +211,9 @@ const webDeepResearch = tool({
   description: "Deep research on a given query",
   inputSchema: z.object({
     prompt: z.string().min(1),
-    depth: z.number().min(1).max(5),
-    breadth: z.number().min(1).max(5),
   }),
-  execute: deepResearch,
+  execute: async ({ prompt }) => {
+    return await deepResearch({ prompt });
+  },
 });
 export default webDeepResearch;
