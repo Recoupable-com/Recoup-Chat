@@ -5,9 +5,9 @@ import performChatCompletion from "@/lib/perplexity/performChatCompletion";
 const getSearchWebTool = (model: string = "sonar-pro") => {
   return tool({
     description:
-      "Engages in a conversation using the Sonar API. " +
+      "Engages in a conversation using the Web Search API. " +
       "Accepts an array of messages (each with a role and content) " +
-      "and returns a ask completion response from the Perplexity model.",
+      "and returns an ask completion response from the Web Search model.",
     inputSchema: z.object({
       messages: z.array(
         z.object({
@@ -22,7 +22,6 @@ const getSearchWebTool = (model: string = "sonar-pro") => {
           "Invalid arguments for search_web: 'messages' must be an array"
         );
       }
-      // Invoke the chat completion function with the provided messages
       const result = await performChatCompletion(messages, model);
       return {
         content: [{ type: "text", text: result }],
