@@ -40,7 +40,7 @@ const searchWeb = async (query: string): Promise<PerplexitySearchResults> => {
       content: query,
     },
   ];
-  const result = await fetchPerplexityApi(messages, "sonar-pro");
+  const result = await fetchPerplexityApi(messages, "sonar-deep-research");
   const data = (await result.json()) as PerplexitySearchResults;
   return data;
 };
