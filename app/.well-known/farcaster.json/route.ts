@@ -18,5 +18,8 @@ export async function GET() {
       splashBackgroundColor: `#${process.env.NEXT_PUBLIC_SPLASH_BACKGROUND_COLOR}`,
       webhookUrl: `${URL}/api/webhook`,
     },
+    baseBuilder: {
+      allowedAddresses: ["0x72A31A5A9568CD9EC1814C9B68dF0059317Bff87"],
+    },
   });
 }
