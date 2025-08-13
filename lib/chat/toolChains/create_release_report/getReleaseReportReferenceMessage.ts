@@ -10,7 +10,7 @@ const getReleaseReportReferenceMessage = (): ModelMessage => {
     content: [
       {
         type: "text" as const,
-        text: `Here is an example release report for reference. Use this as a template for creating your own release reports:
+        text: `Here is an example release report for reference. Use this as a template for creating your own release reports / email text:
   
           ${referenceReleaseReport}`,
       },
