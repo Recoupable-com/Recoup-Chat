@@ -1,5 +1,4 @@
-import { PROMPT_SUGGESTIONS_SYSTEM_PROMPT } from "@/lib/consts";
-import { openai } from "@ai-sdk/openai";
+import { DEFAULT_MODEL, PROMPT_SUGGESTIONS_SYSTEM_PROMPT } from "@/lib/consts";
 import { generateObject } from "ai";
 import { NextRequest, NextResponse } from "next/server";
 import { z } from "zod";
@@ -8,7 +7,7 @@ export const POST = async (req: NextRequest) => {
   const { content } = await req.json();
 
   const { object } = await generateObject({
-    model: openai("gpt-4.1-mini"),
+    model: DEFAULT_MODEL,
     system: PROMPT_SUGGESTIONS_SYSTEM_PROMPT,
     schema: z.object({
       suggestions: z.array(
