@@ -1,3 +1,5 @@
+import generateImage from "./generateImage";
+import createTxtFile from "./createTxtFile";
 import getSegmentFans from "./getSegmentFans";
 import contactTeam from "./contactTeam";
 import getArtistSegments from "./getArtistSegments";
@@ -5,8 +7,6 @@ import getArtistSocials from "./getArtistSocials";
 import getSocialPosts from "./getSocialPosts";
 import getPostComments from "./getPostComments";
 import searchWeb from "./searchWeb";
-import generateImage from "./generateImage";
-import createTxtFile from "./createTxtFile";
 import generateMermaidDiagram from "./generateMermaidDiagram";
 import createArtist from "./createArtist";
 import deleteArtist from "./deleteArtist";
@@ -38,6 +38,8 @@ import webDeepResearch from "./webDeepResearch";
 
 export async function getMcpTools() {
   const tools = {
+    generate_image: generateImage,
+    generate_txt_file: createTxtFile,
     contact_team: contactTeam,
     create_segments: createSegments,
     get_artist_segments: getArtistSegments,
@@ -46,8 +48,6 @@ export async function getMcpTools() {
     get_social_posts: getSocialPosts,
     get_post_comments: getPostComments,
     search_web: searchWeb,
-    generate_image: generateImage,
-    generate_txt_file: createTxtFile,
     generate_mermaid_diagram: generateMermaidDiagram,
     create_new_artist: createArtist,
     delete_artist: deleteArtist,
