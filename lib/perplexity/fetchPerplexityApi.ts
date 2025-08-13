@@ -1,15 +1,13 @@
+// See the Sonar API documentation for more details:
+// https://docs.perplexity.ai/api-reference/chat-completions
 const fetchPerplexityApi = async (
   messages: Array<{ role: string; content: string }>,
   model: string = "sonar-pro"
 ) => {
-  // Construct the API endpoint URL and request body
   const url = new URL("https://api.perplexity.ai/chat/completions");
   const body = {
-    model: model, // Model identifier passed as parameter
+    model,
     messages: messages,
-    // Additional parameters can be added here if required (e.g., max_tokens, temperature, etc.)
-    // See the Sonar API documentation for more details:
-    // https://docs.perplexity.ai/api-reference/chat-completions
   };
 
   let response;
