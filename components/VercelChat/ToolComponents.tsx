@@ -333,7 +333,6 @@ export function getToolResultComponent(part: ToolUIPart) {
       </div>
     );
   } else if (toolName === "search_web" || toolName === "web_deep_research") {
-    console.log("SEARCH WEB RESULT", result);
     return (
       <div key={toolCallId}>
         <SearchWebResult result={result as SearchWebResultType} />
