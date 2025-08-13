@@ -12,30 +12,6 @@ export const createReleaseReportToolChain: ToolChainItem[] = [
   },
   {
     toolName: "generate_txt_file",
-    system: `Create a Release Report TXT file matching the reference release report.
-      The following sections must be included in the report passed to the contents parameter in the generate_txt_file tool: 
-      - {artwork title} Summary
-      - Streaming headlines
-      - Global streaming headlines
-      - TikTok Story So Far
-      - {artwork title} Charts
-      - - Spotify
-      - - Apple Music
-      - - iTunes
-      - - Shazam
-      - - Deezer
-      - {artwork title} Toolkit
-      - - {artwork title} Official Artwork:
-      - - {artwork title} DSP Images: 
-      - - {artwork title} Official Video:
-      - - {artwork title} Cutdowns: 
-      - - {artwork title} Lyric Video: 
-      - - {artwork title} Audio Ad: 
-      - - {artwork title} Press Release: 
-      - - {artwork title} Spotify Inventory: 
-      - - {artwork title} Pseudo Video: 
-      - - {artwork title} Victory Lap Asset: 
-      - Citations`,
     messages: [getReleaseReportReferenceMessage()],
   },
   {
