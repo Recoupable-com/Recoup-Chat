@@ -127,19 +127,11 @@ Deezer:
 #57 Lebanon
 #73 Singapore
 
-‘Illegal’ Toolkit:
-Assets:
-
-‘Illegal’ Official Artwork: https://isaac.wmg.com/?w=NhQb4Fp6-2 
-'Illegal' DSP Images: https://isaac.wmg.com/?w=x_yQPkH971 
-‘Illegal’ Official Video: https://isaac.wmg.com/?w=NHFiiVqudB 
-'Illegal' Cutdowns: https://isaac.wmg.com/?w=j4v4Yu814a 
-'Illegal' Lyric Video: https://isaac.wmg.com/?w=-Kq7p_BfOX 
-‘Illegal’ Audio Ad: https://isaac.wmg.com/?w=5U2uWfklpi 
-‘Illegal’ Press Release: https://isaac.wmg.com/?w=jBa00Y3mHe 
-‘Illegal’ Spotify Inventory: https://isaac.wmg.com/?w=a0beYDZxoe 
-‘Illegal’ Pseudo Video: https://isaac.wmg.com/?w=SkQvHLvm4W 
-‘Illegal’ Victory Lap Asset: https://isaac.wmg.com/?w=BPyZFGCxJH
+Citations:
+- Nia Archives remix (YouTube) — remix strategy and additional content: https://www.youtube.com/watch?v=h-VvUPp6BgE
+- Press profile / campaign case study — context on creative & audience playbook: https://musically.com/2025/07/09/behind-the-campaign-pinkpantheress/
+- Industry metrics snapshot (artist-level): https://www.musicmetricsvault.com/artists/pinkpantheress/78rUTD7y6Cy67W1RVzYs7t
+- Fashion/brand tie-in (example): https://www.showstudio.com/news/pinkpantheress-joins-eccos-modern-family
 
 Thanks!
 
