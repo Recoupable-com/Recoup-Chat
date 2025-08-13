@@ -60,7 +60,7 @@ const MessagesComponent = ({
       ))}
 
       {(status === "submitted" || status === "streaming") && (
-        <div className="text-zinc-500 w-full flex items-center gap-2">
+        <div className="text-zinc-500 w-full max-w-3xl mx-auto flex items-center gap-2">
           Hmm...
           <div className="inline-block animate-spin">
             <SpinnerIcon />
