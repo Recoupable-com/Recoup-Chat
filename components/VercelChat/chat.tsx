@@ -92,7 +92,7 @@ function ChatContentMemoized({ reportId, id }: {reportId?: string; id: string;})
   return (
     <div
       className={cn(
-        "px-4 md:px-0 pb-4 flex flex-col h-full items-center w-full max-w-3xl relative",
+        "px-4 md:px-0 pb-4 flex flex-col h-full items-center w-full relative",
         {
           "justify-between": messages.length > 0,
         }
@@ -107,7 +107,7 @@ function ChatContentMemoized({ reportId, id }: {reportId?: string; id: string;})
           <div className="flex-1"></div>
 
           {/* Centered greeting and chat input */}
-          <div className="w-full">
+          <div className="w-full max-w-3xl mx-auto">
             <ChatGreeting isVisible={isVisible} />
             <ChatPrompt isVisible={isVisible} />
             <div className="mt-1 md:mt-6">
@@ -134,9 +134,9 @@ function ChatContentMemoized({ reportId, id }: {reportId?: string; id: string;})
             setMessages={setMessages}
             reload={reload}
           >
-            {reportId && <ChatReport reportId={reportId} />}
+            {reportId && (<div className="w-full max-w-3xl mx-auto"><ChatReport reportId={reportId} /></div>)}
           </Messages>
-          <div className="w-full">
+          <div className="w-full max-w-3xl mx-auto">
             <ChatInput
               input={input}
               setInput={setInput}
