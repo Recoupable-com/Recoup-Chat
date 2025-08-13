@@ -6,7 +6,7 @@ export const createNewArtistToolChain: ToolChainItem[] = [
   {
     toolName: "update_account_info",
     system:
-      "Read first artist's information from the result of the get_spotify_search tool and update the account using the update_account_info tool with the artist's basic information. Information you should get is: name, image, label etc.",
+      "From the get_spotify_search results, select the artist whose name best matches the user-provided artist name (prefer exact, case-insensitive match; otherwise choose the closest by name and popularity). Update the account using the update_account_info tool with the artist's basic information: name, image, label, etc.",
   },
   { toolName: "update_artist_socials" },
   { toolName: "artist_deep_research" },
