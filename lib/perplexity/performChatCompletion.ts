@@ -19,7 +19,6 @@ async function performChatCompletion(
   if (!response.ok) {
     let errorText;
     try {
-      console.log("perplexity response", response);
       errorText = await response.text();
     } catch (parseError) {
       console.error(parseError);
