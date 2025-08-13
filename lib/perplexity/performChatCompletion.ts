@@ -1,3 +1,5 @@
+import fetchPerplexityApi from "./fetchPerplexityApi";
+
 /**
  * Performs a chat completion by sending a request to the Perplexity API.
  * Appends citations to the returned message content if they exist.
@@ -11,34 +13,13 @@ async function performChatCompletion(
   messages: Array<{ role: string; content: string }>,
   model: string = "sonar-pro"
 ): Promise<string> {
-  // Construct the API endpoint URL and request body
-  const url = new URL("https://api.perplexity.ai/chat/completions");
-  const body = {
-    model: model, // Model identifier passed as parameter
-    messages: messages,
-    // Additional parameters can be added here if required (e.g., max_tokens, temperature, etc.)
-    // See the Sonar API documentation for more details:
-    // https://docs.perplexity.ai/api-reference/chat-completions
-  };
-
-  let response;
-  try {
-    response = await fetch(url.toString(), {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${process.env.PERPLEXITY_API_KEY}`,
-      },
-      body: JSON.stringify(body),
-    });
-  } catch (error) {
-    throw new Error(`Network error while calling Perplexity API: ${error}`);
-  }
+  const response = await fetchPerplexityApi(messages, model);
 
   // Check for non-successful HTTP status
   if (!response.ok) {
     let errorText;
     try {
+      console.log("perplexity response", response);
       errorText = await response.text();
     } catch (parseError) {
       console.error(parseError);
