@@ -85,6 +85,8 @@ import UpdateScheduledActionSkeleton from "./tools/UpdateScheduledActionSkeleton
 export function getToolCallComponent(part: ToolUIPart) {
   const { toolCallId } = part as ToolUIPart;
   const toolName = getToolName(part);
+  const isSearchWebTool =
+    toolName === "search_web" || toolName === "web_deep_research";
 
   // Handle generate_image tool call
   if (toolName === "generate_image") {
@@ -147,7 +149,7 @@ export function getToolCallComponent(part: ToolUIPart) {
         <YouTubeSetThumbnailSkeleton />
       </div>
     );
-  } else if (toolName === "search_web" || toolName === "web_deep_research") {
+  } else if (isSearchWebTool) {
     return (
       <div key={toolCallId}>
         <SearchWebSkeleton />
@@ -227,6 +229,8 @@ export function getToolCallComponent(part: ToolUIPart) {
 export function getToolResultComponent(part: ToolUIPart) {
   const { toolCallId, output: result } = part as ToolUIPart;
   const toolName = getToolName(part);
+  const isSearchWebTool =
+    toolName === "search_web" || toolName === "web_deep_research";
 
   if (toolName === "generate_image") {
     return (
@@ -332,7 +336,7 @@ export function getToolResultComponent(part: ToolUIPart) {
         />
       </div>
     );
-  } else if (toolName === "search_web" || toolName === "web_deep_research") {
+  } else if (isSearchWebTool) {
     return (
       <div key={toolCallId}>
         <SearchWebResult result={result as SearchWebResultType} />
