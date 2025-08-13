@@ -1,6 +1,5 @@
 import { generateText as generate } from "ai";
-import { anthropic } from "@ai-sdk/anthropic";
-import { ANTHROPIC_MODEL } from "../consts";
+import { DEFAULT_MODEL } from "@/lib/consts";
 
 const generateText = async ({
   system,
@@ -11,7 +10,7 @@ const generateText = async ({
 }) => {
   const result = await generate({
     system,
-    model: anthropic(ANTHROPIC_MODEL),
+    model: DEFAULT_MODEL,
     prompt,
   });
 
