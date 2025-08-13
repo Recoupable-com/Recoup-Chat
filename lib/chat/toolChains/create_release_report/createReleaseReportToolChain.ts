@@ -2,21 +2,10 @@ import { ToolChainItem } from "../toolChains";
 import getReleaseReportReferenceMessage from "./getReleaseReportReferenceMessage";
 
 export const createReleaseReportToolChain: ToolChainItem[] = [
-  { toolName: "search_web", messages: [getReleaseReportReferenceMessage()] },
-  { toolName: "youtube_login", messages: [getReleaseReportReferenceMessage()] },
   {
-    toolName: "get_youtube_channels",
+    toolName: "web_deep_research",
     messages: [getReleaseReportReferenceMessage()],
   },
-  {
-    toolName: "get_youtube_channel_video_list",
-    messages: [getReleaseReportReferenceMessage()],
-  },
-  {
-    toolName: "get_spotify_artist_albums",
-    messages: [getReleaseReportReferenceMessage()],
-  },
-  { toolName: "search_web", messages: [getReleaseReportReferenceMessage()] },
   {
     toolName: "create_knowledge_base",
     messages: [getReleaseReportReferenceMessage()],
