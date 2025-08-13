@@ -165,7 +165,6 @@ const deepResearch = async ({
   }
 
   if (depth === 0) {
-    console.log("EARLY EXIT ACCUMULATED RESEARCH", accumulatedResearch);
     return accumulatedResearch;
   }
 
@@ -203,7 +202,6 @@ const deepResearch = async ({
       });
     }
   }
-  console.log("FINAL ACCUMULATED RESEARCH", accumulatedResearch);
   return accumulatedResearch;
 };
 
@@ -213,7 +211,9 @@ const webDeepResearch = tool({
     prompt: z.string().min(1),
   }),
   execute: async ({ prompt }) => {
-    return await deepResearch({ prompt });
+    const response = await deepResearch({ prompt });
+    console.log("DEEP RESEARCH RESPONSE", response);
+    return response;
   },
 });
 export default webDeepResearch;
