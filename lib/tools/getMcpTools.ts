@@ -1,12 +1,12 @@
-import generateImage from "./generateImage";
-import createTxtFile from "./createTxtFile";
+// import generateImage from "./generateImage";
+// import createTxtFile from "./createTxtFile";
 import getSegmentFans from "./getSegmentFans";
 import contactTeam from "./contactTeam";
 import getArtistSegments from "./getArtistSegments";
 import getArtistSocials from "./getArtistSocials";
 import getSocialPosts from "./getSocialPosts";
 import getPostComments from "./getPostComments";
-import searchWeb from "./searchWeb";
+import { searchWeb, webDeepResearch } from "./searchWeb";
 import generateMermaidDiagram from "./generateMermaidDiagram";
 import createArtist from "./createArtist";
 import deleteArtist from "./deleteArtist";
@@ -34,12 +34,11 @@ import getSocialFans from "./getSocialFans";
 import createSegments from "./createSegments";
 import createReleaseReport from "./createReleaseReport";
 import youtubeTools from "./youtube";
-import webDeepResearch from "./webDeepResearch";
 
 export async function getMcpTools() {
   const tools = {
-    generate_image: generateImage,
-    generate_txt_file: createTxtFile,
+    // generate_image: generateImage,
+    // generate_txt_file: createTxtFile,
     contact_team: contactTeam,
     create_segments: createSegments,
     get_artist_segments: getArtistSegments,
@@ -48,6 +47,7 @@ export async function getMcpTools() {
     get_social_posts: getSocialPosts,
     get_post_comments: getPostComments,
     search_web: searchWeb,
+    web_deep_research: webDeepResearch,
     generate_mermaid_diagram: generateMermaidDiagram,
     create_new_artist: createArtist,
     delete_artist: deleteArtist,
@@ -64,7 +64,6 @@ export async function getMcpTools() {
     scrape_instagram_comments: scrapeInstagramComments,
     artist_deep_research: artistDeepResearch,
     spotify_deep_research: getSpotifyDeepResearch,
-    web_deep_research: webDeepResearch,
     create_knowledge_base: createKnowledgeBase,
     get_video_game_campaign_plays: getVideoGameCampaignPlays,
     send_email: sendEmailTool,
