@@ -6,7 +6,6 @@ type CircularProgressProps = {
   progress?: number; // 0 - 100
   className?: string; // size container, e.g., "h-8 w-8"
   strokeWidth?: number; // deprecated alias for thickness
-  thickness?: number; // ring thickness in px
   gap?: number; // gap between element edge and inner ring (px)
   trackClassName?: string;
   progressClassName?: string;
@@ -22,13 +21,12 @@ const CircularProgress = ({
   progress = 0,
   className,
   strokeWidth = 2,
-  thickness,
   gap,
   trackClassName,
   progressClassName,
 }: CircularProgressProps) => {
   const clamped = clampProgress(progress);
-  const ringThickness = typeof thickness === "number" ? thickness : strokeWidth;
+  const ringThickness = strokeWidth;
   const ringGap = typeof gap === "number" ? gap : 1;
   const ringOffset = ringThickness + ringGap;
 
