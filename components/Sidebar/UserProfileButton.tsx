@@ -12,11 +12,12 @@ import {
   DropdownMenuTrigger,
 } from "../ui/dropdown-menu";
 import { IconLogout, IconUser } from "@tabler/icons-react";
+import UserProfileButtonSkeleton from "./UserProfileButtonSkeleton";
 
 const UserProfileButton = () => {
   const { email, toggleModal, userData, signOut } = useUserProvider();
 
-  if (!userData) return null;
+  if (!userData) return <UserProfileButtonSkeleton />;
 
   const displayName = userData?.name || email || userData?.wallet || "";
   const organization = email || "";
