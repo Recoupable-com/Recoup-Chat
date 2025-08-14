@@ -28,6 +28,7 @@ const sendEmailTool = tool({
       .describe(
         "HTML body of the email. Use context to make this creative and engaging."
       )
+      .default("")
       .optional(),
     headers: z
       .record(z.string(), z.string())
