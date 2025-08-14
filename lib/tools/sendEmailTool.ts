@@ -28,6 +28,7 @@ const sendEmailTool = tool({
       .describe(
         "HTML body of the email. Use context to make this creative and engaging."
       )
+      .default("")
       .optional(),
     headers: z
       .record(z.string(), z.string())
@@ -35,7 +36,7 @@ const sendEmailTool = tool({
       .default({})
       .optional(),
   }),
-  execute: async ({ to, cc = [], subject, text, html, headers }) => {
+  execute: async ({ to, cc = [], subject, text, html = "", headers }) => {
     try {
       const response = await sendEmail({
         from: RECOUP_FROM_EMAIL,
@@ -43,7 +44,7 @@ const sendEmailTool = tool({
         cc: cc.length > 0 ? cc : undefined,
         subject,
         text,
-        html,
+        html: html || undefined,
         headers,
       });
       if (response && typeof response.json === "function") {
