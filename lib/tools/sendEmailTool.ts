@@ -35,7 +35,7 @@ const sendEmailTool = tool({
       .default({})
       .optional(),
   }),
-  execute: async ({ to, cc = [], subject, text, html, headers }) => {
+  execute: async ({ to, cc = [], subject, text, html = "", headers }) => {
     try {
       const response = await sendEmail({
         from: RECOUP_FROM_EMAIL,
