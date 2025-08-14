@@ -1,13 +1,13 @@
 import { cn } from "@/lib/utils";
 import type { CSSProperties, ReactNode } from "react";
 
-type ProgressAvatarProps = {
-  children: ReactNode; // Avatar element goes here
+type CircularProgressProps = {
+  children: ReactNode; // Elements goes here
   progress?: number; // 0 - 100
   className?: string; // size container, e.g., "h-8 w-8"
   strokeWidth?: number; // deprecated alias for thickness
   thickness?: number; // ring thickness in px
-  gap?: number; // gap between avatar edge and inner ring (px)
+  gap?: number; // gap between element edge and inner ring (px)
   trackClassName?: string;
   progressClassName?: string;
 };
@@ -17,7 +17,7 @@ const clampProgress = (value: number): number => {
   return Math.max(0, Math.min(100, value));
 };
 
-const ProgressAvatar = ({
+const CircularProgress = ({
   children,
   progress = 0,
   className,
@@ -26,11 +26,11 @@ const ProgressAvatar = ({
   gap,
   trackClassName,
   progressClassName,
-}: ProgressAvatarProps) => {
+}: CircularProgressProps) => {
   const clamped = clampProgress(progress);
   const ringThickness = typeof thickness === "number" ? thickness : strokeWidth;
   const ringGap = typeof gap === "number" ? gap : 1;
-  const ringOffset = ringThickness + ringGap; // expand beyond avatar to keep a gap
+  const ringOffset = ringThickness + ringGap;
 
   return (
     <div className={cn("relative inline-block rounded-full", className)}>
@@ -69,5 +69,5 @@ const ProgressAvatar = ({
   );
 };
 
-export default ProgressAvatar;
+export default CircularProgress;
 
