@@ -39,6 +39,8 @@ const ReasoningMessagePart: React.FC<ReasoningMessagePartProps> = ({
     }
   }, [isReasoning]);
 
+  if (part?.text?.length === 0) return null;
+
   return (
     <div className="flex flex-col">
       {isReasoning ? (
