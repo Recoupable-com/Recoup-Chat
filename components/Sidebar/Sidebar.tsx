@@ -7,10 +7,10 @@ import Menu from "./Menu";
 import AccountModal from "../AccountModal";
 
 const Sidebar = () => {
-  const [menuExpanded, setMenuExpanded] = useState(false);
+  const [menuExpanded, setMenuExpanded] = useState(true);
   const toggleMenuExpanded = () => setMenuExpanded(!menuExpanded);
   const animate = { width: menuExpanded ? 285 : 80 };
-  const initial = { width: 80 };
+  const initial = { width: 285 };
 
   return (
     <motion.div
@@ -18,8 +18,6 @@ const Sidebar = () => {
       animate={animate}
       initial={initial}
       transition={{ duration: 0.2 }}
-      onMouseOver={() => setMenuExpanded(true)}
-      onMouseOut={() => setMenuExpanded(false)}
     >
       {menuExpanded ? (
         <Menu toggleMenuExpanded={toggleMenuExpanded} />
