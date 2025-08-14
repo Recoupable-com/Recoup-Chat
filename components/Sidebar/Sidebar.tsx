@@ -10,7 +10,7 @@ const Sidebar = () => {
   const [menuExpanded, setMenuExpanded] = useState(true);
   const toggleMenuExpanded = () => setMenuExpanded(!menuExpanded);
   const animate = { width: menuExpanded ? 285 : 80 };
-  const initial = { width: 80 };
+  const initial = { width: 285 };
 
   return (
     <motion.div
