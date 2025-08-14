@@ -8,6 +8,7 @@ import { v4 as uuidV4 } from "uuid";
 import { Button } from "../ui/button";
 import FanGroupNavItem from "./FanGroupNavItem";
 import AgentsNavItem from "./AgentsNavItem";
+import { RecentChatsSectionSkeleton } from "./RecentChatsSectionSkeleton";
 
 const Menu = ({ toggleMenuExpanded }: { toggleMenuExpanded: () => void }) => {
   const { push } = useRouter();
@@ -45,7 +46,7 @@ const Menu = ({ toggleMenuExpanded }: { toggleMenuExpanded: () => void }) => {
       </div>
 
       <div className="flex flex-col flex-grow min-h-0">
-        {email && <RecentChats toggleModal={toggleMenuExpanded} />}
+        {!email ? <RecentChatsSectionSkeleton /> : <RecentChats toggleModal={toggleMenuExpanded} />}
 
         <div className="shrink-0 mt-auto">
           {email && <UnlockPro />}
