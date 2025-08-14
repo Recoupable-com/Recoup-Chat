@@ -8,11 +8,13 @@ import {
   DropdownMenuGroup,
   DropdownMenuItem,
   DropdownMenuLabel,
+  DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "../ui/dropdown-menu";
+import { IconLogout, IconUser } from "@tabler/icons-react";
 
 const UserProfileButton = () => {
-  const { email, toggleModal, userData } = useUserProvider();
+  const { email, toggleModal, userData, signOut } = useUserProvider();
 
   if (!userData) return null;
 
@@ -30,7 +32,7 @@ const UserProfileButton = () => {
       variant="ghost"
       className="w-full justify-start items-center gap-2 h-auto py-1 pl-1 pr-2 rounded-xl border border-transparent hover:border-muted-foreground/20"
       type="button"
-    //   onClick={toggleModal}
+      //   onClick={toggleModal}
       aria-label="Open user menu"
     >
       <Avatar className="h-8 w-8 md:h-9 md:w-9 ring-2 ring-muted-foreground/20">
@@ -53,10 +55,20 @@ const UserProfileButton = () => {
           </Button>
         </DropdownMenuTrigger>
         <DropdownMenuContent className="w-56" align="start">
-          <DropdownMenuLabel className="text-sm font-semibold">My Account</DropdownMenuLabel>
+          <DropdownMenuLabel className="text-sm font-semibold">
+            My Account
+          </DropdownMenuLabel>
           <DropdownMenuGroup>
-            <DropdownMenuItem onClick={toggleModal} className="cursor-pointer">Profile</DropdownMenuItem>
+            <DropdownMenuItem onClick={toggleModal} className="cursor-pointer">
+              <IconUser />
+              Profile
+            </DropdownMenuItem>
           </DropdownMenuGroup>
+          <DropdownMenuSeparator />
+          <DropdownMenuItem className="cursor-pointer" onClick={signOut}>
+            <IconLogout />
+            Log out
+          </DropdownMenuItem>
         </DropdownMenuContent>
       </DropdownMenu>
     </Button>
