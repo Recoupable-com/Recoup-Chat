@@ -44,7 +44,7 @@ const sendEmailTool = tool({
         cc: cc.length > 0 ? cc : undefined,
         subject,
         text,
-        html,
+        html: html || undefined,
         headers,
       });
       if (response && typeof response.json === "function") {
