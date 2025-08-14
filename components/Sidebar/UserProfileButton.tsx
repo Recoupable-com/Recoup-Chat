@@ -1,4 +1,5 @@
 import { useUserProvider } from "@/providers/UserProvder";
+import ProgressAvatar from "@/components/ui/progress-avatar";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import { ChevronDown } from "lucide-react";
@@ -35,13 +36,15 @@ const UserProfileButton = () => {
       //   onClick={toggleModal}
       aria-label="Open user menu"
     >
-      <Avatar className="h-8 w-8 md:h-9 md:w-9 ring-2 ring-muted-foreground/20">
-        <AvatarImage
-          src={userData?.image || "https://i.imgur.com/QCdc8Ai.jpg"}
-          alt="User avatar"
-        />
-        <AvatarFallback>{initials || "U"}</AvatarFallback>
-      </Avatar>
+      <ProgressAvatar className="h-8 w-8 md:h-9 md:w-9" progress={0}>
+        <Avatar className="h-full w-full">
+          <AvatarImage
+            src={userData?.image || "https://i.imgur.com/QCdc8Ai.jpg"}
+            alt="User avatar"
+          />
+          <AvatarFallback>{initials || "U"}</AvatarFallback>
+        </Avatar>
+      </ProgressAvatar>
       <div className="flex-1 min-w-0 text-left">
         <p className="text-sm md:text-base font-semibold truncate">
           {displayName}
