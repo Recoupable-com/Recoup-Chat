@@ -5,7 +5,7 @@ import UserProfileDropdown from "./UserProfileDropdown";
 import UserProfileButtonSkeleton from "./UserProfileButtonSkeleton";
 
 const UserProfileButton = () => {
-  const { email, toggleModal, userData, signOut } = useUserProvider();
+  const { email, userData } = useUserProvider();
 
   if (!userData) return <UserProfileButtonSkeleton />;
 
@@ -38,7 +38,7 @@ const UserProfileButton = () => {
         </p>
         <p className="text-xs text-muted-foreground truncate">{organization}</p>
       </div>
-      <UserProfileDropdown onProfileClick={toggleModal} onSignOut={signOut} />
+      <UserProfileDropdown />
     </Button>
   );
 };

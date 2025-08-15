@@ -10,13 +10,10 @@ import {
   DropdownMenuTrigger,
 } from "../ui/dropdown-menu";
 import { IconLogout, IconUser } from "@tabler/icons-react";
+import { useUserProvider } from "@/providers/UserProvder";
 
-interface UserProfileDropdownProps {
-  onProfileClick: () => void;
-  onSignOut: () => void;
-}
-
-const UserProfileDropdown = ({ onProfileClick, onSignOut }: UserProfileDropdownProps) => {
+const UserProfileDropdown = () => {
+  const { toggleModal, signOut } = useUserProvider();
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
@@ -29,13 +26,13 @@ const UserProfileDropdown = ({ onProfileClick, onSignOut }: UserProfileDropdownP
           My Account
         </DropdownMenuLabel>
         <DropdownMenuGroup>
-          <DropdownMenuItem onClick={onProfileClick} className="cursor-pointer">
+          <DropdownMenuItem onClick={toggleModal} className="cursor-pointer">
             <IconUser />
             Profile
           </DropdownMenuItem>
         </DropdownMenuGroup>
         <DropdownMenuSeparator />
-        <DropdownMenuItem className="cursor-pointer" onClick={onSignOut}>
+        <DropdownMenuItem className="cursor-pointer" onClick={signOut}>
           <IconLogout />
           Log out
         </DropdownMenuItem>
