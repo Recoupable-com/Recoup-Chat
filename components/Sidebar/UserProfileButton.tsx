@@ -33,7 +33,6 @@ const UserProfileButton = () => {
       variant="ghost"
       className="w-full justify-start items-center gap-2 h-auto py-1 pl-1 pr-2 rounded-xl border border-transparent hover:border-muted-foreground/20"
       type="button"
-      //   onClick={toggleModal}
       aria-label="Open user menu"
     >
       <Avatar className="h-8 w-8 md:h-9 md:w-9 ring-2 ring-muted-foreground/20">
