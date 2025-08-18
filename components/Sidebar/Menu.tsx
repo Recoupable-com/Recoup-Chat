@@ -9,6 +9,7 @@ import { Button } from "../ui/button";
 import FanGroupNavItem from "./FanGroupNavItem";
 import AgentsNavItem from "./AgentsNavItem";
 import { RecentChatsSectionSkeleton } from "./RecentChatsSectionSkeleton";
+import ScheduledActionsNavItem from "./ScheduledActionsNavItem";
 
 const Menu = ({ toggleMenuExpanded }: { toggleMenuExpanded: () => void }) => {
   const { push } = useRouter();
@@ -42,6 +43,7 @@ const Menu = ({ toggleMenuExpanded }: { toggleMenuExpanded: () => void }) => {
           {email ? "New Chat" : "Sign In"}
         </Button>
         <AgentsNavItem isActive={isAgents} onClick={() => goToItem("agents")} />
+        <ScheduledActionsNavItem isActive={false} onClick={() => goToItem("scheduled-actions")} />
         <FanGroupNavItem isActive={isSegments} onClick={() => goToItem("segments")} />
       </div>
 
