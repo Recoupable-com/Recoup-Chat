@@ -1,5 +1,5 @@
-// import generateImage from "./generateImage";
-// import createTxtFile from "./createTxtFile";
+import generateImage from "./generateImage";
+import createTxtFile from "./createTxtFile";
 import getSegmentFans from "./getSegmentFans";
 import contactTeam from "./contactTeam";
 import getArtistSegments from "./getArtistSegments";
@@ -37,8 +37,8 @@ import youtubeTools from "./youtube";
 
 export async function getMcpTools() {
   const tools = {
-    // generate_image: generateImage,
-    // generate_txt_file: createTxtFile,
+    generate_image: generateImage,
+    generate_txt_file: createTxtFile,
     contact_team: contactTeam,
     create_segments: createSegments,
     get_artist_segments: getArtistSegments,
