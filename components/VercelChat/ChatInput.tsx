@@ -15,7 +15,7 @@ import {
   PromptInputToolbar,
   PromptInputTools,
 } from "../ai-elements/prompt-input";
-import ModelSelect from "./ModelSelect";
+import ModelSelect from "@/components/ModelSelect";
 
 interface ChatInputProps {
   onSendMessage: (event: React.FormEvent<HTMLFormElement>) => void;
@@ -67,7 +67,10 @@ export function ChatInput({
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.3, ease: "easeOut" }}
       >
-        <PromptInput onSubmit={handleSend} className="overflow-visible md:overflow-hidden rounded-xl shadow">
+        <PromptInput
+          onSubmit={handleSend}
+          className="overflow-visible md:overflow-hidden rounded-xl shadow"
+        >
           <PromptInputTextarea
             value={input}
             onChange={(e) => setInput(e.target.value)}
