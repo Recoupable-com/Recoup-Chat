@@ -9,7 +9,7 @@ const ModelSelectItem = ({ model }: { model: GatewayLanguageModelEntry }) => {
   return (
     <PromptInputModelSelectItem
       value={model.id}
-      className={!isModelFree ? "opacity-60 cursor-not-allowed" : ""}
+      className={!isModelFree ? "opacity-60" : ""}
     >
       <div className="flex items-center gap-2">
         {!isModelFree && <Lock className="h-3 w-3 text-muted-foreground" />}
