@@ -1,4 +1,5 @@
 import { gateway, GatewayLanguageModelEntry } from "@ai-sdk/gateway";
+import isEmbedModel from "./isEmbedModel";
 
 /**
  * Returns the list of available LLMs.
@@ -9,23 +10,7 @@ export const getAvailableModels = async (): Promise<
 > => {
   try {
     const apiResponse = await gateway.getAvailableModels();
-    const filtered = apiResponse.models.filter(
-      (m: GatewayLanguageModelEntry) => {
-        const pricing = m.pricing;
-        if (!pricing) return false;
-        const input = parseFloat(pricing.input);
-        const output = parseFloat(pricing.output);
-        if (Number.isNaN(input) || Number.isNaN(output)) return false;
-        const inputPerMillion = input * 1_000_000;
-        const outputPerMillion = output * 1_000_000;
-        return (
-          inputPerMillion <= 0.5 &&
-          outputPerMillion > 0 &&
-          outputPerMillion <= 2.5
-        );
-      }
-    );
-
+    const filtered = apiResponse.models.filter((m) => !isEmbedModel(m));
     return filtered;
   } catch (err) {
     console.error(
