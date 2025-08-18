@@ -8,14 +8,16 @@ import { useVercelChatContext } from "@/providers/VercelChatProvider";
 import { isFreeModel } from "@/lib/ai/isFreeModel";
 import { toast } from "react-toastify";
 import ModelSelectItem from "./ModelSelectItem";
+import { usePaymentProvider } from "@/providers/PaymentProvider";
 
 const ModelSelect = () => {
   const { model, setModel, availableModels } = useVercelChatContext();
+  const { subscriptionActive } = usePaymentProvider();
 
   const handleModelChange = (value: string) => {
     const selectedModel = availableModels.find((m) => m.id === value);
     const isModelFree = selectedModel ? isFreeModel(selectedModel) : false;
-    if (!isModelFree) {
+    if (!isModelFree && !subscriptionActive) {
       toast.error(
         "This model is not free. Please upgrade to a paid plan or select a free model."
       );
