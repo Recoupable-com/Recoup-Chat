@@ -1,4 +1,5 @@
 import { gateway, GatewayLanguageModelEntry } from "@ai-sdk/gateway";
+import isEmbedModel from "./isEmbedModel";
 
 /**
  * Returns the list of available LLMs.
@@ -9,7 +10,8 @@ export const getAvailableModels = async (): Promise<
 > => {
   try {
     const apiResponse = await gateway.getAvailableModels();
-    return apiResponse.models;
+    const filtered = apiResponse.models.filter((m) => !isEmbedModel(m));
+    return filtered;
   } catch (err) {
     console.error(
       "Failed to fetch models from Vercel AI Gateway, using fallback list.",

@@ -8,9 +8,7 @@ export const isFreeModel = (m: GatewayLanguageModelEntry) => {
   if (Number.isNaN(input) || Number.isNaN(output)) return false;
   const inputPerMillion = input * 1_000_000;
   const outputPerMillion = output * 1_000_000;
-  return (
-    inputPerMillion <= 0.5 && outputPerMillion > 0 && outputPerMillion <= 2.5
-  );
+  return inputPerMillion <= 0.5 && outputPerMillion <= 2.5;
 };
 
 export default isFreeModel;
