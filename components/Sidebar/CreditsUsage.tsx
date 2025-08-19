@@ -1,0 +1,25 @@
+import { usePaymentProvider } from "@/providers/PaymentProvider";
+
+const CreditsUsage = () => {
+  const { totalCredits, credits } = usePaymentProvider();
+
+  return (
+    <div className="px-2 py-1.5">
+      <div className="text-xs font-medium text-muted-foreground mb-2">
+        Credit quota
+      </div>
+      <div className="space-y-1 text-xs">
+        <div className="flex justify-between">
+          <span className="text-muted-foreground">Total</span>
+          <span className="font-medium">{totalCredits.toLocaleString()}</span>
+        </div>
+        <div className="flex justify-between">
+          <span className="text-muted-foreground">Remaining</span>
+          <span className="font-medium">{credits}</span>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+export default CreditsUsage;
