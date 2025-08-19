@@ -25,19 +25,19 @@ const Menu = ({ toggleMenuExpanded }: { toggleMenuExpanded: () => void }) => {
   };
 
   return (
-    <div className="w-full h-screen pt-10 pb-4 pl-6 pr-2 hidden md:flex flex-col">
+    <div className="w-full h-screen pt-6 pb-4 pl-6 pr-2 hidden md:flex flex-col">
       <button
-        className="mt-2 shrink-0"
+        className="shrink-0 mb-6"
         onClick={() => push("/")}
         type="button"
         aria-label="Home"
       >
         <Logo />
       </button>
-      <div className="flex flex-col gap-1 w-full pb-2 mt-4">
+      <div className="flex flex-col gap-2 w-full">
         <Button
           variant="outline"
-          className="rounded-xl w-full"
+          className="rounded-xl w-full mb-2"
           onClick={() => goToItem("chat")}
         >
           {email ? "New Chat" : "Sign In"}

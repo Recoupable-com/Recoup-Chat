@@ -2,7 +2,7 @@ import Image from "next/image";
 
 const Logo = () => {
   return (
-    <div className="relative">
+    <div className="relative flex items-center">
       <Image
         src="/Recoup_Icon_Wordmark_Black.svg"
         alt="Recoup Logo"
