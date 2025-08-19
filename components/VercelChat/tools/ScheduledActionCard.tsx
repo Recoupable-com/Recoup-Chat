@@ -64,16 +64,18 @@ const ScheduledActionCard: React.FC<ScheduledActionCardProps> = ({ action, isDel
       </div>
 
       {/* Schedule Information */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 text-[0.65rem]">
-        <div className="flex items-center space-x-2 text-gray-600">
-          <Calendar className="h-3.5 w-3.5 text-blue-500 flex-shrink-0" />
-          <span className="font-medium">Schedule:</span>
-          <span>{parseCronToHuman(action.schedule)}</span>
+      <div className="space-y-3 text-[0.65rem]">
+        <div className="flex items-start space-x-2 text-gray-600">
+          <Calendar className="h-3.5 w-3.5 text-blue-500 flex-shrink-0 mt-0.5" />
+          <div className="min-w-0 flex-1">
+            <span className="font-medium">Schedule: </span>
+            <span className="whitespace-nowrap">{parseCronToHuman(action.schedule)}</span>
+          </div>
         </div>
         
         <div className="flex items-center space-x-2 text-gray-600">
           <Clock className="h-3.5 w-3.5 text-orange-500 flex-shrink-0" />
-          <span className="font-medium">Next run:</span>
+          <span className="font-medium">Next run: </span>
           <span>{formatScheduledActionDate(action.next_run)}</span>
         </div>
       </div>
