@@ -12,9 +12,10 @@ import {
 import { IconLogout, IconUser } from "@tabler/icons-react";
 import { useUserProvider } from "@/providers/UserProvder";
 import CreditsUsage from "./CreditsUsage";
+import AccountIdDisplay from "../ArtistSetting/AccountIdDisplay";
 
 const UserProfileDropdown = () => {
-  const { toggleModal, signOut } = useUserProvider();
+  const { toggleModal, signOut, userData } = useUserProvider();
 
   return (
     <DropdownMenu>
@@ -27,6 +28,14 @@ const UserProfileDropdown = () => {
         <DropdownMenuLabel className="text-sm font-semibold">
           My Account
         </DropdownMenuLabel>
+        {userData?.account_id && (
+          <div className="px-2 py-1.5">
+            <AccountIdDisplay
+              accountId={userData.account_id}
+              label="Account ID"
+            />
+          </div>
+        )}
         <CreditsUsage />
         <DropdownMenuSeparator />
         <DropdownMenuGroup>

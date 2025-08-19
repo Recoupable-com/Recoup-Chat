@@ -5,9 +5,13 @@ import { useState } from "react";
 
 interface AccountIdDisplayProps {
   accountId: string;
+  label?: string;
 }
 
-const AccountIdDisplay = ({ accountId }: AccountIdDisplayProps) => {
+const AccountIdDisplay = ({
+  accountId,
+  label = "Artist ID",
+}: AccountIdDisplayProps) => {
   const [copied, setCopied] = useState(false);
 
   const handleCopy = async () => {
@@ -28,7 +32,7 @@ const AccountIdDisplay = ({ accountId }: AccountIdDisplayProps) => {
 
   return (
     <div className="flex items-center gap-2">
-      <span className="text-xs text-grey-dark">Artist ID</span>
+      <span className="text-xs text-grey-dark">{label}</span>
       <button
         type="button"
         onClick={handleCopy}
