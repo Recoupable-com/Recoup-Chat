@@ -29,15 +29,14 @@ export function ChatGreeting({ isVisible }: { isVisible: boolean }) {
 
   const textStyle = `
     ${plusJakartaSans.className} 
-    text-[19px]
-    sm:text-[22px]
+    text-[20px]
+    sm:text-[24px]
     lg:text-[28px] 
-    leading-[1.3]
-    sm:leading-[1.2]
+    leading-[1.4]
+    sm:leading-[1.3]
     lg:leading-[1.3] 
-    tracking-[-0.25px]
-    lg:tracking-[-0.3px] 
-    font-medium 
+    tracking-[-0.02em]
+    font-normal
   `;
 
   const fadeBase = "transition-opacity duration-700 ease-out";
@@ -46,8 +45,8 @@ export function ChatGreeting({ isVisible }: { isVisible: boolean }) {
 
   const wordComponent = (word: string, icon?: ReactNode) => {
     return (
-      <span className="inline-flex items-center gap-1">
-        {icon}
+      <span className="inline-flex items-center gap-1.5">
+        {icon && <span className="opacity-70">{icon}</span>}
         {word}
       </span>
     );
@@ -61,60 +60,60 @@ export function ChatGreeting({ isVisible }: { isVisible: boolean }) {
       `}
     >
       {firstName ? (
-        <div className="flex items-center flex-wrap gap-1">
-          <span>Hey {firstName}</span>
-          <span className="text-[16px] sm:text-[20px]">👋</span>
-          <span className="text-[#A0A0A8]">
+        <div className="flex items-baseline flex-wrap gap-x-2">
+          <span className="text-black font-medium">Hey {firstName}</span>
+          <span className="text-[18px] sm:text-[22px]">👋</span>
+          <span className="text-[#6B6B75]">
             Ask me about{" "}
             {isArtistSelected ? (
-              <span className="text-[#A0A0A8]">{artistName}&apos;s</span>
+              <span className="text-[#6B6B75]">{artistName}&apos;s</span>
             ) : (
-              <span className="text-[#A0A0A8]">your artist&apos;s</span>
+              <span className="text-[#6B6B75]">your artist&apos;s</span>
             )}
           </span>
           <WordRotate
             duration={3000}
-            className="inline text-[#000]/70 font-bold ml-1"
+            className="inline text-black font-semibold"
             words={[
-              wordComponent("Youtube", <Image src={YoutubeIcon} alt="Youtube" className="w-6 h-6" />),
-              wordComponent("Fans"),
-              wordComponent("Instagram", <Image src={InstagramIcon} alt="Instagram" className="w-6 h-6" />),
-              wordComponent("Analytics"),
-              wordComponent("Tiktok", <Image src={TiktokIcon} alt="Tiktok" className="w-6 h-6" />),
-              wordComponent("Songs"),
-              wordComponent("Spotify", <Image src={SpotifyIcon} alt="Spotify" className="w-6 h-6" />),
-              wordComponent("Albums"),
-              wordComponent("Engagement"),
-              wordComponent("Demographics"),
+              wordComponent("YouTube", <Image src={YoutubeIcon} alt="YouTube" className="w-5 h-5" />),
+              wordComponent("fans"),
+              wordComponent("Instagram", <Image src={InstagramIcon} alt="Instagram" className="w-5 h-5" />),
+              wordComponent("analytics"),
+              wordComponent("TikTok", <Image src={TiktokIcon} alt="TikTok" className="w-5 h-5" />),
+              wordComponent("songs"),
+              wordComponent("Spotify", <Image src={SpotifyIcon} alt="Spotify" className="w-5 h-5" />),
+              wordComponent("albums"),
+              wordComponent("engagement"),
+              wordComponent("demographics"),
             ]}
           />
         </div>
       ) : (
-        <div className="flex items-center flex-wrap gap-1">
-          <span>Hey there</span>
-          <span className="text-[16px] sm:text-[20px]">👋</span>
-          <span className="text-[#A0A0A8]">
+        <div className="flex items-baseline flex-wrap gap-x-2">
+          <span className="text-black font-medium">Hey there</span>
+          <span className="text-[18px] sm:text-[22px]">👋</span>
+          <span className="text-[#6B6B75]">
             Ask me about{" "}
             {isArtistSelected ? (
-              <span className="text-[#A0A0A8]">{artistName}&apos;s</span>
+              <span className="text-[#6B6B75]">{artistName}&apos;s</span>
             ) : (
-              <span className="text-[#A0A0A8]">your artist&apos;s</span>
+              <span className="text-[#6B6B75]">your artist&apos;s</span>
             )}
           </span>
           <WordRotate
             duration={3000}
-            className="inline text-[#000]/70 font-bold ml-1"
+            className="inline text-black font-semibold"
             words={[
-              wordComponent("Youtube", <Image src={YoutubeIcon} alt="Youtube" className="w-6 h-6" />),
-              wordComponent("Fans"),
-              wordComponent("Instagram", <Image src={InstagramIcon} alt="Instagram" className="w-6 h-6" />),
-              wordComponent("Analytics"),
-              wordComponent("Tiktok", <Image src={TiktokIcon} alt="Tiktok" className="w-6 h-6" />),
-              wordComponent("Songs"),
-              wordComponent("Spotify", <Image src={SpotifyIcon} alt="Spotify" className="w-6 h-6" />),
-              wordComponent("Albums"),
-              wordComponent("Engagement"),
-              wordComponent("Demographics"),
+              wordComponent("YouTube", <Image src={YoutubeIcon} alt="YouTube" className="w-5 h-5" />),
+              wordComponent("fans"),
+              wordComponent("Instagram", <Image src={InstagramIcon} alt="Instagram" className="w-5 h-5" />),
+              wordComponent("analytics"),
+              wordComponent("TikTok", <Image src={TiktokIcon} alt="TikTok" className="w-5 h-5" />),
+              wordComponent("songs"),
+              wordComponent("Spotify", <Image src={SpotifyIcon} alt="Spotify" className="w-5 h-5" />),
+              wordComponent("albums"),
+              wordComponent("engagement"),
+              wordComponent("demographics"),
             ]}
           />
         </div>
