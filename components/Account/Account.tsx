@@ -35,7 +35,6 @@ const Account = () => {
       <div className="col-span-12 flex justify-between items-center border-b-greyborder-b-[1px] pb-3">
         <div className="flex flex-col">
           <p>Account Setting</p>
-          {/* Show Account ID if available */}
           {userData?.account_id && (
             <AccountIdDisplay
               accountId={userData.account_id}
