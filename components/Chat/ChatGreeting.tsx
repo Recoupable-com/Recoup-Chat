@@ -45,7 +45,7 @@ export function ChatGreeting({ isVisible }: { isVisible: boolean }) {
 
   const wordComponent = (word: string, icon?: ReactNode) => {
     return (
-      <span className="inline-flex items-center gap-2">
+      <span className="inline-flex items-center gap-3">
         {icon && (
           <span className="inline-flex items-center justify-center w-5 h-5 opacity-70">
             {icon}
