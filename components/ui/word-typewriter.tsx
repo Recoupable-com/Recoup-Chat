@@ -83,6 +83,7 @@ function WordTypewriter({
   
   // Check if the current word has an icon
   const hasIcon = typeof currentWord === 'object' && 
+    currentWord !== null &&
     'props' in currentWord && 
     currentWord.props.children && 
     Array.isArray(currentWord.props.children) &&
