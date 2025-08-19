@@ -61,20 +61,20 @@ export function ChatGreeting({ isVisible }: { isVisible: boolean }) {
       `}
     >
       {firstName ? (
-        <div className="flex items-start flex-wrap">
+        <div className="flex items-center flex-wrap gap-1">
           <span>Hey {firstName}</span>
-          <span className="ml-1 mr-2 text-[16px] sm:text-[20px]">👋</span>
+          <span className="text-[16px] sm:text-[20px]">👋</span>
           <span className="text-[#A0A0A8]">
             Ask me about{" "}
             {isArtistSelected ? (
-              <span className="text-[#A0A0A8]">{artistName}&apos;s </span>
+              <span className="text-[#A0A0A8]">{artistName}&apos;s</span>
             ) : (
-              <span className="text-[#A0A0A8]">your artist&apos;s </span>
+              <span className="text-[#A0A0A8]">your artist&apos;s</span>
             )}
           </span>
           <WordRotate
             duration={3000}
-            className="inline text-[#000]/70 font-bold"
+            className="inline text-[#000]/70 font-bold ml-1"
             words={[
               wordComponent("Youtube", <Image src={YoutubeIcon} alt="Youtube" className="w-6 h-6" />),
               wordComponent("Fans"),
@@ -90,20 +90,20 @@ export function ChatGreeting({ isVisible }: { isVisible: boolean }) {
           />
         </div>
       ) : (
-        <div className="flex items-start flex-wrap">
+        <div className="flex items-center flex-wrap gap-1">
           <span>Hey there</span>
-          <span className="ml-1 mr-2 text-[16px] sm:text-[20px]">👋</span>
+          <span className="text-[16px] sm:text-[20px]">👋</span>
           <span className="text-[#A0A0A8]">
             Ask me about{" "}
             {isArtistSelected ? (
-              <span className="text-[#A0A0A8]">{artistName}&apos;s </span>
+              <span className="text-[#A0A0A8]">{artistName}&apos;s</span>
             ) : (
-              <span className="text-[#A0A0A8]">your artist&apos;s </span>
+              <span className="text-[#A0A0A8]">your artist&apos;s</span>
             )}
           </span>
           <WordRotate
             duration={3000}
-            className="inline text-[#000]/70 font-bold"
+            className="inline text-[#000]/70 font-bold ml-1"
             words={[
               wordComponent("Youtube", <Image src={YoutubeIcon} alt="Youtube" className="w-6 h-6" />),
               wordComponent("Fans"),
