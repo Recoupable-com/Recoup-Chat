@@ -49,32 +49,8 @@ export function ChatPrompt({ isVisible }: { isVisible: boolean }) {
     );
   };
 
-  return (
-    <div
-      className={`
-        ${textStyle} mb-0 sm:mb-1 block ${fadeBase}
-        ${isVisible ? fadeEnd : fadeStart}
-        transition-delay-[100ms]
-      `}
-    >
-      <WordRotate
-        duration={3000}
-        className="block text-[#000]/70 font-bold"
-        words={[
-          wordComponent("Youtube", <Image src={YoutubeIcon} alt="Youtube" className="w-6 h-6" />),
-          wordComponent("Fans"),
-          wordComponent("Instagram", <Image src={InstagramIcon} alt="Instagram" className="w-6 h-6" />),
-          wordComponent("Analytics"),
-          wordComponent("Tiktok", <Image src={TiktokIcon} alt="Tiktok" className="w-6 h-6" />),
-          wordComponent("Songs"),
-          wordComponent("Spotify", <Image src={SpotifyIcon} alt="Spotify" className="w-6 h-6" />),
-          wordComponent("Albums"),
-          wordComponent("Engagement"),
-          wordComponent("Demographics"),
-        ]}
-      />
-    </div>
-  );
+  // Content moved to ChatGreeting component
+  return null;
 }
 
 export default ChatPrompt;
