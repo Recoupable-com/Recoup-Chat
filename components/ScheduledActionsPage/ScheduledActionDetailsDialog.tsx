@@ -4,6 +4,7 @@ import { formatScheduledActionDate } from "@/lib/utils/formatScheduledActionDate
 import { parseCronToHuman } from "@/lib/utils/cronUtils";
 import ScheduleMetaCard from "./ScheduleMetaCard";
 import EditableDialogTitle from "./EditableDialogTitle";
+import EditablePrompt from "./EditablePrompt";
 import { useState } from "react";
 
 type ScheduledAction = Tables<"scheduled_actions">;
@@ -25,6 +26,10 @@ const ScheduledActionDetailsDialog: React.FC<ScheduledActionDetailsDialogProps> 
     setCurrentAction(prev => ({ ...prev, title: newTitle }));
   };
 
+  const handlePromptChange = (newPrompt: string) => {
+    setCurrentAction(prev => ({ ...prev, prompt: newPrompt }));
+  };
+
   return (
     <Dialog>
       <DialogTrigger asChild>
@@ -43,12 +48,13 @@ const ScheduledActionDetailsDialog: React.FC<ScheduledActionDetailsDialogProps> 
           </DialogTitle>
         </DialogHeader>
 
-        <div className="flex-1 overflow-y-auto space-y-4">
+        <div className="flex-1 overflow-y-auto space-y-4 px-4">
           {/* Action Details */}
-          <div>
-            <h3 className="text-sm font-medium text-gray-900 mb-1">Prompt</h3>
-            <p className="text-sm text-gray-600 leading-snug">{currentAction.prompt}</p>
-          </div>
+          <EditablePrompt
+            prompt={currentAction.prompt}
+            actionId={currentAction.id}
+            onPromptChange={handlePromptChange}
+          />
 
           {/* Schedule Information Cards */}
           <div className="space-y-3">
