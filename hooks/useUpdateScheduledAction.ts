@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { toast } from "react-toastify";
 import { Tables } from "@/types/database.types";
+import { useQueryClient } from "@tanstack/react-query";
 
 type ScheduledAction = Tables<"scheduled_actions">;
 type ScheduledActionUpdate = Partial<Omit<ScheduledAction, "id" | "created_at">>;
@@ -14,6 +15,7 @@ interface UpdateScheduledActionParams {
 
 export const useUpdateScheduledAction = () => {
   const [isLoading, setIsLoading] = useState(false);
+  const queryClient = useQueryClient();
 
   const updateAction = async ({
     actionId,
@@ -53,6 +55,7 @@ export const useUpdateScheduledAction = () => {
       throw error;
     } finally {
       setIsLoading(false);
+      queryClient.invalidateQueries({ queryKey: ["scheduled-actions"] });
     }
   };
 
