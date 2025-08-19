@@ -61,7 +61,7 @@ export function ChatGreeting({ isVisible }: { isVisible: boolean }) {
     return (
       <div
         className={`
-          ${textStyle} mb-2 ${fadeBase}
+          ${textStyle} mb-6 mt-4 py-3 ${fadeBase}
           ${isVisible ? fadeEnd : fadeStart}
           text-center w-full
         `}
