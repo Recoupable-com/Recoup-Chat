@@ -5,6 +5,7 @@ import { v4 as uuidV4 } from "uuid";
 import getCredits from "@/lib/supabase/getCredits";
 import { getActiveSubscription } from "@/lib/stripe/getActiveSubscription";
 import decreaseCredits from "@/lib/supabase/decreaseCredits";
+import { DEFAULT_CREDITS } from "@/lib/consts";
 
 const usePayment = () => {
   const [isLoadingCredits, setIsLoadingCredits] = useState(true);
@@ -62,7 +63,7 @@ const usePayment = () => {
     checkCredits();
   }, [checkCredits]);
 
-  const totalCredits = 333;
+  const totalCredits = DEFAULT_CREDITS;
 
   return {
     setSuccessCallbackParams,
