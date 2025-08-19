@@ -63,6 +63,7 @@ export function ChatGreeting({ isVisible }: { isVisible: boolean }) {
         className={`
           ${textStyle} mb-2 ${fadeBase}
           ${isVisible ? fadeEnd : fadeStart}
+          text-center w-full
         `}
       >
         <span className="text-black font-medium">
