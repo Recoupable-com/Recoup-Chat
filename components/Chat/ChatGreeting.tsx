@@ -45,7 +45,7 @@ export function ChatGreeting({ isVisible }: { isVisible: boolean }) {
 
   const wordComponent = (word: string, icon?: ReactNode) => {
     return (
-      <span className="inline-flex items-center gap-1.5">
+      <span className="inline-flex items-center gap-2">
         {icon && (
           <span className="inline-flex items-center justify-center w-5 h-5 opacity-70">
             {icon}
@@ -81,7 +81,7 @@ export function ChatGreeting({ isVisible }: { isVisible: boolean }) {
             className="text-black font-semibold"
             words={[
               wordComponent("YouTube", <Image src={YoutubeIcon} alt="YouTube" className="w-full h-full object-contain" />),
-              wordComponent("fans", <span className="text-[18px] leading-none">👥</span>),
+              wordComponent("fans", <span className="text-[17px] leading-none align-middle">👥</span>),
               wordComponent("Instagram", <Image src={InstagramIcon} alt="Instagram" className="w-full h-full object-contain" />),
               wordComponent("analytics", <span className="text-[18px] leading-none">📊</span>),
               wordComponent("TikTok", <Image src={TiktokIcon} alt="TikTok" className="w-full h-full object-contain" />),
@@ -111,7 +111,7 @@ export function ChatGreeting({ isVisible }: { isVisible: boolean }) {
             className="text-black font-semibold"
             words={[
               wordComponent("YouTube", <Image src={YoutubeIcon} alt="YouTube" className="w-full h-full object-contain" />),
-              wordComponent("fans", <span className="text-[18px] leading-none">👥</span>),
+              wordComponent("fans", <span className="text-[17px] leading-none align-middle">👥</span>),
               wordComponent("Instagram", <Image src={InstagramIcon} alt="Instagram" className="w-full h-full object-contain" />),
               wordComponent("analytics", <span className="text-[18px] leading-none">📊</span>),
               wordComponent("TikTok", <Image src={TiktokIcon} alt="TikTok" className="w-full h-full object-contain" />),
