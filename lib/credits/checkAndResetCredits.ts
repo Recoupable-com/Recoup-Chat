@@ -17,8 +17,6 @@ export const checkAndResetCredits = async (
       oneMonthAgo.setMonth(oneMonthAgo.getMonth() - 1);
 
       if (timestampDate < oneMonthAgo) {
-        console.log("Timestamp is over one month old, resetting credits");
-
         const updatedCreditsUsage = await updateCreditsUsage({
           account_id: accountId,
           updates: {
