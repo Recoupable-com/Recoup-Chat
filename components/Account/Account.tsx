@@ -8,6 +8,7 @@ import ImageSelect from "./ImageSelect";
 import { useUserProvider } from "@/providers/UserProvder";
 import ArtistInstructionTextArea from "./ArtistInstructionTextArea";
 import Input from "../Input";
+import AccountIdDisplay from "../ArtistSetting/AccountIdDisplay";
 
 const Account = () => {
   const isMobile = useIsMobile();
@@ -22,6 +23,7 @@ const Account = () => {
     setOrganization,
     save,
     signOut,
+    userData,
   } = useUserProvider();
 
   return (
@@ -31,7 +33,15 @@ const Account = () => {
       validationSchema={accountValidation}
     >
       <div className="col-span-12 flex justify-between items-center border-b-greyborder-b-[1px] pb-3">
-        <p>Account Setting</p>
+        <div className="flex flex-col">
+          <p>Account Setting</p>
+          {userData?.account_id && (
+            <AccountIdDisplay
+              accountId={userData.account_id}
+              label="Account ID"
+            />
+          )}
+        </div>
         {!isMobile && (
           <button type="button" onClick={toggleModal}>
             <X />
