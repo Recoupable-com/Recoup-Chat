@@ -20,7 +20,6 @@ const ScheduledActionDetailsDialog: React.FC<ScheduledActionDetailsDialogProps> 
 }) => {
   const [currentAction, setCurrentAction] = useState(action);
   const isActive = currentAction.enabled ?? false;
-  const isPaused = !isActive;
 
   const handleTitleChange = (newTitle: string) => {
     setCurrentAction(prev => ({ ...prev, title: newTitle }));
@@ -28,6 +27,10 @@ const ScheduledActionDetailsDialog: React.FC<ScheduledActionDetailsDialogProps> 
 
   const handlePromptChange = (newPrompt: string) => {
     setCurrentAction(prev => ({ ...prev, prompt: newPrompt }));
+  };
+
+  const handleStatusChange = (newStatus: boolean) => {
+    setCurrentAction(prev => ({ ...prev, enabled: newStatus }));
   };
 
   return (
@@ -42,8 +45,8 @@ const ScheduledActionDetailsDialog: React.FC<ScheduledActionDetailsDialogProps> 
               title={currentAction.title}
               actionId={currentAction.id}
               isActive={isActive}
-              isPaused={isPaused}
               onTitleChange={handleTitleChange}
+              onStatusChange={handleStatusChange}
             />
           </DialogTitle>
         </DialogHeader>

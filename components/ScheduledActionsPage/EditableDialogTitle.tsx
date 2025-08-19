@@ -4,21 +4,22 @@ import { Check, X, Pencil } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { useUpdateScheduledAction } from "@/hooks/useUpdateScheduledAction";
+import StatusSwitch from "./StatusSwitch";
 
 interface EditableDialogTitleProps {
   title: string;
   actionId: string;
   isActive: boolean;
-  isPaused: boolean;
   onTitleChange?: (newTitle: string) => void;
+  onStatusChange?: (newStatus: boolean) => void;
 }
 
 const EditableDialogTitle: React.FC<EditableDialogTitleProps> = ({
   title,
   actionId,
   isActive,
-  isPaused,
   onTitleChange,
+  onStatusChange,
 }) => {
   const [isEditing, setIsEditing] = useState(false);
   const [editValue, setEditValue] = useState(title);
@@ -110,18 +111,12 @@ const EditableDialogTitle: React.FC<EditableDialogTitleProps> = ({
         )}
       </div>
 
-      <span
-        className={cn(
-          "text-xs px-2 py-1 rounded-md flex-shrink-0 ml-2",
-          isActive
-            ? "bg-green-50 text-green-700"
-            : isPaused
-              ? "bg-gray-50 text-gray-600"
-              : "bg-red-50 text-red-600"
-        )}
-      >
-        {isActive ? "Active" : isPaused ? "Paused" : "Deleted"}
-      </span>
+      <StatusSwitch
+        actionId={actionId}
+        isActive={isActive}
+        onStatusChange={onStatusChange}
+        disabled={isLoading}
+      />
     </div>
   );
 };
