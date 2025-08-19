@@ -1,9 +1,10 @@
 import { Dialog, DialogContent, DialogTrigger, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Tables } from "@/types/database.types";
-import { cn } from "@/lib/utils";
 import { formatScheduledActionDate } from "@/lib/utils/formatScheduledActionDate";
 import { parseCronToHuman } from "@/lib/utils/cronUtils";
 import ScheduleMetaCard from "./ScheduleMetaCard";
+import EditableDialogTitle from "./EditableDialogTitle";
+import { useState } from "react";
 
 type ScheduledAction = Tables<"scheduled_actions">;
 
@@ -16,8 +17,13 @@ const ScheduledActionDetailsDialog: React.FC<ScheduledActionDetailsDialogProps> 
   children,
   action,
 }) => {
-  const isActive = action.enabled;
-  const isPaused = !action.enabled;
+  const [currentAction, setCurrentAction] = useState(action);
+  const isActive = currentAction.enabled ?? false;
+  const isPaused = !isActive;
+
+  const handleTitleChange = (newTitle: string) => {
+    setCurrentAction(prev => ({ ...prev, title: newTitle }));
+  };
 
   return (
     <Dialog>
@@ -26,22 +32,14 @@ const ScheduledActionDetailsDialog: React.FC<ScheduledActionDetailsDialogProps> 
       </DialogTrigger>
       <DialogContent className="max-w-xl max-h-[85vh] overflow-hidden flex flex-col pt-10">
         <DialogHeader className="pb-3">
-          <DialogTitle className="flex items-center justify-between text-base">
-            <span className={cn("font-medium")}>
-              {action.title}
-            </span>
-            <span
-              className={cn(
-                "text-xs px-2 py-1 rounded-md",
-                isActive
-                  ? "bg-green-50 text-green-700"
-                  : isPaused
-                  ? "bg-gray-50 text-gray-600"
-                  : "bg-red-50 text-red-600"
-              )}
-            >
-              {isActive ? "Active" : isPaused ? "Paused" : "Deleted"}
-            </span>
+          <DialogTitle asChild>
+            <EditableDialogTitle
+              title={currentAction.title}
+              actionId={currentAction.id}
+              isActive={isActive}
+              isPaused={isPaused}
+              onTitleChange={handleTitleChange}
+            />
           </DialogTitle>
         </DialogHeader>
 
@@ -49,7 +47,7 @@ const ScheduledActionDetailsDialog: React.FC<ScheduledActionDetailsDialogProps> 
           {/* Action Details */}
           <div>
             <h3 className="text-sm font-medium text-gray-900 mb-1">Prompt</h3>
-            <p className="text-sm text-gray-600 leading-snug">{action.prompt}</p>
+            <p className="text-sm text-gray-600 leading-snug">{currentAction.prompt}</p>
           </div>
 
           {/* Schedule Information Cards */}
@@ -57,19 +55,19 @@ const ScheduledActionDetailsDialog: React.FC<ScheduledActionDetailsDialogProps> 
             <h3 className="text-sm font-medium text-gray-900">Schedule Information</h3>
             
             <div className="grid gap-3 grid-cols-2">
-              <ScheduleMetaCard label="Time" value={parseCronToHuman(action.schedule)} variant="green" />
-              <ScheduleMetaCard label="Next Run" value={formatScheduledActionDate(action.next_run)} variant="orange" />
+              <ScheduleMetaCard label="Time" value={parseCronToHuman(currentAction.schedule)} variant="green" />
+              <ScheduleMetaCard label="Next Run" value={formatScheduledActionDate(currentAction.next_run)} variant="orange" />
             </div>
 
             <div className="grid gap-3 grid-cols-2">
               <ScheduleMetaCard 
                 label="Last Run" 
-                value={action.last_run ? formatScheduledActionDate(action.last_run) : "Never executed"} 
+                value={currentAction.last_run ? formatScheduledActionDate(currentAction.last_run) : "Never executed"} 
                 variant="blue"
               />
               <ScheduleMetaCard 
                 label="Last Updated" 
-                value={action.updated_at ? formatScheduledActionDate(action.updated_at) : formatScheduledActionDate(action.created_at)} 
+                value={currentAction.updated_at ? formatScheduledActionDate(currentAction.updated_at) : formatScheduledActionDate(currentAction.created_at)} 
                 variant="purple"
               />
             </div>
