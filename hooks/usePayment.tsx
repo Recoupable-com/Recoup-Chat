@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import { createSession } from "@/lib/stripe/createSession";
 import { useUserProvider } from "@/providers/UserProvder";
 import { v4 as uuidV4 } from "uuid";
@@ -22,7 +22,7 @@ const usePayment = () => {
 
   const createCheckoutSession = async (
     productName: string,
-    isSubscription: boolean,
+    isSubscription: boolean
   ) => {
     const referenceId = uuidV4();
     const sessionResponse = await createSession(
@@ -33,7 +33,7 @@ const usePayment = () => {
       wrappedActive ? 495 : 99,
       {
         accountId: userData?.account_id,
-      },
+      }
     );
 
     window.open(sessionResponse.url, "_self");
@@ -62,6 +62,8 @@ const usePayment = () => {
     checkCredits();
   }, [checkCredits]);
 
+  const totalCredits = 333;
+
   return {
     setSuccessCallbackParams,
     isLoadingCredits,
@@ -70,6 +72,7 @@ const usePayment = () => {
     setIsModalOpen,
     toggleModal,
     credits,
+    totalCredits,
     creditUsed,
     subscriptionActive,
     wrappedActive,

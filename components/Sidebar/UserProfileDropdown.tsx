@@ -11,9 +11,11 @@ import {
 } from "../ui/dropdown-menu";
 import { IconLogout, IconUser } from "@tabler/icons-react";
 import { useUserProvider } from "@/providers/UserProvder";
+import CreditsUsage from "./CreditsUsage";
 
 const UserProfileDropdown = () => {
   const { toggleModal, signOut } = useUserProvider();
+
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
@@ -25,6 +27,8 @@ const UserProfileDropdown = () => {
         <DropdownMenuLabel className="text-sm font-semibold">
           My Account
         </DropdownMenuLabel>
+        <CreditsUsage />
+        <DropdownMenuSeparator />
         <DropdownMenuGroup>
           <DropdownMenuItem onClick={toggleModal} className="cursor-pointer">
             <IconUser />
