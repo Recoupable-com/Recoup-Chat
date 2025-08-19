@@ -1,19 +1,16 @@
-import supabase from "@/lib/supabase/serverClient";
 import { NextRequest } from "next/server";
+import { checkAndResetCredits } from "@/lib/credits/checkAndResetCredits";
 
 export async function GET(req: NextRequest) {
   const accountId = req.nextUrl.searchParams.get("accountId");
 
+  if (!accountId) {
+    return Response.json({ message: "accountId is required" }, { status: 400 });
+  }
+
   try {
-    const { data: found } = await supabase
-      .from("credits_usage")
-      .select("*")
-      .eq("account_id", accountId);
-
-    if (found?.length)
-      return Response.json({ data: found[0] }, { status: 200 });
-
-    return Response.json({ data: null }, { status: 200 });
+    const creditsUsage = await checkAndResetCredits(accountId);
+    return Response.json({ data: creditsUsage }, { status: 200 });
   } catch (error) {
     console.error(error);
     const message = error instanceof Error ? error.message : "failed";
