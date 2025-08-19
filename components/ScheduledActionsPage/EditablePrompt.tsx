@@ -2,6 +2,7 @@ import { useState } from "react";
 import { Check, X, Pencil } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
+import { useUpdateScheduledAction } from "@/hooks/useUpdateScheduledAction";
 
 interface EditablePromptProps {
   prompt: string;
@@ -16,7 +17,7 @@ const EditablePrompt: React.FC<EditablePromptProps> = ({
 }) => {
   const [isEditing, setIsEditing] = useState(false);
   const [editValue, setEditValue] = useState(prompt);
-  const [isLoading, setIsLoading] = useState(false);
+  const { updateAction, isLoading } = useUpdateScheduledAction();
 
   const handleEdit = () => {
     setIsEditing(true);
@@ -34,33 +35,18 @@ const EditablePrompt: React.FC<EditablePromptProps> = ({
       return;
     }
 
-    setIsLoading(true);
     try {
-      const response = await fetch("/api/scheduled-actions", {
-        method: "PATCH",
-        headers: {
-          "Content-Type": "application/json",
+      await updateAction({
+        actionId,
+        updates: { prompt: editValue.trim() },
+        onSuccess: (updatedData) => {
+          setIsEditing(false);
+          onPromptChange?.(updatedData.prompt);
         },
-        body: JSON.stringify({
-          id: actionId,
-          prompt: editValue.trim(),
-        }),
+        successMessage: "Prompt updated successfully",
       });
-
-      if (!response.ok) {
-        throw new Error("Failed to update prompt");
-      }
-
-      const result = await response.json();
-      setIsEditing(false);
-      
-      // Notify parent component of the prompt change
-      onPromptChange?.(result.data.prompt);
-    } catch (error) {
-      console.error("Failed to update prompt:", error);
-      // Keep in edit mode on error
-    } finally {
-      setIsLoading(false);
+    } catch {
+      console.error("Failed to update prompt");
     }
   };
 

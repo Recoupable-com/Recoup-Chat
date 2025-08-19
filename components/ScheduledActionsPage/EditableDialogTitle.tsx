@@ -3,7 +3,7 @@ import { cn } from "@/lib/utils";
 import { Check, X, Pencil } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { toast } from "react-toastify";
+import { useUpdateScheduledAction } from "@/hooks/useUpdateScheduledAction";
 
 interface EditableDialogTitleProps {
   title: string;
@@ -22,7 +22,7 @@ const EditableDialogTitle: React.FC<EditableDialogTitleProps> = ({
 }) => {
   const [isEditing, setIsEditing] = useState(false);
   const [editValue, setEditValue] = useState(title);
-  const [isLoading, setIsLoading] = useState(false);
+  const { updateAction, isLoading } = useUpdateScheduledAction();
 
   const handleEdit = () => {
     setIsEditing(true);
@@ -40,34 +40,18 @@ const EditableDialogTitle: React.FC<EditableDialogTitleProps> = ({
       return;
     }
 
-    setIsLoading(true);
     try {
-      const response = await fetch("/api/scheduled-actions", {
-        method: "PATCH",
-        headers: {
-          "Content-Type": "application/json",
+      await updateAction({
+        actionId,
+        updates: { title: editValue.trim() },
+        onSuccess: (updatedData) => {
+          setIsEditing(false);
+          onTitleChange?.(updatedData.title);
         },
-        body: JSON.stringify({
-          id: actionId,
-          title: editValue.trim(),
-        }),
+        successMessage: "Title updated successfully",
       });
-
-      if (!response.ok) {
-        throw new Error("Failed to update title");
-      }
-
-      const result = await response.json();
-      setIsEditing(false);
-      
-      // Notify parent component of the title change
-      onTitleChange?.(result.data.title);
-      toast.success("Title updated successfully");
-    } catch (error) {
-      console.error("Failed to update title:", error);
-      // Keep in edit mode on error
-    } finally {
-      setIsLoading(false);
+    } catch {
+      console.error("Failed to update title");
     }
   };
 
@@ -125,15 +109,15 @@ const EditableDialogTitle: React.FC<EditableDialogTitleProps> = ({
           </div>
         )}
       </div>
-      
+
       <span
         className={cn(
           "text-xs px-2 py-1 rounded-md flex-shrink-0 ml-2",
           isActive
             ? "bg-green-50 text-green-700"
             : isPaused
-            ? "bg-gray-50 text-gray-600"
-            : "bg-red-50 text-red-600"
+              ? "bg-gray-50 text-gray-600"
+              : "bg-red-50 text-red-600"
         )}
       >
         {isActive ? "Active" : isPaused ? "Paused" : "Deleted"}
