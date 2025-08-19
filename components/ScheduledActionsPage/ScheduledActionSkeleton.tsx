@@ -22,11 +22,13 @@ const ScheduledActionSkeleton = () => {
       </div>
 
       {/* Schedule Information Skeleton */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-        <div className="flex items-center space-x-2">
-          <div className="h-3.5 w-3.5 bg-blue-200 rounded animate-pulse"></div>
-          <div className="h-3 bg-gray-200 rounded w-20 animate-pulse"></div>
-          <div className="h-3 bg-gray-200 rounded w-24 animate-pulse"></div>
+      <div className="space-y-3">
+        <div className="flex items-start space-x-2">
+          <div className="h-3.5 w-3.5 bg-blue-200 rounded animate-pulse mt-0.5"></div>
+          <div className="min-w-0 flex-1">
+            <div className="h-3 bg-gray-200 rounded w-20 animate-pulse mb-1"></div>
+            <div className="h-3 bg-gray-200 rounded w-32 animate-pulse"></div>
+          </div>
         </div>
         
         <div className="flex items-center space-x-2">
