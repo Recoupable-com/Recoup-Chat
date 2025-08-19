@@ -1,6 +1,7 @@
 import { Plus_Jakarta_Sans } from "next/font/google";
 import { useUserProvider } from "@/providers/UserProvder";
 import useIsMobile from "@/hooks/useIsMobile";
+import { useArtistProvider } from "@/providers/ArtistProvider";
 
 const plusJakartaSans = Plus_Jakarta_Sans({
   subsets: ["latin"],
@@ -8,14 +9,16 @@ const plusJakartaSans = Plus_Jakarta_Sans({
 });
 
 /**
- * Displays the greeting message with user's name
+ * Displays the greeting message with user's name and prompt
  * Accesses user data directly from providers
  */
 export function ChatGreeting({ isVisible }: { isVisible: boolean }) {
   const { userData } = useUserProvider();
+  const { selectedArtist } = useArtistProvider();
   const isMobile = useIsMobile();
   const firstName = userData?.name?.split(" ")[0] || "";
-  const isLongName = firstName.length > 10;
+  const artistName = selectedArtist?.name || "";
+  const isArtistSelected = !!selectedArtist;
 
   const textStyle = `
     ${plusJakartaSans.className} 
@@ -42,19 +45,32 @@ export function ChatGreeting({ isVisible }: { isVisible: boolean }) {
       `}
     >
       {firstName ? (
-        <div className="flex items-center">
+        <div className="flex items-start flex-wrap">
           <span>Hey {firstName}</span>
-          <span className="ml-1 mr-1 text-[16px] sm:text-[20px]">👋</span>
-          {!isLongName && (
-            <span className="hidden sm:inline">Welcome to Recoup</span>
-          )}
+          <span className="ml-1 mr-2 text-[16px] sm:text-[20px]">👋</span>
+          <span className="text-[#A0A0A8]">
+            Ask me about{" "}
+            {isArtistSelected ? (
+              <span className="text-[#A0A0A8]">{artistName}&apos;s</span>
+            ) : (
+              <span className="text-[#A0A0A8]">your artist&apos;s</span>
+            )}
+          </span>
         </div>
       ) : (
-        <span>Welcome to Recoup <span className="text-[16px] sm:text-[20px]">👋</span></span>
+        <div className="flex items-start flex-wrap">
+          <span>Hey there</span>
+          <span className="ml-1 mr-2 text-[16px] sm:text-[20px]">👋</span>
+          <span className="text-[#A0A0A8]">
+            Ask me about{" "}
+            {isArtistSelected ? (
+              <span className="text-[#A0A0A8]">{artistName}&apos;s</span>
+            ) : (
+              <span className="text-[#A0A0A8]">your artist&apos;s</span>
+            )}
+          </span>
+        </div>
       )}
-
-      {/* For mobile with long names, show this line separately */}
-      {isLongName && <div className="mt-1 sm:hidden">Welcome to Recoup</div>}
     </div>
   );
 }
