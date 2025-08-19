@@ -17,7 +17,7 @@ const ScheduledActionCard: React.FC<ScheduledActionCardProps> = ({ action, isDel
   const isPaused = !action.enabled && !isDeleted;
   return (
     <div
-      className={cn(`border rounded-lg p-4 transition-all ${
+      className={cn(`border rounded-xl p-4 transition-all ${
         action.enabled 
           ? "border-green-200 bg-green-50/30" 
           : "border-gray-200 bg-gray-50/30"

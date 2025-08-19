@@ -1,5 +1,6 @@
 import { Tables } from "@/types/database.types";
 import ScheduledActionCard from "@/components/VercelChat/tools/ScheduledActionCard";
+import ScheduledActionSkeleton from "./ScheduledActionSkeleton";
 
 type ScheduledAction = Tables<"scheduled_actions">;
 
@@ -14,12 +15,18 @@ const ScheduledActionsList: React.FC<ScheduledActionsListProps> = ({
   isLoading,
   isError,
 }) => {
-  if (isLoading) {
-    return <div className="text-sm text-gray-500">Loading actions...</div>;
-  }
-
   if (isError) {
     return <div className="text-sm text-red-600">Failed to load scheduled actions.</div>;
+  }
+
+  if (isLoading) {
+    return (
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+        {Array.from({ length: 6 }).map((_, index) => (
+          <ScheduledActionSkeleton key={index} />
+        ))}
+      </div>
+    );
   }
 
   if (actions.length === 0) {
