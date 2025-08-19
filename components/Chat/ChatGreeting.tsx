@@ -2,7 +2,7 @@ import { Plus_Jakarta_Sans } from "next/font/google";
 import { useUserProvider } from "@/providers/UserProvder";
 import useIsMobile from "@/hooks/useIsMobile";
 import { useArtistProvider } from "@/providers/ArtistProvider";
-import WordRotate from "../ui/word-rotate";
+import WordTypewriter from "../ui/word-typewriter";
 import { ReactNode } from "react";
 import YoutubeIcon from "@/public/brand-logos/youtube.png";
 import InstagramIcon from "@/public/brand-logos/instagram.png";
@@ -71,9 +71,10 @@ export function ChatGreeting({ isVisible }: { isVisible: boolean }) {
               <span className="text-[#6B6B75]">your artist&apos;s</span>
             )}
           </span>
-          <WordRotate
+          <WordTypewriter
             duration={3000}
-            className="inline text-black font-semibold"
+            typingSpeed={60}
+            className="text-black font-semibold"
             words={[
               wordComponent("YouTube", <Image src={YoutubeIcon} alt="YouTube" className="w-5 h-5" />),
               wordComponent("fans"),
@@ -100,9 +101,10 @@ export function ChatGreeting({ isVisible }: { isVisible: boolean }) {
               <span className="text-[#6B6B75]">your artist&apos;s</span>
             )}
           </span>
-          <WordRotate
+          <WordTypewriter
             duration={3000}
-            className="inline text-black font-semibold"
+            typingSpeed={60}
+            className="text-black font-semibold"
             words={[
               wordComponent("YouTube", <Image src={YoutubeIcon} alt="YouTube" className="w-5 h-5" />),
               wordComponent("fans"),
