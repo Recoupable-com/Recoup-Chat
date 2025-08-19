@@ -77,15 +77,15 @@ export function ChatGreeting({ isVisible }: { isVisible: boolean }) {
             className="text-black font-semibold"
             words={[
               wordComponent("YouTube", <Image src={YoutubeIcon} alt="YouTube" className="w-5 h-5" />),
-              wordComponent("fans"),
+              wordComponent("fans", <span className="text-[16px]">👥</span>),
               wordComponent("Instagram", <Image src={InstagramIcon} alt="Instagram" className="w-5 h-5" />),
-              wordComponent("analytics"),
+              wordComponent("analytics", <span className="text-[16px]">📊</span>),
               wordComponent("TikTok", <Image src={TiktokIcon} alt="TikTok" className="w-5 h-5" />),
-              wordComponent("songs"),
+              wordComponent("songs", <span className="text-[16px]">🎵</span>),
               wordComponent("Spotify", <Image src={SpotifyIcon} alt="Spotify" className="w-5 h-5" />),
-              wordComponent("albums"),
-              wordComponent("engagement"),
-              wordComponent("demographics"),
+              wordComponent("albums", <span className="text-[16px]">💿</span>),
+              wordComponent("engagement", <span className="text-[16px]">💬</span>),
+              wordComponent("demographics", <span className="text-[16px]">🌍</span>),
             ]}
           />
         </div>
@@ -107,15 +107,15 @@ export function ChatGreeting({ isVisible }: { isVisible: boolean }) {
             className="text-black font-semibold"
             words={[
               wordComponent("YouTube", <Image src={YoutubeIcon} alt="YouTube" className="w-5 h-5" />),
-              wordComponent("fans"),
+              wordComponent("fans", <span className="text-[16px]">👥</span>),
               wordComponent("Instagram", <Image src={InstagramIcon} alt="Instagram" className="w-5 h-5" />),
-              wordComponent("analytics"),
+              wordComponent("analytics", <span className="text-[16px]">📊</span>),
               wordComponent("TikTok", <Image src={TiktokIcon} alt="TikTok" className="w-5 h-5" />),
-              wordComponent("songs"),
+              wordComponent("songs", <span className="text-[16px]">🎵</span>),
               wordComponent("Spotify", <Image src={SpotifyIcon} alt="Spotify" className="w-5 h-5" />),
-              wordComponent("albums"),
-              wordComponent("engagement"),
-              wordComponent("demographics"),
+              wordComponent("albums", <span className="text-[16px]">💿</span>),
+              wordComponent("engagement", <span className="text-[16px]">💬</span>),
+              wordComponent("demographics", <span className="text-[16px]">🌍</span>),
             ]}
           />
         </div>
