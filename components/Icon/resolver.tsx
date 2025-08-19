@@ -280,4 +280,7 @@ export const Icons = {
   UncheckedIcon: () => (
     <span className="h-6 w-6 rounded-full bg-gray-200 flex items-center justify-center shrink-0 border border-gray-300"></span>
   ),
+  clock: () => (
+    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" className="lucide lucide-clock-icon lucide-clock"><path d="M12 6v6l4 2"/><circle cx="12" cy="12" r="10"/></svg>
+  ),
 };
