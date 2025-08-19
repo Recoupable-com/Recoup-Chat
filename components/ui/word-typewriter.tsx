@@ -92,10 +92,8 @@ function WordTypewriter({
     <span className={cn("inline-flex items-center", className)}>
       {hasIcon && typeof currentWord === 'object' && 'props' in currentWord ? (
         <>
-          {/* Show icon immediately */}
-          <span className="opacity-70 mr-1.5">
-            {currentWord.props.children[0]}
-          </span>
+          {/* Show icon immediately - already wrapped in consistent container */}
+          {currentWord.props.children[0]}
           {/* Type out the text */}
           <span>
             {currentText}
