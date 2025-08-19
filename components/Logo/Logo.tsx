@@ -6,9 +6,10 @@ const Logo = () => {
       <Image
         src="/Recoup_Icon_Wordmark_Black.svg"
         alt="Recoup Logo"
-        width={130}
-        height={35}
+        width={180}
+        height={48}
         priority
+        style={{ width: 'auto', height: 'auto', maxWidth: '180px' }}
       />
     </div>
   );
