@@ -94,8 +94,8 @@ export function ChatGreeting({ isVisible }: { isVisible: boolean }) {
             )}
           </span>
           <WordTypewriter
-            duration={3000}
-            typingSpeed={60}
+            duration={5000}
+            typingSpeed={200}
             className="text-black font-semibold"
             words={[
               wordComponent("YouTube", <Image src={YoutubeIcon} alt="YouTube" className="w-full h-full object-contain" />),
@@ -118,8 +118,8 @@ export function ChatGreeting({ isVisible }: { isVisible: boolean }) {
             )}
           </span>
           <WordTypewriter
-            duration={3000}
-            typingSpeed={60}
+            duration={4000}
+            typingSpeed={180}
             className="text-black font-semibold"
             words={[
               wordComponent("YouTube", <Image src={YoutubeIcon} alt="YouTube" className="w-full h-full object-contain" />),
