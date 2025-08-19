@@ -1,6 +1,7 @@
 import { Tables } from "@/types/database.types";
 import ScheduledActionCard from "@/components/VercelChat/tools/ScheduledActionCard";
 import ScheduledActionSkeleton from "./ScheduledActionSkeleton";
+import ScheduledActionDetailsDialog from "./ScheduledActionDetailsDialog";
 
 type ScheduledAction = Tables<"scheduled_actions">;
 
@@ -36,7 +37,12 @@ const ScheduledActionsList: React.FC<ScheduledActionsListProps> = ({
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
       {actions.map((action) => (
-        <ScheduledActionCard key={action.id} action={action} />
+        <ScheduledActionDetailsDialog
+          key={action.id}
+          action={action}
+        >
+          <ScheduledActionCard action={action} />
+        </ScheduledActionDetailsDialog>
       ))}
     </div>
   );
