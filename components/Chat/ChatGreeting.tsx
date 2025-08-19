@@ -56,10 +56,27 @@ export function ChatGreeting({ isVisible }: { isVisible: boolean }) {
     );
   };
 
+  // Mobile version - simple text
+  if (isMobile) {
+    return (
+      <div
+        className={`
+          ${textStyle} mb-2 ${fadeBase}
+          ${isVisible ? fadeEnd : fadeStart}
+        `}
+      >
+        <span className="text-black font-medium">
+          Ask me about {isArtistSelected ? artistName : "your artist"}
+        </span>
+      </div>
+    );
+  }
+
+  // Desktop version - with animation
   return (
     <div
       className={`
-        ${textStyle} ${isMobile ? "mb-2" : "mb-2"} ${fadeBase}
+        ${textStyle} mb-2 ${fadeBase}
         ${isVisible ? fadeEnd : fadeStart}
       `}
     >
