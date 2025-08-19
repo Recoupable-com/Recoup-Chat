@@ -67,12 +67,12 @@ export function ChatGreeting({ isVisible }: { isVisible: boolean }) {
         <div className="flex items-baseline flex-wrap gap-x-2">
           <span className="text-black font-medium">Hey {firstName}</span>
           <span className="text-[18px] sm:text-[22px]">👋</span>
-          <span className="text-[#6B6B75]">
+          <span className="text-black">
             Ask me about{" "}
             {isArtistSelected ? (
-              <span className="text-[#6B6B75]">{artistName}&apos;s</span>
+              <span className="text-black">{artistName}&apos;s</span>
             ) : (
-              <span className="text-[#6B6B75]">your artist&apos;s</span>
+              <span className="text-black">your artist&apos;s</span>
             )}
           </span>
           <WordTypewriter
@@ -91,12 +91,12 @@ export function ChatGreeting({ isVisible }: { isVisible: boolean }) {
         <div className="flex items-baseline flex-wrap gap-x-2">
           <span className="text-black font-medium">Hey there</span>
           <span className="text-[18px] sm:text-[22px]">👋</span>
-          <span className="text-[#6B6B75]">
+          <span className="text-black">
             Ask me about{" "}
             {isArtistSelected ? (
-              <span className="text-[#6B6B75]">{artistName}&apos;s</span>
+              <span className="text-black">{artistName}&apos;s</span>
             ) : (
-              <span className="text-[#6B6B75]">your artist&apos;s</span>
+              <span className="text-black">your artist&apos;s</span>
             )}
           </span>
           <WordTypewriter
