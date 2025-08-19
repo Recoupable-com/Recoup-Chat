@@ -89,7 +89,7 @@ function WordTypewriter({
     currentWord.props.children.length > 1;
 
   return (
-    <span className={cn("inline-flex items-center", className)}>
+    <span className={cn("inline-flex items-center gap-5", className)}>
       {hasIcon && typeof currentWord === 'object' && 'props' in currentWord ? (
         <>
           {/* Show icon immediately - already wrapped in consistent container */}
