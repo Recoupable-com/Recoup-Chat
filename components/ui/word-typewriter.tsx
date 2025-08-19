@@ -53,7 +53,7 @@ function WordTypewriter({
           setCurrentText(fullText.slice(0, currentText.length + 1));
         } else {
           // Pause before deleting
-          setTimeout(() => setIsDeleting(true), 1500);
+          setTimeout(() => setIsDeleting(true), duration);
         }
       } else {
         // Deleting
@@ -67,7 +67,7 @@ function WordTypewriter({
     }, isDeleting ? typingSpeed / 2 : typingSpeed);
 
     return () => clearTimeout(timer);
-  }, [currentText, currentWordIndex, isDeleting, words, typingSpeed]);
+  }, [currentText, currentWordIndex, isDeleting, words, typingSpeed, duration]);
 
   // Cursor blink effect
   useEffect(() => {
