@@ -5,7 +5,7 @@ import { Messages } from "./messages";
 import ChatInput from "./ChatInput";
 import ChatSkeleton from "../Chat/ChatSkeleton";
 import ChatGreeting from "../Chat/ChatGreeting";
-import ChatPrompt from "../Chat/ChatPrompt";
+
 // import StarterAgents from "../Chat/StarterAgents";
 import useVisibilityDelay from "@/hooks/useVisibilityDelay";
 import { ChatReport } from "../Chat/ChatReport";
@@ -109,7 +109,6 @@ function ChatContentMemoized({ reportId, id }: {reportId?: string; id: string;})
           {/* Centered greeting and chat input */}
           <div className="w-full max-w-3xl mx-auto">
             <ChatGreeting isVisible={isVisible} />
-            <ChatPrompt isVisible={isVisible} />
             <div className="mt-1 md:mt-6">
               <ChatInput
                 input={input}
