@@ -5,6 +5,7 @@ import { parseCronToHuman } from "@/lib/utils/cronUtils";
 import ScheduleMetaCard from "./ScheduleMetaCard";
 import EditableDialogTitle from "./EditableDialogTitle";
 import EditablePrompt from "./EditablePrompt";
+import DeleteScheduledActionButton from "./DeleteScheduledActionButton";
 import { useState } from "react";
 
 type ScheduledAction = Tables<"scheduled_actions">;
@@ -12,13 +13,14 @@ type ScheduledAction = Tables<"scheduled_actions">;
 interface ScheduledActionDetailsDialogProps {
   children: React.ReactNode;
   action: ScheduledAction;
+  onDelete?: () => void;
 }
 
-const ScheduledActionDetailsDialog: React.FC<ScheduledActionDetailsDialogProps> = ({
-  children,
-  action,
-}) => {
+const ScheduledActionDetailsDialog: React.FC<
+  ScheduledActionDetailsDialogProps
+> = ({ children, action, onDelete }) => {
   const [currentAction, setCurrentAction] = useState(action);
+  const [isDialogOpen, setIsDialogOpen] = useState(false);
   const isActive = currentAction.enabled ?? false;
 
   const handleTitleChange = (newTitle: string) => {
@@ -33,8 +35,13 @@ const ScheduledActionDetailsDialog: React.FC<ScheduledActionDetailsDialogProps> 
     setCurrentAction(prev => ({ ...prev, enabled: newStatus }));
   };
 
+  const handleDeleteSuccess = () => {
+    setIsDialogOpen(false);
+    onDelete?.();
+  };
+
   return (
-    <Dialog>
+    <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
       <DialogTrigger asChild>
         <div className="cursor-pointer">{children}</div>
       </DialogTrigger>
@@ -80,6 +87,15 @@ const ScheduledActionDetailsDialog: React.FC<ScheduledActionDetailsDialogProps> 
                 variant="purple"
               />
             </div>
+          </div>
+
+          {/* Delete Button Section */}
+          <div className="pt-4 border-t border-gray-200">
+            <DeleteScheduledActionButton
+              actionId={currentAction.id}
+              actionTitle={currentAction.title}
+              onDelete={handleDeleteSuccess}
+            />
           </div>
         </div>
       </DialogContent>
