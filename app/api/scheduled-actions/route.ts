@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { selectScheduledActions } from "@/lib/supabase/scheduled_actions/selectScheduledActions";
 import { updateScheduledActions } from "@/lib/supabase/scheduled_actions/updateScheduledActions";
+import { deleteScheduledActions } from "@/lib/supabase/scheduled_actions/deleteScheduledActions";
 import { Tables } from "@/types/database.types";
 
 type ScheduledActionUpdate = Partial<Omit<Tables<"scheduled_actions">, "id" | "created_at">>;
@@ -62,6 +63,32 @@ export async function PATCH(req: NextRequest) {
     );
   } catch (error) {
     console.error("Error in PATCH /api/scheduled-actions:", error);
+    const message = error instanceof Error ? error.message : "Server error";
+    return NextResponse.json({ message }, { status: 500 });
+  }
+}
+
+export async function DELETE(req: NextRequest) {
+  try {
+    const body = await req.json();
+    const { id }: { id: string } = body;
+
+    if (!id) {
+      return NextResponse.json(
+        { message: "Missing required parameter: id" },
+        { status: 400 }
+      );
+    }
+
+    // Delete the scheduled action using the existing function
+    const deletedActions = await deleteScheduledActions([id]);
+
+    return NextResponse.json(
+      { message: "Scheduled action deleted successfully", data: deletedActions[0] },
+      { status: 200 }
+    );
+  } catch (error) {
+    console.error("Error in DELETE /api/scheduled-actions:", error);
     const message = error instanceof Error ? error.message : "Server error";
     return NextResponse.json({ message }, { status: 500 });
   }
