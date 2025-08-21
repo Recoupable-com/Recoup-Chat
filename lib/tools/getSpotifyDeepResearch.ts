@@ -4,29 +4,12 @@ import { getArtistSocials } from "../api/artist/getArtistSocials";
 import { SPOTIFY_DEEP_RESEARCH_REQUIREMENTS } from "../consts";
 import { SpotifyDeepResearchResultUIType } from "@/types/spotify";
 
-const TOOL_CHAIN_STEPS = [
-  "get_artist_socials - get spotify account",
-  "get_spotify_artist_top_tracks - get top tracks with popularity scores",
-  "get_spotify_artist_albums - albums for artist",
-  "get_spotify_album - album from get_spotify_artist_albums. repeat this tool for each album.",
-  "<other tools to get engagement info or other missing required items>",
-  "create_knowledge_base - generate a txt file with the research and attach it to the artist",
-];
-
 const getSpotifyDeepResearch = tool({
   description: `
   Performs deep research on an artist using a Spotify ID.
-  Follows this tool loop:
-  <tool_loop>
-  ${TOOL_CHAIN_STEPS.join("\n")}
-  </tool_loop>
 
-  required items in deep research document:
+  Required items in deep research document:
   ${SPOTIFY_DEEP_RESEARCH_REQUIREMENTS}
-
-  Keep going until the job is completely solved before ending your turn.
-  If you're unsure, use your tools, don't guess.
-  Plan thoroughly before every tool call and reflect on the outcome after each tool call.
   `,
   inputSchema: z.object({
     artist_account_id: z.string().describe("Artist account ID to research"),
@@ -39,7 +22,6 @@ const getSpotifyDeepResearch = tool({
       artistSocials: data,
       artist_account_id,
       success: true,
-      nextSteps: TOOL_CHAIN_STEPS,
     } as SpotifyDeepResearchResultUIType;
   },
 });
