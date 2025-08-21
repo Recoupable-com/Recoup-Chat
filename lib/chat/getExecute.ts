@@ -15,7 +15,7 @@ const getExecute = async (options: ExecuteOptions, body: ChatRequest) => {
   writer.merge(result.toUIMessageStream());
   const usage = await result.usage;
   const usageCost = await getCreditUsage(usage, chatConfig.model);
-  if (usageCost > 0 && body.accountId) {
+  if (body.accountId) {
     const creditsToDeduct = Math.max(1, Math.round(usageCost * 100));
     await deductCredits({
       accountId: body.accountId,
