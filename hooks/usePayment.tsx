@@ -1,4 +1,5 @@
-import { useCallback, useEffect, useState } from "react";
+import { useState } from "react";
+import { useQuery } from "@tanstack/react-query";
 import { createSession } from "@/lib/stripe/createSession";
 import { useUserProvider } from "@/providers/UserProvder";
 import { v4 as uuidV4 } from "uuid";
@@ -8,13 +9,34 @@ import decreaseCredits from "@/lib/supabase/decreaseCredits";
 import { DEFAULT_CREDITS } from "@/lib/consts";
 
 const usePayment = () => {
-  const [isLoadingCredits, setIsLoadingCredits] = useState(true);
   const { userData } = useUserProvider();
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [successCallbackParams, setSuccessCallbackParams] = useState("");
-  const [credits, setCredits] = useState(0);
-  const [subscriptionActive, setSubscriptionActive] = useState(false);
   const [wrappedActive, setWrappedActive] = useState(false);
+
+  // React Query for credits
+  const {
+    data: creditsData,
+    isLoading: isLoadingCredits,
+    refetch: refetchCredits,
+  } = useQuery({
+    queryKey: ["credits", userData?.account_id],
+    queryFn: () => getCredits(userData?.account_id),
+    enabled: !!userData?.account_id,
+    staleTime: 5 * 60 * 1000, // 5 minutes
+    refetchOnWindowFocus: true,
+  });
+
+  // React Query for subscription status
+  const { data: subscriptionData, isLoading: isLoadingSubscription } = useQuery(
+    {
+      queryKey: ["subscription", userData?.account_id],
+      queryFn: () => getActiveSubscription(userData?.account_id),
+      enabled: !!userData?.account_id,
+      staleTime: 10 * 60 * 1000, // 10 minutes
+      refetchOnWindowFocus: true,
+    }
+  );
 
   const toggleModal = (wrapped: boolean = false) => {
     setWrappedActive(!isModalOpen && wrapped);
@@ -41,33 +63,23 @@ const usePayment = () => {
   };
 
   const creditUsed = async (minimumCredits: number) => {
-    if (credits < minimumCredits || subscriptionActive) return;
+    const currentCredits = creditsData?.remaining_credits || 0;
+    const subscriptionActive = subscriptionData?.length > 0;
+
+    if (currentCredits < minimumCredits || subscriptionActive) return;
+
     await decreaseCredits(userData?.account_id, minimumCredits);
-    setCredits(credits - minimumCredits);
+    // Refetch credits after usage to get updated balance
+    refetchCredits();
   };
 
-  const checkCredits = useCallback(async () => {
-    if (!userData) return;
-    const subscriptions = await getActiveSubscription(userData?.account_id);
-    if (subscriptions?.length) {
-      setSubscriptionActive(true);
-      setIsLoadingCredits(false);
-      return;
-    }
-    const credits = await getCredits(userData?.account_id);
-    setCredits(credits?.remaining_credits);
-    setIsLoadingCredits(false);
-  }, [userData]);
-
-  useEffect(() => {
-    checkCredits();
-  }, [checkCredits]);
-
   const totalCredits = DEFAULT_CREDITS;
+  const credits = creditsData?.remaining_credits || 0;
+  const subscriptionActive = subscriptionData?.length > 0;
 
   return {
     setSuccessCallbackParams,
-    isLoadingCredits,
+    isLoadingCredits: isLoadingCredits || isLoadingSubscription,
     createCheckoutSession,
     isModalOpen,
     setIsModalOpen,
