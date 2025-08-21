@@ -1,8 +1,13 @@
 import stripeClient from "@/lib/stripe/client";
 import { NextRequest } from "next/server";
+import Stripe from "stripe";
 
 export async function GET(req: NextRequest) {
   const accountId = req.nextUrl.searchParams.get("accountId");
+
+  if (!accountId) {
+    return Response.json({ message: "accountId is required" }, { status: 400 });
+  }
 
   try {
     const subscriptions = await stripeClient.subscriptions.list({
@@ -13,9 +18,10 @@ export async function GET(req: NextRequest) {
     });
 
     const activeSubscriptions = subscriptions?.data?.filter(
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      (subscription: any) => subscription.metadata?.accountId === accountId,
+      (subscription: Stripe.Subscription) =>
+        subscription.metadata?.accountId === accountId
     );
+
     return Response.json({ data: activeSubscriptions }, { status: 200 });
   } catch (error) {
     console.error(error);
