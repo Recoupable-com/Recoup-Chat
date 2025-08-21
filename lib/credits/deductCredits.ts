@@ -23,20 +23,18 @@ export const deductCredits = async ({
   creditsToDeduct,
 }: DeductCreditsParams): Promise<DeductCreditsResult> => {
   try {
-    // Get current credit balance
-    const found = await selectCreditsUsage({ account_id: accountId });
+    const response = await selectCreditsUsage({ account_id: accountId });
 
-    if (!found || found.length === 0) {
+    if (!response || response.length === 0) {
       return {
         success: false,
         message: "No credits usage found for this account",
       };
     }
 
-    const currentCredits = found[0];
+    const currentCredits = response[0];
     const newBalance = currentCredits.remaining_credits - creditsToDeduct;
 
-    // Update the credit balance
     await updateCreditsUsage({
       account_id: accountId,
       updates: {
