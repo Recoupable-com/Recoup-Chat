@@ -13,14 +13,13 @@ export const getCreditUsage = async (
 ): Promise<number> => {
   try {
     const model = await getModel(modelId);
-    console.log("model", model);
     if (!model) {
-      console.warn(`Model not found for ID: ${modelId}`);
+      console.error(`Model not found for ID: ${modelId}`);
       return 0;
     }
     const { inputTokens, outputTokens } = usage;
     if (!inputTokens || !outputTokens) {
-      console.warn("No tokens found in usage");
+      console.error("No tokens found in usage");
       return 0;
     }
     const inputCost = inputTokens * Number(model.pricing?.input);
