@@ -7,6 +7,7 @@ import { handleChatCompletion } from "@/lib/chat/handleChatCompletion";
 import { getCorsHeaders } from "@/lib/chat/getCorsHeaders";
 import { type ChatRequest } from "@/lib/chat/types";
 import generateUUID from "@/lib/generateUUID";
+import { handleChatCredits } from "@/lib/chat/handleChatCredits";
 
 // Handle OPTIONS preflight requests
 export async function OPTIONS() {
@@ -21,10 +22,12 @@ export async function POST(request: NextRequest) {
 
   try {
     const chatConfig = await setupChatRequest(body);
-
-    // Use generateText instead of streamText for non-streaming response
     const result = await generateText(chatConfig);
-
+    await handleChatCredits({
+      usage: result.usage,
+      model: chatConfig.model,
+      accountId: body.accountId,
+    });
     const responseUIMessage = {
       id: generateUUID(),
       role: "assistant",
@@ -35,11 +38,7 @@ export async function POST(request: NextRequest) {
         },
       ],
     } as UIMessage;
-
-    // Handle chat completion using shared function
     await handleChatCompletion(body, [responseUIMessage]);
-
-    // Return the complete response with all the data
     return new Response(
       JSON.stringify({
         text: result.content,
