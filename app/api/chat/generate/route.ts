@@ -7,6 +7,7 @@ import { handleChatCompletion } from "@/lib/chat/handleChatCompletion";
 import { getCorsHeaders } from "@/lib/chat/getCorsHeaders";
 import { type ChatRequest } from "@/lib/chat/types";
 import generateUUID from "@/lib/generateUUID";
+import { handleChatCredits } from "@/lib/chat/handleChatCredits";
 
 // Handle OPTIONS preflight requests
 export async function OPTIONS() {
@@ -24,6 +25,13 @@ export async function POST(request: NextRequest) {
 
     // Use generateText instead of streamText for non-streaming response
     const result = await generateText(chatConfig);
+
+    // Handle credit deduction
+    await handleChatCredits({
+      usage: result.usage,
+      model: chatConfig.model,
+      accountId: body.accountId,
+    });
 
     const responseUIMessage = {
       id: generateUUID(),
