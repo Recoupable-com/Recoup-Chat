@@ -13,6 +13,7 @@ import { UIMessage, FileUIPart } from "ai";
 import useAvailableModels from "./useAvailableModels";
 import { useLocalStorage } from "usehooks-ts";
 import { DEFAULT_MODEL } from "@/lib/consts";
+import { usePaymentProvider } from "@/providers/PaymentProvider";
 
 interface UseVercelChatProps {
   id: string;
@@ -44,6 +45,7 @@ export function useVercelChat({
     "RECOUP_MODEL",
     availableModels[0]?.id ?? ""
   );
+  const { refetchCredits } = usePaymentProvider();
 
   const chatRequestOptions = useMemo(
     () => ({
@@ -77,6 +79,7 @@ export function useVercelChat({
         if (messagesLengthRef.current === 2) {
           fetchConversations();
         }
+        refetchCredits();
       },
     });
 
