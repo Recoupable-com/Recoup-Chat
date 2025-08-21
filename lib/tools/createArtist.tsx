@@ -17,31 +17,10 @@ export interface CreateArtistResult {
 
 const createArtist = tool({
   description: `
-  Create a new artist account in the system and handles initial research.
+  Create a new artist account in the system.
   Requires the artist name and the account ID of the user with admin access to the new artist account.
   The active_conversation_id parameter is optional — when omitted, use the active_conversation_id from the system prompt
   to copy the conversation. Never ask the user to provide a room ID.
-  always follow this tool loop:
-  <tool_loop>
-    create_new_artist - create a new artist account in the system
-    get_spotify_search - check for any existing Spotify artist data to connect to the new artist account
-    update_account_info - update the new artist's profile picture based on the Spotify artist data
-    update_artist_socials - add the Spotify artist's social profiles to the new artist's socials
-    artist_deep_research - conduct comprehensive research on the artist across all platforms
-  </tool_loop>
-
-IMPORTANT: After creating the artist, you MUST continue with these steps in order:
-  1. Call get_spotify_search with the artist's name to find their Spotify profile.
-          •  Choose the best match AUTOMATICALLY using these heuristics (without asking the user):
-              – Exact name match over partial matches.
-              – If no exact match, choose the result with the highest popularity score.
-          •  NEVER ask the user which result to choose — pick the most likely candidate yourself.
-          •  Extract the profile image URL and Spotify URLs from the chosen result for the next steps.
-  2. Call update_account_info to set their profile picture and name based on the chosen Spotify artist.
-  3. Call update_artist_socials to add their Spotify profile URL (and any other socials discovered).
-  4. Call artist_deep_research to gather comprehensive data.
-  
-  Do not stop after creating the artist — continue with all these steps to complete the setup automatically.  
   `,
   inputSchema: z.object({
     name: z.string().describe("The name of the artist to be created"),
