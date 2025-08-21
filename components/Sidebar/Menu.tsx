@@ -17,6 +17,7 @@ const Menu = ({ toggleMenuExpanded }: { toggleMenuExpanded: () => void }) => {
   const { email, isPrepared } = useUserProvider();
   const isAgents = pathname.includes("/agents");
   const isSegments = pathname.includes("/segments");
+  const isScheduledActions = pathname.includes("/scheduled-actions");
 
   const goToItem = (link?: string) => {
     if (isPrepared()) {
@@ -43,7 +44,7 @@ const Menu = ({ toggleMenuExpanded }: { toggleMenuExpanded: () => void }) => {
           {email ? "New Chat" : "Sign In"}
         </Button>
         <AgentsNavItem isActive={isAgents} onClick={() => goToItem("agents")} />
-        <ScheduledActionsNavItem isActive={false} onClick={() => goToItem("scheduled-actions")} />
+        <ScheduledActionsNavItem isActive={isScheduledActions} onClick={() => goToItem("scheduled-actions")} />
         <FanGroupNavItem isActive={isSegments} onClick={() => goToItem("segments")} />
       </div>
 
