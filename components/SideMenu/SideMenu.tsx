@@ -12,6 +12,7 @@ import { Button } from "../ui/button";
 import FanGroupNavItem from "../Sidebar/FanGroupNavItem";
 import AgentsNavItem from "../Sidebar/AgentsNavItem";
 import { usePathname } from "next/navigation";
+import ScheduledActionsNavItem from "../Sidebar/ScheduledActionsNavItem";
 
 const SideMenu = ({
   isVisible,
@@ -30,6 +31,7 @@ const SideMenu = ({
   const isArtistSelected = !!selectedArtist;
   const isAgents = pathname.includes("/agents");
   const isSegments = pathname.includes("/segments");
+  const isScheduledActions = pathname.includes("/scheduled-actions");
 
   const goToItem = (link?: string) => {
     if (isPrepared()) {
@@ -81,6 +83,7 @@ const SideMenu = ({
           </Button>
         )}
         <AgentsNavItem isActive={isAgents} onClick={() => goToItem("agents")} />
+        <ScheduledActionsNavItem isActive={isScheduledActions} onClick={() => goToItem("scheduled-actions")} />
         <FanGroupNavItem isActive={isSegments} onClick={() => goToItem("segments")} />
       </div>
       {address && <RecentChats toggleModal={toggleModal} />}
