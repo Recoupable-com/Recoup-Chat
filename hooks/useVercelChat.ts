@@ -13,6 +13,7 @@ import { UIMessage, FileUIPart } from "ai";
 import useAvailableModels from "./useAvailableModels";
 import { useLocalStorage } from "usehooks-ts";
 import { DEFAULT_MODEL } from "@/lib/consts";
+import { usePaymentProvider } from "@/providers/PaymentProvider";
 
 interface UseVercelChatProps {
   id: string;
@@ -44,6 +45,7 @@ export function useVercelChat({
     "RECOUP_MODEL",
     availableModels[0]?.id ?? ""
   );
+  const { refetchCredits } = usePaymentProvider();
 
   const chatRequestOptions = useMemo(
     () => ({
@@ -67,7 +69,7 @@ export function useVercelChat({
         toast.error("An error occurred, please try again!");
         setHasChatApiError(true);
       },
-      onFinish: () => {
+      onFinish: async () => {
         // As onFinish triggers when a message is streamed successfully.
         // On a new chat, usually there are 2 messages:
         // 1. First user message
@@ -77,6 +79,7 @@ export function useVercelChat({
         if (messagesLengthRef.current === 2) {
           fetchConversations();
         }
+        await refetchCredits();
       },
     });
 

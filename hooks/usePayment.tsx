@@ -11,7 +11,11 @@ const usePayment = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [successCallbackParams, setSuccessCallbackParams] = useState("");
   const [wrappedActive, setWrappedActive] = useState(false);
-  const { data: creditsData, isLoading: isLoadingCredits } = useCredits();
+  const {
+    data: creditsData,
+    isLoading: isLoadingCredits,
+    refetch: refetchCredits,
+  } = useCredits();
   const { data: subscriptionData, isLoading: isLoadingSubscription } =
     useSubscription();
 
@@ -54,6 +58,7 @@ const usePayment = () => {
     totalCredits,
     subscriptionActive,
     wrappedActive,
+    refetchCredits,
   };
 };
 
