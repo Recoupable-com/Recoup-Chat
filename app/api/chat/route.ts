@@ -1,18 +1,14 @@
 // Ensure atob/btoa exist before any downstream imports that may rely on them
 import "@/lib/polyfills/base64";
-import {
-  createUIMessageStream,
-  createUIMessageStreamResponse,
-  streamText,
-} from "ai";
+import { createUIMessageStream, createUIMessageStreamResponse } from "ai";
 import { NextRequest } from "next/server";
 import { serializeError } from "@/lib/errors/serializeError";
 import { sendErrorNotification } from "@/lib/telegram/errors/sendErrorNotification";
-import { setupChatRequest } from "@/lib/chat/setupChatRequest";
 import { handleChatCompletion } from "@/lib/chat/handleChatCompletion";
 import { getCorsHeaders } from "@/lib/chat/getCorsHeaders";
 import { type ChatRequest } from "@/lib/chat/types";
 import generateUUID from "@/lib/generateUUID";
+import getExecute from "@/lib/chat/getExecute";
 
 // Handle OPTIONS preflight requests
 export async function OPTIONS() {
@@ -26,16 +22,10 @@ export async function POST(request: NextRequest) {
   const body: ChatRequest = await request.json();
 
   try {
-    const chatConfig = await setupChatRequest(body);
-
     const stream = createUIMessageStream({
       originalMessages: body.messages,
       generateId: generateUUID,
-      execute: ({ writer }) => {
-        const result = streamText(chatConfig);
-
-        writer.merge(result.toUIMessageStream());
-      },
+      execute: async (options) => await getExecute(options, body),
       onError: (e) => {
         sendErrorNotification({
           ...body,

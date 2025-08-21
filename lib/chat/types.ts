@@ -3,7 +3,6 @@ import { GoogleGenerativeAIProviderOptions } from "@ai-sdk/google";
 import { OpenAIResponsesProviderOptions } from "@ai-sdk/openai";
 import {
   type ModelMessage,
-  type LanguageModel,
   type UIMessage,
   type ToolSet,
   type StopCondition,
@@ -20,7 +19,7 @@ export interface ChatRequest {
 }
 
 export interface ChatConfig {
-  model: LanguageModel;
+  model: string;
   system: string;
   messages: ModelMessage[];
   experimental_generateMessageId: () => string;
