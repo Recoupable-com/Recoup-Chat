@@ -21,7 +21,7 @@ export const handleChatCredits = async ({
   accountId,
 }: HandleChatCreditsParams): Promise<void> => {
   if (!accountId) {
-    console.log("No account ID provided, skipping credit deduction");
+    console.error("No account ID provided, skipping credit deduction");
     return;
   }
 
@@ -30,7 +30,6 @@ export const handleChatCredits = async ({
 
     if (usageCost > 0) {
       const creditsToDeduct = Math.max(1, Math.round(usageCost * 100));
-      console.log("deducting credits:", creditsToDeduct);
 
       await deductCredits({
         accountId,
