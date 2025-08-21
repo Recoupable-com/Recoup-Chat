@@ -69,7 +69,7 @@ export function useVercelChat({
         toast.error("An error occurred, please try again!");
         setHasChatApiError(true);
       },
-      onFinish: () => {
+      onFinish: async () => {
         // As onFinish triggers when a message is streamed successfully.
         // On a new chat, usually there are 2 messages:
         // 1. First user message
@@ -79,7 +79,7 @@ export function useVercelChat({
         if (messagesLengthRef.current === 2) {
           fetchConversations();
         }
-        refetchCredits();
+        await refetchCredits();
       },
     });
 
