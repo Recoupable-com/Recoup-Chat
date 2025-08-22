@@ -1,37 +1,21 @@
 import { useUserProvider } from "@/providers/UserProvder";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { Button } from "@/components/ui/button";
 import UserProfileDropdown from "./UserProfileDropdown";
 import UserProfileButtonSkeleton from "./UserProfileButtonSkeleton";
+import CreditsProgressAvatar from "./CreditsProgressAvatar";
 
 const UserProfileButton = () => {
   const { email, userData } = useUserProvider();
-
   if (!userData) return <UserProfileButtonSkeleton />;
 
   const displayName = userData?.name || email || userData?.wallet || "";
   const organization = email || "";
-  const initials = displayName
-    .split(" ")
-    .map((part: string) => part.charAt(0))
-    .join("")
-    .slice(0, 2)
-    .toUpperCase();
 
   return (
-    <Button
-      variant="ghost"
-      className="w-full justify-start items-center gap-2 h-auto py-1 pl-1 pr-2 rounded-xl border border-transparent hover:border-muted-foreground/20"
-      type="button"
+    <div
+      className="w-full justify-start flex items-center gap-2 h-auto py-1 pl-1 pr-2 rounded-xl border border-transparent hover:border-muted-foreground/20"
       aria-label="Open user menu"
     >
-      <Avatar className="h-8 w-8 md:h-9 md:w-9 ring-2 ring-muted-foreground/20">
-        <AvatarImage
-          src={userData?.image || "https://i.imgur.com/QCdc8Ai.jpg"}
-          alt="User avatar"
-        />
-        <AvatarFallback>{initials || "U"}</AvatarFallback>
-      </Avatar>
+      <CreditsProgressAvatar />
       <div className="flex-1 min-w-0 text-left">
         <p className="text-sm md:text-base font-semibold truncate">
           {displayName}
@@ -39,7 +23,7 @@ const UserProfileButton = () => {
         <p className="text-xs text-muted-foreground truncate">{organization}</p>
       </div>
       <UserProfileDropdown />
-    </Button>
+    </div>
   );
 };
 
