@@ -19,7 +19,6 @@ const CreditsUsage = () => {
         Credits
       </div>
 
-      {/* Credit Details */}
       <div className="space-y-1 text-xs">
         <div className="flex justify-between">
           <span className="text-muted-foreground">Total</span>
