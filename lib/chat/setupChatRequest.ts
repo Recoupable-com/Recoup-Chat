@@ -9,10 +9,11 @@ import { AnthropicProviderOptions } from "@ai-sdk/anthropic";
 import { DEFAULT_MODEL } from "../consts";
 import { stepCountIs } from "ai";
 import getPrepareStepResult from "./toolChains/getPrepareStepResult";
+import { filterExcludedTools } from "./filterExcludedTools";
 
 export async function setupChatRequest(body: ChatRequest): Promise<ChatConfig> {
   let { email } = body;
-  const { accountId, artistId, model } = body;
+  const { accountId, artistId, model, excludeTools } = body;
 
   if (!email && accountId) {
     const emails = await getAccountEmails(accountId);
@@ -21,9 +22,8 @@ export async function setupChatRequest(body: ChatRequest): Promise<ChatConfig> {
     }
   }
 
-  const tools = await getMcpTools();
+  const tools = filterExcludedTools(getMcpTools(), excludeTools);
 
-  // Attach files like PDFs and images
   const messagesWithRichFiles = await attachRichFiles(body.messages, {
     artistId: artistId as string,
   });

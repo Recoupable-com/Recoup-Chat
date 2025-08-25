@@ -1,3 +1,4 @@
+import { ToolSet } from "ai";
 import generateImage from "./generateImage";
 import createTxtFile from "./createTxtFile";
 import getSegmentFans from "./getSegmentFans";
@@ -35,7 +36,7 @@ import createSegments from "./createSegments";
 import createReleaseReport from "./createReleaseReport";
 import youtubeTools from "./youtube";
 
-export async function getMcpTools() {
+export function getMcpTools(): ToolSet {
   const tools = {
     generate_image: generateImage,
     generate_txt_file: createTxtFile,
