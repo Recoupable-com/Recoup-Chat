@@ -16,6 +16,7 @@ export interface ChatRequest {
   accountId: string;
   email?: string;
   model?: string;
+  excludeTools?: string[];
 }
 
 export interface ChatConfig {
