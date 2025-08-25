@@ -24,7 +24,6 @@ export async function setupChatRequest(body: ChatRequest): Promise<ChatConfig> {
 
   const tools = filterExcludedTools(getMcpTools(), excludeTools);
 
-  // Attach files like PDFs and images
   const messagesWithRichFiles = await attachRichFiles(body.messages, {
     artistId: artistId as string,
   });
