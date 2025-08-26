@@ -44,14 +44,6 @@ const UnlockProModal = ({
     },
     {
       id: 3,
-      text: "Recoupable helped us uncover TikTok trends we couldn't get anywhere else.",
-      author: "Nick Pirovano",
-      role: "VP of Marketing",
-      company: "Cantora Records",
-      avatar: "/TesimonalHeadshots/NickPirovano.jpg"
-    },
-    {
-      id: 4,
       text: "The release reports are unreal. Exactly what we're looking for. This is sick and really exciting.",
       author: "Sam Palm",
       role: "Head of Data & Insights",
@@ -59,7 +51,7 @@ const UnlockProModal = ({
       avatar: "/TesimonalHeadshots/SamPalm.jpg"
     },
     {
-      id: 5,
+      id: 4,
       text: "Recoupable is amazing. I've been blown away since day one. It's like having a manager in your pocket.",
       author: "Carolyn Ortiz",
       role: "Chief Operator",
@@ -67,6 +59,13 @@ const UnlockProModal = ({
       avatar: "/TesimonalHeadshots/CarolynOrtiz.jpg"
     }
   ];
+
+  // Ensure currentTestimonial is valid after testimonials array changes
+  React.useEffect(() => {
+    if (currentTestimonial >= testimonials.length) {
+      setCurrentTestimonial(0);
+    }
+  }, [testimonials.length, currentTestimonial]);
 
   // Auto-advance testimonials every 5 seconds
   React.useEffect(() => {
