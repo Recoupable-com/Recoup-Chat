@@ -3,6 +3,7 @@ import AgentTags from "./AgentTags";
 import AgentCard from "./AgentCard";
 import { useAgentData } from "./useAgentData";
 import type { Agent } from "./useAgentData";
+import CreateAgentButton from "./CreateAgentButton";
 
 const Agents = () => {
   const { push } = useRouter();
@@ -22,9 +23,12 @@ const Agents = () => {
 
   return (
     <div className="max-w-full md:max-w-[calc(100vw-200px)] grow py-8 pb-0 px-6 md:px-12 flex flex-col h-full min-h-0">
-      <p className="text-left font-plus_jakarta_sans_bold text-3xl mb-4">
-        Agents
-      </p>
+      <div className="flex justify-between items-center mb-4">
+        <p className="text-left font-plus_jakarta_sans_bold text-3xl">
+          Agents
+        </p>
+        <CreateAgentButton />
+      </div>
       <p className="text-lg text-gray-500 text-left mb-4 font-light font-inter max-w-2xl">
         <span className="sm:hidden">
           Smarter label teams, powered by agents.
