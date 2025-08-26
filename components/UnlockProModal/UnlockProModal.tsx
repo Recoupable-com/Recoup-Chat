@@ -100,34 +100,34 @@ const UnlockProModal = ({
               
               {/* Left side - Signup content */}
               <div className="bg-white flex justify-center flex-col px-10 md:px-12 py-8 md:py-10">
-                <h1 className="text-3xl md:text-4xl leading-snug text-gray-900 mb-2" style={{fontFamily: 'Plus Jakarta Sans, sans-serif', fontWeight: '900'}}>
+                <h1 className="font-inter_bold text-3xl md:text-4xl leading-snug text-gray-900 mb-2 mt-4">
                   Start Your Free<br/>30 Day Trial
                 </h1>
 
                 <ul className="space-y-3 mt-8">
                   <li className="flex items-center gap-3">
-                    <Sparkles className="w-4 h-4 text-blue-600 flex-shrink-0" />
-                    <span className="font-inter_regular text-gray-700 text-sm md:text-base">Top-Tier AI Models</span>
+                    <Sparkles className="w-4 h-4 text-gray-700 flex-shrink-0" />
+                    <span className="font-inter_regular text-gray-700 text-sm md:text-base">Premium AI Models</span>
                   </li>
                   <li className="flex items-center gap-3">
-                    <Bot className="w-4 h-4 text-purple-600 flex-shrink-0" />
+                    <Bot className="w-4 h-4 text-gray-700 flex-shrink-0" />
                     <span className="font-inter_regular text-gray-700 text-sm md:text-base">Customizable Agents</span>
                   </li>
                   <li className="flex items-center gap-3">
-                    <Users className="w-4 h-4 text-green-600 flex-shrink-0" />
-                    <span className="font-inter_regular text-gray-700 text-sm md:text-base">Up to 100 artist roster</span>
+                    <Users className="w-4 h-4 text-gray-700 flex-shrink-0" />
+                    <span className="font-inter_regular text-gray-700 text-sm md:text-base">Up to 100 Artist Roster</span>
                   </li>
                   <li className="flex items-center gap-3">
-                    <Coins className="w-4 h-4 text-amber-600 flex-shrink-0" />
-                    <span className="font-inter_regular text-gray-700 text-sm md:text-base">1,000 credits monthly</span>
+                    <Coins className="w-4 h-4 text-gray-700 flex-shrink-0" />
+                    <span className="font-inter_regular text-gray-700 text-sm md:text-base">1,000 Credits Monthly</span>
                   </li>
                   <li className="flex items-center gap-3">
-                    <Search className="w-4 h-4 text-indigo-600 flex-shrink-0" />
-                    <span className="font-inter_regular text-gray-700 text-sm md:text-base">Rollout research</span>
+                    <Search className="w-4 h-4 text-gray-700 flex-shrink-0" />
+                    <span className="font-inter_regular text-gray-700 text-sm md:text-base">Rollout Research</span>
                   </li>
                   <li className="flex items-center gap-3">
-                    <FileText className="w-4 h-4 text-rose-600 flex-shrink-0" />
-                    <span className="font-inter_regular text-gray-700 text-sm md:text-base">Recurring reports</span>
+                    <FileText className="w-4 h-4 text-gray-700 flex-shrink-0" />
+                    <span className="font-inter_regular text-gray-700 text-sm md:text-base">Recurring Reports</span>
                   </li>
                 </ul>
                 
@@ -140,34 +140,52 @@ const UnlockProModal = ({
                   <ArrowRight className="size-5" />
                 </button>
                 
-                <p className="font-inter_regular text-xs text-gray-500 text-center leading-relaxed">
-                  <span className="text-gray-700 font-inter_medium">Just $3.30/day after trial (less than a coffee)</span><br/>
+                <p className="font-inter_regular text-xs text-gray-500 text-center leading-relaxed italic">
+                  <span className="text-gray-700 font-inter_regular">Just $3.30/day after trial (less than a cup of coffee)</span><br/>
                   No hidden fees • Cancel anytime
                 </p>
               </div>
 
                             {/* Right side - Testimonials */}
-              <div className="bg-[url('/Blue%20Background.png')] bg-cover bg-center bg-no-repeat px-8 py-0 flex flex-col items-center justify-center relative" style={{backgroundSize: 'cover', imageRendering: 'auto'}}>
-                <div className="w-full max-w-md">
+              <div className="bg-[url('/Blue%20Background.png')] bg-cover bg-center bg-no-repeat px-8 py-0 flex flex-col items-center justify-center relative overflow-hidden" style={{backgroundSize: 'cover', imageRendering: 'auto'}}>
+                {/* Video overlay on top of blue background */}
+                <video 
+                  className="absolute inset-0 w-full h-full object-cover opacity-10 pointer-events-none z-10 brightness-150"
+                  autoPlay 
+                  loop 
+                  muted 
+                  playsInline
+                  preload="auto"
+                  ref={(el) => {
+                    if (el) {
+                      el.playbackRate = 1.0;
+                      el.style.transform = 'rotate(90deg) scale(1.5)';
+                      el.style.objectPosition = 'center 25%';
+                      el.currentTime = 0.5;
+                    }
+                  }}
+                >
+                  <source src="/backgrounds/White_Dots_Diagonal_Waves_Animation_source_2463953.mov" type="video/quicktime" />
+                  <source src="/backgrounds/White_Dots_Diagonal_Waves_Animation_source_2463953.mov" type="video/mp4" />
+                </video>
+                <div className="w-full max-w-md relative z-20">
                   {/* Testimonial Card Container - Fixed Height */}
                   <div className="relative h-[220px]">
                     <div className="absolute inset-0">
                       <div 
-                        className="bg-white/15 backdrop-blur-md rounded-2xl p-6 border border-white/20 shadow-xl h-full flex flex-col justify-between"
+                        className="bg-white/15 backdrop-blur-md rounded-3xl p-6 border border-white/20 shadow-2xl h-full flex flex-col relative overflow-hidden"
                         key={currentTestimonial}
                       >
-                        <p 
-                          className="text-white text-lg leading-relaxed font-inter_regular italic animate-fadeIn"
-                          key={`quote-${currentTestimonial}`}
-                        >
-                          &ldquo;{testimonials[currentTestimonial].text}&rdquo;
-                        </p>
-
+                        {/* Decorative quote mark */}
+                        <div className="absolute top-3 right-4 text-white/20 text-5xl font-serif leading-none">
+                          ❝
+                        </div>
+                        
                         <div 
-                          className="flex items-center gap-3 mt-4 animate-fadeIn"
+                          className="flex items-center gap-3 mb-4 animate-fadeIn"
                           key={`author-${currentTestimonial}`}
                         >
-                          <div className="w-12 h-12 rounded-full border border-white/30 overflow-hidden flex-shrink-0">
+                          <div className="w-12 h-12 rounded-full border-2 border-white/40 overflow-hidden flex-shrink-0 shadow-lg">
                             <Image
                               src={testimonials[currentTestimonial].avatar}
                               alt={testimonials[currentTestimonial].author}
@@ -180,14 +198,21 @@ const UnlockProModal = ({
                             <div className="text-white font-inter_bold text-base truncate">
                               {testimonials[currentTestimonial].author}
                             </div>
-                            <div className="text-white/90 font-inter_medium text-sm truncate">
+                            <div className="text-white/95 font-inter_medium text-sm truncate">
                               {testimonials[currentTestimonial].role}
                             </div>
-                            <div className="text-white/70 font-inter_regular text-sm truncate">
+                            <div className="text-white/75 font-inter_regular text-sm truncate">
                               at {testimonials[currentTestimonial].company}
                             </div>
                           </div>
                         </div>
+
+                        <p 
+                          className="text-white text-lg leading-relaxed font-inter_regular italic animate-fadeIn flex-1 pr-6"
+                          key={`quote-${currentTestimonial}`}
+                        >
+                          {testimonials[currentTestimonial].text}
+                        </p>
                       </div>
                     </div>
 
