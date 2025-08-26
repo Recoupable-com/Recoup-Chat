@@ -22,6 +22,11 @@
   font-family: "PlusJakartaSans Regular";
   src: url("/fonts/PlusJakartaSans-Regular.ttf") format("truetype");
 }
+@font-face {
+  font-family: "Instrument Serif";
+  src: url("/fonts/InstrumentSerif-Italic.ttf") format("truetype");
+  font-style: italic;
+}
 
 html,
 body {
