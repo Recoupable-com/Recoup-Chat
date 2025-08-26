@@ -21,11 +21,11 @@ const Agents = () => {
   };
 
   return (
-    <div className="max-w-full md:max-w-[calc(100vw-200px)] grow py-8 px-6 md:px-12 flex flex-col h-full min-h-0">
-      <p className="text-center md:text-left font-plus_jakarta_sans_bold text-3xl mb-4">
+    <div className="max-w-full md:max-w-[calc(100vw-200px)] grow py-8 pb-0 px-6 md:px-12 flex flex-col h-full min-h-0">
+      <p className="text-left font-plus_jakarta_sans_bold text-3xl mb-4">
         Agents
       </p>
-      <p className="text-lg text-gray-500 text-center md:text-left md:mb-4 font-light font-inter max-w-2xl">
+      <p className="text-lg text-gray-500 text-left mb-4 font-light font-inter max-w-2xl">
         <span className="sm:hidden">
           Smarter label teams, powered by agents.
         </span>
@@ -34,7 +34,7 @@ const Agents = () => {
           agents.
         </span>
       </p>
-      <div className="container flex flex-col h-full w-full flex-1 min-h-0">
+      <div className="container relative flex flex-col h-full w-full flex-1 min-h-0 items-start">
         <AgentTags
           tags={tags}
           selectedTag={selectedTag}
@@ -42,7 +42,10 @@ const Agents = () => {
           showAllTags={showAllTags}
           setShowAllTags={setShowAllTags}
         />
-        <div className="flex flex-col flex-1 overflow-y-auto scrollable pt-4 md:pt-6">
+        <div className="relative w-full">
+          <div className="absolute top-0 w-full h-8 z-30 pointer-events-none bg-gradient-to-b from-white/95 to-transparent dark:from-neutral-950/95"></div>
+        </div>
+        <div className="flex flex-col flex-1 overflow-y-auto pt-4 md:pt-8 pb-8 relative bg-white dark:bg-neutral-950">
           {loading ? (
             <div className="text-center text-gray-400 py-12">
               Loading agents...
@@ -63,6 +66,7 @@ const Agents = () => {
             </div>
           )}
         </div>
+        <div className="absolute bottom-0 w-full h-8 z-30 pointer-events-none bg-gradient-to-b to-white/95 from-transparent dark:from-neutral-950/95"></div>
       </div>
     </div>
   );
