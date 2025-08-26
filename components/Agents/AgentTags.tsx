@@ -13,7 +13,7 @@ const AgentTags: React.FC<AgentTagsProps> = ({
   selectedTag,
   setSelectedTag,
 }) => (
-  <div className="flex flex-wrap gap-2 mb-8 items-center justify-center md:justify-start">
+  <div className="flex flex-wrap gap-2 items-center justify-start">
     {tags.map((tag) => (
       <button
         key={tag}
