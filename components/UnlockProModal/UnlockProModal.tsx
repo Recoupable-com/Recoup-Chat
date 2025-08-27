@@ -99,8 +99,8 @@ const UnlockProModal = ({
               
               {/* Left side - Signup content */}
               <div className="bg-white flex justify-center flex-col px-10 md:px-12 py-8 md:py-10">
-                <h1 className="font-inter_bold text-3xl md:text-4xl leading-snug text-gray-900 mb-2 mt-4">
-                  Start Your Free<br/>30 Day Trial
+                <h1 className="font-inter_bold text-4xl md:text-5xl leading-snug text-gray-900 mb-2 mt-4">
+                  Unlock Artist<br/>Intelligence
                 </h1>
 
                 <ul className="space-y-3 mt-8">

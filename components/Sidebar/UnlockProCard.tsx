@@ -42,24 +42,26 @@ const UnlockProCard = () => {
             <Icon name="star" />
           </div>
             <div className="font-inter_bold text-white text-3xl">
-              Unlock Advanced
+              Unlock
+              <br />
+              Artist
               <br />
               Intelligence
             </div>
           </div>
           
           <p className="text-sm font-inter text-white/90 leading-relaxed mb-5 mt-2">
-            Get dramatically better results with <span className="font-inter_bold">premium AI models</span>
+            Get better results with <span className="font-inter_bold">premium AI models</span>
           </p>
           
-          <button
-            type="button"
-            className="font-inter_bold text-sm bg-white/15 backdrop-blur-md text-white rounded-lg px-4 py-2 flex items-center gap-2 border border-white/20 hover:bg-white/25 transition-all duration-200 shadow-xl mt-2"
-            onClick={() => toggleModal(false)}
-          >
-            Start Free Trial
-            <ArrowRight className="size-3" />
-          </button>
+                      <button
+              type="button"
+              className="font-inter_bold text-sm bg-white/15 backdrop-blur-md text-white rounded-lg px-4 py-2 flex items-center gap-2 border border-white/20 hover:bg-white/25 transition-all duration-200 shadow-xl mt-2"
+              onClick={() => toggleModal(false)}
+            >
+              Learn More
+              <ArrowRight className="size-3" />
+            </button>
         </div>
     </div>
   );
