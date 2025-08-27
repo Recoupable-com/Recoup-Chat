@@ -109,7 +109,6 @@ const RecentChats = ({ toggleModal }: { toggleModal: () => void }) => {
             {conversations
               .filter((chat) => 'memories' in chat && chat.memories.length !== 0)
               .map((chatRoom) => {
-                console.log("chatroom", chatRoom);
                 const roomId = getChatRoomId(chatRoom);
 
                 return (
