@@ -77,7 +77,11 @@ export function useVercelChat({
         // When messages length is 2, it means second message has been streamed successfully and should also have been updated on backend
         // So we trigger the fetchConversations to update the conversation list
         if (messagesLengthRef.current === 2) {
-          fetchConversations();
+          if (userId) {
+            fetchConversations(userId);
+          } else {
+            pendingFetchAfterFinishRef.current = true;
+          }
         }
         await refetchCredits();
       },
@@ -106,6 +110,16 @@ export function useVercelChat({
     userId,
     setMessages
   );
+
+  // If we finished streaming the first assistant message but userId wasn't ready yet,
+  // refetch conversations as soon as userId becomes available.
+  const pendingFetchAfterFinishRef = useRef(false);
+  useEffect(() => {
+    if (pendingFetchAfterFinishRef.current && userId) {
+      fetchConversations(userId);
+      pendingFetchAfterFinishRef.current = false;
+    }
+  }, [userId, fetchConversations]);
 
   // Only show loading state if:
   // 1. We're loading messages
