@@ -2,6 +2,7 @@ import useClickChat from "@/hooks/useClickChat";
 import { useConversationsProvider } from "@/providers/ConversationsProvider";
 import RecentChatSkeleton from "./RecentChatSkeleton";
 import { useState, useRef, useEffect } from "react";
+import { AnimatePresence, motion } from "framer-motion";
 import ChatItem from "./ChatItem";
 import { useMobileDetection } from "@/hooks/useMobileDetection";
 import { useOutsideClick } from "@/hooks/useOutsideClick";
@@ -110,32 +111,42 @@ const RecentChats = ({ toggleModal }: { toggleModal: () => void }) => {
         ) : (
           <>
             {filteredConversations.length > 0 ? (
-              filteredConversations.map((chatRoom) => {
-                const roomId = getChatRoomId(chatRoom);
+              <AnimatePresence initial={false}>
+                {filteredConversations.map((chatRoom) => {
+                  const roomId = getChatRoomId(chatRoom);
 
-                return (
-                  <ChatItem
-                    key={roomId}
-                    chatRoom={chatRoom}
-                    isMobile={isMobile}
-                    isHovered={hoveredChatId === roomId}
-                    isMenuOpen={openMenuId === roomId}
-                    isActive={roomId === activeChatId}
-                    menuRef={openMenuId === roomId ? menuRef : null}
-                    setButtonRef={(el: HTMLButtonElement | null) => {
-                      buttonRefs.current[roomId] = el;
-                    }}
-                    onMouseEnter={() => setHoveredChatId(roomId)}
-                    onMouseLeave={() => setHoveredChatId(null)}
-                    onChatClick={() => handleClick(chatRoom, toggleModal)}
-                    onMenuToggle={() => {
-                      setOpenMenuId(openMenuId === roomId ? null : roomId);
-                    }}
-                    onRenameClick={() => openModal("rename", chatRoom)}
-                    onDeleteClick={() => openModal("delete", chatRoom)}
-                  />
-                );
-              })
+                  return (
+                    <motion.div
+                      key={roomId}
+                      layout="position"
+                      initial={{ opacity: 0, y: -8 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      exit={{ opacity: 0, y: -8 }}
+                      transition={{ type: "spring", stiffness: 500, damping: 30, mass: 0.5 }}
+                    >
+                      <ChatItem
+                        chatRoom={chatRoom}
+                        isMobile={isMobile}
+                        isHovered={hoveredChatId === roomId}
+                        isMenuOpen={openMenuId === roomId}
+                        isActive={roomId === activeChatId}
+                        menuRef={openMenuId === roomId ? menuRef : null}
+                        setButtonRef={(el: HTMLButtonElement | null) => {
+                          buttonRefs.current[roomId] = el;
+                        }}
+                        onMouseEnter={() => setHoveredChatId(roomId)}
+                        onMouseLeave={() => setHoveredChatId(null)}
+                        onChatClick={() => handleClick(chatRoom, toggleModal)}
+                        onMenuToggle={() => {
+                          setOpenMenuId(openMenuId === roomId ? null : roomId);
+                        }}
+                        onRenameClick={() => openModal("rename", chatRoom)}
+                        onDeleteClick={() => openModal("delete", chatRoom)}
+                      />
+                    </motion.div>
+                  );
+                })}
+              </AnimatePresence>
             ) : (
               <div className="flex flex-col items-center justify-center py-8 px-4 text-center">
                 <p className="text-sm font-inter text-grey-dark mb-1">No recent chats</p>
