@@ -7,6 +7,8 @@ export interface Agent {
   description: string;
   prompt: string;
   tags?: string[];
+  is_private?: boolean;
+  creator?: string | null;
 }
 
 export function useAgentData() {
