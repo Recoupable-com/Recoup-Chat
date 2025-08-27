@@ -56,7 +56,6 @@ const useUser = () => {
       },
     });
     const data = await response.json();
-    console.log('[test] save data', data);
     setUserData(data.data);
     setUpdating(false);
     setIsModalOpen(false);
@@ -104,7 +103,6 @@ const useUser = () => {
 
       const data = await response.json();
       setUserData(data.data);
-      console.log("[test]", data.data);
       setImage(data.data?.image || "");
       setInstruction(data.data?.instruction || "");
       setName(data?.data?.name || "");

@@ -38,7 +38,6 @@ const useConversations = () => {
 
   const fetchConversations = async (accountIdParam?: string) => {
     const accountId = accountIdParam ?? userData?.id;
-    console.log('[TEST] ACCOUNTID', accountId);
     if (!accountId) return;
     const data = await getConversations(accountId);
     setAllConversations([...data, ...agents]);
