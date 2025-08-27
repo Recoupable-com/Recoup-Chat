@@ -1,4 +1,5 @@
 import type React from "react";
+import { Lock, Globe } from "lucide-react";
 
 interface Agent {
   title: string;
@@ -6,6 +7,7 @@ interface Agent {
   prompt: string;
   tags?: string[];
   status?: string;
+  is_private?: boolean;
 }
 
 interface AgentCardProps {
@@ -28,6 +30,14 @@ const AgentCard: React.FC<AgentCardProps> = ({ agent, onClick }) => {
       className="w-full min-h-32 md:h-44 bg-gray-50 border border-gray-100 rounded-lg p-4 md:p-6 hover:bg-white hover:border-gray-200 hover:shadow-sm transition-all duration-200 text-left group relative flex flex-col"
       onClick={() => onClick(agent)}
     >
+      {/* Visibility indicator */}
+      <div className="absolute top-3 right-3">
+        {agent.is_private ? (
+          <Lock size={16} aria-label="Private" className="text-amber-500" />
+        ) : (
+          <Globe size={16} aria-label="Public" className="text-emerald-500" />
+        )}
+      </div>
       {/* Action tag - fully rounded pills */}
       {displayedActionTags.length > 0 && (
         <div className="flex-shrink-0 mb-2 md:mb-3">
