@@ -36,7 +36,9 @@ const useConversations = () => {
   }, [selectedArtist, allConversations]);
 
   const fetchConversations = async () => {
-    const data = await getConversations(userData.id);
+    const accountId = userData?.id;
+    if (!accountId) return;
+    const data = await getConversations(accountId);
     setAllConversations([...data, ...agents]);
     setIsLoading(false);
   };
