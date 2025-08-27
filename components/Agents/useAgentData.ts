@@ -20,6 +20,7 @@ export function useAgentData() {
     fetch("/api/agent-templates")
       .then((res) => res.json())
       .then((data: Agent[]) => {
+        console.log("[TEST] DATA", data);
         setAgents(data);
         
         // Action tags that should NOT appear in top filters (now multi-word)
