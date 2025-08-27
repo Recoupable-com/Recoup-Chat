@@ -21,8 +21,9 @@ const useConversations = () => {
   };
 
   useEffect(() => {
-    if (userData) {
-      fetchConversations();
+    const accountId = userData?.id;
+    if (accountId) {
+      fetchConversations(accountId);
       return;
     }
     return () => setAllConversations([]);
@@ -35,8 +36,11 @@ const useConversations = () => {
     );
   }, [selectedArtist, allConversations]);
 
-  const fetchConversations = async () => {
-    const data = await getConversations(userData.id);
+  const fetchConversations = async (accountIdParam?: string) => {
+    const accountId = accountIdParam ?? userData?.id;
+    console.log('[TEST] ACCOUNTID', accountId);
+    if (!accountId) return;
+    const data = await getConversations(accountId);
     setAllConversations([...data, ...agents]);
     setIsLoading(false);
   };
