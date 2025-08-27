@@ -155,7 +155,9 @@ export function useVercelChat({
 
     if (!roomId) {
       silentlyUpdateUrl();
-      // Add optimistic
+
+      // Optimistically append a temporary conversation so it appears in Recent Chats
+      // It will be replaced by the real conversation after the updates/refetch
       addOptimisticConversation("New Chat", id);
     }
   };
