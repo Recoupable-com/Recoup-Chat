@@ -37,7 +37,7 @@ const useConversations = () => {
 
   const fetchConversations = async () => {
     const accountId = userData?.id;
-    if (!accountId) return;
+    if (!accountId) throw new Error("No account id found");
     const data = await getConversations(accountId);
     setAllConversations([...data, ...agents]);
     setIsLoading(false);
