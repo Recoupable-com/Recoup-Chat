@@ -4,6 +4,7 @@ import type { ArtistAgent } from "@/lib/supabase/getArtistAgents";
 import capitalize from "@/lib/capitalize";
 import type { RefObject } from "react";
 import { cn } from "@/lib/utils";
+import { useRouter } from 'next/navigation'
 
 type ChatItemProps = {
   chatRoom: Conversation | ArtistAgent;
@@ -46,6 +47,7 @@ const ChatItem = ({
   onRenameClick,
   onDeleteClick
 }: ChatItemProps) => {
+  const router = useRouter();
   const { displayName } = getChatDisplayInfo(chatRoom);
   const showOptions = isMobile || isHovered || isActive;
   const isOptimisticChatItem = (
@@ -61,6 +63,10 @@ const ChatItem = ({
       );
     })
   );
+  
+  if ('id' in chatRoom) {
+    router.prefetch(`/chat/${chatRoom.id}`);
+  }
 
   return (
     <div 
