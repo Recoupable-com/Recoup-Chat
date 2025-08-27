@@ -106,32 +106,34 @@ const RecentChats = ({ toggleModal }: { toggleModal: () => void }) => {
           <RecentChatSkeleton />
         ) : (
           <>
-            {conversations.map((chatRoom) => {
-              const roomId = getChatRoomId(chatRoom);
+            {conversations
+              .filter((chat) => 'memories' in chat && chat.memories.length !== 0)
+              .map((chatRoom) => {
+                const roomId = getChatRoomId(chatRoom);
 
-              return (
-                <ChatItem
-                  key={roomId}
-                  chatRoom={chatRoom}
-                  isMobile={isMobile}
-                  isHovered={hoveredChatId === roomId}
-                  isMenuOpen={openMenuId === roomId}
-                  isActive={roomId === activeChatId}
-                  menuRef={openMenuId === roomId ? menuRef : null}
-                  setButtonRef={(el: HTMLButtonElement | null) => {
-                    buttonRefs.current[roomId] = el;
-                  }}
-                  onMouseEnter={() => setHoveredChatId(roomId)}
-                  onMouseLeave={() => setHoveredChatId(null)}
-                  onChatClick={() => handleClick(chatRoom, toggleModal)}
-                  onMenuToggle={() => {
-                    setOpenMenuId(openMenuId === roomId ? null : roomId);
-                  }}
-                  onRenameClick={() => openModal("rename", chatRoom)}
-                  onDeleteClick={() => openModal("delete", chatRoom)}
-                />
-              );
-            })}
+                return (
+                  <ChatItem
+                    key={roomId}
+                    chatRoom={chatRoom}
+                    isMobile={isMobile}
+                    isHovered={hoveredChatId === roomId}
+                    isMenuOpen={openMenuId === roomId}
+                    isActive={roomId === activeChatId}
+                    menuRef={openMenuId === roomId ? menuRef : null}
+                    setButtonRef={(el: HTMLButtonElement | null) => {
+                      buttonRefs.current[roomId] = el;
+                    }}
+                    onMouseEnter={() => setHoveredChatId(roomId)}
+                    onMouseLeave={() => setHoveredChatId(null)}
+                    onChatClick={() => handleClick(chatRoom, toggleModal)}
+                    onMenuToggle={() => {
+                      setOpenMenuId(openMenuId === roomId ? null : roomId);
+                    }}
+                    onRenameClick={() => openModal("rename", chatRoom)}
+                    onDeleteClick={() => openModal("delete", chatRoom)}
+                  />
+                );
+              })}
           </>
         )}
       </div>
