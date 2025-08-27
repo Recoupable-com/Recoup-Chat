@@ -17,12 +17,13 @@ const useConversations = () => {
   const { agents } = useArtistAgents();
 
   const addConversation = (conversation: Conversation | ArtistAgent) => {
-    setAllConversations([conversation, ...allConversations]);
+    setAllConversations((prev) => [conversation, ...prev]);
   };
 
   useEffect(() => {
-    if (userData) {
-      fetchConversations();
+    const accountId = userData?.id;
+    if (accountId) {
+      fetchConversations(accountId);
       return;
     }
     return () => setAllConversations([]);
@@ -35,14 +36,45 @@ const useConversations = () => {
     );
   }, [selectedArtist, allConversations]);
 
-  const fetchConversations = async () => {
-    const data = await getConversations(userData.id);
+  const fetchConversations = async (accountIdParam?: string) => {
+    const accountId = accountIdParam ?? userData?.id;
+    if (!accountId) return;
+    const data = await getConversations(accountId);
     setAllConversations([...data, ...agents]);
     setIsLoading(false);
   };
 
+  // Optimistic update helpers for creating a new chat room
+  const addOptimisticConversation = (topic: string, chatId: string) => {
+    if (!userData || !selectedArtist?.account_id) return null;
+
+    const now = new Date().toISOString();
+
+    const tempConversation: Conversation = {
+      id: chatId,
+      topic,
+      account_id: userData.id,
+      artist_id: selectedArtist.account_id,
+      // Include one memory so it shows up in RecentChats filter
+      memories: [
+        {
+          id: `${chatId}-m1`,
+          content: { optimistic: true },
+          room_id: chatId,
+          created_at: now,
+        },
+      ],
+      room_reports: [],
+      updated_at: now,
+    };
+
+    setAllConversations((prev) => [tempConversation, ...prev]);
+    return chatId;
+  };
+
   return {
     addConversation,
+    addOptimisticConversation,
     fetchConversations,
     conversations,
     setQuotaExceeded,

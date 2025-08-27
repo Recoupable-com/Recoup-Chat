@@ -87,7 +87,7 @@ const useUser = () => {
         method: "POST",
         body: JSON.stringify({
           email,
-          wallet: wagmiAddress,
+          wallet: address,
         }),
         headers: {
           "Content-Type": "application/json",
@@ -108,9 +108,9 @@ const useUser = () => {
       setName(data?.data?.name || "");
       setOrganization(data?.data?.organization || "");
     };
-    if (!email && !wagmiAddress) return;
+    if (!email && !address) return;
     init();
-  }, [email, wagmiAddress]);
+  }, [email, address]);
 
   return {
     address,
