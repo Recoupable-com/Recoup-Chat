@@ -25,7 +25,7 @@ export const createAgentSchema = z.object({
     .max(1000, {
       message: "Prompt must be less than 1000 characters.",
     }),
-  tags: z.array(z.string()).min(1, { message: "Select at least one tag." }),
+  tags: z.array(z.string()).min(1, { message: "Select at least one tag" }),
   isPrivate: z.boolean(),
 });
 

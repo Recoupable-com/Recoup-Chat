@@ -100,8 +100,8 @@ const CreateAgentForm = ({ onSubmit }: CreateAgentFormProps) => {
                 }}
                 className={
                   isSelected
-                    ? "cursor-pointer select-none rounded-full"
-                    : "cursor-pointer select-none rounded-full bg-transparent border-gray-300 text-gray-600 hover:bg-gray-50"
+                    ? "cursor-pointer select-none rounded-full focus:ring-0"
+                    : "cursor-pointer select-none rounded-full bg-transparent border-gray-300 text-gray-600 hover:bg-gray-50 focus:ring-0"
                 }
                 variant={isSelected ? "default" : "outline"}
               >
