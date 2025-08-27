@@ -38,7 +38,7 @@ export function useVercelChat({
   const artistId = selectedArtist?.account_id;
   const [hasChatApiError, setHasChatApiError] = useState(false);
   const messagesLengthRef = useRef<number>();
-  const { fetchConversations } = useConversationsProvider();
+  const { fetchConversations, addOptimisticConversation } = useConversationsProvider();
   const { data: availableModels = [] } = useAvailableModels();
   const [input, setInput] = useState("");
   const [model, setModel] = useLocalStorage(
@@ -169,6 +169,10 @@ export function useVercelChat({
 
     if (!roomId) {
       silentlyUpdateUrl();
+
+      // Optimistically append a temporary conversation so it appears in Recent Chats
+      // It will be replaced by the real conversation after the updates/refetch
+      addOptimisticConversation("New Chat", id);
     }
   };
 

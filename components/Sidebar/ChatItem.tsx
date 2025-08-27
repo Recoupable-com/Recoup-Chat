@@ -3,6 +3,7 @@ import type { Conversation } from "@/types/Chat";
 import type { ArtistAgent } from "@/lib/supabase/getArtistAgents";
 import capitalize from "@/lib/capitalize";
 import type { RefObject } from "react";
+import { cn } from "@/lib/utils";
 
 type ChatItemProps = {
   chatRoom: Conversation | ArtistAgent;
@@ -47,6 +48,19 @@ const ChatItem = ({
 }: ChatItemProps) => {
   const { displayName } = getChatDisplayInfo(chatRoom);
   const showOptions = isMobile || isHovered || isActive;
+  const isOptimisticChatItem = (
+    'id' in chatRoom &&
+    Array.isArray((chatRoom as Conversation).memories) &&
+    (chatRoom as Conversation).memories.some((m) => {
+      const content = m?.content as unknown;
+      return (
+        !!content &&
+        typeof content === 'object' &&
+        'optimistic' in (content as Record<string, unknown>) &&
+        (content as { optimistic?: unknown }).optimistic === true
+      );
+    })
+  );
 
   return (
     <div 
@@ -68,9 +82,11 @@ const ChatItem = ({
       
       <button
         ref={setButtonRef}
-        className={`shrink-0 p-1 text-gray-500 hover:text-gray-700 transition-colors duration-150 ${
+        className={cn(`shrink-0 p-1 text-gray-500 hover:text-gray-700 transition-colors duration-150 ${
           showOptions ? 'opacity-100' : 'opacity-0'
-        }`}
+        }`, {
+          'opacity-50 pointer-events-none': isOptimisticChatItem
+        })}
         onClick={(e) => {
           e.stopPropagation();
           onMenuToggle();
