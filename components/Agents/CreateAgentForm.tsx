@@ -5,23 +5,36 @@ import { Label } from "@/components/ui/label";
 import { Switch } from "@/components/ui/switch";
 import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
 import { createAgentSchema, type CreateAgentFormData } from "./schemas";
+import { useAgentData } from "./useAgentData";
 
 interface CreateAgentFormProps {
   onSubmit: (values: CreateAgentFormData) => void;
 }
 
 const CreateAgentForm = ({ onSubmit }: CreateAgentFormProps) => {
+  const { tags } = useAgentData();
   const form = useForm<CreateAgentFormData>({
     resolver: zodResolver(createAgentSchema),
     defaultValues: {
       title: "",
       description: "",
       prompt: "",
-      tag: "",
+      tags: [],
       isPrivate: false,
     },
   });
+
+  const selectedTags = form.watch("tags") ?? [];
+
+  const toggleTag = (tag: string) => {
+    const current = form.getValues("tags") ?? [];
+    const next = current.includes(tag)
+      ? current.filter((t: string) => t !== tag)
+      : [...current, tag];
+    form.setValue("tags", next, { shouldDirty: true, shouldValidate: true });
+  };
 
   return (
     <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
@@ -68,15 +81,38 @@ const CreateAgentForm = ({ onSubmit }: CreateAgentFormProps) => {
       </div>
 
       <div className="space-y-2">
-        <Label htmlFor="tag">Tag</Label>
-        <Input
-          id="tag"
-          placeholder="Enter agent tag"
-          {...form.register("tag")}
-        />
-        {form.formState.errors.tag && (
+        <Label htmlFor="tags">Tags</Label>
+        <div className="flex flex-wrap gap-2" id="tags">
+          {tags.filter((t) => t !== "Recommended").map((tag) => {
+            const isSelected = selectedTags.includes(tag);
+            return (
+              <Badge
+                key={tag}
+                role="button"
+                tabIndex={0}
+                aria-pressed={isSelected}
+                onClick={() => toggleTag(tag)}
+                onKeyDown={(e) => {
+                  if (e.key === "Enter" || e.key === " ") {
+                    e.preventDefault();
+                    toggleTag(tag);
+                  }
+                }}
+                className={
+                  isSelected
+                    ? "cursor-pointer select-none rounded-full"
+                    : "cursor-pointer select-none rounded-full bg-transparent border-gray-300 text-gray-600 hover:bg-gray-50"
+                }
+                variant={isSelected ? "default" : "outline"}
+              >
+                {tag}
+              </Badge>
+            );
+          })}
+        </div>
+        {form.formState.errors.tags && (
           <p className="text-sm text-red-500">
-            {form.formState.errors.tag.message}
+            {form.formState.errors.tags.message as string}
           </p>
         )}
       </div>
@@ -91,11 +127,7 @@ const CreateAgentForm = ({ onSubmit }: CreateAgentFormProps) => {
       </div>
 
       <div className="flex justify-end space-x-2 pt-4">
-        <Button
-          type="submit"
-          size="sm"
-          className="rounded-xl"
-        >
+        <Button type="submit" size="sm" className="rounded-xl">
           Create Agent
         </Button>
       </div>
