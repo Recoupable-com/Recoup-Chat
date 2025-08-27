@@ -94,6 +94,9 @@ const RecentChats = ({ toggleModal }: { toggleModal: () => void }) => {
 
   const isRenameModalOpen = modalState.type === "rename";
   const isDeleteModalOpen = modalState.type === "delete";
+  const filteredConversations = conversations.filter(
+    (chat) => "memories" in chat && chat.memories.length !== 0
+  );
 
   return (
     <div className="w-full flex-grow min-h-0 flex flex-col">
@@ -106,9 +109,8 @@ const RecentChats = ({ toggleModal }: { toggleModal: () => void }) => {
           <RecentChatSkeleton />
         ) : (
           <>
-            {conversations
-              .filter((chat) => 'memories' in chat && chat.memories.length !== 0)
-              .map((chatRoom) => {
+            {filteredConversations.length > 0 ? (
+              filteredConversations.map((chatRoom) => {
                 const roomId = getChatRoomId(chatRoom);
 
                 return (
@@ -133,7 +135,13 @@ const RecentChats = ({ toggleModal }: { toggleModal: () => void }) => {
                     onDeleteClick={() => openModal("delete", chatRoom)}
                   />
                 );
-              })}
+              })
+            ) : (
+              <div className="flex flex-col items-center justify-center py-8 px-4 text-center">
+                <p className="text-sm font-inter text-grey-dark mb-1">No recent chats</p>
+                <p className="text-xs font-inter text-grey-dark-1">Start a conversation to see it here</p>
+              </div>
+            )}
           </>
         )}
       </div>
