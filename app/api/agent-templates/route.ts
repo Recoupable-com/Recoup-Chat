@@ -32,5 +32,45 @@ export async function GET(request: Request) {
   }
 }
 
+export async function POST(request: Request) {
+  try {
+    const body = await request.json();
+    const {
+      title,
+      description,
+      prompt,
+      tags,
+      isPrivate,
+      userId,
+    }: {
+      title: string;
+      description: string;
+      prompt: string;
+      tags: string[];
+      isPrivate: boolean;
+      userId?: string | null;
+    } = body;
+
+    const { data, error } = await supabase
+      .from("agent_templates")
+      .insert({
+        title,
+        description,
+        prompt,
+        tags,
+        is_private: isPrivate,
+        creator: userId ?? null,
+      })
+      .select("id, title, description, prompt, tags, creator, is_private")
+      .single();
+
+    if (error) throw error;
+    return NextResponse.json(data, { status: 201 });
+  } catch (error) {
+    console.error("Error creating agent template:", error);
+    return NextResponse.json({ error: "Failed to create template" }, { status: 500 });
+  }
+}
+
 export const dynamic = "force-dynamic";
 export const revalidate = 0; 
