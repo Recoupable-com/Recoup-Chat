@@ -1,5 +1,9 @@
 import type React from "react";
-import { Lock, Globe } from "lucide-react";
+import { ExternalLink, Lock, Globe } from "lucide-react";
+import { Card, CardHeader, CardContent } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
+import Image from "next/image";
 
 interface Agent {
   title: string;
@@ -8,6 +12,7 @@ interface Agent {
   tags?: string[];
   status?: string;
   is_private?: boolean;
+  creator?: string | null;
 }
 
 interface AgentCardProps {
@@ -24,40 +29,62 @@ const AgentCard: React.FC<AgentCardProps> = ({ agent, onClick }) => {
   const pillTag = displayedActionTags[0] ?? agent.tags?.[0];
 
   return (
-    <button
-      type="button"
-      className="w-full min-h-32 md:h-44 bg-gray-50 border border-gray-100 rounded-lg p-4 md:p-6 hover:bg-white hover:border-gray-200 hover:shadow-sm transition-all duration-200 text-left group relative flex flex-col"
-      onClick={() => onClick(agent)}
-    >
-      {/* Visibility indicator */}
-      <div className="absolute top-3 right-3">
-        {agent.is_private ? (
-          <Lock size={16} aria-label="Private" className="text-amber-500" />
-        ) : (
-          <Globe size={16} aria-label="Public" className="text-emerald-500" />
-        )}
-      </div>
-      {/* Tag pill: show action tag if present, else first user tag */}
-      {pillTag && (
-        <div className="flex-shrink-0 mb-2 md:mb-3">
-          <span className="inline-block text-xs text-gray-400 bg-gray-50 px-2 py-1 rounded-full font-medium border border-gray-200">
-            {pillTag}
-          </span>
+    <Card className="relative overflow-hidden">
+      <CardHeader className="p-4 pb-2">
+        <div className="flex items-start justify-between">
+          <div className="space-y-3 flex-1">
+            {pillTag && (
+              <Badge variant="secondary" className="w-fit">
+                {pillTag}
+              </Badge>
+            )}
+            <div>
+              <h3 className="text-lg font-semibold text-balance">{agent.title}</h3>
+              <p className="text-sm text-muted-foreground mt-1 text-pretty line-clamp-2 min-h-[2.5rem]">
+                {agent.description}
+              </p>
+            </div>
+          </div>
+          <div className="ml-3 mt-1">
+            {agent.is_private ? (
+              <Lock className="h-4 w-4 text-amber-500" aria-label="Private" />
+            ) : (
+              <Globe className="h-4 w-4 text-emerald-500" aria-label="Public" />
+            )}
+          </div>
         </div>
-      )}
-      
-      {/* Title - lighter weight */}
-      <div className="flex-shrink-0 mb-2 md:mb-3">
-        <h3 className="text-base md:text-lg font-medium text-gray-900 leading-tight group-hover:text-black transition-colors">
-          {agent.title}
-        </h3>
-      </div>
-      
-      {/* Description - more compact */}
-      <div className="flex-1 text-gray-600 text-sm leading-relaxed line-clamp-3 overflow-hidden">
-        {agent.description}
-      </div>
-    </button>
+      </CardHeader>
+
+      <CardContent className="px-4 pt-0 pb-3">
+        <div className="flex items-center justify-between">
+          <div className="flex gap-2">
+            <Button
+              size="sm"
+              variant="outline"
+              className="h-8 w-8 p-0 bg-transparent"
+              onClick={() => onClick(agent)}
+            >
+              <ExternalLink className="h-4 w-4" />
+              <span className="sr-only">Open link</span>
+            </Button>
+          </div>
+
+          {/* Brand watermark */}
+          <div className="flex items-center">
+            {agent.creator === null && (
+              <Image
+                src="/Recoup_Icon_Wordmark_Black.svg"
+                alt="Recoup"
+                width={64}
+                height={18}
+                className="opacity-70 h-[14px] w-auto"
+                priority={false}
+              />
+            )}
+          </div>
+        </div>
+      </CardContent>
+    </Card>
   );
 };
 

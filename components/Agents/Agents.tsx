@@ -4,7 +4,6 @@ import AgentCard from "./AgentCard";
 import { useAgentData } from "./useAgentData";
 import type { Agent } from "./useAgentData";
 import CreateAgentButton from "./CreateAgentButton";
-import Image from "next/image";
 
 const Agents = () => {
   const { push } = useRouter();
@@ -63,16 +62,6 @@ const Agents = () => {
             <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-4 md:gap-6 xl:gap-8 pr-1 md:pr-2">
               {gridAgents.map((agent) => (
                 <div key={agent.title} className="relative">
-                  {agent.creator === null && (
-                    <Image
-                      src="/Recoup_Icon_Wordmark_Black.svg"
-                      alt="Recoup"
-                      width={64}
-                      height={18}
-                      className="absolute bottom-2 right-2 z-10 opacity-80 pointer-events-none"
-                      priority={false}
-                    />
-                  )}
                   <AgentCard
                     agent={agent}
                     onClick={() => handleAgentClick(agent)}
