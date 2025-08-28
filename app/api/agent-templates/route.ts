@@ -9,7 +9,7 @@ export async function GET(request: Request) {
     if (userId && userId !== "undefined") {
       const { data, error } = await supabase
         .from("agent_templates")
-        .select("id, title, description, prompt, tags, creator, is_private")
+        .select("id, title, description, prompt, tags, creator, is_private, updated_at")
         .or(`creator.eq.${userId},is_private.eq.false`) // user-owned OR any public
         .order("title");
 
@@ -20,7 +20,7 @@ export async function GET(request: Request) {
     // No userId: return any public templates only
     const { data, error } = await supabase
       .from("agent_templates")
-      .select("id, title, description, prompt, tags, creator, is_private")
+      .select("id, title, description, prompt, tags, creator, is_private, updated_at")
       .eq("is_private", false)
       .order("title");
 
