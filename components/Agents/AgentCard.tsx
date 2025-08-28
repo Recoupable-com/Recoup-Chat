@@ -19,10 +19,9 @@ const AgentCard: React.FC<AgentCardProps> = ({ agent, onClick }) => {
   // Define action tags that should be displayed in cards
   const actionTags = ["Deep Research", "Send Report", "Email Outreach", "Scheduled Action", "Creative Content"];
   
-  // Filter agent tags to only show action tags
-  const displayedActionTags = agent.tags?.filter(tag => 
-    actionTags.includes(tag)
-  ) || [];
+  // Prefer action tags; otherwise fall back to the first available tag
+  const displayedActionTags = agent.tags?.filter(tag => actionTags.includes(tag)) || [];
+  const pillTag = displayedActionTags[0] ?? agent.tags?.[0];
 
   return (
     <button
@@ -38,11 +37,11 @@ const AgentCard: React.FC<AgentCardProps> = ({ agent, onClick }) => {
           <Globe size={16} aria-label="Public" className="text-emerald-500" />
         )}
       </div>
-      {/* Action tag - fully rounded pills */}
-      {displayedActionTags.length > 0 && (
+      {/* Tag pill: show action tag if present, else first user tag */}
+      {pillTag && (
         <div className="flex-shrink-0 mb-2 md:mb-3">
           <span className="inline-block text-xs text-gray-400 bg-gray-50 px-2 py-1 rounded-full font-medium border border-gray-200">
-            {displayedActionTags[0]}
+            {pillTag}
           </span>
         </div>
       )}
