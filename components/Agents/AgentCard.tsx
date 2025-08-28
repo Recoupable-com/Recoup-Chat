@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import Image from "next/image";
 import AgentPreviewDialogButton from "./AgentPreviewDialog";
+import AgentDeleteButton from "./AgentDeleteButton";
 
 interface Agent {
   title: string;
@@ -71,6 +72,7 @@ const AgentCard: React.FC<AgentCardProps> = ({ agent, onClick }) => {
               <ExternalLink className="h-4 w-4" />
               <span className="sr-only">Open link</span>
             </Button>
+            <AgentDeleteButton id={agent.id ?? ""} creatorId={agent.creator} />
           </div>
 
           {/* Brand watermark */}
