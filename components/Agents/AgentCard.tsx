@@ -39,7 +39,7 @@ const AgentCard: React.FC<AgentCardProps> = ({ agent, onClick }) => {
               </Badge>
             )}
             <div>
-              <h3 className="text-lg font-semibold text-balance">{agent.title}</h3>
+              <h3 className="text-lg font-semibold text-balance line-clamp-1">{agent.title}</h3>
               <p className="text-sm text-muted-foreground mt-1 text-pretty line-clamp-2 min-h-[2.5rem]">
                 {agent.description}
               </p>
