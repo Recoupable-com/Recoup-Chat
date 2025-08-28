@@ -4,6 +4,7 @@ import { Card, CardHeader, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import Image from "next/image";
+import AgentPreviewDialogButton from "./AgentPreviewDialog";
 
 interface Agent {
   title: string;
@@ -13,6 +14,8 @@ interface Agent {
   status?: string;
   is_private?: boolean;
   creator?: string | null;
+  id?: string;
+  created_at?: string;
 }
 
 interface AgentCardProps {
@@ -58,6 +61,7 @@ const AgentCard: React.FC<AgentCardProps> = ({ agent, onClick }) => {
       <CardContent className="px-4 pt-0 pb-3">
         <div className="flex items-center justify-between">
           <div className="flex gap-2">
+            <AgentPreviewDialogButton agent={agent} />
             <Button
               size="sm"
               variant="ghost"
