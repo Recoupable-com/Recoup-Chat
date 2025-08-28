@@ -1,3 +1,4 @@
+import { useUserProvider } from "@/providers/UserProvder";
 import { useEffect, useState } from "react";
 
 // Define Agent type for agent metadata loaded from database
@@ -10,6 +11,7 @@ export interface Agent {
 }
 
 export function useAgentData() {
+  const { userData } = useUserProvider();
   const [agents, setAgents] = useState<Agent[]>([]);
   const [selectedTag, setSelectedTag] = useState("Recommended");
   const [loading, setLoading] = useState(true);
@@ -17,7 +19,7 @@ export function useAgentData() {
   const [showAllTags, setShowAllTags] = useState(false);
 
   useEffect(() => {
-    fetch("/api/agent-templates")
+    fetch(`/api/agent-templates?userId=${userData?.id}`)
       .then((res) => res.json())
       .then((data: Agent[]) => {
         setAgents(data);
