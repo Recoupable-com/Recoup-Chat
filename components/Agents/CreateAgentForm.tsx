@@ -142,7 +142,7 @@ const CreateAgentForm = ({ onSubmit, isSubmitting }: CreateAgentFormProps) => {
               Creating...
             </>
           ) : (
-            "Create Agent"
+            "Submit"
           )}
         </Button>
       </div>
