@@ -8,12 +8,14 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { createAgentSchema, type CreateAgentFormData } from "./schemas";
 import { useAgentData } from "./useAgentData";
+import { Loader } from "lucide-react";
 
 interface CreateAgentFormProps {
   onSubmit: (values: CreateAgentFormData) => void;
+  isSubmitting?: boolean;
 }
 
-const CreateAgentForm = ({ onSubmit }: CreateAgentFormProps) => {
+const CreateAgentForm = ({ onSubmit, isSubmitting }: CreateAgentFormProps) => {
   const { tags } = useAgentData();
   const form = useForm<CreateAgentFormData>({
     resolver: zodResolver(createAgentSchema),
@@ -127,8 +129,21 @@ const CreateAgentForm = ({ onSubmit }: CreateAgentFormProps) => {
       </div>
 
       <div className="flex justify-end space-x-2 pt-4">
-        <Button type="submit" size="sm" className="rounded-xl">
-          Create Agent
+        <Button
+          type="submit"
+          size="sm"
+          className="rounded-xl"
+          disabled={Boolean(isSubmitting)}
+          aria-busy={Boolean(isSubmitting)}
+        >
+          {isSubmitting ? (
+            <>
+              <Loader className="animate-spin" />
+              Creating...
+            </>
+          ) : (
+            "Create Agent"
+          )}
         </Button>
       </div>
     </form>

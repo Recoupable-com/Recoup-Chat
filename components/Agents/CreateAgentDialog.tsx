@@ -9,6 +9,8 @@ import {
 import CreateAgentForm from "./CreateAgentForm";
 import { useState } from "react";
 import { type CreateAgentFormData } from "./schemas";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { useUserProvider } from "@/providers/UserProvder";
 
 interface CreateAgentDialogProps {
   children: React.ReactNode;
@@ -16,11 +18,30 @@ interface CreateAgentDialogProps {
 
 const CreateAgentDialog = ({ children }: CreateAgentDialogProps) => {
   const [open, setOpen] = useState(false);
+  const { userData } = useUserProvider();
+  const queryClient = useQueryClient();
+
+  const createTemplate = useMutation({
+    mutationFn: async (values: CreateAgentFormData) => {
+      const res = await fetch("/api/agent-templates", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          ...values,
+          userId: userData?.id ?? null,
+        }),
+      });
+      if (!res.ok) throw new Error("Failed to create template");
+      return res.json();
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["agent-templates"] });
+      setOpen(false);
+    },
+  });
 
   const onSubmit = (values: CreateAgentFormData) => {
-    console.log("Form data:", values);
-    // TODO: Implement agent creation logic
-    setOpen(false); // Close dialog after submission
+    createTemplate.mutate(values);
   };
 
   return (
@@ -35,7 +56,7 @@ const CreateAgentDialog = ({ children }: CreateAgentDialogProps) => {
             Create a new intelligent agent to help manage your roster tasks.
           </DialogDescription>
         </DialogHeader>
-        <CreateAgentForm onSubmit={onSubmit} />
+        <CreateAgentForm onSubmit={onSubmit} isSubmitting={createTemplate.isPending} />
       </DialogContent>
     </Dialog>
   );
