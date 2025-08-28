@@ -1,5 +1,4 @@
 import { NextResponse } from "next/server";
-// import { getAgentTemplates } from "@/lib/supabase/agent_templates/getAgentTemplates";
 import supabase from "@/lib/supabase/serverClient";
 
 export async function GET(request: Request) {
