@@ -9,7 +9,7 @@ export async function GET(request: Request) {
     if (userId && userId !== "undefined") {
       const { data, error } = await supabase
         .from("agent_templates")
-        .select("id, title, description, prompt, tags, creator, is_private")
+        .select("id, title, description, prompt, tags, creator, is_private, updated_at")
         .or(`creator.eq.${userId},is_private.eq.false`) // user-owned OR any public
         .order("title");
 
@@ -20,7 +20,7 @@ export async function GET(request: Request) {
     // No userId: return any public templates only
     const { data, error } = await supabase
       .from("agent_templates")
-      .select("id, title, description, prompt, tags, creator, is_private")
+      .select("id, title, description, prompt, tags, creator, is_private, updated_at")
       .eq("is_private", false)
       .order("title");
 
@@ -29,6 +29,79 @@ export async function GET(request: Request) {
   } catch (error) {
     console.error('Error fetching agent templates:', error);
     return NextResponse.json({ error: 'Failed to fetch templates' }, { status: 500 });
+  }
+}
+
+export async function POST(request: Request) {
+  try {
+    const body = await request.json();
+    const {
+      title,
+      description,
+      prompt,
+      tags,
+      isPrivate,
+      userId,
+    }: {
+      title: string;
+      description: string;
+      prompt: string;
+      tags: string[];
+      isPrivate: boolean;
+      userId?: string | null;
+    } = body;
+
+    const { data, error } = await supabase
+      .from("agent_templates")
+      .insert({
+        title,
+        description,
+        prompt,
+        tags,
+        is_private: isPrivate,
+        creator: userId ?? null,
+      })
+      .select("id, title, description, prompt, tags, creator, is_private")
+      .single();
+
+    if (error) throw error;
+    return NextResponse.json(data, { status: 201 });
+  } catch (error) {
+    console.error("Error creating agent template:", error);
+    return NextResponse.json({ error: "Failed to create template" }, { status: 500 });
+  }
+}
+
+export async function DELETE(request: Request) {
+  try {
+    const { id, userId } = (await request.json()) as { id: string; userId: string };
+    if (!id || !userId) {
+      return NextResponse.json({ error: "Missing id or userId" }, { status: 400 });
+    }
+
+    // Verify ownership
+    const { data: template, error: fetchError } = await supabase
+      .from("agent_templates")
+      .select("id, creator")
+      .eq("id", id)
+      .single();
+
+    if (fetchError) throw fetchError;
+    if (!template || template.creator !== userId) {
+      return NextResponse.json({ error: "Forbidden" }, { status: 403 });
+    }
+
+    const { error: deleteError } = await supabase
+      .from("agent_templates")
+      .delete()
+      .eq("id", id);
+
+    if (deleteError) throw deleteError;
+
+    return NextResponse.json({ success: true });
+  } catch (error) {
+    console.error("Error deleting template:", error);
+    return NextResponse.json({ error: "Failed to delete template" }, { status: 500 });
   }
 }
 
