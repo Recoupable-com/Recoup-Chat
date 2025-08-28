@@ -1,6 +1,6 @@
+import { useUserProvider } from "@/providers/UserProvder";
 import { useEffect, useState } from "react";
 import { useQuery } from "@tanstack/react-query";
-import { useUserProvider } from "@/providers/UserProvder";
 
 // Define Agent type for agent metadata loaded from database
 export interface Agent {
