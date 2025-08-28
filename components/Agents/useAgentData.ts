@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { useQuery } from "@tanstack/react-query";
+import { useUserProvider } from "@/providers/UserProvder";
 
 // Define Agent type for agent metadata loaded from database
 export interface Agent {
@@ -13,6 +14,7 @@ export interface Agent {
 }
 
 export function useAgentData() {
+  const { userData } = useUserProvider();
   const [agents, setAgents] = useState<Agent[]>([]);
   const [selectedTag, setSelectedTag] = useState("Recommended");
   const [tags, setTags] = useState<string[]>(["Recommended"]);
@@ -21,7 +23,7 @@ export function useAgentData() {
   const { data, isPending } = useQuery<Agent[]>({
     queryKey: ["agent-templates"],
     queryFn: async (): Promise<Agent[]> => {
-      const res = await fetch("/api/agent-templates");
+      const res = await fetch(`/api/agent-templates?userId=${userData?.id}`);
       if (!res.ok) throw new Error("Failed to fetch agent templates");
       return (await res.json()) as Agent[];
     },
