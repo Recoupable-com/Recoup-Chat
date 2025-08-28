@@ -72,5 +72,38 @@ export async function POST(request: Request) {
   }
 }
 
+export async function DELETE(request: Request) {
+  try {
+    const { id, userId } = (await request.json()) as { id: string; userId: string };
+    if (!id || !userId) {
+      return NextResponse.json({ error: "Missing id or userId" }, { status: 400 });
+    }
+
+    // Verify ownership
+    const { data: template, error: fetchError } = await supabase
+      .from("agent_templates")
+      .select("id, creator")
+      .eq("id", id)
+      .single();
+
+    if (fetchError) throw fetchError;
+    if (!template || template.creator !== userId) {
+      return NextResponse.json({ error: "Forbidden" }, { status: 403 });
+    }
+
+    const { error: deleteError } = await supabase
+      .from("agent_templates")
+      .delete()
+      .eq("id", id);
+
+    if (deleteError) throw deleteError;
+
+    return NextResponse.json({ success: true });
+  } catch (error) {
+    console.error("Error deleting template:", error);
+    return NextResponse.json({ error: "Failed to delete template" }, { status: 500 });
+  }
+}
+
 export const dynamic = "force-dynamic";
 export const revalidate = 0; 
