@@ -60,8 +60,8 @@ const AgentCard: React.FC<AgentCardProps> = ({ agent, onClick }) => {
           <div className="flex gap-2">
             <Button
               size="sm"
-              variant="outline"
-              className="h-8 w-8 p-0 bg-transparent"
+              variant="ghost"
+              className="h-8 w-8 p-0 bg-transparent rounded-xl"
               onClick={() => onClick(agent)}
             >
               <ExternalLink className="h-4 w-4" />
