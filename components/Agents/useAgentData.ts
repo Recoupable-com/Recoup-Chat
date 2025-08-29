@@ -40,7 +40,7 @@ export function useAgentData() {
         setTags(Array.from(new Set(allTags)));
         setLoading(false);
       });
-  }, []);
+  }, [userData?.id]);
 
   // Get all agents except the special card, filtered by the selected tag
   const filteredAgents = agents.filter(
