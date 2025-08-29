@@ -4,5 +4,3 @@
 ALTER TABLE agent_templates
   ADD COLUMN IF NOT EXISTS creator uuid REFERENCES accounts(id) ON DELETE SET NULL,
   ADD COLUMN IF NOT EXISTS is_private boolean NOT NULL DEFAULT false;
-
-
