@@ -28,8 +28,9 @@ const NavButton = ({
     <Button
       variant="ghost"
       onClick={onClick}
-      className={cn("rounded-xl w-full flex justify-start", {
-        "bg-gray-200 hover:bg-gray-200/70": isActive,
+      className={cn("rounded-xl w-full h-10 flex justify-start gap-3 px-3 font-medium", {
+        "bg-gray-100 hover:bg-gray-150 text-gray-900": isActive,
+        "hover:bg-gray-50 text-gray-700": !isActive,
       })}
       aria-label={ariaLabel}
     >

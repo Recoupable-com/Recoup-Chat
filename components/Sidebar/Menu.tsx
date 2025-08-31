@@ -26,32 +26,39 @@ const Menu = ({ toggleMenuExpanded }: { toggleMenuExpanded: () => void }) => {
   };
 
   return (
-    <div className="w-full h-screen pt-6 pb-4 pl-6 pr-2 hidden md:flex flex-col">
+    <div className="w-full h-screen pt-8 pb-6 pl-6 pr-3 hidden md:flex flex-col">
       <button
-        className="shrink-0 mb-6"
+        className="shrink-0 mb-8"
         onClick={() => push("/")}
         type="button"
         aria-label="Home"
       >
         <Logo />
       </button>
-      <div className="flex flex-col gap-2 w-full">
+      
+      {/* Navigation Section */}
+      <div className="flex flex-col gap-3 w-full mb-8">
         <Button
           variant="outline"
-          className="rounded-xl w-full mb-2"
+          className="rounded-xl w-full h-11 font-medium"
           onClick={() => goToItem("chat")}
         >
           {email ? "New Chat" : "Sign In"}
         </Button>
-        <AgentsNavItem isActive={isAgents} onClick={() => goToItem("agents")} />
-        <ScheduledActionsNavItem isActive={isScheduledActions} onClick={() => goToItem("scheduled-actions")} />
-        <FanGroupNavItem isActive={isSegments} onClick={() => goToItem("segments")} />
+        
+        <div className="flex flex-col gap-2">
+          <AgentsNavItem isActive={isAgents} onClick={() => goToItem("agents")} />
+          <ScheduledActionsNavItem isActive={isScheduledActions} onClick={() => goToItem("scheduled-actions")} />
+          <FanGroupNavItem isActive={isSegments} onClick={() => goToItem("segments")} />
+        </div>
       </div>
 
+      {/* Recent Chats Section */}
       <div className="flex flex-col flex-grow min-h-0">
         {!email ? <RecentChatsSectionSkeleton /> : <RecentChats toggleModal={toggleMenuExpanded} />}
 
-        <div className="shrink-0 mt-auto">
+        {/* Bottom Section */}
+        <div className="shrink-0 mt-6 pt-4 border-t border-gray-100">
           {email && <UnlockPro />}
           <UserInfo toggleMenuExpanded={toggleMenuExpanded} />
         </div>
