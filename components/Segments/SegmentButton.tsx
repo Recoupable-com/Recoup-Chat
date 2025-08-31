@@ -1,5 +1,5 @@
-import { Card, CardContent } from "@/components/ui/card";
-import { Users } from "lucide-react";
+import { Card } from "@/components/ui/card";
+import { Users, ArrowUpRight } from "lucide-react";
 import { Segment } from "@/lib/supabase/getArtistSegments";
 import SegmentFanCircles from "./SegmentFanCircles";
 
@@ -13,7 +13,7 @@ const SegmentButton = ({ segment, onGenerateReport }: SegmentButtonProps) => {
 
   return (
     <Card 
-      className="p-6 border border-gray-200 hover:shadow-lg transition-all duration-200 cursor-pointer"
+      className="p-6 border border-gray-200 hover:shadow-lg transition-all duration-200 cursor-pointer relative"
       onClick={() => onGenerateReport(segment.id, segment.name)}
     >
       <div className="space-y-4">
@@ -39,6 +39,11 @@ const SegmentButton = ({ segment, onGenerateReport }: SegmentButtonProps) => {
           )}
           <span className="text-sm text-gray-600">{segment.size} Fans</span>
         </div>
+      </div>
+
+      {/* Arrow Icon */}
+      <div className="absolute bottom-4 right-4">
+        <ArrowUpRight className="w-4 h-4 text-gray-400 group-hover:text-gray-600 transition-colors" />
       </div>
     </Card>
   );
