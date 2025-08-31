@@ -9,7 +9,7 @@ const SegmentsPage: NextPage = () => {
       <p className="text-center md:text-left font-plus_jakarta_sans_bold text-3xl mb-4">
         Fans
       </p>
-      <p className="text-lg text-gray-500 text-center md:text-left mb-8 font-light font-inter max-w-2xl">
+      <p className="text-base text-gray-500 text-center md:text-left mb-8 font-light font-inter max-w-2xl">
         <span className="sm:hidden">View fan groups and insights.</span>
         <span className="hidden sm:inline">View your fan groups and get automated insights.</span>
       </p>

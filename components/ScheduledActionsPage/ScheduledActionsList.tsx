@@ -39,11 +39,17 @@ const ScheduledActionsList: React.FC<ScheduledActionsListProps> = ({
   }
 
   return (
-    <div className="space-y-4">
-      {actions.map((action) => (
-        <ScheduledActionCard key={action.id} action={action} />
+    <div className="max-w-2xl mx-auto mt-16">
+      <div className="mb-8">
+        <h3 className="text-lg font-semibold text-gray-900">Scheduled</h3>
+      </div>
+      {actions.map((action, index) => (
+        <ScheduledActionDetailsDialog key={action.id} action={action}>
+          <div className={index !== actions.length - 1 ? "border-b border-gray-100" : ""}>
+            <ScheduledActionCard action={action} />
+          </div>
+        </ScheduledActionDetailsDialog>
       ))}
-      <ScheduledActionDetailsDialog />
     </div>
   );
 };

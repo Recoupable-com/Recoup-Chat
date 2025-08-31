@@ -26,9 +26,9 @@ const Menu = ({ toggleMenuExpanded }: { toggleMenuExpanded: () => void }) => {
   };
 
   return (
-    <div className="w-full h-screen pt-8 pb-6 pl-6 pr-3 hidden md:flex flex-col">
+    <div className="w-full h-screen pt-9 pb-6 pl-6 pr-3 hidden md:flex flex-col">
       <button
-        className="shrink-0 mb-8"
+        className="shrink-0 mb-0"
         onClick={() => push("/")}
         type="button"
         aria-label="Home"
