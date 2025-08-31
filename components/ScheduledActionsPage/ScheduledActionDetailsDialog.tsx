@@ -301,8 +301,8 @@ const ScheduledActionDetailsDialog: React.FC<
                 </SelectContent>
               </Select>
             </div>
+            </div>
           </div>
-        </div>
 
         {/* Action Buttons */}
         <div className="flex gap-2 mt-8 justify-between">
