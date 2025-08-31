@@ -25,7 +25,7 @@ const Agents = () => {
       <p className="text-left font-plus_jakarta_sans_bold text-3xl mb-4">
         Agents
       </p>
-      <p className="text-lg text-gray-500 text-left mb-4 font-light font-inter max-w-2xl">
+      <p className="text-base text-gray-500 text-left mb-4 font-light font-inter max-w-2xl">
         <span className="sm:hidden">
           Smarter label teams, powered by agents.
         </span>

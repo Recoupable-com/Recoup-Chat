@@ -10,7 +10,7 @@ const ScheduledActionsNavItem = ({
   return (
     <NavButton
       icon="clock"
-      label="Scheduled Actions"
+      label="Tasks"
       isActive={isActive}
       onClick={onClick}
       aria-label="View scheduled actions"

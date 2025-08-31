@@ -17,31 +17,37 @@ const ScheduledActionsList: React.FC<ScheduledActionsListProps> = ({
   isError,
 }) => {
   if (isError) {
-    return <div className="text-sm text-red-600">Failed to load scheduled actions.</div>;
+    return <div className="text-sm text-red-600">Failed to load scheduled actions</div>;
   }
 
   if (isLoading) {
     return (
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-        {Array.from({ length: 6 }).map((_, index) => (
-          <ScheduledActionSkeleton key={index} />
-        ))}
+      <div className="space-y-4">
+        <ScheduledActionSkeleton />
+        <ScheduledActionSkeleton />
+        <ScheduledActionSkeleton />
       </div>
     );
   }
 
   if (actions.length === 0) {
-    return <div className="text-sm text-gray-500">No scheduled actions found.</div>;
+    return (
+      <div className="text-center py-8">
+        <p className="text-gray-500">You have no scheduled tasks.</p>
+      </div>
+    );
   }
 
   return (
-    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-      {actions.map((action) => (
-        <ScheduledActionDetailsDialog
-          key={action.id}
-          action={action}
-        >
-          <ScheduledActionCard action={action} />
+    <div className="max-w-2xl mx-auto mt-16">
+      <div className="mb-8">
+        <h3 className="text-lg font-semibold text-gray-900">Scheduled</h3>
+      </div>
+      {actions.map((action, index) => (
+        <ScheduledActionDetailsDialog key={action.id} action={action}>
+          <div className={index !== actions.length - 1 ? "border-b border-gray-100" : ""}>
+            <ScheduledActionCard action={action} />
+          </div>
         </ScheduledActionDetailsDialog>
       ))}
     </div>
