@@ -4,7 +4,6 @@ import { createUIMessageStream, createUIMessageStreamResponse } from "ai";
 import { NextRequest } from "next/server";
 import { serializeError } from "@/lib/errors/serializeError";
 import { sendErrorNotification } from "@/lib/telegram/errors/sendErrorNotification";
-import { handleChatCompletion } from "@/lib/chat/handleChatCompletion";
 import { getCorsHeaders } from "@/lib/chat/getCorsHeaders";
 import { type ChatRequest } from "@/lib/chat/types";
 import generateUUID from "@/lib/generateUUID";
@@ -35,9 +34,9 @@ export async function POST(request: NextRequest) {
         console.error("Error in chat API:", e);
         return JSON.stringify(serializeError(e));
       },
-      onFinish: async ({ messages }) => {
-        await handleChatCompletion(body, messages);
-      },
+      // onFinish: async ({ messages }) => {
+      //   await handleChatCompletion(body, messages);
+      // },
     });
 
     return createUIMessageStreamResponse({ stream });
