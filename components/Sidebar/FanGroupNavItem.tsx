@@ -17,7 +17,7 @@ const FanGroupNavItem = ({
   return (
     <NavButton
       icon="segments"
-      label="Fan Groups"
+      label="Fans"
       isActive={isActive}
       onClick={onClick}
       shouldRender={shouldRender}
