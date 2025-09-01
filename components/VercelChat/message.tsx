@@ -1,5 +1,4 @@
 import { ChatStatus, ToolUIPart, UIMessage, isToolUIPart } from "ai";
-import ReasoningMessagePart from "./ReasoningMessagePart";
 import { useState } from "react";
 import { UseChatHelpers } from "@ai-sdk/react";
 import { motion } from "framer-motion";
@@ -9,6 +8,7 @@ import ViewingMessage from "./ViewingMessage";
 import EditingMessage from "./EditingMessage";
 import { getToolCallComponent, getToolResultComponent } from "./ToolComponents";
 import MessageFileViewer from "./message-file-viewer";
+import { Reasoning, ReasoningTrigger, ReasoningContent } from "@/components/reasoning";
 
 const Message = ({
   message,
@@ -48,15 +48,24 @@ const Message = ({
               const key = `message-${message.id}-part-${partIndex}`;
 
               if (type === "reasoning") {
+                // Only show reasoning if there's actual text content
+                if (!part.text || part.text.trim().length === 0) {
+                  return null;
+                }
+                
                 return (
-                  <ReasoningMessagePart
+                  <Reasoning
                     key={key}
-                    part={part}
-                    isReasoning={
+                    className="w-full"
+                    isStreaming={
                       status === "streaming" &&
                       partIndex === message.parts.length - 1
                     }
-                  />
+                    defaultOpen={false}
+                  >
+                    <ReasoningTrigger content={part.text} />
+                    <ReasoningContent>{part.text}</ReasoningContent>
+                  </Reasoning>
                 );
               }
 

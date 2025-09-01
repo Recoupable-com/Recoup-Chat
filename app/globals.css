@@ -48,6 +48,18 @@ body {
   }
 }
 
+@keyframes shimmer {
+  0% {
+    background-position: 200% 0;
+  }
+  75% {
+    background-position: -200% 0;
+  }
+  100% {
+    background-position: -200% 0;
+  }
+}
+
 .no_typecursor .Typewriter__cursor {
   display: none;
 }
