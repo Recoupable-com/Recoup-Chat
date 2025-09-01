@@ -9,6 +9,8 @@ import EditingMessage from "./EditingMessage";
 import { getToolCallComponent, getToolResultComponent } from "./ToolComponents";
 import MessageFileViewer from "./message-file-viewer";
 import { Reasoning, ReasoningTrigger, ReasoningContent } from "@/components/reasoning";
+import { Actions, Action } from "@/components/actions";
+import { RefreshCcwIcon, CopyIcon } from "lucide-react";
 
 const Message = ({
   message,
@@ -74,14 +76,37 @@ const Message = ({
               }
 
               if (type === "text") {
+                const isLastMessage = message.role === "assistant" && 
+                  status !== "streaming" && 
+                  partIndex === message.parts.length - 1;
+
                 if (mode === "view") {
                   return (
-                    <ViewingMessage
-                      key={key}
-                      message={message}
-                      partText={part?.text || ""}
-                      setMode={setMode}
-                    />
+                    <div key={key}>
+                      <ViewingMessage
+                        message={message}
+                        partText={part?.text || ""}
+                        setMode={setMode}
+                      />
+                      {isLastMessage && (
+                        <Actions className="mt-2 ml-5">
+                          <Action
+                            onClick={() => reload()}
+                            label="Retry"
+                            tooltip="Regenerate this response"
+                          >
+                            <RefreshCcwIcon className="size-3" />
+                          </Action>
+                          <Action
+                            onClick={() => navigator.clipboard.writeText(part?.text || "")}
+                            label="Copy"
+                            tooltip="Copy response to clipboard"
+                          >
+                            <CopyIcon className="size-3" />
+                          </Action>
+                        </Actions>
+                      )}
+                    </div>
                   );
                 }
 
