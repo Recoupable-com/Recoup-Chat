@@ -1,68 +1,28 @@
 import generateUUID from "@/lib/generateUUID";
-import { getMcpTools } from "@/lib/tools/getMcpTools";
-import attachRichFiles from "@/lib/chat/attachRichFiles";
-import getSystemPrompt from "@/lib/prompts/getSystemPrompt";
-import { getAccountEmails } from "@/lib/supabase/account_emails/getAccountEmails";
+import { convertToModelMessages, stepCountIs, type ToolSet } from "ai";
 import { MAX_MESSAGES } from "./const";
 import { type ChatRequest, type ChatConfig } from "./types";
-import { AnthropicProviderOptions } from "@ai-sdk/anthropic";
 import { DEFAULT_MODEL } from "../consts";
-import { stepCountIs } from "ai";
-import getPrepareStepResult from "./toolChains/getPrepareStepResult";
-import { filterExcludedTools } from "./filterExcludedTools";
 
 export async function setupChatRequest(body: ChatRequest): Promise<ChatConfig> {
-  let { email } = body;
-  const { accountId, artistId, model, excludeTools } = body;
+  // EXPERIMENTAL: Bypass async pre-stream work (DB/fetch/tool loading)
+  const { model } = body;
 
-  if (!email && accountId) {
-    const emails = await getAccountEmails(accountId);
-    if (emails.length > 0 && emails[0].email) {
-      email = emails[0].email;
-    }
-  }
+  // Minimal system prompt to avoid DB and remote fetches
+  const system = "Recoup assistant";
 
-  const tools = filterExcludedTools(getMcpTools(), excludeTools);
+  // Convert UI messages without attaching external files or fetching metadata
+  const messages = convertToModelMessages(body.messages).slice(-MAX_MESSAGES);
 
-  const messagesWithRichFiles = await attachRichFiles(body.messages, {
-    artistId: artistId as string,
-  });
-
-  const system = await getSystemPrompt({
-    roomId: body.roomId,
-    artistId,
-    accountId,
-    email,
-  });
+  // Empty toolset to avoid heavy imports and dynamic wiring
+  const tools: ToolSet = {};
 
   return {
     model: model || DEFAULT_MODEL,
     system,
-    messages: messagesWithRichFiles.slice(-MAX_MESSAGES),
+    messages,
     experimental_generateMessageId: generateUUID,
     tools,
     stopWhen: stepCountIs(111),
-    prepareStep: (options) => {
-      const next = getPrepareStepResult(options);
-      if (next) {
-        return { ...options, ...next };
-      }
-      return options;
-    },
-    providerOptions: {
-      anthropic: {
-        thinking: { type: "enabled", budgetTokens: 12000 },
-      } satisfies AnthropicProviderOptions,
-      google: {
-        thinkingConfig: {
-          thinkingBudget: 8192,
-          includeThoughts: true,
-        },
-      },
-      openai: {
-        reasoningEffort: "medium",
-        reasoningSummary: "detailed",
-      },
-    },
   };
 }
