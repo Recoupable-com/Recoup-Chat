@@ -3,11 +3,12 @@ import "@/lib/polyfills/base64";
 import { createUIMessageStream, createUIMessageStreamResponse } from "ai";
 import { NextRequest } from "next/server";
 import { serializeError } from "@/lib/errors/serializeError";
-import { sendErrorNotification } from "@/lib/telegram/errors/sendErrorNotification";
 import { getCorsHeaders } from "@/lib/chat/getCorsHeaders";
 import { type ChatRequest } from "@/lib/chat/types";
 import generateUUID from "@/lib/generateUUID";
 import getExecute from "@/lib/chat/getExecute";
+
+export const runtime = "edge";
 
 // Handle OPTIONS preflight requests
 export async function OPTIONS() {
@@ -26,11 +27,7 @@ export async function POST(request: NextRequest) {
       generateId: generateUUID,
       execute: async (options) => await getExecute(options, body),
       onError: (e) => {
-        sendErrorNotification({
-          ...body,
-          error: serializeError(e),
-          path: "/api/chat",
-        });
+        // Telegram notification disabled for edge runtime
         console.error("Error in chat API:", e);
         return JSON.stringify(serializeError(e));
       },
@@ -41,11 +38,7 @@ export async function POST(request: NextRequest) {
 
     return createUIMessageStreamResponse({ stream });
   } catch (e) {
-    sendErrorNotification({
-      ...body,
-      error: serializeError(e),
-      path: "/api/chat",
-    });
+    // Telegram notification disabled for edge runtime
     console.error("Global error in chat API:", e);
     return new Response(JSON.stringify(serializeError(e)), {
       status: 500,
