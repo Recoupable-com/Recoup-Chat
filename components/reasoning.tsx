@@ -116,7 +116,7 @@ export type ReasoningTriggerProps = ComponentProps<typeof CollapsibleTrigger> & 
 
 export const ReasoningTrigger = memo(
   ({ className, children, content, ...props }: ReasoningTriggerProps) => {
-    const { isStreaming, isOpen, duration } = useReasoning();
+    const { isStreaming, isOpen } = useReasoning();
     
     // Extract the first line or sentence as the title
     const getReasoningTitle = () => {
