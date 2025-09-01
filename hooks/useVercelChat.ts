@@ -62,7 +62,7 @@ export function useVercelChat({
   const { messages, status, stop, sendMessage, setMessages, regenerate } =
     useChat({
       id,
-      experimental_throttle: 100,
+      experimental_throttle: 0,
       generateId: generateUUID,
       onError: (e) => {
         console.error("An error occurred, please try again!", e);
