@@ -14,7 +14,7 @@ export async function setupChatRequest(body: ChatRequest): Promise<ChatConfig> {
   const { accountId, artistId, model, excludeTools, email, knowledgeFiles } = body;
   const tools = filterExcludedTools(getMcpTools(), excludeTools);
 
-  const messagesWithRichFiles = await attachRichFiles(body.messages, {
+  const messagesWithRichFiles = attachRichFiles(body.messages, {
     artistId: artistId as string,
     knowledgeFiles,
   });
