@@ -36,7 +36,8 @@ export async function POST(request: NextRequest) {
         return JSON.stringify(serializeError(e));
       },
       onFinish: async ({ messages }) => {
-        await handleChatCompletion(body, messages);
+        handleChatCompletion(body, messages);
+        await Promise.resolve();
       },
     });
 
