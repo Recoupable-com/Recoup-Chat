@@ -19,7 +19,7 @@ export async function setupChatRequest(body: ChatRequest): Promise<ChatConfig> {
     knowledgeFiles,
   });
 
-  const system = await getSystemPrompt({
+  const system = getSystemPrompt({
     roomId: body.roomId,
     artistId,
     accountId,

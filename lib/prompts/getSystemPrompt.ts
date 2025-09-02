@@ -1,6 +1,6 @@
 import { SYSTEM_PROMPT } from "@/lib/consts";
 
-export async function getSystemPrompt({
+export function getSystemPrompt({
   roomId,
   artistId,
   accountId,
@@ -16,7 +16,7 @@ export async function getSystemPrompt({
   knowledgeBaseText?: string;
   artistInstruction?: string;
   conversationName?: string;
-}): Promise<string> {
+}): string {
   const resolvedArtistId = artistId;
 
   let systemPrompt = `${SYSTEM_PROMPT} 
