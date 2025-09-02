@@ -11,7 +11,7 @@ import getPrepareStepResult from "./toolChains/getPrepareStepResult";
 import { filterExcludedTools } from "./filterExcludedTools";
 
 export async function setupChatRequest(body: ChatRequest): Promise<ChatConfig> {
-  const { accountId, artistId, model, excludeTools, email, knowledgeFiles, artistInstruction } = body;
+  const { accountId, artistId, model, excludeTools, email, knowledgeFiles, artistInstruction, knowledgeBaseText } = body;
   const tools = filterExcludedTools(getMcpTools(), excludeTools);
 
   const messagesWithRichFiles = attachRichFiles(body.messages, {
@@ -25,7 +25,7 @@ export async function setupChatRequest(body: ChatRequest): Promise<ChatConfig> {
     accountId,
     email,
     artistInstruction,
-    knowledgeFiles,
+    knowledgeBaseText,
   });
 
   return {

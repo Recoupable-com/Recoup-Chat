@@ -1,13 +1,11 @@
 import { SYSTEM_PROMPT } from "@/lib/consts";
-import getKnowledgeBaseContext from "@/lib/agent/getKnowledgeBaseContext";
-import { KnowledgeBaseEntry } from "../supabase/getArtistKnowledge";
 
 export async function getSystemPrompt({
   roomId,
   artistId,
   accountId,
   email,
-  knowledgeFiles,
+  knowledgeBaseText,
   artistInstruction,
   conversationName = "New conversation",
 }: {
@@ -15,7 +13,7 @@ export async function getSystemPrompt({
   artistId?: string;
   accountId?: string;
   email?: string;
-  knowledgeFiles?: KnowledgeBaseEntry[];
+  knowledgeBaseText?: string;
   artistInstruction?: string;
   conversationName?: string;
 }): Promise<string> {
@@ -38,7 +36,7 @@ ${customInstruction}
 -----END ARTIST CUSTOM INSTRUCTION-----`;
   }
 
-  const knowledge = await getKnowledgeBaseContext(knowledgeFiles);
+  const knowledge = knowledgeBaseText;
   if (knowledge) {
     systemPrompt = `${systemPrompt}
 -----ARTIST KNOWLEDGE BASE-----
