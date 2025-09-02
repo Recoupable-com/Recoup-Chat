@@ -15,10 +15,12 @@ const ModelSelectItem = ({ model }: { model: GatewayLanguageModelEntry }) => {
       value={model.id}
       className={isLocked ? "opacity-60" : ""}
     >
-      <div className="flex items-center gap-2">
-        {isLocked && <Lock className="h-3 w-3 text-muted-foreground" />}
-        {isUnlockedPro && <Crown className="h-3 w-3 text-muted-foreground" />}
-        {model.name}
+      <div className="flex items-center justify-between w-full">
+        <span className="pr-2">{model.name}</span>
+        <div className="flex items-center gap-3">
+          {isLocked && <Lock className="h-3 w-3 text-muted-foreground" />}
+          {isUnlockedPro && <Crown className="h-3 w-3 text-muted-foreground" />}
+        </div>
       </div>
     </PromptInputModelSelectItem>
   );
