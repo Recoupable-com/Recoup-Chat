@@ -82,9 +82,11 @@ const SideMenu = ({
             {hasArtists ? "Select Your Artist" : "Add Your Artist"}
           </Button>
         )}
-        <AgentsNavItem isActive={isAgents} onClick={() => goToItem("agents")} />
-        <ScheduledActionsNavItem isActive={isScheduledActions} onClick={() => goToItem("scheduled-actions")} />
-        <FanGroupNavItem isActive={isSegments} onClick={() => goToItem("segments")} />
+        <div className="flex flex-col gap-2 pt-2">
+          <AgentsNavItem isActive={isAgents} onClick={() => goToItem("agents")} />
+          <ScheduledActionsNavItem isActive={isScheduledActions} onClick={() => goToItem("scheduled-actions")} />
+          <FanGroupNavItem isActive={isSegments} onClick={() => goToItem("segments")} />
+        </div>
       </div>
       {address && <RecentChats toggleModal={toggleModal} />}
       <div className="grow flex flex-col gap-1 md:gap-3 justify-end">
