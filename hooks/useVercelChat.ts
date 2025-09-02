@@ -66,6 +66,20 @@ export function useVercelChat({
     staleTime: 5 * 60 * 1000,
   });
 
+  // Fetch custom artist instruction on client
+  const { data: artistInstruction } = useQuery<string | undefined>({
+    queryKey: ["artist-instruction", artistId],
+    enabled: Boolean(artistId),
+    queryFn: async () => {
+      if (!artistId) return undefined;
+      const res = await fetch(`/api/artist?artistId=${encodeURIComponent(artistId)}`);
+      if (!res.ok) return undefined;
+      const json = await res.json();
+      return json?.artist.instruction || undefined;
+    },
+    staleTime: 5 * 60 * 1000,
+  });
+
   const chatRequestOptions = useMemo(
     () => ({
       body: {
@@ -75,9 +89,10 @@ export function useVercelChat({
         email,
         model,
         knowledgeFiles,
+        artistInstruction,
       },
     }),
-    [id, artistId, userId, email, model, knowledgeFiles]
+    [id, artistId, userId, email, model, knowledgeFiles, artistInstruction]
   );
 
   const { messages, status, stop, sendMessage, setMessages, regenerate } =
