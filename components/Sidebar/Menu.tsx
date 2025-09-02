@@ -37,10 +37,10 @@ const Menu = ({ toggleMenuExpanded }: { toggleMenuExpanded: () => void }) => {
       </button>
       
       {/* Navigation Section */}
-      <div className="flex flex-col gap-3 w-full mb-8">
+      <div className="flex flex-col gap-3 w-full">
         <Button
           variant="outline"
-          className="rounded-xl w-full h-11 font-medium"
+          className="rounded-xl w-full"
           onClick={() => goToItem("chat")}
         >
           {email ? "New Chat" : "Sign In"}
@@ -58,7 +58,7 @@ const Menu = ({ toggleMenuExpanded }: { toggleMenuExpanded: () => void }) => {
         {!email ? <RecentChatsSectionSkeleton /> : <RecentChats toggleModal={toggleMenuExpanded} />}
 
         {/* Bottom Section */}
-        <div className="shrink-0 mt-6 pt-4 border-t border-gray-100">
+        <div className="shrink-0 pt-4 border-t border-gray-100">
           {email && <UnlockPro />}
           <UserInfo toggleMenuExpanded={toggleMenuExpanded} />
         </div>
