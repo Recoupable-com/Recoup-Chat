@@ -1,22 +1,25 @@
 import { SYSTEM_PROMPT } from "@/lib/consts";
 import getKnowledgeBaseContext from "@/lib/agent/getKnowledgeBaseContext";
-import getArtistIdForRoom from "../supabase/getArtistIdForRoom";
-import getArtistInstruction from "../supabase/getArtistInstruction";
+import { KnowledgeBaseEntry } from "../supabase/getArtistKnowledge";
 
 export async function getSystemPrompt({
   roomId,
   artistId,
   accountId,
   email,
+  knowledgeFiles,
+  artistInstruction,
   conversationName = "New conversation",
 }: {
   roomId?: string;
   artistId?: string;
   accountId?: string;
   email?: string;
+  knowledgeFiles?: KnowledgeBaseEntry[];
+  artistInstruction?: string;
   conversationName?: string;
 }): Promise<string> {
-  const resolvedArtistId = artistId || (await getArtistIdForRoom(roomId || ""));
+  const resolvedArtistId = artistId;
 
   let systemPrompt = `${SYSTEM_PROMPT} 
 
@@ -27,7 +30,7 @@ export async function getSystemPrompt({
   The active_conversation_id is ${roomId || "No ID"}.
   The active_conversation_name is ${conversationName || "No Chat Name"}.`;
 
-  const customInstruction = await getArtistInstruction(resolvedArtistId || "");
+  const customInstruction = artistInstruction;
   if (customInstruction) {
     systemPrompt = `${systemPrompt}
 -----ARTIST CUSTOM INSTRUCTION-----
@@ -35,7 +38,7 @@ ${customInstruction}
 -----END ARTIST CUSTOM INSTRUCTION-----`;
   }
 
-  const knowledge = await getKnowledgeBaseContext(resolvedArtistId || "");
+  const knowledge = await getKnowledgeBaseContext(knowledgeFiles);
   if (knowledge) {
     systemPrompt = `${systemPrompt}
 -----ARTIST KNOWLEDGE BASE-----
