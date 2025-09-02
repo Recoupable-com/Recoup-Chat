@@ -31,7 +31,7 @@ export function useVercelChat({
   initialMessages,
   attachments = [],
 }: UseVercelChatProps) {
-  const { userData } = useUserProvider();
+  const { userData, email } = useUserProvider();
   const { selectedArtist } = useArtistProvider();
   const { roomId } = useParams();
   const userId = userData?.id;
@@ -53,10 +53,11 @@ export function useVercelChat({
         roomId: id,
         artistId,
         accountId: userId,
+        email,
         model,
       },
     }),
-    [id, artistId, userId, model]
+    [id, artistId, userId, email, model]
   );
 
   const { messages, status, stop, sendMessage, setMessages, regenerate } =
