@@ -2,7 +2,6 @@ import generateUUID from "@/lib/generateUUID";
 import { getMcpTools } from "@/lib/tools/getMcpTools";
 import attachRichFiles from "@/lib/chat/attachRichFiles";
 import getSystemPrompt from "@/lib/prompts/getSystemPrompt";
-import { getAccountEmails } from "@/lib/supabase/account_emails/getAccountEmails";
 import { MAX_MESSAGES } from "./const";
 import { type ChatRequest, type ChatConfig } from "./types";
 import { AnthropicProviderOptions } from "@ai-sdk/anthropic";
@@ -12,16 +11,7 @@ import getPrepareStepResult from "./toolChains/getPrepareStepResult";
 import { filterExcludedTools } from "./filterExcludedTools";
 
 export async function setupChatRequest(body: ChatRequest): Promise<ChatConfig> {
-  let { email } = body;
-  const { accountId, artistId, model, excludeTools } = body;
-
-  if (!email && accountId) {
-    const emails = await getAccountEmails(accountId);
-    if (emails.length > 0 && emails[0].email) {
-      email = emails[0].email;
-    }
-  }
-
+  const { accountId, artistId, model, excludeTools, email } = body;
   const tools = filterExcludedTools(getMcpTools(), excludeTools);
 
   const messagesWithRichFiles = await attachRichFiles(body.messages, {
