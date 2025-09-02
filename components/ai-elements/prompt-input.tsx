@@ -79,7 +79,7 @@ export type PromptInputProps = HTMLAttributes<HTMLFormElement>;
 export const PromptInput = ({ className, ...props }: PromptInputProps) => (
   <form
     className={cn(
-      "w-full divide-y overflow-hidden rounded-xl border bg-background shadow-sm",
+      "w-full overflow-hidden rounded-2xl border border-border/50 bg-background/95 backdrop-blur-sm shadow-lg",
       className
     )}
     {...props}
@@ -123,9 +123,9 @@ export const PromptInputTextarea = ({
   return (
     <Textarea
       className={cn(
-        "w-full resize-none rounded-none border-none p-3 shadow-none outline-none ring-0",
+        "w-full resize-none rounded-none border-none px-6 py-4 shadow-none outline-none ring-0",
         "bg-transparent dark:bg-transparent",
-        "focus-visible:ring-0",
+        "focus-visible:ring-0 text-base leading-relaxed",
         className
       )}
       name="message"
@@ -148,7 +148,7 @@ export const PromptInputToolbar = ({
   ...props
 }: PromptInputToolbarProps) => (
   <div
-    className={cn("flex items-center justify-between p-1", className)}
+    className={cn("flex items-center justify-between px-6 py-3", className)}
     {...props}
   />
 );
@@ -161,8 +161,8 @@ export const PromptInputTools = ({
 }: PromptInputToolsProps) => (
   <div
     className={cn(
-      "flex items-center gap-1",
-      "[&_button:first-child]:rounded-bl-xl",
+      "flex items-center gap-2",
+      "[&_button:first-child]:rounded-bl-2xl",
       className
     )}
     {...props}
@@ -183,9 +183,9 @@ export const PromptInputButton = ({
   return (
     <Button
       className={cn(
-        "shrink-0 gap-1.5 rounded-lg",
-        variant === "ghost" && "text-muted-foreground",
-        newSize === "default" && "px-3",
+        "shrink-0 gap-2 rounded-xl transition-all duration-200",
+        variant === "ghost" && "text-muted-foreground hover:text-foreground",
+        newSize === "default" && "px-4 py-2",
         className
       )}
       size={newSize}
@@ -220,7 +220,7 @@ export const PromptInputSubmit = ({
 
   return (
     <Button
-      className={cn("gap-1.5 rounded-lg", className)}
+      className={cn("gap-2 rounded-xl transition-all duration-200 hover:scale-105", className)}
       size={size}
       type="submit"
       variant={variant}
@@ -247,8 +247,9 @@ export const PromptInputModelSelectTrigger = ({
 }: PromptInputModelSelectTriggerProps) => (
   <SelectTrigger
     className={cn(
-      "border-none bg-transparent font-medium text-muted-foreground shadow-none transition-colors",
-      'hover:bg-accent hover:text-foreground [&[aria-expanded="true"]]:bg-accent [&[aria-expanded="true"]]:text-foreground focus:ring-0',
+      "border-none bg-transparent font-medium text-muted-foreground shadow-none transition-all duration-200",
+      'hover:bg-accent/50 hover:text-foreground rounded-lg px-3 py-1.5',
+      '[&[aria-expanded="true"]]:bg-accent/50 [&[aria-expanded="true"]]:text-foreground focus:ring-0',
       className
     )}
     {...props}
