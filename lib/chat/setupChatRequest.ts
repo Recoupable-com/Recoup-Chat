@@ -24,6 +24,7 @@ export async function setupChatRequest(body: ChatRequest): Promise<ChatConfig> {
     artistId,
     accountId,
     email,
+    knowledgeFiles,
   });
 
   return {

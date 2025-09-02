@@ -19,6 +19,8 @@ export interface ChatRequest {
   model?: string;
   excludeTools?: string[];
   knowledgeFiles?: KnowledgeBaseEntry[];
+  artistInstruction?: string;
+  knowledgeBaseText?: string;
 }
 
 export interface ChatConfig {
