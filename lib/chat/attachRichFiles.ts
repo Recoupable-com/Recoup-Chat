@@ -14,12 +14,12 @@ const findLastUserMessageIndex = (messages: UIMessage[]): number => {
   return -1;
 };
 
-const attachRichFiles = async (
+const attachRichFiles = (
   messages: UIMessage[],
   {
     knowledgeFiles,
   }: { artistId: string; knowledgeFiles?: KnowledgeBaseEntry[] }
-): Promise<ModelMessage[]> => {
+): ModelMessage[] => {
   const lastUserIndex = findLastUserMessageIndex(messages);
   // Get and process artist knowledge files
   const supportedFiles = (knowledgeFiles || []).filter(
