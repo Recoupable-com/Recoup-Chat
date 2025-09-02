@@ -4,7 +4,7 @@ import {
   convertToModelMessages,
   FileUIPart,
 } from "ai";
-import getArtistKnowledge from "../supabase/getArtistKnowledge";
+import type { KnowledgeBaseEntry } from "../supabase/getArtistKnowledge";
 import createMessageFileAttachment from "./createFileAttachment";
 
 const findLastUserMessageIndex = (messages: UIMessage[]): number => {
@@ -16,13 +16,13 @@ const findLastUserMessageIndex = (messages: UIMessage[]): number => {
 
 const attachRichFiles = async (
   messages: UIMessage[],
-  { artistId }: { artistId: string }
+  {
+    knowledgeFiles,
+  }: { artistId: string; knowledgeFiles?: KnowledgeBaseEntry[] }
 ): Promise<ModelMessage[]> => {
   const lastUserIndex = findLastUserMessageIndex(messages);
-
   // Get and process artist knowledge files
-  const knowledgeFiles = await getArtistKnowledge(artistId);
-  const supportedFiles = knowledgeFiles.filter(
+  const supportedFiles = (knowledgeFiles || []).filter(
     (file) => file.type === "application/pdf" || file.type.startsWith("image")
   );
 
