@@ -18,6 +18,8 @@ export async function OPTIONS() {
   });
 }
 
+export const runtime = "edge";
+
 export async function POST(request: NextRequest) {
   const body: ChatRequest = await request.json();
 
