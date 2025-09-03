@@ -20,6 +20,7 @@ const attachRichFiles = (
     knowledgeFiles,
   }: { artistId: string; knowledgeFiles?: KnowledgeBaseEntry[] }
 ): ModelMessage[] => {
+  return convertToModelMessages(messages);
   const lastUserIndex = findLastUserMessageIndex(messages);
   // Get and process artist knowledge files
   const supportedFiles = (knowledgeFiles || []).filter(
