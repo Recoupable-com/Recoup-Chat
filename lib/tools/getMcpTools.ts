@@ -34,7 +34,7 @@ import deleteScheduledAction from "./scheduled_actions/deleteScheduledActions";
 import getSocialFans from "./getSocialFans";
 import createSegments from "./createSegments";
 import createReleaseReport from "./createReleaseReport";
-// import youtubeTools from "./youtube";
+import youtubeTools from "./youtube";
 
 export function getMcpTools(): ToolSet {
   const tools = {
@@ -74,7 +74,7 @@ export function getMcpTools(): ToolSet {
     delete_scheduled_actions: deleteScheduledAction,
     get_social_fans: getSocialFans,
     create_release_report: createReleaseReport,
-    // ...youtubeTools,
+    ...youtubeTools,
   };
 
   return tools;
