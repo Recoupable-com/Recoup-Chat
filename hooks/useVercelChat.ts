@@ -17,6 +17,7 @@ import useAvailableModels from "./useAvailableModels";
 import { useLocalStorage } from "usehooks-ts";
 import { DEFAULT_MODEL } from "@/lib/consts";
 import { usePaymentProvider } from "@/providers/PaymentProvider";
+import getConversations from "@/lib/getConversations";
 
 interface UseVercelChatProps {
   id: string;
@@ -41,7 +42,7 @@ export function useVercelChat({
   const artistId = selectedArtist?.account_id;
   const [hasChatApiError, setHasChatApiError] = useState(false);
   const messagesLengthRef = useRef<number>();
-  const { fetchConversations, addOptimisticConversation } = useConversationsProvider();
+  const { fetchConversations, addOptimisticConversation, conversations } = useConversationsProvider();
   const { data: availableModels = [] } = useAvailableModels();
   const [input, setInput] = useState("");
   const [model, setModel] = useLocalStorage(
@@ -49,6 +50,7 @@ export function useVercelChat({
     availableModels[0]?.id ?? ""
   );
   const { refetchCredits } = usePaymentProvider();
+  const latestChatId = window.location.pathname.match(/\/chat\/([^\/]+)/)?.[1];
 
   // Fetch artist knowledge on client to avoid server pre-stream lookup
   const { data: knowledgeFiles } = useArtistKnowledge(artistId);
@@ -93,9 +95,7 @@ export function useVercelChat({
         // When messages length is 2, it means second message has been streamed successfully and should also have been updated on backend
         // So we trigger the fetchConversations to update the conversation list
         if (messagesLengthRef.current === 2) {
-          if (userId) {
-            fetchConversations(userId);
-          } else {
+          if (!userId) {
             pendingFetchAfterFinishRef.current = true;
           }
         }
@@ -131,9 +131,10 @@ export function useVercelChat({
   // refetch conversations as soon as userId becomes available.
   const pendingFetchAfterFinishRef = useRef(false);
   useEffect(() => {
-    if (pendingFetchAfterFinishRef.current && userId) {
-      fetchConversations(userId);
-      pendingFetchAfterFinishRef.current = false;
+    if (messagesLengthRef.current === 2) {
+      if (!userId) {
+        pendingFetchAfterFinishRef.current = true;
+      }
     }
   }, [userId, fetchConversations]);
 
@@ -214,6 +215,35 @@ export function useVercelChat({
     const defaultId = preferred ? preferred.id : availableModels[0].id;
     setModel(defaultId);
   }, [availableModels, model]);
+
+  useEffect(() => {
+    if (!latestChatId || !userId) return;
+    if (messagesLengthRef.current !== 2) return;
+
+    const run = async () => {
+      const exists = conversations.some(
+        (c) => ("id" in c ? c.id : c.agentId) === latestChatId
+      );
+      if (exists) {
+        const remoteRooms = await getConversations(userId);
+        const existingIds = new Set(
+          conversations
+            .map((c) => ("id" in c ? c.id : undefined))
+            .filter((id): id is string => typeof id === "string")
+        );
+        const hasNew = Array.isArray(remoteRooms)
+          ? remoteRooms.some((r: { id?: string }) => r?.id && !existingIds.has(r.id))
+          : false;
+        if (hasNew) {
+          await fetchConversations(userId);
+        }
+        return;
+      }
+      await fetchConversations(userId);
+    };
+
+    run();
+  }, [latestChatId, userId, conversations, fetchConversations, messages.length]);
 
   return {
     // States
