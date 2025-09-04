@@ -3,7 +3,7 @@ import { useMessageLoader } from "./useMessageLoader";
 import { useUserProvider } from "@/providers/UserProvder";
 import { useArtistProvider } from "@/providers/ArtistProvider";
 import { useQuery } from "@tanstack/react-query";
-import type { KnowledgeBaseEntry } from "@/lib/supabase/getArtistKnowledge";
+import { useArtistKnowledge } from "./useArtistKnowledge";
 import { useParams } from "next/navigation";
 import { toast } from "react-toastify";
 import { useEffect, useState, useRef, useMemo } from "react";
@@ -50,21 +50,7 @@ export function useVercelChat({
   const { refetchCredits } = usePaymentProvider();
 
   // Fetch artist knowledge on client to avoid server pre-stream lookup
-  const { data: knowledgeFiles } = useQuery<KnowledgeBaseEntry[]>({
-    queryKey: ["artist-knowledge", artistId],
-    enabled: Boolean(artistId),
-    queryFn: async () => {
-      if (!artistId) return [];
-      const res = await fetch(`/api/artist?artistId=${encodeURIComponent(artistId)}`);
-      if (!res.ok) return [];
-      const json = await res.json();
-      // account_info(*) was selected in the API route; prefer nested path then fallback
-      const knowledges: KnowledgeBaseEntry[] =
-        json?.artist?.account_info?.[0]?.knowledges || json?.artist?.knowledges || [];
-      return Array.isArray(knowledges) ? knowledges : [];
-    },
-    staleTime: 5 * 60 * 1000,
-  });
+  const { data: knowledgeFiles } = useArtistKnowledge(artistId);
 
   // Fetch custom artist instruction on client
   const { data: artistInstruction } = useQuery<string | undefined>({
