@@ -17,6 +17,7 @@ import useAvailableModels from "./useAvailableModels";
 import { useLocalStorage } from "usehooks-ts";
 import { DEFAULT_MODEL } from "@/lib/consts";
 import { usePaymentProvider } from "@/providers/PaymentProvider";
+import getConversations from "@/lib/getConversations";
 
 interface UseVercelChatProps {
   id: string;
@@ -224,9 +225,24 @@ export function useVercelChat({
         (c) => ("id" in c ? c.id : c.agentId) === latestChatId
       );
       if (exists) {
-        if (intervalId !== null) {
-          window.clearInterval(intervalId);
-          intervalId = null;
+        try {
+          const remoteRooms = await getConversations(userId);
+          const existingIds = new Set(
+            conversations
+              .map((c) => ("id" in c ? c.id : undefined))
+              .filter((id): id is string => typeof id === "string")
+          );
+          const hasNew = Array.isArray(remoteRooms)
+            ? remoteRooms.some((r: { id?: string }) => r?.id && !existingIds.has(r.id))
+            : false;
+          if (hasNew) {
+            await fetchConversations(userId);
+          }
+        } finally {
+          if (intervalId !== null) {
+            window.clearInterval(intervalId);
+            intervalId = null;
+          }
         }
         return;
       }
