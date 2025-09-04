@@ -218,48 +218,32 @@ export function useVercelChat({
 
   useEffect(() => {
     if (!latestChatId || !userId) return;
+    if (messagesLengthRef.current !== 2) return;
 
-    let intervalId: number | null = null;
-
-    const checkAndFetch = async () => {
+    const run = async () => {
       const exists = conversations.some(
         (c) => ("id" in c ? c.id : c.agentId) === latestChatId
       );
       if (exists) {
-        try {
-          const remoteRooms = await getConversations(userId);
-          const existingIds = new Set(
-            conversations
-              .map((c) => ("id" in c ? c.id : undefined))
-              .filter((id): id is string => typeof id === "string")
-          );
-          const hasNew = Array.isArray(remoteRooms)
-            ? remoteRooms.some((r: { id?: string }) => r?.id && !existingIds.has(r.id))
-            : false;
-          if (hasNew) {
-            await fetchConversations(userId);
-          }
-        } finally {
-          if (intervalId !== null) {
-            window.clearInterval(intervalId);
-            intervalId = null;
-          }
+        const remoteRooms = await getConversations(userId);
+        const existingIds = new Set(
+          conversations
+            .map((c) => ("id" in c ? c.id : undefined))
+            .filter((id): id is string => typeof id === "string")
+        );
+        const hasNew = Array.isArray(remoteRooms)
+          ? remoteRooms.some((r: { id?: string }) => r?.id && !existingIds.has(r.id))
+          : false;
+        if (hasNew) {
+          await fetchConversations(userId);
         }
         return;
       }
       await fetchConversations(userId);
     };
-    if (messagesLengthRef.current === 2) {
-      checkAndFetch();
-    }
-    intervalId = window.setInterval(checkAndFetch, 3000);
 
-    return () => {
-      if (intervalId !== null) {
-        window.clearInterval(intervalId);
-      }
-    };
-  }, [latestChatId, userId, messagesLengthRef.current]);
+    run();
+  }, [latestChatId, userId, conversations, fetchConversations, messages.length]);
 
   return {
     // States
