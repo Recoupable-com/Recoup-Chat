@@ -132,9 +132,7 @@ export function useVercelChat({
   const pendingFetchAfterFinishRef = useRef(false);
   useEffect(() => {
     if (messagesLengthRef.current === 2) {
-      if (userId) {
-        fetchConversations(userId);
-      } else {
+      if (!userId) {
         pendingFetchAfterFinishRef.current = true;
       }
     }
