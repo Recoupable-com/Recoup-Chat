@@ -1,23 +1,17 @@
 import generateUUID from "@/lib/generateUUID";
 import { getMcpTools } from "@/lib/tools/getMcpTools";
-import attachRichFiles from "@/lib/chat/attachRichFiles";
 import getSystemPrompt from "@/lib/prompts/getSystemPrompt";
 import { MAX_MESSAGES } from "./const";
 import { type ChatRequest, type ChatConfig } from "./types";
 import { AnthropicProviderOptions } from "@ai-sdk/anthropic";
 import { DEFAULT_MODEL } from "../consts";
-import { stepCountIs } from "ai";
+import { convertToModelMessages, stepCountIs } from "ai";
 import getPrepareStepResult from "./toolChains/getPrepareStepResult";
 import { filterExcludedTools } from "./filterExcludedTools";
 
 export async function setupChatRequest(body: ChatRequest): Promise<ChatConfig> {
-  const { accountId, artistId, model, excludeTools, email, knowledgeFiles, artistInstruction, knowledgeBaseText } = body;
+  const { accountId, artistId, model, excludeTools, email, artistInstruction, knowledgeBaseText } = body;
   const tools = filterExcludedTools(getMcpTools(), excludeTools);
-
-  const messagesWithRichFiles = attachRichFiles(body.messages, {
-    artistId: artistId as string,
-    knowledgeFiles,
-  });
 
   const system = getSystemPrompt({
     roomId: body.roomId,
@@ -31,7 +25,7 @@ export async function setupChatRequest(body: ChatRequest): Promise<ChatConfig> {
   return {
     model: model || DEFAULT_MODEL,
     system,
-    messages: messagesWithRichFiles.slice(-MAX_MESSAGES),
+    messages: convertToModelMessages(body.messages.slice(-MAX_MESSAGES)),
     experimental_generateMessageId: generateUUID,
     tools,
     stopWhen: stepCountIs(111),
