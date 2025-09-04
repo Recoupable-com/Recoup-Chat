@@ -2,9 +2,9 @@ import { useChat } from "@ai-sdk/react";
 import { useMessageLoader } from "./useMessageLoader";
 import { useUserProvider } from "@/providers/UserProvder";
 import { useArtistProvider } from "@/providers/ArtistProvider";
-import { useQuery } from "@tanstack/react-query";
 import { useArtistKnowledge } from "./useArtistKnowledge";
 import { useArtistInstruction } from "./useArtistInstruction";
+import { useArtistKnowledgeText } from "./useArtistKnowledgeText";
 import { useParams } from "next/navigation";
 import { toast } from "react-toastify";
 import { useEffect, useState, useRef, useMemo } from "react";
@@ -57,35 +57,7 @@ export function useVercelChat({
   const { data: artistInstruction } = useArtistInstruction(artistId);
 
   // Build knowledge base text from client-fetched knowledge files
-  const { data: knowledgeBaseText } = useQuery<string>({
-    queryKey: ["artist-knowledge-text", artistId, knowledgeFiles?.length],
-    enabled: Boolean(artistId) && Array.isArray(knowledgeFiles),
-    queryFn: async () => {
-      if (!knowledgeFiles || knowledgeFiles.length === 0) return "";
-      const textTypes = new Set([
-        "text/plain",
-        "text/markdown",
-        "application/json",
-        "text/csv",
-      ]);
-      const texts = await Promise.all(
-        knowledgeFiles
-          .filter((f) => textTypes.has(f.type))
-          .map(async (f) => {
-            try {
-              const res = await fetch(f.url);
-              if (!res.ok) return "";
-              const content = await res.text();
-              return `--- ${f.name} ---\n${content}`;
-            } catch {
-              return "";
-            }
-          })
-      );
-      return texts.filter(Boolean).join("\n\n");
-    },
-    staleTime: 5 * 60 * 1000,
-  });
+  const { data: knowledgeBaseText } = useArtistKnowledgeText(artistId, knowledgeFiles);
 
   const chatRequestOptions = useMemo(
     () => ({
