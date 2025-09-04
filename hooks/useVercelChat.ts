@@ -50,7 +50,9 @@ export function useVercelChat({
     availableModels[0]?.id ?? ""
   );
   const { refetchCredits } = usePaymentProvider();
-  const latestChatId = window.location.pathname.match(/\/chat\/([^\/]+)/)?.[1];
+  const latestChatId = typeof window !== 'undefined' 
+    ? window.location.pathname.match(/\/chat\/([^\/]+)/)?.[1]
+    : undefined;
 
   // Fetch artist knowledge on client to avoid server pre-stream lookup
   const { data: knowledgeFiles } = useArtistKnowledge(artistId);
