@@ -258,7 +258,7 @@ export function useVercelChat({
         window.clearInterval(intervalId);
       }
     };
-  }, [latestChatId, conversations, fetchConversations, userId]);
+  }, [latestChatId, userId]);
 
   return {
     // States
