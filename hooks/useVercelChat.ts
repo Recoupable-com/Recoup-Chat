@@ -95,9 +95,7 @@ export function useVercelChat({
         // When messages length is 2, it means second message has been streamed successfully and should also have been updated on backend
         // So we trigger the fetchConversations to update the conversation list
         if (messagesLengthRef.current === 2) {
-          if (userId) {
-            fetchConversations(userId);
-          } else {
+          if (!userId) {
             pendingFetchAfterFinishRef.current = true;
           }
         }
@@ -253,17 +251,17 @@ export function useVercelChat({
       }
       await fetchConversations(userId);
     };
-
-    // run immediately, then every 2 seconds
-    checkAndFetch();
-    intervalId = window.setInterval(checkAndFetch, 2000);
+    if (messagesLengthRef.current === 2) {
+      checkAndFetch();
+    }
+    intervalId = window.setInterval(checkAndFetch, 3000);
 
     return () => {
       if (intervalId !== null) {
         window.clearInterval(intervalId);
       }
     };
-  }, [latestChatId, userId]);
+  }, [latestChatId, userId, messagesLengthRef.current]);
 
   return {
     // States
