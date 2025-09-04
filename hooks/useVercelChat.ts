@@ -4,6 +4,7 @@ import { useUserProvider } from "@/providers/UserProvder";
 import { useArtistProvider } from "@/providers/ArtistProvider";
 import { useQuery } from "@tanstack/react-query";
 import { useArtistKnowledge } from "./useArtistKnowledge";
+import { useArtistInstruction } from "./useArtistInstruction";
 import { useParams } from "next/navigation";
 import { toast } from "react-toastify";
 import { useEffect, useState, useRef, useMemo } from "react";
@@ -53,18 +54,7 @@ export function useVercelChat({
   const { data: knowledgeFiles } = useArtistKnowledge(artistId);
 
   // Fetch custom artist instruction on client
-  const { data: artistInstruction } = useQuery<string | undefined>({
-    queryKey: ["artist-instruction", artistId],
-    enabled: Boolean(artistId),
-    queryFn: async () => {
-      if (!artistId) return undefined;
-      const res = await fetch(`/api/artist?artistId=${encodeURIComponent(artistId)}`);
-      if (!res.ok) return undefined;
-      const json = await res.json();
-      return json?.artist.instruction || undefined;
-    },
-    staleTime: 5 * 60 * 1000,
-  });
+  const { data: artistInstruction } = useArtistInstruction(artistId);
 
   // Build knowledge base text from client-fetched knowledge files
   const { data: knowledgeBaseText } = useQuery<string>({
