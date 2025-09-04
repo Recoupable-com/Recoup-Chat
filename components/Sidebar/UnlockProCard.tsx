@@ -7,7 +7,7 @@ const UnlockProCard = () => {
   const { toggleModal } = usePaymentProvider();
   
   return (
-    <div className="w-full md:w-[250px] shadow-lg flex flex-col rounded-xl overflow-hidden my-4 aspect-[212/200] md:aspect-[212/220] bg-[url('/Blue%20Background.png')] bg-cover bg-top border border-white p-6 pl-6 pr-6 relative">
+    <div className="w-full md:w-[250px] shadow-lg flex flex-col rounded-xl overflow-hidden my-3 aspect-[212/175] md:aspect-[212/190] bg-[url('/Background.png')] bg-cover bg-center border border-white p-4 relative">
       {/* Inner white border with spacing */}
       <div className="absolute inset-0 border-2 border-white/30 rounded-xl pointer-events-none z-5"></div>
 
@@ -34,11 +34,11 @@ const UnlockProCard = () => {
       </video>
 
       <div className="relative z-20">
-        <div className="relative mb-3">
-          <div className="absolute right-1 top-2">
+        <div className="relative mb-2">
+          <div className="absolute right-1 top-1">
             <Icon name="star" />
           </div>
-          <div className="font-inter_bold text-white text-3xl">
+          <div className="font-inter_bold text-white text-2xl leading-tight">
             Unlock
             <br />
             Artist
@@ -47,13 +47,13 @@ const UnlockProCard = () => {
           </div>
         </div>
         
-        <p className="text-sm font-inter text-white/90 leading-relaxed mb-3 mt-2">
+        <p className="text-xs font-inter text-white/90 leading-tight mb-1 mt-1">
           Get better results with<br /><span className="font-inter_bold">premium AI models</span>
         </p>
         
         <button
           type="button"
-          className="font-inter_bold text-sm bg-white/15 backdrop-blur-md text-white rounded-lg px-4 py-2 flex items-center gap-2 border border-white/20 hover:bg-white/25 transition-all duration-200 shadow-xl mt-2"
+          className="font-inter_bold text-xs bg-white/15 backdrop-blur-md text-white rounded-lg px-3 py-1.5 flex items-center gap-2 border border-white/20 hover:bg-white/25 transition-all duration-200 shadow-xl mt-3"
           onClick={() => toggleModal(false)}
         >
           Start Free Trial
