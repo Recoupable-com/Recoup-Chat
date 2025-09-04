@@ -35,8 +35,10 @@ export async function POST(request: NextRequest) {
         console.error("Error in chat API:", e);
         return JSON.stringify(serializeError(e));
       },
-      onFinish: async ({ messages }) => {
-        await handleChatCompletion(body, messages);
+      onFinish: ({ messages }) => {
+        void handleChatCompletion(body, messages).catch((e) => {
+          console.error("Failed to handle chat completion:", e);
+        });
       },
     });
 

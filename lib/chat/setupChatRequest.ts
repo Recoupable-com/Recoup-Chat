@@ -1,44 +1,31 @@
 import generateUUID from "@/lib/generateUUID";
 import { getMcpTools } from "@/lib/tools/getMcpTools";
-import attachRichFiles from "@/lib/chat/attachRichFiles";
 import getSystemPrompt from "@/lib/prompts/getSystemPrompt";
-import { getAccountEmails } from "@/lib/supabase/account_emails/getAccountEmails";
 import { MAX_MESSAGES } from "./const";
 import { type ChatRequest, type ChatConfig } from "./types";
 import { AnthropicProviderOptions } from "@ai-sdk/anthropic";
 import { DEFAULT_MODEL } from "../consts";
-import { stepCountIs } from "ai";
+import { convertToModelMessages, stepCountIs } from "ai";
 import getPrepareStepResult from "./toolChains/getPrepareStepResult";
 import { filterExcludedTools } from "./filterExcludedTools";
 
 export async function setupChatRequest(body: ChatRequest): Promise<ChatConfig> {
-  let { email } = body;
-  const { accountId, artistId, model, excludeTools } = body;
-
-  if (!email && accountId) {
-    const emails = await getAccountEmails(accountId);
-    if (emails.length > 0 && emails[0].email) {
-      email = emails[0].email;
-    }
-  }
-
+  const { accountId, artistId, model, excludeTools, email, artistInstruction, knowledgeBaseText } = body;
   const tools = filterExcludedTools(getMcpTools(), excludeTools);
 
-  const messagesWithRichFiles = await attachRichFiles(body.messages, {
-    artistId: artistId as string,
-  });
-
-  const system = await getSystemPrompt({
+  const system = getSystemPrompt({
     roomId: body.roomId,
     artistId,
     accountId,
     email,
+    artistInstruction,
+    knowledgeBaseText,
   });
 
   return {
     model: model || DEFAULT_MODEL,
     system,
-    messages: messagesWithRichFiles.slice(-MAX_MESSAGES),
+    messages: convertToModelMessages(body.messages.slice(-MAX_MESSAGES)),
     experimental_generateMessageId: generateUUID,
     tools,
     stopWhen: stepCountIs(111),

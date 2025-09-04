@@ -8,6 +8,7 @@ import {
   type StopCondition,
   type PrepareStepFunction,
 } from "ai";
+import type { KnowledgeBaseEntry } from "@/lib/supabase/getArtistKnowledge";
 
 export interface ChatRequest {
   messages: Array<UIMessage>;
@@ -17,6 +18,9 @@ export interface ChatRequest {
   email?: string;
   model?: string;
   excludeTools?: string[];
+  knowledgeFiles?: KnowledgeBaseEntry[];
+  artistInstruction?: string;
+  knowledgeBaseText?: string;
 }
 
 export interface ChatConfig {
