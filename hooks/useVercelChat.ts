@@ -41,7 +41,7 @@ export function useVercelChat({
   const artistId = selectedArtist?.account_id;
   const [hasChatApiError, setHasChatApiError] = useState(false);
   const messagesLengthRef = useRef<number>();
-  const { fetchConversations, addOptimisticConversation } = useConversationsProvider();
+  const { fetchConversations, addOptimisticConversation, conversations } = useConversationsProvider();
   const { data: availableModels = [] } = useAvailableModels();
   const [input, setInput] = useState("");
   const [model, setModel] = useLocalStorage(
@@ -49,6 +49,7 @@ export function useVercelChat({
     availableModels[0]?.id ?? ""
   );
   const { refetchCredits } = usePaymentProvider();
+  const latestChatId = window.location.pathname.match(/\/chat\/([^\/]+)/)?.[1];
 
   // Fetch artist knowledge on client to avoid server pre-stream lookup
   const { data: knowledgeFiles } = useArtistKnowledge(artistId);
@@ -93,9 +94,7 @@ export function useVercelChat({
         // When messages length is 2, it means second message has been streamed successfully and should also have been updated on backend
         // So we trigger the fetchConversations to update the conversation list
         if (messagesLengthRef.current === 2) {
-          if (userId) {
-            fetchConversations(userId);
-          } else {
+          if (!userId) {
             pendingFetchAfterFinishRef.current = true;
           }
         }
@@ -214,6 +213,36 @@ export function useVercelChat({
     const defaultId = preferred ? preferred.id : availableModels[0].id;
     setModel(defaultId);
   }, [availableModels, model]);
+
+  useEffect(() => {
+    if (!latestChatId || !userId) return;
+
+    let intervalId: number | null = null;
+
+    const checkAndFetch = async () => {
+      const exists = conversations.some(
+        (c) => ("id" in c ? c.id : c.agentId) === latestChatId
+      );
+      if (exists) {
+        if (intervalId !== null) {
+          window.clearInterval(intervalId);
+          intervalId = null;
+        }
+        return;
+      }
+      await fetchConversations(userId);
+    };
+
+    // run immediately, then every 2 seconds
+    checkAndFetch();
+    intervalId = window.setInterval(checkAndFetch, 2000);
+
+    return () => {
+      if (intervalId !== null) {
+        window.clearInterval(intervalId);
+      }
+    };
+  }, [latestChatId, conversations, fetchConversations, userId]);
 
   return {
     // States
