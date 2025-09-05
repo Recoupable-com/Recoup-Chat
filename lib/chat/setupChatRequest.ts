@@ -10,7 +10,7 @@ import getPrepareStepResult from "./toolChains/getPrepareStepResult";
 import { filterExcludedTools } from "./filterExcludedTools";
 
 export async function setupChatRequest(body: ChatRequest): Promise<ChatConfig> {
-  const { accountId, artistId, model, excludeTools, email, artistInstruction, knowledgeBaseText } = body;
+  const { accountId, artistId, model, excludeTools, email, artistInstruction, knowledgeBaseText, timezone } = body;
   const tools = filterExcludedTools(getMcpTools(), excludeTools);
 
   const system = getSystemPrompt({
@@ -20,6 +20,7 @@ export async function setupChatRequest(body: ChatRequest): Promise<ChatConfig> {
     email,
     artistInstruction,
     knowledgeBaseText,
+    timezone,
   });
 
   return {

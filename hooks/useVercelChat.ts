@@ -61,6 +61,8 @@ export function useVercelChat({
   // Build knowledge base text from client-fetched knowledge files
   const { data: knowledgeBaseText } = useArtistKnowledgeText(artistId, knowledgeFiles);
 
+  const timezone = useMemo(() => Intl.DateTimeFormat().resolvedOptions().timeZone, []);
+
   const chatRequestOptions = useMemo(
     () => ({
       body: {
@@ -69,12 +71,13 @@ export function useVercelChat({
         accountId: userId,
         email,
         model,
+        timezone,
         knowledgeFiles,
         artistInstruction,
         knowledgeBaseText,
       },
     }),
-    [id, artistId, userId, email, model, knowledgeFiles, artistInstruction, knowledgeBaseText]
+    [id, artistId, userId, email, model, timezone, knowledgeFiles, artistInstruction, knowledgeBaseText]
   );
 
   const { messages, status, stop, sendMessage, setMessages, regenerate } =

@@ -8,6 +8,7 @@ export function getSystemPrompt({
   knowledgeBaseText,
   artistInstruction,
   conversationName = "New conversation",
+  timezone,
 }: {
   roomId?: string;
   artistId?: string;
@@ -16,6 +17,7 @@ export function getSystemPrompt({
   knowledgeBaseText?: string;
   artistInstruction?: string;
   conversationName?: string;
+  timezone?: string;
 }): string {
   const resolvedArtistId = artistId;
 
@@ -25,7 +27,8 @@ export function getSystemPrompt({
   The account_id is ${accountId || "Unknown"} use this to create / delete artists.
   The active_account_email is ${email || "Unknown"}. 
   The active_conversation_id is ${roomId || "No ID"}.
-  The active_conversation_name is ${conversationName || "No Chat Name"}.`;
+  The active_conversation_name is ${conversationName || "No Chat Name"}.
+  The active_timezone is ${timezone || "Unknown"}. If you need current local time, prefer using the get_local_time tool and pass this timezone as the input parameter when available.`;
 
   const customInstruction = artistInstruction;
   if (customInstruction) {
