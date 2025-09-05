@@ -1,6 +1,8 @@
 import { SYSTEM_PROMPT } from "@/lib/consts";
+import getArtistIdForRoom from "../supabase/getArtistIdForRoom";
+import getArtistInstruction from "../supabase/getArtistInstruction";
 
-export function getSystemPrompt({
+export async function getSystemPrompt({
   roomId,
   artistId,
   accountId,
@@ -18,8 +20,8 @@ export function getSystemPrompt({
   artistInstruction?: string;
   conversationName?: string;
   timezone?: string;
-}): string {
-  const resolvedArtistId = artistId;
+}): Promise<string> {
+  const resolvedArtistId = artistId || (await getArtistIdForRoom(roomId || ""));
 
   let systemPrompt = `${SYSTEM_PROMPT} 
 
@@ -30,7 +32,7 @@ export function getSystemPrompt({
   The active_conversation_name is ${conversationName || "No Chat Name"}.
   The active_timezone is ${timezone || "Unknown"}. If you need current local time, prefer using the get_local_time tool and pass this timezone as the input parameter when available.`;
 
-  const customInstruction = artistInstruction;
+  const customInstruction = artistInstruction || await getArtistInstruction(resolvedArtistId || "");
   if (customInstruction) {
     systemPrompt = `${systemPrompt}
 -----ARTIST CUSTOM INSTRUCTION-----
