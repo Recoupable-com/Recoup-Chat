@@ -1,10 +1,12 @@
-import { type KnowledgeBaseEntry } from "@/lib/supabase/getArtistKnowledge";
+import getArtistKnowledge from "@/lib/supabase/getArtistKnowledge";
 
 export async function getKnowledgeBaseContext(
-  knowledgeFiles?: KnowledgeBaseEntry[]
+  artistId: string,
 ): Promise<string> {
   try {
-    const knowledges = knowledgeFiles && knowledgeFiles.length ? knowledgeFiles : [];
+    if (!artistId) return "";
+
+    const knowledges = await getArtistKnowledge(artistId);
     if (!knowledges.length) return "";
 
     const textFiles = knowledges.filter((file) =>
