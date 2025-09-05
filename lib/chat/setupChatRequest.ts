@@ -13,7 +13,7 @@ export async function setupChatRequest(body: ChatRequest): Promise<ChatConfig> {
   const { accountId, artistId, model, excludeTools, email, artistInstruction, knowledgeBaseText, timezone } = body;
   const tools = filterExcludedTools(getMcpTools(), excludeTools);
 
-  const system = getSystemPrompt({
+  const system = await getSystemPrompt({
     roomId: body.roomId,
     artistId,
     accountId,
