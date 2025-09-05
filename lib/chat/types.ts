@@ -17,6 +17,7 @@ export interface ChatRequest {
   accountId: string;
   email?: string;
   model?: string;
+  timezone?: string;
   excludeTools?: string[];
   knowledgeFiles?: KnowledgeBaseEntry[];
   artistInstruction?: string;
