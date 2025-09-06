@@ -33,7 +33,7 @@ export function ChatInput({
   input,
 }: ChatInputProps) {
   const { selectedArtist, sorted } = useArtistProvider();
-  const { hasPendingUploads, messages, status, model } = useVercelChatContext();
+  const { hasPendingUploads, messages, status } = useVercelChatContext();
   const isDisabled = !selectedArtist && sorted.length > 0;
   
 

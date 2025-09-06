@@ -1,12 +1,12 @@
 import { ChatRequest } from "./types";
 
 /**
- * Handles Fal nano banana model selection and forced tool calling
+ * Handles Fal nano banana model selection and tool filtering
  * @param body - The chat request body
- * @returns Object with resolved model and optional forced tool choice
+ * @returns Object with resolved model and optional tool exclusions
  */
 export function handleNanoBananaModel(body: ChatRequest) {
-  const { model, messages } = body;
+  const { model } = body;
   
   // Only handle if nano banana model is selected
   if (model !== "fal-ai/nano-banana/edit") {

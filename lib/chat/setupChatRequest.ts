@@ -30,13 +30,12 @@ export async function setupChatRequest(body: ChatRequest): Promise<ChatConfig> {
     timezone,
   });
 
-  return {
+  const config: ChatConfig = {
     model: nanoBananaConfig.resolvedModel || DEFAULT_MODEL,
     system,
     messages: convertToModelMessages(body.messages.slice(-MAX_MESSAGES)),
     experimental_generateMessageId: generateUUID,
     tools,
-    ...(nanoBananaConfig.forcedToolChoice && { toolChoice: nanoBananaConfig.forcedToolChoice }),
     stopWhen: stepCountIs(111),
     prepareStep: (options) => {
       const next = getPrepareStepResult(options);
@@ -61,4 +60,11 @@ export async function setupChatRequest(body: ChatRequest): Promise<ChatConfig> {
       },
     },
   };
+
+  // Add toolChoice if provided by nano banana config
+  if (nanoBananaConfig.forcedToolChoice) {
+    (config as ChatConfig & { toolChoice?: unknown }).toolChoice = nanoBananaConfig.forcedToolChoice;
+  }
+
+  return config;
 }

@@ -6,24 +6,24 @@ function ensureBase64Polyfills() {
   const atobImpl = (data: string) => Buffer.from(data, "base64").toString("binary");
   const btoaImpl = (data: string) => Buffer.from(data, "binary").toString("base64");
 
-  // Apply to all possible global contexts
-  const globals = [globalThis, global, window].filter(Boolean);
+  // Apply to globalThis and global objects
+  const globals = [globalThis, global].filter(Boolean);
   
-  globals.forEach((g: any) => {
-    if (typeof g.atob === "undefined") {
-      g.atob = atobImpl;
+  globals.forEach((g) => {
+    if (typeof (g as typeof globalThis & { atob?: unknown }).atob === "undefined") {
+      (g as typeof globalThis & { atob: (data: string) => string }).atob = atobImpl;
     }
-    if (typeof g.btoa === "undefined") {
-      g.btoa = btoaImpl;
+    if (typeof (g as typeof globalThis & { btoa?: unknown }).btoa === "undefined") {
+      (g as typeof globalThis & { btoa: (data: string) => string }).btoa = btoaImpl;
     }
   });
 
   // Also ensure they're available as direct properties
-  if (typeof (globalThis as any).atob === "undefined") {
-    (globalThis as any).atob = atobImpl;
+  if (typeof (globalThis as typeof globalThis & { atob?: unknown }).atob === "undefined") {
+    (globalThis as typeof globalThis & { atob: (data: string) => string }).atob = atobImpl;
   }
-  if (typeof (globalThis as any).btoa === "undefined") {
-    (globalThis as any).btoa = btoaImpl;
+  if (typeof (globalThis as typeof globalThis & { btoa?: unknown }).btoa === "undefined") {
+    (globalThis as typeof globalThis & { btoa: (data: string) => string }).btoa = btoaImpl;
   }
 }
 

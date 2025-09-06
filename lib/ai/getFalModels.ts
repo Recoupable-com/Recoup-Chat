@@ -16,6 +16,11 @@ export const getFalModels = async (): Promise<GatewayLanguageModelEntry[]> => {
       pricing: {
         input: "0.0001", // Estimated - adjust based on actual Fal pricing
         output: "0.001"
+      },
+      specification: {
+        specificationVersion: "v2",
+        provider: "fal",
+        modelId: "fal-ai/nano-banana/edit"
       }
     },
     {
@@ -25,6 +30,11 @@ export const getFalModels = async (): Promise<GatewayLanguageModelEntry[]> => {
       pricing: {
         input: "0.0001",
         output: "0.001"
+      },
+      specification: {
+        specificationVersion: "v2",
+        provider: "fal",
+        modelId: "fal-ai/flux/dev"
       }
     },
     {
@@ -34,6 +44,11 @@ export const getFalModels = async (): Promise<GatewayLanguageModelEntry[]> => {
       pricing: {
         input: "0.0002",
         output: "0.002"
+      },
+      specification: {
+        specificationVersion: "v2",
+        provider: "fal",
+        modelId: "fal-ai/flux-pro/kontext"
       }
     },
     {
@@ -43,6 +58,11 @@ export const getFalModels = async (): Promise<GatewayLanguageModelEntry[]> => {
       pricing: {
         input: "0.0001",
         output: "0.001"
+      },
+      specification: {
+        specificationVersion: "v2",
+        provider: "fal",
+        modelId: "fal-ai/ideogram/character"
       }
     }
   ];
