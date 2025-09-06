@@ -12,7 +12,7 @@ import { usePaymentProvider } from "@/providers/PaymentProvider";
 import { organizeModels } from "@/lib/ai/organizeModels";
 import { getFeaturedModelConfig } from "@/lib/ai/featuredModels";
 import { useMemo } from "react";
-import { useIsMobile } from "@/hooks/useIsMobile";
+import useIsMobile from "@/hooks/useIsMobile";
 
 const ModelSelect = () => {
   const { model, setModel, availableModels } = useVercelChatContext();
