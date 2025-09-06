@@ -2,8 +2,7 @@ import { GatewayLanguageModelEntry } from "@ai-sdk/gateway";
 import { isFreeModel } from "./isFreeModel";
 import { 
   FEATURED_MODELS, 
-  isFeaturedModel,
-  getFeaturedModelConfig 
+  isFeaturedModel
 } from "./featuredModels";
 
 export interface OrganizedModels {
