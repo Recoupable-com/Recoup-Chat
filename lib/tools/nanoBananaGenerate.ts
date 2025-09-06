@@ -32,7 +32,7 @@ const nanoBananaGenerate = tool({
   inputSchema: schema,
   execute: async ({ prompt }): Promise<NanoBananaGenerateResult> => {
     try {
-      console.log("🍌 NANO BANANA GENERATE: Starting image generation - CALL #" + Date.now());
+      console.log("🍌 NANO BANANA GENERATE: Starting image generation");
       console.log("🍌 Prompt:", prompt);
 
       // Import Fal client dynamically to avoid issues

@@ -33,8 +33,7 @@ export function usePureFileAttachments() {
       const formData = new FormData();
       formData.append("file", file);
 
-      // TEMPORARY: Use fallback upload endpoint to bypass Arweave issues
-      const response = await fetch("/api/upload-temp", {
+      const response = await fetch("/api/upload", {
         method: "POST",
         body: formData,
       });
