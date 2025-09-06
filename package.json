@@ -12,6 +12,7 @@
   },
   "dependencies": {
     "@ai-sdk/anthropic": "2.0.0-beta.8",
+    "@ai-sdk/fal": "^1.0.12",
     "@ai-sdk/gateway": "^1.0.4",
     "@ai-sdk/google": "2.0.0-beta.15",
     "@ai-sdk/openai": "2.0.0-beta.11",
@@ -21,6 +22,7 @@
     "@ardrive/turbo-sdk": "^1.22.1",
     "@coinbase/cdp-sdk": "^1.4.0",
     "@coinbase/onchainkit": "^0.38.8",
+    "@fal-ai/client": "^1.6.2",
     "@farcaster/frame-sdk": "^0.0.44",
     "@farcaster/frame-wagmi-connector": "^0.0.37",
     "@hookform/resolvers": "^3.9.1",

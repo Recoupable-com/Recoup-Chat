@@ -8,10 +8,17 @@ import { DEFAULT_MODEL } from "../consts";
 import { convertToModelMessages, stepCountIs } from "ai";
 import getPrepareStepResult from "./toolChains/getPrepareStepResult";
 import { filterExcludedTools } from "./filterExcludedTools";
+import { handleNanoBananaModel } from "./handleNanoBananaModel";
 
 export async function setupChatRequest(body: ChatRequest): Promise<ChatConfig> {
-  const { accountId, artistId, model, excludeTools, email, artistInstruction, knowledgeBaseText, timezone } = body;
-  const tools = filterExcludedTools(getMcpTools(), excludeTools);
+  const { accountId, artistId, excludeTools, email, artistInstruction, knowledgeBaseText, timezone } = body;
+  
+  // Handle Fal nano banana model selection
+  const nanoBananaConfig = handleNanoBananaModel(body);
+  
+  // Use exclude tools from nano banana config if available
+  const finalExcludeTools = nanoBananaConfig.excludeTools || excludeTools;
+  const tools = filterExcludedTools(getMcpTools(), finalExcludeTools);
 
   const system = await getSystemPrompt({
     roomId: body.roomId,
@@ -24,11 +31,12 @@ export async function setupChatRequest(body: ChatRequest): Promise<ChatConfig> {
   });
 
   return {
-    model: model || DEFAULT_MODEL,
+    model: nanoBananaConfig.resolvedModel || DEFAULT_MODEL,
     system,
     messages: convertToModelMessages(body.messages.slice(-MAX_MESSAGES)),
     experimental_generateMessageId: generateUUID,
     tools,
+    ...(nanoBananaConfig.forcedToolChoice && { toolChoice: nanoBananaConfig.forcedToolChoice }),
     stopWhen: stepCountIs(111),
     prepareStep: (options) => {
       const next = getPrepareStepResult(options);

@@ -1,6 +1,7 @@
 import { AnthropicProviderOptions } from "@ai-sdk/anthropic";
 import { GoogleGenerativeAIProviderOptions } from "@ai-sdk/google";
 import { OpenAIResponsesProviderOptions } from "@ai-sdk/openai";
+import { FalProviderOptions } from "@ai-sdk/fal";
 import {
   type ModelMessage,
   type UIMessage,
@@ -25,7 +26,7 @@ export interface ChatRequest {
 }
 
 export interface ChatConfig {
-  model: string;
+  model: string | any;
   system: string;
   messages: ModelMessage[];
   experimental_generateMessageId: () => string;
@@ -35,6 +36,7 @@ export interface ChatConfig {
     anthropic?: AnthropicProviderOptions;
     google?: GoogleGenerativeAIProviderOptions;
     openai?: OpenAIResponsesProviderOptions;
+    fal?: FalProviderOptions;
   };
   stopWhen?:
     | StopCondition<NoInfer<ToolSet>>

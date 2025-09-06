@@ -1,5 +1,7 @@
 import { ToolSet } from "ai";
 import generateImage from "./generateImage";
+import nanoBananaGenerate from "./nanoBananaGenerate";
+import nanoBananaEdit from "./nanoBananaEdit";
 import createTxtFile from "./createTxtFile";
 import getSegmentFans from "./getSegmentFans";
 import contactTeam from "./contactTeam";
@@ -40,6 +42,8 @@ import getLocalTime from "./getLocalTime";
 export function getMcpTools(): ToolSet {
   const tools = {
     generate_image: generateImage,
+    nano_banana_generate: nanoBananaGenerate,
+    nano_banana_edit: nanoBananaEdit,
     generate_txt_file: createTxtFile,
     contact_team: contactTeam,
     create_segments: createSegments,
