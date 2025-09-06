@@ -11,13 +11,12 @@ import ModelSelectItem from "./ModelSelectItem";
 import { usePaymentProvider } from "@/providers/PaymentProvider";
 import { organizeModels } from "@/lib/ai/organizeModels";
 import { getFeaturedModelConfig } from "@/lib/ai/featuredModels";
-import { useState, useMemo } from "react";
+import { useMemo } from "react";
 import { ChevronRight } from "lucide-react";
 
 const ModelSelect = () => {
   const { model, setModel, availableModels } = useVercelChatContext();
   const { subscriptionActive } = usePaymentProvider();
-  const [showMoreModels, setShowMoreModels] = useState(false);
 
   // Organize models into featured and other models
   const organizedModels = useMemo(() => {
