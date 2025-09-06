@@ -12,7 +12,6 @@ import { usePaymentProvider } from "@/providers/PaymentProvider";
 import { organizeModels } from "@/lib/ai/organizeModels";
 import { getFeaturedModelConfig } from "@/lib/ai/featuredModels";
 import { useMemo } from "react";
-import { ChevronRight } from "lucide-react";
 
 const ModelSelect = () => {
   const { model, setModel, availableModels } = useVercelChatContext();
@@ -61,9 +60,8 @@ const ModelSelect = () => {
             )}
             <div className="relative">
               <PromptInputModelSelect onValueChange={handleModelChange} value="">
-                <PromptInputModelSelectTrigger className="w-full justify-between px-3 py-2.5 text-sm font-medium text-muted-foreground hover:bg-accent hover:text-foreground rounded-lg border-none shadow-none bg-transparent [&>svg]:hidden">
+                <PromptInputModelSelectTrigger className="w-full justify-start px-3 py-2.5 text-sm font-medium text-muted-foreground hover:bg-accent hover:text-foreground rounded-lg border-none shadow-none bg-transparent [&>svg]:hidden">
                   <span>More Models</span>
-                  <ChevronRight className="h-4 w-4" />
                 </PromptInputModelSelectTrigger>
                 <PromptInputModelSelectContent className="min-w-[200px]" side="right" align="start" sideOffset={8}>
                   {organizedModels.otherModels.map((model) => (

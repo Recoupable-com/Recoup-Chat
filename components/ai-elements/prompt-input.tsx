@@ -264,7 +264,7 @@ export const PromptInputModelSelectContent = ({
   className,
   ...props
 }: PromptInputModelSelectContentProps) => (
-  <SelectContent className={cn("rounded-2xl min-w-[280px] px-2 pt-2", className)} {...props} />
+  <SelectContent className={cn("rounded-2xl min-w-[280px] px-2 py-2", className)} {...props} />
 );
 
 export type PromptInputModelSelectItemProps = ComponentProps<typeof SelectItem>;
