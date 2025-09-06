@@ -12,10 +12,12 @@ import { usePaymentProvider } from "@/providers/PaymentProvider";
 import { organizeModels } from "@/lib/ai/organizeModels";
 import { getFeaturedModelConfig } from "@/lib/ai/featuredModels";
 import { useMemo } from "react";
+import { useIsMobile } from "@/hooks/useIsMobile";
 
 const ModelSelect = () => {
   const { model, setModel, availableModels } = useVercelChatContext();
   const { subscriptionActive } = usePaymentProvider();
+  const isMobile = useIsMobile();
 
   // Organize models into featured and other models
   const organizedModels = useMemo(() => {
@@ -63,7 +65,12 @@ const ModelSelect = () => {
                 <PromptInputModelSelectTrigger className="w-full justify-start px-3 py-2.5 text-sm font-medium text-muted-foreground hover:bg-accent hover:text-foreground rounded-lg border-none shadow-none bg-transparent [&>svg]:hidden">
                   <span>More Models</span>
                 </PromptInputModelSelectTrigger>
-                <PromptInputModelSelectContent className="min-w-[200px]" side="right" align="start" sideOffset={8}>
+                <PromptInputModelSelectContent 
+                  className="min-w-[200px]" 
+                  side={isMobile ? "bottom" : "right"} 
+                  align="start" 
+                  sideOffset={8}
+                >
                   {organizedModels.otherModels.map((model) => (
                     <ModelSelectItem key={model.id} model={model} />
                   ))}
