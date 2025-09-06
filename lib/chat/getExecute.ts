@@ -10,14 +10,20 @@ type ExecuteOptions = {
 const getExecute = async (options: ExecuteOptions, body: ChatRequest) => {
   const { writer } = options;
   const chatConfig = await setupChatRequest(body);
-  const result = streamText(chatConfig);
-  writer.merge(result.toUIMessageStream());
-  const usage = await result.usage;
-  await handleChatCredits({
-    usage,
-    model: chatConfig.model,
-    accountId: body.accountId,
-  });
+  
+  try {
+    const result = streamText(chatConfig);
+    writer.merge(result.toUIMessageStream());
+    const usage = await result.usage;
+    
+    await handleChatCredits({
+      usage,
+      model: chatConfig.model,
+      accountId: body.accountId,
+    });
+  } catch (error) {
+    throw error;
+  }
 };
 
 export default getExecute;

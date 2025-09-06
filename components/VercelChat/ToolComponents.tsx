@@ -1,6 +1,9 @@
 import { ImageSkeleton } from "@/components/VercelChat/tools/image/ImageSkeleton";
 import { ImageResult } from "@/components/VercelChat/tools/image/ImageResult";
+import { NanoBananaResult } from "@/components/VercelChat/tools/image/NanoBananaResult";
 import { ImageGenerationResult } from "@/lib/tools/generateImage";
+import { NanoBananaGenerateResult } from "@/lib/tools/nanoBananaGenerate";
+import { NanoBananaEditResult } from "@/lib/tools/nanoBananaEdit";
 import MermaidDiagram from "@/components/VercelChat/tools/mermaid/MermaidDiagram";
 import { MermaidDiagramSkeleton } from "@/components/VercelChat/tools/mermaid/MermaidDiagramSkeleton";
 import { GenerateMermaidDiagramResult } from "@/lib/tools/generateMermaidDiagram";
@@ -90,6 +93,18 @@ export function getToolCallComponent(part: ToolUIPart) {
 
   // Handle generate_image tool call
   if (toolName === "generate_image") {
+    return (
+      <div key={toolCallId} className="skeleton">
+        <ImageSkeleton />
+      </div>
+    );
+  } else if (toolName === "nano_banana_generate") {
+    return (
+      <div key={toolCallId} className="skeleton">
+        <ImageSkeleton />
+      </div>
+    );
+  } else if (toolName === "nano_banana_edit") {
     return (
       <div key={toolCallId} className="skeleton">
         <ImageSkeleton />
@@ -236,6 +251,18 @@ export function getToolResultComponent(part: ToolUIPart) {
     return (
       <div key={toolCallId}>
         <ImageResult result={result as ImageGenerationResult} />
+      </div>
+    );
+  } else if (toolName === "nano_banana_generate") {
+    return (
+      <div key={toolCallId}>
+        <NanoBananaResult result={result as NanoBananaGenerateResult} />
+      </div>
+    );
+  } else if (toolName === "nano_banana_edit") {
+    return (
+      <div key={toolCallId}>
+        <NanoBananaResult result={result as NanoBananaEditResult} />
       </div>
     );
   } else if (toolName === "generate_mermaid_diagram") {

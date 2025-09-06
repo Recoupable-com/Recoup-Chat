@@ -35,6 +35,7 @@ export function ChatInput({
   const { selectedArtist, sorted } = useArtistProvider();
   const { hasPendingUploads, messages, status } = useVercelChatContext();
   const isDisabled = !selectedArtist && sorted.length > 0;
+  
 
   const handleSend = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -84,6 +85,7 @@ export function ChatInput({
               </PromptInputButton>
               {/* YouTube connect button removed from ChatInput UI intentionally; preserved for future reuse */}
               <ModelSelect />
+              
             </PromptInputTools>
             <PromptInputSubmit
               disabled={isDisabled || hasPendingUploads}
