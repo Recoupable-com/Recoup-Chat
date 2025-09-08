@@ -33,7 +33,7 @@ export function ChatInput({
   input,
 }: ChatInputProps) {
   const { selectedArtist, sorted } = useArtistProvider();
-  const { hasPendingUploads, messages, status } = useVercelChatContext();
+  const { hasPendingUploads, messages, status, model } = useVercelChatContext();
   const isDisabled = !selectedArtist && sorted.length > 0;
   
 
@@ -77,6 +77,7 @@ export function ChatInput({
             onChange={(e) => setInput(e.target.value)}
             disabled={isDisabled || hasPendingUploads}
             className="h-10"
+            placeholder={model === "fal-ai/nano-banana/edit" ? "Describe an image or upload a file to edit..." : "What would you like to know?"}
           />
           <PromptInputToolbar>
             <PromptInputTools>
