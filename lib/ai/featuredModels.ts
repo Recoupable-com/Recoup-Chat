@@ -30,7 +30,7 @@ export const FEATURED_MODELS: FeaturedModelConfig[] = [
     displayName: "Nano Banana",
     isPro: false,
     order: 1,
-    pill: "Image Edit",
+    pill: "Image",
     description: "Great for image editing",
     tooltip: "Google's nano banana model via Fal - perfect for image editing and generation",
   },
