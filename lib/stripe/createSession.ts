@@ -12,6 +12,10 @@ const createSession = async (accountId: string, successUrl: string) => {
     product_data: {
       name: "Recoup Pro",
     },
+    recurring: {
+      interval: "month",
+      interval_count: 1,
+    },
   };
 
   const sessionData: Stripe.Checkout.SessionCreateParams = {
