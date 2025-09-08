@@ -1,11 +1,4 @@
-export const createSession = async (
-  successUrl: string,
-  productName: string,
-  referenceId: string,
-  metadata: {
-    accountId: string;
-  }
-) => {
+export const fetchCheckoutSession = async (accountId: string) => {
   try {
     const response = await fetch(`/api/stripe/session/create`, {
       method: "POST",
@@ -13,11 +6,7 @@ export const createSession = async (
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        successUrl,
-        productName,
-        referenceId,
-        isSubscription: true,
-        metadata,
+        accountId,
       }),
     });
 
