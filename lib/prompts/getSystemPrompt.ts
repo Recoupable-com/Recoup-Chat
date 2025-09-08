@@ -31,7 +31,9 @@ export async function getSystemPrompt({
   The active_account_email is ${email || "Unknown"}. 
   The active_conversation_id is ${roomId || "No ID"}.
   The active_conversation_name is ${conversationName || "No Chat Name"}.
-  The active_timezone is ${timezone || "Unknown"}. If you need current local time, prefer using the get_local_time tool and pass this timezone as the input parameter when available.`;
+  The active_timezone is ${timezone || "Unknown"}. If you need current local time, prefer using the get_local_time tool and pass this timezone as the input parameter when available.
+  Knowledge base usage:
+  - If you need any information about the active artist, call the artist_knowledge_base tool with artist_id: ${resolvedArtistId}.`;
 
   const customInstruction = artistInstruction || await getArtistInstruction(resolvedArtistId || "");
   if (customInstruction) {
