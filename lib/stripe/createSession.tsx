@@ -2,10 +2,9 @@ export const createSession = async (
   successUrl: string,
   productName: string,
   referenceId: string,
-  isSubscription: boolean,
-  totalPrice: number,
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  metadata: any,
+  metadata: {
+    accountId: string;
+  }
 ) => {
   try {
     const response = await fetch(`/api/stripe/session/create`, {
@@ -17,9 +16,8 @@ export const createSession = async (
         successUrl,
         productName,
         referenceId,
-        isSubscription,
+        isSubscription: true,
         metadata,
-        totalPrice,
       }),
     });
 
