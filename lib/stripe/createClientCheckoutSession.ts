@@ -1,8 +1,20 @@
-import { fetchCheckoutSession } from "./fetchCheckoutSession";
-
 const createClientCheckoutSession = async (accountId: string) => {
-  const sessionResponse = await fetchCheckoutSession(accountId);
-  window.open(sessionResponse.url, "_self");
+  try {
+    const response = await fetch(`/api/stripe/session/create`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        accountId,
+      }),
+    });
+
+    const data = await response.json();
+    window.open(data.data.url, "_self");
+  } catch (error) {
+    return { error };
+  }
 };
 
 export default createClientCheckoutSession;
