@@ -27,7 +27,7 @@ export function ImageResult({ result }: ImageResultProps) {
   }
 
   return (
-    <div className="flex justify-center">
+    <div className="flex justify-start my-3">
       {result.arweaveUrl ? (
         <div className="border border-gray-200 rounded-2xl group cursor-pointer relative overflow-hidden max-w-md max-h-md">
           <div className="relative w-full h-full max-h-[28rem]">
