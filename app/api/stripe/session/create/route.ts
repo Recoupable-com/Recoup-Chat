@@ -4,9 +4,10 @@ import { NextRequest } from "next/server";
 export async function POST(req: NextRequest) {
   const body = await req.json();
   const accountId = body.accountId;
+  const successUrl = body.successUrl;
 
   try {
-    const session = await createSession(accountId);
+    const session = await createSession(accountId, successUrl);
     return Response.json({ data: session }, { status: 200 });
   } catch (error) {
     console.error(error);

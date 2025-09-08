@@ -2,7 +2,7 @@ import Stripe from "stripe";
 import stripeClient from "./client";
 import { v4 as uuidV4 } from "uuid";
 
-const createSession = async (accountId: string) => {
+const createSession = async (accountId: string, successUrl: string) => {
   const metadata = {
     accountId,
   };
@@ -27,6 +27,7 @@ const createSession = async (accountId: string) => {
     subscription_data: {
       metadata,
     },
+    success_url: successUrl,
   };
   const session = await stripeClient.checkout.sessions.create(sessionData);
   return session;

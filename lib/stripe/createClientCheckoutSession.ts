@@ -7,6 +7,7 @@ const createClientCheckoutSession = async (accountId: string) => {
       },
       body: JSON.stringify({
         accountId,
+        successUrl: `${window.location.href}`,
       }),
     });
 
