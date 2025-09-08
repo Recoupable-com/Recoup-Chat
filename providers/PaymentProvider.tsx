@@ -1,11 +1,10 @@
 "use client";
 
-import UnlockProModal from "@/components/UnlockProModal";
 import usePayment from "@/hooks/usePayment";
 import React, { createContext, useContext, useMemo } from "react";
 
 const PaymentContext = createContext<ReturnType<typeof usePayment>>(
-  {} as ReturnType<typeof usePayment>,
+  {} as ReturnType<typeof usePayment>
 );
 
 const PaymentProvider = ({ children }: { children: React.ReactNode }) => {
@@ -13,15 +12,7 @@ const PaymentProvider = ({ children }: { children: React.ReactNode }) => {
   const value = useMemo(() => ({ ...payment }), [payment]);
 
   return (
-    <PaymentContext.Provider value={value}>
-      {!payment.isLoadingCredits && (
-        <UnlockProModal
-          isModalOpen={payment.isModalOpen}
-          toggleModal={payment.toggleModal}
-        />
-      )}
-      {children}
-    </PaymentContext.Provider>
+    <PaymentContext.Provider value={value}>{children}</PaymentContext.Provider>
   );
 };
 
