@@ -1,35 +1,67 @@
 import { ArrowRight } from "lucide-react";
 import Icon from "../Icon";
-import { usePaymentProvider } from "@/providers/PaymentProvider";
+import createClientCheckoutSession from "@/lib/stripe/createClientCheckoutSession";
+import React from "react";
+import { useUserProvider } from "@/providers/UserProvder";
 
 const UnlockProCard = () => {
-  const { toggleModal } = usePaymentProvider();
+  const { userData } = useUserProvider();
 
   return (
-    <div className="w-full md:w-[250px] shadow-grey-light flex flex-col rounded-3xl overflow-hidden my-4 aspect-[212/175] md:aspect-[212/180] bg-[url('/unlock-pro.png')] bg-cover bg-center">
-      <div className="w-full relative aspect-[212/100]">
-        <div className="absolute right-4 top-4">
-          <Icon name="star" />
+    <div className="w-full md:w-[250px] shadow-lg flex flex-col rounded-xl overflow-hidden my-3 aspect-[212/175] md:aspect-[212/190] bg-[url('/Background.png')] bg-cover bg-center border border-white p-4 relative">
+      <div className="absolute inset-0 border-2 border-white/30 rounded-xl pointer-events-none z-5"></div>
+      <video
+        className="absolute inset-0 w-full h-full object-cover rounded-xl opacity-20 pointer-events-none z-10"
+        autoPlay
+        loop
+        muted
+        playsInline
+        preload="auto"
+        ref={(el) => {
+          if (el) {
+            el.playbackRate = 1.0;
+            el.style.transform = "rotate(90deg) scale(1.2)";
+            el.style.objectPosition = "center 25%";
+            el.currentTime = 0.5;
+          }
+        }}
+      >
+        <source
+          src="/backgrounds/White_Dots_Diagonal_Waves_Animation_source_2463953.mov"
+          type="video/quicktime"
+        />
+        <source
+          src="/backgrounds/White_Dots_Diagonal_Waves_Animation_source_2463953.mov"
+          type="video/mp4"
+        />
+      </video>
+
+      <div className="relative z-20">
+        <div className="relative mb-2">
+          <div className="absolute right-1 top-1">
+            <Icon name="star" />
+          </div>
+          <div className="font-inter_bold text-white text-2xl leading-tight">
+            Unlock
+            <br />
+            Artist
+            <br />
+            Intelligence
+          </div>
         </div>
-        <div className="absolute size-full z-[1] font-inter_bold text-white text-xl p-4">
-          Unlock PRO:
+
+        <p className="text-xs font-inter text-white/90 leading-tight mb-1 mt-1">
+          Get better results with
           <br />
-          Smarter Brand
-          <br />
-          Deals Made Easy
-        </div>
-      </div>
-      <div className="bg-white grow pt-3 px-4">
-        <p className="text-[11px] font-plus_jakarta_sans_bold">
-          Unlock unlimited reports and let AI find your next big brand deal
-          automatically.
+          <span className="font-inter_bold">premium AI models</span>
         </p>
+
         <button
           type="button"
-          className="font-inter_bold text-xs bg-black text-white rounded-md px-2 py-1 flex justify-center gap-2 items-center mt-2"
-          onClick={() => toggleModal(false)}
+          className="font-inter_bold text-xs bg-white/15 backdrop-blur-md text-white rounded-lg px-3 py-1.5 flex items-center gap-2 border border-white/20 hover:bg-white/25 transition-all duration-200 shadow-xl mt-3"
+          onClick={() => createClientCheckoutSession(userData?.account_id)}
         >
-          Unlock PRO Now
+          Start Free Trial
           <ArrowRight className="size-3" />
         </button>
       </div>
