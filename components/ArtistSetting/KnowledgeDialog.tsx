@@ -10,6 +10,7 @@ import {
 import { ReactNode } from "react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
+import isImagePath from "@/utils/isImagePath";
 
 type KnowledgeDialogProps = {
   name: string;
@@ -18,18 +19,12 @@ type KnowledgeDialogProps = {
 };
 
 const KnowledgeDialog = ({ name, url, children }: KnowledgeDialogProps) => {
-  const isImageUrl = (value: string): boolean => {
-    const lower = value.toLowerCase();
-    return [".png", ".jpg", ".jpeg", ".gif", ".webp", ".svg"].some((ext) =>
-      lower.endsWith(ext)
-    );
-  };
-  const isImage = isImageUrl(url) || (name ? isImageUrl(name) : false);
+  const isImage = isImagePath(url) || (name ? isImagePath(name) : false);
   const ext = (() => {
     const base = (name || url).split("?")[0];
     const part = base.includes(".") ? base.split(".").pop() : undefined;
     return (part || "file").toUpperCase();
-  })();
+  })(); // Create PNG, JPG, TXT etc. label etc.
   return (
     <Dialog>
       <DialogTrigger asChild>{children}</DialogTrigger>
@@ -55,6 +50,7 @@ const KnowledgeDialog = ({ name, url, children }: KnowledgeDialogProps) => {
         </div>
         {isImage ? (
           <div className="h-[70vh] bg-muted flex items-center justify-center select-none pointer-events-none">
+            {/* eslint-disable-next-line @next/next/no-img-element */}
             <img
               src={url}
               alt={name || "image"}
