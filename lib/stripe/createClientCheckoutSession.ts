@@ -12,7 +12,7 @@ const createClientCheckoutSession = async (accountId: string) => {
     });
 
     const data = await response.json();
-    window.open(data.data.url, "_self");
+    window.open(data.data.url, "__blank");
   } catch (error) {
     return { error };
   }
