@@ -1,30 +1,46 @@
 import { useArtistProvider } from "@/providers/ArtistProvider";
 import { X } from "lucide-react";
-import Icon from "../Icon";
+import Icon, { IconsType } from "../Icon";
 import getKnowledgeIcon from "@/lib/getKnowledgeIcon";
+import { Button } from "@/components/ui/button";
+import KnowledgeDialog from "./KnowledgeDialog";
+
+type KnowledgeBaseItem = {
+  url: string;
+  type: string;
+  name: string;
+};
 
 const Knowledges = () => {
   const { bases, handleDeleteKnowledge } = useArtistProvider();
   return (
     <>
-      {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
-      {bases.map((base: any, index: number) => (
+      {bases.map((base: KnowledgeBaseItem, index: number) => (
         <div
-          className="flex gap-2 justify-between items-center w-full"
           key={index}
+          className="group flex w-full items-center justify-between rounded-sm border border-border/40 px-1 py-0.5 transition-colors hover:bg-accent"
         >
-          <button
+          <KnowledgeDialog name={base.name} url={base.url}>
+            <Button
+              type="button"
+              variant="ghost"
+              size="sm"
+              className="flex min-w-0 items-center gap-1 px-0.5 h-7 text-xs"
+            >
+              <Icon name={getKnowledgeIcon(base.type) as IconsType} />
+              <span className="truncate max-w-[200px] text-xs">{base.name}</span>
+            </Button>
+          </KnowledgeDialog>
+          <Button
             type="button"
-            className="flex items-center gap-1"
-            onClick={() => window.open(base.url, "_blank")}
+            variant="ghost"
+            size="icon"
+            aria-label="Remove file"
+            className="h-7 w-7 opacity-70 transition-colors group-hover:opacity-100 hover:bg-destructive/10 hover:text-destructive"
+            onClick={() => handleDeleteKnowledge(index)}
           >
-            {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
-            <Icon name={getKnowledgeIcon(base.type) as any} />
-            <p className="truncate max-w-[200px] text-sm">{base.name}</p>
-          </button>
-          <button type="button" onClick={() => handleDeleteKnowledge(index)}>
             <X className="size-4" />
-          </button>
+          </Button>
         </div>
       ))}
     </>

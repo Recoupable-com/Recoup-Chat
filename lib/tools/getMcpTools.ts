@@ -1,5 +1,7 @@
 import { ToolSet } from "ai";
 import generateImage from "./generateImage";
+import nanoBananaGenerate from "./nanoBananaGenerate";
+import nanoBananaEdit from "./nanoBananaEdit";
 import createTxtFile from "./createTxtFile";
 import getSegmentFans from "./getSegmentFans";
 import contactTeam from "./contactTeam";
@@ -35,10 +37,13 @@ import getSocialFans from "./getSocialFans";
 import createSegments from "./createSegments";
 import createReleaseReport from "./createReleaseReport";
 import youtubeTools from "./youtube";
+import getLocalTime from "./getLocalTime";
 
 export function getMcpTools(): ToolSet {
   const tools = {
     generate_image: generateImage,
+    nano_banana_generate: nanoBananaGenerate,
+    nano_banana_edit: nanoBananaEdit,
     generate_txt_file: createTxtFile,
     contact_team: contactTeam,
     create_segments: createSegments,
@@ -74,6 +79,7 @@ export function getMcpTools(): ToolSet {
     delete_scheduled_actions: deleteScheduledAction,
     get_social_fans: getSocialFans,
     create_release_report: createReleaseReport,
+    get_local_time: getLocalTime,
     ...youtubeTools,
   };
 

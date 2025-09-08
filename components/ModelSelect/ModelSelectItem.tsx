@@ -3,25 +3,50 @@ import { PromptInputModelSelectItem } from "../ai-elements/prompt-input";
 import { isFreeModel } from "@/lib/ai/isFreeModel";
 import { Lock, Crown } from "lucide-react";
 import { usePaymentProvider } from "@/providers/PaymentProvider";
+import { getFeaturedModelConfig } from "@/lib/ai/featuredModels";
+import { Tooltip } from "../common/Tooltip";
 
 const ModelSelectItem = ({ model }: { model: GatewayLanguageModelEntry }) => {
   const { subscriptionActive } = usePaymentProvider();
   const isModelFree = isFreeModel(model);
   const isLocked = !isModelFree && !subscriptionActive;
   const isUnlockedPro = !isModelFree && subscriptionActive;
+  
+  // Get featured model config for pills and descriptions
+  const featuredConfig = getFeaturedModelConfig(model.id);
+
+  const content = (
+    <div className="w-full">
+      <div className="flex items-center gap-2.5">
+        <span className="font-semibold text-sm text-foreground">{model.name}</span>
+        {isLocked && <Lock className="h-3 w-3 text-muted-foreground" />}
+        {isUnlockedPro && <Crown className="h-3 w-3 text-muted-foreground" />}
+        {featuredConfig?.pill && (
+          <span className="px-2.5 py-0.5 text-xs font-medium bg-transparent text-gray-700 rounded-full border border-gray-200">
+            {featuredConfig.pill}
+          </span>
+        )}
+      </div>
+      {featuredConfig?.description && (
+        <div className="text-xs text-muted-foreground/80 mt-1.5 font-normal">
+          {featuredConfig.description}
+        </div>
+      )}
+    </div>
+  );
 
   return (
     <PromptInputModelSelectItem
       value={model.id}
-      className={isLocked ? "opacity-60" : ""}
+      className={`py-3 ${isLocked ? "opacity-40" : ""}`}
     >
-      <div className="flex items-center justify-between w-full">
-        <span className="pr-2">{model.name}</span>
-        <div className="flex items-center gap-3">
-          {isLocked && <Lock className="h-3 w-3 text-muted-foreground" />}
-          {isUnlockedPro && <Crown className="h-3 w-3 text-muted-foreground" />}
-        </div>
-      </div>
+      {featuredConfig?.tooltip ? (
+        <Tooltip content={featuredConfig.tooltip}>
+          {content}
+        </Tooltip>
+      ) : (
+        content
+      )}
     </PromptInputModelSelectItem>
   );
 };

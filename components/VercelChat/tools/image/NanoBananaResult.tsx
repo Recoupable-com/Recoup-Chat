@@ -1,15 +1,16 @@
 import Image from "next/image";
-import { ImageGenerationResult } from "@/lib/tools/generateImage";
+import { NanoBananaGenerateResult } from "@/lib/tools/nanoBananaGenerate";
+import { NanoBananaEditResult } from "@/lib/tools/nanoBananaEdit";
 import { useImageDownloader } from "@/hooks/useImageDownloader";
 import MessageMediaDownloadButton from "../../MessageMediaDownloadButton";
 
-interface ImageResultProps {
-  result: ImageGenerationResult;
+interface NanoBananaResultProps {
+  result: NanoBananaGenerateResult | NanoBananaEditResult;
 }
 
-export function ImageResult({ result }: ImageResultProps) {
+export function NanoBananaResult({ result }: NanoBananaResultProps) {
   const { isDownloading, isReady, handleDownload } = useImageDownloader({
-    imageUrl: result.arweaveUrl,
+    imageUrl: result.imageUrl,
     enabled: result.success,
   });
 
@@ -17,7 +18,7 @@ export function ImageResult({ result }: ImageResultProps) {
     return (
       <div className="w-full max-w-md mx-auto p-4 border border-red-200 rounded-md bg-red-50">
         <p className="text-sm font-medium text-red-600">
-          Error generating image
+          🍌 Nano Banana Error
         </p>
         <p className="text-sm text-red-500">
           {result.error || "Unknown error occurred"}
@@ -28,7 +29,7 @@ export function ImageResult({ result }: ImageResultProps) {
 
   return (
     <div className="flex justify-start my-3">
-      {result.arweaveUrl ? (
+      {result.imageUrl ? (
         <div className="border border-gray-200 rounded-2xl group cursor-pointer relative overflow-hidden max-w-md max-h-md">
           <div className="relative w-full h-full max-h-[28rem]">
             {/* Top gradient overlay */}
@@ -52,8 +53,8 @@ export function ImageResult({ result }: ImageResultProps) {
 
             <div className="w-full h-auto max-w-md max-h-md">
               <Image
-                src={result.arweaveUrl}
-                alt="Generated image"
+                src={result.imageUrl}
+                alt="Nano Banana generated/edited image"
                 width={448}
                 height={448}
                 style={{
@@ -71,7 +72,7 @@ export function ImageResult({ result }: ImageResultProps) {
       ) : (
         <div className="p-4 border border-gray-200 rounded-md bg-gray-50 max-w-md">
           <p className="text-sm text-gray-500">
-            {result.message || "Image generated but storage URL not available."}
+            🍌 {result.message || "Image generated but URL not available."}
           </p>
         </div>
       )}

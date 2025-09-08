@@ -3,17 +3,27 @@ import { Readable } from "node:stream";
 
 // Ensure Node.js has browser-like base64 helpers used by downstream deps (e.g., cosmjs)
 function ensureBase64Polyfills() {
-  const typedGlobal = globalThis as unknown as {
-    atob?: (data: string) => string;
-    btoa?: (data: string) => string;
-  };
-  if (typeof typedGlobal.atob === "undefined") {
-    typedGlobal.atob = (data: string) =>
-      Buffer.from(data, "base64").toString("binary");
+  const atobImpl = (data: string) => Buffer.from(data, "base64").toString("binary");
+  const btoaImpl = (data: string) => Buffer.from(data, "binary").toString("base64");
+
+  // Apply to globalThis and global objects
+  const globals = [globalThis, global].filter(Boolean);
+  
+  globals.forEach((g) => {
+    if (typeof (g as typeof globalThis & { atob?: unknown }).atob === "undefined") {
+      (g as typeof globalThis & { atob: (data: string) => string }).atob = atobImpl;
+    }
+    if (typeof (g as typeof globalThis & { btoa?: unknown }).btoa === "undefined") {
+      (g as typeof globalThis & { btoa: (data: string) => string }).btoa = btoaImpl;
+    }
+  });
+
+  // Also ensure they're available as direct properties
+  if (typeof (globalThis as typeof globalThis & { atob?: unknown }).atob === "undefined") {
+    (globalThis as typeof globalThis & { atob: (data: string) => string }).atob = atobImpl;
   }
-  if (typeof typedGlobal.btoa === "undefined") {
-    typedGlobal.btoa = (data: string) =>
-      Buffer.from(data, "binary").toString("base64");
+  if (typeof (globalThis as typeof globalThis & { btoa?: unknown }).btoa === "undefined") {
+    (globalThis as typeof globalThis & { btoa: (data: string) => string }).btoa = btoaImpl;
   }
 }
 

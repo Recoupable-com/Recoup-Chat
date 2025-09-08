@@ -1,6 +1,9 @@
 import { SYSTEM_PROMPT } from "@/lib/consts";
+import getArtistIdForRoom from "../supabase/getArtistIdForRoom";
+import getArtistInstruction from "../supabase/getArtistInstruction";
+import getKnowledgeBaseContext from "../agent/getKnowledgeBaseContext";
 
-export function getSystemPrompt({
+export async function getSystemPrompt({
   roomId,
   artistId,
   accountId,
@@ -8,6 +11,7 @@ export function getSystemPrompt({
   knowledgeBaseText,
   artistInstruction,
   conversationName = "New conversation",
+  timezone,
 }: {
   roomId?: string;
   artistId?: string;
@@ -16,8 +20,9 @@ export function getSystemPrompt({
   knowledgeBaseText?: string;
   artistInstruction?: string;
   conversationName?: string;
-}): string {
-  const resolvedArtistId = artistId;
+  timezone?: string;
+}): Promise<string> {
+  const resolvedArtistId = artistId || (await getArtistIdForRoom(roomId || ""));
 
   let systemPrompt = `${SYSTEM_PROMPT} 
 
@@ -25,9 +30,10 @@ export function getSystemPrompt({
   The account_id is ${accountId || "Unknown"} use this to create / delete artists.
   The active_account_email is ${email || "Unknown"}. 
   The active_conversation_id is ${roomId || "No ID"}.
-  The active_conversation_name is ${conversationName || "No Chat Name"}.`;
+  The active_conversation_name is ${conversationName || "No Chat Name"}.
+  The active_timezone is ${timezone || "Unknown"}. If you need current local time, prefer using the get_local_time tool and pass this timezone as the input parameter when available.`;
 
-  const customInstruction = artistInstruction;
+  const customInstruction = artistInstruction || await getArtistInstruction(resolvedArtistId || "");
   if (customInstruction) {
     systemPrompt = `${systemPrompt}
 -----ARTIST CUSTOM INSTRUCTION-----
@@ -35,7 +41,7 @@ ${customInstruction}
 -----END ARTIST CUSTOM INSTRUCTION-----`;
   }
 
-  const knowledge = knowledgeBaseText;
+  const knowledge = knowledgeBaseText || await getKnowledgeBaseContext(resolvedArtistId || "");
   if (knowledge) {
     systemPrompt = `${systemPrompt}
 -----ARTIST KNOWLEDGE BASE-----
