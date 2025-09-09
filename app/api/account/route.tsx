@@ -65,8 +65,7 @@ export async function POST(req: NextRequest) {
       await insertAccountWallet(newAccount.id, wallet);
     }
 
-    // Initialize credits
-    await initializeAccountCredits(newAccount.id, 1);
+    await initializeAccountCredits(newAccount.id);
 
     const newAccountData = {
       id: newAccount.id,
