@@ -13,7 +13,11 @@ const usePayment = () => {
 
   const totalCredits = DEFAULT_CREDITS;
   const credits = creditsData?.remaining_credits || 0;
-  const subscriptionActive = (subscriptionData?.length || 0) > 0;
+  const subscription = subscriptionData?.[0];
+  const isTrial = subscription?.status === "trialing";
+  const isCanceledTrial = isTrial && subscription?.canceled_at;
+  const subscriptionActive =
+    (subscriptionData?.length || 0) > 0 && !isCanceledTrial;
 
   return {
     isLoadingCredits: isLoadingCredits || isLoadingSubscription,
@@ -21,6 +25,7 @@ const usePayment = () => {
     totalCredits,
     subscriptionActive,
     refetchCredits,
+    subscription,
   };
 };
 
