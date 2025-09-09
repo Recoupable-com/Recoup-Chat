@@ -1,7 +1,7 @@
 "use client";
 
 import cn from "classnames";
-import { useEffect, useMemo, useState } from "react";
+//
 import { useArtistProvider } from "@/providers/ArtistProvider";
 import { useVercelChatContext } from "@/providers/VercelChatProvider";
 import AttachmentsPreview from "./AttachmentsPreview";
@@ -16,9 +16,7 @@ import {
   PromptInputTools,
 } from "../ai-elements/prompt-input";
 import ModelSelect from "@/components/ModelSelect";
-import { MentionsInput, Mention, OnChangeHandlerFunc, SuggestionDataItem } from "react-mentions";
-import { Card } from "@/components/ui/card";
-import { useArtistKnowledge } from "@/hooks/useArtistKnowledge";
+import FileMentionsInput from "./FileMentionsInput";
 
 interface ChatInputProps {
   onSendMessage: (event: React.FormEvent<HTMLFormElement>) => void;
@@ -38,40 +36,7 @@ export function ChatInput({
   const { selectedArtist, sorted } = useArtistProvider();
   const { hasPendingUploads, messages, status, model } = useVercelChatContext();
   const isDisabled = !selectedArtist && sorted.length > 0;
-  const [portalHost, setPortalHost] = useState<Element | undefined>(undefined);
-  useEffect(() => {
-    if (typeof window !== "undefined") setPortalHost(document.body);
-  }, []);
-  
-  // Load artist knowledge files
   const artistId = selectedArtist?.account_id;
-  const { data: knowledgeFiles = [] } = useArtistKnowledge(artistId);
-  const mentionOptions = useMemo(() => {
-    return (knowledgeFiles || [])
-      .filter((f) => typeof f?.url === "string" && !!f.url)
-      .map((f) => ({ id: String(f.url), display: String(f.name || f.url) })) as SuggestionDataItem[];
-  }, [knowledgeFiles]);
-
-  // Parse already mentioned ids from markup '@[__display__](__id__)'
-  const mentionedIds = useMemo(() => {
-    const ids = new Set<string>();
-    const value = typeof input === "string" ? input : "";
-    const regex = /@\[[^\]]+\]\(([^)]+)\)/g;
-    let match: RegExpExecArray | null;
-    // eslint-disable-next-line no-cond-assign
-    while ((match = regex.exec(value))) {
-      if (match[1]) ids.add(match[1]);
-    }
-    return ids;
-  }, [input]);
-
-  const handleMentionsChange: OnChangeHandlerFunc = (
-    _event,
-    newValue
-  ) => {
-    // Store markup value so the UI preserves highlighted mentions
-    setInput(newValue);
-  };
 
 
   const handleSend = (event: React.FormEvent<HTMLFormElement>) => {
@@ -113,112 +78,13 @@ export function ChatInput({
             "shadow-sm"
           )}
         >
-          <MentionsInput
+          <FileMentionsInput
             value={typeof input === "string" ? input : ""}
-            onChange={handleMentionsChange}
+            onChange={setInput}
             disabled={isDisabled || hasPendingUploads}
-            className="w-full text-[14px] leading-[1.6] pb-2 md:pb-0"
-            suggestionsPortalHost={portalHost}
-            allowSuggestionsAboveCursor
-            customSuggestionsContainer={(children) => (
-              <Card
-                className="z-[70] shadow-lg border rounded-xl overflow-hidden p-1"
-                style={{ background: "hsl(var(--background))", minWidth: 320, maxHeight: 360, overflow: "auto" }}
-              >
-                {children}
-              </Card>
-            )}
-            placeholder={
-              model === "fal-ai/nano-banana/edit"
-                ? "Describe an image or upload a file to edit..."
-                : "What would you like to know? Type @ to attach files"
-            }
-            onKeyDown={(e: React.KeyboardEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-              if (e.key === "Enter" && !e.shiftKey) {
-                e.preventDefault();
-                const form = (e.target as HTMLTextAreaElement)?.form;
-                if (form) form.requestSubmit();
-              }
-            }}
-            style={{
-              control: {
-                minHeight: 44,
-                border: "none",
-                outline: "none",
-                background: "transparent",
-                width: "100%",
-              },
-              "&multiLine": {
-                highlighter: {
-                  padding: "12px 20px",
-                  fontSize: 14,
-                  lineHeight: 1.6,
-                  maxHeight: 180,
-                  overflow: "hidden",
-                },
-                input: {
-                  padding: "12px 20px",
-                  outline: "none",
-                  fontSize: 14,
-                  lineHeight: 1.6,
-                  minHeight: 44,
-                  maxHeight: 180,
-                  overflowY: "auto",
-                  resize: "none",
-                  boxSizing: "border-box",
-                },
-              },
-              "&singleLine": {
-                highlighter: {
-                  padding: "12px 20px",
-                  fontSize: 14,
-                  lineHeight: 1.6,
-                },
-                input: {
-                  padding: "12px 20px",
-                  outline: "none",
-                  fontSize: 14,
-                  lineHeight: 1.6,
-                },
-              },
-            }}
-          >
-            <Mention
-              trigger="@"
-              markup='@[__display__](__id__)'
-              data={(query: string, callback: (results: SuggestionDataItem[]) => void) => {
-                const q = (query || "").toLowerCase();
-                const results = mentionOptions
-                  .filter((f) => !mentionedIds.has(String(f.id)))
-                  .filter((f) => (f.display ?? String(f.id)).toLowerCase().includes(q));
-                callback(results as SuggestionDataItem[]);
-              }}
-              displayTransform={(_id: string, display: string) => display}
-              appendSpaceOnAdd
-              style={{
-                backgroundColor: "rgb(0 0 0 / 0.25)",
-                borderRadius: 6,
-              }}
-              renderSuggestion={(
-                entry: SuggestionDataItem,
-                _search: string,
-                highlightedDisplay: React.ReactNode,
-                _index: number,
-                focused: boolean
-              ) => (
-                <div
-                  className={cn(
-                    "px-3 py-2 text-[13px] cursor-pointer select-none",
-                    "flex items-center gap-2 rounded-md",
-                    focused ? "bg-muted text-foreground" : "text-muted-foreground hover:bg-muted"
-                  )}
-                >
-                  <div className="size-2 rounded-full bg-primary/60" />
-                  <span className="truncate">{highlightedDisplay || entry.display}</span>
-                </div>
-              )}
-            />
-          </MentionsInput>
+            model={model}
+            artistId={artistId}
+          />
           <PromptInputToolbar>
             <PromptInputTools>
               <PromptInputButton className="hover:scale-105 active:scale-95 transition-all">
