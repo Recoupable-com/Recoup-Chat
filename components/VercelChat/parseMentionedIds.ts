@@ -11,5 +11,3 @@ export const parseMentionedIds = (value: string | undefined): Set<string> => {
 };
 
 export default parseMentionedIds;
-
-

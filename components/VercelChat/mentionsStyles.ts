@@ -40,5 +40,3 @@ export const mentionsStyles = {
     },
   },
 } as const;
-
-

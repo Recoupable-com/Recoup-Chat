@@ -8,5 +8,3 @@ export const mapKnowledgeToOptions = (
     .map((f) => ({ id: String(f.url), display: String(f.name || f.url) }));
 
 export default mapKnowledgeToOptions;
-
-
