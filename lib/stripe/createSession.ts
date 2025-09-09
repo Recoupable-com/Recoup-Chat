@@ -6,22 +6,11 @@ const createSession = async (accountId: string, successUrl: string) => {
   const metadata = {
     accountId,
   };
-  const priceData: Stripe.Checkout.SessionCreateParams.LineItem.PriceData = {
-    currency: "usd",
-    unit_amount: 2000,
-    product_data: {
-      name: "Recoup Pro",
-    },
-    recurring: {
-      interval: "month",
-      interval_count: 1,
-    },
-  };
 
   const sessionData: Stripe.Checkout.SessionCreateParams = {
     line_items: [
       {
-        price_data: priceData,
+        price: "price_1RyDFD00JObOnOb53PcVOeBz",
         quantity: 1,
       },
     ],
@@ -30,6 +19,7 @@ const createSession = async (accountId: string, successUrl: string) => {
     metadata,
     subscription_data: {
       metadata,
+      trial_period_days: 30,
     },
     success_url: successUrl,
   };
