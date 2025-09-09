@@ -1,11 +1,9 @@
 import { ArrowRight } from "lucide-react";
 import Icon from "../Icon";
-import createClientCheckoutSession from "@/lib/stripe/createClientCheckoutSession";
-import React from "react";
-import { useUserProvider } from "@/providers/UserProvder";
+import useSubscribeClick from "@/hooks/useSubscribeClick";
 
 const UnlockProCard = () => {
-  const { userData } = useUserProvider();
+  const { handleClick } = useSubscribeClick();
 
   return (
     <div className="w-full md:w-[250px] shadow-lg flex flex-col rounded-xl overflow-hidden my-3 aspect-[212/175] md:aspect-[212/190] bg-[url('/Background.png')] bg-cover bg-center border border-white p-4 relative">
@@ -59,7 +57,7 @@ const UnlockProCard = () => {
         <button
           type="button"
           className="font-inter_bold text-xs bg-white/15 backdrop-blur-md text-white rounded-lg px-3 py-1.5 flex items-center gap-2 border border-white/20 hover:bg-white/25 transition-all duration-200 shadow-xl mt-3"
-          onClick={() => createClientCheckoutSession(userData?.account_id)}
+          onClick={handleClick}
         >
           Start Free Trial
           <ArrowRight className="size-3" />
