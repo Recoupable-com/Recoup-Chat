@@ -37,5 +37,3 @@ export const useKnowledgeEditor = ({ isText, textContent }: Args) => {
 };
 
 export default useKnowledgeEditor;
-
-

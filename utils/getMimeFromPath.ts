@@ -16,5 +16,3 @@ export const getMimeFromPath = (path: string): string => {
 };
 
 export default getMimeFromPath;
-
-

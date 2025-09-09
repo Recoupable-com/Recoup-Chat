@@ -69,5 +69,3 @@ export const useSaveKnowledgeEdit = ({ name, url, editedText }: UseSaveKnowledge
 };
 
 export default useSaveKnowledgeEdit;
-
-
