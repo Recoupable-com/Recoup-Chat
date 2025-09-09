@@ -7,7 +7,7 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
-import { ReactNode, useEffect, useState } from "react";
+import { ReactNode } from "react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import isImagePath from "@/utils/isImagePath";
@@ -16,6 +16,7 @@ import { useTextFileContent } from "@/hooks/useTextFileContent";
 import { Textarea } from "@/components/ui/textarea";
 import { useArtistProvider } from "@/providers/ArtistProvider";
 import useSaveKnowledgeEdit from "@/hooks/useSaveKnowledgeEdit";
+import useKnowledgeEditor from "@/hooks/useKnowledgeEditor";
 
 type KnowledgeDialogProps = {
   name: string;
@@ -34,23 +35,9 @@ const KnowledgeDialog = ({ name, url, children }: KnowledgeDialogProps) => {
   const { content: textContent, loading, error } = useTextFileContent(
     isText ? url : null
   );
-  const [isEditing, setIsEditing] = useState(false);
-  const [editedText, setEditedText] = useState("");
   const { knowledgeUploading } = useArtistProvider();
-  const [isOpen, setIsOpen] = useState(false);
-
-  useEffect(() => {
-    if (isEditing) setEditedText(textContent);
-  }, [isEditing, textContent]);
-  const handleOpenChange = (open: boolean) => {
-    if (!open) {
-      if (isText && isEditing && editedText !== textContent) {
-        const shouldClose = window.confirm("You have unsaved edits. Discard changes?");
-        if (!shouldClose) return; // keep dialog open
-      }
-    }
-    setIsOpen(open);
-  };
+  const { isEditing, setIsEditing, editedText, setEditedText, isOpen, handleOpenChange } =
+    useKnowledgeEditor({ isText, textContent });
 
   const { handleSave } = useSaveKnowledgeEdit({ name, url, editedText });
 
