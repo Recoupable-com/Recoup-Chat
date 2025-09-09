@@ -33,6 +33,14 @@ export default function FileMentionsInput({ value, onChange, disabled, model, ar
 		onChange(newValue);
 	};
 
+    const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+        if (e.key === "Enter" && !e.shiftKey) {
+            e.preventDefault();
+            const form = (e.target as HTMLTextAreaElement)?.form;
+            if (form) form.requestSubmit();
+        }
+    }
+
 	return (
 		<MentionsInput
 			value={typeof value === "string" ? value : ""}
@@ -49,13 +57,7 @@ export default function FileMentionsInput({ value, onChange, disabled, model, ar
 					? "Describe an image or upload a file to edit..."
 					: "What would you like to know? Type @ to attach files"
 			}
-			onKeyDown={(e: React.KeyboardEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-				if (e.key === "Enter" && !e.shiftKey) {
-					e.preventDefault();
-					const form = (e.target as HTMLTextAreaElement)?.form;
-					if (form) form.requestSubmit();
-				}
-			}}
+			onKeyDown={handleKeyDown}
 			style={mentionsStyles}
 		>
 			<Mention
