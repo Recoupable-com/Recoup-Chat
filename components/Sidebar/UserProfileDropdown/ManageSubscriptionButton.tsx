@@ -7,12 +7,12 @@ import createClientCheckoutSession from "@/lib/stripe/createClientCheckoutSessio
 
 const ManageSubscriptionButton = () => {
   const { userData } = useUserProvider();
-  const { subscriptionActive } = usePaymentProvider();
+  const { subscription } = usePaymentProvider();
 
   const handleClick = () => {
     if (!userData?.account_id) return;
 
-    if (subscriptionActive) {
+    if (subscription) {
       createClientPortalSession(userData.account_id);
       return;
     }
@@ -22,7 +22,7 @@ const ManageSubscriptionButton = () => {
   return (
     <DropdownMenuItem onClick={handleClick} className="cursor-pointer">
       <IconCreditCard />
-      {subscriptionActive ? "Manage Subscription" : "Subscribe"}
+      {subscription ? "Manage Subscription" : "Subscribe"}
     </DropdownMenuItem>
   );
 };
