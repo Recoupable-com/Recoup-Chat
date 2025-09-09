@@ -12,6 +12,7 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import isImagePath from "@/utils/isImagePath";
 import isTextPath from "@/utils/isTextPath";
+import isTextMimeType from "@/utils/isTextMimeType";
 import { useTextFileContent } from "@/hooks/useTextFileContent";
 import { useArtistProvider } from "@/providers/ArtistProvider";
 import useSaveKnowledgeEdit from "@/hooks/useSaveKnowledgeEdit";
@@ -21,17 +22,18 @@ import KnowledgePreview from "./KnowledgePreview";
 type KnowledgeDialogProps = {
   name: string;
   url: string;
+  type?: string;
   children: ReactNode;
 };
 
-const KnowledgeDialog = ({ name, url, children }: KnowledgeDialogProps) => {
-  const isImage = isImagePath(url) || (name ? isImagePath(name) : false);
+const KnowledgeDialog = ({ name, url, type, children }: KnowledgeDialogProps) => {
+  const isImage = isImagePath(url) || (name ? isImagePath(name) : false) || (!!type && type.startsWith("image/"));
   const ext = (() => {
     const base = (name || url).split("?")[0];
     const part = base.includes(".") ? base.split(".").pop() : undefined;
     return (part || "file").toUpperCase();
   })(); // Create PNG, JPG, TXT etc. label etc.
-  const isText = isTextPath(url) || (name ? isTextPath(name) : false);
+  const isText = isTextPath(url) || (name ? isTextPath(name) : false) || isTextMimeType(type);
   const { content: textContent, loading, error } = useTextFileContent(isText ? url : null);
   const { knowledgeUploading } = useArtistProvider();
   const { isEditing, setIsEditing, editedText, setEditedText, isOpen, handleOpenChange } =
@@ -52,17 +54,7 @@ const KnowledgeDialog = ({ name, url, children }: KnowledgeDialogProps) => {
             {isText && !isEditing && (<Button size="sm" variant="outline" className="h-8 px-2 text-xs sm:px-3" onClick={() => setIsEditing(true)}>Edit</Button>)}
             {isText && isEditing && (
               <>
-                <Button
-                  size="sm"
-                  variant="secondary"
-                  className="h-8 px-2 text-xs sm:px-3"
-                  onClick={() => {
-                    setEditedText(textContent);
-                    setIsEditing(false);
-                  }}
-                >
-                  Cancel
-                </Button>
+                <Button size="sm" variant="secondary" className="h-8 px-2 text-xs sm:px-3" onClick={() => { setEditedText(textContent); setIsEditing(false); }}>Cancel</Button>
                 <Button
                   size="sm"
                   className="h-8 px-2 text-xs sm:px-3"
@@ -85,7 +77,7 @@ const KnowledgeDialog = ({ name, url, children }: KnowledgeDialogProps) => {
           isText={isText}
           isEditing={isEditing}
           editedText={editedText}
-          setEditedText={(v) => setEditedText(v)}
+          setEditedText={setEditedText}
           loading={loading}
           error={error || null}
           textContent={textContent}
