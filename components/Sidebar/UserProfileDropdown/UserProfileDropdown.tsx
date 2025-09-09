@@ -8,11 +8,12 @@ import {
   DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-} from "../ui/dropdown-menu";
+} from "@/components/ui/dropdown-menu";
 import { IconLogout, IconUser } from "@tabler/icons-react";
 import { useUserProvider } from "@/providers/UserProvder";
 import CreditsUsage from "./CreditsUsage";
-import AccountIdDisplay from "../ArtistSetting/AccountIdDisplay";
+import AccountIdDisplay from "@/components/ArtistSetting/AccountIdDisplay";
+import ManageSubscriptionButton from "./ManageSubscriptionButton";
 
 const UserProfileDropdown = () => {
   const { toggleModal, signOut, userData } = useUserProvider();
@@ -43,6 +44,7 @@ const UserProfileDropdown = () => {
             <IconUser />
             Profile
           </DropdownMenuItem>
+          <ManageSubscriptionButton />
         </DropdownMenuGroup>
         <DropdownMenuSeparator />
         <DropdownMenuItem className="cursor-pointer" onClick={signOut}>

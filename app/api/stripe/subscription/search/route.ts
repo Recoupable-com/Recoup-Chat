@@ -1,6 +1,5 @@
-import stripeClient from "@/lib/stripe/client";
+import { getActiveSubscriptions } from "@/lib/stripe/getActiveSubscriptions";
 import { NextRequest } from "next/server";
-import Stripe from "stripe";
 
 export async function GET(req: NextRequest) {
   const accountId = req.nextUrl.searchParams.get("accountId");
@@ -10,18 +9,7 @@ export async function GET(req: NextRequest) {
   }
 
   try {
-    const subscriptions = await stripeClient.subscriptions.list({
-      limit: 100,
-      current_period_end: {
-        gt: parseInt(Number(Date.now() / 1000).toFixed(0), 10),
-      },
-    });
-
-    const activeSubscriptions = subscriptions?.data?.filter(
-      (subscription: Stripe.Subscription) =>
-        subscription.metadata?.accountId === accountId
-    );
-
+    const activeSubscriptions = await getActiveSubscriptions(accountId);
     return Response.json({ data: activeSubscriptions }, { status: 200 });
   } catch (error) {
     console.error(error);
