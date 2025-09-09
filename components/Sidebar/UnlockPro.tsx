@@ -1,5 +1,5 @@
 import { usePaymentProvider } from "@/providers/PaymentProvider";
-import UnlimitedCredits from "./UnlimitedCredits";
+import RecoupablePro from "./RecoupablePro";
 import UnlockProCard from "./UnlockProCard";
 
 const UnlockPro = () => {
@@ -7,7 +7,7 @@ const UnlockPro = () => {
 
   return (
     <div className="-mt-px">
-      {subscriptionActive ? <UnlimitedCredits /> : <UnlockProCard />}
+      {subscriptionActive ? <RecoupablePro /> : <UnlockProCard />}
     </div>
   );
 };

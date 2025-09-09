@@ -1,7 +1,9 @@
 import { selectCreditsUsage } from "../supabase/credits_usage/selectCreditsUsage";
 import { updateCreditsUsage } from "../supabase/credits_usage/updateCreditsUsage";
 import { CreditsUsage } from "@/lib/supabase/credits_usage/selectCreditsUsage";
-import { DEFAULT_CREDITS } from "../consts";
+import { DEFAULT_CREDITS, PRO_CREDITS } from "../consts";
+import isActiveSubscription from "../stripe/isActiveSubscription";
+import { getActiveSubscriptionDetails } from "../stripe/getActiveSubscriptionDetails";
 
 export const checkAndResetCredits = async (
   accountId: string
@@ -17,10 +19,14 @@ export const checkAndResetCredits = async (
       oneMonthAgo.setMonth(oneMonthAgo.getMonth() - 1);
 
       if (timestampDate < oneMonthAgo) {
+        const subscription = await getActiveSubscriptionDetails(accountId);
+        const subscriptionActive = isActiveSubscription(subscription);
         const updatedCreditsUsage = await updateCreditsUsage({
           account_id: accountId,
           updates: {
-            remaining_credits: DEFAULT_CREDITS,
+            remaining_credits: subscriptionActive
+              ? PRO_CREDITS
+              : DEFAULT_CREDITS,
             timestamp: new Date().toISOString(),
           },
         });
