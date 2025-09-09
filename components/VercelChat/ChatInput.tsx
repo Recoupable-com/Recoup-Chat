@@ -117,7 +117,7 @@ export function ChatInput({
             value={typeof input === "string" ? input : ""}
             onChange={handleMentionsChange}
             disabled={isDisabled || hasPendingUploads}
-            className="w-full text-[14px] leading-[1.6]"
+            className="w-full text-[14px] leading-[1.6] pb-2 md:pb-0"
             suggestionsPortalHost={portalHost}
             allowSuggestionsAboveCursor
             customSuggestionsContainer={(children) => (
@@ -131,7 +131,7 @@ export function ChatInput({
             placeholder={
               model === "fal-ai/nano-banana/edit"
                 ? "Describe an image or upload a file to edit..."
-                : "What would you like to know?"
+                : "What would you like to know? Type @ to attach files"
             }
             onKeyDown={(e: React.KeyboardEvent<HTMLInputElement | HTMLTextAreaElement>) => {
               if (e.key === "Enter" && !e.shiftKey) {
