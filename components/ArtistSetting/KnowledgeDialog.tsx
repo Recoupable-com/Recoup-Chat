@@ -14,11 +14,8 @@ import isImagePath from "@/utils/isImagePath";
 import isTextPath from "@/utils/isTextPath";
 import { useTextFileContent } from "@/hooks/useTextFileContent";
 import { Textarea } from "@/components/ui/textarea";
-import getMimeFromPath from "@/utils/getMimeFromPath";
-import { uploadFile } from "@/lib/arweave/uploadToArweave";
 import { useArtistProvider } from "@/providers/ArtistProvider";
-import { toast } from "react-toastify";
-import { useQueryClient } from "@tanstack/react-query";
+import useSaveKnowledgeEdit from "@/hooks/useSaveKnowledgeEdit";
 
 type KnowledgeDialogProps = {
   name: string;
@@ -39,8 +36,7 @@ const KnowledgeDialog = ({ name, url, children }: KnowledgeDialogProps) => {
   );
   const [isEditing, setIsEditing] = useState(false);
   const [editedText, setEditedText] = useState("");
-  const { knowledgeUploading, setKnowledgeUploading, bases, setBases, saveSetting, selectedArtist } = useArtistProvider();
-  const queryClient = useQueryClient();
+  const { knowledgeUploading } = useArtistProvider();
   const [isOpen, setIsOpen] = useState(false);
 
   useEffect(() => {
@@ -56,43 +52,7 @@ const KnowledgeDialog = ({ name, url, children }: KnowledgeDialogProps) => {
     setIsOpen(open);
   };
 
-  const handleSave = async () => {
-    const mime = getMimeFromPath(name || url);
-    if (mime === "application/json") {
-      try {
-        JSON.parse(editedText);
-      } catch {
-        toast.warn("Invalid JSON; saving as-is");
-      }
-    }
-    try {
-      setKnowledgeUploading(true);
-      const file = new File([editedText], name || "file.txt", { type: mime });
-      const { uri } = await uploadFile(file);
-      const next = bases.map((b) => ({ ...b }));
-      const idx = next.findIndex((b) => b.url === url && b.name === name);
-      if (idx >= 0) {
-        next[idx] = { name, url: uri, type: mime } as { name: string; url: string; type: string };
-        setBases(next);
-      }
-      try {
-        await saveSetting(next);
-        const artistId = selectedArtist?.account_id;
-        if (artistId) {
-          await queryClient.invalidateQueries({ queryKey: ["artist-knowledge", artistId] });
-          await queryClient.invalidateQueries({ queryKey: ["artist-knowledge-text"] });
-        }
-        toast.success("Saved");
-        setIsEditing(false);
-      } catch {
-        toast.error("Failed to save changes");
-      }
-    } catch {
-      toast.error("Upload failed");
-    } finally {
-      setKnowledgeUploading(false);
-    }
-  };
+  const { handleSave } = useSaveKnowledgeEdit({ name, url, editedText });
 
   return (
     <Dialog open={isOpen} onOpenChange={handleOpenChange}>
