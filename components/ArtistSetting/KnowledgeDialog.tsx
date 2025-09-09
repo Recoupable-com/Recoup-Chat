@@ -114,11 +114,11 @@ const KnowledgeDialog = ({ name, url, children }: KnowledgeDialogProps) => {
                         setBases(next);
                       }
                       try {
-                        await saveSetting();
+                        await saveSetting(next);
                         const artistId = selectedArtist?.account_id;
                         if (artistId) {
                           await queryClient.invalidateQueries({ queryKey: ["artist-knowledge", artistId] });
-                          await queryClient.invalidateQueries({ queryKey: ["artist-knowledge-text", artistId] });
+                          await queryClient.invalidateQueries({ queryKey: ["artist-knowledge-text"] });
                         }
                         toast.success("Saved");
                         setIsEditing(false);
