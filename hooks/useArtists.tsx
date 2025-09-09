@@ -84,7 +84,9 @@ const useArtists = () => {
     [userData]
   );
 
-  const saveSetting = async () => {
+  const saveSetting = async (
+    overrideKnowledges?: Array<{ name: string; url: string; type: string }>
+  ) => {
     setUpdating(true);
     const saveMode = artistMode.settingMode;
     try {
@@ -102,7 +104,7 @@ const useArtists = () => {
         profileUrls,
         instruction: artistSetting.instruction,
         label: artistSetting.label,
-        knowledges: artistSetting.bases,
+        knowledges: overrideKnowledges ?? artistSetting.bases,
         artistId:
           saveMode === SETTING_MODE.CREATE
             ? ""
