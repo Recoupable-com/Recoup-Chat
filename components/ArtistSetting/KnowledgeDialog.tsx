@@ -96,12 +96,12 @@ const KnowledgeDialog = ({ name, url, children }: KnowledgeDialogProps) => {
                   disabled={loading || knowledgeUploading}
                   onClick={async () => {
                     const mime = getMimeFromPath(name || url);
-                    try {
-                      if (mime === "application/json") {
-                        JSON.parse(editedText || "null");
+                    if (mime === "application/json") {
+                      try {
+                        JSON.parse(editedText);
+                      } catch {
+                        toast.warn("Invalid JSON; saving as-is");
                       }
-                    } catch {
-                      return;
                     }
                     try {
                       setKnowledgeUploading(true);
