@@ -47,6 +47,10 @@ const useConversations = () => {
   // Optimistic update helpers for creating a new chat room
   const addOptimisticConversation = (topic: string, chatId: string) => {
     if (!userData || !selectedArtist?.account_id) return null;
+    // Avoid adding an optimistic conversation when a chat id already exists in the URL
+    const hasChatIdInUrl =
+      typeof window !== "undefined" && /\/chat\/[^\/]+/.test(window.location.pathname);
+    if (hasChatIdInUrl) return null;
 
     const now = new Date().toISOString();
 
