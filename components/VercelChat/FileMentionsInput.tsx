@@ -5,7 +5,8 @@ import { useEffect, useMemo, useState } from "react";
 import { MentionsInput, Mention, OnChangeHandlerFunc, SuggestionDataItem } from "react-mentions";
 import { Card } from "@/components/ui/card";
 import { useArtistKnowledge } from "@/hooks/useArtistKnowledge";
-import { mapKnowledgeToOptions, parseMentionedIds } from "./mentionsUtils";
+import parseMentionedIds from "./parseMentionedIds";
+import mapKnowledgeToOptions from "./mapKnowledgeToOptions";
 import { mentionsStyles } from "./mentionsStyles";
 
 interface FileMentionsInputProps {
