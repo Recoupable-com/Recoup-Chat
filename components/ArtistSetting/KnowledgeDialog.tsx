@@ -58,7 +58,9 @@ const KnowledgeDialog = ({ name, url, type, children }: KnowledgeDialogProps) =>
                   size="sm"
                   variant="secondary"
                   className="h-8 px-2 text-xs sm:px-3"
-                  onClick={() => { setEditedText(textContent); setIsEditing(false); }}
+                  onClick={() => {
+                    setEditedText(textContent);
+                    setIsEditing(false); }}
                 >
                   Cancel
                 </Button>
