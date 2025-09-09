@@ -151,7 +151,6 @@ const useArtistSetting = () => {
     editableArtist,
     setEditableArtist,
     setKnowledgeUploading,
-    setBases,
   };
 };
 
