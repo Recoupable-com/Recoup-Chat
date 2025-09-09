@@ -55,16 +55,36 @@ export function useVercelChat({
     : undefined;
 
   // Fetch artist knowledge on client to avoid server pre-stream lookup
-  const { data: knowledgeFiles } = useArtistKnowledge(artistId);
+  const { data: allKnowledgeFiles = [] } = useArtistKnowledge(artistId);
 
   // Fetch custom artist instruction on client
   const { data: artistInstruction } = useArtistInstruction(artistId);
 
-  // Build knowledge base text from client-fetched knowledge files
+  // Extract mentioned file ids from input markup '@[display](id)'
+  const selectedFileIds = useMemo(() => {
+    const ids = new Set<string>();
+    const regex = /@\[[^\]]+\]\(([^)]+)\)/g;
+    let match: RegExpExecArray | null;
+    // eslint-disable-next-line no-cond-assign
+    while ((match = regex.exec(input))) {
+      if (match[1]) ids.add(match[1]);
+    }
+    return Array.from(ids);
+  }, [input]);
+
+  // Filter to only selected knowledge files
+  const knowledgeFiles = useMemo(() => {
+    if (!Array.isArray(allKnowledgeFiles) || allKnowledgeFiles.length === 0) return [] as typeof allKnowledgeFiles;
+    if (!selectedFileIds.length) return [] as typeof allKnowledgeFiles;
+    const idSet = new Set(selectedFileIds);
+    return allKnowledgeFiles.filter((f) => idSet.has(f.url));
+  }, [allKnowledgeFiles, selectedFileIds]);
+
+  // Build knowledge base text from selected files only
   const { data: knowledgeBaseText } = useArtistKnowledgeText(artistId, knowledgeFiles);
 
   const timezone = useMemo(() => Intl.DateTimeFormat().resolvedOptions().timeZone, []);
-
+  
   const chatRequestOptions = useMemo(
     () => ({
       body: {
