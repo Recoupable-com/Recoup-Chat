@@ -1,8 +1,11 @@
 import { NextRequest } from "next/server";
 import getAccountByEmail from "@/lib/supabase/accounts/getAccountByEmail";
 import { getAccountByWallet } from "@/lib/supabase/accounts/getAccountByWallet";
+import { getAccountWithDetails } from "@/lib/supabase/accounts/getAccountWithDetails";
+import insertAccount from "@/lib/supabase/accounts/insertAccount";
+import insertAccountEmail from "@/lib/supabase/accountEmails/insertAccountEmail";
 import { insertAccountWallet } from "@/lib/supabase/accounts/insertAccountWallet";
-import supabase from "@/lib/supabase/serverClient";
+import { initializeAccountCredits } from "@/lib/supabase/credits_usage/initializeAccountCredits";
 
 export async function POST(req: NextRequest) {
   const body = await req.json();
@@ -14,105 +17,68 @@ export async function POST(req: NextRequest) {
     if (email) {
       try {
         const emailRecord = await getAccountByEmail(email);
-        if (emailRecord) {
-          const { data: account } = await supabase
-            .from("accounts")
-            .select("*, account_info(*), account_emails(*), account_wallets(*)")
-            .eq("id", emailRecord.account_id)
-            .single();
-
-          if (account) {
-            return Response.json(
-              {
-                data: {
-                  ...account.account_info[0],
-                  ...account.account_emails[0],
-                  ...account.account_wallets[0],
-                  ...account,
-                },
-              },
-              { status: 200 }
-            );
-          }
+        if (emailRecord?.account_id) {
+          const accountData = await getAccountWithDetails(
+            emailRecord.account_id
+          );
+          return Response.json({ data: accountData }, { status: 200 });
         }
       } catch (error) {
         console.log(
           "Email not found, creating new account:",
           error instanceof Error ? error.message : "Unknown error"
         );
-        // Continue to create new account if email not found
+        // Continue to wallet check if email not found
       }
     }
 
-    // If wallet is provided, check account_wallets first
     if (wallet) {
       try {
         const account = await getAccountByWallet(wallet);
-        return Response.json(
-          {
-            data: {
-              ...account.account_info[0],
-              ...account.account_emails[0],
-              ...account.account_wallets[0],
-              ...account,
-            },
-          },
-          { status: 200 }
-        );
+        const accountData = {
+          ...account.account_info[0],
+          ...account.account_emails[0],
+          ...account.account_wallets[0],
+          ...account,
+        };
+        return Response.json({ data: accountData }, { status: 200 });
       } catch (error) {
         console.log(
           "Wallet not found, checking email:",
           error instanceof Error ? error.message : "Unknown error"
         );
-        // Continue to email check if wallet not found
+        // Continue to create new account if wallet not found
       }
     }
 
-    // Create new account if neither wallet nor email found
-    const { data: newAccount } = await supabase
-      .from("accounts")
-      .insert({
-        name: "",
-      })
-      .select("*")
-      .single();
+    const newAccount = await insertAccount({ name: "" });
 
-    // Insert email if provided
-    if (email) {
-      await supabase
-        .from("account_emails")
-        .insert({
-          account_id: newAccount.id,
-          email,
-        })
-        .select("*")
-        .single();
+    if (!newAccount) {
+      throw new Error("Failed to create account");
     }
 
-    // Insert wallet if provided
+    if (email) {
+      await insertAccountEmail(newAccount.id, email);
+    }
+
     if (wallet) {
       await insertAccountWallet(newAccount.id, wallet);
     }
 
-    await supabase.from("credits_usage").insert({
-      account_id: newAccount.id,
-      remaining_credits: 1,
-    });
+    // Initialize credits
+    await initializeAccountCredits(newAccount.id, 1);
 
-    return Response.json(
-      {
-        data: {
-          id: newAccount.id,
-          account_id: newAccount.id,
-          email: email || "",
-          wallet: wallet || "",
-          image: "",
-          instruction: "",
-          organization: "",
-        },
-      },
-      { status: 200 }
-    );
+    const newAccountData = {
+      id: newAccount.id,
+      account_id: newAccount.id,
+      email: email || "",
+      wallet: wallet || "",
+      image: "",
+      instruction: "",
+      organization: "",
+    };
+
+    return Response.json({ data: newAccountData }, { status: 200 });
   } catch (error) {
     console.error(error);
     const message = error instanceof Error ? error.message : "failed";
