@@ -8,21 +8,15 @@ import {
   DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-} from "../ui/dropdown-menu";
-import { IconLogout, IconUser, IconCreditCard } from "@tabler/icons-react";
+} from "@/components/ui/dropdown-menu";
+import { IconLogout, IconUser } from "@tabler/icons-react";
 import { useUserProvider } from "@/providers/UserProvder";
 import CreditsUsage from "./CreditsUsage";
-import AccountIdDisplay from "../ArtistSetting/AccountIdDisplay";
-import createClientPortalSession from "@/lib/stripe/createClientPortalSession";
+import AccountIdDisplay from "@/components/ArtistSetting/AccountIdDisplay";
+import ManageSubscriptionButton from "./ManageSubscriptionButton";
 
 const UserProfileDropdown = () => {
   const { toggleModal, signOut, userData } = useUserProvider();
-
-  const handleManageSubscription = () => {
-    if (userData?.account_id) {
-      createClientPortalSession(userData.account_id);
-    }
-  };
 
   return (
     <DropdownMenu>
@@ -50,13 +44,7 @@ const UserProfileDropdown = () => {
             <IconUser />
             Profile
           </DropdownMenuItem>
-          <DropdownMenuItem
-            onClick={handleManageSubscription}
-            className="cursor-pointer"
-          >
-            <IconCreditCard />
-            Manage Subscription
-          </DropdownMenuItem>
+          <ManageSubscriptionButton />
         </DropdownMenuGroup>
         <DropdownMenuSeparator />
         <DropdownMenuItem className="cursor-pointer" onClick={signOut}>
