@@ -14,6 +14,11 @@ import isImagePath from "@/utils/isImagePath";
 import isTextPath from "@/utils/isTextPath";
 import { useTextFileContent } from "@/hooks/useTextFileContent";
 import { Textarea } from "@/components/ui/textarea";
+import getMimeFromPath from "@/utils/getMimeFromPath";
+import { uploadFile } from "@/lib/arweave/uploadToArweave";
+import { useArtistProvider } from "@/providers/ArtistProvider";
+import { toast } from "react-toastify";
+import { useQueryClient } from "@tanstack/react-query";
 
 type KnowledgeDialogProps = {
   name: string;
@@ -34,12 +39,25 @@ const KnowledgeDialog = ({ name, url, children }: KnowledgeDialogProps) => {
   );
   const [isEditing, setIsEditing] = useState(false);
   const [editedText, setEditedText] = useState("");
+  const { knowledgeUploading, setKnowledgeUploading, bases, setBases, saveSetting, selectedArtist } = useArtistProvider();
+  const queryClient = useQueryClient();
+  const [isOpen, setIsOpen] = useState(false);
 
   useEffect(() => {
     if (isEditing) setEditedText(textContent);
   }, [isEditing, textContent]);
+  const handleOpenChange = (open: boolean) => {
+    if (!open) {
+      if (isText && isEditing && editedText !== textContent) {
+        const shouldClose = window.confirm("You have unsaved edits. Discard changes?");
+        if (!shouldClose) return; // keep dialog open
+      }
+    }
+    setIsOpen(open);
+  };
+
   return (
-    <Dialog>
+    <Dialog open={isOpen} onOpenChange={handleOpenChange}>
       <DialogTrigger asChild>{children}</DialogTrigger>
       <DialogContent className="w-[96vw] sm:w-[92vw] max-w-5xl pt-3 z-[1000] max-h-[90vh] overflow-hidden grid grid-rows-[auto,1fr]">
         <div className="flex flex-wrap items-start sm:items-center justify-between gap-2 sm:gap-3 border-b px-3 py-2 sm:px-4 sm:py-3 bg-background/80 backdrop-blur">
@@ -54,10 +72,70 @@ const KnowledgeDialog = ({ name, url, children }: KnowledgeDialogProps) => {
             </div>
           </div>
           <div className="ml-0 sm:ml-4 shrink-0 flex items-center gap-2 w-full sm:w-auto justify-end">
-            {isText && (
-              <Button size="sm" variant="outline" className="h-8 px-2 text-xs sm:px-3" onClick={() => setIsEditing((v) => !v)}>
-                {isEditing ? "Close edit" : "Edit"}
+            {isText && !isEditing && (
+              <Button size="sm" variant="outline" className="h-8 px-2 text-xs sm:px-3" onClick={() => setIsEditing(true)}>
+                Edit
               </Button>
+            )}
+            {isText && isEditing && (
+              <>
+                <Button
+                  size="sm"
+                  variant="secondary"
+                  className="h-8 px-2 text-xs sm:px-3"
+                  onClick={() => {
+                    setEditedText(textContent);
+                    setIsEditing(false);
+                  }}
+                >
+                  Cancel
+                </Button>
+                <Button
+                  size="sm"
+                  className="h-8 px-2 text-xs sm:px-3"
+                  disabled={loading || knowledgeUploading}
+                  onClick={async () => {
+                    const mime = getMimeFromPath(name || url);
+                    try {
+                      if (mime === "application/json") {
+                        JSON.parse(editedText || "null");
+                      }
+                    } catch {
+                      return;
+                    }
+                    try {
+                      setKnowledgeUploading(true);
+                      const file = new File([editedText], name || "file.txt", { type: mime });
+                      const { uri } = await uploadFile(file);
+                      const next = bases.map((b) => ({ ...b }));
+                      const idx = next.findIndex((b) => b.url === url && b.name === name);
+                      if (idx >= 0) {
+                        next[idx] = { name, url: uri, type: mime } as { name: string; url: string; type: string };
+                        setBases(next);
+                      }
+                      try {
+                        await saveSetting();
+                        const artistId = selectedArtist?.account_id;
+                        if (artistId) {
+                          await queryClient.invalidateQueries({ queryKey: ["artist-knowledge", artistId] });
+                          await queryClient.invalidateQueries({ queryKey: ["artist-knowledge-text", artistId] });
+                        }
+                        toast.success("Saved");
+                        setIsEditing(false);
+                      } catch {
+                        toast.error("Failed to save changes");
+                      }
+                    } catch {
+                      // swallow error; could add toast later
+                      toast.error("Upload failed");
+                    } finally {
+                      setKnowledgeUploading(false);
+                    }
+                  }}
+                >
+                  Save
+                </Button>
+              </>
             )}
             <Button asChild size="sm" variant="secondary" className="h-8 px-2 text-xs sm:px-3">
               <a href={url} target="_blank" rel="noopener noreferrer">

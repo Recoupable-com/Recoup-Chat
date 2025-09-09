@@ -150,6 +150,8 @@ const useArtistSetting = () => {
     handleDeleteKnowledge,
     editableArtist,
     setEditableArtist,
+    setKnowledgeUploading,
+    setBases,
   };
 };
 
