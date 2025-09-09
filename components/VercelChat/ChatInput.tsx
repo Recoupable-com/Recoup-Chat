@@ -1,7 +1,6 @@
 "use client";
 
 import cn from "classnames";
-//
 import { useArtistProvider } from "@/providers/ArtistProvider";
 import { useVercelChatContext } from "@/providers/VercelChatProvider";
 import AttachmentsPreview from "./AttachmentsPreview";
@@ -37,7 +36,6 @@ export function ChatInput({
   const { hasPendingUploads, messages, status, model } = useVercelChatContext();
   const isDisabled = !selectedArtist && sorted.length > 0;
   const artistId = selectedArtist?.account_id;
-
 
   const handleSend = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
