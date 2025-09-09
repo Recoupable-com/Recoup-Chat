@@ -56,6 +56,44 @@ const KnowledgeDialog = ({ name, url, children }: KnowledgeDialogProps) => {
     setIsOpen(open);
   };
 
+  const handleSave = async () => {
+    const mime = getMimeFromPath(name || url);
+    if (mime === "application/json") {
+      try {
+        JSON.parse(editedText);
+      } catch {
+        toast.warn("Invalid JSON; saving as-is");
+      }
+    }
+    try {
+      setKnowledgeUploading(true);
+      const file = new File([editedText], name || "file.txt", { type: mime });
+      const { uri } = await uploadFile(file);
+      const next = bases.map((b) => ({ ...b }));
+      const idx = next.findIndex((b) => b.url === url && b.name === name);
+      if (idx >= 0) {
+        next[idx] = { name, url: uri, type: mime } as { name: string; url: string; type: string };
+        setBases(next);
+      }
+      try {
+        await saveSetting(next);
+        const artistId = selectedArtist?.account_id;
+        if (artistId) {
+          await queryClient.invalidateQueries({ queryKey: ["artist-knowledge", artistId] });
+          await queryClient.invalidateQueries({ queryKey: ["artist-knowledge-text"] });
+        }
+        toast.success("Saved");
+        setIsEditing(false);
+      } catch {
+        toast.error("Failed to save changes");
+      }
+    } catch {
+      toast.error("Upload failed");
+    } finally {
+      setKnowledgeUploading(false);
+    }
+  };
+
   return (
     <Dialog open={isOpen} onOpenChange={handleOpenChange}>
       <DialogTrigger asChild>{children}</DialogTrigger>
@@ -94,44 +132,7 @@ const KnowledgeDialog = ({ name, url, children }: KnowledgeDialogProps) => {
                   size="sm"
                   className="h-8 px-2 text-xs sm:px-3"
                   disabled={loading || knowledgeUploading}
-                  onClick={async () => {
-                    const mime = getMimeFromPath(name || url);
-                    if (mime === "application/json") {
-                      try {
-                        JSON.parse(editedText);
-                      } catch {
-                        toast.warn("Invalid JSON; saving as-is");
-                      }
-                    }
-                    try {
-                      setKnowledgeUploading(true);
-                      const file = new File([editedText], name || "file.txt", { type: mime });
-                      const { uri } = await uploadFile(file);
-                      const next = bases.map((b) => ({ ...b }));
-                      const idx = next.findIndex((b) => b.url === url && b.name === name);
-                      if (idx >= 0) {
-                        next[idx] = { name, url: uri, type: mime } as { name: string; url: string; type: string };
-                        setBases(next);
-                      }
-                      try {
-                        await saveSetting(next);
-                        const artistId = selectedArtist?.account_id;
-                        if (artistId) {
-                          await queryClient.invalidateQueries({ queryKey: ["artist-knowledge", artistId] });
-                          await queryClient.invalidateQueries({ queryKey: ["artist-knowledge-text"] });
-                        }
-                        toast.success("Saved");
-                        setIsEditing(false);
-                      } catch {
-                        toast.error("Failed to save changes");
-                      }
-                    } catch {
-                      // swallow error; could add toast later
-                      toast.error("Upload failed");
-                    } finally {
-                      setKnowledgeUploading(false);
-                    }
-                  }}
+                  onClick={handleSave}
                 >
                   Save
                 </Button>
