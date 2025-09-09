@@ -29,7 +29,7 @@ const CreditsUsage = () => {
           {isLoadingCredits ? (
             <div className="h-4 w-8 bg-muted animate-pulse rounded" />
           ) : (
-            <span className="font-medium">{credits}</span>
+            <span className="font-medium">{credits.toLocaleString()}</span>
           )}
         </div>
       </div>
