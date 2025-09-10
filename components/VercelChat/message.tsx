@@ -88,7 +88,10 @@ const Message = ({
                         partText={part?.text || ""}
                         setMode={setMode}
                       />
-                      <Actions className="mt-2 ml-5">
+                      <Actions className={cn("mt-2", {
+                        "ml-5": message.role === "assistant",
+                        "mr-5": message.role === "user"
+                      })}>
                         {isLastMessage && (
                           <Action
                             onClick={() => reload()}
