@@ -6,10 +6,15 @@ import "react-photo-view/dist/react-photo-view.css";
 import Icon from "@/components/Icon";
 import getFileVisual from "@/utils/getFileVisual";
 import FileItemMenu from "@/components/Files/FileItemMenu";
+import DeleteFileDialog from "@/components/Files/DeleteFileDialog";
+import { useState } from "react";
 
 interface FileRow { id: string; file_name: string; storage_key: string; mime_type?: string | null; is_directory?: boolean }
+interface FilesGridProps { files: FileRow[]; onDeleted?: () => void; ownerAccountId?: string }
 
-export default function FilesGrid({ files }: { files: FileRow[] }) {
+export default function FilesGrid({ files, onDeleted, ownerAccountId }: FilesGridProps) {
+  const [deleteOpen, setDeleteOpen] = useState(false);
+  const [target, setTarget] = useState<{ id: string; storage_key: string; file_name: string } | null>(null);
   return (
     <PhotoProvider>
       <div className="grid grid-cols-4 gap-2 p-1.5 md:grid-cols-6 lg:grid-cols-8">
@@ -26,7 +31,18 @@ export default function FilesGrid({ files }: { files: FileRow[] }) {
                 {f.file_name}
               </div>
               <div className="absolute right-1 bottom-1">
-                <FileItemMenu id={f.id} fileName={f.file_name} storageKey={f.storage_key} isDirectory={f.is_directory} />
+                <FileItemMenu
+                  id={f.id}
+                  fileName={f.file_name}
+                  storageKey={f.storage_key}
+                  isDirectory={f.is_directory}
+                  onAction={(action) => {
+                    if (action === "delete") {
+                      setTarget({ id: f.id, storage_key: f.storage_key, file_name: f.file_name });
+                      setDeleteOpen(true);
+                    }
+                  }}
+                />
               </div>
             </div>
           );
@@ -53,7 +69,17 @@ export default function FilesGrid({ files }: { files: FileRow[] }) {
                       {f.file_name}
                     </div>
                     <div className="absolute right-1 bottom-1">
-                      <FileItemMenu id={f.id} fileName={f.file_name} storageKey={f.storage_key} />
+                      <FileItemMenu
+                        id={f.id}
+                        fileName={f.file_name}
+                        storageKey={f.storage_key}
+                        onAction={(action) => {
+                          if (action === "delete") {
+                            setTarget({ id: f.id, storage_key: f.storage_key, file_name: f.file_name });
+                            setDeleteOpen(true);
+                          }
+                        }}
+                      />
                     </div>
                   </div>
                 </PhotoView>
@@ -64,6 +90,20 @@ export default function FilesGrid({ files }: { files: FileRow[] }) {
           );
         })}
       </div>
+      {target && (
+        <DeleteFileDialog
+          open={deleteOpen}
+          onOpenChange={setDeleteOpen}
+          id={target.id}
+          storageKey={target.storage_key}
+          fileName={target.file_name}
+          ownerAccountId={ownerAccountId || ""}
+          onDeleted={() => {
+            setTarget(null);
+            onDeleted?.();
+          }}
+        />
+      )}
     </PhotoProvider>
   );
 }
