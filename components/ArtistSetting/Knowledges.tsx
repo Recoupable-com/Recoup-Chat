@@ -20,7 +20,7 @@ const Knowledges = () => {
           key={index}
           className="group flex w-full items-center justify-between rounded-sm border border-border/40 px-1 py-0.5 transition-colors hover:bg-accent"
         >
-          <KnowledgeDialog name={base.name} url={base.url}>
+          <KnowledgeDialog name={base.name} url={base.url} type={base.type}>
             <Button
               type="button"
               variant="ghost"
