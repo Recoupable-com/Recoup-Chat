@@ -1,7 +1,7 @@
 "use client";
 
 import { useMemo, useState } from "react";
-import { useQuery, useQueryClient } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useUserProvider } from "@/providers/UserProvder";
 import { useArtistProvider } from "@/providers/ArtistProvider";
 
@@ -9,9 +9,10 @@ export interface ListedFileRow {
   id: string;
   file_name: string;
   mime_type: string | null;
+  is_directory?: boolean;
 }
 
-export default function useFilesManager() {
+export default function useFilesManager(activePath?: string) {
   const { userData } = useUserProvider();
   const { selectedArtist } = useArtistProvider();
 
@@ -31,6 +32,22 @@ export default function useFilesManager() {
       return res.json();
     },
     enabled: Boolean(ownerAccountId && artistAccountId),
+  });
+
+  const createFolderMutation = useMutation({
+    mutationFn: async (name: string) => {
+      const res = await fetch("/api/files/folder", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ ownerAccountId, artistAccountId, name, parentPath: activePath || `files/${ownerAccountId}/${artistAccountId}/` }),
+      });
+      const json = await res.json();
+      if (!res.ok) throw new Error(json.error || "Failed to create folder");
+      return json.folder as ListedFileRow;
+    },
+    onSuccess: async () => {
+      await qc.invalidateQueries({ queryKey: ["files", ownerAccountId, artistAccountId] });
+    },
   });
 
   async function handleUpload(selectedFile?: File) {
@@ -89,6 +106,7 @@ export default function useFilesManager() {
     isLoading,
     files: data?.files || [],
     handleUpload,
+    createFolder: (name: string) => createFolderMutation.mutateAsync(name),
   };
 }
 
