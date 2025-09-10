@@ -14,6 +14,7 @@ const useConversations = () => {
   >([]);
   const [quotaExceeded, setQuotaExceeded] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
+  const [previousConversations, setPreviousConversations] = useState<Array<Conversation | ArtistAgent>>([]);
   const { agents } = useArtistAgents();
 
   const addConversation = (conversation: Conversation | ArtistAgent) => {
@@ -30,11 +31,23 @@ const useConversations = () => {
   }, [userData, agents]);
 
   const conversations = useMemo(() => {
-    return allConversations.filter(
+    const filtered = allConversations.filter(
       (item: Conversation | ArtistAgent) =>
         'artist_id' in item && item.artist_id === selectedArtist?.account_id
     );
-  }, [selectedArtist, allConversations]);
+    
+    // Prevent empty state during artist transitions - keep previous conversations visible
+    if (filtered.length === 0 && previousConversations.length > 0 && selectedArtist) {
+      return previousConversations; // Keep showing previous conversations during transition
+    }
+    
+    // Update previous conversations when we have new valid data
+    if (filtered.length > 0) {
+      setPreviousConversations(filtered);
+    }
+    
+    return filtered;
+  }, [selectedArtist, allConversations, previousConversations]);
 
   const fetchConversations = async (accountIdParam?: string) => {
     const accountId = accountIdParam ?? userData?.id;
