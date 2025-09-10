@@ -30,7 +30,9 @@ export default function UploadAndList() {
     <div className="space-y-4 px-2 md:px-0">
       <div className="flex items-start gap-3 md:items-center">
         <div className="min-w-0">
-          <div className="mb-1">
+          <h1 className="text-[20px] md:text-[22px] font-semibold tracking-tight leading-tight">Files</h1>
+          <p className="mt-1 text-[12px] text-muted-foreground">Store and manage files per artist.</p>
+          <div className="mt-2">
             <Breadcrumb>
               <BreadcrumbList>
                 <BreadcrumbItem>
@@ -59,8 +61,6 @@ export default function UploadAndList() {
               </BreadcrumbList>
             </Breadcrumb>
           </div>
-          <h1 className="text-[20px] md:text-[22px] font-semibold tracking-tight leading-tight">Files</h1>
-          <p className="mt-1 text-[12px] text-muted-foreground">Store and manage files per artist.</p>
         </div>
         <div className="ml-auto flex items-center gap-2 shrink-0">
           <NewFolderDialog onCreate={createFolder} />
