@@ -1,13 +1,6 @@
 import { NextResponse } from "next/server";
 import supabase from "@/lib/supabase/serverClient";
-
-function isValidFolderName(name: string): boolean {
-  if (!name) return false;
-  if (name.length > 64) return false;
-  if (/[\\/]/.test(name)) return false;
-  if (name.includes("..")) return false;
-  return /^[\w .-]+$/.test(name);
-}
+import isValidFolderName from "@/utils/isValidFolderName";
 
 export async function POST(req: Request) {
   try {
