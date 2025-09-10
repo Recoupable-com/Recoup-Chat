@@ -61,5 +61,3 @@ grant select on table "public"."files" to "service_role";
 grant trigger on table "public"."files" to "service_role";
 grant truncate on table "public"."files" to "service_role";
 grant update on table "public"."files" to "service_role";
-
-
