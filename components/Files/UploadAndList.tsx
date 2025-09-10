@@ -37,7 +37,7 @@ export default function UploadAndList() {
               <BreadcrumbList>
                 <BreadcrumbItem>
                   <BreadcrumbLink asChild>
-                    <Link href={`?path=${encodeURIComponent(base)}`}>/</Link>
+                    <Link href={`?path=${encodeURIComponent(base)}`}>Home</Link>
                   </BreadcrumbLink>
                 </BreadcrumbItem>
                 {relative.map((seg, idx) => {
