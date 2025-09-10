@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useUserProvider } from "@/providers/UserProvder";
 import { useArtistProvider } from "@/providers/ArtistProvider";
@@ -34,6 +34,28 @@ export default function useFilesManager(activePath?: string) {
     },
     enabled: Boolean(ownerAccountId && artistAccountId),
   });
+
+  // Prefetch next-level directories for snappier navigation
+  useEffect(() => {
+    const items = data?.files || [];
+    if (items.length === 0) return;
+    const basePath = activePath
+      ? activePath.endsWith("/") ? activePath : activePath + "/"
+      : `files/${ownerAccountId}/${artistAccountId}/`;
+    items.filter((f) => f.is_directory).forEach((dir) => {
+      const childPath = `${basePath}${dir.file_name}/`;
+      qc.prefetchQuery({
+        queryKey: ["files", ownerAccountId, artistAccountId, childPath],
+        queryFn: async () => {
+          const url = `/api/files/list?ownerAccountId=${ownerAccountId}&artistAccountId=${artistAccountId}&path=${encodeURIComponent(childPath)}`;
+          const res = await fetch(url, { cache: "no-store" });
+          if (!res.ok) throw new Error("Failed to load files");
+          return res.json();
+        },
+        staleTime: 30000,
+      });
+    });
+  }, [data?.files, activePath, ownerAccountId, artistAccountId, qc]);
 
   const createFolderMutation = useMutation({
     mutationFn: async (name: string) => {
