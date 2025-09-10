@@ -15,7 +15,7 @@ export async function GET(req: Request) {
     // List immediate children under "path". If no path provided, return all (fallback)
     const { data, error } = await supabase
       .from("files")
-      .select("*")
+      .select("id,file_name,storage_key,mime_type,is_directory,created_at")
       .eq("owner_account_id", ownerAccountId)
       .eq("artist_account_id", artistAccountId)
       .ilike("storage_key", path ? `${path}%` : "%")

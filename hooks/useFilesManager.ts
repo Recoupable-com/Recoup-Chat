@@ -8,6 +8,7 @@ import { useArtistProvider } from "@/providers/ArtistProvider";
 export interface ListedFileRow {
   id: string;
   file_name: string;
+  storage_key: string;
   mime_type: string | null;
   is_directory?: boolean;
 }
