@@ -12,13 +12,13 @@
 "orientation": "portrait",
 "icons": [
     {
-        "src": "/Icon with Background.png",
+        "src": "/icon-with-background.png",
         "sizes": "any",
         "type": "image/png",
         "purpose": "any"
     },
     {
-        "src": "/Icon with Background.png",
+        "src": "/icon-with-background.png",
         "sizes": "360x360",
         "type": "image/png",
         "description": "recoupable"
