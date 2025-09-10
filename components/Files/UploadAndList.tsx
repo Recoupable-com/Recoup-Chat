@@ -13,7 +13,7 @@ export default function UploadAndList() {
   const { selectedArtist } = useArtistProvider();
   const base = `files/${userData?.account_id || ""}/${selectedArtist?.account_id || ""}/`;
   const { path } = useFilesPath(base);
-  const { files, isLoading, setFile, status, handleUpload, createFolder } = useFilesManager(path);
+  const { files, isLoading, setFile, status, handleUpload, createFolder, refreshFiles, ownerAccountId } = useFilesManager(path);
 
   const parts = path.replace(/\/$/, "").split("/");
   const relative = parts.length > 3 ? parts.slice(3) : [];
@@ -37,7 +37,7 @@ export default function UploadAndList() {
         ) : files.length === 0 ? (
           <div className="p-12 text-center text-sm text-muted-foreground">No files yet.</div>
         ) : (
-          <FilesGrid files={files as { id: string; file_name: string; storage_key: string; mime_type?: string | null; is_directory?: boolean }[]} />
+          <FilesGrid files={files as { id: string; file_name: string; storage_key: string; mime_type?: string | null; is_directory?: boolean }[]} onDeleted={refreshFiles} ownerAccountId={ownerAccountId} />
         )}
       </div>
     </div>

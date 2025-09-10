@@ -134,6 +134,9 @@ export default function useFilesManager(activePath?: string) {
     files: data?.files || [],
     handleUpload,
     createFolder: (name: string) => createFolderMutation.mutateAsync(name),
+    refreshFiles: async () => {
+      await qc.invalidateQueries({ queryKey: ["files", ownerAccountId, artistAccountId] });
+    },
   };
 }
 
