@@ -30,7 +30,8 @@ export async function GET(req: Request) {
     const files = (data || []).filter((row) => {
       if (!base) return true;
       const rel = row.storage_key.replace(base, "");
-      return rel.length > 0 && !rel.slice(0, -1).includes("/");
+      const trimmed = rel.endsWith("/") ? rel.slice(0, -1) : rel;
+      return trimmed.length > 0 && !trimmed.includes("/");
     });
 
     return NextResponse.json({ files }, { status: 200 });

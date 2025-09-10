@@ -61,7 +61,10 @@ export default function useFilesManager(activePath?: string) {
     setStatus("Uploading...");
 
     const safeName = targetFile.name.replace(/[^a-zA-Z0-9._-]/g, "_");
-    const key = `files/${ownerAccountId}/${artistAccountId}/${safeName}`;
+    const basePath = activePath
+      ? (activePath.endsWith("/") ? activePath : activePath + "/")
+      : `files/${ownerAccountId}/${artistAccountId}/`;
+    const key = `${basePath}${safeName}`;
 
     const form = new FormData();
     form.append("key", key);
