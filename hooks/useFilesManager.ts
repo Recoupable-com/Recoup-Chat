@@ -24,9 +24,10 @@ export default function useFilesManager(activePath?: string) {
   const qc = useQueryClient();
 
   const { data, isLoading } = useQuery<{ files: Array<ListedFileRow> }>({
-    queryKey: ["files", ownerAccountId, artistAccountId],
+    queryKey: ["files", ownerAccountId, artistAccountId, activePath],
     queryFn: async () => {
-      const url = `/api/files/list?ownerAccountId=${ownerAccountId}&artistAccountId=${artistAccountId}`;
+      const p = activePath ? `&path=${encodeURIComponent(activePath)}` : "";
+      const url = `/api/files/list?ownerAccountId=${ownerAccountId}&artistAccountId=${artistAccountId}${p}`;
       const res = await fetch(url, { cache: "no-store" });
       if (!res.ok) throw new Error("Failed to load files");
       return res.json();

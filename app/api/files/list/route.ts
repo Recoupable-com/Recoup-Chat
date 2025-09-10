@@ -6,23 +6,34 @@ export async function GET(req: Request) {
     const { searchParams } = new URL(req.url);
     const ownerAccountId = searchParams.get("ownerAccountId");
     const artistAccountId = searchParams.get("artistAccountId");
+    const path = searchParams.get("path") || "";
 
     if (!ownerAccountId || !artistAccountId) {
       return NextResponse.json({ error: "Missing ownerAccountId or artistAccountId" }, { status: 400 });
     }
 
+    // List immediate children under "path". If no path provided, return all (fallback)
     const { data, error } = await supabase
       .from("files")
       .select("*")
       .eq("owner_account_id", ownerAccountId)
       .eq("artist_account_id", artistAccountId)
+      .ilike("storage_key", path ? `${path}%` : "%")
       .order("created_at", { ascending: false });
 
     if (error) {
       return NextResponse.json({ error: error.message }, { status: 500 });
     }
 
-    return NextResponse.json({ files: data ?? [] }, { status: 200 });
+    // Filter to immediate children client-side (single level)
+    const base = path && path.endsWith("/") ? path : path ? path + "/" : "";
+    const files = (data || []).filter((row) => {
+      if (!base) return true;
+      const rel = row.storage_key.replace(base, "");
+      return rel.length > 0 && !rel.slice(0, -1).includes("/");
+    });
+
+    return NextResponse.json({ files }, { status: 200 });
   } catch (err) {
     const message = err instanceof Error ? err.message : "Unknown error";
     return NextResponse.json({ error: message }, { status: 500 });
