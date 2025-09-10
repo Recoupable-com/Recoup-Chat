@@ -10,6 +10,7 @@ import { useUserProvider } from "@/providers/UserProvder";
 import { useArtistProvider } from "@/providers/ArtistProvider";
 import Link from "next/link";
 import FilesBreadcrumb from "@/components/Files/FilesBreadcrumb";
+import getFileVisual from "@/utils/getFileVisual";
 
 export default function UploadAndList() {
   const { userData } = useUserProvider();
@@ -60,10 +61,11 @@ export default function UploadAndList() {
           <div className="grid grid-cols-4 gap-2 p-1.5 md:grid-cols-6 lg:grid-cols-8">
             {files.map((f) => {
               const targetPath = f.is_directory ? `${path}${f.file_name}/` : undefined;
+              const visual = getFileVisual(f.file_name, (f as { mime_type?: string | null }).mime_type);
               const TileContent = (
-                <div className="flex flex-col items-center gap-2">
-                  <div className="text-muted-foreground">
-                    <Icon name={f.is_directory ? "folder" : "plain"} />
+                <div className="flex flex-col items-center gap-2 cursor-pointer">
+                  <div className={f.is_directory ? "text-muted-foreground" : visual.color}>
+                    <Icon name={f.is_directory ? "folder" : visual.icon} />
                   </div>
                   <div
                     className="w-full truncate whitespace-nowrap text-center text-[11px] leading-snug font-medium text-foreground/90 hover:underline"

@@ -82,15 +82,14 @@ export const Icons = {
   ),
   pdf: () => (
     <svg
-      width="18"
-      height="18"
-      viewBox="0 0 18 18"
-      fill="none"
+      width="22"
+      height="22"
+      viewBox="0 0 22 22"
+      fill="currentColor"
       xmlns="http://www.w3.org/2000/svg"
     >
       <path
         d="M16 0H2C0.9 0 0 0.9 0 2V16C0 17.1 0.9 18 2 18H16C17.1 18 18 17.1 18 16V2C18 0.9 17.1 0 16 0ZM6.5 8.5C6.5 9.3 5.8 10 5 10H4V12H2.5V6H5C5.8 6 6.5 6.7 6.5 7.5V8.5ZM11.5 10.5C11.5 11.3 10.8 12 10 12H7.5V6H10C10.8 6 11.5 6.7 11.5 7.5V10.5ZM15.5 7.5H14V8.5H15.5V10H14V12H12.5V6H15.5V7.5ZM9 7.5H10V10.5H9V7.5ZM4 7.5H5V8.5H4V7.5Z"
-        fill="black"
       />
     </svg>
   ),
@@ -99,20 +98,19 @@ export const Icons = {
       width="17"
       height="16"
       viewBox="0 0 17 16"
-      fill="none"
+      fill="currentColor"
       xmlns="http://www.w3.org/2000/svg"
     >
       <path
         d="M10.625 0H2.125C1.56141 0 1.02091 0.168571 0.622398 0.468629C0.223883 0.768687 0 1.17565 0 1.6V14.4C0 14.8243 0.223883 15.2313 0.622398 15.5314C1.02091 15.8314 1.56141 16 2.125 16H14.875C15.4386 16 15.9791 15.8314 16.3776 15.5314C16.7761 15.2313 17 14.8243 17 14.4V4.8L10.625 0ZM11.9 14.4H10.4125L8.5 8.96L6.5875 14.4H5.1L2.7625 7.2H4.35625L5.84375 12.64L7.75625 7.2H9.1375L11.05 12.64L12.5375 7.2H14.1312L11.9 14.4ZM9.5625 5.6V1.2L15.4062 5.6H9.5625Z"
-        fill="black"
       />
     </svg>
   ),
   image: () => (
     <svg
       xmlns="http://www.w3.org/2000/svg"
-      width="18"
-      height="18"
+      width="24"
+      height="24"
       viewBox="0 0 24 24"
       fill="none"
       stroke="currentColor"
@@ -128,6 +126,12 @@ export const Icons = {
   csv: () => (<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" className="lucide lucide-table-icon lucide-table"><path d="M12 3v18"/><rect width="18" height="18" x="3" y="3" rx="2"/><path d="M3 9h18"/><path d="M3 15h18"/></svg>),
   json: () => (<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" className="lucide lucide-file-json-icon lucide-file-json"><path d="M15 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7Z"/><path d="M14 2v4a2 2 0 0 0 2 2h4"/><path d="M10 12a1 1 0 0 0-1 1v1a1 1 0 0 1-1 1 1 1 0 0 1 1 1v1a1 1 0 0 0 1 1"/><path d="M14 18a1 1 0 0 0 1-1v-1a1 1 0 0 1 1-1 1 1 0 0 1-1-1v-1a1 1 0 0 0-1-1"/></svg>),
   plain: () => (<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" className="lucide lucide-file-text-icon lucide-file-text"><path d="M15 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7Z"/><path d="M14 2v4a2 2 0 0 0 2 2h4"/><path d="M10 9H8"/><path d="M16 13H8"/><path d="M16 17H8"/></svg>),
+  audio: () => (
+    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" className="lucide lucide-music-icon lucide-music"><path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/></svg>
+  ),
+  video: () => (
+    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" className="lucide lucide-video-icon lucide-video"><path d="m22 8-6 4 6 4V8Z"/><rect width="14" height="12" x="2" y="6" rx="2" ry="2"/></svg>
+  ),
   dashboard: () => (
     <svg
       width="17"
