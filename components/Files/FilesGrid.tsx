@@ -18,7 +18,7 @@ export default function FilesGrid({ path, files }: { path: string; files: FileRo
 
           const TileContent = (
             <div className="flex flex-col items-center gap-2 cursor-pointer">
-              <div className={f.is_directory ? "text-muted-foreground" : visual.color}>
+              <div className={`${f.is_directory ? "text-muted-foreground" : visual.color} h-10 w-10 flex items-center justify-center [&_svg]:h-10 [&_svg]:w-10`}>
                 <Icon name={f.is_directory ? "folder" : visual.icon} />
               </div>
               <div className="w-full truncate whitespace-nowrap text-center text-[11px] leading-snug font-medium text-foreground/90 hover:underline" title={f.file_name}>
