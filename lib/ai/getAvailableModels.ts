@@ -10,37 +10,33 @@ export const getAvailableModels = async (): Promise<
   GatewayLanguageModelEntry[]
 > => {
   try {
-    console.log("🔄 MODELS: Fetching models from all providers");
 
     // Fetch models from Vercel AI Gateway
     let gatewayModels: GatewayLanguageModelEntry[] = [];
     try {
       const apiResponse = await gateway.getAvailableModels();
       gatewayModels = apiResponse.models.filter((m) => !isEmbedModel(m));
-      console.log("🔄 GATEWAY MODELS: Fetched", gatewayModels.length, "models");
-    } catch (gatewayErr) {
-      console.error("Failed to fetch models from Vercel AI Gateway:", gatewayErr);
+      // Successfully fetched gateway models
+    } catch {
+      // Error fetching gateway models - continuing with fallback
     }
 
     // Fetch models from Fal AI
     let falModels: GatewayLanguageModelEntry[] = [];
     try {
-      falModels = await getFalModels();
-      console.log("🔄 FAL MODELS: Fetched", falModels.length, "models");
-    } catch (falErr) {
-      console.error("Failed to fetch models from Fal AI:", falErr);
+      falModels = getFalModels();
+      // Successfully fetched Fal models
+    } catch {
+      // Error fetching Fal models - continuing with fallback
     }
 
     // Combine all models
     const allModels = [...gatewayModels, ...falModels];
-    console.log("🔄 TOTAL MODELS: Combined", allModels.length, "models");
+    // Successfully combined all available models
 
     return allModels;
-  } catch (err) {
-    console.error(
-      "Failed to fetch models from all providers, using fallback list.",
-      err
-    );
+  } catch {
+    // Error fetching from all providers - returning empty fallback
     return [];
   }
 };

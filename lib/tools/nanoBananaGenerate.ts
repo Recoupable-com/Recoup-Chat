@@ -1,13 +1,12 @@
 import { z } from "zod";
 import { tool } from "ai";
+import { fal } from "@fal-ai/client";
+import { ensureBase64Polyfills } from "@/lib/utils/base64Polyfill";
+import { configureFalClient } from "@/lib/utils/falConfig";
+import { mapFalError } from "@/lib/utils/falErrorHandler";
 
 // Ensure base64 polyfills are available for Fal client
-if (typeof globalThis.atob === "undefined") {
-  globalThis.atob = (data: string) => Buffer.from(data, "base64").toString("binary");
-}
-if (typeof globalThis.btoa === "undefined") {
-  globalThis.btoa = (data: string) => Buffer.from(data, "binary").toString("base64");
-}
+ensureBase64Polyfills();
 
 const schema = z.object({
   prompt: z
@@ -32,16 +31,9 @@ const nanoBananaGenerate = tool({
   inputSchema: schema,
   execute: async ({ prompt }): Promise<NanoBananaGenerateResult> => {
     try {
-      console.log("🍌 NANO BANANA GENERATE: Starting image generation");
-      console.log("🍌 Prompt:", prompt);
 
-      // Import Fal client dynamically to avoid issues
-      const { fal } = await import("@fal-ai/client");
-      
       // Configure Fal client
-      fal.config({
-        credentials: process.env.FAL_KEY || process.env.FAL_API_KEY,
-      });
+      configureFalClient(fal);
 
       // Call Fal's nano banana text-to-image endpoint
       const result = await fal.subscribe("fal-ai/nano-banana", {
@@ -51,15 +43,11 @@ const nanoBananaGenerate = tool({
           output_format: "png",
         },
         logs: true,
-        onQueueUpdate: (update) => {
-          if (update.status === "IN_PROGRESS") {
-            console.log("🍌 Generation progress:", update.logs?.map(log => log.message).join(" "));
-          }
+        onQueueUpdate: () => {
+          // Progress tracking could be added here if needed
         },
       });
 
-      console.log("🍌 NANO BANANA GENERATE: Image generated successfully");
-      console.log("🍌 Result:", result.data);
 
       const imageUrl = result.data.images[0]?.url;
       const description = result.data.description || "Image generated successfully";
@@ -71,21 +59,9 @@ const nanoBananaGenerate = tool({
         message: "", // Empty message - let the UI component handle everything
       };
     } catch (error) {
-      console.error("🍌 NANO BANANA GENERATE ERROR:", error);
-
-      // Format helpful error messages
-      let errorMessage =
-        error instanceof Error ? error.message : "An unexpected error occurred";
-
-      if (errorMessage.includes("API key") || errorMessage.includes("credentials")) {
-        errorMessage =
-          "Fal AI API key is missing or invalid. Please check your FAL_KEY environment variable.";
-      } else if (errorMessage.includes("content policy")) {
-        errorMessage =
-          "Your prompt may violate content policy. Please try a different prompt.";
-      } else if (errorMessage.includes("rate limit")) {
-        errorMessage = "Rate limit exceeded. Please try again later.";
-      }
+      // Format helpful error messages using centralized error handler
+      const originalError = error instanceof Error ? error.message : "An unexpected error occurred";
+      const errorMessage = mapFalError(originalError);
 
       return {
         success: false,

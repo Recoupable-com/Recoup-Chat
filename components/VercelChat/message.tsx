@@ -88,8 +88,8 @@ const Message = ({
                         partText={part?.text || ""}
                         setMode={setMode}
                       />
-                      {isLastMessage && (
-                        <Actions className="mt-2 ml-5">
+                      <Actions className="mt-2 ml-5">
+                        {isLastMessage && (
                           <Action
                             onClick={() => reload()}
                             label="Retry"
@@ -97,15 +97,15 @@ const Message = ({
                           >
                             <RefreshCcwIcon className="size-3" />
                           </Action>
-                          <Action
-                            onClick={() => navigator.clipboard.writeText(part?.text || "")}
-                            label="Copy"
-                            tooltip="Copy response to clipboard"
-                          >
-                            <CopyIcon className="size-3" />
-                          </Action>
-                        </Actions>
-                      )}
+                        )}
+                        <Action
+                          onClick={() => navigator.clipboard.writeText(part?.text || "")}
+                          label="Copy"
+                          tooltip="Copy response to clipboard"
+                        >
+                          <CopyIcon className="size-3" />
+                        </Action>
+                      </Actions>
                     </div>
                   );
                 }
