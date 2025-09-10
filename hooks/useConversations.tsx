@@ -37,17 +37,22 @@ const useConversations = () => {
     );
     
     // Prevent empty state during artist transitions - keep previous conversations visible
-    if (filtered.length === 0 && previousConversations.length > 0 && selectedArtist) {
-      return previousConversations; // Keep showing previous conversations during transition
-    }
+    return filtered.length === 0 && previousConversations.length > 0 && selectedArtist
+      ? previousConversations 
+      : filtered;
+  }, [selectedArtist, allConversations, previousConversations]);
+
+  // Move the state update to a separate useEffect to break the circular dependency
+  useEffect(() => {
+    const filtered = allConversations.filter(
+      (item: Conversation | ArtistAgent) =>
+        'artist_id' in item && item.artist_id === selectedArtist?.account_id
+    );
     
-    // Update previous conversations when we have new valid data
     if (filtered.length > 0) {
       setPreviousConversations(filtered);
     }
-    
-    return filtered;
-  }, [selectedArtist, allConversations, previousConversations]);
+  }, [allConversations, selectedArtist]);
 
   const fetchConversations = async (accountIdParam?: string) => {
     const accountId = accountIdParam ?? userData?.id;
