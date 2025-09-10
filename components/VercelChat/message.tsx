@@ -89,8 +89,8 @@ const Message = ({
                         setMode={setMode}
                       />
                       <Actions className={cn("mt-2", {
-                        "ml-5": message.role === "assistant",
-                        "mr-5": message.role === "user"
+                        "ml-5 justify-start": message.role === "assistant",
+                        "mr-5 justify-end": message.role === "user"
                       })}>
                         {isLastMessage && (
                           <Action
