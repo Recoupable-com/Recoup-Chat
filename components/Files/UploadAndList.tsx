@@ -4,6 +4,7 @@ import useFilesManager from "@/hooks/useFilesManager";
 import { Button } from "@/components/ui/button";
 import Icon from "@/components/Icon";
 import NewFolderDialog from "@/components/Files/NewFolderDialog";
+import FilesGridSkeleton from "@/components/Files/FilesGridSkeleton";
 import useFilesPath from "@/hooks/useFilesPath";
 import { useUserProvider } from "@/providers/UserProvder";
 import { useArtistProvider } from "@/providers/ArtistProvider";
@@ -52,7 +53,7 @@ export default function UploadAndList() {
 
       <div className="rounded-lg">
         {isLoading ? (
-          <div className="p-6 text-sm text-muted-foreground">Loading...</div>
+          <FilesGridSkeleton />
         ) : files.length === 0 ? (
           <div className="p-12 text-center text-sm text-muted-foreground">No files yet.</div>
         ) : (
