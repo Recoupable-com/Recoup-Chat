@@ -89,24 +89,40 @@ export default function useFilesManager(activePath?: string) {
       : `files/${ownerAccountId}/${artistAccountId}/`;
     const key = `${basePath}${safeName}`;
 
-    const form = new FormData();
-    form.append("key", key);
-    form.append("file", targetFile);
-
-    const up = await fetch("/api/storage/upload-by-key", { method: "POST", body: form });
-    const upJson = await up.json();
-    if (!up.ok) {
-      setStatus(`Error: ${upJson.error || up.statusText}`);
+    // Request a signed upload URL from the server (service role)
+    const sig = await fetch("/api/storage/signed-upload-url", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ key }),
+    });
+    const sigJson = await sig.json();
+    if (!sig.ok) {
+      setStatus(`Error: ${sigJson.error || sig.statusText}`);
       return;
     }
 
+    // Upload file directly to Supabase Storage using the signed URL
+    const uploadRes = await fetch(sigJson.signedUrl, {
+      method: "PUT",
+      headers: {
+        "Content-Type": targetFile.type || "application/octet-stream",
+      },
+      body: targetFile,
+    });
+
+    if (!uploadRes.ok) {
+      setStatus(`Error: Failed to upload (${uploadRes.status})`);
+      return;
+    }
+
+    // Record metadata
     const rec = await fetch("/api/files/record", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
         ownerAccountId,
         artistAccountId,
-        storageKey: upJson.path || key,
+        storageKey: key,
         fileName: targetFile.name,
         mimeType: targetFile.type,
         sizeBytes: targetFile.size,
