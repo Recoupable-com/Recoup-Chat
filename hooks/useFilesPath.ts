@@ -1,14 +1,27 @@
 "use client";
 
-import { useMemo } from "react";
+import { useEffect, useMemo } from "react";
 import { useSearchParams, useRouter } from "next/navigation";
 
 export default function useFilesPath(base: string) {
   const params = useSearchParams();
   const router = useRouter();
-  const path = params.get("path") || base;
+  const baseNormalized = useMemo(() => (base.endsWith("/") ? base : base + "/"), [base]);
+  const paramPath = params.get("path");
+  const path = paramPath || baseNormalized;
 
   const normalized = useMemo(() => (path.endsWith("/") ? path : path + "/"), [path]);
+
+  // When base changes (e.g., artist switched), ensure URL path resets under the new base
+  useEffect(() => {
+    if (!baseNormalized) return;
+    const current = params.get("path");
+    if (current && current.startsWith(baseNormalized)) return;
+    const usp = new URLSearchParams(Array.from(params.entries()));
+    usp.set("path", baseNormalized);
+    router.replace(`?${usp.toString()}`);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [baseNormalized]);
 
   const goTo = (next: string) => {
     const p = next.endsWith("/") ? next : next + "/";
