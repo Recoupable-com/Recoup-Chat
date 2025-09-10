@@ -3,9 +3,17 @@
 import useFilesManager from "@/hooks/useFilesManager";
 import { Button } from "@/components/ui/button";
 import Icon from "@/components/Icon";
+import NewFolderDialog from "@/components/Files/NewFolderDialog";
+import useFilesPath from "@/hooks/useFilesPath";
+import { useUserProvider } from "@/providers/UserProvder";
+import { useArtistProvider } from "@/providers/ArtistProvider";
 
 export default function UploadAndList() {
-  const { files, isLoading, setFile, status, handleUpload } = useFilesManager();
+  const { userData } = useUserProvider();
+  const { selectedArtist } = useArtistProvider();
+  const base = `files/${userData?.account_id || ""}/${selectedArtist?.account_id || ""}/`;
+  const { path } = useFilesPath(base);
+  const { files, isLoading, setFile, status, handleUpload, createFolder } = useFilesManager(path);
 
   return (
     <div className="space-y-4">
@@ -15,6 +23,7 @@ export default function UploadAndList() {
           <p className="text-xs text-muted-foreground">Store and manage files per artist.</p>
         </div>
         <div className="ml-auto flex items-center gap-2">
+          <NewFolderDialog onCreate={createFolder} />
           <label className="relative inline-flex items-center cursor-pointer">
             <input
               type="file"
@@ -44,7 +53,7 @@ export default function UploadAndList() {
               <div key={f.id} className="rounded-md p-2 text-sm hover:bg-accent/40">
                 <div className="flex flex-col items-center gap-2">
                   <div className="text-muted-foreground">
-                    <Icon name="plain" />
+                    <Icon name={f.is_directory ? "folder" : "plain"} />
                   </div>
                   <div
                     className="w-full truncate whitespace-nowrap text-center text-xs leading-snug font-medium text-foreground hover:underline"
