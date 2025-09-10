@@ -37,7 +37,7 @@ export default function UploadAndList() {
         ) : files.length === 0 ? (
           <div className="p-12 text-center text-sm text-muted-foreground">No files yet.</div>
         ) : (
-          <FilesGrid path={path} files={files as { id: string; file_name: string; mime_type?: string | null; is_directory?: boolean }[]} />
+          <FilesGrid files={files as { id: string; file_name: string; storage_key: string; mime_type?: string | null; is_directory?: boolean }[]} />
         )}
       </div>
     </div>

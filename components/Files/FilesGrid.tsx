@@ -6,14 +6,14 @@ import "react-photo-view/dist/react-photo-view.css";
 import Icon from "@/components/Icon";
 import getFileVisual from "@/utils/getFileVisual";
 
-interface FileRow { id: string; file_name: string; mime_type?: string | null; is_directory?: boolean }
+interface FileRow { id: string; file_name: string; storage_key: string; mime_type?: string | null; is_directory?: boolean }
 
-export default function FilesGrid({ path, files }: { path: string; files: FileRow[] }) {
+export default function FilesGrid({ files }: { files: FileRow[] }) {
   return (
     <PhotoProvider>
       <div className="grid grid-cols-4 gap-2 p-1.5 md:grid-cols-6 lg:grid-cols-8">
         {files.map((f) => {
-          const targetPath = f.is_directory ? `${path}${f.file_name}/` : undefined;
+          const targetPath = f.is_directory ? f.storage_key : undefined;
           const visual = getFileVisual(f.file_name, f.mime_type ?? null);
 
           const TileContent = (
@@ -36,7 +36,7 @@ export default function FilesGrid({ path, files }: { path: string; files: FileRo
           }
 
           const isImage = visual.icon === "image";
-          const fileKey = `${path}${f.file_name}`;
+          const fileKey = f.storage_key;
           const signedUrl = `/api/files/signed-url?key=${encodeURIComponent(fileKey)}`;
 
           return (
