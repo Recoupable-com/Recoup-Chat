@@ -13,13 +13,14 @@ import ScheduledActionsNavItem from "./ScheduledActionsNavItem";
 import FilesNavItem from "./FilesNavItem";
 
 const Menu = ({ toggleMenuExpanded }: { toggleMenuExpanded: () => void }) => {
-  const { push } = useRouter();
+  const { push, prefetch } = useRouter();
   const pathname = usePathname();
   const { email, isPrepared } = useUserProvider();
   const isAgents = pathname.includes("/agents");
   const isSegments = pathname.includes("/segments");
   const isScheduledActions = pathname.includes("/scheduled-actions");
   const isFiles = pathname.includes("/files");
+  prefetch('/files');
 
   const goToItem = (link?: string) => {
     if (isPrepared()) {
