@@ -24,9 +24,10 @@ export default function useFilesManager(activePath?: string) {
   const qc = useQueryClient();
 
   const { data, isLoading } = useQuery<{ files: Array<ListedFileRow> }>({
-    queryKey: ["files", ownerAccountId, artistAccountId],
+    queryKey: ["files", ownerAccountId, artistAccountId, activePath],
     queryFn: async () => {
-      const url = `/api/files/list?ownerAccountId=${ownerAccountId}&artistAccountId=${artistAccountId}`;
+      const p = activePath ? `&path=${encodeURIComponent(activePath)}` : "";
+      const url = `/api/files/list?ownerAccountId=${ownerAccountId}&artistAccountId=${artistAccountId}${p}`;
       const res = await fetch(url, { cache: "no-store" });
       if (!res.ok) throw new Error("Failed to load files");
       return res.json();
@@ -60,7 +61,10 @@ export default function useFilesManager(activePath?: string) {
     setStatus("Uploading...");
 
     const safeName = targetFile.name.replace(/[^a-zA-Z0-9._-]/g, "_");
-    const key = `files/${ownerAccountId}/${artistAccountId}/${safeName}`;
+    const basePath = activePath
+      ? (activePath.endsWith("/") ? activePath : activePath + "/")
+      : `files/${ownerAccountId}/${artistAccountId}/`;
+    const key = `${basePath}${safeName}`;
 
     const form = new FormData();
     form.append("key", key);
