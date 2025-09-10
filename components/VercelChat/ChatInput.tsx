@@ -11,11 +11,11 @@ import {
   PromptInput,
   PromptInputButton,
   PromptInputSubmit,
-  PromptInputTextarea,
   PromptInputToolbar,
   PromptInputTools,
 } from "../ai-elements/prompt-input";
 import ModelSelect from "@/components/ModelSelect";
+import FileMentionsInput from "./FileMentionsInput";
 
 interface ChatInputProps {
   onSendMessage: (event: React.FormEvent<HTMLFormElement>) => void;
@@ -35,7 +35,7 @@ export function ChatInput({
   const { selectedArtist, sorted } = useArtistProvider();
   const { hasPendingUploads, messages, status, model } = useVercelChatContext();
   const isDisabled = !selectedArtist && sorted.length > 0;
-  
+  const artistId = selectedArtist?.account_id;
 
   const handleSend = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -70,14 +70,18 @@ export function ChatInput({
       >
         <PromptInput
           onSubmit={handleSend}
-          className="overflow-visible md:overflow-hidden rounded-xl shadow"
+          className={cn(
+            "overflow-visible md:overflow-hidden",
+            "rounded-2xl border bg-background/70 backdrop-blur",
+            "shadow-sm"
+          )}
         >
-          <PromptInputTextarea
-            value={input}
-            onChange={(e) => setInput(e.target.value)}
+          <FileMentionsInput
+            value={typeof input === "string" ? input : ""}
+            onChange={setInput}
             disabled={isDisabled || hasPendingUploads}
-            className="h-10"
-            placeholder={model === "fal-ai/nano-banana/edit" ? "Describe an image or upload a file to edit..." : "What would you like to know?"}
+            model={model}
+            artistId={artistId}
           />
           <PromptInputToolbar>
             <PromptInputTools>
