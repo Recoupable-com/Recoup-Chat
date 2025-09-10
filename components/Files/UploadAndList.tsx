@@ -7,14 +7,8 @@ import NewFolderDialog from "@/components/Files/NewFolderDialog";
 import useFilesPath from "@/hooks/useFilesPath";
 import { useUserProvider } from "@/providers/UserProvder";
 import { useArtistProvider } from "@/providers/ArtistProvider";
-import {
-  Breadcrumb,
-  BreadcrumbItem,
-  BreadcrumbLink,
-  BreadcrumbList,
-  BreadcrumbSeparator,
-} from "@/components/ui/breadcrumb";
 import Link from "next/link";
+import FilesBreadcrumb from "@/components/Files/FilesBreadcrumb";
 
 export default function UploadAndList() {
   const { userData } = useUserProvider();
@@ -33,33 +27,7 @@ export default function UploadAndList() {
           <h1 className="text-[20px] md:text-[22px] font-semibold tracking-tight leading-tight">Files</h1>
           <p className="mt-1 text-[12px] text-muted-foreground">Store and manage files per artist.</p>
           <div className="mt-2">
-            <Breadcrumb>
-              <BreadcrumbList>
-                <BreadcrumbItem>
-                  <BreadcrumbLink asChild>
-                    <Link href={`?path=${encodeURIComponent(base)}`}>Home</Link>
-                  </BreadcrumbLink>
-                </BreadcrumbItem>
-                {relative.map((seg, idx) => {
-                  const target = `${base}${relative.slice(0, idx + 1).join("/")}/`;
-                  const isLast = idx === relative.length - 1;
-                  return (
-                    <>
-                      <BreadcrumbSeparator />
-                      <BreadcrumbItem>
-                        {isLast ? (
-                          <span className="text-sm text-muted-foreground">{seg}</span>
-                        ) : (
-                          <BreadcrumbLink asChild>
-                            <Link href={`?path=${encodeURIComponent(target)}`}>{seg}</Link>
-                          </BreadcrumbLink>
-                        )}
-                      </BreadcrumbItem>
-                    </>
-                  );
-                })}
-              </BreadcrumbList>
-            </Breadcrumb>
+            <FilesBreadcrumb base={base} relative={relative} />
           </div>
         </div>
         <div className="ml-auto flex items-center gap-2 shrink-0">
