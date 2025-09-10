@@ -33,20 +33,21 @@ export default function useFilesManager() {
     enabled: Boolean(ownerAccountId && artistAccountId),
   });
 
-  async function handleUpload() {
-    if (!file) return;
+  async function handleUpload(selectedFile?: File) {
+    const targetFile = selectedFile || file;
+    if (!targetFile) return;
     if (!ownerAccountId || !artistAccountId) {
       setStatus("Missing account or artist");
       return;
     }
     setStatus("Uploading...");
 
-    const safeName = file.name.replace(/[^a-zA-Z0-9._-]/g, "_");
+    const safeName = targetFile.name.replace(/[^a-zA-Z0-9._-]/g, "_");
     const key = `files/${ownerAccountId}/${artistAccountId}/${safeName}`;
 
     const form = new FormData();
     form.append("key", key);
-    form.append("file", file);
+    form.append("file", targetFile);
 
     const up = await fetch("/api/storage/upload-by-key", { method: "POST", body: form });
     const upJson = await up.json();
@@ -62,9 +63,9 @@ export default function useFilesManager() {
         ownerAccountId,
         artistAccountId,
         storageKey: upJson.path || key,
-        fileName: file.name,
-        mimeType: file.type,
-        sizeBytes: file.size,
+        fileName: targetFile.name,
+        mimeType: targetFile.type,
+        sizeBytes: targetFile.size,
       }),
     });
     const recJson = await rec.json();
@@ -74,7 +75,7 @@ export default function useFilesManager() {
     }
 
     setStatus("Uploaded");
-    setFile(null);
+    if (!selectedFile) setFile(null);
     await qc.invalidateQueries({ queryKey: ["files", ownerAccountId, artistAccountId] });
   }
 
