@@ -51,11 +51,11 @@ export default function FileItemMenu({ id, fileName, storageKey, isDirectory, on
       <DropdownMenuContent align="end" sideOffset={6} onClick={(e) => e.stopPropagation()}>
         <DropdownMenuLabel className="max-w-[200px] truncate">{fileName}</DropdownMenuLabel>
         <DropdownMenuSeparator />
-        <DropdownMenuItem onClick={handle("properties")}> 
+        <DropdownMenuItem disabled> 
           <Info className="mr-2 h-4 w-4" /> Properties
         </DropdownMenuItem>
         {!isDirectory && (
-          <DropdownMenuItem onClick={handle("download")}>
+          <DropdownMenuItem disabled>
             <Download className="mr-2 h-4 w-4" /> Download
           </DropdownMenuItem>
         )}
