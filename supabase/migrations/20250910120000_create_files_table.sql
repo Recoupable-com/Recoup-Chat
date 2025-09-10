@@ -1,14 +1,14 @@
 create table if not exists "public"."files" (
     "id" uuid not null default gen_random_uuid(),
     "owner_account_id" uuid not null,
-    "artist_id" uuid not null,
+    "artist_account_id" uuid not null,
     "storage_key" text not null,
     "file_name" text not null,
     "mime_type" text,
     "size_bytes" bigint,
     "description" text,
     "tags" text[] default '{}'::text[],
-    "shared_with_artist_ids" uuid[] default '{}'::uuid[],
+    "shared_with_artist_account_ids" uuid[] default '{}'::uuid[],
     "shared_with_account_ids" uuid[] default '{}'::uuid[],
     "shared_with_all_artist_members" boolean not null default false,
     "created_at" timestamp with time zone not null default now(),
@@ -25,17 +25,17 @@ CREATE UNIQUE INDEX files_storage_key_key ON public.files USING btree (storage_k
 alter table "public"."files" add constraint "files_storage_key_key" UNIQUE using index "files_storage_key_key";
 
 CREATE INDEX idx_files_owner_account_id ON public.files USING btree (owner_account_id);
-CREATE INDEX idx_files_artist_id ON public.files USING btree (artist_id);
+CREATE INDEX idx_files_artist_account_id ON public.files USING btree (artist_account_id);
 CREATE INDEX idx_files_created_at ON public.files USING btree (created_at);
 CREATE INDEX idx_files_shared_with_account_ids ON public.files USING GIN (shared_with_account_ids);
-CREATE INDEX idx_files_shared_with_artist_ids ON public.files USING GIN (shared_with_artist_ids);
+CREATE INDEX idx_files_shared_with_artist_account_ids ON public.files USING GIN (shared_with_artist_account_ids);
 
 -- Foreign keys
-alter table "public"."files" add constraint "files_owner_account_id_fkey" FOREIGN KEY (owner_account_id) REFERENCES accounts(id) ON DELETE CASCADE not valid;
+alter table "public"."files" add constraint "files_owner_account_id_fkey" FOREIGN KEY (owner_account_id) REFERENCES "public"."accounts"(id) ON DELETE CASCADE not valid;
 alter table "public"."files" validate constraint "files_owner_account_id_fkey";
 
-alter table "public"."files" add constraint "files_artist_id_fkey" FOREIGN KEY (artist_id) REFERENCES artists(id) ON DELETE CASCADE not valid;
-alter table "public"."files" validate constraint "files_artist_id_fkey";
+alter table "public"."files" add constraint "files_artist_account_id_fkey" FOREIGN KEY (artist_account_id) REFERENCES "public"."accounts"(id) ON DELETE CASCADE not valid;
+alter table "public"."files" validate constraint "files_artist_account_id_fkey";
 
 -- Grants (consistent with existing migrations)
 grant delete on table "public"."files" to "anon";
