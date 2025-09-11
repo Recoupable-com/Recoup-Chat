@@ -42,10 +42,10 @@ export async function generateMetadata(): Promise<Metadata> {
     openGraph: {
       title: TITLE,
       description: META_DESCRIPTION,
-      images: "/logo.png",
+      images: "/icon-with-background.png",
     },
     manifest: "/manifest.json",
-    icons: [{ rel: "icon", url: "/recoup.png" }],
+    icons: [{ rel: "icon", url: "/icon-with-background.png" }],
     viewport:
       "minimum-scale=1, initial-scale=1, width=device-width, shrink-to-fit=no, viewport-fit=cover",
     themeColor: [{ media: "(prefers-color-scheme: dark)", color: "#fff" }],

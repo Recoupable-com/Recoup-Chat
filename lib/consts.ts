@@ -39,7 +39,7 @@ export const AI_MODEL = "o3-mini";
 export const ANTHROPIC_MODEL = "claude-3-7-sonnet-20250219";
 export const DEFAULT_MODEL = "openai/gpt-5-mini";
 
-export const TITLE = "Recoup";
+export const TITLE = "Recoupable";
 
 export const META_DESCRIPTION =
   "Recoup is an AI agent platform for smarter song rollouts, unforgettable fan experiences, and lasting artist growth. Empowering music executives with actionable insights and next-gen tools.";

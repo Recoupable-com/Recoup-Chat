@@ -91,20 +91,10 @@ export function getToolCallComponent(part: ToolUIPart) {
   const isSearchWebTool =
     toolName === "search_web" || toolName === "web_deep_research";
 
-  // Handle generate_image tool call
-  if (toolName === "generate_image") {
-    return (
-      <div key={toolCallId} className="skeleton">
-        <ImageSkeleton />
-      </div>
-    );
-  } else if (toolName === "nano_banana_generate") {
-    return (
-      <div key={toolCallId} className="skeleton">
-        <ImageSkeleton />
-      </div>
-    );
-  } else if (toolName === "nano_banana_edit") {
+  // Handle image generation tools (including nano banana variants)
+  if (toolName === "generate_image" || 
+      toolName === "nano_banana_generate" || 
+      toolName === "nano_banana_edit") {
     return (
       <div key={toolCallId} className="skeleton">
         <ImageSkeleton />
@@ -253,16 +243,10 @@ export function getToolResultComponent(part: ToolUIPart) {
         <ImageResult result={result as ImageGenerationResult} />
       </div>
     );
-  } else if (toolName === "nano_banana_generate") {
+  } else if (toolName === "nano_banana_generate" || toolName === "nano_banana_edit") {
     return (
       <div key={toolCallId}>
-        <NanoBananaResult result={result as NanoBananaGenerateResult} />
-      </div>
-    );
-  } else if (toolName === "nano_banana_edit") {
-    return (
-      <div key={toolCallId}>
-        <NanoBananaResult result={result as NanoBananaEditResult} />
+        <NanoBananaResult result={result as NanoBananaGenerateResult | NanoBananaEditResult} />
       </div>
     );
   } else if (toolName === "generate_mermaid_diagram") {

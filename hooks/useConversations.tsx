@@ -14,6 +14,7 @@ const useConversations = () => {
   >([]);
   const [quotaExceeded, setQuotaExceeded] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
+  const [previousConversations, setPreviousConversations] = useState<Array<Conversation | ArtistAgent>>([]);
   const { agents } = useArtistAgents();
 
   const addConversation = (conversation: Conversation | ArtistAgent) => {
@@ -30,11 +31,28 @@ const useConversations = () => {
   }, [userData, agents]);
 
   const conversations = useMemo(() => {
-    return allConversations.filter(
+    const filtered = allConversations.filter(
       (item: Conversation | ArtistAgent) =>
         'artist_id' in item && item.artist_id === selectedArtist?.account_id
     );
-  }, [selectedArtist, allConversations]);
+    
+    // Prevent empty state during artist transitions - keep previous conversations visible
+    return filtered.length === 0 && previousConversations.length > 0 && selectedArtist
+      ? previousConversations 
+      : filtered;
+  }, [selectedArtist, allConversations, previousConversations]);
+
+  // Move the state update to a separate useEffect to break the circular dependency
+  useEffect(() => {
+    const filtered = allConversations.filter(
+      (item: Conversation | ArtistAgent) =>
+        'artist_id' in item && item.artist_id === selectedArtist?.account_id
+    );
+    
+    if (filtered.length > 0) {
+      setPreviousConversations(filtered);
+    }
+  }, [allConversations, selectedArtist]);
 
   const fetchConversations = async (accountIdParam?: string) => {
     const accountId = accountIdParam ?? userData?.id;

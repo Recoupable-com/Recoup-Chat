@@ -68,10 +68,5 @@ export async function setupChatRequest(body: ChatRequest): Promise<ChatConfig> {
     },
   };
 
-  // Add toolChoice if provided by nano banana config
-  if (nanoBananaConfig.forcedToolChoice) {
-    (config as ChatConfig & { toolChoice?: unknown }).toolChoice = nanoBananaConfig.forcedToolChoice;
-  }
-
   return config;
 }
