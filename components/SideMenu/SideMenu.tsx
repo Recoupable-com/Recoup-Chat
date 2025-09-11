@@ -13,6 +13,7 @@ import FanGroupNavItem from "../Sidebar/FanGroupNavItem";
 import AgentsNavItem from "../Sidebar/AgentsNavItem";
 import { usePathname } from "next/navigation";
 import ScheduledActionsNavItem from "../Sidebar/ScheduledActionsNavItem";
+import FilesNavItem from "../Sidebar/FilesNavItem";
 
 const SideMenu = ({
   isVisible,
@@ -32,6 +33,7 @@ const SideMenu = ({
   const isAgents = pathname.includes("/agents");
   const isSegments = pathname.includes("/segments");
   const isScheduledActions = pathname.includes("/scheduled-actions");
+  const isFiles = pathname.includes("/files");
 
   const goToItem = (link?: string) => {
     if (isPrepared()) {
@@ -86,6 +88,7 @@ const SideMenu = ({
           <AgentsNavItem isActive={isAgents} onClick={() => goToItem("agents")} />
           <ScheduledActionsNavItem isActive={isScheduledActions} onClick={() => goToItem("scheduled-actions")} />
           <FanGroupNavItem isActive={isSegments} onClick={() => goToItem("segments")} />
+          <FilesNavItem isActive={isFiles} onClick={() => goToItem("files")} />
         </div>
       </div>
       {address && <RecentChats toggleModal={toggleModal} />}

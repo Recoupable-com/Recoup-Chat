@@ -10,14 +10,17 @@ import FanGroupNavItem from "./FanGroupNavItem";
 import AgentsNavItem from "./AgentsNavItem";
 import { RecentChatsSectionSkeleton } from "./RecentChatsSectionSkeleton";
 import ScheduledActionsNavItem from "./ScheduledActionsNavItem";
+import FilesNavItem from "./FilesNavItem";
 
 const Menu = ({ toggleMenuExpanded }: { toggleMenuExpanded: () => void }) => {
-  const { push } = useRouter();
+  const { push, prefetch } = useRouter();
   const pathname = usePathname();
   const { email, isPrepared } = useUserProvider();
   const isAgents = pathname.includes("/agents");
   const isSegments = pathname.includes("/segments");
   const isScheduledActions = pathname.includes("/scheduled-actions");
+  const isFiles = pathname.includes("/files");
+  prefetch('/files');
 
   const goToItem = (link?: string) => {
     if (isPrepared()) {
@@ -50,6 +53,7 @@ const Menu = ({ toggleMenuExpanded }: { toggleMenuExpanded: () => void }) => {
           <AgentsNavItem isActive={isAgents} onClick={() => goToItem("agents")} />
           <ScheduledActionsNavItem isActive={isScheduledActions} onClick={() => goToItem("scheduled-actions")} />
           <FanGroupNavItem isActive={isSegments} onClick={() => goToItem("segments")} />
+          <FilesNavItem isActive={isFiles} onClick={() => goToItem("files")} />
         </div>
       </div>
 
