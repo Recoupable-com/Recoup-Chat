@@ -87,7 +87,6 @@ const Message = ({
                       <ViewingMessage
                         message={message}
                         partText={part?.text || ""}
-                        setMode={setMode}
                       />
                       <Actions className={cn("mt-2", {
                         "justify-start": message.role === "assistant",

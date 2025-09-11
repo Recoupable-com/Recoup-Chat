@@ -1,19 +1,16 @@
-import React, { Dispatch, memo, SetStateAction } from "react";
+import React, { memo } from "react";
 import { UIMessage } from "ai";
 import { cn } from "@/lib/utils";
 import { TextMessagePart } from "./messages";
-import EditButton from "./EditButton";
 
 interface ViewingMessageProps {
   message: UIMessage;
   partText: string;
-  setMode: Dispatch<SetStateAction<"view" | "edit">>;
 }
 
 const ViewingMessageComponent: React.FC<ViewingMessageProps> = ({
   message,
   partText,
-  setMode,
 }) => {
   return (
     <div className="flex flex-row gap-2 items-center">
