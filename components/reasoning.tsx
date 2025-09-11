@@ -207,6 +207,54 @@ export const ReasoningContent = memo(
       return content; // If only one line, keep it as is
     };
 
+    // Process content to properly style headers and markdown
+    const processContentWithHeaders = (content: string) => {
+      const processedContent = getContentWithoutTitle(content);
+      
+      // Split into lines and process each line
+      const lines = processedContent.split('\n');
+      const processedLines = lines.map(line => {
+        // Check if line starts with header markdown
+        const headerMatch = line.match(/^(#{1,6})\s*(.+)$/);
+        if (headerMatch) {
+          const level = headerMatch[1].length;
+          const text = headerMatch[2].trim();
+          
+          // Return styled header based on level
+          switch (level) {
+            case 1:
+              return `<h3 class="text-base font-semibold mt-4 mb-2 text-foreground">${text}</h3>`;
+            case 2:
+              return `<h4 class="text-sm font-semibold mt-3 mb-1 text-foreground">${text}</h4>`;
+            case 3:
+            default:
+              return `<h5 class="text-sm font-medium mt-2 mb-1 text-foreground">${text}</h5>`;
+          }
+        }
+        
+        // Check if line contains **bold** text (treat as header)
+        const boldHeaderMatch = line.match(/^\*\*(.+?)\*\*\s*$/);
+        if (boldHeaderMatch) {
+          const text = boldHeaderMatch[1].trim();
+          return `<h4 class="text-xs font-normal mt-2 mb-1 text-muted-foreground/80">${text}</h4>`;
+        }
+        
+        // Process inline markdown in regular text
+        if (line.trim()) {
+          let processedLine = line
+            .replace(/\*\*(.+?)\*\*/g, '<strong class="font-semibold">$1</strong>') // Bold
+            .replace(/\*(.+?)\*/g, '<em>$1</em>') // Italic
+            .replace(/`(.+?)`/g, '<code class="bg-muted px-1 rounded">$1</code>'); // Code
+          
+          return `<p class="text-xs text-muted-foreground/70 mb-2">${processedLine}</p>`;
+        }
+        
+        return '';
+      });
+      
+      return processedLines.filter(line => line).join('\n');
+    };
+
     return (
       <CollapsibleContent
         className={cn(
@@ -216,7 +264,12 @@ export const ReasoningContent = memo(
         )}
         {...props}
       >
-        <Response className="grid gap-2">{getContentWithoutTitle(children)}</Response>
+        <div 
+          className="grid gap-1"
+          dangerouslySetInnerHTML={{ 
+            __html: processContentWithHeaders(children) 
+          }} 
+        />
       </CollapsibleContent>
     );
   }

@@ -85,3 +85,132 @@ The nano banana implementation is sophisticated:
 5. **Tool Execution**: Direct Fal API calls with proper authentication
 
 **The flow appears architecturally sound - issue is likely authentication or LLM tool selection.**
+
+---
+
+# REASONING HEADERS ISSUE INVESTIGATION
+
+## Current Problem
+When nano banana model is selected, the reasoning response shows headers in the dropdown.
+
+## Root Cause Analysis
+
+### **Google Provider Configuration** (`lib/chat/setupChatRequest.ts` lines 58-63):
+```tsx
+google: {
+  thinkingConfig: {
+    thinkingBudget: 8192,
+    includeThoughts: true,  // ← This causes reasoning headers
+  },
+},
+```
+
+### **The Issue**
+When nano banana model is selected:
+1. **Model Swap**: `handleNanoBananaModel()` swaps to `"google/gemini-2.5-flash-lite"`
+2. **Google Provider**: Uses Google provider configuration
+3. **includeThoughts: true**: Enables reasoning/thinking output
+4. **Reasoning Component**: Displays the thinking process with headers
+
+### **Why This Happens**
+- **Google Models**: Have built-in reasoning/thinking capabilities
+- **includeThoughts: true**: Tells Google to include the thinking process in response
+- **Reasoning Headers**: The thinking process includes structured headers/sections
+- **Reasoning Component**: Parses and displays these headers in the dropdown
+
+## Suggested Solutions (No Changes Made)
+
+### **Option 1: Disable Reasoning for Nano Banana**
+Modify `handleNanoBananaModel.ts` to return custom provider options that disable reasoning:
+```tsx
+return {
+  resolvedModel: "google/gemini-2.5-flash-lite",
+  excludeTools: ["generate_image"],
+  providerOptions: {
+    google: {
+      thinkingConfig: {
+        thinkingBudget: 0,
+        includeThoughts: false,  // Disable reasoning for nano banana
+      },
+    },
+  }
+};
+```
+
+### **Option 2: Conditional Provider Options**
+Add logic in `setupChatRequest.ts` to conditionally disable reasoning when nano banana is selected.
+
+### **Option 3: Reasoning Display Logic**
+Modify reasoning component to handle nano banana responses differently (hide headers, show simplified view).
+
+## Recommended Approach
+**Option 1** is simplest - disable reasoning specifically for nano banana model since users primarily want image generation, not thinking process visibility.
+
+**The reasoning headers appear because Google Flash is configured to show its thinking process when nano banana model triggers the Google provider.**
+
+---
+
+# AI-ELEMENTS REASONING DISPLAY INVESTIGATION
+
+## Current Reasoning Implementation
+
+### **Reasoning Component Structure** (`components/reasoning.tsx`):
+
+**1. ReasoningTrigger (The Dropdown Header)** - Lines 117-189:
+- **Title Extraction**: Takes first line of reasoning content as title
+- **Header Stripping**: Removes markdown formatting (**, *, `, #) from title
+- **Display Logic**: Shows "Generating Banana Edit" or similar as clickable header
+- **Formatting**: `getReasoningTitle()` processes the first line for display
+
+**2. ReasoningContent (The Dropdown Body)** - Lines 198-223:
+- **Content Processing**: `getContentWithoutTitle()` removes first line from body
+- **Display**: Shows remaining reasoning content when expanded
+- **Response Component**: Renders content with `<Response>` component
+
+### **How Headers Appear in Dropdown**
+
+**ReasoningTrigger Title Logic** (Lines 122-147):
+```tsx
+const getReasoningTitle = () => {
+  if (!content) return "Reasoning";
+  
+  // Get the first non-empty line
+  const lines = content.split('\n').filter(line => line.trim());
+  if (lines.length > 0) {
+    let firstLine = lines[0].trim();
+    
+    // Strip markdown formatting
+    firstLine = firstLine
+      .replace(/\*\*(.*?)\*\*/g, '$1') // Remove bold **text**
+      .replace(/\*(.*?)\*/g, '$1')     // Remove italic *text*
+      .replace(/`(.*?)`/g, '$1')       // Remove code `text`
+      .replace(/#{1,6}\s*/g, '')       // Remove headers # ## ###
+      .trim();
+    
+    // If it's a short line (likely a title), use it as-is
+    if (firstLine.length < 100) {
+      return firstLine;  // ← This becomes the dropdown header
+    }
+  }
+  return "Reasoning";
+};
+```
+
+## Why Nano Banana Shows Headers
+
+### **The Flow**:
+1. **Google Flash Reasoning**: Generates structured thinking with headers like "# Generating Banana Edit"
+2. **First Line Extraction**: `getReasoningTitle()` takes the first line
+3. **Header Stripping**: Removes the `#` but keeps "Generating Banana Edit" 
+4. **Dropdown Display**: Shows "Generating Banana Edit" as the clickable header
+5. **Content Body**: Remaining reasoning content shown when expanded
+
+### **Current Behavior** (From Your Screenshot):
+- **Dropdown Header**: "Generating Banana Edit" (processed from `# Generating Banana Edit`)
+- **Dropdown Body**: Detailed reasoning content when clicked
+- **Headers Visible**: Because Google Flash includes structured reasoning with headers
+
+## The Issue
+The reasoning component is working as designed - it extracts the first line as a title for the dropdown. When Google Flash generates reasoning with headers, these become visible in the UI.
+
+**The "headers in dropdown" are actually the reasoning component correctly displaying the structured thinking process from Google Flash model.**
