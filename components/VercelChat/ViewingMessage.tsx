@@ -17,9 +17,6 @@ const ViewingMessageComponent: React.FC<ViewingMessageProps> = ({
 }) => {
   return (
     <div className="flex flex-row gap-2 items-center">
-      {message.role === "user" && (
-        <EditButton onClick={() => setMode("edit")} />
-      )}
       <div
         data-testid="message-content"
         className={cn("flex flex-col gap-4", {

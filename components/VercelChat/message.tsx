@@ -11,6 +11,7 @@ import MessageFileViewer from "./message-file-viewer";
 import { Reasoning, ReasoningTrigger, ReasoningContent } from "@/components/reasoning";
 import { Actions, Action } from "@/components/actions";
 import { RefreshCcwIcon, CopyIcon } from "lucide-react";
+import { PencilEditIcon } from "./icons";
 
 const Message = ({
   message,
@@ -92,6 +93,15 @@ const Message = ({
                         "ml-5 justify-start": message.role === "assistant",
                         "mr-5 justify-end": message.role === "user"
                       })}>
+                        {message.role === "user" && (
+                          <Action
+                            onClick={() => setMode("edit")}
+                            label="Edit"
+                            tooltip="Edit message"
+                          >
+                            <PencilEditIcon className="size-3" />
+                          </Action>
+                        )}
                         {isLastMessage && (
                           <Action
                             onClick={() => reload()}
