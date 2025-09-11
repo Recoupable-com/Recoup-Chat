@@ -10,7 +10,7 @@ import { cn } from '@/lib/utils';
 import { BrainIcon, ChevronDownIcon } from 'lucide-react';
 import type { ComponentProps } from 'react';
 import { createContext, memo, useContext, useEffect, useState } from 'react';
-import { Response } from './response';
+// Response import removed since we now use custom HTML rendering
 
 type ReasoningContextValue = {
   isStreaming: boolean;
@@ -241,7 +241,7 @@ export const ReasoningContent = memo(
         
         // Process inline markdown in regular text
         if (line.trim()) {
-          let processedLine = line
+          const processedLine = line
             .replace(/\*\*(.+?)\*\*/g, '<strong class="font-semibold">$1</strong>') // Bold
             .replace(/\*(.+?)\*/g, '<em>$1</em>') // Italic
             .replace(/`(.+?)`/g, '<code class="bg-muted px-1 rounded">$1</code>'); // Code

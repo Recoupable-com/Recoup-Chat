@@ -98,7 +98,7 @@ const Message = ({
                             label="Edit"
                             tooltip="Edit message"
                           >
-                            <PencilEditIcon className="size-3" />
+                            <PencilEditIcon size={12} />
                           </Action>
                         )}
                         {isLastMessage && (
