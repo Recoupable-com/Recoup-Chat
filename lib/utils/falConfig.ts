@@ -5,10 +5,10 @@
 
 /**
  * Gets the Fal API credentials from environment variables
- * Uses FAL_API_KEY as the standard environment variable name
+ * Uses FAL_KEY as the standard environment variable name (official Fal convention)
  */
 export function getFalCredentials(): string | undefined {
-  return process.env.FAL_API_KEY;
+  return process.env.FAL_KEY;
 }
 
 /**

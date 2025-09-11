@@ -6,7 +6,7 @@ export function mapFalError(originalError: string): string {
   const errorMessage = originalError.toLowerCase();
   
   if (errorMessage.includes("api key") || errorMessage.includes("credentials")) {
-    return "Fal AI API key is missing or invalid. Please check your FAL_API_KEY environment variable.";
+    return "Fal AI API key is missing or invalid. Please check your FAL_KEY environment variable.";
   }
   
   if (errorMessage.includes("content policy")) {
