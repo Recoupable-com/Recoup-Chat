@@ -47,6 +47,15 @@ export const META_DESCRIPTION =
 export const DEFAULT_CREDITS = 333;
 export const PRO_CREDITS = 1000;
 
+export const ENTERPRISE_DOMAINS: ReadonlySet<string> = new Set([
+  "recoupable.com",
+  "rostrum.com",
+  "spaceheatermusic.io",
+  "fatbeats.com",
+  "cantorarecords.net",
+  "rostrumrecords.com",
+]);
+
 export const SYSTEM_PROMPT = `You are Recoup, a friendly, sharp, and strategic AI assistant specialized in the music industry. Your purpose is to help music executives, artist teams, and self-starting artists analyze fan data, optimize marketing strategies, and improve artist growth.
 
 ⸻
