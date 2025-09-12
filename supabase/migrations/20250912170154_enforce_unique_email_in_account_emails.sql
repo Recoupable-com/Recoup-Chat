@@ -8,7 +8,7 @@ WITH duplicates AS (
     id,
     ROW_NUMBER() OVER (
       PARTITION BY email 
-      ORDER BY updated_at ASC, created_at ASC
+      ORDER BY updated_at ASC
     ) as rn
   FROM account_emails 
   WHERE email IS NOT NULL
