@@ -33,9 +33,8 @@ export function ChatInput({
   input,
 }: ChatInputProps) {
   const { selectedArtist, sorted } = useArtistProvider();
-  const { hasPendingUploads, messages, status, model } = useVercelChatContext();
+  const { hasPendingUploads, messages, status, model, isLoadingSignedUrls } = useVercelChatContext();
   const isDisabled = !selectedArtist && sorted.length > 0;
-  const artistId = selectedArtist?.account_id;
 
   const handleSend = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -47,7 +46,7 @@ export function ChatInput({
     }
 
     // Only check input requirements for sending new messages
-    if (input === "" || isDisabled || hasPendingUploads) return;
+    if (input === "" || isDisabled || hasPendingUploads || isLoadingSignedUrls) return;
 
     onSendMessage(event);
   };
@@ -81,7 +80,6 @@ export function ChatInput({
             onChange={setInput}
             disabled={isDisabled || hasPendingUploads}
             model={model}
-            artistId={artistId}
           />
           <PromptInputToolbar>
             <PromptInputTools>
@@ -93,13 +91,13 @@ export function ChatInput({
               
             </PromptInputTools>
             <PromptInputSubmit
-              disabled={isDisabled || hasPendingUploads}
+              disabled={isDisabled || hasPendingUploads || isLoadingSignedUrls}
               status={status}
               className={cn(
                 "rounded-full hover:scale-105 active:scale-95 transition-all",
                 {
                   "cursor-not-allowed opacity-50":
-                    isDisabled || hasPendingUploads,
+                    isDisabled || hasPendingUploads || isLoadingSignedUrls,
                 }
               )}
             />

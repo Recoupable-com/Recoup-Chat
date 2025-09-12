@@ -10,7 +10,6 @@ import getPrepareStepResult from "./toolChains/getPrepareStepResult";
 import { filterExcludedTools } from "./filterExcludedTools";
 import { handleNanoBananaModel } from "./handleNanoBananaModel";
 import attachRichFiles from "./attachRichFiles";
-import { KnowledgeBaseEntry } from "../supabase/getArtistKnowledge";
 
 export async function setupChatRequest(body: ChatRequest): Promise<ChatConfig> {
   const { accountId, artistId, excludeTools, email, artistInstruction, knowledgeBaseText, timezone } = body;
@@ -24,8 +23,9 @@ export async function setupChatRequest(body: ChatRequest): Promise<ChatConfig> {
 
   const messagesWithRichFiles = attachRichFiles(body.messages, {
     artistId: artistId || "",
-    knowledgeFiles: body.knowledgeFiles as KnowledgeBaseEntry[],
   });
+
+  // attachments are passed via message parts; knowledgeFiles not required here
 
   const system = await getSystemPrompt({
     roomId: body.roomId,
