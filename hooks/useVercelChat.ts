@@ -2,7 +2,6 @@ import { useChat } from "@ai-sdk/react";
 import { useMessageLoader } from "./useMessageLoader";
 import { useUserProvider } from "@/providers/UserProvder";
 import { useArtistProvider } from "@/providers/ArtistProvider";
-import { useArtistKnowledge } from "./useArtistKnowledge";
 import { useArtistInstruction } from "./useArtistInstruction";
 import { useArtistKnowledgeText } from "./useArtistKnowledgeText";
 import { useParams } from "next/navigation";
@@ -18,6 +17,8 @@ import { useLocalStorage } from "usehooks-ts";
 import { DEFAULT_MODEL } from "@/lib/consts";
 import { usePaymentProvider } from "@/providers/PaymentProvider";
 import getConversations from "@/lib/getConversations";
+import useArtistFilesForMentions from "@/hooks/useArtistFilesForMentions";
+import type { KnowledgeBaseEntry } from "@/lib/supabase/getArtistKnowledge";
 
 interface UseVercelChatProps {
   id: string;
@@ -54,8 +55,8 @@ export function useVercelChat({
     ? window.location.pathname.match(/\/chat\/([^\/]+)/)?.[1]
     : undefined;
 
-  // Fetch artist knowledge on client to avoid server pre-stream lookup
-  const { data: allKnowledgeFiles = [] } = useArtistKnowledge(artistId);
+  // Load artist files for mentions (from Supabase)
+  const { files: allArtistFiles = [] } = useArtistFilesForMentions();
 
   // Fetch custom artist instruction on client
   const { data: artistInstruction } = useArtistInstruction(artistId);
@@ -72,16 +73,67 @@ export function useVercelChat({
     return Array.from(ids);
   }, [input]);
 
-  // Filter to only selected knowledge files
-  const knowledgeFiles = useMemo(() => {
-    if (!Array.isArray(allKnowledgeFiles) || allKnowledgeFiles.length === 0) return [] as typeof allKnowledgeFiles;
-    if (!selectedFileIds.length) return [] as typeof allKnowledgeFiles;
-    const idSet = new Set(selectedFileIds);
-    return allKnowledgeFiles.filter((f) => idSet.has(f.url));
-  }, [allKnowledgeFiles, selectedFileIds]);
+  // Resolve selected files to signed URLs for attachment
+  const [knowledgeFiles, setKnowledgeFiles] = useState<KnowledgeBaseEntry[]>([]);
+  const [isLoadingSignedUrls, setIsLoadingSignedUrls] = useState(false);
+  useEffect(() => {
+    let cancelled = false;
+    const run = async () => {
+      if (!selectedFileIds.length) {
+        if (!cancelled) setKnowledgeFiles([]);
+        if (!cancelled) setIsLoadingSignedUrls(false);
+        return;
+      }
+      if (!cancelled) setIsLoadingSignedUrls(true);
+      const idSet = new Set(selectedFileIds);
+      const selected = allArtistFiles.filter((f) => idSet.has(f.id));
+      if (selected.length === 0) {
+        if (!cancelled) setKnowledgeFiles([]);
+        if (!cancelled) setIsLoadingSignedUrls(false);
+        return;
+      }
+      try {
+        const entries = await Promise.all(
+          selected.map(async (f) => {
+            const res = await fetch(`/api/files/get-signed-url?key=${encodeURIComponent(f.storage_key)}&expires=600`);
+            if (!res.ok) throw new Error("Failed to get signed URL");
+            const { signedUrl } = (await res.json()) as { signedUrl: string };
+            return {
+              url: signedUrl,
+              name: f.file_name,
+              type: f.mime_type || "application/octet-stream",
+            } as KnowledgeBaseEntry;
+          })
+        );
+        if (!cancelled) setKnowledgeFiles(entries);
+        if (!cancelled) setIsLoadingSignedUrls(false);
+      } catch (e) {
+        console.error(e);
+        if (!cancelled) setKnowledgeFiles([]);
+        if (!cancelled) setIsLoadingSignedUrls(false);
+      }
+    };
+    run();
+    return () => {
+      cancelled = true;
+    };
+  }, [selectedFileIds, allArtistFiles]);
 
-  // Build knowledge base text from selected files only
+  console.log("knowledgeFiles", knowledgeFiles);
+
+  // Build knowledge base text from selected files (text-like types only)
   const { data: knowledgeBaseText } = useArtistKnowledgeText(artistId, knowledgeFiles);
+
+  // Convert selected signed files to FileUIPart attachments (pdf/images)
+  const selectedFileAttachments = useMemo(() => {
+    const outputs: FileUIPart[] = [];
+    for (const f of knowledgeFiles) {
+      if (f.type === "application/pdf" || f.type.startsWith("image")) {
+        outputs.push({ type: "file", url: f.url, mediaType: f.type });
+      }
+    }
+    return outputs;
+  }, [knowledgeFiles]);
 
   const timezone = useMemo(() => Intl.DateTimeFormat().resolvedOptions().timeZone, []);
   
@@ -94,12 +146,11 @@ export function useVercelChat({
         email,
         model,
         timezone,
-        knowledgeFiles,
         artistInstruction,
         knowledgeBaseText,
       },
     }),
-    [id, artistId, userId, email, model, timezone, knowledgeFiles, artistInstruction, knowledgeBaseText]
+    [id, artistId, userId, email, model, timezone, artistInstruction, knowledgeBaseText]
   );
 
   const { messages, status, stop, sendMessage, setMessages, regenerate } =
@@ -134,7 +185,10 @@ export function useVercelChat({
       text: input,
       files: undefined as FileUIPart[] | undefined,
     };
-    if (attachments && attachments.length > 0) payload.files = attachments;
+    const combined: FileUIPart[] = [];
+    if (attachments && attachments.length > 0) combined.push(...attachments);
+    if (selectedFileAttachments.length > 0) combined.push(...selectedFileAttachments);
+    if (combined.length > 0) payload.files = combined;
     sendMessage(payload, chatRequestOptions);
     setInput("");
   };
@@ -278,6 +332,7 @@ export function useVercelChat({
     hasError,
     isGeneratingResponse,
     model,
+    isLoadingSignedUrls,
 
     // Actions
     handleSendMessage,

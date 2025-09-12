@@ -4,7 +4,6 @@ import {
   convertToModelMessages,
   FileUIPart,
 } from "ai";
-import type { KnowledgeBaseEntry } from "../supabase/getArtistKnowledge";
 import createMessageFileAttachment from "./createFileAttachment";
 
 const findLastUserMessageIndex = (messages: UIMessage[]): number => {
@@ -16,19 +15,9 @@ const findLastUserMessageIndex = (messages: UIMessage[]): number => {
 
 const attachRichFiles = (
   messages: UIMessage[],
-  {
-    knowledgeFiles,
-  }: { artistId: string; knowledgeFiles?: KnowledgeBaseEntry[] }
+  { }: { artistId: string }
 ): ModelMessage[] => {
   const lastUserIndex = findLastUserMessageIndex(messages);
-  // Get and process artist knowledge files
-  const supportedFiles = (knowledgeFiles || []).filter(
-    (file) => file.type === "application/pdf" || file.type.startsWith("image")
-  );
-
-  const fileAttachments = supportedFiles
-    .map(createMessageFileAttachment)
-    .filter((attachment): attachment is FileUIPart => attachment !== null);
 
   // Transform messages, adding attachments to the user message
   // Ref. https://ai-sdk.dev/providers/ai-sdk-providers/anthropic#pdf-support
@@ -54,7 +43,6 @@ const attachRichFiles = (
           type: "text" as const,
           text: message.parts.find((part) => part.type === "text")?.text || "",
         },
-        ...fileAttachments,
         ...userAttachments,
       ];
 
