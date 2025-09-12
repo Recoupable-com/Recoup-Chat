@@ -48,6 +48,7 @@ export const DEFAULT_CREDITS = 333;
 export const PRO_CREDITS = 1000;
 
 export const ENTERPRISE_DOMAINS: ReadonlySet<string> = new Set([
+  "recoupable.com",
   "rostrum.com",
   "spaceheatermusic.io",
   "fatbeats.com",
