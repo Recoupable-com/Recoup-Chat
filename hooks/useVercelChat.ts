@@ -343,3 +343,4 @@ export function useVercelChat({
     append,
   };
 }
+
