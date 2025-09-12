@@ -80,16 +80,16 @@ export function useVercelChat({
     let cancelled = false;
     const run = async () => {
       if (!selectedFileIds.length) {
-        if (!cancelled) setKnowledgeFiles([]);
-        if (!cancelled) setIsLoadingSignedUrls(false);
+        if (!cancelled) setKnowledgeFiles((prev) => (prev.length ? [] : prev));
+        if (!cancelled) setIsLoadingSignedUrls((prev) => (prev ? false : prev));
         return;
       }
       if (!cancelled) setIsLoadingSignedUrls(true);
       const idSet = new Set(selectedFileIds);
       const selected = allArtistFiles.filter((f) => idSet.has(f.id));
       if (selected.length === 0) {
-        if (!cancelled) setKnowledgeFiles([]);
-        if (!cancelled) setIsLoadingSignedUrls(false);
+        if (!cancelled) setKnowledgeFiles((prev) => (prev.length ? [] : prev));
+        if (!cancelled) setIsLoadingSignedUrls((prev) => (prev ? false : prev));
         return;
       }
       try {
@@ -109,8 +109,8 @@ export function useVercelChat({
         if (!cancelled) setIsLoadingSignedUrls(false);
       } catch (e) {
         console.error(e);
-        if (!cancelled) setKnowledgeFiles([]);
-        if (!cancelled) setIsLoadingSignedUrls(false);
+        if (!cancelled) setKnowledgeFiles((prev) => (prev.length ? [] : prev));
+        if (!cancelled) setIsLoadingSignedUrls((prev) => (prev ? false : prev));
       }
     };
     run();
@@ -118,8 +118,6 @@ export function useVercelChat({
       cancelled = true;
     };
   }, [selectedFileIds, allArtistFiles]);
-
-  console.log("knowledgeFiles", knowledgeFiles);
 
   // Build knowledge base text from selected files (text-like types only)
   const { data: knowledgeBaseText } = useArtistKnowledgeText(artistId, knowledgeFiles);
