@@ -31,35 +31,60 @@
 - **Avoid configuration confusion** - Developers should know exactly which variables to set
 - **Document configuration requirements** - Make setup clear and unambiguous
 
-## 6. Code Complexity & Abstraction
+## 6. Single Responsibility Principle
+- **One function per file** - Each file should have exactly one responsibility and one reason to change
+- **Clear file naming** - File names should clearly indicate what the single function does
+- **Focused functionality** - Functions should do one thing and do it well
+- **Easier testing** - Single-purpose functions are easier to test in isolation
+- **Better maintainability** - Changes to one function don't affect unrelated functionality
+
+## 7. Code Complexity & Abstraction
 - **Don't abstract prematurely** - Simple conditionals are better than unnecessary abstractions for single use cases
 - **Question over-engineering** - Ask if the complexity is justified by the requirements
 - **Prefer explicit over implicit** - Code should be clear about what it's doing and why
 - **YAGNI (You Aren't Gonna Need It)** - Don't build for hypothetical future needs
 
-## 7. Import & Dependency Management
+## 8. Import & Dependency Management
 - **Use static imports when possible** - Dynamic imports should have clear justification
 - **Document import decisions** - If dynamic imports are necessary, explain why
 - **Consistent import patterns** - Follow the same import style throughout the codebase
 - **Question unnecessary async** - Don't make functions async unless they need to be
 
-## 8. Architectural Consistency
+## 9. Architectural Consistency
 - **Maintain consistent patterns** - If the codebase has established ways of doing things, follow them
 - **Question scope creep** - Changes should be related to the stated purpose of the PR
 - **Separate concerns** - Different types of changes should be in different commits/PRs
 - **Think about maintainability** - Code should be easy to understand and modify later
 
-## 9. Error Handling & Robustness
+## 10. Error Handling & Robustness
 - **Centralize error handling** - Don't duplicate error message mapping and handling logic
 - **Consistent error messages** - Users should see consistent messaging across similar scenarios
 - **Handle edge cases** - Consider what happens when things go wrong
 - **Graceful degradation** - Systems should handle failures elegantly
 
-## 10. Performance & Efficiency
+## 11. Performance & Efficiency
 - **Question unnecessary overhead** - Don't add complexity without performance benefit
 - **Remove unused code paths** - Dead code still has maintenance cost
 - **Optimize for the common case** - Don't over-optimize for edge cases
 - **Consider bundle size** - Unnecessary dependencies and code increase load times
+
+## 12. Security & Maintainability Trade-offs
+- **Prefer battle-tested solutions over custom implementations** - Use established libraries (like Streamdown, Shadcn, ect.) instead of custom when possible.
+- **Speed and Security first, then customize** - Start with speed, secure foundations, then apply custom styling/behavior
+- **Avoid `dangerouslySetInnerHTML` with custom parsing** - Use proper HTML sanitization and escaping
+- **Hybrid approaches for best of both worlds** - Combine library security with custom styling needs
+
+## 13. File Organization & Structure
+- **Avoid generic utility folders for specialized code** - Move domain-specific utilities to dedicated folders (e.g., `/lib/fal/` instead of `/lib/utils/`)
+- **Group related functionality together** - Keep related files in the same directory for easier discovery
+- **Clear directory naming** - Directory names should indicate their specific purpose and domain
+- **Scalable organization** - Structure should accommodate future growth in that domain
+
+## 14. Code Comments & Documentation
+- **Remove comments that don't add value** - Avoid explaining what's already obvious from the code
+- **Comments should explain 'why', not 'what'** - Focus on business logic and reasoning, not implementation details
+- **Self-documenting code over comments** - Prefer clear naming and structure over explanatory comments
+- **Question every comment's necessity** - Ask "what does a junior developer learn from this?"
 
 ## Review Checklist
 
@@ -94,6 +119,26 @@ Before opening a PR, ask these questions:
 - [ ] Does this fit well with the existing architecture?
 - [ ] Will this be easy to modify or extend later?
 - [ ] Am I separating concerns appropriately?
+
+### Security & Dependencies
+- [ ] Am I using battle-tested libraries instead of custom implementations?
+- [ ] Are there any security risks with custom parsing or HTML generation?
+- [ ] Could I achieve the same result with a more secure approach?
+
+### File Organization
+- [ ] Are files organized in appropriate domain-specific directories?
+- [ ] Would a new developer easily find related functionality?
+- [ ] Am I avoiding generic folders for specialized code?
+
+### Comments & Documentation
+- [ ] Do my comments add value that isn't obvious from the code?
+- [ ] Am I explaining 'why' rather than 'what'?
+- [ ] Would removing this comment make the code less clear?
+
+### Single Responsibility
+- [ ] Does each file have exactly one responsibility?
+- [ ] Are function names clear about their single purpose?
+- [ ] Could this function be split into smaller, focused functions?
 
 ---
 
