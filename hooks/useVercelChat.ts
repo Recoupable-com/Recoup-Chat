@@ -76,6 +76,10 @@ export function useVercelChat({
   // Resolve selected files to signed URLs for attachment
   const [knowledgeFiles, setKnowledgeFiles] = useState<KnowledgeBaseEntry[]>([]);
   const [isLoadingSignedUrls, setIsLoadingSignedUrls] = useState(false);
+  // Cache signed URLs by storage_key to avoid redundant refetches
+  const signedUrlCacheRef = useRef<
+    Map<string, { entry: KnowledgeBaseEntry; expiresAt: number }>
+  >(new Map());
   useEffect(() => {
     let cancelled = false;
     const run = async () => {
@@ -84,7 +88,6 @@ export function useVercelChat({
         if (!cancelled) setIsLoadingSignedUrls((prev) => (prev ? false : prev));
         return;
       }
-      if (!cancelled) setIsLoadingSignedUrls(true);
       const idSet = new Set(selectedFileIds);
       const selected = allArtistFiles.filter((f) => idSet.has(f.id));
       if (selected.length === 0) {
@@ -93,18 +96,49 @@ export function useVercelChat({
         return;
       }
       try {
-        const entries = await Promise.all(
-          selected.map(async (f) => {
-            const res = await fetch(`/api/files/get-signed-url?key=${encodeURIComponent(f.storage_key)}&expires=600`);
+        const now = Date.now();
+        const ttlMs = 590_000; // ~9m50s, slightly under the 10m server expiry
+        const cache = signedUrlCacheRef.current;
+
+        // Determine which of the selected files need fetching
+        const toFetch = selected.filter((f) => {
+          const cached = cache.get(f.storage_key);
+          return !(cached && cached.expiresAt > now);
+        });
+
+        if (toFetch.length === 0) {
+          // All selected entries are cached and valid
+          const entries = selected
+            .map((f) => cache.get(f.storage_key)?.entry)
+            .filter((e): e is KnowledgeBaseEntry => Boolean(e));
+          if (!cancelled) setKnowledgeFiles(entries);
+          if (!cancelled) setIsLoadingSignedUrls(false);
+          return;
+        }
+
+        if (!cancelled) setIsLoadingSignedUrls(true);
+
+        await Promise.all(
+          toFetch.map(async (f) => {
+            const res = await fetch(
+              `/api/files/get-signed-url?key=${encodeURIComponent(f.storage_key)}&expires=600`
+            );
             if (!res.ok) throw new Error("Failed to get signed URL");
             const { signedUrl } = (await res.json()) as { signedUrl: string };
-            return {
+            const entry: KnowledgeBaseEntry = {
               url: signedUrl,
               name: f.file_name,
               type: f.mime_type || "application/octet-stream",
-            } as KnowledgeBaseEntry;
+            };
+            cache.set(f.storage_key, { entry, expiresAt: now + ttlMs });
           })
         );
+
+        // Compose final entries in the order of selection
+        const entries = selected
+          .map((f) => signedUrlCacheRef.current.get(f.storage_key)?.entry)
+          .filter((e): e is KnowledgeBaseEntry => Boolean(e));
+
         if (!cancelled) setKnowledgeFiles(entries);
         if (!cancelled) setIsLoadingSignedUrls(false);
       } catch (e) {
