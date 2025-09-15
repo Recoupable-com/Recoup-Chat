@@ -2,7 +2,6 @@ import { useChat } from "@ai-sdk/react";
 import { useMessageLoader } from "./useMessageLoader";
 import { useUserProvider } from "@/providers/UserProvder";
 import { useArtistProvider } from "@/providers/ArtistProvider";
-import { useArtistKnowledge } from "./useArtistKnowledge";
 import { useArtistInstruction } from "./useArtistInstruction";
 import { useArtistKnowledgeText } from "./useArtistKnowledgeText";
 import { useParams } from "next/navigation";
@@ -18,6 +17,11 @@ import { useLocalStorage } from "usehooks-ts";
 import { DEFAULT_MODEL } from "@/lib/consts";
 import { usePaymentProvider } from "@/providers/PaymentProvider";
 import getConversations from "@/lib/getConversations";
+import useArtistFilesForMentions from "@/hooks/useArtistFilesForMentions";
+import type { KnowledgeBaseEntry } from "@/lib/supabase/getArtistKnowledge";
+
+// 30 days in seconds for Supabase signed URL expiry
+const SIGNED_URL_EXPIRES_SECONDS = 60 * 60 * 24 * 30;
 
 interface UseVercelChatProps {
   id: string;
@@ -54,8 +58,8 @@ export function useVercelChat({
     ? window.location.pathname.match(/\/chat\/([^\/]+)/)?.[1]
     : undefined;
 
-  // Fetch artist knowledge on client to avoid server pre-stream lookup
-  const { data: allKnowledgeFiles = [] } = useArtistKnowledge(artistId);
+  // Load artist files for mentions (from Supabase)
+  const { files: allArtistFiles = [] } = useArtistFilesForMentions();
 
   // Fetch custom artist instruction on client
   const { data: artistInstruction } = useArtistInstruction(artistId);
@@ -72,18 +76,99 @@ export function useVercelChat({
     return Array.from(ids);
   }, [input]);
 
-  // Filter to only selected knowledge files
-  const knowledgeFiles = useMemo(() => {
-    if (!Array.isArray(allKnowledgeFiles) || allKnowledgeFiles.length === 0) return [] as typeof allKnowledgeFiles;
-    if (!selectedFileIds.length) return [] as typeof allKnowledgeFiles;
-    const idSet = new Set(selectedFileIds);
-    return allKnowledgeFiles.filter((f) => idSet.has(f.url));
-  }, [allKnowledgeFiles, selectedFileIds]);
+  // Resolve selected files to signed URLs for attachment
+  const [knowledgeFiles, setKnowledgeFiles] = useState<KnowledgeBaseEntry[]>([]);
+  const [isLoadingSignedUrls, setIsLoadingSignedUrls] = useState(false);
+  // Cache signed URLs by storage_key to avoid redundant refetches
+  const signedUrlCacheRef = useRef<Map<string, KnowledgeBaseEntry>>(new Map());
+  useEffect(() => {
+    let cancelled = false;
+    const run = async () => {
+      if (!selectedFileIds.length) {
+        if (!cancelled) setKnowledgeFiles((prev) => (prev.length ? [] : prev));
+        if (!cancelled) setIsLoadingSignedUrls((prev) => (prev ? false : prev));
+        return;
+      }
+      const idSet = new Set(selectedFileIds);
+      const selected = allArtistFiles.filter((f) => idSet.has(f.id));
+      if (selected.length === 0) {
+        if (!cancelled) setKnowledgeFiles((prev) => (prev.length ? [] : prev));
+        if (!cancelled) setIsLoadingSignedUrls((prev) => (prev ? false : prev));
+        return;
+      }
+      try {
+        const cache = signedUrlCacheRef.current;
 
-  // Build knowledge base text from selected files only
+        // Determine which of the selected files need fetching
+        const toFetch = selected.filter((f) => !cache.has(f.storage_key));
+
+        if (toFetch.length === 0) {
+          // All selected entries are cached and valid
+          const entries = selected
+            .map((f) => cache.get(f.storage_key))
+            .filter((e): e is KnowledgeBaseEntry => Boolean(e));
+          if (!cancelled) setKnowledgeFiles(entries);
+          if (!cancelled) setIsLoadingSignedUrls(false);
+          return;
+        }
+
+        if (!cancelled) setIsLoadingSignedUrls(true);
+
+        await Promise.all(
+          toFetch.map(async (f) => {
+            const res = await fetch(
+              `/api/files/get-signed-url?key=${encodeURIComponent(f.storage_key)}&expires=${SIGNED_URL_EXPIRES_SECONDS}`
+            );
+            if (!res.ok) throw new Error("Failed to get signed URL");
+            const { signedUrl } = (await res.json()) as { signedUrl: string };
+            const entry: KnowledgeBaseEntry = {
+              url: signedUrl,
+              name: f.file_name,
+              type: f.mime_type || "application/octet-stream",
+            };
+            cache.set(f.storage_key, entry);
+          })
+        );
+
+        // Compose final entries in the order of selection
+        const entries = selected
+          .map((f) => signedUrlCacheRef.current.get(f.storage_key))
+          .filter((e): e is KnowledgeBaseEntry => Boolean(e));
+
+        if (!cancelled) setKnowledgeFiles(entries);
+        if (!cancelled) setIsLoadingSignedUrls(false);
+      } catch (e) {
+        console.error(e);
+        if (!cancelled) setKnowledgeFiles((prev) => (prev.length ? [] : prev));
+        if (!cancelled) setIsLoadingSignedUrls((prev) => (prev ? false : prev));
+      }
+    };
+    run();
+    return () => {
+      cancelled = true;
+    };
+  }, [selectedFileIds, allArtistFiles]);
+
+  // Build knowledge base text from selected files (text-like types only)
   const { data: knowledgeBaseText } = useArtistKnowledgeText(artistId, knowledgeFiles);
 
+  // Convert selected signed files to FileUIPart attachments (pdf/images)
+  const selectedFileAttachments = useMemo(() => {
+    const outputs: FileUIPart[] = [];
+    for (const f of knowledgeFiles) {
+      if (f.type === "application/pdf" || f.type.startsWith("image")) {
+        outputs.push({ type: "file", url: f.url, mediaType: f.type });
+      }
+    }
+    return outputs;
+  }, [knowledgeFiles]);
+
   const timezone = useMemo(() => Intl.DateTimeFormat().resolvedOptions().timeZone, []);
+  const conversationsIdsKey = useMemo(() => {
+    const ids = conversations.map((c) => ("id" in c ? c.id : c.agentId) as string);
+    return ids.join("|");
+  }, [conversations]);
+  const memoizedConversations = useMemo(() => conversations, [conversationsIdsKey]);
   
   const chatRequestOptions = useMemo(
     () => ({
@@ -94,12 +179,11 @@ export function useVercelChat({
         email,
         model,
         timezone,
-        knowledgeFiles,
         artistInstruction,
         knowledgeBaseText,
       },
     }),
-    [id, artistId, userId, email, model, timezone, knowledgeFiles, artistInstruction, knowledgeBaseText]
+    [id, artistId, userId, email, model, timezone, artistInstruction, knowledgeBaseText]
   );
 
   const { messages, status, stop, sendMessage, setMessages, regenerate } =
@@ -134,7 +218,10 @@ export function useVercelChat({
       text: input,
       files: undefined as FileUIPart[] | undefined,
     };
-    if (attachments && attachments.length > 0) payload.files = attachments;
+    const combined: FileUIPart[] = [];
+    if (attachments && attachments.length > 0) combined.push(...attachments);
+    if (selectedFileAttachments.length > 0) combined.push(...selectedFileAttachments);
+    if (combined.length > 0) payload.files = combined;
     sendMessage(payload, chatRequestOptions);
     setInput("");
   };
@@ -245,13 +332,13 @@ export function useVercelChat({
     if (messagesLengthRef.current !== 2) return;
 
     const run = async () => {
-      const exists = conversations.some(
+      const exists = memoizedConversations.some(
         (c) => ("id" in c ? c.id : c.agentId) === latestChatId
       );
       if (exists) {
         const remoteRooms = await getConversations(userId);
         const existingIds = new Set(
-          conversations
+          memoizedConversations
             .map((c) => ("id" in c ? c.id : undefined))
             .filter((id): id is string => typeof id === "string")
         );
@@ -267,7 +354,7 @@ export function useVercelChat({
     };
 
     run();
-  }, [latestChatId, userId, conversations, fetchConversations, messages.length]);
+  }, [latestChatId, userId, memoizedConversations, fetchConversations, messages.length]);
 
   return {
     // States
@@ -278,6 +365,7 @@ export function useVercelChat({
     hasError,
     isGeneratingResponse,
     model,
+    isLoadingSignedUrls,
 
     // Actions
     handleSendMessage,
@@ -290,3 +378,4 @@ export function useVercelChat({
     append,
   };
 }
+

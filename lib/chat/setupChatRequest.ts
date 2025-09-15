@@ -5,12 +5,10 @@ import { MAX_MESSAGES } from "./const";
 import { type ChatRequest, type ChatConfig } from "./types";
 import { AnthropicProviderOptions } from "@ai-sdk/anthropic";
 import { DEFAULT_MODEL } from "../consts";
-import { stepCountIs } from "ai";
+import { convertToModelMessages, stepCountIs } from "ai";
 import getPrepareStepResult from "./toolChains/getPrepareStepResult";
 import { filterExcludedTools } from "./filterExcludedTools";
 import { handleNanoBananaModel } from "./handleNanoBananaModel";
-import attachRichFiles from "./attachRichFiles";
-import { KnowledgeBaseEntry } from "../supabase/getArtistKnowledge";
 
 export async function setupChatRequest(body: ChatRequest): Promise<ChatConfig> {
   const { accountId, artistId, excludeTools, email, artistInstruction, knowledgeBaseText, timezone } = body;
@@ -21,11 +19,6 @@ export async function setupChatRequest(body: ChatRequest): Promise<ChatConfig> {
   // Use exclude tools from nano banana config if available
   const finalExcludeTools = nanoBananaConfig.excludeTools || excludeTools;
   const tools = filterExcludedTools(getMcpTools(), finalExcludeTools);
-
-  const messagesWithRichFiles = attachRichFiles(body.messages, {
-    artistId: artistId || "",
-    knowledgeFiles: body.knowledgeFiles as KnowledgeBaseEntry[],
-  });
 
   const system = await getSystemPrompt({
     roomId: body.roomId,
@@ -40,7 +33,7 @@ export async function setupChatRequest(body: ChatRequest): Promise<ChatConfig> {
   const config: ChatConfig = {
     model: nanoBananaConfig.resolvedModel || DEFAULT_MODEL,
     system,
-    messages: messagesWithRichFiles.slice(-MAX_MESSAGES),
+    messages: convertToModelMessages(body.messages).slice(-MAX_MESSAGES),
     experimental_generateMessageId: generateUUID,
     tools,
     stopWhen: stepCountIs(111),

@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import { useUserProvider } from "@/providers/UserProvder";
 import { useArtistProvider } from "@/providers/ArtistProvider";
 import getConversations from "@/lib/getConversations";
@@ -20,15 +20,6 @@ const useConversations = () => {
     setAllConversations((prev) => [conversation, ...prev]);
   };
 
-  useEffect(() => {
-    const accountId = userData?.id;
-    if (accountId) {
-      fetchConversations(accountId);
-      return;
-    }
-    return () => setAllConversations([]);
-  }, [userData, agents]);
-
   const conversations = useMemo(() => {
     return allConversations.filter(
       (item: Conversation | ArtistAgent) =>
@@ -36,13 +27,22 @@ const useConversations = () => {
     );
   }, [selectedArtist, allConversations]);
 
-  const fetchConversations = async (accountIdParam?: string) => {
+  const fetchConversations = useCallback(async (accountIdParam?: string) => {
     const accountId = accountIdParam ?? userData?.id;
     if (!accountId) return;
     const data = await getConversations(accountId);
     setAllConversations([...data, ...agents]);
     setIsLoading(false);
-  };
+  }, [userData?.id, agents]);
+
+  useEffect(() => {
+    const accountId = userData?.id;
+    if (accountId) {
+      fetchConversations(accountId);
+      return;
+    }
+    return () => setAllConversations([]);
+  }, [userData, agents, fetchConversations]);
 
   // Optimistic update helpers for creating a new chat room
   const addOptimisticConversation = (topic: string, chatId: string) => {
