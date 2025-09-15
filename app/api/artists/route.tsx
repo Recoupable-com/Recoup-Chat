@@ -1,5 +1,5 @@
-import getAccountArtistIds from "@/lib/supabase/accountArtistIds/getAccountArtistIds";
 import { NextRequest } from "next/server";
+import getArtists from "@/lib/artists/getArtists";
 
 export async function GET(req: NextRequest) {
   const accountId = req.nextUrl.searchParams.get("accountId");
@@ -11,13 +11,9 @@ export async function GET(req: NextRequest) {
         { status: 400 }
       );
     }
-    const result = await getAccountArtistIds({ accountIds: [accountId] });
-    return Response.json(
-      {
-        artists: result,
-      },
-      { status: 200 }
-    );
+
+    const artists = await getArtists(accountId);
+    return Response.json({ artists }, { status: 200 });
   } catch (error) {
     console.error(error);
     const message = error instanceof Error ? error.message : "failed";
