@@ -134,6 +134,11 @@ export function useVercelChat({
   }, [knowledgeFiles]);
 
   const timezone = useMemo(() => Intl.DateTimeFormat().resolvedOptions().timeZone, []);
+  const conversationsIdsKey = useMemo(() => {
+    const ids = conversations.map((c) => ("id" in c ? c.id : c.agentId) as string);
+    return ids.join("|");
+  }, [conversations]);
+  const memoizedConversations = useMemo(() => conversations, [conversationsIdsKey]);
   
   const chatRequestOptions = useMemo(
     () => ({
@@ -297,13 +302,13 @@ export function useVercelChat({
     if (messagesLengthRef.current !== 2) return;
 
     const run = async () => {
-      const exists = conversations.some(
+      const exists = memoizedConversations.some(
         (c) => ("id" in c ? c.id : c.agentId) === latestChatId
       );
       if (exists) {
         const remoteRooms = await getConversations(userId);
         const existingIds = new Set(
-          conversations
+          memoizedConversations
             .map((c) => ("id" in c ? c.id : undefined))
             .filter((id): id is string => typeof id === "string")
         );
@@ -319,7 +324,7 @@ export function useVercelChat({
     };
 
     run();
-  }, [latestChatId, userId, conversations, fetchConversations, messages.length]);
+  }, [latestChatId, userId, memoizedConversations, fetchConversations, messages.length]);
 
   return {
     // States
