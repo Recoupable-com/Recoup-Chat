@@ -56,7 +56,6 @@ export const ENTERPRISE_DOMAINS: ReadonlySet<string> = new Set([
   "rostrumrecords.com",
 ]);
 
-// ROSTRUM PACIFIC ARTISTS
 export const ROSTRUM_ORG_ARTIST_IDS: string[] = [
   "1873859c-dd37-4e9a-9bac-80d3558527a9", // Gatsby Grace
   "3f9dd138-f5f2-442b-b009-222f37cd2972", // Gliiico
