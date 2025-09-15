@@ -56,31 +56,32 @@ export const ENTERPRISE_DOMAINS: ReadonlySet<string> = new Set([
   "rostrumrecords.com",
 ]);
 
+// ROSTRUM PACIFIC ARTISTS
 export const ROSTRUM_ORG_ARTIST_IDS: string[] = [
-  "1873859c-dd37-4e9a-9bac-80d3558527a9",
-  "3f9dd138-f5f2-442b-b009-222f37cd2972",
-  "c182c7b4-5956-4f72-a375-df4240caab97",
-  "2e8e643e-ab6e-49e0-bd58-f06dc39a4ee9",
-  "a92841a7-edab-43b2-b0c4-1ea1d90b2d32",
-  "32e83747-de64-4154-93c5-c001ec02b4a8",
-  "b67e1902-12d8-42f2-9930-b1d40ea8ec4a",
-  "becf071a-a834-47b6-8510-4573d205c3eb",
-  "06c7682c-bcc1-465a-a51d-f640d7edaa84",
-  "496027b3-e60d-4a6f-9eca-4cffd39e911d",
-  "ce53c5cb-97f1-40b3-90b1-3e1bd3ba012a",
-  "8dde6db5-5c6b-4cc4-a6a3-b647c5dbd3a8",
-  "cf7ebe4a-cbbf-4d41-adfa-217da5e6267e",
-  "a61cf649-d323-4bec-a772-cc1331842262",
-  "9b6a7524-af66-4a55-b88f-95241c4ae58a",
-  "f95b0f73-4ac6-4063-9633-e8b17c5c31e4",
-  "4f07f136-b30b-4bf5-bcf9-5ff40989ca8e",
-  "7c351892-2649-4946-8532-56e0314af0cf",
-  "2edaec49-6cef-4846-ac6c-0f44d9c2a92f",
-  "8d61f25a-ca47-4a7e-89c5-1ce643b2f666",
-  "be17e29b-5208-455d-a701-cc8b29c05a54",
-  "94c884f9-34e8-46a4-9240-cf33ebf67390",
-  "8f94490f-5141-4626-a955-e22043d3e3ca",
-  "d21d6bf6-900d-4e77-b15e-6830c03d3936",
+  "1873859c-dd37-4e9a-9bac-80d3558527a9", // Gatsby Grace
+  "3f9dd138-f5f2-442b-b009-222f37cd2972", // Gliiico
+  "c182c7b4-5956-4f72-a375-df4240caab97", // Julius Black
+  "2e8e643e-ab6e-49e0-bd58-f06dc39a4ee9", // No Love For The Middle Child
+  "a92841a7-edab-43b2-b0c4-1ea1d90b2d32", // Murdermart
+  "32e83747-de64-4154-93c5-c001ec02b4a8", // BearHands
+  "b67e1902-12d8-42f2-9930-b1d40ea8ec4a", // Kaash Paige
+  "becf071a-a834-47b6-8510-4573d205c3eb", // Baro Sura
+  "06c7682c-bcc1-465a-a51d-f640d7edaa84", // Niko IS
+  "496027b3-e60d-4a6f-9eca-4cffd39e911d", // Solene
+  "ce53c5cb-97f1-40b3-90b1-3e1bd3ba012a", // Soul The Horn
+  "8dde6db5-5c6b-4cc4-a6a3-b647c5dbd3a8", // Jeezy
+  "cf7ebe4a-cbbf-4d41-adfa-217da5e6267e", // Raekwon
+  "a61cf649-d323-4bec-a772-cc1331842262", // Theo Croker
+  "9b6a7524-af66-4a55-b88f-95241c4ae58a", // Rashad Thomas
+  "f95b0f73-4ac6-4063-9633-e8b17c5c31e4", // Mac Miller
+  "4f07f136-b30b-4bf5-bcf9-5ff40989ca8e", // Wiz Khalifa
+  "7c351892-2649-4946-8532-56e0314af0cf", // DC The Don
+  "2edaec49-6cef-4846-ac6c-0f44d9c2a92f", // MGMT
+  "8d61f25a-ca47-4a7e-89c5-1ce643b2f666", // Mod Sun
+  "be17e29b-5208-455d-a701-cc8b29c05a54", // Alé Araya
+  "94c884f9-34e8-46a4-9240-cf33ebf67390", // El Michels Affair
+  "8f94490f-5141-4626-a955-e22043d3e3ca", // Teammate
+  "d21d6bf6-900d-4e77-b15e-6830c03d3936", // Mike Taylor
 ];
 
 export const SYSTEM_PROMPT = `You are Recoup, a friendly, sharp, and strategic AI assistant specialized in the music industry. Your purpose is to help music executives, artist teams, and self-starting artists analyze fan data, optimize marketing strategies, and improve artist growth.
