@@ -9,7 +9,8 @@ import {
   DropdownMenuSeparator,
   DropdownMenuLabel,
 } from "@/components/ui/dropdown-menu";
-import { MoreVertical, Info, Download, Trash2 } from "lucide-react";
+import { MoreVertical, Info, Trash2 } from "lucide-react";
+import DownloadMenuItem from "./DownloadMenuItem";
 import { useCallback } from "react";
 
 export type FileItemMenuProps = {
@@ -55,9 +56,7 @@ export default function FileItemMenu({ id, fileName, storageKey, isDirectory, on
           <Info className="mr-2 h-4 w-4" /> Properties
         </DropdownMenuItem>
         {!isDirectory && (
-          <DropdownMenuItem disabled>
-            <Download className="mr-2 h-4 w-4" /> Download
-          </DropdownMenuItem>
+          <DownloadMenuItem storageKey={storageKey} fileName={fileName} />
         )}
         <DropdownMenuSeparator />
         {!isDirectory && (
