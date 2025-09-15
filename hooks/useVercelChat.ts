@@ -77,9 +77,7 @@ export function useVercelChat({
   const [knowledgeFiles, setKnowledgeFiles] = useState<KnowledgeBaseEntry[]>([]);
   const [isLoadingSignedUrls, setIsLoadingSignedUrls] = useState(false);
   // Cache signed URLs by storage_key to avoid redundant refetches
-  const signedUrlCacheRef = useRef<
-    Map<string, { entry: KnowledgeBaseEntry; expiresAt: number }>
-  >(new Map());
+  const signedUrlCacheRef = useRef<Map<string, KnowledgeBaseEntry>>(new Map());
   useEffect(() => {
     let cancelled = false;
     const run = async () => {
@@ -96,20 +94,15 @@ export function useVercelChat({
         return;
       }
       try {
-        const now = Date.now();
-        const ttlMs = 590_000; // ~9m50s, slightly under the 10m server expiry
         const cache = signedUrlCacheRef.current;
 
         // Determine which of the selected files need fetching
-        const toFetch = selected.filter((f) => {
-          const cached = cache.get(f.storage_key);
-          return !(cached && cached.expiresAt > now);
-        });
+        const toFetch = selected.filter((f) => !cache.has(f.storage_key));
 
         if (toFetch.length === 0) {
           // All selected entries are cached and valid
           const entries = selected
-            .map((f) => cache.get(f.storage_key)?.entry)
+            .map((f) => cache.get(f.storage_key))
             .filter((e): e is KnowledgeBaseEntry => Boolean(e));
           if (!cancelled) setKnowledgeFiles(entries);
           if (!cancelled) setIsLoadingSignedUrls(false);
@@ -121,7 +114,7 @@ export function useVercelChat({
         await Promise.all(
           toFetch.map(async (f) => {
             const res = await fetch(
-              `/api/files/get-signed-url?key=${encodeURIComponent(f.storage_key)}&expires=600`
+              `/api/files/get-signed-url?key=${encodeURIComponent(f.storage_key)}&expires=2592000`
             );
             if (!res.ok) throw new Error("Failed to get signed URL");
             const { signedUrl } = (await res.json()) as { signedUrl: string };
@@ -130,13 +123,13 @@ export function useVercelChat({
               name: f.file_name,
               type: f.mime_type || "application/octet-stream",
             };
-            cache.set(f.storage_key, { entry, expiresAt: now + ttlMs });
+            cache.set(f.storage_key, entry);
           })
         );
 
         // Compose final entries in the order of selection
         const entries = selected
-          .map((f) => signedUrlCacheRef.current.get(f.storage_key)?.entry)
+          .map((f) => signedUrlCacheRef.current.get(f.storage_key))
           .filter((e): e is KnowledgeBaseEntry => Boolean(e));
 
         if (!cancelled) setKnowledgeFiles(entries);
