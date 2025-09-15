@@ -7,11 +7,15 @@ export async function GET(req: Request) {
     const { searchParams } = new URL(req.url);
     const key = searchParams.get("key") || "";
     const expiresParam = searchParams.get("expires");
-    const ONE_WEEK = 7 * 24 * 60 * 60; // 604800 seconds
-    const expires = Math.min(
-      ONE_WEEK,
-      Math.max(60, Number.isFinite(Number(expiresParam)) ? Number(expiresParam) : ONE_WEEK)
-    );
+    const DEFAULT_EXPIRES_SEC = 300; // 5 minutes
+    let expires = DEFAULT_EXPIRES_SEC;
+    if (expiresParam !== null && expiresParam !== "") {
+      const parsed = Number(expiresParam);
+      if (!Number.isFinite(parsed) || parsed <= 0) {
+        return NextResponse.json({ error: "Invalid expires value" }, { status: 400 });
+      }
+      expires = parsed;
+    }
     if (!isValidStorageKey(key)) return NextResponse.json({ error: "Invalid key" }, { status: 400 });
 
     const signedUrl = await createSignedUrlForKey(key, expires);
