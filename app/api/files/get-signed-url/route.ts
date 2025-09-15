@@ -2,6 +2,8 @@ import { NextResponse } from "next/server";
 import isValidStorageKey from "@/utils/isValidStorageKey";
 import { createSignedUrlForKey } from "@/lib/supabase/storage/createSignedUrl";
 
+export const runtime = "edge";
+
 export async function GET(req: Request) {
   try {
     const { searchParams } = new URL(req.url);
