@@ -20,6 +20,9 @@ import getConversations from "@/lib/getConversations";
 import useArtistFilesForMentions from "@/hooks/useArtistFilesForMentions";
 import type { KnowledgeBaseEntry } from "@/lib/supabase/getArtistKnowledge";
 
+// 30 days in seconds for Supabase signed URL expiry
+const SIGNED_URL_EXPIRES_SECONDS = 60 * 60 * 24 * 30;
+
 interface UseVercelChatProps {
   id: string;
   initialMessages?: UIMessage[];
@@ -114,7 +117,7 @@ export function useVercelChat({
         await Promise.all(
           toFetch.map(async (f) => {
             const res = await fetch(
-              `/api/files/get-signed-url?key=${encodeURIComponent(f.storage_key)}&expires=2592000`
+              `/api/files/get-signed-url?key=${encodeURIComponent(f.storage_key)}&expires=${SIGNED_URL_EXPIRES_SECONDS}`
             );
             if (!res.ok) throw new Error("Failed to get signed URL");
             const { signedUrl } = (await res.json()) as { signedUrl: string };
