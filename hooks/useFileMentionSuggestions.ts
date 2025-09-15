@@ -21,6 +21,15 @@ export default function useFileMentionSuggestions(value: string) {
       const q = (query || "").toLowerCase();
       const items: GroupedSuggestion[] = artistFiles
         .filter((f) => !f.is_directory)
+        .filter((f) => {
+          const type = (f.mime_type || "").toLowerCase();
+          if (type) return type === "application/pdf" || type.startsWith("image/");
+          const name = (f.relative_path || f.file_name || "").toLowerCase();
+          return (
+            name.endsWith(".pdf") ||
+            /\.(png|jpg|jpeg|gif|webp|svg)$/i.test(name)
+          );
+        })
         .map((f) => {
           const rel = f.relative_path || f.file_name;
           const lastSlash = rel.lastIndexOf("/");
