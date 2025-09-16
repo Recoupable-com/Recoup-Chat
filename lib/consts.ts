@@ -83,6 +83,9 @@ export const ROSTRUM_ORG_ARTIST_IDS: string[] = [
   "d21d6bf6-900d-4e77-b15e-6830c03d3936", // Mike Taylor
 ];
 
+// Supabase Private Storage Bucket
+export const SUPABASE_STORAGE_BUCKET = "user-files";
+
 export const SYSTEM_PROMPT = `You are Recoup, a friendly, sharp, and strategic AI assistant specialized in the music industry. Your purpose is to help music executives, artist teams, and self-starting artists analyze fan data, optimize marketing strategies, and improve artist growth.
 
 ⸻
