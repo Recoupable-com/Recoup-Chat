@@ -13,19 +13,9 @@ import useArtists from "@/hooks/useArtists";
 import { Separator } from "../ui/separator";
 import useFileAccessGrant from "@/hooks/useFileAccessGrant";
 import useUser from "@/hooks/useUser";
-import { useQuery, useQueryClient } from "@tanstack/react-query";
+import { useQuery } from "@tanstack/react-query";
 import { Skeleton } from "@/components/ui/skeleton";
-import {
-  AlertDialog,
-  AlertDialogAction,
-  AlertDialogCancel,
-  AlertDialogContent,
-  AlertDialogDescription,
-  AlertDialogFooter,
-  AlertDialogHeader,
-  AlertDialogTitle,
-  AlertDialogTrigger,
-} from "@/components/ui/alert-dialog";
+import RevokeAccessDialog from "@/components/Files/RevokeAccessDialog";
 
 type ArtistAccessSelectorProps = {
   disabled?: boolean;
@@ -53,8 +43,6 @@ export default function ArtistAccessSelector({
     success: boolean;
     data?: { artists: ArtistAccess[]; count: number; fileId: string; accountId: string };
   };
-
-  const queryClient = useQueryClient();
 
   const { data: accessData, isLoading: isAccessLoading } = useQuery<AccessArtistsResponse | null>({
     queryKey: ["file-access-artists", fileId, accountId],
@@ -160,36 +148,16 @@ export default function ArtistAccessSelector({
             {accessData.data.artists.map((a: ArtistAccess) => (
               <Badge key={a.artistId} variant="secondary" className="pr-1">
                 {a.artistName || a.artistEmail || a.artistId}
-                <AlertDialog>
-                  <AlertDialogTrigger asChild>
-                    <button className="ml-1" aria-label="Revoke">
-                      <X className="h-3 w-3" />
-                    </button>
-                  </AlertDialogTrigger>
-                  <AlertDialogContent>
-                    <AlertDialogHeader>
-                      <AlertDialogTitle>Remove access?</AlertDialogTitle>
-                      <AlertDialogDescription>
-                        This will revoke access to this file for the selected artist. You can grant access again later.
-                      </AlertDialogDescription>
-                    </AlertDialogHeader>
-                    <AlertDialogFooter>
-                      <AlertDialogCancel>Cancel</AlertDialogCancel>
-                      <AlertDialogAction
-                        onClick={async () => {
-                          await fetch("/api/files/revoke-access", {
-                            method: "POST",
-                            headers: { "Content-Type": "application/json" },
-                            body: JSON.stringify({ fileId, artistId: a.artistId }),
-                          });
-                          queryClient.invalidateQueries({ queryKey: ["file-access-artists", fileId, accountId] });
-                        }}
-                      >
-                        Remove
-                      </AlertDialogAction>
-                    </AlertDialogFooter>
-                  </AlertDialogContent>
-                </AlertDialog>
+                <RevokeAccessDialog
+                  fileId={fileId}
+                  artistId={a.artistId}
+                  accountId={accountId}
+                  artistLabel={a.artistName || a.artistEmail || a.artistId}
+                >
+                  <button className="ml-1" aria-label="Revoke">
+                    <X className="h-3 w-3" />
+                  </button>
+                </RevokeAccessDialog>
               </Badge>
             ))}
           </div>
