@@ -39,7 +39,7 @@ export default function FileMentionsInput({ value, onChange, disabled, model }: 
 			suggestionsPortalHost={portalHost}
 			allowSuggestionsAboveCursor
 			customSuggestionsContainer={(children) => (
-				<Card className="z-[70] shadow-lg border rounded-xl overflow-hidden p-1" style={{ background: "hsl(var(--background))", minWidth: 320, maxHeight: 360, overflow: "auto" }}>{children}</Card>
+				<Card className="z-[70] shadow-lg border rounded-xl overflow-hidden p-1 max-w-32" style={{ background: "hsl(var(--background))", minWidth: 320, maxHeight: 360, overflow: "auto" }}>{children}</Card>
 			)}
 			placeholder={
 				model === "fal-ai/nano-banana/edit"
