@@ -13,8 +13,8 @@ import useArtists from "@/hooks/useArtists";
 import { Separator } from "../ui/separator";
 import useFileAccessGrant from "@/hooks/useFileAccessGrant";
 import useUser from "@/hooks/useUser";
-import { Skeleton } from "@/components/ui/skeleton";
 import HasAccessList from "@/components/Files/HasAccessList";
+import ArtistAccessSelectorSkeleton from "@/components/Files/ArtistAccessSelectorSkeleton";
 import type { ArtistAccess } from "@/components/Files/types";
 
 type ArtistAccessSelectorProps = {
@@ -42,19 +42,7 @@ export default function ArtistAccessSelector({
     <div className="space-y-2">
       <Separator />
       <div className="text-xs text-muted-foreground">Share with artists</div>
-      {isUiLoading ? (
-        <div className="space-y-2">
-          <div className="flex gap-2">
-            <Skeleton className="h-8 w-28" />
-            <Skeleton className="h-8 w-24" />
-          </div>
-          <div className="flex flex-wrap gap-1">
-            <Skeleton className="h-6 w-24" />
-            <Skeleton className="h-6 w-20" />
-            <Skeleton className="h-6 w-16" />
-          </div>
-        </div>
-      ) : null}
+      {isUiLoading ? <ArtistAccessSelectorSkeleton /> : null}
       {/* Access list now merged below */}
       {!isUiLoading && (
         <>
