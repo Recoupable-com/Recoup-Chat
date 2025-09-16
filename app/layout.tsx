@@ -12,6 +12,7 @@ import ArtistsSidebar from "@/components/Artists/ArtistsSidebar";
 import { ToastContainer } from "react-toastify";
 import { Analytics } from "@vercel/analytics/react";
 import ArtistSelectionOverlay from "@/components/ArtistSelectionOverlay";
+import { Toaster } from "sonner";
 
 export const viewport: Viewport = {
   width: "device-width",
@@ -78,6 +79,7 @@ export default function RootLayout({
             </div>
             <ArtistSelectionOverlay />
             <ToastContainer />
+            <Toaster />
           </Providers>
         </Suspense>
         <Analytics />

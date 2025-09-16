@@ -1,7 +1,9 @@
 "use client";
 
+import { useState } from "react";
 import { DropdownMenuItem } from "@/components/ui/dropdown-menu";
-import { Download } from "lucide-react";
+import { Download, Loader2 } from "lucide-react";
+import { toast } from "sonner";
 
 type DownloadMenuItemProps = {
   storageKey: string;
@@ -12,9 +14,15 @@ export default function DownloadMenuItem({
   storageKey,
   fileName,
 }: DownloadMenuItemProps) {
+  const [isLoading, setIsLoading] = useState(false);
+
   const handleDownload = async () => {
-    if (!storageKey) return;
+    if (!storageKey || isLoading) return;
     try {
+      setIsLoading(true);
+      toast.info("Preparing download...", {
+        description: `Starting download of ${fileName}`,
+      });
       const res = await fetch(
         `/api/files/get-signed-url?key=${encodeURIComponent(storageKey)}`
       );
@@ -43,15 +51,28 @@ export default function DownloadMenuItem({
       a.click();
       a.remove();
       setTimeout(() => URL.revokeObjectURL(url), 1000);
+      
+      toast.success("Download started", {
+        description: `Your browser should now prompt you to save ${name}`,
+      });
     } catch (error) {
-        console.error("Error downloading file", error);
+      console.error("Error downloading file", error);
+      toast.error("Download failed", {
+        description: "Unable to download the file. Please try again.",
+      });
+    } finally {
+      setIsLoading(false);
     }
   };
 
   return (
-    <DropdownMenuItem onClick={handleDownload}>
-      <Download className="mr-2 h-4 w-4" />
-      Download
+    <DropdownMenuItem onClick={handleDownload} disabled={isLoading} aria-disabled={isLoading}>
+      {isLoading ? (
+        <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+      ) : (
+        <Download className="mr-2 h-4 w-4" />
+      )}
+      {isLoading ? "Preparing..." : "Download"}
     </DropdownMenuItem>
   );
 }

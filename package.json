@@ -91,6 +91,7 @@
     "remark-gfm": "4",
     "sharp": "^0.34.2",
     "socket.io-client": "^4.8.1",
+    "sonner": "^2.0.7",
     "streamdown": "^1.1.6",
     "stripe": "^17.4.0",
     "swiper": "^11.1.15",
