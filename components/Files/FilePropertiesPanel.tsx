@@ -4,6 +4,7 @@ import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { X } from "lucide-react";
 import { useMemo } from "react";
+import ArtistAccessSelector from "./ArtistAccessSelector";
 
 export type FileMeta = {
   id: string;
@@ -67,6 +68,9 @@ export default function FilePropertiesPanel({ open, file, onClose, base }: FileP
               <div className="col-span-1 text-xs text-muted-foreground">Path</div>
               <div className="col-span-2 break-all">{friendlyPath}</div>
             </div>
+            {!isDirectory && (
+              <ArtistAccessSelector />
+            )}
           </div>
         ) : (
           <div className="text-sm text-muted-foreground">No file selected.</div>
