@@ -23,37 +23,32 @@ export default function DownloadMenuItem({
       toast.info("Preparing download...", {
         description: `Starting download of ${fileName}`,
       });
+      
       const res = await fetch(
         `/api/files/get-signed-url?key=${encodeURIComponent(storageKey)}`
       );
       if (!res.ok) throw new Error("Failed to get signed URL");
       const { signedUrl } = (await res.json()) as { signedUrl: string };
 
-      // Fetch file as Blob to force OS save dialog
+      // Fetch as Blob to force OS save dialog
       const fileRes = await fetch(signedUrl);
       if (!fileRes.ok) throw new Error("Failed to fetch file");
       const blob = await fileRes.blob();
 
-      // Attempt to derive filename from headers
-      const disposition = fileRes.headers.get("content-disposition") || "";
-      let name = fileName || "download";
-      const cdMatch = /filename\*=UTF-8''([^;]+)|filename="?([^";]+)"?/i.exec(disposition);
-      if (cdMatch) {
-        const candidate = decodeURIComponent(cdMatch[1] ?? cdMatch[2]);
-        if (candidate) name = candidate;
-      }
-
-      const url = URL.createObjectURL(blob);
+      // Create blob URL and trigger download
+      const blobUrl = URL.createObjectURL(blob);
       const a = document.createElement("a");
-      a.href = url;
-      a.download = name;
+      a.href = blobUrl;
+      a.download = fileName || "download";
       document.body.appendChild(a);
       a.click();
       a.remove();
-      setTimeout(() => URL.revokeObjectURL(url), 1000);
+      
+      // Clean up blob URL
+      setTimeout(() => URL.revokeObjectURL(blobUrl), 1000);
       
       toast.success("Download started", {
-        description: `Your browser should now prompt you to save ${name}`,
+        description: `Your browser should now prompt you to save ${fileName}`,
       });
     } catch (error) {
       console.error("Error downloading file", error);
