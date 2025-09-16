@@ -1,14 +1,20 @@
 import { useCallback, useState } from "react";
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, useQueryClient, useQuery } from "@tanstack/react-query";
 import { toast } from "sonner";
+import useUser from "@/hooks/useUser";
+import type { ArtistAccess, AccessArtistsResponse } from "@/components/Files/types";
 
 type AccessGrant = {
   fileId: string;
   grantedBy: string;
+  invalidateKeys?: unknown[][]; // Query keys to invalidate after success
 };
 
-const useFileAccessGrant = ({ fileId, grantedBy }: AccessGrant) => {
+const useFileAccessGrant = ({ fileId, grantedBy, invalidateKeys }: AccessGrant) => {
   const [selected, setSelected] = useState<string[]>([]);
+  const queryClient = useQueryClient();
+  const { userData } = useUser();
+  const accountId = userData?.account_id;
   const { mutate, isPending: isSavingAccess } = useMutation({
     mutationFn: async (selected: string[]) => {
       const response = await fetch("/api/files/grant-access", {
@@ -29,6 +35,14 @@ const useFileAccessGrant = ({ fileId, grantedBy }: AccessGrant) => {
         } else {
           toast.success(`Access granted to ${summary.successful} artists`);
         }
+        // Invalidate provided query keys to refresh dependent views
+        if (Array.isArray(invalidateKeys)) {
+          for (const key of invalidateKeys) {
+            if (Array.isArray(key)) {
+              queryClient.invalidateQueries({ queryKey: key as readonly unknown[] });
+            }
+          }
+        }
       } else {
         toast.error(data.message || "Failed to grant access");
       }
@@ -38,6 +52,23 @@ const useFileAccessGrant = ({ fileId, grantedBy }: AccessGrant) => {
       toast.error(errorMessage);
     },
   });
+
+  // Fetch existing access data
+  const { data: accessData, isLoading: isAccessLoading } = useQuery<AccessArtistsResponse | null>({
+    queryKey: ["file-access-artists", fileId, accountId],
+    queryFn: async () => {
+      if (!accountId) return null;
+      const res = await fetch(`/api/files/access-artists?fileId=${encodeURIComponent(fileId)}&accountId=${encodeURIComponent(accountId)}`);
+      if (!res.ok) return null;
+      return res.json();
+    },
+    enabled: Boolean(fileId && accountId),
+    staleTime: 30_000,
+  });
+
+  // Treat UI as loading until we have an accountId and the query has resolved
+  const isUiLoading = !accountId || isAccessLoading;
+  const alreadyHasAccessIds: string[] = (accessData?.data?.artists || []).map((a: ArtistAccess) => a.artistId);
 
   const add = useCallback(
     (id: string) =>
@@ -61,6 +92,9 @@ const useFileAccessGrant = ({ fileId, grantedBy }: AccessGrant) => {
     remove,
     onGrant,
     isSavingAccess,
+    accessData,
+    isUiLoading,
+    alreadyHasAccessIds,
   };
 };
 
