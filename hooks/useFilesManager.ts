@@ -11,6 +11,9 @@ export interface ListedFileRow {
   storage_key: string;
   mime_type: string | null;
   is_directory?: boolean;
+  is_shared?: boolean;
+  access_granted_at?: string;
+  scope?: "read_only" | "admin";
 }
 
 export default function useFilesManager(activePath?: string) {
