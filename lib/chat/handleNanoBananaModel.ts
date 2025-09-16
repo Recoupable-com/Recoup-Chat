@@ -17,7 +17,7 @@ export function handleNanoBananaModel(body: ChatRequest) {
     };
   }
 
-  console.log("🍌 NANO BANANA: Setting up with nano banana tools only");
+  // Configure nano banana model with appropriate tool filtering
   
   return {
     resolvedModel: "google/gemini-2.5-flash-lite",

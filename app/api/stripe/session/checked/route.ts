@@ -5,6 +5,10 @@ export async function GET(req: NextRequest) {
   const sessionId = req.nextUrl.searchParams.get("sessionId");
   const accountId = req.nextUrl.searchParams.get("accountId");
 
+  if (!sessionId) {
+    return Response.json({ message: "sessionId is required" }, { status: 400 });
+  }
+
   try {
     const session = await stripeClient.checkout.sessions.update(sessionId, {
       metadata: {

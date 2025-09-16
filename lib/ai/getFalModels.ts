@@ -4,8 +4,7 @@ import { GatewayLanguageModelEntry } from "@ai-sdk/gateway";
  * Returns the list of available Fal AI models.
  * For now, returns a curated list of popular Fal models.
  */
-export const getFalModels = async (): Promise<GatewayLanguageModelEntry[]> => {
-  console.log("🎨 FAL MODELS: Returning curated Fal models list");
+export const getFalModels = (): GatewayLanguageModelEntry[] => {
   
   // Curated list of popular and useful Fal models
   const falModels: GatewayLanguageModelEntry[] = [
@@ -14,8 +13,8 @@ export const getFalModels = async (): Promise<GatewayLanguageModelEntry[]> => {
       name: "Nano Banana",
       description: "Google's state-of-the-art image generation and editing model",
       pricing: {
-        input: "0.0001", // Estimated - adjust based on actual Fal pricing
-        output: "0.001"
+        input: "0.0000", // Free for testing
+        output: "0.0000"
       },
       specification: {
         specificationVersion: "v2",
@@ -67,6 +66,5 @@ export const getFalModels = async (): Promise<GatewayLanguageModelEntry[]> => {
     }
   ];
 
-  console.log("🎨 FAL MODELS: Returning", falModels.length, "models");
   return falModels;
 };

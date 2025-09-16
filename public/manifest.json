@@ -1,6 +1,6 @@
 {
-"name": "Recoup",
-"short_name": "Recoup",
+"name": "Recoupable",
+"short_name": "Recoupable",
 "start_url": "/",
 "scope": "/",
 "display": "standalone",
@@ -12,16 +12,16 @@
 "orientation": "portrait",
 "icons": [
     {
-        "src": "/recoup.png",
+        "src": "/icon-with-background.png",
         "sizes": "any",
         "type": "image/png",
         "purpose": "any"
     },
     {
-        "src": "/recoup.png",
+        "src": "/icon-with-background.png",
         "sizes": "360x360",
         "type": "image/png",
-        "description": "recoup"
+        "description": "recoupable"
     }
 ]
 }
