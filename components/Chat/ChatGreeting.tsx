@@ -1,14 +1,5 @@
 import { Plus_Jakarta_Sans } from "next/font/google";
-import { useUserProvider } from "@/providers/UserProvder";
-import useIsMobile from "@/hooks/useIsMobile";
 import { useArtistProvider } from "@/providers/ArtistProvider";
-import WordTypewriter from "../ui/word-typewriter";
-import { ReactNode } from "react";
-import YoutubeIcon from "@/public/brand-logos/youtube.png";
-import InstagramIcon from "@/public/brand-logos/instagram.png";
-import Image from "next/image";
-import TiktokIcon from "@/public/brand-logos/tiktok.png";
-import SpotifyIcon from "@/public/brand-logos/spotify.png";
 
 const plusJakartaSans = Plus_Jakarta_Sans({
   subsets: ["latin"],
@@ -16,14 +7,11 @@ const plusJakartaSans = Plus_Jakarta_Sans({
 });
 
 /**
- * Displays the greeting message with user's name and prompt
- * Accesses user data directly from providers
+ * Displays a simple greeting message asking about the selected artist
+ * Shows "Ask me about [Selected Artist]" or fallback text
  */
 export function ChatGreeting({ isVisible }: { isVisible: boolean }) {
-  const { userData } = useUserProvider();
   const { selectedArtist } = useArtistProvider();
-  const isMobile = useIsMobile();
-  const firstName = userData?.name?.split(" ")[0] || "";
   const artistName = selectedArtist?.name || "";
   const isArtistSelected = !!selectedArtist;
 
@@ -43,93 +31,17 @@ export function ChatGreeting({ isVisible }: { isVisible: boolean }) {
   const fadeStart = "opacity-0";
   const fadeEnd = "opacity-100";
 
-  const wordComponent = (word: string, icon?: ReactNode) => {
-    return (
-      <span className="inline-flex items-center gap-3">
-        {icon && (
-          <span className="inline-flex items-center justify-center w-5 h-5 opacity-70">
-            {icon}
-          </span>
-        )}
-        {word}
-      </span>
-    );
-  };
-
-  // Mobile version - simple text
-  if (isMobile) {
-    return (
-      <div
-        className={`
-          ${textStyle} mb-6 mt-4 py-3 ${fadeBase}
-          ${isVisible ? fadeEnd : fadeStart}
-          text-center w-full
-        `}
-      >
-        <span className="text-black font-medium">
-          Ask me about {isArtistSelected ? artistName : "your artist"}
-        </span>
-      </div>
-    );
-  }
-
-  // Desktop version - with animation
   return (
     <div
       className={`
-        ${textStyle} mb-2 ${fadeBase}
+        ${textStyle} mb-6 mt-4 py-3 ${fadeBase}
         ${isVisible ? fadeEnd : fadeStart}
+        text-center w-full
       `}
     >
-      {firstName ? (
-        <div className="flex items-baseline flex-wrap gap-x-2">
-          <span className="text-black font-medium">Hey {firstName}</span>
-          <span className="text-[18px] sm:text-[22px]">👋</span>
-          <span className="text-black">
-            Ask me about{" "}
-            {isArtistSelected ? (
-              <span className="text-black">{artistName}&apos;s</span>
-            ) : (
-              <span className="text-black">your artist&apos;s</span>
-            )}
-          </span>
-          <WordTypewriter
-            duration={5000}
-            typingSpeed={200}
-            className="text-black font-semibold"
-            words={[
-              wordComponent("YouTube", <Image src={YoutubeIcon} alt="YouTube" className="w-full h-full object-contain" />),
-              wordComponent("Instagram", <Image src={InstagramIcon} alt="Instagram" className="w-full h-full object-contain" />),
-              wordComponent("TikTok", <Image src={TiktokIcon} alt="TikTok" className="w-full h-full object-contain" />),
-              wordComponent("Spotify", <Image src={SpotifyIcon} alt="Spotify" className="w-full h-full object-contain" />),
-            ]}
-          />
-        </div>
-      ) : (
-        <div className="flex items-baseline flex-wrap gap-x-2">
-          <span className="text-black font-medium">Hey there</span>
-          <span className="text-[18px] sm:text-[22px]">👋</span>
-          <span className="text-black">
-            Ask me about{" "}
-            {isArtistSelected ? (
-              <span className="text-black">{artistName}&apos;s</span>
-            ) : (
-              <span className="text-black">your artist&apos;s</span>
-            )}
-          </span>
-          <WordTypewriter
-            duration={4000}
-            typingSpeed={180}
-            className="text-black font-semibold"
-            words={[
-              wordComponent("YouTube", <Image src={YoutubeIcon} alt="YouTube" className="w-full h-full object-contain" />),
-              wordComponent("Instagram", <Image src={InstagramIcon} alt="Instagram" className="w-full h-full object-contain" />),
-              wordComponent("TikTok", <Image src={TiktokIcon} alt="TikTok" className="w-full h-full object-contain" />),
-              wordComponent("Spotify", <Image src={SpotifyIcon} alt="Spotify" className="w-full h-full object-contain" />),
-            ]}
-          />
-        </div>
-      )}
+      <span className="text-black font-medium">
+        Ask me about {isArtistSelected ? artistName : "your artist"}
+      </span>
     </div>
   );
 }
