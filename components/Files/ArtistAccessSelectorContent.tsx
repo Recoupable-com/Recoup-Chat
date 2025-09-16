@@ -8,7 +8,7 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { ChevronDown, Loader2, X } from "lucide-react";
+import { ChevronDown, Loader, X } from "lucide-react";
 import useArtists from "@/hooks/useArtists";
 
 type ArtistAccessSelectorContentProps = {
@@ -85,7 +85,7 @@ export default function ArtistAccessSelectorContent({
           disabled={disabled || !selected.length || isSavingAccess}
           onClick={() => onGrant()}
         >
-          {isSavingAccess && <Loader2 className="ml-1 h-3 w-3 animate-spin" />}
+          {isSavingAccess && <Loader className="ml-1 h-3 w-3 animate-spin" />}
           Grant access
         </Button>
       </div>
