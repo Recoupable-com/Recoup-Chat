@@ -42,6 +42,7 @@ export default function UploadAndList() {
             onDeleted={refreshFiles}
             ownerAccountId={ownerAccountId}
             base={base}
+            currentArtistId={selectedArtist?.account_id}
           />
         )}
       </div>

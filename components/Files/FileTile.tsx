@@ -11,9 +11,10 @@ type FileTileProps = {
   file: FileRow;
   onDelete: (file: FileRow) => void;
   onProperties: (file: FileRow) => void;
+  isOwner?: boolean;
 };
 
-export default function FileTile({ file, onDelete, onProperties }: FileTileProps) {
+export default function FileTile({ file, onDelete, onProperties, isOwner }: FileTileProps) {
   const visual = getFileVisual(file.file_name, file.mime_type ?? null);
   const targetPath = file.is_directory ? file.storage_key : undefined;
   const isImage = visual.icon === "image";
@@ -77,6 +78,8 @@ export default function FileTile({ file, onDelete, onProperties }: FileTileProps
           fileName={file.file_name}
           storageKey={file.storage_key}
           isDirectory={file.is_directory}
+          isShared={file.is_shared}
+          isOwner={isOwner}
           onAction={(action) => {
             if (action === "delete") onDelete(file);
             if (action === "properties") onProperties(file);
