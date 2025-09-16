@@ -10,6 +10,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { ChevronDown, Loader, X } from "lucide-react";
 import useArtists from "@/hooks/useArtists";
+import { useArtistProvider } from "@/providers/ArtistProvider";
 
 type ArtistAccessSelectorContentProps = {
   selected: string[];
@@ -31,6 +32,7 @@ export default function ArtistAccessSelectorContent({
   onGrant,
 }: ArtistAccessSelectorContentProps) {
   const { artists } = useArtists();
+  const { selectedArtist } = useArtistProvider();
 
   return (
     <>
@@ -60,7 +62,7 @@ export default function ArtistAccessSelectorContent({
           </DropdownMenuTrigger>
           <DropdownMenuContent align="start" className="w-56">
             {artists
-              .filter((a) => !selected.includes(a.account_id) && !alreadyHasAccessIds.includes(a.account_id))
+              .filter((a) => !selected.includes(a.account_id) && !alreadyHasAccessIds.includes(a.account_id) && a.account_id !== selectedArtist?.account_id)
               .map((a) => (
                 <DropdownMenuItem
                   key={a.account_id}
@@ -72,7 +74,7 @@ export default function ArtistAccessSelectorContent({
                   <span className="truncate">{a.name || a.account_id}</span>
                 </DropdownMenuItem>
               ))}
-            {artists.filter((a) => !selected.includes(a.account_id) && !alreadyHasAccessIds.includes(a.account_id)).length ===
+            {artists.filter((a) => !selected.includes(a.account_id) && !alreadyHasAccessIds.includes(a.account_id) && a.account_id !== selectedArtist?.account_id).length ===
               0 && (
               <div className="px-2 py-1.5 text-xs text-muted-foreground">
                 No more artists
