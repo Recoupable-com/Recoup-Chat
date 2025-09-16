@@ -1,14 +1,16 @@
 import { useCallback, useState } from "react";
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
 
 type AccessGrant = {
   fileId: string;
   grantedBy: string;
+  invalidateKeys?: unknown[][]; // Query keys to invalidate after success
 };
 
-const useFileAccessGrant = ({ fileId, grantedBy }: AccessGrant) => {
+const useFileAccessGrant = ({ fileId, grantedBy, invalidateKeys }: AccessGrant) => {
   const [selected, setSelected] = useState<string[]>([]);
+  const queryClient = useQueryClient();
   const { mutate, isPending: isSavingAccess } = useMutation({
     mutationFn: async (selected: string[]) => {
       const response = await fetch("/api/files/grant-access", {
@@ -28,6 +30,14 @@ const useFileAccessGrant = ({ fileId, grantedBy }: AccessGrant) => {
           toast.warning(`Access granted to ${summary.successful} artists, ${summary.failed} failed`);
         } else {
           toast.success(`Access granted to ${summary.successful} artists`);
+        }
+        // Invalidate provided query keys to refresh dependent views
+        if (Array.isArray(invalidateKeys)) {
+          for (const key of invalidateKeys) {
+            if (Array.isArray(key)) {
+              queryClient.invalidateQueries({ queryKey: key as readonly unknown[] });
+            }
+          }
         }
       } else {
         toast.error(data.message || "Failed to grant access");
