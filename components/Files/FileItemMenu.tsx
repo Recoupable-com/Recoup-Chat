@@ -18,11 +18,13 @@ export type FileItemMenuProps = {
   fileName: string;
   storageKey: string;
   isDirectory?: boolean;
+  isShared?: boolean;
+  isOwner?: boolean;
   onAction?: (action: string, payload: { id: string; storageKey: string }) => void;
   onOpen?: () => void; // optional: for parent to stop propagation
 };
 
-export default function FileItemMenu({ id, fileName, storageKey, isDirectory, onAction, onOpen }: FileItemMenuProps) {
+export default function FileItemMenu({ id, fileName, storageKey, isDirectory, isShared, isOwner, onAction, onOpen }: FileItemMenuProps) {
   const handle = useCallback(
     (action: string) => (e: React.MouseEvent) => {
       e.preventDefault();
@@ -55,11 +57,11 @@ export default function FileItemMenu({ id, fileName, storageKey, isDirectory, on
         <DropdownMenuItem onClick={handle("properties")}> 
           <Info className="mr-2 h-4 w-4" /> Properties
         </DropdownMenuItem>
-        {!isDirectory && (
+        {!isDirectory && (isOwner || isShared) && (
           <DownloadMenuItem storageKey={storageKey} fileName={fileName} />
         )}
         <DropdownMenuSeparator />
-        {!isDirectory && (
+        {!isDirectory && (!isShared || isOwner) && (
           <DropdownMenuItem onClick={handle("delete")} className="text-red-600 focus:text-red-700">
             <Trash2 className="mr-2 h-4 w-4" /> Delete
           </DropdownMenuItem>
