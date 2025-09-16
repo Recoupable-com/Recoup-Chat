@@ -5,6 +5,7 @@ import Icon from "@/components/Icon";
 import getFileVisual from "@/utils/getFileVisual";
 import FileItemMenu from "@/components/Files/FileItemMenu";
 import { FileRow } from "@/components/Files/types";
+import { cn } from "@/lib/utils";
 
 type FileTileProps = {
   file: FileRow;
@@ -18,15 +19,59 @@ export default function FileTile({ file, onDelete, onProperties }: FileTileProps
   const isImage = visual.icon === "image";
   const signedUrl = `/api/files/signed-url?key=${encodeURIComponent(file.storage_key)}`;
 
-  const TileContent = (
-    <div className="group relative flex flex-col items-center gap-2 cursor-pointer">
-      <div className={`${file.is_directory ? "text-muted-foreground" : visual.color} h-10 w-10 flex items-center justify-center [&_svg]:h-10 [&_svg]:w-10`}>
-        <Icon name={file.is_directory ? "folder" : visual.icon} />
+  // Shared indicator - subtle blue dot
+  const sharedIndicator = file.is_shared && (
+    <div className="absolute -top-1 -left-1 w-3 h-3 bg-blue-500 rounded-full shadow-sm border border-white/50"></div>
+  );
+
+  // macOS Finder-style container styling - minimal by default, styled on hover
+  const containerClasses = cn(
+    "group relative rounded-xl bg-white/80 hover:bg-blue-50/60 transition-all duration-200",
+    "w-32 h-32 flex flex-col items-center justify-start p-4 gap-3",
+    "hover:shadow-sm hover:border hover:border-blue-200/40",
+    file.is_shared && "bg-blue-50/30 hover:bg-blue-100/70",
+    !file.is_shared && "hover:bg-blue-50/50"
+  );
+
+  // macOS Finder-style icon container - minimal by default
+  const iconClasses = cn(
+    "h-16 w-16 flex items-center justify-center rounded-lg",
+    file.is_directory ? "text-blue-600" : `${visual.color}`,
+    "group-hover:scale-105 group-hover:drop-shadow-sm transition-all duration-200 [&_svg]:h-10 [&_svg]:w-10"
+  );
+
+  // macOS Finder-style file name styling
+  const fileNameClasses = "w-full truncate whitespace-nowrap text-center text-sm leading-relaxed font-medium text-gray-700 group-hover:text-gray-900 px-1";
+
+  const content = (
+    <>
+      {/* Icon with Shared Indicator */}
+      <div className="relative">
+        <div className={iconClasses}>
+          {isImage && !file.is_directory ? (
+            // eslint-disable-next-line @next/next/no-img-element
+            <img
+              src={signedUrl}
+              alt={file.file_name}
+              className="h-full w-full object-cover rounded-lg"
+            />
+          ) : (
+            <Icon
+              name={file.is_directory ? "folder" : visual.icon}
+            />
+          )}
+        </div>
+        {/* Shared indicator overlay */}
+        {sharedIndicator}
       </div>
-      <div className="w-full truncate whitespace-nowrap text-center text-[11px] leading-snug font-medium text-foreground/90 hover:underline" title={file.file_name}>
+
+      {/* File Name */}
+      <div className={fileNameClasses} title={file.file_name}>
         {file.file_name}
       </div>
-      <div className="absolute right-1 bottom-1">
+
+      {/* Menu Button - positioned absolutely in top-right */}
+      <div className="absolute top-3 right-3 opacity-0 group-hover:opacity-100 transition-opacity duration-200">
         <FileItemMenu
           id={file.id}
           fileName={file.file_name}
@@ -38,46 +83,23 @@ export default function FileTile({ file, onDelete, onProperties }: FileTileProps
           }}
         />
       </div>
-    </div>
+    </>
   );
 
   if (file.is_directory) {
     return (
       <Link
-        key={file.id}
         href={`?path=${encodeURIComponent(targetPath!)}`}
-        className="rounded-md p-2 text-sm hover:bg-accent/30 block w-32 flex-none"
+        className={containerClasses}
       >
-        {TileContent}
+        {content}
       </Link>
     );
   }
 
   return (
-    <div key={file.id} className="rounded-md p-2 text-sm hover:bg-accent/30 w-32 aspect-video flex-none">
-      {isImage ? (
-        <div className="group relative flex flex-col items-center gap-2 cursor-zoom-in">
-          <img src={signedUrl} alt={file.file_name} className="h-10 w-10 object-cover rounded" />
-          <div className="w-full truncate whitespace-nowrap text-center text-[11px] leading-snug font-medium text-foreground/90 hover:underline" title={file.file_name}>
-            {file.file_name}
-          </div>
-          <div className="absolute right-1 bottom-1">
-            <FileItemMenu
-              id={file.id}
-              fileName={file.file_name}
-              storageKey={file.storage_key}
-              onAction={(action) => {
-                if (action === "delete") onDelete(file);
-                if (action === "properties") onProperties(file);
-              }}
-            />
-          </div>
-        </div>
-      ) : (
-        TileContent
-      )}
+    <div className={containerClasses}>
+      {content}
     </div>
   );
 }
-
-
