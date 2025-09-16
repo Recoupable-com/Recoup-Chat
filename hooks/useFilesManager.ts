@@ -137,9 +137,14 @@ export default function useFilesManager(activePath?: string) {
       return;
     }
 
-    setStatus("Uploaded");
+    setStatus("Uploaded successfully");
     if (!selectedFile) setFile(null);
     await qc.invalidateQueries({ queryKey: ["files", ownerAccountId, artistAccountId] });
+
+    // Clear success status after 3 seconds to be ready for new uploads
+    setTimeout(() => {
+      setStatus("");
+    }, 3000);
   }
 
   return {
