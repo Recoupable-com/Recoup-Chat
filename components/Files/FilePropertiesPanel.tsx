@@ -1,6 +1,7 @@
 "use client";
 
 import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
 import { cn } from "@/lib/utils";
 import { X } from "lucide-react";
 import { useMemo } from "react";
@@ -13,6 +14,7 @@ export type FileMeta = {
   storage_key: string;
   mime_type?: string | null;
   is_directory?: boolean;
+  is_shared?: boolean;
 };
 
 type FilePropertiesPanelProps = {
@@ -68,7 +70,17 @@ export default function FilePropertiesPanel({
           <div className="space-y-3 text-sm">
             <div>
               <div className="text-xs text-muted-foreground">Name</div>
-              <div className="font-medium break-words">{file.file_name}</div>
+              <div className="font-medium break-words flex items-center gap-2">
+                {file.file_name}
+                {file.is_shared && (
+                  <Badge
+                    variant="secondary"
+                    className="h-5 px-2 text-[10px] leading-none rounded-full bg-blue-50 text-blue-700 border border-blue-200 font-medium"
+                  >
+                    Shared
+                  </Badge>
+                )}
+              </div>
             </div>
             <div className="grid grid-cols-3 gap-2">
               <div className="col-span-1 text-xs text-muted-foreground">
@@ -90,7 +102,7 @@ export default function FilePropertiesPanel({
               </div>
               <div className="col-span-2 break-all">{friendlyPath}</div>
             </div>
-            {!isDirectory && (
+            {!isDirectory && !file.is_shared && (
               <ArtistAccessSelector fileId={file.id} grantedBy={userData.id} />
             )}
           </div>
