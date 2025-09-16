@@ -13,9 +13,9 @@ import useArtists from "@/hooks/useArtists";
 import { Separator } from "../ui/separator";
 import useFileAccessGrant from "@/hooks/useFileAccessGrant";
 import useUser from "@/hooks/useUser";
-import { useQuery } from "@tanstack/react-query";
 import { Skeleton } from "@/components/ui/skeleton";
-import RevokeAccessDialog from "@/components/Files/RevokeAccessDialog";
+import HasAccessList from "@/components/Files/HasAccessList";
+import type { ArtistAccess } from "@/components/Files/types";
 
 type ArtistAccessSelectorProps = {
   disabled?: boolean;
@@ -31,34 +31,8 @@ export default function ArtistAccessSelector({
   const { artists } = useArtists();
   const { userData } = useUser();
   const accountId = userData?.account_id;
-  type ArtistAccess = {
-    artistId: string;
-    scope: "read_only" | "admin";
-    grantedAt: string;
-    expiresAt: string | null;
-    artistName?: string | null;
-    artistEmail?: string | null;
-  };
-  type AccessArtistsResponse = {
-    success: boolean;
-    data?: { artists: ArtistAccess[]; count: number; fileId: string; accountId: string };
-  };
 
-  const { data: accessData, isLoading: isAccessLoading } = useQuery<AccessArtistsResponse | null>({
-    queryKey: ["file-access-artists", fileId, accountId],
-    queryFn: async () => {
-      if (!accountId) return null;
-      const res = await fetch(`/api/files/access-artists?fileId=${encodeURIComponent(fileId)}&accountId=${encodeURIComponent(accountId)}`);
-      if (!res.ok) return null;
-      return res.json();
-    },
-    enabled: Boolean(fileId && accountId),
-    staleTime: 30_000,
-  });
-  // Treat UI as loading until we have an accountId and the query has resolved
-  const isUiLoading = !accountId || isAccessLoading;
-  const alreadyHasAccessIds: string[] = (accessData?.data?.artists || []).map((a: ArtistAccess) => a.artistId);
-  const { selected, add, remove, onGrant, isSavingAccess } = useFileAccessGrant({
+  const { selected, add, remove, onGrant, isSavingAccess, accessData, isUiLoading, alreadyHasAccessIds } = useFileAccessGrant({
     fileId,
     grantedBy,
     invalidateKeys: [["file-access-artists", fileId, accountId]],
@@ -142,26 +116,7 @@ export default function ArtistAccessSelector({
         </>
       )}
       {!isUiLoading && accessData?.data?.artists?.length ? (
-        <div className="space-y-2">
-          <div className="text-xs text-muted-foreground">Has access</div>
-          <div className="flex flex-wrap gap-1">
-            {accessData.data.artists.map((a: ArtistAccess) => (
-              <Badge key={a.artistId} variant="secondary" className="pr-1">
-                {a.artistName || a.artistEmail || a.artistId}
-                <RevokeAccessDialog
-                  fileId={fileId}
-                  artistId={a.artistId}
-                  accountId={accountId}
-                  artistLabel={a.artistName || a.artistEmail || a.artistId}
-                >
-                  <button className="ml-1" aria-label="Revoke">
-                    <X className="h-3 w-3" />
-                  </button>
-                </RevokeAccessDialog>
-              </Badge>
-            ))}
-          </div>
-        </div>
+        <HasAccessList artists={accessData.data.artists as ArtistAccess[]} fileId={fileId} accountId={accountId} />
       ) : null}
     </div>
   );
