@@ -63,7 +63,7 @@ const Menu = ({ toggleMenuExpanded }: { toggleMenuExpanded: () => void }) => {
 
         {/* Bottom Section */}
         <div className="shrink-0 pt-4 border-t border-gray-100">
-          {email && <UnlockPro />}
+          <UnlockPro />
           <UserInfo toggleMenuExpanded={toggleMenuExpanded} />
         </div>
       </div>
