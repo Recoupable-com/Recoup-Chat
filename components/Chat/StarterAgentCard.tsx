@@ -1,5 +1,6 @@
 import type React from "react";
-import { type Agent } from "../Agents/useAgentData";
+import type { AgentTemplateRow } from "@/types/AgentTemplates";
+type Agent = AgentTemplateRow;
 
 interface StarterAgentCardProps {
   agent: Agent;

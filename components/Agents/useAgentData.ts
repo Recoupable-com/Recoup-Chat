@@ -5,7 +5,7 @@ import { toast } from "sonner";
 import type { ToggleFavoriteRequest } from "@/types/AgentTemplates";
 import type { AgentTemplateRow } from "@/types/AgentTemplates";
 
-type Agent = AgentTemplateRow;
+export type Agent = AgentTemplateRow;
 
 export function useAgentData() {
   const { userData } = useUserProvider();
