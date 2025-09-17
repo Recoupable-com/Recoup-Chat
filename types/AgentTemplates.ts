@@ -1,0 +1,32 @@
+// Shared API types for agent templates endpoints
+
+export type ToggleFavoriteRequest = {
+  templateId: string;
+  userId: string;
+  isFavourite: boolean;
+};
+
+export type ToggleFavoriteResponse = {
+  success: true;
+  favorites_count: number | null;
+} | {
+  error: string;
+};
+
+// Row shape for agent_templates + computed fields returned by GET endpoint
+export type AgentTemplateRow = {
+  id: string;
+  title: string;
+  description: string;
+  prompt: string;
+  tags: string[] | null;
+  creator: string | null;
+  is_private: boolean;
+  created_at: string | null;
+  favorites_count: number | null;
+  updated_at: string | null;
+  // computed for requesting user
+  is_favourite?: boolean;
+};
+
+

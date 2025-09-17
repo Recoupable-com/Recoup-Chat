@@ -6,25 +6,22 @@ import { Badge } from "@/components/ui/badge";
 import Image from "next/image";
 import AgentPreviewDialogButton from "./AgentPreviewDialog";
 import AgentDeleteButton from "./AgentDeleteButton";
+import AgentHeart from "./AgentHeart";
+import type { AgentTemplateRow } from "@/types/agentTemplates";
 
-interface Agent {
-  title: string;
-  description: string;
-  prompt: string;
-  tags?: string[];
-  status?: string;
-  is_private?: boolean;
-  creator?: string | null;
-  id?: string;
-  created_at?: string;
-}
+type Agent = AgentTemplateRow;
 
 interface AgentCardProps {
   agent: Agent;
   onClick: (agent: Agent) => void;
+  onToggleFavorite?: (agentId: string, nextFavourite: boolean) => void;
 }
 
-const AgentCard: React.FC<AgentCardProps> = ({ agent, onClick }) => {
+const AgentCard: React.FC<AgentCardProps> = ({
+  agent,
+  onClick,
+  onToggleFavorite
+}) => {
   // Define action tags that should be displayed in cards
   const actionTags = ["Deep Research", "Send Report", "Email Outreach", "Scheduled Action", "Creative Content"];
   
@@ -56,6 +53,10 @@ const AgentCard: React.FC<AgentCardProps> = ({ agent, onClick }) => {
         <div className="flex items-center justify-between">
           <div className="flex gap-1">
             <AgentPreviewDialogButton agent={agent} />
+            <AgentHeart
+              isFavorited={!!agent.is_favourite}
+              onToggle={() => onToggleFavorite?.(agent.id ?? "", !(agent.is_favourite ?? false))}
+            />
             <Button
               size="sm"
               variant="ghost"

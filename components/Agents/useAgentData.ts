@@ -1,20 +1,14 @@
 import { useUserProvider } from "@/providers/UserProvder";
 import { useEffect, useState } from "react";
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
+import type { ToggleFavoriteRequest } from "@/types/agentTemplates";
+import type { AgentTemplateRow } from "@/types/agentTemplates";
 
-// Define Agent type for agent metadata loaded from database
-export interface Agent {
-  id: string;
-  title: string;
-  description: string;
-  prompt: string;
-  tags?: string[];
-  is_private?: boolean;
-  creator?: string | null;
-}
+type Agent = AgentTemplateRow;
 
 export function useAgentData() {
   const { userData } = useUserProvider();
+  const queryClient = useQueryClient();
   const [agents, setAgents] = useState<Agent[]>([]);
   const [selectedTag, setSelectedTag] = useState("Recommended");
   const [tags, setTags] = useState<string[]>(["Recommended"]);
@@ -74,5 +68,17 @@ export function useAgentData() {
     gridAgents,
     isPrivate,
     togglePrivate,
+    handleToggleFavorite: async (templateId: string, nextFavourite: boolean) => {
+      if (!userData?.id || !templateId) return;
+      const body: ToggleFavoriteRequest = { templateId, userId: userData.id, isFavourite: nextFavourite };
+      const res = await fetch("/api/agent-templates/favorites", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(body),
+      });
+      await res.json(); // parsed for completeness; response not used now
+      // Invalidate templates list so is_favourite and favorites_count refresh
+      queryClient.invalidateQueries({ queryKey: ["agent-templates"] });
+    },
   };
 } 
