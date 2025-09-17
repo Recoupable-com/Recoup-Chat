@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import supabase from "@/lib/supabase/serverClient";
-import type { AgentTemplateRow } from "@/types/agentTemplates";
+import type { AgentTemplateRow } from "@/types/AgentTemplates";
 
 export const runtime = "edge";
 

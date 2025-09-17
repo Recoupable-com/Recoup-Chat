@@ -5,7 +5,7 @@ import AgentCard from "./AgentCard";
 import { useAgentData } from "./useAgentData";
 import CreateAgentButton from "./CreateAgentButton";
 import { Switch } from "@/components/ui/switch";
-import type { AgentTemplateRow } from "@/types/agentTemplates";
+import type { AgentTemplateRow } from "@/types/AgentTemplates";
 
 type Agent = AgentTemplateRow;
 

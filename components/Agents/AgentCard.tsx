@@ -7,7 +7,7 @@ import Image from "next/image";
 import AgentPreviewDialogButton from "./AgentPreviewDialog";
 import AgentDeleteButton from "./AgentDeleteButton";
 import AgentHeart from "./AgentHeart";
-import type { AgentTemplateRow } from "@/types/agentTemplates";
+import type { AgentTemplateRow } from "@/types/AgentTemplates";
 
 type Agent = AgentTemplateRow;
 

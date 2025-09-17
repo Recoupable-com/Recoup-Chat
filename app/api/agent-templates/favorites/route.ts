@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import supabase from "@/lib/supabase/serverClient";
-import type { ToggleFavoriteRequest, ToggleFavoriteResponse } from "@/types/agentTemplates";
+import type { ToggleFavoriteRequest, ToggleFavoriteResponse } from "@/types/AgentTemplates";
 
 export const runtime = "edge";
 
