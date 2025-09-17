@@ -10,42 +10,36 @@ export const checkAndResetCredits = async (
 ): Promise<CreditsUsage | null> => {
   const found = await selectCreditsUsage({ account_id: accountId });
 
-  if (found && found.length > 0) {
-    const creditsUsage = found[0];
+  if (!found || found.length === 0) return null;
 
-    if (creditsUsage.timestamp) {
-      const timestampDate = new Date(creditsUsage.timestamp);
-      const oneMonthAgo = new Date();
-      oneMonthAgo.setMonth(oneMonthAgo.getMonth() - 1);
+  const creditsUsage = found[0];
+  if (!creditsUsage.timestamp) return creditsUsage;
 
-      const subscription = await getActiveSubscriptionDetails(accountId);
-      const subscriptionActive = isActiveSubscription(subscription);
-      const subscriptionStartUnix =
-        subscription?.current_period_start ?? subscription?.start_date;
+  const timestampDate = new Date(creditsUsage.timestamp);
+  const oneMonthAgo = new Date();
+  oneMonthAgo.setMonth(oneMonthAgo.getMonth() - 1);
 
-      const saveCredits = async (remaining: number) =>
-        updateCreditsUsage({
-          account_id: accountId,
-          updates: {
-            remaining_credits: remaining,
-            timestamp: new Date().toISOString(),
-          },
-        });
+  const subscription = await getActiveSubscriptionDetails(accountId);
+  const subscriptionActive = isActiveSubscription(subscription);
+  const subscriptionStartUnix =
+    subscription?.current_period_start ?? subscription?.start_date;
 
-      if (timestampDate < oneMonthAgo) {
-        return saveCredits(subscriptionActive ? PRO_CREDITS : DEFAULT_CREDITS);
-      }
+  const isMonthlyRefill = timestampDate < oneMonthAgo;
+  const hasActiveSubscription = subscriptionActive && subscriptionStartUnix;
+  const subscriptionStart = hasActiveSubscription
+    ? new Date(subscriptionStartUnix * 1000)
+    : null;
+  const isSubscriptionStartedAfterLastUpdate =
+    subscriptionStart && timestampDate < subscriptionStart;
+  const isRefill = isMonthlyRefill || isSubscriptionStartedAfterLastUpdate;
 
-      // If a subscription started after the last credits update, upgrade to PRO credits now
-      if (subscriptionActive && subscriptionStartUnix) {
-        const subscriptionStart = new Date(subscriptionStartUnix * 1000);
-        if (timestampDate < subscriptionStart) {
-          return saveCredits(PRO_CREDITS);
-        }
-      }
-    }
+  if (!isRefill) return creditsUsage;
 
-    return creditsUsage;
-  }
-  return null;
+  return updateCreditsUsage({
+    account_id: accountId,
+    updates: {
+      remaining_credits: subscriptionActive ? PRO_CREDITS : DEFAULT_CREDITS,
+      timestamp: new Date().toISOString(),
+    },
+  });
 };
