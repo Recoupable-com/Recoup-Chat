@@ -11,22 +11,13 @@ interface FilesGridProps {
   onDeleted?: () => void;
   ownerAccountId?: string;
   base?: string;
-  currentArtistId?: string;
 }
-
-// Extract original artist owner from storage key
-const getOriginalArtistId = (storageKey: string): string | null => {
-  // Path format: files/{userId}/{artistId}/...
-  const parts = storageKey.split('/');
-  return parts.length >= 3 ? parts[2] : null;
-};
 
 export default function FilesGrid({
   files,
   onDeleted,
   ownerAccountId,
   base,
-  currentArtistId,
 }: FilesGridProps) {
   const [deleteOpen, setDeleteOpen] = useState(false);
   const [target, setTarget] = useState<{
@@ -49,8 +40,6 @@ export default function FilesGrid({
             setSelectedFile(f);
             setPropertiesOpen(true);
           }}
-          currentArtistId={currentArtistId}
-          getOriginalArtistId={getOriginalArtistId}
         />
       </div>
 

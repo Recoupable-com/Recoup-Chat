@@ -11,27 +11,21 @@ type FileTileProps = {
   file: FileRow;
   onDelete: (file: FileRow) => void;
   onProperties: (file: FileRow) => void;
-  isOwner?: boolean;
 };
 
-export default function FileTile({ file, onDelete, onProperties, isOwner }: FileTileProps) {
+export default function FileTile({ file, onDelete, onProperties }: FileTileProps) {
   const visual = getFileVisual(file.file_name, file.mime_type ?? null);
   const targetPath = file.is_directory ? file.storage_key : undefined;
   const isImage = visual.icon === "image";
   const signedUrl = `/api/files/signed-url?key=${encodeURIComponent(file.storage_key)}`;
 
-  // Shared indicator - subtle blue dot
-  const sharedIndicator = file.is_shared && (
-    <div className="absolute -top-1 -left-1 w-3 h-3 bg-blue-500 rounded-full shadow-sm border border-white/50"></div>
-  );
 
   // macOS Finder-style container styling - minimal by default, styled on hover
   const containerClasses = cn(
     "group relative rounded-xl bg-white/80 hover:bg-blue-50/60 transition-all duration-200",
     "w-32 h-32 flex flex-col items-center justify-start p-4 gap-3",
     "hover:shadow-sm hover:border hover:border-blue-200/40",
-    file.is_shared && "bg-blue-50/30 hover:bg-blue-100/70",
-    !file.is_shared && "hover:bg-blue-50/50"
+    "hover:bg-blue-50/50"
   );
 
   // macOS Finder-style icon container - minimal by default
@@ -46,7 +40,7 @@ export default function FileTile({ file, onDelete, onProperties, isOwner }: File
 
   const content = (
     <>
-      {/* Icon with Shared Indicator */}
+      {/* Icon */}
       <div className="relative">
         <div className={iconClasses}>
           {isImage && !file.is_directory ? (
@@ -62,8 +56,6 @@ export default function FileTile({ file, onDelete, onProperties, isOwner }: File
             />
           )}
         </div>
-        {/* Shared indicator overlay */}
-        {sharedIndicator}
       </div>
 
       {/* File Name */}
@@ -78,8 +70,6 @@ export default function FileTile({ file, onDelete, onProperties, isOwner }: File
           fileName={file.file_name}
           storageKey={file.storage_key}
           isDirectory={file.is_directory}
-          isShared={file.is_shared}
-          isOwner={isOwner}
           onAction={(action) => {
             if (action === "delete") onDelete(file);
             if (action === "properties") onProperties(file);
