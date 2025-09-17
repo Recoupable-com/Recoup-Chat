@@ -9,7 +9,6 @@ export const checkAndResetCredits = async (
   accountId: string
 ): Promise<CreditsUsage | null> => {
   const found = await selectCreditsUsage({ account_id: accountId });
-
   if (!found || found.length === 0) return null;
 
   const creditsUsage = found[0];
