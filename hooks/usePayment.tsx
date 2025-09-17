@@ -6,7 +6,7 @@ import isEnterprise from "@/lib/recoup/isEnterprise";
 import { useUserProvider } from "@/providers/UserProvder";
 
 const usePayment = () => {
-  const { email } = useUserProvider();
+  const { email, userData } = useUserProvider();
   const {
     data: creditsData,
     isLoading: isLoadingCredits,
@@ -15,6 +15,7 @@ const usePayment = () => {
   const { data: subscriptionData, isLoading: isLoadingSubscription } =
     useSubscription();
 
+  const isLoadingUser = email === undefined || (!!email && !userData);
   const credits = creditsData?.remaining_credits || 0;
   const subscription = subscriptionData?.[0];
   const subscriptionActive =
@@ -22,7 +23,8 @@ const usePayment = () => {
   const totalCredits = subscriptionActive ? PRO_CREDITS : DEFAULT_CREDITS;
 
   return {
-    isLoadingCredits: isLoadingCredits || isLoadingSubscription,
+    isLoadingCredits:
+      isLoadingCredits || isLoadingSubscription || isLoadingUser,
     credits,
     totalCredits,
     subscriptionActive,
