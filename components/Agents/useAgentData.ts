@@ -28,6 +28,7 @@ export function useAgentData() {
       return (await res.json()) as Agent[];
     },
     retry: 1,
+    enabled: !!userData?.id,
   });
 
   useEffect(() => {
