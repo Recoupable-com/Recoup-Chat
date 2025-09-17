@@ -52,11 +52,33 @@ export function useAgentData() {
   const filteredAgents = agents.filter(
     (agent) =>
       agent.title !== "Audience Segmentation" &&
-      (selectedTag === "Recommended" ? true : agent.tags?.includes(selectedTag)) &&
+      (selectedTag === "Recommended"
+        ? true
+        : agent.tags?.includes(selectedTag)) &&
       (isPrivate ? agent.is_private === true : agent.is_private !== true)
   );
   // Hide the "Audience Segmentation" card from UI - keep all other logic intact
   const gridAgents = filteredAgents;
+
+  const handleToggleFavorite = async (
+    templateId: string,
+    nextFavourite: boolean
+  ) => {
+    if (!userData?.id || !templateId) return;
+    const body: ToggleFavoriteRequest = {
+      templateId,
+      userId: userData.id,
+      isFavourite: nextFavourite,
+    };
+    const res = await fetch("/api/agent-templates/favorites", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(body),
+    });
+    await res.json(); // parsed for completeness; response not used now
+    // Invalidate templates list so is_favourite and favorites_count refresh
+    queryClient.invalidateQueries({ queryKey: ["agent-templates"] });
+  };
 
   return {
     tags,
@@ -68,17 +90,6 @@ export function useAgentData() {
     gridAgents,
     isPrivate,
     togglePrivate,
-    handleToggleFavorite: async (templateId: string, nextFavourite: boolean) => {
-      if (!userData?.id || !templateId) return;
-      const body: ToggleFavoriteRequest = { templateId, userId: userData.id, isFavourite: nextFavourite };
-      const res = await fetch("/api/agent-templates/favorites", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(body),
-      });
-      await res.json(); // parsed for completeness; response not used now
-      // Invalidate templates list so is_favourite and favorites_count refresh
-      queryClient.invalidateQueries({ queryKey: ["agent-templates"] });
-    },
+    handleToggleFavorite,
   };
-} 
+}
