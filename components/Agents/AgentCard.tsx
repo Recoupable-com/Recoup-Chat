@@ -1,5 +1,5 @@
 import type React from "react";
-import { ExternalLink, Lock, Globe } from "lucide-react";
+import { ExternalLink} from "lucide-react";
 import { Card, CardHeader, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -48,13 +48,6 @@ const AgentCard: React.FC<AgentCardProps> = ({ agent, onClick }) => {
                 {agent.description}
               </p>
             </div>
-          </div>
-          <div className="ml-3 mt-1">
-            {agent.is_private ? (
-              <Lock className="h-4 w-4 text-amber-500" aria-label="Private" />
-            ) : (
-              <Globe className="h-4 w-4 text-emerald-500" aria-label="Public" />
-            )}
           </div>
         </div>
       </CardHeader>
