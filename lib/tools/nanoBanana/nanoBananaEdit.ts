@@ -4,6 +4,7 @@ import { fal } from "@fal-ai/client";
 import { ensureBase64Polyfills } from "@/lib/utils/base64Polyfill";
 import { configureFalClient } from "@/lib/utils/falConfig";
 import { mapFalError } from "@/lib/utils/falErrorHandler";
+import { handleNanoBananaCredits } from "@/lib/credits/handleNanoBananaCredits";
 
 // Ensure base64 polyfills are available for Fal client
 ensureBase64Polyfills();
@@ -18,6 +19,11 @@ const schema = z.object({
     .string()
     .url("Must be a valid image URL")
     .describe("URL of the image to edit"),
+  account_id: z
+    .string()
+    .describe(
+      "The ID of the account that owns the artist. Never ask for this, use the account_id from the system prompt."
+    ),
 });
 
 export interface NanoBananaEditResult {
@@ -28,14 +34,16 @@ export interface NanoBananaEditResult {
   error?: string;
 }
 
-// Define the nanoBananaEdit tool
 const nanoBananaEdit = tool({
   description:
     "Edit existing images using Fal's nano banana image editing model. Modifies images based on text prompts while preserving the original context and style.",
   inputSchema: schema,
-  execute: async ({ prompt, imageUrl }): Promise<NanoBananaEditResult> => {
+  execute: async ({
+    prompt,
+    imageUrl,
+    account_id,
+  }): Promise<NanoBananaEditResult> => {
     try {
-
       // Configure Fal client
       configureFalClient(fal);
 
@@ -48,14 +56,12 @@ const nanoBananaEdit = tool({
           output_format: "png",
         },
         logs: true,
-        onQueueUpdate: () => {
-          // Progress tracking could be added here if needed
-        },
       });
 
-
       const editedImageUrl = result.data.images[0]?.url;
-      const description = result.data.description || "Image edited successfully";
+      const description =
+        result.data.description || "Image edited successfully";
+      await handleNanoBananaCredits(account_id);
 
       return {
         success: true,
@@ -64,11 +70,11 @@ const nanoBananaEdit = tool({
         message: "", // Empty message - let the UI component handle everything
       };
     } catch (error) {
-
       // Format helpful error messages using centralized error handler
-      const originalError = error instanceof Error ? error.message : "An unexpected error occurred";
+      const originalError =
+        error instanceof Error ? error.message : "An unexpected error occurred";
       let errorMessage = mapFalError(originalError);
-      
+
       // Handle edit-specific errors
       if (originalError.includes("Invalid image URL")) {
         errorMessage = "The image URL provided is invalid or inaccessible.";
