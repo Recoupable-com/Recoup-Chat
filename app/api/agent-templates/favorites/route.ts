@@ -28,14 +28,7 @@ export async function POST(request: Request) {
       if (error) throw error;
     }
 
-    const { data: template, error: tplError } = await supabase
-      .from("agent_templates")
-      .select("id, favorites_count")
-      .eq("id", templateId)
-      .single();
-    if (tplError) throw tplError;
-
-    return NextResponse.json({ success: true, favorites_count: template?.favorites_count ?? null } as ToggleFavoriteResponse);
+    return NextResponse.json({ success: true } as ToggleFavoriteResponse);
   } catch (error) {
     console.error("Error toggling favourite:", error);
     return NextResponse.json({ error: "Failed to toggle favourite" } as ToggleFavoriteResponse, { status: 500 });
