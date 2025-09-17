@@ -3,11 +3,9 @@ import React from "react";
 import AgentTags from "./AgentTags";
 import AgentCard from "./AgentCard";
 import { useAgentData } from "./useAgentData";
+import type { Agent } from "./useAgentData";
 import CreateAgentButton from "./CreateAgentButton";
 import { Switch } from "@/components/ui/switch";
-import type { AgentTemplateRow } from "@/types/AgentTemplates";
-
-type Agent = AgentTemplateRow;
 
 const Agents = () => {
   const { push } = useRouter();
