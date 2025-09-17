@@ -19,6 +19,7 @@ export function useAgentData() {
   const [selectedTag, setSelectedTag] = useState("Recommended");
   const [tags, setTags] = useState<string[]>(["Recommended"]);
   const [showAllTags, setShowAllTags] = useState(false);
+  const [isPrivate, setIsPrivate] = useState(false);
   
   const { data, isPending } = useQuery<Agent[]>({
     queryKey: ["agent-templates"],
@@ -50,11 +51,15 @@ export function useAgentData() {
 
   const loading = isPending;
 
-  // Get all agents except the special card, filtered by the selected tag
+  // Toggle function to switch between public and private agent visibility
+  const togglePrivate = () => setIsPrivate(!isPrivate);
+
+  // Get all agents except the special card, filtered by the selected tag and public/private
   const filteredAgents = agents.filter(
     (agent) =>
       agent.title !== "Audience Segmentation" &&
-      (selectedTag === "Recommended" ? true : agent.tags?.includes(selectedTag))
+      (selectedTag === "Recommended" ? true : agent.tags?.includes(selectedTag)) &&
+      (isPrivate ? agent.is_private === true : agent.is_private !== true)
   );
   // Hide the "Audience Segmentation" card from UI - keep all other logic intact
   const gridAgents = filteredAgents;
@@ -67,5 +72,7 @@ export function useAgentData() {
     showAllTags,
     setShowAllTags,
     gridAgents,
+    isPrivate,
+    togglePrivate,
   };
 } 

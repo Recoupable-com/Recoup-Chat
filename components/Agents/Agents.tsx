@@ -4,6 +4,7 @@ import AgentCard from "./AgentCard";
 import { useAgentData } from "./useAgentData";
 import type { Agent } from "./useAgentData";
 import CreateAgentButton from "./CreateAgentButton";
+import { Switch } from "@/components/ui/switch";
 
 const Agents = () => {
   const { push } = useRouter();
@@ -15,6 +16,8 @@ const Agents = () => {
     showAllTags,
     setShowAllTags,
     gridAgents,
+    isPrivate,
+    togglePrivate,
   } = useAgentData();
 
   const handleAgentClick = (agent: Agent) => {
@@ -27,7 +30,15 @@ const Agents = () => {
         <p className="text-left font-plus_jakarta_sans_bold text-3xl">
           Agents
         </p>
-        <CreateAgentButton />
+        <div className="flex items-center gap-4">
+          <div className="flex items-center gap-2">
+            <span className="text-sm text-gray-600 dark:text-gray-400">
+              {isPrivate ? "Private" : "Public"}
+            </span>
+            <Switch checked={isPrivate} onCheckedChange={() => togglePrivate()} />
+          </div>
+          <CreateAgentButton />
+        </div>
       </div>
       <p className="text-lg text-gray-500 text-left mb-4 font-light font-inter max-w-2xl">
         <span className="sm:hidden">
