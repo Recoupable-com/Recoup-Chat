@@ -3,9 +3,9 @@ import RecoupablePro from "./RecoupablePro";
 import UnlockProCard from "./UnlockProCard";
 
 const UnlockPro = () => {
-  const { subscriptionActive, isLoadingCredits } = usePaymentProvider();
+  const { subscriptionActive, isLoading } = usePaymentProvider();
 
-  if (isLoadingCredits) return null;
+  if (isLoading) return null;
 
   return (
     <div className="-mt-px">

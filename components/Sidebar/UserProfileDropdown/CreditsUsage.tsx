@@ -2,7 +2,7 @@ import { usePaymentProvider } from "@/providers/PaymentProvider";
 import { AnimatedCircularProgressBar } from "@/components/ui/animated-circular-progress-bar";
 
 const CreditsUsage = () => {
-  const { totalCredits, credits, isLoadingCredits } = usePaymentProvider();
+  const { totalCredits, credits, isLoading } = usePaymentProvider();
 
   return (
     <div className="px-2 py-1.5">
@@ -26,7 +26,7 @@ const CreditsUsage = () => {
         </div>
         <div className="flex justify-between">
           <span className="text-muted-foreground">Remaining</span>
-          {isLoadingCredits ? (
+          {isLoading ? (
             <div className="h-4 w-8 bg-muted animate-pulse rounded" />
           ) : (
             <span className="font-medium">{credits.toLocaleString()}</span>

@@ -23,8 +23,7 @@ const usePayment = () => {
   const totalCredits = subscriptionActive ? PRO_CREDITS : DEFAULT_CREDITS;
 
   return {
-    isLoadingCredits:
-      isLoadingCredits || isLoadingSubscription || isLoadingUser,
+    isLoading: isLoadingCredits || isLoadingSubscription || isLoadingUser,
     credits,
     totalCredits,
     subscriptionActive,
