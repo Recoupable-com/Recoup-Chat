@@ -1,5 +1,3 @@
-// Shared API types for agent templates endpoints
-
 export type ToggleFavoriteRequest = {
   templateId: string;
   userId: string;
@@ -13,7 +11,6 @@ export type ToggleFavoriteResponse = {
   error: string;
 };
 
-// Row shape for agent_templates + computed fields returned by GET endpoint
 export type AgentTemplateRow = {
   id: string;
   title: string;
