@@ -23,8 +23,7 @@ const nextConfig = {
       "avatars.githubusercontent.com", // GitHub
       "example.com", // Example domain from our mock data
       "arweave.net", // Arweave
-      "v3.fal.media", // Fal AI image hosting
-      "v3b.fal.media", // Fal AI image hosting
+      "*.fal.media", // Fal AI image hosting (any subdomain)
       "storage.googleapis.com", // Fal AI image hosting (backup)
     ],
   },
