@@ -4,6 +4,7 @@ import { CreditsUsage } from "@/lib/supabase/credits_usage/selectCreditsUsage";
 import { DEFAULT_CREDITS, PRO_CREDITS } from "../consts";
 import isActiveSubscription from "../stripe/isActiveSubscription";
 import { getActiveSubscriptionDetails } from "../stripe/getActiveSubscriptionDetails";
+import isEnterpriseAccount from "@/lib/recoup/isEnterpriseAccount";
 
 export const checkAndResetCredits = async (
   accountId: string
@@ -22,6 +23,7 @@ export const checkAndResetCredits = async (
   const subscriptionStartUnix =
     subscription?.current_period_start ?? subscription?.start_date;
   const isMonthlyRefill = lastUpdatedCredits < oneMonthAgo;
+  const enterprise = await isEnterpriseAccount(accountId);
   const hasActiveSubscription = subscriptionActive && subscriptionStartUnix;
   const subscriptionStart = hasActiveSubscription
     ? new Date(subscriptionStartUnix * 1000)
@@ -30,11 +32,12 @@ export const checkAndResetCredits = async (
     subscriptionStart && lastUpdatedCredits < subscriptionStart;
   const isRefill = isMonthlyRefill || isSubscriptionStartedAfterLastUpdate;
   if (!isRefill) return creditsUsage;
+  const isPro = subscriptionActive || enterprise;
 
   return updateCreditsUsage({
     account_id: accountId,
     updates: {
-      remaining_credits: subscriptionActive ? PRO_CREDITS : DEFAULT_CREDITS,
+      remaining_credits: isPro ? PRO_CREDITS : DEFAULT_CREDITS,
       timestamp: new Date().toISOString(),
     },
   });

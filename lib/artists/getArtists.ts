@@ -1,6 +1,5 @@
 import getAccountArtistIds from "@/lib/supabase/accountArtistIds/getAccountArtistIds";
-import getAccountEmails from "@/lib/supabase/accountEmails/getAccountEmails";
-import isEnterprise from "@/lib/recoup/isEnterprise";
+import isEnterpriseAccount from "@/lib/recoup/isEnterpriseAccount";
 import type { ArtistRecord } from "@/types/Artist";
 import { ROSTRUM_ORG_ARTIST_IDS } from "../consts";
 
@@ -8,10 +7,8 @@ const getArtists = async (accountId: string): Promise<ArtistRecord[]> => {
   // Fetch user-linked artists
   const userArtists = await getAccountArtistIds({ accountIds: [accountId] });
 
-  // Determine if the account email belongs to an enterprise domain
-  const emails = await getAccountEmails([accountId]);
-  const email = emails[0]?.email || "";
-  const enterprise = isEnterprise(email);
+  // Determine if the account belongs to an enterprise domain
+  const enterprise = await isEnterpriseAccount(accountId);
 
   // Optionally fetch org artists if enterprise and list provided
   const orgArtists =
