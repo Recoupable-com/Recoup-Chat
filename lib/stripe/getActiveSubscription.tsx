@@ -1,12 +1,23 @@
 export const getActiveSubscription = async (accountId: string) => {
   try {
     const response = await fetch(
-      `/api/stripe/subscription/search?accountId=${accountId}`,
+      `https://api.recoupable.com/api/subscriptions?accountId=${accountId}`,
+      {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }
     );
 
+    if (!response.ok) {
+      throw new Error(`Error: ${response.status}`);
+    }
+
     const data = await response.json();
-    return data.data;
+    return data;
   } catch (error) {
+    console.error("Failed to fetch active subscription:", error);
     return { error };
   }
 };
