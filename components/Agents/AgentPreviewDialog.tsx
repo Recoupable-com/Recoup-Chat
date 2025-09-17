@@ -11,19 +11,12 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
+import type { AgentTemplateRow } from "@/types/AgentTemplates";
 
-type PreviewAgent = {
-  title: string;
-  description: string;
-  prompt: string;
-  tags?: string[];
-  is_private?: boolean;
-  creator?: string | null;
-  updated_at?: string;
-};
+type Agent = AgentTemplateRow;
 
 interface AgentPreviewDialogProps {
-  agent: PreviewAgent;
+  agent: Agent;
 }
 
 const AgentPreviewDialog: React.FC<AgentPreviewDialogProps> = ({ agent }) => (

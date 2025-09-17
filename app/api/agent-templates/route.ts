@@ -1,5 +1,8 @@
 import { NextResponse } from "next/server";
 import supabase from "@/lib/supabase/serverClient";
+import type { AgentTemplateRow } from "@/types/AgentTemplates";
+
+export const runtime = "edge";
 
 export async function GET(request: Request) {
   try {
@@ -14,7 +17,21 @@ export async function GET(request: Request) {
         .order("title");
 
       if (error) throw error;
-      return NextResponse.json(data || []);
+      // Fetch user's favourites and merge into response as is_favourite
+      const { data: favs, error: favError } = await supabase
+        .from("agent_template_favorites")
+        .select("template_id")
+        .eq("user_id", userId);
+
+      if (favError) throw favError;
+
+      const favouriteIds = new Set<string>((favs || []).map((f: { template_id: string }) => f.template_id));
+      const withFavourite = (data || []).map((t: AgentTemplateRow) => ({
+        ...t,
+        is_favourite: favouriteIds.has(t.id),
+      }));
+
+      return NextResponse.json(withFavourite);
     }
 
     // No userId: return any public templates only
@@ -25,7 +42,9 @@ export async function GET(request: Request) {
       .order("title");
 
     if (error) throw error;
-    return NextResponse.json(data || []);
+    // No user: include is_favourite=false for consistency
+    const withFavourite = (data || []).map((t: AgentTemplateRow) => ({ ...t, is_favourite: false }));
+    return NextResponse.json(withFavourite);
   } catch (error) {
     console.error('Error fetching agent templates:', error);
     return NextResponse.json({ error: 'Failed to fetch templates' }, { status: 500 });

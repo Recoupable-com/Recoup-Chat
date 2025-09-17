@@ -1,20 +1,15 @@
 import { useUserProvider } from "@/providers/UserProvder";
 import { useEffect, useState } from "react";
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
+import { toast } from "sonner";
+import type { ToggleFavoriteRequest } from "@/types/AgentTemplates";
+import type { AgentTemplateRow } from "@/types/AgentTemplates";
 
-// Define Agent type for agent metadata loaded from database
-export interface Agent {
-  id: string;
-  title: string;
-  description: string;
-  prompt: string;
-  tags?: string[];
-  is_private?: boolean;
-  creator?: string | null;
-}
+export type Agent = AgentTemplateRow;
 
 export function useAgentData() {
   const { userData } = useUserProvider();
+  const queryClient = useQueryClient();
   const [agents, setAgents] = useState<Agent[]>([]);
   const [selectedTag, setSelectedTag] = useState("Recommended");
   const [tags, setTags] = useState<string[]>(["Recommended"]);
@@ -58,11 +53,46 @@ export function useAgentData() {
   const filteredAgents = agents.filter(
     (agent) =>
       agent.title !== "Audience Segmentation" &&
-      (selectedTag === "Recommended" ? true : agent.tags?.includes(selectedTag)) &&
+      (selectedTag === "Recommended"
+        ? true
+        : agent.tags?.includes(selectedTag)) &&
       (isPrivate ? agent.is_private === true : agent.is_private !== true)
   );
   // Hide the "Audience Segmentation" card from UI - keep all other logic intact
   const gridAgents = filteredAgents;
+
+  const handleToggleFavorite = async (
+    templateId: string,
+    nextFavourite: boolean
+  ) => {
+    if (!userData?.id || !templateId) return;
+    
+    try {
+      const body: ToggleFavoriteRequest = {
+        templateId,
+        userId: userData.id,
+        isFavourite: nextFavourite,
+      };
+      const res = await fetch("/api/agent-templates/favorites", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(body),
+      });
+      
+      if (!res.ok) {
+        throw new Error("Failed to toggle favorite");
+      }
+      
+      toast.success(
+        nextFavourite ? "Added to favorites" : "Removed from favorites"
+      );
+      
+      // Invalidate templates list so is_favourite and favorites_count refresh
+      queryClient.invalidateQueries({ queryKey: ["agent-templates"] });
+    } catch {
+      toast.error("Failed to update favorite");
+    }
+  };
 
   return {
     tags,
@@ -74,5 +104,6 @@ export function useAgentData() {
     gridAgents,
     isPrivate,
     togglePrivate,
+    handleToggleFavorite,
   };
-} 
+}

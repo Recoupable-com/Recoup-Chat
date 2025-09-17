@@ -1,4 +1,5 @@
 import { useRouter } from "next/navigation";
+import React from "react";
 import AgentTags from "./AgentTags";
 import AgentCard from "./AgentCard";
 import { useAgentData } from "./useAgentData";
@@ -18,6 +19,7 @@ const Agents = () => {
     gridAgents,
     isPrivate,
     togglePrivate,
+    handleToggleFavorite,
   } = useAgentData();
 
   const handleAgentClick = (agent: Agent) => {
@@ -76,6 +78,7 @@ const Agents = () => {
                   <AgentCard
                     agent={agent}
                     onClick={() => handleAgentClick(agent)}
+                    onToggleFavorite={(id, next) => handleToggleFavorite(id, next)}
                   />
                 </div>
               ))}
