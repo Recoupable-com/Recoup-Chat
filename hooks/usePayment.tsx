@@ -17,7 +17,10 @@ const usePayment = () => {
 
   const isLoadingUser = email === undefined || (!!email && !userData);
   const credits = creditsData?.remaining_credits || 0;
-  const subscription = subscriptionData?.[0];
+  const subscription =
+    subscriptionData?.status === "success" && "subscription" in subscriptionData
+      ? subscriptionData.subscription
+      : undefined;
   const subscriptionActive =
     isEnterprise(email || "") || isActiveSubscription(subscription);
   const totalCredits = subscriptionActive ? PRO_CREDITS : DEFAULT_CREDITS;

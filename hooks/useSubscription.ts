@@ -3,7 +3,12 @@ import { getActiveSubscription } from "@/lib/stripe/getActiveSubscription";
 import { useUserProvider } from "@/providers/UserProvder";
 import Stripe from "stripe";
 
-const useSubscription = (): UseQueryResult<Stripe.Subscription[]> => {
+type SubscriptionResponse =
+  | { status: "success"; subscription: Stripe.Subscription }
+  | { status: "success"; isEnterprise: true }
+  | { status: "error"; error: string };
+
+const useSubscription = (): UseQueryResult<SubscriptionResponse> => {
   const { userData } = useUserProvider();
   return useQuery({
     queryKey: ["subscription", userData?.account_id],
