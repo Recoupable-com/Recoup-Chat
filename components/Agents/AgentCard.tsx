@@ -52,11 +52,11 @@ const AgentCard: React.FC<AgentCardProps> = ({
       <CardContent className="px-4 pt-0 pb-3">
         <div className="flex items-center justify-between">
           <div className="flex gap-1">
-            <AgentPreviewDialogButton agent={agent} />
             <AgentHeart
               isFavorited={!!agent.is_favourite}
               onToggle={() => onToggleFavorite?.(agent.id ?? "", !(agent.is_favourite ?? false))}
             />
+            <AgentPreviewDialogButton agent={agent} />
             <Button
               size="sm"
               variant="ghost"
