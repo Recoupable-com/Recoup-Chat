@@ -14,7 +14,7 @@ export const checkAndResetCredits = async (
   const creditsUsage = found[0];
   if (!creditsUsage.timestamp) return creditsUsage;
 
-  const timestampDate = new Date(creditsUsage.timestamp);
+  const lastUpdatedCredits = new Date(creditsUsage.timestamp);
   const oneMonthAgo = new Date();
   oneMonthAgo.setMonth(oneMonthAgo.getMonth() - 1);
 
@@ -23,13 +23,13 @@ export const checkAndResetCredits = async (
   const subscriptionStartUnix =
     subscription?.current_period_start ?? subscription?.start_date;
 
-  const isMonthlyRefill = timestampDate < oneMonthAgo;
+  const isMonthlyRefill = lastUpdatedCredits < oneMonthAgo;
   const hasActiveSubscription = subscriptionActive && subscriptionStartUnix;
   const subscriptionStart = hasActiveSubscription
     ? new Date(subscriptionStartUnix * 1000)
     : null;
   const isSubscriptionStartedAfterLastUpdate =
-    subscriptionStart && timestampDate < subscriptionStart;
+    subscriptionStart && lastUpdatedCredits < subscriptionStart;
   const isRefill = isMonthlyRefill || isSubscriptionStartedAfterLastUpdate;
 
   if (!isRefill) return creditsUsage;
