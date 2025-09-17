@@ -2,8 +2,8 @@ import { useUserProvider } from "@/providers/UserProvder";
 import { useEffect, useState } from "react";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
-import type { ToggleFavoriteRequest } from "@/types/agentTemplates";
-import type { AgentTemplateRow } from "@/types/agentTemplates";
+import type { ToggleFavoriteRequest } from "@/types/AgentTemplates";
+import type { AgentTemplateRow } from "@/types/AgentTemplates";
 
 type Agent = AgentTemplateRow;
 

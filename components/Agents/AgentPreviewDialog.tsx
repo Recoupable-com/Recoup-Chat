@@ -11,7 +11,7 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
-import type { AgentTemplateRow } from "@/types/agentTemplates";
+import type { AgentTemplateRow } from "@/types/AgentTemplates";
 
 type Agent = AgentTemplateRow;
 
