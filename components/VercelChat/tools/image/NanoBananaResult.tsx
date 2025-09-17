@@ -1,6 +1,6 @@
 import Image from "next/image";
-import { NanoBananaGenerateResult } from "@/lib/tools/nanoBananaGenerate";
-import { NanoBananaEditResult } from "@/lib/tools/nanoBananaEdit";
+import { NanoBananaGenerateResult } from "@/lib/tools/nanoBanana/nanoBananaGenerate";
+import { NanoBananaEditResult } from "@/lib/tools/nanoBanana/nanoBananaEdit";
 import { useImageDownloader } from "@/hooks/useImageDownloader";
 import MessageMediaDownloadButton from "../../MessageMediaDownloadButton";
 
@@ -17,9 +17,7 @@ export function NanoBananaResult({ result }: NanoBananaResultProps) {
   if (!result.success) {
     return (
       <div className="w-full max-w-md mx-auto p-4 border border-red-200 rounded-md bg-red-50">
-        <p className="text-sm font-medium text-red-600">
-          🍌 Nano Banana Error
-        </p>
+        <p className="text-sm font-medium text-red-600">🍌 Nano Banana Error</p>
         <p className="text-sm text-red-500">
           {result.error || "Unknown error occurred"}
         </p>

@@ -2,8 +2,8 @@ import { ImageSkeleton } from "@/components/VercelChat/tools/image/ImageSkeleton
 import { ImageResult } from "@/components/VercelChat/tools/image/ImageResult";
 import { NanoBananaResult } from "@/components/VercelChat/tools/image/NanoBananaResult";
 import { ImageGenerationResult } from "@/lib/tools/generateImage";
-import { NanoBananaGenerateResult } from "@/lib/tools/nanoBananaGenerate";
-import { NanoBananaEditResult } from "@/lib/tools/nanoBananaEdit";
+import { NanoBananaGenerateResult } from "@/lib/tools/nanoBanana/nanoBananaGenerate";
+import { NanoBananaEditResult } from "@/lib/tools/nanoBanana/nanoBananaEdit";
 import MermaidDiagram from "@/components/VercelChat/tools/mermaid/MermaidDiagram";
 import { MermaidDiagramSkeleton } from "@/components/VercelChat/tools/mermaid/MermaidDiagramSkeleton";
 import { GenerateMermaidDiagramResult } from "@/lib/tools/generateMermaidDiagram";
@@ -92,9 +92,11 @@ export function getToolCallComponent(part: ToolUIPart) {
     toolName === "search_web" || toolName === "web_deep_research";
 
   // Handle image generation tools (including nano banana variants)
-  if (toolName === "generate_image" || 
-      toolName === "nano_banana_generate" || 
-      toolName === "nano_banana_edit") {
+  if (
+    toolName === "generate_image" ||
+    toolName === "nano_banana_generate" ||
+    toolName === "nano_banana_edit"
+  ) {
     return (
       <div key={toolCallId} className="skeleton">
         <ImageSkeleton />
@@ -243,10 +245,15 @@ export function getToolResultComponent(part: ToolUIPart) {
         <ImageResult result={result as ImageGenerationResult} />
       </div>
     );
-  } else if (toolName === "nano_banana_generate" || toolName === "nano_banana_edit") {
+  } else if (
+    toolName === "nano_banana_generate" ||
+    toolName === "nano_banana_edit"
+  ) {
     return (
       <div key={toolCallId}>
-        <NanoBananaResult result={result as NanoBananaGenerateResult | NanoBananaEditResult} />
+        <NanoBananaResult
+          result={result as NanoBananaGenerateResult | NanoBananaEditResult}
+        />
       </div>
     );
   } else if (toolName === "generate_mermaid_diagram") {
