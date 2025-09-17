@@ -10,7 +10,7 @@ const ManageSubscriptionButton = () => {
   return (
     <DropdownMenuItem onClick={handleClick} className="cursor-pointer">
       <IconCreditCard />
-      {subscription ? "Manage Subscription" : "Subscribe"}
+      {subscription ? "Billing" : "Subscribe"}
     </DropdownMenuItem>
   );
 };
