@@ -18,20 +18,30 @@ export const checkAndResetCredits = async (
       const oneMonthAgo = new Date();
       oneMonthAgo.setMonth(oneMonthAgo.getMonth() - 1);
 
-      if (timestampDate < oneMonthAgo) {
-        const subscription = await getActiveSubscriptionDetails(accountId);
-        const subscriptionActive = isActiveSubscription(subscription);
-        const updatedCreditsUsage = await updateCreditsUsage({
+      const subscription = await getActiveSubscriptionDetails(accountId);
+      const subscriptionActive = isActiveSubscription(subscription);
+      const subscriptionStartUnix =
+        subscription?.current_period_start ?? subscription?.start_date;
+
+      const saveCredits = async (remaining: number) =>
+        updateCreditsUsage({
           account_id: accountId,
           updates: {
-            remaining_credits: subscriptionActive
-              ? PRO_CREDITS
-              : DEFAULT_CREDITS,
+            remaining_credits: remaining,
             timestamp: new Date().toISOString(),
           },
         });
 
-        return updatedCreditsUsage;
+      if (timestampDate < oneMonthAgo) {
+        return saveCredits(subscriptionActive ? PRO_CREDITS : DEFAULT_CREDITS);
+      }
+
+      // If a subscription started after the last credits update, upgrade to PRO credits now
+      if (subscriptionActive && subscriptionStartUnix) {
+        const subscriptionStart = new Date(subscriptionStartUnix * 1000);
+        if (timestampDate < subscriptionStart) {
+          return saveCredits(PRO_CREDITS);
+        }
       }
     }
 
