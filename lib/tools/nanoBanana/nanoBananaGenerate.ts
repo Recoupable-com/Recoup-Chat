@@ -4,6 +4,7 @@ import { fal } from "@fal-ai/client";
 import { ensureBase64Polyfills } from "@/lib/utils/base64Polyfill";
 import { configureFalClient } from "@/lib/utils/falConfig";
 import { mapFalError } from "@/lib/utils/falErrorHandler";
+import { handleNanoBananaCredits } from "@/lib/credits/handleNanoBananaCredits";
 
 // Ensure base64 polyfills are available for Fal client
 ensureBase64Polyfills();
@@ -14,6 +15,11 @@ const schema = z.object({
     .min(1, "Prompt is required")
     .max(1000, "Prompt is too long")
     .describe("Text prompt for image generation"),
+  account_id: z
+    .string()
+    .describe(
+      "The ID of the account that owns the artist. Never ask for this, use the account_id from the system prompt."
+    ),
 });
 
 export interface NanoBananaGenerateResult {
@@ -29,9 +35,11 @@ const nanoBananaGenerate = tool({
   description:
     "Generate images using Fal's nano banana text-to-image model. Creates new images from text prompts using Google's state-of-the-art nano banana model.",
   inputSchema: schema,
-  execute: async ({ prompt }): Promise<NanoBananaGenerateResult> => {
+  execute: async ({
+    prompt,
+    account_id,
+  }): Promise<NanoBananaGenerateResult> => {
     try {
-
       // Configure Fal client
       configureFalClient(fal);
 
@@ -43,14 +51,13 @@ const nanoBananaGenerate = tool({
           output_format: "png",
         },
         logs: true,
-        onQueueUpdate: () => {
-          // Progress tracking could be added here if needed
-        },
       });
 
-
       const imageUrl = result.data.images[0]?.url;
-      const description = result.data.description || "Image generated successfully";
+      const description =
+        result.data.description || "Image generated successfully";
+
+      await handleNanoBananaCredits(account_id);
 
       return {
         success: true,
@@ -60,7 +67,8 @@ const nanoBananaGenerate = tool({
       };
     } catch (error) {
       // Format helpful error messages using centralized error handler
-      const originalError = error instanceof Error ? error.message : "An unexpected error occurred";
+      const originalError =
+        error instanceof Error ? error.message : "An unexpected error occurred";
       const errorMessage = mapFalError(originalError);
 
       return {

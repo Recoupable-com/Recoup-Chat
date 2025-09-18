@@ -1,7 +1,6 @@
 import { ToolSet } from "ai";
 import generateImage from "./generateImage";
-import nanoBananaGenerate from "./nanoBananaGenerate";
-import nanoBananaEdit from "./nanoBananaEdit";
+import nanoBananaTools from "./nanoBanana";
 import createTxtFile from "./createTxtFile";
 import getSegmentFans from "./getSegmentFans";
 import contactTeam from "./contactTeam";
@@ -42,8 +41,6 @@ import getLocalTime from "./getLocalTime";
 export function getMcpTools(): ToolSet {
   const tools = {
     generate_image: generateImage,
-    nano_banana_generate: nanoBananaGenerate,
-    nano_banana_edit: nanoBananaEdit,
     generate_txt_file: createTxtFile,
     contact_team: contactTeam,
     create_segments: createSegments,
@@ -80,8 +77,17 @@ export function getMcpTools(): ToolSet {
     get_social_fans: getSocialFans,
     create_release_report: createReleaseReport,
     get_local_time: getLocalTime,
+    ...nanoBananaTools,
     ...youtubeTools,
   };
 
-  return tools;
+  // Handle potential namespacing issues with beta AI SDK
+  // Some models may try to call tools with 'default_api.' prefix
+  const namespacedTools: ToolSet = { ...tools };
+  Object.entries(tools).forEach(([key, tool]) => {
+    // Also register with default_api prefix for compatibility with beta AI SDK
+    namespacedTools[`default_api.${key}`] = tool;
+  });
+
+  return namespacedTools;
 }
