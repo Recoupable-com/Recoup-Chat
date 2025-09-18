@@ -37,7 +37,7 @@ CREATE UNIQUE INDEX IF NOT EXISTS ux_agent_templates_title ON agent_templates(ti
 
 -- Insert original data if table is empty
 INSERT INTO agent_templates (title, description, prompt, tags) 
-SELECT * FROM (VALUES
+SELECT title::text, description::text, prompt::text, tags::text[] FROM (VALUES
   ('Audience Segmentation', 'Identify and analyze key audience segments for targeted marketing and growth.', '', '{"Research"}'),
   ('Superfan Insights', 'Surface your most engaged listeners for premium engagement and monetization opportunities.', 'Analyze my artist''s fan segments and tell me who our most valuable listeners are. What demographics do they represent, how do they engage with us, and how should we target them in our next campaign? Please provide a downloadable report with actionable recommendations.', '{"Social"}'),
   ('Social Performance Audit', 'Comprehensive analysis of your social channels to inform digital strategy.', 'Give me a complete health check of my artist''s social media presence. Which posts are performing best, what are fans saying in the comments, and how does engagement vary across platforms? Could you create a diagram showing our social ecosystem with specific areas to improve?', '{"Social"}'),
@@ -62,7 +62,7 @@ SELECT * FROM (VALUES
   ('Podcast Guest Acquisition', 'Find the right creators to feature on your podcast, build relationships, and send outreach emails that spark collaborations.', 'Find 10 creators in unexpected niches (e.g., glitch fashion, gaming modders, TikTok historians, sports crossovers) who share audience overlap with my brand. For each creator: find their email. If no contact is found, skip them and find a different creator. Draft a personalized email inviting them to be a guest on my podcast. Reference their work, explain why the collaboration makes sense, and suggest a creative topic idea for the episode. Show me all the drafted emails and get my approval before sending any outreach emails.', '{"Podcasts", "Outreach"}'),
   ('Niche Community Infiltration', 'Find overlooked communities that align with your audience, then pitch tailored collaborations to build cultural relevance.', 'Identify 5 hyper-niche communities (e.g., glitch art Discords, solarpunk Reddit threads, biohacking forums, VR modding groups) that share values with my brand. For each: find the moderator/admin contact email. If none, skip and find another. Draft a non corporate outreach email offering to guest-speak, co-host an AMA, or co-create content for their community. Show me all the drafted emails and get my approval before sending any outreach emails.', '{"Community", "Outreach"}'),
   ('Ghibli YouTube Thumbnail Generation', 'Find a strong video with low CTR, create a Ghibli-style thumbnail, and upload it.', 'Analyze my YouTube channel to identify a video with strong content but low click-through rate that needs thumbnail improvements. Create an eye-catching, brand-aligned thumbnail (ghiblified style) with clear focal points, minimal text, and high contrast colors. Show me the thumbnail image and get approval before uploading to YouTube.', '{"YouTube", "Content", "Social", "Assistant"}')
-) AS new_data(title text, description text, prompt text, tags text[])
+) AS new_data(title, description, prompt, tags)
 WHERE NOT EXISTS (SELECT 1 FROM agent_templates LIMIT 1);
 
 -- Now proceed with updates and removals
