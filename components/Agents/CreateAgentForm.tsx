@@ -86,7 +86,7 @@ const CreateAgentForm = ({ onSubmit, isSubmitting, initialValues, submitLabel }:
       </div>
 
       <div className="space-y-2">
-        <Label htmlFor="tags">Tags</Label>
+        <Label htmlFor="tags">Category</Label>
         <div className="flex flex-wrap gap-2" id="tags">
           {tags.filter((t) => t !== "Recommended").map((tag) => {
             const isSelected = selectedTags.includes(tag);
