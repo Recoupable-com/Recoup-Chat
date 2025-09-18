@@ -78,11 +78,9 @@ const AgentCard: React.FC<AgentCardProps> = ({
       <CardHeader className="p-4 pb-2">
         <div className="flex items-start justify-between">
           <div className="space-y-3 flex-1">
-            {pillTag && (
-              <Badge variant="secondary" className="w-fit">
-                {pillTag}
-              </Badge>
-            )}
+            <Badge variant="secondary" className="w-fit">
+              {pillTag || "General"}
+            </Badge>
             <div>
               <h3 className="text-lg font-semibold text-balance line-clamp-1">{agent.title}</h3>
               <p className="text-sm text-muted-foreground mt-1 text-pretty line-clamp-2 min-h-[2.5rem]">
