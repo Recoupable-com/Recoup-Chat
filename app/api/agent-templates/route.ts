@@ -124,5 +124,66 @@ export async function DELETE(request: Request) {
   }
 }
 
+export async function PATCH(request: Request) {
+  try {
+    const body = await request.json();
+    const {
+      id,
+      userId,
+      title,
+      description,
+      prompt,
+      tags,
+      isPrivate,
+    }: {
+      id: string;
+      userId: string;
+      title?: string;
+      description?: string;
+      prompt?: string;
+      tags?: string[];
+      isPrivate?: boolean;
+    } = body;
+
+    if (!id || !userId) {
+      return NextResponse.json({ error: "Missing id or userId" }, { status: 400 });
+    }
+
+    // Verify ownership
+    const { data: template, error: fetchError } = await supabase
+      .from("agent_templates")
+      .select("id, creator")
+      .eq("id", id)
+      .single();
+
+    if (fetchError) throw fetchError;
+    if (!template || template.creator !== userId) {
+      return NextResponse.json({ error: "Forbidden" }, { status: 403 });
+    }
+
+    const updateFields: Record<string, unknown> = { updated_at: new Date().toISOString() };
+    if (typeof title !== "undefined") updateFields.title = title;
+    if (typeof description !== "undefined") updateFields.description = description;
+    if (typeof prompt !== "undefined") updateFields.prompt = prompt;
+    if (typeof tags !== "undefined") updateFields.tags = tags;
+    if (typeof isPrivate !== "undefined") updateFields.is_private = isPrivate;
+
+    const { data, error } = await supabase
+      .from("agent_templates")
+      .update(updateFields)
+      .eq("id", id)
+      .select(
+        "id, title, description, prompt, tags, creator, is_private, created_at, favorites_count, updated_at"
+      )
+      .single();
+
+    if (error) throw error;
+    return NextResponse.json(data);
+  } catch (error) {
+    console.error("Error updating agent template:", error);
+    return NextResponse.json({ error: "Failed to update template" }, { status: 500 });
+  }
+}
+
 export const dynamic = "force-dynamic";
 export const revalidate = 0; 

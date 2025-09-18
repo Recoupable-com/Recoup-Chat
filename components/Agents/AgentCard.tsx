@@ -4,9 +4,11 @@ import { Card, CardHeader, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import AgentCreator from "./AgentCreator";
 import AgentPreviewDialogButton from "./AgentPreviewDialog";
+import AgentEditDialog from "./AgentEditDialog";
 import AgentDeleteButton from "./AgentDeleteButton";
 import AgentHeart from "./AgentHeart";
 import type { AgentTemplateRow } from "@/types/AgentTemplates";
+import { useUserProvider } from "@/providers/UserProvder";
 
 type Agent = AgentTemplateRow;
 
@@ -21,6 +23,7 @@ const AgentCard: React.FC<AgentCardProps> = ({
   onClick,
   onToggleFavorite
 }) => {
+  const { userData } = useUserProvider();
   // Define action tags that should be displayed in cards
   const actionTags = ["Deep Research", "Send Report", "Email Outreach", "Scheduled Action", "Creative Content"];
   
@@ -29,16 +32,41 @@ const AgentCard: React.FC<AgentCardProps> = ({
   const pillTag = displayedActionTags[0] ?? agent.tags?.[0];
 
   const handleCardKeyDown = (event: React.KeyboardEvent<HTMLDivElement>) => {
+    const target = event.target as HTMLElement;
+    const tag = target.tagName?.toLowerCase();
+    const isInteractive =
+      target.isContentEditable ||
+      tag === "input" ||
+      tag === "textarea" ||
+      tag === "select" ||
+      tag === "button";
+    if (isInteractive) return;
+
     if (event.key === "Enter" || event.key === " ") {
       event.preventDefault();
       onClick(agent);
     }
   };
 
+  const handleCardClick = (event: React.MouseEvent<HTMLDivElement>) => {
+    const target = event.target as HTMLElement;
+    const interactiveAncestor = target.closest(
+      "button, [role='button'], input, textarea, select, a"
+    );
+    // Ignore clicks on interactive elements, but allow the card itself (role=button)
+    if (
+      (interactiveAncestor && interactiveAncestor !== event.currentTarget) ||
+      target.isContentEditable
+    ) {
+      return;
+    }
+    onClick(agent);
+  };
+
   return (
     <Card
       className="group relative overflow-hidden cursor-pointer transition-colors hover:bg-muted/40 hover:ring-1 hover:ring-primary/20"
-      onClick={() => onClick(agent)}
+      onClick={handleCardClick}
       role="button"
       tabIndex={0}
       onKeyDown={handleCardKeyDown}
@@ -72,7 +100,11 @@ const AgentCard: React.FC<AgentCardProps> = ({
               isFavorited={!!agent.is_favourite}
               onToggle={() => onToggleFavorite?.(agent.id ?? "", !(agent.is_favourite ?? false))}
             />
-            <AgentPreviewDialogButton agent={agent} />
+            {userData?.id && userData.id === agent.creator ? (
+              <AgentEditDialog agent={agent} />
+            ) : (
+              <AgentPreviewDialogButton agent={agent} />
+            )}
             <AgentDeleteButton id={agent.id ?? ""} creatorId={agent.creator} />
           </div>
 
