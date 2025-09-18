@@ -75,6 +75,7 @@ const CreateAgentForm = ({ onSubmit, isSubmitting, initialValues, submitLabel }:
         <Textarea
           id="prompt"
           placeholder="Enter agent prompt"
+          maxLength={10000}
           {...form.register("prompt")}
         />
         {form.formState.errors.prompt && (
