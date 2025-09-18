@@ -11,6 +11,7 @@ import AgentsNavItem from "./AgentsNavItem";
 import { RecentChatsSectionSkeleton } from "./RecentChatsSectionSkeleton";
 import ScheduledActionsNavItem from "./ScheduledActionsNavItem";
 import FilesNavItem from "./FilesNavItem";
+import { useEffect } from "react";
 
 const Menu = ({ toggleMenuExpanded }: { toggleMenuExpanded: () => void }) => {
   const { push, prefetch } = useRouter();
@@ -20,13 +21,17 @@ const Menu = ({ toggleMenuExpanded }: { toggleMenuExpanded: () => void }) => {
   const isSegments = pathname.includes("/segments");
   const isScheduledActions = pathname.includes("/scheduled-actions");
   const isFiles = pathname.includes("/files");
-  prefetch('/files');
 
   const goToItem = (link?: string) => {
     if (isPrepared()) {
       push(`/${link || uuidV4()}`);
     }
   };
+
+  useEffect(() => {
+    prefetch('/files');
+    prefetch('/agents');
+  }, [prefetch]);
 
   return (
     <div className="w-full h-screen pt-9 pb-6 pl-6 pr-3 hidden md:flex flex-col">
