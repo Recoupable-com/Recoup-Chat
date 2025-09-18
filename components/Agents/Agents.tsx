@@ -63,7 +63,7 @@ const Agents = () => {
         <div className="relative w-full">
           <div className="absolute top-0 w-full h-8 z-30 pointer-events-none bg-gradient-to-b from-white/95 to-transparent dark:from-neutral-950/95"></div>
         </div>
-        <div className="flex flex-col flex-1 overflow-y-auto pt-4 md:pt-8 pb-8 relative bg-white dark:bg-neutral-950">
+        <div className="flex flex-col flex-1 overflow-y-auto pt-4 md:pt-8 pb-8 relative bg-white dark:bg-neutral-950 w-full">
           {loading ? (
             <AgentsSkeleton />
           ) : gridAgents.length === 0 ? (
