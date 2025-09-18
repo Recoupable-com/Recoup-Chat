@@ -1,7 +1,5 @@
 import type React from "react";
-import { ExternalLink} from "lucide-react";
 import { Card, CardHeader, CardContent } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import AgentCreator from "./AgentCreator";
 import AgentPreviewDialogButton from "./AgentPreviewDialog";
@@ -29,8 +27,21 @@ const AgentCard: React.FC<AgentCardProps> = ({
   const displayedActionTags = agent.tags?.filter(tag => actionTags.includes(tag)) || [];
   const pillTag = displayedActionTags[0] ?? agent.tags?.[0];
 
+  const handleCardKeyDown = (event: React.KeyboardEvent<HTMLDivElement>) => {
+    if (event.key === "Enter" || event.key === " ") {
+      event.preventDefault();
+      onClick(agent);
+    }
+  };
+
   return (
-    <Card className="relative overflow-hidden">
+    <Card
+      className="relative overflow-hidden cursor-pointer"
+      onClick={() => onClick(agent)}
+      role="button"
+      tabIndex={0}
+      onKeyDown={handleCardKeyDown}
+    >
       <CardHeader className="p-4 pb-2">
         <div className="flex items-start justify-between">
           <div className="space-y-3 flex-1">
@@ -51,21 +62,12 @@ const AgentCard: React.FC<AgentCardProps> = ({
 
       <CardContent className="px-4 pt-0 pb-3">
         <div className="flex items-center justify-between">
-          <div className="flex gap-1">
+          <div className="flex gap-1" onClick={(e) => e.stopPropagation()}>
             <AgentHeart
               isFavorited={!!agent.is_favourite}
               onToggle={() => onToggleFavorite?.(agent.id ?? "", !(agent.is_favourite ?? false))}
             />
             <AgentPreviewDialogButton agent={agent} />
-            <Button
-              size="sm"
-              variant="ghost"
-              className="h-8 w-8 p-0 bg-transparent rounded-xl"
-              onClick={() => onClick(agent)}
-            >
-              <ExternalLink className="h-4 w-4" />
-              <span className="sr-only">Open link</span>
-            </Button>
             <AgentDeleteButton id={agent.id ?? ""} creatorId={agent.creator} />
           </div>
 
