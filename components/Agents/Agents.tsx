@@ -6,6 +6,7 @@ import { useAgentData } from "./useAgentData";
 import type { Agent } from "./useAgentData";
 import CreateAgentButton from "./CreateAgentButton";
 import { Switch } from "@/components/ui/switch";
+import AgentsSkeleton from "./AgentsSkeleton";
 
 const Agents = () => {
   const { push } = useRouter();
@@ -62,11 +63,9 @@ const Agents = () => {
         <div className="relative w-full">
           <div className="absolute top-0 w-full h-8 z-30 pointer-events-none bg-gradient-to-b from-white/95 to-transparent dark:from-neutral-950/95"></div>
         </div>
-        <div className="flex flex-col flex-1 overflow-y-auto pt-4 md:pt-8 pb-8 relative bg-white dark:bg-neutral-950">
+        <div className="flex flex-col flex-1 overflow-y-auto pt-4 md:pt-8 pb-8 relative bg-white dark:bg-neutral-950 w-full">
           {loading ? (
-            <div className="text-center text-gray-400 py-12">
-              Loading agents...
-            </div>
+            <AgentsSkeleton />
           ) : gridAgents.length === 0 ? (
             <div className="text-center text-gray-400 py-12">
               No agents found for this tag.
