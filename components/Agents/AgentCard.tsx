@@ -3,7 +3,7 @@ import { ExternalLink} from "lucide-react";
 import { Card, CardHeader, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import Image from "next/image";
+import AgentCreator from "./AgentCreator";
 import AgentPreviewDialogButton from "./AgentPreviewDialog";
 import AgentDeleteButton from "./AgentDeleteButton";
 import AgentHeart from "./AgentHeart";
@@ -69,19 +69,8 @@ const AgentCard: React.FC<AgentCardProps> = ({
             <AgentDeleteButton id={agent.id ?? ""} creatorId={agent.creator} />
           </div>
 
-          {/* Brand watermark */}
-          <div className="flex items-center">
-            {agent.creator === null && (
-              <Image
-                src="/Recoup_Icon_Wordmark_Black.svg"
-                alt="Recoup"
-                width={64}
-                height={18}
-                className="opacity-70 h-[14px] w-auto"
-                priority={false}
-              />
-            )}
-          </div>
+          {/* Creator avatar or brand */}
+          <AgentCreator creatorId={agent.creator} className="flex items-center" />
         </div>
       </CardContent>
     </Card>
