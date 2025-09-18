@@ -3,6 +3,7 @@ import React from "react";
 import AgentTags from "./AgentTags";
 import AgentCard from "./AgentCard";
 import { useAgentData } from "./useAgentData";
+import { useAgentToggleFavorite } from "./useAgentToggleFavorite";
 import type { Agent } from "./useAgentData";
 import CreateAgentButton from "./CreateAgentButton";
 import { Switch } from "@/components/ui/switch";
@@ -20,8 +21,8 @@ const Agents = () => {
     gridAgents,
     isPrivate,
     togglePrivate,
-    handleToggleFavorite,
   } = useAgentData();
+  const { handleToggleFavorite } = useAgentToggleFavorite();
 
   const handleAgentClick = (agent: Agent) => {
     push(`/chat?q=${encodeURIComponent(agent.prompt)}`);
