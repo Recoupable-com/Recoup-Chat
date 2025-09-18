@@ -1,4 +1,5 @@
 import type React from "react";
+import { ExternalLink } from "lucide-react";
 import { Card, CardHeader, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import AgentCreator from "./AgentCreator";
@@ -36,12 +37,16 @@ const AgentCard: React.FC<AgentCardProps> = ({
 
   return (
     <Card
-      className="relative overflow-hidden cursor-pointer"
+      className="group relative overflow-hidden cursor-pointer transition-colors hover:bg-muted/40 hover:ring-1 hover:ring-primary/20"
       onClick={() => onClick(agent)}
       role="button"
       tabIndex={0}
       onKeyDown={handleCardKeyDown}
     >
+      <ExternalLink
+        className="absolute top-2 right-2 h-4 w-4 text-muted-foreground opacity-0 translate-x-1 transition-all duration-200 group-hover:opacity-100 group-hover:translate-x-0"
+        aria-hidden
+      />
       <CardHeader className="p-4 pb-2">
         <div className="flex items-start justify-between">
           <div className="space-y-3 flex-1">
