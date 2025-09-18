@@ -14,8 +14,8 @@ interface AgentCardProps {
 }
 
 const AgentCard: React.FC<AgentCardProps> = ({ agent, onClick }) => {
-  // Define action tags that should be displayed in cards
-  const actionTags = ["Deep Research", "Send Report", "Email Outreach", "Scheduled Action", "Creative Content"];
+  // Define action tags that should be displayed in cards (mirrors filter tags)
+  const actionTags = ["Research", "Plan", "Create", "Connect", "Report"];
   
   // Filter agent tags to only show action tags
   const displayedActionTags = agent.tags?.filter(tag => 

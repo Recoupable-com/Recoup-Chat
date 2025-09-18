@@ -22,15 +22,13 @@ export function useAgentData() {
       .then((data: Agent[]) => {
         setAgents(data);
         
-        // Action tags that should NOT appear in top filters (now multi-word)
-        const actionTags = ["Deep Research", "Send Report", "Email Outreach", "Scheduled Action", "Creative Content"];
-        
-        // Build a unique tag list from all agents, excluding action tags
+        // Since action tags now mirror filter tags, we don't exclude them
+        // All tags will appear as both filters and pills
         const uniqueTags = Array.from(
           new Set(
             data
               .flatMap((agent: Agent) => agent.tags || [])
-              .filter((tag: string) => !!tag && !actionTags.includes(tag)) // Exclude action tags
+              .filter((tag: string) => !!tag) // Just filter out empty tags
           )
         );
         
