@@ -52,7 +52,7 @@ const AgentCreator = ({ creatorId, className }: AgentCreatorProps) => {
 
   return (
     <div className={className}>
-      <Avatar className="h-[18px] w-[18px] rounded-full">
+      <Avatar className="h-[24px] w-[24px] rounded-full">
         <AvatarImage src={imageUrl} alt={name || "Creator"} />
       </Avatar>
     </div>
