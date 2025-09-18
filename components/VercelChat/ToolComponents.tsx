@@ -95,7 +95,9 @@ export function getToolCallComponent(part: ToolUIPart) {
   if (
     toolName === "generate_image" ||
     toolName === "nano_banana_generate" ||
-    toolName === "nano_banana_edit"
+    toolName === "nano_banana_edit" ||
+    toolName === "default_api.nano_banana_generate" ||
+    toolName === "default_api.nano_banana_edit"
   ) {
     return (
       <div key={toolCallId} className="skeleton">
@@ -247,7 +249,9 @@ export function getToolResultComponent(part: ToolUIPart) {
     );
   } else if (
     toolName === "nano_banana_generate" ||
-    toolName === "nano_banana_edit"
+    toolName === "nano_banana_edit" ||
+    toolName === "default_api.nano_banana_generate" ||
+    toolName === "default_api.nano_banana_edit"
   ) {
     return (
       <div key={toolCallId}>
