@@ -81,5 +81,13 @@ export function getMcpTools(): ToolSet {
     ...youtubeTools,
   };
 
-  return tools;
+  // Handle potential namespacing issues with beta AI SDK
+  // Some models may try to call tools with 'default_api.' prefix
+  const namespacedTools: ToolSet = { ...tools };
+  Object.entries(tools).forEach(([key, tool]) => {
+    // Also register with default_api prefix for compatibility with beta AI SDK
+    namespacedTools[`default_api.${key}`] = tool;
+  });
+
+  return namespacedTools;
 }
