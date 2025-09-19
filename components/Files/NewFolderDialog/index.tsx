@@ -20,7 +20,7 @@ export default function NewFolderDialog({ onCreate }: { onCreate: (name: string)
   return (
     <Dialog open={open} onOpenChange={(v) => { if (!submitting) setOpen(v); }}>
       <DialogTrigger asChild>
-        <Button size="sm" variant="outline">New Folder</Button>
+        <Button size="sm" variant="outline" className="rounded-lg">New Folder</Button>
       </DialogTrigger>
       <DialogContent className="sm:max-w-[380px]">
         <DialogHeader>
