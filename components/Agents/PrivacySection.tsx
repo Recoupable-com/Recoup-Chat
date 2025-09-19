@@ -6,9 +6,11 @@ import EmailShareInput from "./EmailShareInput";
 
 interface PrivacySectionProps {
   form: UseFormReturn<CreateAgentFormData>;
+  existingSharedEmails?: string[];
+  onExistingEmailsChange?: (emails: string[]) => void;
 }
 
-const PrivacySection = ({ form }: PrivacySectionProps) => {
+const PrivacySection = ({ form, existingSharedEmails = [], onExistingEmailsChange }: PrivacySectionProps) => {
   const isPrivate = form.watch("isPrivate");
 
   return (
@@ -25,9 +27,11 @@ const PrivacySection = ({ form }: PrivacySectionProps) => {
       {isPrivate && (
         <EmailShareInput
           emails={form.watch("shareEmails") ?? []}
+          existingSharedEmails={existingSharedEmails}
           onEmailsChange={(emails) => {
             form.setValue("shareEmails", emails, { shouldDirty: true, shouldValidate: true });
           }}
+          onExistingEmailsChange={onExistingEmailsChange}
         />
       )}
     </>

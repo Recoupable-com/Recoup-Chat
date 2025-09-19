@@ -1,16 +1,18 @@
 import { useState } from "react";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Badge } from "@/components/ui/badge";
-import { X } from "lucide-react";
 import { isValidEmail } from "@/lib/utils/isValidEmail";
+import ExistingSharedEmailsList from "./ExistingSharedEmailsList";
+import NewEmailsList from "./NewEmailsList";
 
 interface EmailShareInputProps {
   emails: string[];
+  existingSharedEmails?: string[];
   onEmailsChange: (emails: string[]) => void;
+  onExistingEmailsChange?: (emails: string[]) => void;
 }
 
-const EmailShareInput = ({ emails, onEmailsChange }: EmailShareInputProps) => {
+const EmailShareInput = ({ emails, existingSharedEmails = [], onEmailsChange, onExistingEmailsChange }: EmailShareInputProps) => {
   const [inputValue, setInputValue] = useState("");
 
   const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
@@ -22,26 +24,35 @@ const EmailShareInput = ({ emails, onEmailsChange }: EmailShareInputProps) => {
 
   const addEmail = () => {
     const trimmedEmail = inputValue.trim().toLowerCase();
-    
+
     if (!trimmedEmail) return;
-    
+
     if (!isValidEmail(trimmedEmail)) {
       // You could add error handling here
       return;
     }
-    
-    if (emails.includes(trimmedEmail)) {
+
+    // Check if email already exists in either existing or new emails
+    if (emails.includes(trimmedEmail) || existingSharedEmails.includes(trimmedEmail)) {
       setInputValue("");
       return;
     }
-    
+
     onEmailsChange([...emails, trimmedEmail]);
     setInputValue("");
   };
 
-  const removeEmail = (emailToRemove: string) => {
+  const removeNewEmail = (emailToRemove: string) => {
     onEmailsChange(emails.filter(email => email !== emailToRemove));
   };
+
+  const removeExistingEmail = (emailToRemove: string) => {
+    if (onExistingEmailsChange) {
+      onExistingEmailsChange(existingSharedEmails.filter(email => email !== emailToRemove));
+    }
+  };
+
+  const hasAnyEmails = existingSharedEmails.length > 0 || emails.length > 0;
 
   return (
     <div className="space-y-2">
@@ -54,26 +65,17 @@ const EmailShareInput = ({ emails, onEmailsChange }: EmailShareInputProps) => {
         onChange={(e) => setInputValue(e.target.value)}
         onKeyDown={handleKeyDown}
       />
-      
-      {emails.length > 0 && (
-        <div className="flex flex-wrap gap-2 mt-2">
-          {emails.map((email) => (
-            <Badge
-              key={email}
-              variant="secondary"
-              className="flex items-center gap-1 pr-1"
-            >
-              {email}
-              <button
-                type="button"
-                onClick={() => removeEmail(email)}
-                className="ml-1 hover:bg-gray-200 rounded-full p-0.5"
-                aria-label={`Remove ${email}`}
-              >
-                <X className="h-3 w-3" />
-              </button>
-            </Badge>
-          ))}
+
+      {hasAnyEmails && (
+        <div className="space-y-3">
+          <ExistingSharedEmailsList
+            emails={existingSharedEmails}
+            onRemoveEmail={removeExistingEmail}
+          />
+          <NewEmailsList
+            emails={emails}
+            onRemoveEmail={removeNewEmail}
+          />
         </div>
       )}
     </div>
