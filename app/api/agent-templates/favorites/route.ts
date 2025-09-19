@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
-import { toggleAgentTemplateFavorite } from "@/lib/supabase/agent_templates/toggleAgentTemplateFavorite";
+import { addAgentTemplateFavorite } from "@/lib/supabase/agent_templates/addAgentTemplateFavorite";
+import { removeAgentTemplateFavorite } from "@/lib/supabase/agent_templates/removeAgentTemplateFavorite";
 import type { ToggleFavoriteRequest, ToggleFavoriteResponse } from "@/types/AgentTemplates";
 
 export const runtime = "edge";
@@ -12,7 +13,11 @@ export async function POST(request: Request) {
       return NextResponse.json({ error: "Missing templateId or userId" }, { status: 400 });
     }
 
-    await toggleAgentTemplateFavorite(templateId, userId, isFavourite);
+    if (isFavourite) {
+      await addAgentTemplateFavorite(templateId, userId);
+    } else {
+      await removeAgentTemplateFavorite(templateId, userId);
+    }
 
     return NextResponse.json({ success: true } as ToggleFavoriteResponse);
   } catch (error) {
