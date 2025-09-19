@@ -38,7 +38,7 @@ export default function FileTile({ file, onDelete, onProperties, isOwner, isSele
   // macOS Finder-style icon container - minimal by default
   const iconClasses = cn(
     "h-16 w-16 flex items-center justify-center rounded-lg",
-    file.is_directory ? "text-blue-600" : `${visual.color}`,
+    file.is_directory ? "text-black" : `${visual.color}`,
     "group-hover:scale-105 group-hover:drop-shadow-sm transition-all duration-200 [&_svg]:h-10 [&_svg]:w-10"
   );
 
