@@ -13,18 +13,20 @@ import { Loader } from "lucide-react";
 interface CreateAgentFormProps {
   onSubmit: (values: CreateAgentFormData) => void;
   isSubmitting?: boolean;
+  initialValues?: Partial<CreateAgentFormData>;
+  submitLabel?: string;
 }
 
-const CreateAgentForm = ({ onSubmit, isSubmitting }: CreateAgentFormProps) => {
+const CreateAgentForm = ({ onSubmit, isSubmitting, initialValues, submitLabel }: CreateAgentFormProps) => {
   const { tags } = useAgentData();
   const form = useForm<CreateAgentFormData>({
     resolver: zodResolver(createAgentSchema),
     defaultValues: {
-      title: "",
-      description: "",
-      prompt: "",
-      tags: [],
-      isPrivate: false,
+      title: initialValues?.title ?? "",
+      description: initialValues?.description ?? "",
+      prompt: initialValues?.prompt ?? "",
+      tags: initialValues?.tags ?? [],
+      isPrivate: initialValues?.isPrivate ?? false,
     },
   });
 
@@ -73,6 +75,7 @@ const CreateAgentForm = ({ onSubmit, isSubmitting }: CreateAgentFormProps) => {
         <Textarea
           id="prompt"
           placeholder="Enter agent prompt"
+          maxLength={10000}
           {...form.register("prompt")}
         />
         {form.formState.errors.prompt && (
@@ -83,7 +86,7 @@ const CreateAgentForm = ({ onSubmit, isSubmitting }: CreateAgentFormProps) => {
       </div>
 
       <div className="space-y-2">
-        <Label htmlFor="tags">Tags</Label>
+        <Label htmlFor="tags">Category</Label>
         <div className="flex flex-wrap gap-2" id="tags">
           {tags.filter((t) => t !== "Recommended").map((tag) => {
             const isSelected = selectedTags.includes(tag);
@@ -139,10 +142,10 @@ const CreateAgentForm = ({ onSubmit, isSubmitting }: CreateAgentFormProps) => {
           {isSubmitting ? (
             <>
               <Loader className="animate-spin" />
-              Creating...
+              {submitLabel ? `${submitLabel}...` : "Saving..."}
             </>
           ) : (
-            "Submit"
+            submitLabel ?? "Save"
           )}
         </Button>
       </div>

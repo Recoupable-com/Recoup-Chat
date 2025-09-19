@@ -7,7 +7,7 @@ import { handleChatCompletion } from "@/lib/chat/handleChatCompletion";
 import { getCorsHeaders } from "@/lib/chat/getCorsHeaders";
 import { type ChatRequest } from "@/lib/chat/types";
 import generateUUID from "@/lib/generateUUID";
-import { handleChatCredits } from "@/lib/chat/handleChatCredits";
+import { handleChatCredits } from "@/lib/credits/handleChatCredits";
 
 // Handle OPTIONS preflight requests
 export async function OPTIONS() {

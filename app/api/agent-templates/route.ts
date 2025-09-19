@@ -1,31 +1,20 @@
 import { NextResponse } from "next/server";
-import supabase from "@/lib/supabase/serverClient";
+// Supabase client is used in utilities imported below; no direct use here
+import { listAgentTemplatesWithFavourites } from "@/lib/supabase/agent_templates/listAgentTemplatesWithFavourites";
+import { createAgentTemplate } from "@/lib/supabase/agent_templates/createAgentTemplate";
+import { updateAgentTemplate } from "@/lib/supabase/agent_templates/updateAgentTemplate";
+import { deleteAgentTemplate } from "@/lib/supabase/agent_templates/deleteAgentTemplate";
+import { verifyAgentTemplateOwner } from "@/lib/supabase/agent_templates/verifyAgentTemplateOwner";
+
+export const runtime = "edge";
 
 export async function GET(request: Request) {
   try {
     const { searchParams } = new URL(request.url);
     const userId = searchParams.get("userId");
 
-    if (userId && userId !== "undefined") {
-      const { data, error } = await supabase
-        .from("agent_templates")
-        .select("id, title, description, prompt, tags, creator, is_private, updated_at")
-        .or(`creator.eq.${userId},is_private.eq.false`) // user-owned OR any public
-        .order("title");
-
-      if (error) throw error;
-      return NextResponse.json(data || []);
-    }
-
-    // No userId: return any public templates only
-    const { data, error } = await supabase
-      .from("agent_templates")
-      .select("id, title, description, prompt, tags, creator, is_private, updated_at")
-      .eq("is_private", false)
-      .order("title");
-
-    if (error) throw error;
-    return NextResponse.json(data || []);
+    const result = await listAgentTemplatesWithFavourites(userId ?? undefined);
+    return NextResponse.json(result);
   } catch (error) {
     console.error('Error fetching agent templates:', error);
     return NextResponse.json({ error: 'Failed to fetch templates' }, { status: 500 });
@@ -51,20 +40,14 @@ export async function POST(request: Request) {
       userId?: string | null;
     } = body;
 
-    const { data, error } = await supabase
-      .from("agent_templates")
-      .insert({
-        title,
-        description,
-        prompt,
-        tags,
-        is_private: isPrivate,
-        creator: userId ?? null,
-      })
-      .select("id, title, description, prompt, tags, creator, is_private")
-      .single();
-
-    if (error) throw error;
+    const data = await createAgentTemplate({
+      title,
+      description,
+      prompt,
+      tags,
+      isPrivate,
+      userId,
+    });
     return NextResponse.json(data, { status: 201 });
   } catch (error) {
     console.error("Error creating agent template:", error);
@@ -79,29 +62,67 @@ export async function DELETE(request: Request) {
       return NextResponse.json({ error: "Missing id or userId" }, { status: 400 });
     }
 
-    // Verify ownership
-    const { data: template, error: fetchError } = await supabase
-      .from("agent_templates")
-      .select("id, creator")
-      .eq("id", id)
-      .single();
-
-    if (fetchError) throw fetchError;
-    if (!template || template.creator !== userId) {
+    const isOwner = await verifyAgentTemplateOwner(id, userId);
+    if (!isOwner) {
       return NextResponse.json({ error: "Forbidden" }, { status: 403 });
     }
 
-    const { error: deleteError } = await supabase
-      .from("agent_templates")
-      .delete()
-      .eq("id", id);
-
-    if (deleteError) throw deleteError;
-
+    await deleteAgentTemplate(id);
     return NextResponse.json({ success: true });
   } catch (error) {
     console.error("Error deleting template:", error);
     return NextResponse.json({ error: "Failed to delete template" }, { status: 500 });
+  }
+}
+
+export async function PATCH(request: Request) {
+  try {
+    const body = await request.json();
+    const {
+      id,
+      userId,
+      title,
+      description,
+      prompt,
+      tags,
+      isPrivate,
+    }: {
+      id: string;
+      userId: string;
+      title?: string;
+      description?: string;
+      prompt?: string;
+      tags?: string[];
+      isPrivate?: boolean;
+    } = body;
+
+    if (!id || !userId) {
+      return NextResponse.json({ error: "Missing id or userId" }, { status: 400 });
+    }
+
+    const isOwner = await verifyAgentTemplateOwner(id, userId);
+    if (!isOwner) {
+      return NextResponse.json({ error: "Forbidden" }, { status: 403 });
+    }
+
+    const updateFields: {
+      title?: string;
+      description?: string;
+      prompt?: string;
+      tags?: string[];
+      is_private?: boolean;
+    } = {};
+    if (typeof title !== "undefined") updateFields.title = title;
+    if (typeof description !== "undefined") updateFields.description = description;
+    if (typeof prompt !== "undefined") updateFields.prompt = prompt;
+    if (typeof tags !== "undefined") updateFields.tags = tags;
+    if (typeof isPrivate !== "undefined") updateFields.is_private = isPrivate;
+
+    const data = await updateAgentTemplate(id, updateFields);
+    return NextResponse.json(data);
+  } catch (error) {
+    console.error("Error updating agent template:", error);
+    return NextResponse.json({ error: "Failed to update template" }, { status: 500 });
   }
 }
 
