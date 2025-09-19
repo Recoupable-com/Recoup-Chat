@@ -1,4 +1,5 @@
 import supabase from "@/lib/supabase/serverClient";
+import { createAgentTemplateShares } from "./createAgentTemplateShares";
 
 export async function createAgentTemplate(params: {
   title: string;
@@ -30,37 +31,3 @@ export async function createAgentTemplate(params: {
 
   return data;
 }
-
-// Helper function to create agent template shares
-async function createAgentTemplateShares(templateId: string, emails: string[]) {
-  // Get user accounts by email from account_emails table
-  const { data: userEmails, error: usersError } = await supabase
-    .from("account_emails")
-    .select("account_id, email")
-    .in("email", emails);
-
-  if (usersError) throw usersError;
-
-  if (!userEmails || userEmails.length === 0) {
-    // If no users found, we could either throw an error or silently continue
-    // For now, we'll silently continue as the emails might be for future users
-    return;
-  }
-
-  // Create share records for found users
-  const sharesData = userEmails.map(userEmail => ({
-    template_id: templateId,
-    user_id: userEmail.account_id,
-  }));
-
-  const { error: sharesError } = await supabase
-    .from("agent_template_shares")
-    .upsert(sharesData, {
-      onConflict: "template_id,user_id",
-      ignoreDuplicates: true
-    });
-
-  if (sharesError) throw sharesError;
-}
-
-
