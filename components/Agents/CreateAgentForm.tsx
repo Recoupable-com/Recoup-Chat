@@ -12,9 +12,11 @@ interface CreateAgentFormProps {
   isSubmitting?: boolean;
   initialValues?: Partial<CreateAgentFormData>;
   submitLabel?: string;
+  existingSharedEmails?: string[];
+  onExistingEmailsChange?: (emails: string[]) => void;
 }
 
-const CreateAgentForm = ({ onSubmit, isSubmitting, initialValues, submitLabel }: CreateAgentFormProps) => {
+const CreateAgentForm = ({ onSubmit, isSubmitting, initialValues, submitLabel, existingSharedEmails, onExistingEmailsChange }: CreateAgentFormProps) => {
   const form = useForm<CreateAgentFormData>({
     resolver: zodResolver(createAgentSchema),
     defaultValues: {
@@ -42,7 +44,7 @@ const CreateAgentForm = ({ onSubmit, isSubmitting, initialValues, submitLabel }:
     <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
       <FormFields form={form} />
       <TagSelector form={form} />
-      <PrivacySection form={form} />
+      <PrivacySection form={form} existingSharedEmails={existingSharedEmails} onExistingEmailsChange={onExistingEmailsChange} />
       <SubmitButton isSubmitting={isSubmitting} submitLabel={submitLabel} />
     </form>
   );
