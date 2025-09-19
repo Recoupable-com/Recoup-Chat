@@ -28,16 +28,48 @@ export async function POST(req: Request) {
     }
 
     if (row.is_directory) {
-      return NextResponse.json({ error: "Cannot delete a folder here" }, { status: 400 });
+      // For directories, we need to delete all files inside first, then the directory
+      // Get all files in this directory
+      const { data: childFiles, error: childError } = await supabase
+        .from("files")
+        .select("storage_key")
+        .like("storage_key", `${storageKey}%`)
+        .neq("id", id); // Exclude the directory itself
+      
+      if (childError) {
+        return NextResponse.json({ error: childError.message }, { status: 500 });
+      }
+
+      // Delete all files in the directory from storage
+      if (childFiles && childFiles.length > 0) {
+        const childStorageKeys = childFiles.map(f => f.storage_key);
+        const { error: removeChildError } = await supabase.storage
+          .from(SUPABASE_STORAGE_BUCKET)
+          .remove(childStorageKeys);
+        if (removeChildError) {
+          return NextResponse.json({ error: removeChildError.message }, { status: 500 });
+        }
+      }
+
+      // Delete all child file records from database
+      const { error: deleteChildError } = await supabase
+        .from("files")
+        .delete()
+        .like("storage_key", `${storageKey}%`)
+        .neq("id", id);
+      
+      if (deleteChildError) {
+        return NextResponse.json({ error: deleteChildError.message }, { status: 500 });
+      }
+    } else {
+      // For regular files, delete from storage first
+      const { error: removeError } = await supabase.storage.from(SUPABASE_STORAGE_BUCKET).remove([storageKey]);
+      if (removeError) {
+        return NextResponse.json({ error: removeError.message }, { status: 500 });
+      }
     }
 
-    // Delete from storage first
-    const { error: removeError } = await supabase.storage.from(SUPABASE_STORAGE_BUCKET).remove([storageKey]);
-    if (removeError) {
-      return NextResponse.json({ error: removeError.message }, { status: 500 });
-    }
-
-    // Then delete DB row
+    // Delete the main DB row (file or directory)
     const { error: dbError } = await supabase.from("files").delete().eq("id", id);
     if (dbError) {
       return NextResponse.json({ error: dbError.message }, { status: 500 });

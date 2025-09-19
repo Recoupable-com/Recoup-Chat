@@ -19,10 +19,11 @@ export type DeleteFileDialogProps = {
   storageKey: string;
   fileName: string;
   ownerAccountId: string;
+  isDirectory?: boolean;
   onDeleted?: () => void;
 };
 
-export default function DeleteFileDialog({ open, onOpenChange, id, storageKey, fileName, ownerAccountId, onDeleted }: DeleteFileDialogProps) {
+export default function DeleteFileDialog({ open, onOpenChange, id, storageKey, fileName, ownerAccountId, isDirectory, onDeleted }: DeleteFileDialogProps) {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string>("");
 
@@ -54,12 +55,20 @@ export default function DeleteFileDialog({ open, onOpenChange, id, storageKey, f
     <AlertDialog open={open} onOpenChange={onOpenChange}>
       <AlertDialogContent>
         <AlertDialogHeader>
-          <AlertDialogTitle>Delete “{fileName}”?</AlertDialogTitle>
+          <AlertDialogTitle>Delete {isDirectory ? "folder" : "file"} &ldquo;{fileName}&rdquo;?</AlertDialogTitle>
           <AlertDialogDescription>
-            This will permanently remove the file from storage. This action cannot be undone.
+            {isDirectory 
+              ? "This will permanently remove the folder and all files inside it from storage. This action cannot be undone."
+              : "This will permanently remove the file from storage. This action cannot be undone."
+            }
           </AlertDialogDescription>
         </AlertDialogHeader>
-        {error && <div className="text-sm text-red-600">{error}</div>}
+        {error && (
+          <div className="bg-red-50 border border-red-200 rounded-md p-3">
+            <div className="text-sm text-red-700 font-medium">Cannot delete folder</div>
+            <div className="text-sm text-red-600 mt-1">{error}</div>
+          </div>
+        )}
         <AlertDialogFooter>
           <AlertDialogCancel disabled={loading}>Cancel</AlertDialogCancel>
           <AlertDialogAction onClick={handleConfirm} disabled={loading} className="bg-red-600 hover:bg-red-700">
