@@ -12,32 +12,33 @@ type FileTileProps = {
   onDelete: (file: FileRow) => void;
   onProperties: (file: FileRow) => void;
   isOwner?: boolean;
+  isSelected?: boolean;
+  onClick?: (event: React.MouseEvent) => void;
 };
 
-export default function FileTile({ file, onDelete, onProperties, isOwner }: FileTileProps) {
+export default function FileTile({ file, onDelete, onProperties, isOwner, isSelected, onClick }: FileTileProps) {
   const visual = getFileVisual(file.file_name, file.mime_type ?? null);
   const targetPath = file.is_directory ? file.storage_key : undefined;
   const isImage = visual.icon === "image";
   const signedUrl = `/api/files/signed-url?key=${encodeURIComponent(file.storage_key)}`;
 
-  // Shared indicator - subtle blue dot
+  // Shared indicator using shadcn theme colors
   const sharedIndicator = file.is_shared && (
-    <div className="absolute -top-1 -left-1 w-3 h-3 bg-blue-500 rounded-full shadow-sm border border-white/50"></div>
+    <div className="absolute -top-1 -left-1 w-3 h-3 bg-accent-foreground rounded-full shadow-sm border border-background"></div>
   );
 
-  // macOS Finder-style container styling - minimal by default, styled on hover
+  // macOS Finder-style container styling using shadcn theme colors
   const containerClasses = cn(
-    "group relative rounded-xl bg-white/80 hover:bg-blue-50/60 transition-all duration-200",
+    "group relative rounded-xl bg-card hover:bg-accent transition-all duration-200 cursor-pointer",
     "w-32 h-32 flex flex-col items-center justify-start p-4 gap-3",
-    "hover:shadow-sm hover:border hover:border-blue-200/40",
-    file.is_shared && "bg-blue-50/30 hover:bg-blue-100/70",
-    !file.is_shared && "hover:bg-blue-50/50"
+    "hover:shadow-sm border border-border",
+    isSelected && "bg-accent border-accent-foreground/20"
   );
 
   // macOS Finder-style icon container - minimal by default
   const iconClasses = cn(
     "h-16 w-16 flex items-center justify-center rounded-lg",
-    file.is_directory ? "text-blue-600" : `${visual.color}`,
+    file.is_directory ? "text-black" : `${visual.color}`,
     "group-hover:scale-105 group-hover:drop-shadow-sm transition-all duration-200 [&_svg]:h-10 [&_svg]:w-10"
   );
 
@@ -94,6 +95,12 @@ export default function FileTile({ file, onDelete, onProperties, isOwner }: File
       <Link
         href={`?path=${encodeURIComponent(targetPath!)}`}
         className={containerClasses}
+        onClick={(e) => {
+          if (onClick && (e.shiftKey || e.ctrlKey || e.metaKey)) {
+            e.preventDefault(); // Prevent navigation when selecting
+            onClick(e);
+          }
+        }}
       >
         {content}
       </Link>
@@ -101,7 +108,10 @@ export default function FileTile({ file, onDelete, onProperties, isOwner }: File
   }
 
   return (
-    <div className={containerClasses}>
+    <div 
+      className={containerClasses}
+      onClick={onClick}
+    >
       {content}
     </div>
   );
