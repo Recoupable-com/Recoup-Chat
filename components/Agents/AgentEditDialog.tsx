@@ -13,7 +13,7 @@ import CreateAgentForm from "./CreateAgentForm";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useUserProvider } from "@/providers/UserProvder";
 import type { AgentTemplateRow } from "@/types/AgentTemplates";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 interface AgentEditDialogProps {
   agent: AgentTemplateRow;
@@ -23,6 +23,7 @@ const AgentEditDialog: React.FC<AgentEditDialogProps> = ({ agent }) => {
   const [open, setOpen] = useState(false);
   const { userData } = useUserProvider();
   const queryClient = useQueryClient();
+  const [currentSharedEmails, setCurrentSharedEmails] = useState<string[]>(agent.shared_emails || []);
 
   const editTemplate = useMutation({
     mutationFn: async (values: {
@@ -31,7 +32,13 @@ const AgentEditDialog: React.FC<AgentEditDialogProps> = ({ agent }) => {
       prompt?: string;
       tags?: string[];
       isPrivate?: boolean;
+      shareEmails?: string[];
     }) => {
+      // Combine existing emails (after removals) with new emails
+      const finalShareEmails = values.shareEmails && values.shareEmails.length > 0
+        ? [...currentSharedEmails, ...values.shareEmails]
+        : currentSharedEmails;
+
       const res = await fetch("/api/agent-templates", {
         method: "PATCH",
         headers: { "Content-Type": "application/json" },
@@ -43,6 +50,7 @@ const AgentEditDialog: React.FC<AgentEditDialogProps> = ({ agent }) => {
           prompt: values.prompt,
           tags: values.tags,
           isPrivate: values.isPrivate,
+          shareEmails: finalShareEmails,
         }),
       });
       if (!res.ok) throw new Error("Failed to update template");
@@ -60,9 +68,21 @@ const AgentEditDialog: React.FC<AgentEditDialogProps> = ({ agent }) => {
     prompt: string;
     tags: string[];
     isPrivate: boolean;
+    shareEmails?: string[];
   }) => {
     editTemplate.mutate(values);
   };
+
+  const handleExistingEmailsChange = (emails: string[]) => {
+    setCurrentSharedEmails(emails);
+  };
+
+  // Reset current shared emails when dialog opens or agent changes
+  useEffect(() => {
+    if (open) {
+      setCurrentSharedEmails(agent.shared_emails || []);
+    }
+  }, [open, agent.shared_emails]);
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
@@ -85,7 +105,10 @@ const AgentEditDialog: React.FC<AgentEditDialogProps> = ({ agent }) => {
             prompt: agent.prompt,
             tags: agent.tags ?? [],
             isPrivate: agent.is_private,
+            shareEmails: [],
           }}
+          existingSharedEmails={currentSharedEmails}
+          onExistingEmailsChange={handleExistingEmailsChange}
           submitLabel="Save changes"
         />
       </DialogContent>

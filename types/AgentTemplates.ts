@@ -24,6 +24,8 @@ export type AgentTemplateRow = {
   updated_at: string | null;
   // computed for requesting user
   is_favourite?: boolean;
+  // emails the template is shared with (only for private templates)
+  shared_emails?: string[];
 };
 
 

@@ -1,24 +1,22 @@
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { Switch } from "@/components/ui/switch";
-import { Textarea } from "@/components/ui/textarea";
-import { Button } from "@/components/ui/button";
-import { Badge } from "@/components/ui/badge";
+import { useEffect } from "react";
 import { createAgentSchema, type CreateAgentFormData } from "./schemas";
-import { useAgentData } from "./useAgentData";
-import { Loader } from "lucide-react";
+import FormFields from "./FormFields";
+import TagSelector from "./TagSelector";
+import PrivacySection from "./PrivacySection";
+import SubmitButton from "./SubmitButton";
 
 interface CreateAgentFormProps {
   onSubmit: (values: CreateAgentFormData) => void;
   isSubmitting?: boolean;
   initialValues?: Partial<CreateAgentFormData>;
   submitLabel?: string;
+  existingSharedEmails?: string[];
+  onExistingEmailsChange?: (emails: string[]) => void;
 }
 
-const CreateAgentForm = ({ onSubmit, isSubmitting, initialValues, submitLabel }: CreateAgentFormProps) => {
-  const { tags } = useAgentData();
+const CreateAgentForm = ({ onSubmit, isSubmitting, initialValues, submitLabel, existingSharedEmails, onExistingEmailsChange }: CreateAgentFormProps) => {
   const form = useForm<CreateAgentFormData>({
     resolver: zodResolver(createAgentSchema),
     defaultValues: {
@@ -27,128 +25,27 @@ const CreateAgentForm = ({ onSubmit, isSubmitting, initialValues, submitLabel }:
       prompt: initialValues?.prompt ?? "",
       tags: initialValues?.tags ?? [],
       isPrivate: initialValues?.isPrivate ?? false,
+      shareEmails: initialValues?.shareEmails ?? [],
     },
   });
 
-  const selectedTags = form.watch("tags") ?? [];
+  const isPrivate = form.watch("isPrivate");
 
-  const toggleTag = (tag: string) => {
-    const current = form.getValues("tags") ?? [];
-    const next = current.includes(tag)
-      ? current.filter((t: string) => t !== tag)
-      : [...current, tag];
-    form.setValue("tags", next, { shouldDirty: true, shouldValidate: true });
-  };
+  // Ensure shareEmails is initialized when private is toggled
+  useEffect(() => {
+    if (!isPrivate) {
+      form.setValue("shareEmails", []);
+    } else if (!form.getValues("shareEmails")) {
+      form.setValue("shareEmails", []);
+    }
+  }, [isPrivate, form]);
 
   return (
     <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
-      <div className="space-y-2">
-        <Label htmlFor="title">Title</Label>
-        <Input
-          id="title"
-          placeholder="Enter agent title"
-          {...form.register("title")}
-        />
-        {form.formState.errors.title && (
-          <p className="text-sm text-red-500">
-            {form.formState.errors.title.message}
-          </p>
-        )}
-      </div>
-
-      <div className="space-y-2">
-        <Label htmlFor="description">Description</Label>
-        <Textarea
-          id="description"
-          placeholder="Enter agent description"
-          {...form.register("description")}
-        />
-        {form.formState.errors.description && (
-          <p className="text-sm text-red-500">
-            {form.formState.errors.description.message}
-          </p>
-        )}
-      </div>
-
-      <div className="space-y-2">
-        <Label htmlFor="prompt">Prompt</Label>
-        <Textarea
-          id="prompt"
-          placeholder="Enter agent prompt"
-          maxLength={10000}
-          {...form.register("prompt")}
-        />
-        {form.formState.errors.prompt && (
-          <p className="text-sm text-red-500">
-            {form.formState.errors.prompt.message}
-          </p>
-        )}
-      </div>
-
-      <div className="space-y-2">
-        <Label htmlFor="tags">Category</Label>
-        <div className="flex flex-wrap gap-2" id="tags">
-          {tags.filter((t) => t !== "Recommended").map((tag) => {
-            const isSelected = selectedTags.includes(tag);
-            return (
-              <Badge
-                key={tag}
-                role="button"
-                tabIndex={0}
-                aria-pressed={isSelected}
-                onClick={() => toggleTag(tag)}
-                onKeyDown={(e) => {
-                  if (e.key === "Enter" || e.key === " ") {
-                    e.preventDefault();
-                    toggleTag(tag);
-                  }
-                }}
-                className={
-                  isSelected
-                    ? "cursor-pointer select-none rounded-full focus:ring-0"
-                    : "cursor-pointer select-none rounded-full bg-transparent border-gray-300 text-gray-600 hover:bg-gray-50 focus:ring-0"
-                }
-                variant={isSelected ? "default" : "outline"}
-              >
-                {tag}
-              </Badge>
-            );
-          })}
-        </div>
-        {form.formState.errors.tags && (
-          <p className="text-sm text-red-500">
-            {form.formState.errors.tags.message as string}
-          </p>
-        )}
-      </div>
-
-      <div className="flex items-center space-x-2">
-        <Switch
-          id="isPrivate"
-          checked={form.watch("isPrivate")}
-          onCheckedChange={(checked) => form.setValue("isPrivate", checked)}
-        />
-        <Label htmlFor="isPrivate">Private</Label>
-      </div>
-
-      <div className="flex justify-end space-x-2 pt-4">
-        <Button
-          type="submit"
-          size="sm"
-          className="rounded-xl"
-          disabled={Boolean(isSubmitting)}
-          aria-busy={Boolean(isSubmitting)}
-        >
-          {isSubmitting ? (
-            <>
-              <Loader className="animate-spin" />
-              {submitLabel ? `${submitLabel}...` : "Saving..."}
-            </>
-          ) : (
-            submitLabel ?? "Save"
-          )}
-        </Button>
-      </div>
+      <FormFields form={form} />
+      <TagSelector form={form} />
+      <PrivacySection form={form} existingSharedEmails={existingSharedEmails} onExistingEmailsChange={onExistingEmailsChange} />
+      <SubmitButton isSubmitting={isSubmitting} submitLabel={submitLabel} />
     </form>
   );
 };

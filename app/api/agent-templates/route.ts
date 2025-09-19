@@ -1,10 +1,11 @@
 import { NextResponse } from "next/server";
 // Supabase client is used in utilities imported below; no direct use here
-import { listAgentTemplatesWithFavourites } from "@/lib/supabase/agent_templates/listAgentTemplatesWithFavourites";
+import { getUserAccessibleTemplates } from "@/lib/supabase/agent_templates/getUserAccessibleTemplates";
 import { createAgentTemplate } from "@/lib/supabase/agent_templates/createAgentTemplate";
 import { updateAgentTemplate } from "@/lib/supabase/agent_templates/updateAgentTemplate";
 import { deleteAgentTemplate } from "@/lib/supabase/agent_templates/deleteAgentTemplate";
 import { verifyAgentTemplateOwner } from "@/lib/supabase/agent_templates/verifyAgentTemplateOwner";
+import { getSharedEmailsForTemplates } from "@/lib/supabase/agent_templates/getSharedEmailsForTemplates";
 
 export const runtime = "edge";
 
@@ -13,8 +14,25 @@ export async function GET(request: Request) {
     const { searchParams } = new URL(request.url);
     const userId = searchParams.get("userId");
 
-    const result = await listAgentTemplatesWithFavourites(userId ?? undefined);
-    return NextResponse.json(result);
+    const templates = await getUserAccessibleTemplates(userId ?? undefined);
+
+    // Get shared emails for private templates
+    const privateTemplateIds = templates
+      .filter(template => template.is_private)
+      .map(template => template.id);
+
+    let sharedEmails: Record<string, string[]> = {};
+    if (privateTemplateIds.length > 0) {
+      sharedEmails = await getSharedEmailsForTemplates(privateTemplateIds);
+    }
+
+    // Add shared emails to templates
+    const templatesWithEmails = templates.map(template => ({
+      ...template,
+      shared_emails: template.is_private ? (sharedEmails[template.id] || []) : []
+    }));
+
+    return NextResponse.json(templatesWithEmails);
   } catch (error) {
     console.error('Error fetching agent templates:', error);
     return NextResponse.json({ error: 'Failed to fetch templates' }, { status: 500 });
@@ -30,6 +48,7 @@ export async function POST(request: Request) {
       prompt,
       tags,
       isPrivate,
+      shareEmails,
       userId,
     }: {
       title: string;
@@ -37,6 +56,7 @@ export async function POST(request: Request) {
       prompt: string;
       tags: string[];
       isPrivate: boolean;
+      shareEmails?: string[];
       userId?: string | null;
     } = body;
 
@@ -46,6 +66,7 @@ export async function POST(request: Request) {
       prompt,
       tags,
       isPrivate,
+      shareEmails,
       userId,
     });
     return NextResponse.json(data, { status: 201 });
@@ -86,6 +107,7 @@ export async function PATCH(request: Request) {
       prompt,
       tags,
       isPrivate,
+      shareEmails,
     }: {
       id: string;
       userId: string;
@@ -94,6 +116,7 @@ export async function PATCH(request: Request) {
       prompt?: string;
       tags?: string[];
       isPrivate?: boolean;
+      shareEmails?: string[];
     } = body;
 
     if (!id || !userId) {
@@ -118,7 +141,7 @@ export async function PATCH(request: Request) {
     if (typeof tags !== "undefined") updateFields.tags = tags;
     if (typeof isPrivate !== "undefined") updateFields.is_private = isPrivate;
 
-    const data = await updateAgentTemplate(id, updateFields);
+    const data = await updateAgentTemplate(id, updateFields, shareEmails);
     return NextResponse.json(data);
   } catch (error) {
     console.error("Error updating agent template:", error);
