@@ -64,7 +64,7 @@ export default function FileItemMenu({ id, fileName, storageKey, isDirectory, on
             <Trash2 className="mr-2 h-4 w-4" /> Delete
           </DropdownMenuItem>
         )}
-        {isDirectory && isOwner && (
+        {isDirectory && (
           <DropdownMenuItem onClick={handle("delete")} className="text-red-600 focus:text-red-700">
             <Trash2 className="mr-2 h-4 w-4" /> Delete Folder
           </DropdownMenuItem>
