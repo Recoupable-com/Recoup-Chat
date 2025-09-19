@@ -60,23 +60,12 @@ const ModelSelect = () => {
             {organizedModels.featuredModels.length > 0 && (
               <div className="my-1 h-px bg-border" />
             )}
-            <div className="relative">
-              <PromptInputModelSelect onValueChange={handleModelChange} value="">
-                <PromptInputModelSelectTrigger className="w-full justify-start px-3 py-2.5 text-sm font-medium text-muted-foreground hover:bg-accent hover:text-foreground rounded-lg border-none shadow-none bg-transparent [&>svg]:hidden">
-                  <span>More Models</span>
-                </PromptInputModelSelectTrigger>
-                <PromptInputModelSelectContent 
-                  className="min-w-[200px]" 
-                  side={isMobile ? "bottom" : "right"} 
-                  align="start" 
-                  sideOffset={8}
-                >
-                  {organizedModels.otherModels.map((model) => (
-                    <ModelSelectItem key={model.id} model={model} />
-                  ))}
-                </PromptInputModelSelectContent>
-              </PromptInputModelSelect>
+            <div className="px-3 py-2.5 text-sm font-medium text-muted-foreground">
+              More Models
             </div>
+            {organizedModels.otherModels.map((model) => (
+              <ModelSelectItem key={model.id} model={model} />
+            ))}
           </>
         )}
       </PromptInputModelSelectContent>
