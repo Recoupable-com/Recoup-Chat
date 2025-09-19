@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useCallback } from "react";
+import { useCallback } from "react";
 import { PhotoProvider } from "react-photo-view";
 import "react-photo-view/dist/react-photo-view.css";
 import { FileRow } from "@/components/Files/types";
@@ -57,7 +57,7 @@ export default function FilesGridList({
       // Regular click: single selection
       onSelectionChange(new Set([file.id]), index);
     }
-  }, [selectedFiles, lastClickedIndex, files]);
+  }, [selectedFiles, lastClickedIndex, files, onSelectionChange]);
 
   return (
     <PhotoProvider>

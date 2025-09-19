@@ -10,11 +10,10 @@ interface FilesToolbarProps {
   onCreateFolder: (name: string) => Promise<unknown> | void;
   onFileSelected: (file: File) => void;
   selectedFiles: Set<string>;
-  onClearSelection: () => void;
   onDeleteSelected: () => void;
 }
 
-export default function FilesToolbar({ base, relative, onCreateFolder, onFileSelected, selectedFiles, onClearSelection, onDeleteSelected }: FilesToolbarProps) {
+export default function FilesToolbar({ base, relative, onCreateFolder, onFileSelected, selectedFiles, onDeleteSelected }: FilesToolbarProps) {
   return (
     <div className="flex items-start gap-3 md:items-center">
       <div className="min-w-0">

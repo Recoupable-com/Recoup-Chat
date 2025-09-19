@@ -58,7 +58,6 @@ export default function UploadAndList() {
           handleUpload(f);
         }}
         selectedFiles={selectedFiles}
-        onClearSelection={clearSelection}
         onDeleteSelected={() => {
           const selectedFileObjects = files.filter(f => selectedFiles.has(f.id));
           setBatchDeleteTarget({
