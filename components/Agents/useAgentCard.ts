@@ -13,7 +13,6 @@ interface UseAgentCardProps {
 interface UseAgentCardReturn {
   // Status detection
   isSharedWithUser: boolean;
-  isPrivateNotOwned: boolean;
 
   // UI state
   pillTag: string;
@@ -47,12 +46,6 @@ export function useAgentCard({
     userData.id !== agent.creator &&
     email &&
     agent.shared_emails?.includes(email);
-
-  // Check if this agent is private and user is not the owner
-  const isPrivateNotOwned =
-    agent.is_private &&
-    userData?.id &&
-    userData.id !== agent.creator;
 
   const handleCardKeyDown = useCallback((event: React.KeyboardEvent<HTMLDivElement>) => {
     const target = event.target as HTMLElement;
@@ -95,7 +88,6 @@ export function useAgentCard({
 
   return {
     isSharedWithUser,
-    isPrivateNotOwned,
     pillTag,
     handleCardKeyDown,
     handleCardClick,

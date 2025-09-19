@@ -1,5 +1,5 @@
 import type React from "react";
-import { ExternalLink, Users, Lock } from "lucide-react";
+import { ExternalLink, Users} from "lucide-react";
 import { Card, CardHeader, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import AgentCreator from "./AgentCreator";
@@ -28,7 +28,6 @@ const AgentCard: React.FC<AgentCardProps> = ({
 
   const {
     isSharedWithUser,
-    isPrivateNotOwned,
     pillTag,
     handleCardKeyDown,
     handleCardClick,
@@ -41,9 +40,7 @@ const AgentCard: React.FC<AgentCardProps> = ({
 
   return (
     <Card
-      className={`group relative overflow-hidden cursor-pointer transition-colors hover:bg-muted/40 hover:ring-1 hover:ring-primary/20 ${
-        isSharedWithUser ? 'ring-1 ring-blue-200' : ''
-      }`}
+      className={`group relative overflow-hidden cursor-pointer transition-colors hover:bg-muted/40 hover:ring-1 hover:ring-primary/20`}
       onClick={handleCardClick}
       role="button"
       tabIndex={0}
@@ -51,10 +48,7 @@ const AgentCard: React.FC<AgentCardProps> = ({
     >
       {/* Status indicator bar */}
       {isSharedWithUser && (
-        <div className="absolute top-0 left-0 right-0 h-1 bg-blue-500" />
-      )}
-      {isPrivateNotOwned && !isSharedWithUser && (
-        <div className="absolute top-0 left-0 right-0 h-1 bg-gray-400" />
+        <div className="absolute top-0 left-0 right-0 h-1 bg-black" />
       )}
       <ExternalLink
         className="absolute top-2 right-2 h-4 w-4 text-muted-foreground opacity-0 translate-x-1 transition-all duration-200 group-hover:opacity-100 group-hover:translate-x-0"
@@ -68,15 +62,9 @@ const AgentCard: React.FC<AgentCardProps> = ({
                 {pillTag || "General"}
               </Badge>
               {isSharedWithUser && (
-                <Badge variant="outline" className="flex items-center gap-1 text-xs bg-blue-50 border-blue-200 text-blue-700">
+                <Badge variant="outline" className="flex items-center gap-1 text-xs bg-black border-black text-white">
                   <Users className="h-3 w-3" />
                   Shared
-                </Badge>
-              )}
-              {isPrivateNotOwned && !isSharedWithUser && (
-                <Badge variant="outline" className="flex items-center gap-1 text-xs bg-gray-50 border-gray-200 text-gray-600">
-                  <Lock className="h-3 w-3" />
-                  Private
                 </Badge>
               )}
             </div>
