@@ -1,9 +1,12 @@
 import { useRouter } from "next/navigation";
+import React from "react";
 import AgentTags from "./AgentTags";
 import AgentCard from "./AgentCard";
 import { useAgentData } from "./useAgentData";
 import type { Agent } from "./useAgentData";
 import CreateAgentButton from "./CreateAgentButton";
+import { Switch } from "@/components/ui/switch";
+import AgentsSkeleton from "./AgentsSkeleton";
 
 const Agents = () => {
   const { push } = useRouter();
@@ -15,6 +18,9 @@ const Agents = () => {
     showAllTags,
     setShowAllTags,
     gridAgents,
+    isPrivate,
+    togglePrivate,
+    handleToggleFavorite,
   } = useAgentData();
 
   const handleAgentClick = (agent: Agent) => {
@@ -27,7 +33,15 @@ const Agents = () => {
         <p className="text-left font-plus_jakarta_sans_bold text-3xl">
           Agents
         </p>
-        <CreateAgentButton />
+        <div className="flex items-center gap-4">
+          <div className="flex items-center gap-2">
+            <span className="text-sm text-gray-600 dark:text-gray-400">
+              {isPrivate ? "Private" : "Public"}
+            </span>
+            <Switch checked={isPrivate} onCheckedChange={() => togglePrivate()} />
+          </div>
+          <CreateAgentButton />
+        </div>
       </div>
       <p className="text-lg text-gray-500 text-left mb-4 font-light font-inter max-w-2xl">
         <span className="sm:hidden">
@@ -49,11 +63,9 @@ const Agents = () => {
         <div className="relative w-full">
           <div className="absolute top-0 w-full h-8 z-30 pointer-events-none bg-gradient-to-b from-white/95 to-transparent dark:from-neutral-950/95"></div>
         </div>
-        <div className="flex flex-col flex-1 overflow-y-auto pt-4 md:pt-8 pb-8 relative bg-white dark:bg-neutral-950">
+        <div className="flex flex-col flex-1 overflow-y-auto pt-4 md:pt-8 pb-8 relative bg-white dark:bg-neutral-950 w-full">
           {loading ? (
-            <div className="text-center text-gray-400 py-12">
-              Loading agents...
-            </div>
+            <AgentsSkeleton />
           ) : gridAgents.length === 0 ? (
             <div className="text-center text-gray-400 py-12">
               No agents found for this tag.
@@ -65,6 +77,7 @@ const Agents = () => {
                   <AgentCard
                     agent={agent}
                     onClick={() => handleAgentClick(agent)}
+                    onToggleFavorite={(id, next) => handleToggleFavorite(id, next)}
                   />
                 </div>
               ))}

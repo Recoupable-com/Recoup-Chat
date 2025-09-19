@@ -1,5 +1,5 @@
 import type React from "react";
-import { Eye, Lock, Globe } from "lucide-react";
+import { Info, Lock, Globe } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { format } from "date-fns";
@@ -11,26 +11,19 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
+import type { AgentTemplateRow } from "@/types/AgentTemplates";
 
-type PreviewAgent = {
-  title: string;
-  description: string;
-  prompt: string;
-  tags?: string[];
-  is_private?: boolean;
-  creator?: string | null;
-  updated_at?: string;
-};
+type Agent = AgentTemplateRow;
 
 interface AgentPreviewDialogProps {
-  agent: PreviewAgent;
+  agent: Agent;
 }
 
 const AgentPreviewDialog: React.FC<AgentPreviewDialogProps> = ({ agent }) => (
   <Dialog>
     <DialogTrigger asChild>
       <Button size="sm" variant="ghost" className="h-8 w-8 p-0 bg-transparent rounded-xl">
-        <Eye className="h-4 w-4" />
+        <Info className="h-4 w-4" />
         <span className="sr-only">Preview</span>
       </Button>
     </DialogTrigger>
