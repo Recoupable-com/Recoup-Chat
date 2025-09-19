@@ -5,6 +5,7 @@ import { createAgentTemplate } from "@/lib/supabase/agent_templates/createAgentT
 import { updateAgentTemplate } from "@/lib/supabase/agent_templates/updateAgentTemplate";
 import { deleteAgentTemplate } from "@/lib/supabase/agent_templates/deleteAgentTemplate";
 import { verifyAgentTemplateOwner } from "@/lib/supabase/agent_templates/verifyAgentTemplateOwner";
+import { getSharedEmailsForTemplates } from "@/lib/supabase/agent_templates/getSharedEmailsForTemplates";
 
 export const runtime = "edge";
 
@@ -13,8 +14,25 @@ export async function GET(request: Request) {
     const { searchParams } = new URL(request.url);
     const userId = searchParams.get("userId");
 
-    const result = await getUserAccessibleTemplates(userId ?? undefined);
-    return NextResponse.json(result);
+    const templates = await getUserAccessibleTemplates(userId ?? undefined);
+
+    // Get shared emails for private templates
+    const privateTemplateIds = templates
+      .filter(template => template.is_private)
+      .map(template => template.id);
+
+    let sharedEmails: Record<string, string[]> = {};
+    if (privateTemplateIds.length > 0) {
+      sharedEmails = await getSharedEmailsForTemplates(privateTemplateIds);
+    }
+
+    // Add shared emails to templates
+    const templatesWithEmails = templates.map(template => ({
+      ...template,
+      shared_emails: template.is_private ? (sharedEmails[template.id] || []) : []
+    }));
+
+    return NextResponse.json(templatesWithEmails);
   } catch (error) {
     console.error('Error fetching agent templates:', error);
     return NextResponse.json({ error: 'Failed to fetch templates' }, { status: 500 });
