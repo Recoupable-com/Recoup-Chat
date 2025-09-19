@@ -1,4 +1,5 @@
 import supabase from "@/lib/supabase/serverClient";
+import { updateAgentTemplateShares } from "./updateAgentTemplateShares";
 
 export type AgentTemplateUpdates = {
   title?: string;
@@ -10,7 +11,8 @@ export type AgentTemplateUpdates = {
 
 export async function updateAgentTemplate(
   id: string,
-  updates: AgentTemplateUpdates
+  updates: AgentTemplateUpdates,
+  shareEmails?: string[]
 ) {
   const { data, error } = await supabase
     .from("agent_templates")
@@ -24,7 +26,11 @@ export async function updateAgentTemplate(
     )
     .single();
   if (error) throw error;
+
+  // Handle email sharing updates if shareEmails is provided
+  if (typeof shareEmails !== "undefined") {
+    await updateAgentTemplateShares(id, shareEmails);
+  }
+
   return data;
 }
-
-
