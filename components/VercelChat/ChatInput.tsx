@@ -71,7 +71,7 @@ export function ChatInput({
           onSubmit={handleSend}
           className={cn(
             "overflow-visible md:overflow-hidden",
-            "rounded-2xl border bg-background/70 backdrop-blur",
+            "rounded-2xl border border-gray-200 bg-background/70 backdrop-blur",
             "shadow-sm"
           )}
         >
