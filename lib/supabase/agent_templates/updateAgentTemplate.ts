@@ -28,7 +28,6 @@ export async function updateAgentTemplate(
   if (error) throw error;
 
   // Handle email sharing updates if shareEmails is provided
-  // Note: userId is used for permission checking at the API level, not needed here
   if (typeof shareEmails !== "undefined") {
     await updateAgentTemplateShares(id, shareEmails);
   }

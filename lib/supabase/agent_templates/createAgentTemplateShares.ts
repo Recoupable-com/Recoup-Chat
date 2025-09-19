@@ -18,8 +18,6 @@ export async function createAgentTemplateShares(
   const userEmails = await getAccountDetailsByEmails(emails);
 
   if (userEmails.length === 0) {
-    // If no users found, we could either throw an error or silently continue
-    // For now, we'll silently continue as the emails might be for future users
     return;
   }
 
