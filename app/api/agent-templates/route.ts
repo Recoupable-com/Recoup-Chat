@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 // Supabase client is used in utilities imported below; no direct use here
-import { listAgentTemplatesWithFavourites } from "@/lib/supabase/agent_templates/listAgentTemplatesWithFavourites";
+import { getUserAccessibleTemplates } from "@/lib/supabase/agent_templates/getUserAccessibleTemplates";
 import { createAgentTemplate } from "@/lib/supabase/agent_templates/createAgentTemplate";
 import { updateAgentTemplate } from "@/lib/supabase/agent_templates/updateAgentTemplate";
 import { deleteAgentTemplate } from "@/lib/supabase/agent_templates/deleteAgentTemplate";
@@ -13,7 +13,7 @@ export async function GET(request: Request) {
     const { searchParams } = new URL(request.url);
     const userId = searchParams.get("userId");
 
-    const result = await listAgentTemplatesWithFavourites(userId ?? undefined);
+    const result = await getUserAccessibleTemplates(userId ?? undefined);
     return NextResponse.json(result);
   } catch (error) {
     console.error('Error fetching agent templates:', error);
