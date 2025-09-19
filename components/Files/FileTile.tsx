@@ -16,16 +16,11 @@ type FileTileProps = {
   onClick?: (event: React.MouseEvent) => void;
 };
 
-export default function FileTile({ file, onDelete, onProperties, isOwner, isSelected, onClick }: FileTileProps) {
+export default function FileTile({ file, onDelete, onProperties, isSelected, onClick }: FileTileProps) {
   const visual = getFileVisual(file.file_name, file.mime_type ?? null);
   const targetPath = file.is_directory ? file.storage_key : undefined;
   const isImage = visual.icon === "image";
   const signedUrl = `/api/files/signed-url?key=${encodeURIComponent(file.storage_key)}`;
-
-  // Shared indicator using shadcn theme colors
-  const sharedIndicator = file.is_shared && (
-    <div className="absolute -top-1 -left-1 w-3 h-3 bg-accent-foreground rounded-full shadow-sm border border-background"></div>
-  );
 
   // macOS Finder-style container styling using shadcn theme colors
   const containerClasses = cn(
@@ -47,7 +42,7 @@ export default function FileTile({ file, onDelete, onProperties, isOwner, isSele
 
   const content = (
     <>
-      {/* Icon with Shared Indicator */}
+      {/* Icon */}
       <div className="relative">
         <div className={iconClasses}>
           {isImage && !file.is_directory ? (
@@ -63,8 +58,6 @@ export default function FileTile({ file, onDelete, onProperties, isOwner, isSele
             />
           )}
         </div>
-        {/* Shared indicator overlay */}
-        {sharedIndicator}
       </div>
 
       {/* File Name */}
@@ -79,8 +72,6 @@ export default function FileTile({ file, onDelete, onProperties, isOwner, isSele
           fileName={file.file_name}
           storageKey={file.storage_key}
           isDirectory={file.is_directory}
-          isShared={file.is_shared}
-          isOwner={isOwner}
           onAction={(action) => {
             if (action === "delete") onDelete(file);
             if (action === "properties") onProperties(file);

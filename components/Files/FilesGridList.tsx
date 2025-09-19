@@ -92,5 +92,3 @@ export default function FilesGridList({
     </PhotoProvider>
   );
 }
-
-
