@@ -30,6 +30,7 @@ export async function POST(request: Request) {
       prompt,
       tags,
       isPrivate,
+      shareEmails,
       userId,
     }: {
       title: string;
@@ -37,6 +38,7 @@ export async function POST(request: Request) {
       prompt: string;
       tags: string[];
       isPrivate: boolean;
+      shareEmails?: string[];
       userId?: string | null;
     } = body;
 
@@ -46,6 +48,7 @@ export async function POST(request: Request) {
       prompt,
       tags,
       isPrivate,
+      shareEmails,
       userId,
     });
     return NextResponse.json(data, { status: 201 });
@@ -86,6 +89,7 @@ export async function PATCH(request: Request) {
       prompt,
       tags,
       isPrivate,
+      shareEmails,
     }: {
       id: string;
       userId: string;
@@ -94,6 +98,7 @@ export async function PATCH(request: Request) {
       prompt?: string;
       tags?: string[];
       isPrivate?: boolean;
+      shareEmails?: string[];
     } = body;
 
     if (!id || !userId) {
@@ -118,7 +123,7 @@ export async function PATCH(request: Request) {
     if (typeof tags !== "undefined") updateFields.tags = tags;
     if (typeof isPrivate !== "undefined") updateFields.is_private = isPrivate;
 
-    const data = await updateAgentTemplate(id, updateFields);
+    const data = await updateAgentTemplate(id, updateFields, shareEmails);
     return NextResponse.json(data);
   } catch (error) {
     console.error("Error updating agent template:", error);
