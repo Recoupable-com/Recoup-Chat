@@ -55,7 +55,7 @@ export default function DeleteFileDialog({ open, onOpenChange, id, storageKey, f
     <AlertDialog open={open} onOpenChange={onOpenChange}>
       <AlertDialogContent>
         <AlertDialogHeader>
-          <AlertDialogTitle>Delete {isDirectory ? "folder" : "file"} "{fileName}"?</AlertDialogTitle>
+          <AlertDialogTitle>Delete {isDirectory ? "folder" : "file"} &ldquo;{fileName}&rdquo;?</AlertDialogTitle>
           <AlertDialogDescription>
             {isDirectory 
               ? "This will permanently remove the folder and all files inside it from storage. This action cannot be undone."
