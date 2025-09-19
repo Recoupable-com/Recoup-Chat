@@ -31,6 +31,7 @@ const AgentEditDialog: React.FC<AgentEditDialogProps> = ({ agent }) => {
       prompt?: string;
       tags?: string[];
       isPrivate?: boolean;
+      shareEmails?: string[];
     }) => {
       const res = await fetch("/api/agent-templates", {
         method: "PATCH",
@@ -43,6 +44,7 @@ const AgentEditDialog: React.FC<AgentEditDialogProps> = ({ agent }) => {
           prompt: values.prompt,
           tags: values.tags,
           isPrivate: values.isPrivate,
+          shareEmails: values.shareEmails,
         }),
       });
       if (!res.ok) throw new Error("Failed to update template");
@@ -60,6 +62,7 @@ const AgentEditDialog: React.FC<AgentEditDialogProps> = ({ agent }) => {
     prompt: string;
     tags: string[];
     isPrivate: boolean;
+    shareEmails?: string[];
   }) => {
     editTemplate.mutate(values);
   };
@@ -85,6 +88,7 @@ const AgentEditDialog: React.FC<AgentEditDialogProps> = ({ agent }) => {
             prompt: agent.prompt,
             tags: agent.tags ?? [],
             isPrivate: agent.is_private,
+            shareEmails: [],
           }}
           submitLabel="Save changes"
         />

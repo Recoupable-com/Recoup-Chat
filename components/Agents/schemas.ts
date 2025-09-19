@@ -27,6 +27,7 @@ export const createAgentSchema = z.object({
     }),
   tags: z.array(z.string()),
   isPrivate: z.boolean(),
+  shareEmails: z.array(z.string().email()).optional().default([]),
 });
 
 export type CreateAgentFormData = z.infer<typeof createAgentSchema>;
