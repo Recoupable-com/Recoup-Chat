@@ -11,11 +11,19 @@ import { filterExcludedTools } from "./filterExcludedTools";
 import { handleNanoBananaModel } from "./handleNanoBananaModel";
 
 export async function setupChatRequest(body: ChatRequest): Promise<ChatConfig> {
-  const { accountId, artistId, excludeTools, email, artistInstruction, knowledgeBaseText, timezone } = body;
-  
+  const {
+    accountId,
+    artistId,
+    excludeTools,
+    email,
+    artistInstruction,
+    knowledgeBaseText,
+    timezone,
+  } = body;
+
   // Handle Fal nano banana model selection
   const nanoBananaConfig = handleNanoBananaModel(body);
-  
+
   // Use exclude tools from nano banana config if available
   const finalExcludeTools = nanoBananaConfig.excludeTools || excludeTools;
   const tools = filterExcludedTools(getMcpTools(), finalExcludeTools);
@@ -33,7 +41,10 @@ export async function setupChatRequest(body: ChatRequest): Promise<ChatConfig> {
   const config: ChatConfig = {
     model: nanoBananaConfig.resolvedModel || DEFAULT_MODEL,
     system,
-    messages: convertToModelMessages(body.messages).slice(-MAX_MESSAGES),
+    messages: convertToModelMessages(body.messages, {
+      tools,
+      ignoreIncompleteToolCalls: true,
+    }).slice(-MAX_MESSAGES),
     experimental_generateMessageId: generateUUID,
     tools,
     stopWhen: stepCountIs(111),
