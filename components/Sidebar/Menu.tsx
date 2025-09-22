@@ -6,13 +6,13 @@ import UnlockPro from "./UnlockPro";
 import UserInfo from "../Sidebar/UserInfo";
 import Logo from "../Logo";
 import { v4 as uuidV4 } from "uuid";
-import { Button } from "../ui/button";
 import FanGroupNavItem from "./FanGroupNavItem";
 import AgentsNavItem from "./AgentsNavItem";
 import { RecentChatsSectionSkeleton } from "./RecentChatsSectionSkeleton";
 import ScheduledActionsNavItem from "./ScheduledActionsNavItem";
 import FilesNavItem from "./FilesNavItem";
 import { useEffect } from "react";
+import ChatNavItem from "./ChatNavItem";
 
 const Menu = ({ toggleMenuExpanded }: { toggleMenuExpanded: () => void }) => {
   const { push, prefetch } = useRouter();
@@ -22,6 +22,7 @@ const Menu = ({ toggleMenuExpanded }: { toggleMenuExpanded: () => void }) => {
   const isSegments = pathname.includes("/segments");
   const isScheduledActions = pathname.includes("/scheduled-actions");
   const isFiles = pathname.includes("/files");
+  const isChat = pathname.includes("/chat");
 
   const goToItem = (link?: string) => {
     if (isPrepared()) {
@@ -45,21 +46,12 @@ const Menu = ({ toggleMenuExpanded }: { toggleMenuExpanded: () => void }) => {
       </Link>
       
       {/* Navigation Section */}
-      <div className="flex flex-col gap-3 w-full mt-2">
-        <Button
-          variant="outline"
-          className="rounded-xl w-full"
-          onClick={() => goToItem("chat")}
-        >
-          {email ? "New Chat" : "Sign In"}
-        </Button>
-        
-        <div className="flex flex-col gap-2">
-          <AgentsNavItem isActive={isAgents} onClick={() => goToItem("agents")} />
-          <ScheduledActionsNavItem isActive={isScheduledActions} onClick={() => goToItem("scheduled-actions")} />
-          <FanGroupNavItem isActive={isSegments} onClick={() => goToItem("segments")} />
-          <FilesNavItem isActive={isFiles} onClick={() => goToItem("files")} />
-        </div>
+      <div className="flex flex-col gap-1 py-0.5 mt-2">
+        <ChatNavItem isActive={isChat} onClick={() => goToItem("chat")} email={email} />
+        <AgentsNavItem isActive={isAgents} onClick={() => goToItem("agents")} />
+        <ScheduledActionsNavItem isActive={isScheduledActions} onClick={() => goToItem("scheduled-actions")} />
+        <FanGroupNavItem isActive={isSegments} onClick={() => goToItem("segments")} />
+        <FilesNavItem isActive={isFiles} onClick={() => goToItem("files")} />
       </div>
 
       {/* Recent Chats Section */}

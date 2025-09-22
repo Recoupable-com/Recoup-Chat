@@ -28,7 +28,7 @@ const NavButton = ({
     <Button
       variant="ghost"
       onClick={onClick}
-      className={cn("rounded-xl w-full flex justify-start", {
+      className={cn("rounded-xl w-full flex justify-start pl-2 gap-1.5 text-[#1d1c1b]", {
         "bg-muted text-black ring-1 ring-border hover:bg-muted": isActive,
         "text-black hover:bg-muted hover:text-black hover:ring-1 hover:ring-border": !isActive,
       })}
