@@ -78,8 +78,7 @@ const useUser = () => {
     setImage("");
     setOrganization("");
     await logout();
-    router.push("/");
-    login();
+    router.push("/signin");
   };
 
   useEffect(() => {
