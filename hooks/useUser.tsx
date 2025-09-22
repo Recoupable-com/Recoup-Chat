@@ -70,15 +70,16 @@ const useUser = () => {
     return true;
   };
 
-  const signOut = () => {
+  const signOut = async () => {
     setIsModalOpen(false);
     setUserData(null);
     setName("");
     setInstruction("");
     setImage("");
     setOrganization("");
-    logout();
+    await logout();
     router.push("/");
+    login();
   };
 
   useEffect(() => {
