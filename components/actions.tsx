@@ -50,7 +50,7 @@ export const Action = ({
 
   if (tooltip) {
     return (
-      <TooltipProvider delayDuration={0}>
+      <TooltipProvider delayDuration={100}>
         <Tooltip>
           <TooltipTrigger asChild>{button}</TooltipTrigger>
           <TooltipContent side="bottom">
