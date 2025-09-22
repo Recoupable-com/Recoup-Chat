@@ -10,8 +10,7 @@ import { getToolCallComponent, getToolResultComponent } from "./ToolComponents";
 import MessageFileViewer from "./message-file-viewer";
 import { Reasoning, ReasoningTrigger, ReasoningContent } from "@/components/reasoning";
 import { Actions, Action } from "@/components/actions";
-import { RefreshCcwIcon, CopyIcon } from "lucide-react";
-import { PencilEditIcon } from "./icons";
+import { RefreshCcwIcon, CopyIcon, Pencil } from "lucide-react";
 
 const Message = ({
   message,
@@ -88,7 +87,7 @@ const Message = ({
                         message={message}
                         partText={part?.text || ""}
                       />
-                      <Actions className={cn("mt-2", {
+                      <Actions className={cn("mt-0.5 gap-0.5", {
                         "justify-start": message.role === "assistant",
                         "justify-end": message.role === "user"
                       })}>
@@ -98,7 +97,7 @@ const Message = ({
                             label="Edit"
                             tooltip="Edit message"
                           >
-                            <PencilEditIcon size={12} />
+                            <Pencil className="!w-3 !h-3" />
                           </Action>
                         )}
                         {isLastMessage && (
@@ -107,7 +106,7 @@ const Message = ({
                             label="Retry"
                             tooltip="Regenerate this response"
                           >
-                            <RefreshCcwIcon className="size-3" />
+                            <RefreshCcwIcon className="!w-3 !h-3" />
                           </Action>
                         )}
                         <Action
@@ -115,7 +114,7 @@ const Message = ({
                           label="Copy"
                           tooltip="Copy response to clipboard"
                         >
-                          <CopyIcon className="size-3" />
+                          <CopyIcon className="!w-3 !h-3" />
                         </Action>
                       </Actions>
                     </div>
