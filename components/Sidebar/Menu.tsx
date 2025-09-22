@@ -1,4 +1,5 @@
 import { usePathname, useRouter } from "next/navigation";
+import Link from "next/link";
 import { useUserProvider } from "@/providers/UserProvder";
 import RecentChats from "../Sidebar/RecentChats";
 import UnlockPro from "./UnlockPro";
@@ -34,18 +35,17 @@ const Menu = ({ toggleMenuExpanded }: { toggleMenuExpanded: () => void }) => {
   }, [prefetch]);
 
   return (
-    <div className="w-full h-screen pt-9 pb-6 pl-6 pr-3 hidden md:flex flex-col">
-      <button
-        className="shrink-0 mb-0"
-        onClick={() => push("/")}
-        type="button"
+    <div className="w-full h-screen pt-4 pb-6 px-2.5 hidden md:flex flex-col">
+      <Link
+        href="/"
+        className="shrink-0 mb-0 hover:opacity-80 transition-opacity duration-200 w-fit"
         aria-label="Home"
       >
         <Logo />
-      </button>
+      </Link>
       
       {/* Navigation Section */}
-      <div className="flex flex-col gap-3 w-full">
+      <div className="flex flex-col gap-3 w-full mt-2">
         <Button
           variant="outline"
           className="rounded-xl w-full"
