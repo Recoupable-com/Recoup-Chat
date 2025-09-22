@@ -1,19 +1,26 @@
-import React from "react";
+import React, { useState } from "react";
 import { Action } from "@/components/actions";
-import { CopyIcon } from "lucide-react";
-import { toast } from "sonner";
+import { CopyIcon, Check } from "lucide-react";
+import { motion, AnimatePresence } from "framer-motion";
 
 interface CopyActionProps {
   text: string;
 }
 
 const CopyAction: React.FC<CopyActionProps> = ({ text }) => {
+  const [isCopied, setIsCopied] = useState(false);
+
   const handleCopy = async () => {
     try {
       await navigator.clipboard.writeText(text);
-      toast.success("Copied to clipboard");
+      setIsCopied(true);
+
+      // Reset back to copy icon after 1.5 seconds
+      setTimeout(() => {
+        setIsCopied(false);
+      }, 1500);
     } catch {
-      toast.error("Failed to copy to clipboard");
+      console.error("Failed to copy to clipboard");
     }
   };
 
@@ -23,7 +30,29 @@ const CopyAction: React.FC<CopyActionProps> = ({ text }) => {
       label="Copy"
       tooltip="Copy response to clipboard"
     >
-      <CopyIcon className="!w-3 !h-3" />
+      <AnimatePresence mode="wait">
+        {isCopied ? (
+          <motion.div
+            key="check"
+            initial={{ scale: 0, rotate: -180 }}
+            animate={{ scale: 1, rotate: 0 }}
+            exit={{ scale: 0, rotate: 180 }}
+            transition={{ duration: 0.15 }}
+          >
+            <Check className="!w-3 !h-3" />
+          </motion.div>
+        ) : (
+          <motion.div
+            key="copy"
+            initial={{ scale: 0, rotate: -180 }}
+            animate={{ scale: 1, rotate: 0 }}
+            exit={{ scale: 0, rotate: 180 }}
+            transition={{ duration: 0.15 }}
+          >
+            <CopyIcon className="!w-3 !h-3" />
+          </motion.div>
+        )}
+      </AnimatePresence>
     </Action>
   );
 };
