@@ -10,7 +10,8 @@ import { getToolCallComponent, getToolResultComponent } from "./ToolComponents";
 import MessageFileViewer from "./message-file-viewer";
 import { Reasoning, ReasoningTrigger, ReasoningContent } from "@/components/reasoning";
 import { Actions, Action } from "@/components/actions";
-import { RefreshCcwIcon, CopyIcon, Pencil } from "lucide-react";
+import { RefreshCcwIcon, Pencil } from "lucide-react";
+import CopyAction from "./CopyAction";
 
 const Message = ({
   message,
@@ -109,13 +110,7 @@ const Message = ({
                             <RefreshCcwIcon className="!w-3 !h-3" />
                           </Action>
                         )}
-                        <Action
-                          onClick={() => navigator.clipboard.writeText(part?.text || "")}
-                          label="Copy"
-                          tooltip="Copy response to clipboard"
-                        >
-                          <CopyIcon className="!w-3 !h-3" />
-                        </Action>
+                        <CopyAction text={part?.text || ""} />
                       </Actions>
                     </div>
                   );
