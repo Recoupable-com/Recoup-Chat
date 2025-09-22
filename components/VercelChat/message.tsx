@@ -44,7 +44,7 @@ const Message = ({
             }
           )}
         >
-          <div className={cn("flex flex-col gap-4 w-full")}>
+          <div className={cn("flex flex-col gap-4 w-full group")}>
             {message.parts?.map((part, partIndex) => {
               const { type } = part;
               const key = `message-${message.id}-part-${partIndex}`;
@@ -87,7 +87,7 @@ const Message = ({
                         message={message}
                         partText={part?.text || ""}
                       />
-                      <Actions className={cn("mt-0.5 gap-0.5", {
+                      <Actions className={cn("mt-0.5 gap-0.5 opacity-0 pointer-events-none group-hover:opacity-100 group-hover:pointer-events-auto transition-opacity", {
                         "justify-start": message.role === "assistant",
                         "justify-end": message.role === "user"
                       })}>
