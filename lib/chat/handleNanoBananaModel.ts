@@ -11,7 +11,7 @@ export function handleNanoBananaModel(body: ChatRequest) {
   // Only handle if nano banana model is selected
   if (model !== "fal-ai/nano-banana/edit") {
     return {
-      resolvedModel: "xai/grok-4-fast-non-reasoning",
+      resolvedModel: "xai/grok-4-fast-reasoning",
       forcedToolChoice: undefined,
       excludeTools: undefined
     };
