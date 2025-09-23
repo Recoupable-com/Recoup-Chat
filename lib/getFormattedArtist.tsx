@@ -23,6 +23,7 @@ const getFormattedArtist = (artist: any) => {
     ...info,
     account_id,
     account_socials,
+    pinned: artist.pinned || false,
   };
 };
 
