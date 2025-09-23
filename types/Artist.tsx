@@ -19,6 +19,7 @@ export type ArtistRecord = {
   knowledges?: any;
   label?: string | null;
   organization?: string | null;
+  pinned?: boolean;
   updated_at?: string;
   isWrapped?: boolean;
 };
