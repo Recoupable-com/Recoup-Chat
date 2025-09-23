@@ -42,9 +42,6 @@ const useArtists = () => {
     setSelectedArtist
   );
   const [menuVisibleArtistId, setMenuVisibleArtistId] = useState<any>("");
-  const activeArtistIndex = artists.findIndex(
-    (artist: ArtistRecord) => artist.account_id === selectedArtist?.account_id
-  );
   const { isCreatingArtist, setIsCreatingArtist, updateChatState } =
     useCreateArtists();
 
@@ -71,7 +68,12 @@ const useArtists = () => {
     // Sort remaining artists with pinned first
     const sortedRemaining = sortArtistsWithPinnedFirst(artistsWithoutSelected);
 
-    // Find where to insert selected artist (after pinned artists)
+    // If selected artist is pinned, put it at the very top
+    if (selectedArtist.pinned) {
+      return [selectedArtist, ...sortedRemaining];
+    }
+
+    // If selected artist is not pinned, find where to insert it (after pinned artists)
     const firstUnpinnedIndex = sortedRemaining.findIndex(artist => !artist.pinned);
     
     if (firstUnpinnedIndex === -1) {
