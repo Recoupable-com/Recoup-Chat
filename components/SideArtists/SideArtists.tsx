@@ -1,9 +1,8 @@
 import SideModal from "../SideModal";
 import { useUserProvider } from "@/providers/UserProvder";
-import Artist from "../Header/Artist";
-import { ArtistRecord } from "@/types/Artist";
 import { useArtistProvider } from "@/providers/ArtistProvider";
 import { Plus } from "lucide-react";
+import { useArtistPinRenderer } from "@/hooks/useArtistPinRenderer";
 
 const SideArtists = ({
   isVisible,
@@ -14,6 +13,7 @@ const SideArtists = ({
 }) => {
   const { address, isPrepared } = useUserProvider();
   const { toggleCreation, sorted } = useArtistProvider();
+  const { renderArtistListWithPins } = useArtistPinRenderer({ sorted, menuExpanded: true });
 
   const handleCreate = () => {
     if (!isPrepared()) return;
@@ -30,14 +30,11 @@ const SideArtists = ({
       className="w-[250px]"
     >
       <div className="no-scrollbar grow flex flex-col gap-1 overflow-y-auto overflow-x-hidden w-full">
-        {address &&
-          sorted.map((artist: ArtistRecord | null) => (
-            <Artist
-              artist={artist}
-              toggleDropDown={() => toggleModal()}
-              key={artist?.account_id}
-            />
-          ))}
+        {address && renderArtistListWithPins().map((element, index) => (
+          <div key={index} onClick={() => toggleModal()}>
+            {element}
+          </div>
+        ))}
       </div>
       <button
         className="flex px-2 py-1 gap-2 text-sm items-center text-grey-dark-1 w-full hover:bg-gray-50"
