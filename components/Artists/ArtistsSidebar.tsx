@@ -3,14 +3,13 @@
 import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import { useArtistProvider } from "@/providers/ArtistProvider";
-import Artist from "../Header/Artist";
 import ArtistSkeleton from "./ArtistSkeleton";
-import { ArtistRecord } from "@/types/Artist";
 import { Loader, Plus } from "lucide-react";
 import useIsMobile from "@/hooks/useIsMobile";
 import { useUserProvider } from "@/providers/UserProvder";
 import { useSidebarExpansion } from "@/providers/SidebarExpansionContext";
 import { cn } from "@/lib/utils";
+import { useArtistPinRenderer } from "@/hooks/useArtistPinRenderer";
 
 const ArtistsSidebar = () => {
   const {
@@ -27,6 +26,7 @@ const ArtistsSidebar = () => {
   const isArtistSelected = !!selectedArtist;
 
   const [menuExpanded, setMenuExpanded] = useState(false);
+  const { renderArtistListWithPins } = useArtistPinRenderer({ sorted, menuExpanded });
   const animate = { width: menuExpanded ? 220 : 80 };
   const initial = { width: 80 };
 
@@ -53,15 +53,9 @@ const ArtistsSidebar = () => {
       ));
     }
 
-    // Render actual artists when loaded
-    return email && sorted.map((artist: ArtistRecord | null) => (
-      <Artist
-        artist={artist}
-        toggleDropDown={() => {}}
-        key={artist?.account_id}
-        isMini={!menuExpanded}
-      />
-    ));
+    if (!email || !sorted.length) return null;
+
+    return renderArtistListWithPins();
   };
 
   return (
