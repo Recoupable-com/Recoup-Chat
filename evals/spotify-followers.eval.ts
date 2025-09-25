@@ -9,9 +9,6 @@ import { getSpotifyFollowers } from "@/lib/spotify/getSpotifyFollowers";
  * This evaluation tests whether your AI system properly uses tool calls
  * to fetch Spotify follower data instead of defaulting to "I don't have access" responses.
  *
- * This evaluation fetches fresh Spotify follower data each time it runs,
- * ensuring the test cases always have the latest follower counts.
- *
  * Run: npx braintrust eval evals/spotify-followers.eval.ts
  */
 
