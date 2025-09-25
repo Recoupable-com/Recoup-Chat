@@ -1,11 +1,13 @@
 import { useArtistProvider } from "@/providers/ArtistProvider";
 import { ArtistRecord } from "@/types/Artist";
 import ImageWithFallback from "../ImageWithFallback";
-import { EllipsisVertical } from "lucide-react";
+import { EllipsisVertical, Pin, PinOff } from "lucide-react";
 import { usePathname, useRouter } from "next/navigation";
 import { useState } from "react";
 import { cn } from "@/lib/utils";
 import { motion } from "framer-motion";
+import { useArtistPinToggle } from "@/hooks/useArtistPinToggle";
+import ArtistActionButton from "./ArtistActionButton";
 
 const Artist = ({
   artist,
@@ -23,6 +25,7 @@ const Artist = ({
     toggleSettingModal,
   } = useArtistProvider();
   const [isHovered, setIsHovered] = useState(false);
+  const { handlePinToggle, isPinning } = useArtistPinToggle(artist);
 
   const isSelectedArtist = selectedArtist?.account_id === artist?.account_id;
   const isAnyArtistSelected = !!selectedArtist;
@@ -40,6 +43,7 @@ const Artist = ({
     }
     setSelectedArtist(artist);
   };
+
 
   // Truncate name if longer than 12 characters
   const displayName = artist?.name
@@ -98,24 +102,34 @@ const Artist = ({
           >
             {displayName}
           </div>
-          <button
-            type="button"
-            onClick={(e) => {
-              e.stopPropagation();
-              if (artist) toggleUpdate(artist);
-              toggleSettingModal();
-            }}
-            className={cn(
-              "ml-auto flex-shrink-0 opacity-0 pointer-events-none",
-              {
-                "opacity-1 pointer-events-auto": isHovered || isSelectedArtist,
-              }
-            )}
-            title="Edit artist settings"
-            aria-label="Edit artist settings"
-          >
-            <EllipsisVertical className="size-5 rotate-90" />
-          </button>
+          <div className="ml-auto flex gap-1">
+            <ArtistActionButton
+              onClick={handlePinToggle}
+              disabled={isPinning}
+              isVisible={isHovered || isSelectedArtist}
+              title={artist?.pinned ? "Unpin artist" : "Pin artist"}
+              ariaLabel={artist?.pinned ? "Unpin artist" : "Pin artist"}
+            >
+              {artist?.pinned ? (
+                <Pin className="size-4 text-primary" />
+              ) : (
+                <PinOff className="size-4 text-grey-dark" />
+              )}
+            </ArtistActionButton>
+            
+            <ArtistActionButton
+              onClick={(e) => {
+                e.stopPropagation();
+                if (artist) toggleUpdate(artist);
+                toggleSettingModal();
+              }}
+              isVisible={isHovered || isSelectedArtist}
+              title="Edit artist settings"
+              ariaLabel="Edit artist settings"
+            >
+              <EllipsisVertical className="size-5 rotate-90" />
+            </ArtistActionButton>
+          </div>
         </>
       )}
     </motion.button>

@@ -8,9 +8,14 @@ import saveArtist from "@/lib/saveArtist";
 import useInitialArtists from "./useInitialArtists";
 import useCreateArtists from "./useCreateArtists";
 
-// Helper function to sort artists alphabetically by name
-const sortArtistsAlphabetically = (artists: ArtistRecord[]): ArtistRecord[] => {
+// Helper function to sort artists with pinned first, then alphabetically
+const sortArtistsWithPinnedFirst = (artists: ArtistRecord[]): ArtistRecord[] => {
   return [...artists].sort((a, b) => {
+    // First sort by pinned status (pinned artists first)
+    if (a.pinned && !b.pinned) return -1;
+    if (!a.pinned && b.pinned) return 1;
+    
+    // Then sort alphabetically by name
     const nameA = a.name?.toLowerCase() || "";
     const nameB = b.name?.toLowerCase() || "";
     return nameA.localeCompare(nameB);
@@ -37,22 +42,52 @@ const useArtists = () => {
     setSelectedArtist
   );
   const [menuVisibleArtistId, setMenuVisibleArtistId] = useState<any>("");
-  const activeArtistIndex = artists.findIndex(
-    (artist: ArtistRecord) => artist.account_id === selectedArtist?.account_id
-  );
   const { isCreatingArtist, setIsCreatingArtist, updateChatState } =
     useCreateArtists();
 
-  const sorted =
-    selectedArtist && activeArtistIndex >= 0
-      ? [
-          selectedArtist,
-          ...sortArtistsAlphabetically([
-            ...artists.slice(0, activeArtistIndex),
-            ...artists.slice(activeArtistIndex + 1),
-          ]),
-        ]
-      : sortArtistsAlphabetically(artists);
+  const sorted = (() => {
+    if (!selectedArtist) {
+      return sortArtistsWithPinnedFirst(artists);
+    }
+
+    // Find the selected artist index
+    const selectedIndex = artists.findIndex(
+      (artist: ArtistRecord) => artist.account_id === selectedArtist.account_id
+    );
+    
+    if (selectedIndex === -1) {
+      return sortArtistsWithPinnedFirst(artists);
+    }
+
+    // Remove selected artist from the list
+    const artistsWithoutSelected = [
+      ...artists.slice(0, selectedIndex),
+      ...artists.slice(selectedIndex + 1),
+    ];
+
+    // Sort remaining artists with pinned first
+    const sortedRemaining = sortArtistsWithPinnedFirst(artistsWithoutSelected);
+
+    // If selected artist is pinned, put it at the very top
+    if (selectedArtist.pinned) {
+      return [selectedArtist, ...sortedRemaining];
+    }
+
+    // If selected artist is not pinned, find where to insert it (after pinned artists)
+    const firstUnpinnedIndex = sortedRemaining.findIndex(artist => !artist.pinned);
+    
+    if (firstUnpinnedIndex === -1) {
+      // All remaining artists are pinned, add selected at the end
+      return [...sortedRemaining, selectedArtist];
+    } else {
+      // Insert selected artist before the first unpinned artist
+      return [
+        ...sortedRemaining.slice(0, firstUnpinnedIndex),
+        selectedArtist,
+        ...sortedRemaining.slice(firstUnpinnedIndex),
+      ];
+    }
+  })();
 
   const getArtists = useCallback(
     async (artistId?: string) => {
