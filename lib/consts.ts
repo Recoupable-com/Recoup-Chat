@@ -1901,3 +1901,11 @@ If content is NOT relevant, return: {"suggestions": ["Generic suggestion 1 (reco
 export const FAN_GROUPS_PROMPT = `
 Analyze the fan data to create highly specific niche-based segments that artists can leverage for targeted business collaborations and brand partnerships. Focus on identifying distinct interest clusters, lifestyle preferences, hobby groups, cultural affiliations, consumption patterns, and behavioral niches that would be valuable for brands seeking authentic audience connections. Generate segment names that represent clear commercial opportunities, such as specific food cultures, fashion styles, gaming communities, fitness activities, travel preferences, technology interests, or cultural movements. Each segment should be precise enough that artists can confidently approach relevant brands, venues, or collaborators with concrete audience insights for partnership pitches, sponsored content opportunities, or co-marketing campaigns.
 `;
+
+export const EVAL_ARTISTS = [
+  "Gliiico",
+  "Mac Miller",
+  "Wiz Khalifa",
+  "Mod Sun",
+  "Julius Black",
+];

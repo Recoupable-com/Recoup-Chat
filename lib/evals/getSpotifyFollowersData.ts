@@ -1,16 +1,9 @@
 import getSpotifyFollowersExpected from "@/lib/evals/getSpotifyFollowersExpected";
+import { EVAL_ARTISTS } from "@/lib/consts";
 
 const getSpotifyFollowersData = async () => {
-  const artists = [
-    "Gliiico",
-    "Mac Miller",
-    "Wiz Khalifa",
-    "Mod Sun",
-    "Julius Black",
-  ];
-
   const testCases = await Promise.all(
-    artists.map(async (artist) => {
+    EVAL_ARTISTS.map(async (artist) => {
       const { expected } = await getSpotifyFollowersExpected(artist);
       return {
         input: `how many total followers does ${artist} have on Spotify`,
