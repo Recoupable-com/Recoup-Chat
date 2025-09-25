@@ -1,7 +1,8 @@
 import getSocialPlatformByLink from "./getSocialPlatformByLink";
 
 // eslint-disable-next-line
-const getFormattedArtist = (artist: any) => {
+const getFormattedArtist = (row: any) => {
+  const artist = row.artist_info || row;
   const account_id = artist.id;
   const account_info = artist.account_info?.[0];
   const info = account_info || {
@@ -23,7 +24,7 @@ const getFormattedArtist = (artist: any) => {
     ...info,
     account_id,
     account_socials,
-    pinned: artist.pinned || false,
+    pinned: row.pinned || false,
   };
 };
 
