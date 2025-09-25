@@ -35,7 +35,7 @@ const Menu = ({ toggleMenuExpanded }: { toggleMenuExpanded: () => void }) => {
   }, [prefetch]);
 
   return (
-    <div className="w-full h-screen pt-4 pb-6 px-2.5 hidden md:flex flex-col">
+    <div className="w-full h-screen pt-4 pb-2 px-2.5 hidden md:flex flex-col">
       <Link
         href="/"
         className="shrink-0 mb-0 hover:opacity-80 transition-opacity duration-200 w-fit"
@@ -67,7 +67,7 @@ const Menu = ({ toggleMenuExpanded }: { toggleMenuExpanded: () => void }) => {
         {!email ? <RecentChatsSectionSkeleton /> : <RecentChats toggleModal={toggleMenuExpanded} />}
 
         {/* Bottom Section */}
-        <div className="shrink-0 pt-4 border-t border-gray-100">
+        <div className="shrink-0 border-t border-gray-100">
           <UnlockPro />
           <UserInfo toggleMenuExpanded={toggleMenuExpanded} />
         </div>
