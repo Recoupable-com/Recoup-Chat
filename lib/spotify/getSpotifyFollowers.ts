@@ -1,8 +1,3 @@
-/**
- * Helper function to get Spotify follower count for an artist
- * Queries the Recoupable API to fetch real Spotify data
- */
-
 interface SpotifyArtist {
   external_urls: {
     spotify: string;
