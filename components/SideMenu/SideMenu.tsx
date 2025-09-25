@@ -1,5 +1,6 @@
 import SideModal from "../SideModal";
 import { useRouter } from "next/navigation";
+import Link from "next/link";
 import { useUserProvider } from "@/providers/UserProvder";
 import RecentChats from "../Sidebar/RecentChats";
 import UnlockPro from "../Sidebar/UnlockPro";
@@ -57,9 +58,13 @@ const SideMenu = ({
 
   return (
     <SideModal isVisible={isVisible} toggleModal={toggleModal}>
-      <button className="mt-4" onClick={() => push("/")} type="button">
+      <Link
+        href="/"
+        className="mt-0 shrink-0 hover:opacity-80 transition-opacity duration-200 w-fit"
+        aria-label="Home"
+      >
         <Logo />
-      </button>
+      </Link>
       <div className="flex flex-col gap-1 w-full pb-2">
         <Button
           variant="outline"
