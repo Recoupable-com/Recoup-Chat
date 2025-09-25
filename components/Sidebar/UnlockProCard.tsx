@@ -6,7 +6,7 @@ const UnlockProCard = () => {
   const { handleClick } = useSubscribeClick();
 
   return (
-    <div className="w-full md:w-[250px] shadow-lg flex flex-col rounded-xl overflow-hidden my-3 aspect-[212/175] md:aspect-[212/190] bg-[url('/Background.png')] bg-cover bg-center border border-white p-4 relative">
+    <div className="w-full md:w-[250px] shadow-lg flex flex-col rounded-xl overflow-hidden mb-2 mt-0 aspect-[212/175] md:aspect-[212/190] bg-[url('/Background.png')] bg-cover bg-center border border-white p-4 relative">
       <div className="absolute inset-0 border-2 border-white/30 rounded-xl pointer-events-none z-5"></div>
       <video
         className="absolute inset-0 w-full h-full object-cover rounded-xl opacity-20 pointer-events-none z-10"
