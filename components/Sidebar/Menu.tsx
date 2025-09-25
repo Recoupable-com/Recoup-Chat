@@ -54,7 +54,7 @@ const Menu = ({ toggleMenuExpanded }: { toggleMenuExpanded: () => void }) => {
           {email ? "New Chat" : "Sign In"}
         </Button>
         
-        <div className="flex flex-col gap-2">
+        <div className="flex flex-col gap-1">
           <AgentsNavItem isActive={isAgents} onClick={() => goToItem("agents")} />
           <ScheduledActionsNavItem isActive={isScheduledActions} onClick={() => goToItem("scheduled-actions")} />
           <FanGroupNavItem isActive={isSegments} onClick={() => goToItem("segments")} />
