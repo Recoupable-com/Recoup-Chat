@@ -1,5 +1,5 @@
 import { NextRequest } from "next/server";
-import { toggleArtistPin } from "@/lib/supabase/artist/toggleArtistPin";
+import { toggleArtistPin } from "@/lib/supabase/accountArtistIds/toggleArtistPin";
 
 export const runtime = "edge";
 
