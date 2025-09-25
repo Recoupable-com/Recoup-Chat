@@ -62,7 +62,6 @@ export async function getSpotifyFollowers(artistName: string): Promise<number> {
       throw new Error(`No artists found for "${artistName}"`);
     }
 
-    // Return the follower count of the first result
     return data.artists.items[0].followers.total;
   } catch (error) {
     console.error(
