@@ -4,12 +4,12 @@ const Logo = () => {
   return (
     <div className="relative flex items-center">
       <Image
-        src="/Recoup_Icon_Wordmark_Black.svg"
+        src="/brand-logos/recoup-v2.png"
         alt="Recoup Logo"
         width={260}
-        height={70}
+        height={260}
         priority
-        style={{ width: '100%', height: 'auto', maxWidth: '260px' }}
+        className="w-7 h-7 rounded-lg"
       />
     </div>
   );

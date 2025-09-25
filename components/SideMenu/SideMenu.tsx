@@ -1,5 +1,6 @@
 import SideModal from "../SideModal";
 import { useRouter } from "next/navigation";
+import Link from "next/link";
 import { useUserProvider } from "@/providers/UserProvder";
 import RecentChats from "../Sidebar/RecentChats";
 import UnlockPro from "../Sidebar/UnlockPro";
@@ -57,13 +58,17 @@ const SideMenu = ({
 
   return (
     <SideModal isVisible={isVisible} toggleModal={toggleModal}>
-      <button className="mt-4" onClick={() => push("/")} type="button">
+      <Link
+        href="/"
+        className="mt-0 shrink-0 hover:opacity-80 transition-opacity duration-200 w-fit"
+        aria-label="Home"
+      >
         <Logo />
-      </button>
+      </Link>
       <div className="flex flex-col gap-1 w-full pb-2">
         <Button
           variant="outline"
-          className="mt-4 rounded-xl md:mt-8 cursor-pointer"
+          className="mt-2 rounded-xl md:mt-8 cursor-pointer"
           onClick={() => goToItem("chat")}
           aria-label={address ? "Start a new chat" : "Sign in to your account"}
         >
@@ -84,7 +89,7 @@ const SideMenu = ({
             {hasArtists ? "Select Your Artist" : "Add Your Artist"}
           </Button>
         )}
-        <div className="flex flex-col gap-2 pt-2">
+        <div className="flex flex-col gap-1 pt-2">
           <AgentsNavItem isActive={isAgents} onClick={() => goToItem("agents")} />
           <ScheduledActionsNavItem isActive={isScheduledActions} onClick={() => goToItem("scheduled-actions")} />
           <FanGroupNavItem isActive={isSegments} onClick={() => goToItem("segments")} />
