@@ -65,7 +65,6 @@ Eval("First Week Album Sales Evaluation", {
 
   task: async (input: string): Promise<string> => {
     try {
-      // Call the chat functions directly instead of making HTTP requests
       const response = await callChatFunctions(input);
       return response;
     } catch (error) {
