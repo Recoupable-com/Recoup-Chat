@@ -1,7 +1,5 @@
 "use client";
 
-import useIsMobile from "@/hooks/useIsMobile";
-import { X } from "lucide-react";
 import Form from "../Form";
 import { accountValidation } from "@/lib/utils/setting";
 import ImageSelect from "./ImageSelect";
@@ -11,9 +9,7 @@ import Input from "../Input";
 import AccountIdDisplay from "../ArtistSetting/AccountIdDisplay";
 
 const Account = () => {
-  const isMobile = useIsMobile();
   const {
-    toggleModal,
     setInstruction,
     setName,
     instruction,
@@ -42,11 +38,6 @@ const Account = () => {
             />
           )}
         </div>
-        {!isMobile && (
-          <button type="button" onClick={toggleModal}>
-            <X />
-          </button>
-        )}
       </div>
       <div className="col-span-7 space-y-1 md:space-y-2">
         <Input
