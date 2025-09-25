@@ -13,13 +13,15 @@ on:
   workflow_dispatch: # Allow manual triggering
 
 permissions:
-  pull-requests: write  # Required for PR comments
+  pull-requests: write # Required for PR comments
   contents: read
 
 jobs:
   eval:
     name: Run evaluations
     runs-on: ubuntu-latest
+    env:
+      ARWEAVE_KEY: ${{ secrets.ARWEAVE_KEY }}
 
     steps:
       - name: Checkout
