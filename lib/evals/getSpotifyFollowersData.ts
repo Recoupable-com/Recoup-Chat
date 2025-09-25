@@ -9,7 +9,6 @@ const getSpotifyFollowersData = async () => {
     "Julius Black",
   ];
 
-  // Fetch fresh data for all artists
   const testCases = await Promise.all(
     artists.map(async (artist) => {
       const { expected } = await getSpotifyFollowersExpected(artist);
