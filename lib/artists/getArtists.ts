@@ -4,11 +4,11 @@ import type { ArtistRecord } from "@/types/Artist";
 import { ROSTRUM_ORG_ARTIST_IDS } from "../consts";
 
 const getArtists = async (accountId: string): Promise<ArtistRecord[]> => {
-  // Fetch user-linked artists
-  const userArtists = await getAccountArtistIds({ accountIds: [accountId] });
-
-  // Determine if the account belongs to an enterprise domain
-  const enterprise = await isEnterpriseAccount(accountId);
+  // Run parallel queries for better performance
+  const [userArtists, enterprise] = await Promise.all([
+    getAccountArtistIds({ accountIds: [accountId] }),
+    isEnterpriseAccount(accountId)
+  ]);
 
   // Optionally fetch org artists if enterprise and list provided
   const orgArtists =
