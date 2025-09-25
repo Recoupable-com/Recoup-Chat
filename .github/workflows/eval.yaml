@@ -13,13 +13,21 @@ on:
   workflow_dispatch: # Allow manual triggering
 
 permissions:
-  pull-requests: write  # Required for PR comments
+  pull-requests: write # Required for PR comments
   contents: read
 
 jobs:
   eval:
     name: Run evaluations
     runs-on: ubuntu-latest
+    env:
+      ARWEAVE_KEY: ${{ secrets.ARWEAVE_KEY }}
+      NEXT_PUBLIC_SUPABASE_URL: ${{ secrets.NEXT_PUBLIC_SUPABASE_URL }}
+      SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
+      NEXT_PUBLIC_SUPABASE_ANON_KEY: ${{ secrets.NEXT_PUBLIC_SUPABASE_ANON_KEY }}
+      TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+      OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+      AI_GATEWAY_API_KEY: ${{ secrets.AI_GATEWAY_API_KEY }}
 
     steps:
       - name: Checkout
