@@ -1,3 +1,4 @@
+import { useAgentData } from "../Agents/useAgentData";
 import NavButton from "./NavButton";
 
 const AgentsNavItem = ({
@@ -7,6 +8,8 @@ const AgentsNavItem = ({
   isActive: boolean;
   onClick: () => void;
 }) => {
+  const { prefetchAgents } = useAgentData();
+
   return (
     <NavButton
       icon="robot"
@@ -14,6 +17,7 @@ const AgentsNavItem = ({
       isActive={isActive}
       onClick={onClick}
       aria-label="View agents"
+      onHover={prefetchAgents}
     />
   );
 };

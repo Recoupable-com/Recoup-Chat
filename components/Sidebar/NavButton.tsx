@@ -10,6 +10,7 @@ interface NavButtonProps {
   onClick: () => void;
   shouldRender?: boolean;
   "aria-label"?: string;
+  onHover?: () => void;
 }
 
 const NavButton = ({
@@ -19,6 +20,7 @@ const NavButton = ({
   onClick,
   shouldRender = true,
   "aria-label": ariaLabel,
+  onHover,
 }: NavButtonProps) => {
   if (!shouldRender) {
     return null;
@@ -28,6 +30,7 @@ const NavButton = ({
     <Button
       variant="ghost"
       onClick={onClick}
+      onMouseEnter={onHover}
       className={cn("rounded-xl w-full flex justify-start", {
         "bg-muted text-black ring-1 ring-border hover:bg-muted": isActive,
         "text-black hover:bg-muted hover:text-black hover:ring-1 hover:ring-border": !isActive,
