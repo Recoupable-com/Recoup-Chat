@@ -8,7 +8,7 @@ const UnlockPro = () => {
   if (isLoading) return null;
 
   return (
-    <div className="-mt-px">
+    <div className="-mt-px md:mx-auto">
       {subscriptionActive ? <RecoupablePro /> : <UnlockProCard />}
     </div>
   );

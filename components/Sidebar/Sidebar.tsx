@@ -9,8 +9,8 @@ import AccountModal from "../AccountModal";
 const Sidebar = () => {
   const [menuExpanded, setMenuExpanded] = useState(true);
   const toggleMenuExpanded = () => setMenuExpanded(!menuExpanded);
-  const animate = { width: menuExpanded ? 285 : 80 };
-  const initial = { width: 285 };
+  const animate = { width: menuExpanded ? 265 : 80 };
+  const initial = { width: 265 };
 
   return (
     <motion.div

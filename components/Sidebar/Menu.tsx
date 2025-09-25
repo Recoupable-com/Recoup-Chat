@@ -67,7 +67,7 @@ const Menu = ({ toggleMenuExpanded }: { toggleMenuExpanded: () => void }) => {
         {!email ? <RecentChatsSectionSkeleton /> : <RecentChats toggleModal={toggleMenuExpanded} />}
 
         {/* Bottom Section */}
-        <div className="shrink-0 border-t border-gray-100">
+        <div className="shrink-0 border-t border-gray-100 mx-auto">
           <UnlockPro />
           <UserInfo toggleMenuExpanded={toggleMenuExpanded} />
         </div>
