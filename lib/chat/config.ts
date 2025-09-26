@@ -4,4 +4,6 @@ export const CHAT_INPUT_SUPPORTED_FILE = {
   "image/gif": [".gif"],
   "image/webp": [".webp"],
   "application/pdf": [".pdf"],
+  "text/csv": [".csv"],
+  "text/plain": [".txt"],
 }; 
