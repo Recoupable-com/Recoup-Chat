@@ -63,7 +63,7 @@ const useConversations = () => {
   }, [userData, agents, fetchConversations]);
 
   // Optimistic update helpers for creating a new chat room
-  const addOptimisticConversation = (topic: string, chatId: string) => {
+  const addOptimisticConversation = (topic: string, chatId: string, message?: string) => {
     if (!userData || !selectedArtist?.account_id) return null;
     // Avoid adding an optimistic conversation when a chat id already exists in the URL
     const hasChatIdInUrl =
@@ -81,7 +81,10 @@ const useConversations = () => {
       memories: [
         {
           id: `${chatId}-m1`,
-          content: { optimistic: true },
+          content: {
+            optimistic: true,
+            parts: message ? [{ text: message }] : [],
+          },
           room_id: chatId,
           created_at: now,
         },
