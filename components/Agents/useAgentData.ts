@@ -2,14 +2,9 @@ import { useUserProvider } from "@/providers/UserProvder";
 import { useEffect, useState } from "react";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import type { AgentTemplateRow } from "@/types/AgentTemplates";
+import fetchAgentTemplates from "@/lib/agent-templates/fetchAgentTemplates";
 
 export type Agent = AgentTemplateRow;
-
-const fetchAgentTemplates = async (userData: {id: string}): Promise<Agent[]> => {
-  const res = await fetch(`/api/agent-templates?userId=${userData?.id}`);
-  if (!res.ok) throw new Error("Failed to fetch agent templates");
-  return (await res.json()) as Agent[];
-}
 
 export function useAgentData() {
   const { userData } = useUserProvider();
