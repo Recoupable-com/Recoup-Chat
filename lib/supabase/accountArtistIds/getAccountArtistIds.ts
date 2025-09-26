@@ -37,9 +37,9 @@ export async function getAccountArtistIds(params: {
       console.error("Error getting account-artist IDs:", error);
       return [];
     }
-    // Format each artist_info using getFormattedArtist and include pinned status
-    return (data || []).map((row: { artist_info: ArtistRecord; pinned: boolean }) =>
-      getFormattedArtist({ ...row.artist_info, pinned: row.pinned })
+    // Format each artist_info using getFormattedArtist
+    return (data || []).map((row: { artist_info: ArtistRecord; }) =>
+      getFormattedArtist(row)
     );
   } catch (error) {
     console.error("Unexpected error in getAccountArtistIds:", error);
