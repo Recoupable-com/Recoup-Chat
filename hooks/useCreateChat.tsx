@@ -74,7 +74,7 @@ const useCreateChat = ({
           setDisplayName(data.room.topic);
 
           // Remove optimistic flag from memory and treat it as a normal memory.
-          // It will enable 3 dots on the chat item.
+          // It will re-enable 3 dots on the chat item.
           setAllConversations((prev) => {
             return prev.map((item) => {
               if ((item as Conversation).id === (chatRoom as Conversation).id) {
