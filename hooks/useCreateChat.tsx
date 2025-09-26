@@ -76,13 +76,12 @@ const useCreateChat = ({
           // Remove optimistic flag from memory and treat it as a normal memory.
           // It will re-enable 3 dots on the chat item.
           setAllConversations((prev) => {
-            return prev.map((item) => {
+            return prev.map((item: Conversation | ArtistAgent) => {
               if ((item as Conversation).id === (chatRoom as Conversation).id) {
-                const conversationItem = item as Conversation;
                 return {
-                  ...conversationItem,
+                  ...item,
                   topic: data.room.topic,
-                  memories: conversationItem.memories?.map((memory) => ({
+                  memories: (item as Conversation).memories?.map((memory) => ({
                     ...memory,
                     content: {},
                   })),
