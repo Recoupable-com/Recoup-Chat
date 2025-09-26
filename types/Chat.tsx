@@ -29,6 +29,7 @@ export interface CreateChatRequest {
   artistId?: string;
   chatId?: string;
   firstMessage?: string;
+  email?: string;
 }
 
 export interface CreateChatResponse {

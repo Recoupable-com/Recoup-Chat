@@ -13,7 +13,7 @@ const useCreateChat = ({
   chatRoom: Conversation | ArtistAgent;
   setDisplayName: (displayName: string) => void;
 }) => {
-  const { userData } = useUserProvider();
+  const { userData, email } = useUserProvider();
   const { selectedArtist } = useArtistProvider();
 
   useEffect(() => {
@@ -54,6 +54,7 @@ const useCreateChat = ({
           artistId: selectedArtist?.account_id,
           chatId: (chatRoom as Conversation).id,
           firstMessage: messageText,
+          email,
         };
 
         const response = await fetch("/api/chat/create", {
@@ -78,7 +79,7 @@ const useCreateChat = ({
     };
 
     createChat();
-  }, [isOptimisticChatItem, chatRoom, userData?.account_id, selectedArtist?.account_id, setDisplayName]);
+  }, [isOptimisticChatItem, chatRoom, userData?.account_id, selectedArtist?.account_id, setDisplayName, email]);
 };
 
 export default useCreateChat;

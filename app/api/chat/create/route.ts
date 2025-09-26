@@ -1,15 +1,14 @@
 import { NextRequest, NextResponse } from "next/server";
 import { createRoomWithReport } from "@/lib/supabase/createRoomWithReport";
 import { generateChatTitle } from "@/lib/chat/generateChatTitle";
+import { sendNewConversationNotification } from "@/lib/telegram/sendNewConversationNotification";
 import { CreateChatRequest } from "@/types/Chat";
-
-export const runtime = "edge";
 
 export async function POST(request: NextRequest) {
   try {
     const body: CreateChatRequest = await request.json();
 
-    const { accountId, artistId, chatId, firstMessage } = body;
+    const { accountId, artistId, chatId, firstMessage, email } = body;
 
     if (!accountId || !firstMessage || !artistId || !chatId) {
       return NextResponse.json(
@@ -45,6 +44,20 @@ export async function POST(request: NextRequest) {
           status: 500,
         }
       );
+    }
+
+    // Send telegram notification for new conversation
+    try {
+      await sendNewConversationNotification({
+        accountId,
+        email: email || "",
+        conversationId: new_room.id,
+        topic: generatedTitle,
+        firstMessage,
+      });
+    } catch (notificationError) {
+      console.error("Failed to send new conversation notification:", notificationError);
+      // Don't fail the request if notification fails
     }
 
     return NextResponse.json(
