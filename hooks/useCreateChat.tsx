@@ -3,6 +3,7 @@ import { Conversation, CreateChatRequest, CreateChatResponse } from "@/types/Cha
 import type { ArtistAgent } from "@/lib/supabase/getArtistAgents";
 import { useUserProvider } from "@/providers/UserProvder";
 import { useArtistProvider } from "@/providers/ArtistProvider";
+import { useConversationsProvider } from "@/providers/ConversationsProvider";
 
 const useCreateChat = ({
   isOptimisticChatItem,
@@ -15,6 +16,7 @@ const useCreateChat = ({
 }) => {
   const { userData, email } = useUserProvider();
   const { selectedArtist } = useArtistProvider();
+  const { setAllConversations } = useConversationsProvider();
 
   useEffect(() => {
     if (!isOptimisticChatItem) return;
@@ -70,6 +72,25 @@ const useCreateChat = ({
         if (data.success && data.room) {
           // Update display name with the room topic
           setDisplayName(data.room.topic);
+
+          // Remove optimistic flag from memory and treat it as a normal memory.
+          // It will enable 3 dots on the chat item.
+          setAllConversations((prev) => {
+            return prev.map((item) => {
+              if ((item as Conversation).id === (chatRoom as Conversation).id) {
+                const conversationItem = item as Conversation;
+                return {
+                  ...conversationItem,
+                  topic: data.room.topic,
+                  memories: conversationItem.memories?.map((memory) => ({
+                    ...memory,
+                    content: {},
+                  })),
+                };
+              }
+              return item;
+            });
+          });
         } else {
           console.error("Failed to create chat:", data.error);
         }
@@ -79,7 +100,7 @@ const useCreateChat = ({
     };
 
     createChat();
-  }, [isOptimisticChatItem, chatRoom, userData?.account_id, selectedArtist?.account_id, setDisplayName, email]);
+  }, [isOptimisticChatItem, chatRoom, userData?.account_id, selectedArtist?.account_id, setDisplayName, email, setAllConversations]);
 };
 
 export default useCreateChat;

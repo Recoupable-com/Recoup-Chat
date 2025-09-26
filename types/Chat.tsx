@@ -1,3 +1,8 @@
+export type MemoryContent = {
+  optimistic?: boolean;
+  parts?: { text: string }[];
+};
+
 export type Conversation = {
   topic: string;
   id: string;

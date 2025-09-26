@@ -106,6 +106,7 @@ const useConversations = () => {
     quotaExceeded,
     allConversations,
     isLoading,
+    setAllConversations,
   };
 };
 
