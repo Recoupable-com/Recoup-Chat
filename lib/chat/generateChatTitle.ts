@@ -10,11 +10,12 @@ import { LIGHTWEIGHT_MODEL } from "../consts";
  */
 export async function generateChatTitle(question: string): Promise<string> {
   const response = await generateText({
-    prompt: `Provide a brief title (more formal, no more than 20 characters!!!) that reflects the key elements of the given context.
+    prompt: `Provide a brief title (more formal, no more than 20 characters!!!) that reflects the key elements of the given context. Do not wrap the title in quotes.
         If the question is related to a segment or contains a segment name, highlight the segment name.
         Context: ${question}`,
     model: LIGHTWEIGHT_MODEL,
   });
 
-  return response.text;
+  // In case model accidentally generates quotes again, remove them here
+  return response.text.replace(/^["']|["']$/g, '');
 }
