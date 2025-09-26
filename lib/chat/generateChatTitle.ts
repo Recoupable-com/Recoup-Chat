@@ -1,4 +1,5 @@
 import generateText from "@/lib/ai/generateText";
+import { LIGHTWEIGHT_MODEL } from "../consts";
 
 /**
  * Generates a brief, formal title (max 20 characters) based on the given question context.
@@ -12,6 +13,7 @@ export async function generateChatTitle(question: string): Promise<string> {
     prompt: `Provide a brief title (more formal, no more than 20 characters!!!) that reflects the key elements of the given context.
         If the question is related to a segment or contains a segment name, highlight the segment name.
         Context: ${question}`,
+    model: LIGHTWEIGHT_MODEL,
   });
 
   return response.text;

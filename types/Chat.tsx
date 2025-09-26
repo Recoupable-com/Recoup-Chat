@@ -23,3 +23,21 @@ export type MessageFileAttachment = {
   type: "image";
   image: string;
 };
+
+export interface CreateChatRequest {
+  accountId: string;
+  artistId?: string;
+  chatId?: string;
+  firstMessage?: string;
+}
+
+export interface CreateChatResponse {
+  room: {
+    id: string;
+    topic: string;
+    memories: unknown[];
+    rooms_reports: string[];
+  };
+  success: boolean;
+  error?: string;
+}

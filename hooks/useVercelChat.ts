@@ -6,7 +6,7 @@ import { useArtistInstruction } from "./useArtistInstruction";
 import { useArtistKnowledgeText } from "./useArtistKnowledgeText";
 import { useParams } from "next/navigation";
 import { toast } from "react-toastify";
-import { useEffect, useState, useRef, useMemo } from "react";
+import { useEffect, useState, useRef, useMemo, useCallback } from "react";
 import getEarliestFailedUserMessageId from "@/lib/messages/getEarliestFailedUserMessageId";
 import { clientDeleteTrailingMessages } from "@/lib/messages/clientDeleteTrailingMessages";
 import { generateUUID } from "@/lib/generateUUID";
@@ -16,7 +16,6 @@ import useAvailableModels from "./useAvailableModels";
 import { useLocalStorage } from "usehooks-ts";
 import { DEFAULT_MODEL } from "@/lib/consts";
 import { usePaymentProvider } from "@/providers/PaymentProvider";
-import getConversations from "@/lib/getConversations";
 import useArtistFilesForMentions from "@/hooks/useArtistFilesForMentions";
 import type { KnowledgeBaseEntry } from "@/lib/supabase/getArtistKnowledge";
 
@@ -46,7 +45,7 @@ export function useVercelChat({
   const artistId = selectedArtist?.account_id;
   const [hasChatApiError, setHasChatApiError] = useState(false);
   const messagesLengthRef = useRef<number>();
-  const { fetchConversations, addOptimisticConversation, conversations } = useConversationsProvider();
+  const { addOptimisticConversation } = useConversationsProvider();
   const { data: availableModels = [] } = useAvailableModels();
   const [input, setInput] = useState("");
   const [model, setModel] = useLocalStorage(
@@ -54,9 +53,6 @@ export function useVercelChat({
     availableModels[0]?.id ?? ""
   );
   const { refetchCredits } = usePaymentProvider();
-  const latestChatId = typeof window !== 'undefined' 
-    ? window.location.pathname.match(/\/chat\/([^\/]+)/)?.[1]
-    : undefined;
 
   // Load artist files for mentions (from Supabase)
   const { files: allArtistFiles = [] } = useArtistFilesForMentions();
@@ -164,11 +160,6 @@ export function useVercelChat({
   }, [knowledgeFiles]);
 
   const timezone = useMemo(() => Intl.DateTimeFormat().resolvedOptions().timeZone, []);
-  const conversationsIdsKey = useMemo(() => {
-    const ids = conversations.map((c) => ("id" in c ? c.id : c.agentId) as string);
-    return ids.join("|");
-  }, [conversations]);
-  const memoizedConversations = useMemo(() => conversations, [conversationsIdsKey]);
   
   const chatRequestOptions = useMemo(
     () => ({
@@ -197,17 +188,7 @@ export function useVercelChat({
         setHasChatApiError(true);
       },
       onFinish: async () => {
-        // As onFinish triggers when a message is streamed successfully.
-        // On a new chat, usually there are 2 messages:
-        // 1. First user message
-        // 2. Second just streamed message
-        // When messages length is 2, it means second message has been streamed successfully and should also have been updated on backend
-        // So we trigger the fetchConversations to update the conversation list
-        if (messagesLengthRef.current === 2) {
-          if (!userId) {
-            pendingFetchAfterFinishRef.current = true;
-          }
-        }
+        // Update credits after AI response completes
         await refetchCredits();
       },
     });
@@ -239,16 +220,6 @@ export function useVercelChat({
     setMessages
   );
 
-  // If we finished streaming the first assistant message but userId wasn't ready yet,
-  // refetch conversations as soon as userId becomes available.
-  const pendingFetchAfterFinishRef = useRef(false);
-  useEffect(() => {
-    if (messagesLengthRef.current === 2) {
-      if (!userId) {
-        pendingFetchAfterFinishRef.current = true;
-      }
-    }
-  }, [userId, fetchConversations]);
 
   // Only show loading state if:
   // 1. We're loading messages
@@ -282,9 +253,9 @@ export function useVercelChat({
     setHasChatApiError(false);
   };
 
-  const silentlyUpdateUrl = () => {
+  const silentlyUpdateUrl = useCallback(() => {
     window.history.replaceState({}, "", `/chat/${id}`);
-  };
+  }, [id]);
 
   const handleSendMessage = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -293,21 +264,24 @@ export function useVercelChat({
       await deleteTrailingMessages();
     }
 
+    // Capture the input value before it's cleared by handleSubmit
+    const messageContent = input;
+
     // Submit the message
     handleSubmit(event);
 
     if (!roomId) {
       // Optimistically append a temporary conversation so it appears in Recent Chats
       // It will be replaced by the real conversation after the updates/refetch
-      addOptimisticConversation("New Chat", id);
+      addOptimisticConversation("New Chat", id, messageContent);
       silentlyUpdateUrl();
     }
   };
 
-  const handleSendQueryMessages = async (initialMessage: UIMessage) => {
+  const handleSendQueryMessages = useCallback(async (initialMessage: UIMessage) => {
     silentlyUpdateUrl();
     sendMessage(initialMessage, chatRequestOptions);
-  };
+  }, [silentlyUpdateUrl, sendMessage, chatRequestOptions]);
 
   useEffect(() => {
     const isFullyLoggedIn = userId;
@@ -317,7 +291,7 @@ export function useVercelChat({
     if (!hasInitialMessages || !isReady || hasMessages || !isFullyLoggedIn)
       return;
     handleSendQueryMessages(initialMessages[0]);
-  }, [initialMessages, status, userId]);
+  }, [initialMessages, status, userId, handleSendQueryMessages, messages.length]);
 
   // Sync state when models first load and prioritize preferred model
   useEffect(() => {
@@ -325,36 +299,8 @@ export function useVercelChat({
     const preferred = availableModels.find((m) => m.id === DEFAULT_MODEL);
     const defaultId = preferred ? preferred.id : availableModels[0].id;
     setModel(defaultId);
-  }, [availableModels, model]);
+  }, [availableModels, model, setModel]);
 
-  useEffect(() => {
-    if (!latestChatId || !userId) return;
-    if (messagesLengthRef.current !== 2) return;
-
-    const run = async () => {
-      const exists = memoizedConversations.some(
-        (c) => ("id" in c ? c.id : c.agentId) === latestChatId
-      );
-      if (exists) {
-        const remoteRooms = await getConversations(userId);
-        const existingIds = new Set(
-          memoizedConversations
-            .map((c) => ("id" in c ? c.id : undefined))
-            .filter((id): id is string => typeof id === "string")
-        );
-        const hasNew = Array.isArray(remoteRooms)
-          ? remoteRooms.some((r: { id?: string }) => r?.id && !existingIds.has(r.id))
-          : false;
-        if (hasNew) {
-          await fetchConversations(userId);
-        }
-        return;
-      }
-      await fetchConversations(userId);
-    };
-
-    run();
-  }, [latestChatId, userId, memoizedConversations, fetchConversations, messages.length]);
 
   return {
     // States

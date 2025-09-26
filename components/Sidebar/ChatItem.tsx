@@ -2,8 +2,9 @@ import { MoreHorizontal, Pencil, Trash2 } from "lucide-react";
 import type { Conversation } from "@/types/Chat";
 import type { ArtistAgent } from "@/lib/supabase/getArtistAgents";
 import capitalize from "@/lib/capitalize";
-import type { RefObject } from "react";
+import { useState, type RefObject } from "react";
 import { cn } from "@/lib/utils";
+import useCreateChat from "@/hooks/useCreateChat";
 
 type ChatItemProps = {
   chatRoom: Conversation | ArtistAgent;
@@ -46,7 +47,7 @@ const ChatItem = ({
   onRenameClick,
   onDeleteClick
 }: ChatItemProps) => {
-  const { displayName } = getChatDisplayInfo(chatRoom);
+  const [displayName, setDisplayName] = useState(getChatDisplayInfo(chatRoom).displayName);
   const showOptions = isMobile || isHovered || isActive;
   const isOptimisticChatItem = (
     'id' in chatRoom &&
@@ -61,6 +62,11 @@ const ChatItem = ({
       );
     })
   );
+  useCreateChat({
+    isOptimisticChatItem,
+    chatRoom,
+    setDisplayName,
+  });
 
   return (
     <div 

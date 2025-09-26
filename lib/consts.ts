@@ -38,6 +38,8 @@ export const APIFY_WEBHOOKS_VALUE =
 export const AI_MODEL = "o3-mini";
 export const ANTHROPIC_MODEL = "claude-3-7-sonnet-20250219";
 export const DEFAULT_MODEL = "openai/gpt-5-mini";
+// Fastest model for lightweight tasks e.g generating chat titles etc.
+export const LIGHTWEIGHT_MODEL = "openai/gpt-4o-mini";
 
 export const TITLE = "Recoupable";
 

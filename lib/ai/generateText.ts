@@ -4,13 +4,15 @@ import { DEFAULT_MODEL } from "@/lib/consts";
 const generateText = async ({
   system,
   prompt,
+  model,
 }: {
   system?: string;
   prompt: string;
+  model?: string;
 }) => {
   const result = await generate({
     system,
-    model: DEFAULT_MODEL,
+    model: model || DEFAULT_MODEL,
     prompt,
   });
 
