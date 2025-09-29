@@ -14,10 +14,8 @@ export const CatalogAvailability = async ({
   input: string;
 }) => {
   try {
-    // Load catalog data dynamically
     const catalog = await getCatalogData();
 
-    // Use AI to analyze the output against the catalog
     const result = await generateObject({
       model: DEFAULT_MODEL,
       system: `You are a music catalog analyst. Your job is to analyze song recommendations and determine which ones are available in the provided music catalog.
