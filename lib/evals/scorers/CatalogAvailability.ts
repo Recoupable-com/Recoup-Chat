@@ -85,7 +85,6 @@ export const CatalogAvailability = async ({
       },
     };
   } catch (error) {
-    // Fallback to a basic score if AI analysis fails
     console.error("Error in CatalogAvailability scorer:", error);
     return {
       name: "catalog_availability",
