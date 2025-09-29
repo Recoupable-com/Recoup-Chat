@@ -15,7 +15,6 @@ import { callChatFunctions } from "@/lib/evals";
 
 Eval("Search Web Tool Evaluation", {
   data: () => [
-    // Current music industry news and events
     {
       input: "What are the latest music industry trends for 2025?",
       expected: `The latest music industry trends for 2025 include several transformative shifts driven by technology, changing listener habits, and new genre developments.
