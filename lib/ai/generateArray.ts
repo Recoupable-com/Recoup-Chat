@@ -1,4 +1,4 @@
-import { generateObject } from "ai";
+import { generateObject } from "@/lib/braintrust/client";
 import { anthropic } from "@ai-sdk/anthropic";
 import { z } from "zod";
 import { ANTHROPIC_MODEL, SEGMENT_FAN_SOCIAL_ID_PROMPT } from "../consts";

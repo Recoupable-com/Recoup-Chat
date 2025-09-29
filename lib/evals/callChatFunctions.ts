@@ -1,7 +1,7 @@
 import { UIMessage } from "ai";
 import { DEFAULT_MODEL } from "@/lib/consts";
 import { setupChatRequest } from "@/lib/chat/setupChatRequest";
-import { generateText } from "ai";
+import { generateText } from "@/lib/braintrust/client";
 import { type ChatRequest } from "@/lib/chat/types";
 
 /**

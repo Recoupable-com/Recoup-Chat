@@ -1,4 +1,4 @@
-import { generateText as generate } from "ai";
+import { generateText as generate } from "@/lib/braintrust/client";
 import { DEFAULT_MODEL } from "@/lib/consts";
 
 const generateText = async ({

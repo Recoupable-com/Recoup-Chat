@@ -49,7 +49,7 @@
     "ai": "^5.0.48",
     "apify-client": "^2.9.7",
     "autoevals": "^0.0.129",
-    "braintrust": "^0.0.205",
+    "braintrust": "^0.3.8",
     "class-variance-authority": "^0.7.1",
     "classnames": "^2.5.1",
     "clsx": "^2.1.1",

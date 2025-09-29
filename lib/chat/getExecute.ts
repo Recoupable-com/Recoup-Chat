@@ -1,4 +1,5 @@
-import { streamText, UIMessageStreamWriter } from "ai";
+import { UIMessageStreamWriter } from "ai";
+import { streamText } from "@/lib/braintrust/client";
 import { ChatRequest } from "./types";
 import { setupChatRequest } from "./setupChatRequest";
 import { handleChatCredits } from "@/lib/credits/handleChatCredits";

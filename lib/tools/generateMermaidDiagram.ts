@@ -1,4 +1,5 @@
-import { generateText, tool } from "ai";
+import { tool } from "ai";
+import { generateText } from "@/lib/braintrust/client";
 import { z } from "zod";
 import { ANTHROPIC_MODEL, MERMAID_INSTRUCTIONS_PROMPT } from "../consts";
 

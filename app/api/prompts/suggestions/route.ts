@@ -1,5 +1,5 @@
 import { DEFAULT_MODEL, PROMPT_SUGGESTIONS_SYSTEM_PROMPT } from "@/lib/consts";
-import { generateObject } from "ai";
+import { generateObject } from "@/lib/braintrust/client";
 import { NextRequest, NextResponse } from "next/server";
 import { z } from "zod";
 

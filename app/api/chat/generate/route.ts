@@ -1,4 +1,5 @@
-import { generateText, UIMessage } from "ai";
+import { UIMessage } from "ai";
+import { generateText } from "@/lib/braintrust/client";
 import { NextRequest } from "next/server";
 import { serializeError } from "@/lib/errors/serializeError";
 import { sendErrorNotification } from "@/lib/telegram/errors/sendErrorNotification";
