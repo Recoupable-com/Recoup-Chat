@@ -73,7 +73,7 @@ export const CatalogAvailability = async ({
     return {
       name: "catalog_availability",
       score: result.object.score,
-      metadata: {
+      metadata: JSON.stringify({
         analysis: result.object.analysis,
         total_songs: result.object.totalSongs,
         songs_in_catalog: result.object.songsInCatalog,
@@ -82,7 +82,7 @@ export const CatalogAvailability = async ({
         catalog_coverage: `${result.object.songsInCatalog}/${result.object.totalSongs}`,
         catalog_coverage_percentage: `${Math.round(result.object.score * 100)}%`,
         reasoning: result.object.reasoning,
-      },
+      }),
     };
   } catch (error) {
     console.error("Error in CatalogAvailability scorer:", error);
