@@ -71,12 +71,10 @@ IMPORTANT: Return ONLY valid JSON. Use double quotes for all strings. Escape any
       }),
     });
 
-    // Validate the result object and handle potential JSON issues
     if (!result.object) {
       throw new Error("No response object received from AI model");
     }
 
-    // Ensure score is a valid number between 0-1
     const score =
       typeof result.object.score === "number"
         ? Math.max(0, Math.min(1, result.object.score))
@@ -85,16 +83,7 @@ IMPORTANT: Return ONLY valid JSON. Use double quotes for all strings. Escape any
     return {
       name: "catalog_availability",
       score,
-      metadata: {
-        analysis: result.object.analysis || "No analysis provided",
-        total_songs: result.object.totalSongs || 0,
-        songs_in_catalog: result.object.songsInCatalog || 0,
-        matched_songs: result.object.matchedSongs || [],
-        unmatched_songs: result.object.unmatchedSongs || [],
-        catalog_coverage: `${result.object.songsInCatalog || 0}/${result.object.totalSongs || 0}`,
-        catalog_coverage_percentage: `${Math.round(score * 100)}%`,
-        reasoning: result.object.reasoning || "No reasoning provided",
-      },
+      metadata: result.object,
     };
   } catch (error) {
     console.error("Error in CatalogAvailability scorer:", error);
