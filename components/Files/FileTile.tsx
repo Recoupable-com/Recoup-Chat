@@ -7,6 +7,7 @@ import FileItemMenu from "@/components/Files/FileItemMenu";
 import { FileRow } from "@/components/Files/types";
 import { cn } from "@/lib/utils";
 import { ImageIcon } from "lucide-react";
+import { PhotoView } from "react-photo-view";
 
 type FileTileProps = {
   file: FileRow;
@@ -52,6 +53,7 @@ export default function FileTile({ file, onDelete, onProperties, isSelected, onC
               <div className="w-full h-full rounded-lg absolute inset-0 z-0 flex items-center justify-center">
                 <ImageIcon className="w-8 h-8 text-muted-foreground" />
               </div>
+              <PhotoView src={signedUrl}>
               {/* eslint-disable-next-line @next/next/no-img-element */}
               <img
                 src={signedUrl}
@@ -67,6 +69,7 @@ export default function FileTile({ file, onDelete, onProperties, isSelected, onC
                   }
                 }}
               />
+              </PhotoView>
             </div>
           ) : (
             <Icon
