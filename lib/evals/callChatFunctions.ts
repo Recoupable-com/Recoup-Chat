@@ -29,6 +29,7 @@ export async function callChatFunctions(input: string): Promise<string> {
     messages,
     roomId: "3779c62e-7583-40c6-a0bb-6bbac841a531",
     accountId: "fb678396-a68f-4294-ae50-b8cacf9ce77b",
+    artistId: "29cfd55a-98d9-45a5-96c9-c751a88f7799",
     model: DEFAULT_MODEL,
     excludeTools: [], // Don't exclude any tools - we want to test tool usage
   };
