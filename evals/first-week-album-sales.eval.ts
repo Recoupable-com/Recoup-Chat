@@ -27,9 +27,9 @@ Eval("First Week Album Sales Evaluation", {
     },
     {
       input:
-        "what were the first week sales for Taylor Swift's Midnights album",
+        "what were the first week sales for Taylor Swift's Midnights album?",
       expected:
-        "Taylor Swift's Midnights sold 1.578 million equivalent album units in its first week in the United States, which included 1.14 million pure album sales (vinyl, CD, and cassette) and 439.03 million streams. This marked the biggest sales week for any album since Adele's 25 in 2015 and the best sales week for a vinyl album in the modern tracking era.",
+        "Taylor Swift's Midnights sold 1.578 million equivalent album units in its first week in the United States, which included 1.14 million pure album sales. This marked the biggest sales week for any album since Adele's 25 in 2015 and the best sales week for a vinyl album in the modern tracking era.",
       metadata: {
         artist: "Taylor Swift",
         album: "Midnights",
