@@ -17,7 +17,7 @@ Eval("First Week Album Sales Evaluation", {
       input:
         "how many albums did Halsey The Great Impersonator sell the first week of release",
       expected:
-        "Based on available data, Halsey's 'The Great Impersonator' sold approximately 100,000 copies in its first week of release, debuting at #2 on the Billboard 200 chart.",
+        "Halsey's album 'The Great Impersonator' sold between 93,000 and 100,000 copies in its first week of release. It debuted at No. 2 on the Billboard 200 chart.",
       metadata: {
         artist: "Halsey",
         album: "The Great Impersonator",
