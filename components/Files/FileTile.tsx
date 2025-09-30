@@ -6,6 +6,7 @@ import getFileVisual from "@/utils/getFileVisual";
 import FileItemMenu from "@/components/Files/FileItemMenu";
 import { FileRow } from "@/components/Files/types";
 import { cn } from "@/lib/utils";
+import { ImageIcon } from "lucide-react";
 
 type FileTileProps = {
   file: FileRow;
@@ -46,12 +47,27 @@ export default function FileTile({ file, onDelete, onProperties, isSelected, onC
       <div className="relative">
         <div className={iconClasses}>
           {isImage && !file.is_directory ? (
-            // eslint-disable-next-line @next/next/no-img-element
-            <img
-              src={signedUrl}
-              alt={file.file_name}
-              className="h-full w-full object-cover rounded-lg"
-            />
+            <div className="w-full h-full relative">
+              {/* <Skeleton className="w-full h-full absolute animate-pulse"/> */}
+              <div className="w-full h-full rounded-lg absolute inset-0 z-0 flex items-center justify-center">
+                <ImageIcon className="w-8 h-8 text-muted-foreground" />
+              </div>
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img
+                src={signedUrl}
+                alt={file.file_name}
+                loading="lazy"
+                className="h-full w-full object-cover rounded-lg absolute inset-0 z-10"
+                onLoad={(e) => {
+                  // Hide the placeholder SVG icon when image loads
+                  const img = e.target as HTMLImageElement;
+                  const placeholder = img.previousElementSibling as HTMLElement;
+                  if (placeholder) {
+                    placeholder.style.display = 'none';
+                  }
+                }}
+              />
+            </div>
           ) : (
             <Icon
               name={file.is_directory ? "folder" : visual.icon}
