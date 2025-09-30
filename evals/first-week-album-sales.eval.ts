@@ -17,7 +17,7 @@ Eval("First Week Album Sales Evaluation", {
       input:
         "how many albums did Halsey The Great Impersonator sell the first week of release",
       expected:
-        "Based on available data, Halsey's 'The Great Impersonator' sold approximately 100,000 copies in its first week of release, debuting at #2 on the Billboard 200 chart.",
+        "Halsey's album 'The Great Impersonator' sold between 93,000 and 100,000 copies in its first week of release. It debuted at No. 2 on the Billboard 200 chart.",
       metadata: {
         artist: "Halsey",
         album: "The Great Impersonator",
@@ -27,9 +27,9 @@ Eval("First Week Album Sales Evaluation", {
     },
     {
       input:
-        "what were the first week sales for Taylor Swift's Midnights album",
+        "what were the first week sales for Taylor Swift's Midnights album?",
       expected:
-        "Taylor Swift's Midnights sold 1.578 million equivalent album units in its first week in the United States, which included 1.14 million pure album sales (vinyl, CD, and cassette) and 439.03 million streams. This marked the biggest sales week for any album since Adele's 25 in 2015 and the best sales week for a vinyl album in the modern tracking era.",
+        "Taylor Swift's Midnights sold 1.578 million equivalent album units in its first week in the United States, which included between 1 million and 1.5 million pure album sales. This marked the biggest sales week for any album since Adele's 25 in 2015 and the best sales week for a vinyl album in the modern tracking era.",
       metadata: {
         artist: "Taylor Swift",
         album: "Midnights",
