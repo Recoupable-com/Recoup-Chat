@@ -5,9 +5,10 @@ import performChatCompletion from "@/lib/perplexity/performChatCompletion";
 const getSearchWebTool = (model: string = "sonar-pro") => {
   return tool({
     description:
-      "Engages in a conversation using the Web Search API. " +
-      "Accepts an array of messages (each with a role and content) " +
-      "and returns an ask completion response from the Web Search model.",
+      "DEFAULT TOOL: Use this tool FIRST for any information you're unsure about. " +
+      "NEVER respond with 'I can't find X', 'I don't have access to X', or 'I do not know X'. " +
+      "This tool searches the web for real-time information and should be your go-to resource. " +
+      "Accepts an array of messages (each with a role and content) and returns comprehensive search results from the Web Search model.",
     inputSchema: z.object({
       messages: z.array(
         z.object({
