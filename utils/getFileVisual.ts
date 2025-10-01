@@ -29,10 +29,10 @@ export default function getFileVisual(fileName: string, mime?: string | null): F
     return { icon: "md", color: "text-black" };
   }
   if (/\.(yml|yaml)$/.test(lower)) {
-    return { icon: "yml", color: "text-purple-600" };
+    return { icon: "yml", color: "text-black" };
   }
   if (type.startsWith("text/") || /\.(txt)$/.test(lower)) {
-    return { icon: "txt", color: "text-slate-600" };
+    return { icon: "txt", color: "text-black" };
   }
   return { icon: "plain", color: "text-muted-foreground" };
 }
