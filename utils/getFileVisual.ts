@@ -28,11 +28,11 @@ export default function getFileVisual(fileName: string, mime?: string | null): F
   if (/\.(md|markdown)$/.test(lower)) {
     return { icon: "md", color: "text-black" };
   }
-  if (type.startsWith("text/") || /\.(txt)$/.test(lower)) {
-    return { icon: "txt", color: "text-slate-600" };
-  }
   if (/\.(yml|yaml)$/.test(lower)) {
     return { icon: "yml", color: "text-purple-600" };
+  }
+  if (type.startsWith("text/") || /\.(txt)$/.test(lower)) {
+    return { icon: "txt", color: "text-slate-600" };
   }
   return { icon: "plain", color: "text-muted-foreground" };
 }
