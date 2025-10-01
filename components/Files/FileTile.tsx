@@ -1,13 +1,13 @@
 "use client";
 
 import Link from "next/link";
-import Icon from "@/components/Icon";
 import getFileVisual from "@/utils/getFileVisual";
 import FileItemMenu from "@/components/Files/FileItemMenu";
 import { FileRow } from "@/components/Files/types";
 import { cn } from "@/lib/utils";
 import { ImageIcon } from "lucide-react";
 import { PhotoView } from "react-photo-view";
+import FileIcon from "./FileIcon";
 
 type FileTileProps = {
   file: FileRow;
@@ -72,9 +72,7 @@ export default function FileTile({ file, onDelete, onProperties, isSelected, onC
               </PhotoView>
             </div>
           ) : (
-            <Icon
-              name={file.is_directory ? "folder" : visual.icon}
-            />
+            <FileIcon file={file} />
           )}
         </div>
       </div>
