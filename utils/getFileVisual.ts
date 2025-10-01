@@ -1,4 +1,4 @@
-export type FileVisual = { icon: "plain" | "image" | "pdf" | "word" | "csv" | "json" | "audio" | "video"; color: string };
+export type FileVisual = { icon: "plain" | "txt" | "yml" | "md" | "image" | "pdf" | "word" | "csv" | "json" | "audio" | "video"; color: string };
 
 export default function getFileVisual(fileName: string, mime?: string | null): FileVisual {
   const lower = fileName.toLowerCase();
@@ -24,6 +24,15 @@ export default function getFileVisual(fileName: string, mime?: string | null): F
   }
   if (/\.(json)$/.test(lower)) {
     return { icon: "json", color: "text-amber-600" };
+  }
+  if (/\.(md|markdown)$/.test(lower)) {
+    return { icon: "md", color: "text-black" };
+  }
+  if (/\.(yml|yaml)$/.test(lower)) {
+    return { icon: "yml", color: "text-black" };
+  }
+  if (type.startsWith("text/") || /\.(txt)$/.test(lower)) {
+    return { icon: "txt", color: "text-black" };
   }
   return { icon: "plain", color: "text-muted-foreground" };
 }
