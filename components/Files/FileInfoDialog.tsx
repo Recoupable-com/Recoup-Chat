@@ -1,8 +1,9 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Dialog, DialogContent } from "@/components/ui/dialog";
 import type { FileRow } from "@/components/Files/types";
+import { useFileContent } from "@/hooks/useFileContent";
 import FileInfoDialogHeader from "./FileInfoDialogHeader";
 import FileInfoDialogContent from "./FileInfoDialogContent";
 import FileInfoDialogMetadata from "./FileInfoDialogMetadata";
@@ -15,11 +16,34 @@ type FileInfoDialogProps = {
 
 export default function FileInfoDialog({ file, open, onOpenChange }: FileInfoDialogProps) {
   const [isEditing, setIsEditing] = useState(false);
+  const [editedContent, setEditedContent] = useState("");
   
+  const { content } = useFileContent(file?.file_name || "", file?.storage_key || "");
+
+  // Initialize edited content when content loads or editing starts
+  useEffect(() => {
+    if (content && isEditing && !editedContent) {
+      setEditedContent(content);
+    }
+  }, [content, isEditing, editedContent]);
+
   if (!file) return null;
 
+  const handleEditToggle = (editing: boolean) => {
+    if (editing && content) {
+      setEditedContent(content);
+    }
+    setIsEditing(editing);
+  };
+
   const handleSave = () => {
-    // TODO: Save functionality
+    console.log("Saving file:", {
+      fileName: file.file_name,
+      storageKey: file.storage_key,
+      content: editedContent,
+      originalContent: content,
+    });
+    // TODO: Implement actual save functionality
     setIsEditing(false);
   };
   
@@ -29,7 +53,7 @@ export default function FileInfoDialog({ file, open, onOpenChange }: FileInfoDia
         <FileInfoDialogHeader
           fileName={file.file_name}
           isEditing={isEditing}
-          onEditToggle={setIsEditing}
+          onEditToggle={handleEditToggle}
           onSave={handleSave}
         />
 
@@ -38,6 +62,8 @@ export default function FileInfoDialog({ file, open, onOpenChange }: FileInfoDia
             isEditing={isEditing}
             fileName={file.file_name}
             storageKey={file.storage_key}
+            editedContent={editedContent}
+            onContentChange={setEditedContent}
           />
           <FileInfoDialogMetadata file={file} />
         </div>
