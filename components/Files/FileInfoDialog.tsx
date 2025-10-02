@@ -4,6 +4,7 @@ import { useState, useEffect } from "react";
 import { Dialog, DialogContent } from "@/components/ui/dialog";
 import type { FileRow } from "@/components/Files/types";
 import { useFileContent } from "@/hooks/useFileContent";
+import { useUpdateFile } from "@/hooks/useUpdateFile";
 import FileInfoDialogHeader from "./FileInfoDialogHeader";
 import FileInfoDialogContent from "./FileInfoDialogContent";
 import FileInfoDialogMetadata from "./FileInfoDialogMetadata";
@@ -19,6 +20,7 @@ export default function FileInfoDialog({ file, open, onOpenChange }: FileInfoDia
   const [editedContent, setEditedContent] = useState("");
   
   const { content } = useFileContent(file?.file_name || "", file?.storage_key || "");
+  const { mutate: updateFile, isPending: isSaving } = useUpdateFile();
 
   // Initialize edited content when content loads or editing starts
   useEffect(() => {
@@ -27,24 +29,58 @@ export default function FileInfoDialog({ file, open, onOpenChange }: FileInfoDia
     }
   }, [content, isEditing, editedContent]);
 
+  // Reset editing state when dialog closes
+  useEffect(() => {
+    if (!open) {
+      setIsEditing(false);
+      setEditedContent("");
+    }
+  }, [open]);
+
   if (!file) return null;
+
+  // Extract account IDs from storage key
+  const extractAccountIds = (storageKey: string) => {
+    const parts = storageKey.split("/");
+    return {
+      ownerAccountId: parts[1] || "",
+      artistAccountId: parts[2] || "",
+    };
+  };
+
+  const { ownerAccountId, artistAccountId } = extractAccountIds(file.storage_key);
 
   const handleEditToggle = (editing: boolean) => {
     if (editing && content) {
       setEditedContent(content);
+    } else {
+      // Reset edited content when canceling
+      setEditedContent("");
     }
     setIsEditing(editing);
   };
 
   const handleSave = () => {
-    console.log("Saving file:", {
-      fileName: file.file_name,
-      storageKey: file.storage_key,
-      content: editedContent,
-      originalContent: content,
-    });
-    // TODO: Implement actual save functionality
-    setIsEditing(false);
+    if (!ownerAccountId || !artistAccountId) {
+      console.error("Missing account IDs");
+      return;
+    }
+
+    updateFile(
+      {
+        storageKey: file.storage_key,
+        content: editedContent,
+        mimeType: file.mime_type || "text/plain",
+        ownerAccountId,
+        artistAccountId,
+      },
+      {
+        onSuccess: () => {
+          setIsEditing(false);
+          setEditedContent("");
+        },
+      }
+    );
   };
   
   return (
@@ -53,6 +89,7 @@ export default function FileInfoDialog({ file, open, onOpenChange }: FileInfoDia
         <FileInfoDialogHeader
           fileName={file.file_name}
           isEditing={isEditing}
+          isSaving={isSaving}
           onEditToggle={handleEditToggle}
           onSave={handleSave}
         />

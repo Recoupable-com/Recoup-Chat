@@ -1,16 +1,19 @@
 import { DialogHeader, DialogTitle, DialogDescription } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
+import { Loader2 } from "lucide-react";
 
 type FileInfoDialogHeaderProps = {
   fileName: string;
   isEditing: boolean;
+  isSaving?: boolean;
   onEditToggle: (editing: boolean) => void;
   onSave: () => void;
 };
 
 export default function FileInfoDialogHeader({ 
   fileName, 
-  isEditing, 
+  isEditing,
+  isSaving = false,
   onEditToggle, 
   onSave 
 }: FileInfoDialogHeaderProps) {
@@ -20,7 +23,9 @@ export default function FileInfoDialogHeader({
         <div className="min-w-0 flex-1">
           <DialogHeader>
             <DialogTitle className="truncate text-sm sm:text-base">{fileName}</DialogTitle>
-            <DialogDescription className="text-xs sm:text-sm">File information</DialogDescription>
+            <DialogDescription className="text-xs sm:text-sm">
+              {isSaving ? "Saving changes..." : "File information"}
+            </DialogDescription>
           </DialogHeader>
         </div>
         <div className="flex items-center gap-2 shrink-0">
@@ -30,6 +35,7 @@ export default function FileInfoDialogHeader({
               variant="outline" 
               className="h-8 px-3 text-xs"
               onClick={() => onEditToggle(true)}
+              disabled={isSaving}
             >
               Edit
             </Button>
@@ -40,6 +46,7 @@ export default function FileInfoDialogHeader({
                 variant="outline"
                 className="h-8 px-3 text-xs"
                 onClick={() => onEditToggle(false)}
+                disabled={isSaving}
               >
                 Cancel
               </Button>
@@ -47,8 +54,16 @@ export default function FileInfoDialogHeader({
                 size="sm"
                 className="h-8 px-3 text-xs"
                 onClick={onSave}
+                disabled={isSaving}
               >
-                Save
+                {isSaving ? (
+                  <>
+                    <Loader2 className="mr-1.5 h-3 w-3 animate-spin" />
+                    Saving
+                  </>
+                ) : (
+                  "Save"
+                )}
               </Button>
             </>
           )}
