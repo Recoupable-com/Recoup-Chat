@@ -1,11 +1,12 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import useFilesManager from "@/hooks/useFilesManager";
 import FilesGridSkeleton from "@/components/Files/FilesGridSkeleton";
 import useFilesPath from "@/hooks/useFilesPath";
 import { useUserProvider } from "@/providers/UserProvder";
 import { useArtistProvider } from "@/providers/ArtistProvider";
+import { toast } from "sonner";
 import FilesToolbar from "@/components/Files/FilesToolbar";
 import FilesGrid from "@/components/Files/FilesGrid";
 import {
@@ -47,6 +48,27 @@ export default function UploadAndList() {
     clearSelection();
   }, [path]);
 
+  // Handle dropped files from drag-and-drop
+  const handleFilesDropped = useCallback(
+    async (droppedFiles: File[]) => {
+      if (droppedFiles.length === 0) return;
+
+      toast.success(`Uploading ${droppedFiles.length} file${droppedFiles.length > 1 ? "s" : ""}...`);
+
+      for (const file of droppedFiles) {
+        try {
+          await handleUpload(file);
+        } catch (error) {
+          console.error(`Failed to upload ${file.name}:`, error);
+          toast.error(`Failed to upload ${file.name}`);
+        }
+      }
+
+      refreshFiles();
+    },
+    [handleUpload, refreshFiles]
+  );
+
   return (
     <div className="space-y-4 px-2 md:px-0">
       <FilesToolbar
@@ -86,6 +108,7 @@ export default function UploadAndList() {
             selectedFiles={selectedFiles}
             lastClickedIndex={lastClickedIndex}
             onSelectionChange={handleSelectionChange}
+            onFilesDropped={handleFilesDropped}
           />
         )}
       </div>

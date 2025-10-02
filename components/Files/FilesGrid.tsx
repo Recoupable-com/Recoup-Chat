@@ -15,6 +15,7 @@ interface FilesGridProps {
   selectedFiles: Set<string>;
   lastClickedIndex: number | null;
   onSelectionChange: (selectedFiles: Set<string>, lastClickedIndex: number | null) => void;
+  onFilesDropped?: (files: File[]) => void;
 }
 
 // Extract original artist owner from storage key
@@ -33,6 +34,7 @@ export default function FilesGrid({
   selectedFiles,
   lastClickedIndex,
   onSelectionChange,
+  onFilesDropped,
 }: FilesGridProps) {
   const [deleteOpen, setDeleteOpen] = useState(false);
   const [target, setTarget] = useState<{
@@ -61,6 +63,7 @@ export default function FilesGrid({
           selectedFiles={selectedFiles}
           lastClickedIndex={lastClickedIndex}
           onSelectionChange={onSelectionChange}
+          onFilesDropped={onFilesDropped}
         />
       </div>
 
