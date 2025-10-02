@@ -4,6 +4,7 @@ export interface FileRow {
   storage_key: string;
   mime_type?: string | null;
   is_directory?: boolean;
+  size_bytes?: number | null;
 }
 
 
