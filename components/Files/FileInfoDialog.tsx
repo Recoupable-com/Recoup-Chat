@@ -1,14 +1,13 @@
 "use client";
 
-import { useState, useEffect } from "react";
 import { Dialog, DialogContent } from "@/components/ui/dialog";
+import { toast } from "sonner";
 import type { FileRow } from "@/components/Files/types";
 import { useFileContent } from "@/hooks/useFileContent";
-import { useUpdateFile } from "@/hooks/useUpdateFile";
+import { useFileEdit } from "@/hooks/useFileEdit";
+import { useKeyboardSave } from "@/hooks/useKeyboardSave";
 import { isTextFile } from "@/utils/isTextFile";
-import { getContentSizeBytes } from "@/utils/getContentSizeBytes";
-import { MAX_TEXT_FILE_SIZE_BYTES, MAX_TEXT_FILE_SIZE_LABEL } from "@/lib/consts/fileConstants";
-import { toast } from "sonner";
+import { extractAccountIds } from "@/utils/extractAccountIds";
 import FileInfoDialogHeader from "./FileInfoDialogHeader";
 import FileInfoDialogContent from "./FileInfoDialogContent";
 import FileInfoDialogMetadata from "./FileInfoDialogMetadata";
@@ -20,88 +19,50 @@ type FileInfoDialogProps = {
 };
 
 export default function FileInfoDialog({ file, open, onOpenChange }: FileInfoDialogProps) {
-  const [isEditing, setIsEditing] = useState(false);
-  const [editedContent, setEditedContent] = useState("");
-  
   const { content } = useFileContent(file?.file_name || "", file?.storage_key || "");
-  const { mutate: updateFile, isPending: isSaving } = useUpdateFile();
+  
+  // Extract account IDs and check if file is editable
+  const { ownerAccountId, artistAccountId } = file 
+    ? extractAccountIds(file.storage_key) 
+    : { ownerAccountId: "", artistAccountId: "" };
+  const canEdit = file ? isTextFile(file.file_name) : false;
 
-  // Initialize edited content when content loads or editing starts
-  useEffect(() => {
-    if (content && isEditing && !editedContent) {
-      setEditedContent(content);
-    }
-  }, [content, isEditing, editedContent]);
+  // File editing state and operations
+  const {
+    isEditing,
+    editedContent,
+    isSaving,
+    hasUnsavedChanges,
+    setEditedContent,
+    handleSave,
+    handleEditToggle: baseHandleEditToggle,
+  } = useFileEdit({
+    content,
+    storageKey: file?.storage_key || "",
+    mimeType: file?.mime_type || null,
+    ownerAccountId,
+    artistAccountId,
+    isOpen: open,
+  });
 
-  // Reset editing state when dialog closes
-  useEffect(() => {
-    if (!open) {
-      setIsEditing(false);
-      setEditedContent("");
-    }
-  }, [open]);
+  // Keyboard shortcut for saving
+  useKeyboardSave({
+    isOpen: open,
+    isEditing,
+    hasUnsavedChanges,
+    isSaving,
+    onSave: handleSave,
+  });
 
   if (!file) return null;
 
-  // Extract account IDs from storage key
-  const extractAccountIds = (storageKey: string) => {
-    const parts = storageKey.split("/");
-    return {
-      ownerAccountId: parts[1] || "",
-      artistAccountId: parts[2] || "",
-    };
-  };
-
-  const { ownerAccountId, artistAccountId } = extractAccountIds(file.storage_key);
-
-  // Check if file is editable (text file only)
-  const canEdit = isTextFile(file.file_name);
-
+  // Wrap edit toggle with text file validation
   const handleEditToggle = (editing: boolean) => {
-    if (!canEdit) {
+    if (!canEdit && editing) {
       toast.error("Only text files can be edited");
       return;
     }
-
-    if (editing && content) {
-      setEditedContent(content);
-    } else {
-      // Reset edited content when canceling
-      setEditedContent("");
-    }
-    setIsEditing(editing);
-  };
-
-  const handleSave = () => {
-    if (!ownerAccountId || !artistAccountId) {
-      toast.error("Missing account information");
-      return;
-    }
-
-    // Validate file size (10MB limit for text files)
-    const contentSize = getContentSizeBytes(editedContent);
-    if (contentSize > MAX_TEXT_FILE_SIZE_BYTES) {
-      toast.error(
-        `File size exceeds ${MAX_TEXT_FILE_SIZE_LABEL} limit. Current size: ${(contentSize / 1024 / 1024).toFixed(2)}MB`
-      );
-      return;
-    }
-
-    updateFile(
-      {
-        storageKey: file.storage_key,
-        content: editedContent,
-        mimeType: file.mime_type || "text/plain",
-        ownerAccountId,
-        artistAccountId,
-      },
-      {
-        onSuccess: () => {
-          setIsEditing(false);
-          setEditedContent("");
-        },
-      }
-    );
+    baseHandleEditToggle(editing);
   };
   
   return (
@@ -112,6 +73,7 @@ export default function FileInfoDialog({ file, open, onOpenChange }: FileInfoDia
           isEditing={isEditing}
           isSaving={isSaving}
           canEdit={canEdit}
+          hasUnsavedChanges={hasUnsavedChanges}
           onEditToggle={handleEditToggle}
           onSave={handleSave}
         />

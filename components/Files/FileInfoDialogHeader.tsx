@@ -7,6 +7,7 @@ type FileInfoDialogHeaderProps = {
   isEditing: boolean;
   isSaving?: boolean;
   canEdit?: boolean;
+  hasUnsavedChanges?: boolean;
   onEditToggle: (editing: boolean) => void;
   onSave: () => void;
 };
@@ -16,6 +17,7 @@ export default function FileInfoDialogHeader({
   isEditing,
   isSaving = false,
   canEdit = true,
+  hasUnsavedChanges = false,
   onEditToggle, 
   onSave 
 }: FileInfoDialogHeaderProps) {
@@ -24,9 +26,18 @@ export default function FileInfoDialogHeader({
       <div className="flex items-start justify-between gap-4">
         <div className="min-w-0 flex-1">
           <DialogHeader>
-            <DialogTitle className="truncate text-sm sm:text-base">{fileName}</DialogTitle>
+            <DialogTitle className="truncate text-sm sm:text-base flex items-center gap-2">
+              {fileName}
+              {hasUnsavedChanges && (
+                <span className="text-xs font-normal text-muted-foreground">*</span>
+              )}
+            </DialogTitle>
             <DialogDescription className="text-xs sm:text-sm">
-              {isSaving ? "Saving changes..." : "File information"}
+              {isSaving 
+                ? "Saving changes..." 
+                : hasUnsavedChanges 
+                  ? "Unsaved changes • Press Cmd+S or Ctrl+S to save" 
+                  : "File information"}
             </DialogDescription>
           </DialogHeader>
         </div>
