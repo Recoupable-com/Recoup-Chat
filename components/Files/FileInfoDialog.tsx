@@ -25,7 +25,7 @@ export default function FileInfoDialog({ file, open, onOpenChange }: FileInfoDia
   
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="w-[96vw] sm:w-[92vw] max-w-5xl min-h-[50vh] max-h-[90vh] overflow-hidden p-0 gap-0 pt-6">
+      <DialogContent className="w-[96vw] sm:w-[92vw] max-w-5xl h-[90vh] p-0 gap-0 pt-6 flex flex-col">
         <FileInfoDialogHeader
           fileName={file.file_name}
           isEditing={isEditing}
@@ -33,8 +33,12 @@ export default function FileInfoDialog({ file, open, onOpenChange }: FileInfoDia
           onSave={handleSave}
         />
 
-        <div className="flex flex-col sm:flex-row h-full overflow-hidden">
-          <FileInfoDialogContent isEditing={isEditing} />
+        <div className="flex flex-col sm:flex-row flex-1 overflow-hidden">
+          <FileInfoDialogContent 
+            isEditing={isEditing}
+            fileName={file.file_name}
+            storageKey={file.storage_key}
+          />
           <FileInfoDialogMetadata file={file} />
         </div>
       </DialogContent>
