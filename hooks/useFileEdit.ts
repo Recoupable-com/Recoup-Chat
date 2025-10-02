@@ -2,7 +2,7 @@ import { useState, useEffect, useCallback } from "react";
 import { toast } from "sonner";
 import { useUpdateFile } from "@/hooks/useUpdateFile";
 import { getContentSizeBytes } from "@/utils/getContentSizeBytes";
-import { MAX_TEXT_FILE_SIZE_BYTES, MAX_TEXT_FILE_SIZE_LABEL } from "@/lib/consts/fileConstants";
+import { MAX_TEXT_FILE_SIZE_BYTES } from "@/lib/consts/fileConstants";
 
 type UseFileEditParams = {
   content: string | null;
@@ -58,7 +58,7 @@ export function useFileEdit({
     const contentSize = getContentSizeBytes(editedContent);
     if (contentSize > MAX_TEXT_FILE_SIZE_BYTES) {
       toast.error(
-        `File size exceeds ${MAX_TEXT_FILE_SIZE_LABEL} limit. Current size: ${(contentSize / 1024 / 1024).toFixed(2)}MB`
+        `File size exceeds 10 limit. Current size: ${(contentSize / 1024 / 1024).toFixed(2)}MB`
       );
       return;
     }
