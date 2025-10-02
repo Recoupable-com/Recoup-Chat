@@ -1,10 +1,12 @@
 "use client";
 
-import { useCallback } from "react";
+import { useCallback, useState } from "react";
 import { PhotoProvider } from "react-photo-view";
 import "react-photo-view/dist/react-photo-view.css";
 import { FileRow } from "@/components/Files/types";
 import FileTile from "@/components/Files/FileTile";
+import getFileVisual from "@/utils/getFileVisual";
+import FileInfoDialog from "./FileInfoDialog";
 
 type FilesGridListProps = {
   files: FileRow[];
@@ -27,6 +29,8 @@ export default function FilesGridList({
   lastClickedIndex,
   onSelectionChange
 }: FilesGridListProps) {
+  const [dialogOpen, setDialogOpen] = useState(false);
+  const [dialogInfoFile, setDialogInfoFile] = useState<FileRow | null>(null);
 
   const handleFileClick = useCallback((file: FileRow, index: number, event: React.MouseEvent) => {
     event.stopPropagation(); // Prevent triggering clearSelection
@@ -56,6 +60,13 @@ export default function FilesGridList({
     } else {
       // Regular click: single selection
       onSelectionChange(new Set([file.id]), index);
+      
+      // Open dialog for non-image, non-directory files
+      const visual = getFileVisual(file.file_name, file.mime_type ?? null);
+      if (!file.is_directory && visual.icon !== "image") {
+        setDialogInfoFile(file);
+        setDialogOpen(true);
+      }
     }
   }, [selectedFiles, lastClickedIndex, files, onSelectionChange]);
 
@@ -89,6 +100,14 @@ export default function FilesGridList({
           );
         })}
       </div>
+      <FileInfoDialog 
+        file={dialogInfoFile} 
+        open={dialogOpen} 
+        onOpenChange={(open: boolean) => {
+          setDialogOpen(open);
+          if (!open) setDialogInfoFile(null);
+        }} 
+      />
     </PhotoProvider>
   );
 }

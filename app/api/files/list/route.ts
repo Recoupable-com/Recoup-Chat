@@ -15,7 +15,7 @@ export async function GET(req: Request) {
     // Query 1: Files directly owned by the artist
     const { data: ownedFiles, error: ownedError } = await supabase
       .from("files")
-      .select("id,file_name,storage_key,mime_type,is_directory,created_at")
+      .select("id,file_name,storage_key,mime_type,is_directory,size_bytes,created_at")
       .eq("owner_account_id", ownerAccountId)
       .eq("artist_account_id", artistAccountId)
       .ilike("storage_key", path ? `${path}%` : "%")
