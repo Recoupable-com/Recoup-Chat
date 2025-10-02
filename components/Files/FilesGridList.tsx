@@ -6,6 +6,8 @@ import "react-photo-view/dist/react-photo-view.css";
 import { FileRow } from "@/components/Files/types";
 import FileTile from "@/components/Files/FileTile";
 import getFileVisual from "@/utils/getFileVisual";
+import { useDragAndDrop } from "@/hooks/useDragAndDrop";
+import { Upload } from "lucide-react";
 import FileInfoDialog from "./FileInfoDialog";
 
 type FilesGridListProps = {
@@ -17,6 +19,7 @@ type FilesGridListProps = {
   selectedFiles: Set<string>;
   lastClickedIndex: number | null;
   onSelectionChange: (selectedFiles: Set<string>, lastClickedIndex: number | null) => void;
+  onFilesDropped?: (files: File[]) => void;
 };
 
 export default function FilesGridList({
@@ -27,10 +30,22 @@ export default function FilesGridList({
   getOriginalArtistId,
   selectedFiles,
   lastClickedIndex,
-  onSelectionChange
+  onSelectionChange,
+  onFilesDropped,
 }: FilesGridListProps) {
   const [dialogOpen, setDialogOpen] = useState(false);
   const [dialogInfoFile, setDialogInfoFile] = useState<FileRow | null>(null);
+
+  // Drag and drop functionality
+  const { getRootProps, getInputProps, isDragging, isDragReject } = useDragAndDrop({
+    onDrop: (files) => {
+      if (onFilesDropped) {
+        onFilesDropped(files);
+      }
+    },
+    maxFiles: 100,
+    maxSizeMB: 100,
+  });
 
   const handleFileClick = useCallback((file: FileRow, index: number, event: React.MouseEvent) => {
     event.stopPropagation(); // Prevent triggering clearSelection
@@ -73,7 +88,14 @@ export default function FilesGridList({
   return (
     <PhotoProvider>
       <div 
-        className="flex flex-wrap gap-2 p-1.5"
+        {...getRootProps()}
+        className={`flex flex-wrap gap-2 p-1.5 rounded-lg transition-all relative ${
+          isDragging 
+            ? "ring-2 ring-primary ring-offset-2 bg-primary/5" 
+            : isDragReject
+            ? "ring-2 ring-destructive ring-offset-2 bg-destructive/5"
+            : ""
+        }`}
         onClick={(e) => {
           // Clear selection when clicking empty space (not on a file)
           if (e.target === e.currentTarget && !e.shiftKey) {
@@ -81,6 +103,18 @@ export default function FilesGridList({
           }
         }}
       >
+        <input {...getInputProps()} />
+        
+        {/* Drop zone overlay */}
+        {isDragging && (
+          <div className="absolute inset-0 flex items-center justify-center bg-primary/10 backdrop-blur-sm rounded-lg z-10 pointer-events-none">
+            <div className="flex flex-col items-center gap-3 text-primary">
+              <Upload className="h-12 w-12 animate-bounce" />
+              <p className="text-lg font-medium">Drop files here</p>
+            </div>
+          </div>
+        )}
+
         {files.map((f, index) => {
           // Determine ownership by comparing current artist with original file owner
           const originalArtistId = getOriginalArtistId?.(f.storage_key);
