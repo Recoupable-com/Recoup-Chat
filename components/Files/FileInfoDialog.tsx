@@ -5,6 +5,10 @@ import { Dialog, DialogContent } from "@/components/ui/dialog";
 import type { FileRow } from "@/components/Files/types";
 import { useFileContent } from "@/hooks/useFileContent";
 import { useUpdateFile } from "@/hooks/useUpdateFile";
+import { isTextFile } from "@/utils/isTextFile";
+import { getContentSizeBytes } from "@/utils/getContentSizeBytes";
+import { MAX_TEXT_FILE_SIZE_BYTES, MAX_TEXT_FILE_SIZE_LABEL } from "@/lib/consts/fileConstants";
+import { toast } from "sonner";
 import FileInfoDialogHeader from "./FileInfoDialogHeader";
 import FileInfoDialogContent from "./FileInfoDialogContent";
 import FileInfoDialogMetadata from "./FileInfoDialogMetadata";
@@ -50,7 +54,15 @@ export default function FileInfoDialog({ file, open, onOpenChange }: FileInfoDia
 
   const { ownerAccountId, artistAccountId } = extractAccountIds(file.storage_key);
 
+  // Check if file is editable (text file only)
+  const canEdit = isTextFile(file.file_name);
+
   const handleEditToggle = (editing: boolean) => {
+    if (!canEdit) {
+      toast.error("Only text files can be edited");
+      return;
+    }
+
     if (editing && content) {
       setEditedContent(content);
     } else {
@@ -62,7 +74,16 @@ export default function FileInfoDialog({ file, open, onOpenChange }: FileInfoDia
 
   const handleSave = () => {
     if (!ownerAccountId || !artistAccountId) {
-      console.error("Missing account IDs");
+      toast.error("Missing account information");
+      return;
+    }
+
+    // Validate file size (10MB limit for text files)
+    const contentSize = getContentSizeBytes(editedContent);
+    if (contentSize > MAX_TEXT_FILE_SIZE_BYTES) {
+      toast.error(
+        `File size exceeds ${MAX_TEXT_FILE_SIZE_LABEL} limit. Current size: ${(contentSize / 1024 / 1024).toFixed(2)}MB`
+      );
       return;
     }
 
@@ -90,6 +111,7 @@ export default function FileInfoDialog({ file, open, onOpenChange }: FileInfoDia
           fileName={file.file_name}
           isEditing={isEditing}
           isSaving={isSaving}
+          canEdit={canEdit}
           onEditToggle={handleEditToggle}
           onSave={handleSave}
         />
