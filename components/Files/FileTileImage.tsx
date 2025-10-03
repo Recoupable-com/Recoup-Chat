@@ -4,16 +4,16 @@ import { ImageIcon } from "lucide-react";
 import { PhotoView } from "react-photo-view";
 
 type FileTileImageProps = {
-  signedUrl: string;
+  url: string;
   fileName: string;
 };
 
-export default function FileTileImage({ signedUrl, fileName }: FileTileImageProps) {
+export default function FileTileImage({ url, fileName }: FileTileImageProps) {
   const handleImageLoad = (e: React.SyntheticEvent<HTMLImageElement>) => {
     const img = e.target as HTMLImageElement;
     const placeholder = img.previousElementSibling as HTMLElement;
     if (placeholder) {
-      placeholder.style.display = 'none';
+      placeholder.style.display = "none";
     }
   };
 
@@ -22,10 +22,10 @@ export default function FileTileImage({ signedUrl, fileName }: FileTileImageProp
       <div className="w-full h-full rounded-lg absolute inset-0 z-0 flex items-center justify-center">
         <ImageIcon className="w-8 h-8 text-muted-foreground" />
       </div>
-      <PhotoView src={signedUrl}>
+      <PhotoView src={url}>
         {/* eslint-disable-next-line @next/next/no-img-element */}
         <img
-          src={signedUrl}
+          src={url}
           alt={fileName}
           loading="lazy"
           className="h-full w-full object-cover rounded-lg absolute inset-0 z-10"
@@ -35,4 +35,3 @@ export default function FileTileImage({ signedUrl, fileName }: FileTileImageProp
     </div>
   );
 }
-

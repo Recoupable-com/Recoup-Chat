@@ -47,7 +47,7 @@ export default function FileTile({ file, onDelete, onProperties, isSelected, onC
       <div className="relative">
         <div className={iconClasses}>
           {isImage && !file.is_directory ? (
-            <FileTileImage signedUrl={signedUrl} fileName={file.file_name} />
+            <FileTileImage url={signedUrl} fileName={file.file_name} />
           ) : (
             <FileIcon file={file} />
           )}
