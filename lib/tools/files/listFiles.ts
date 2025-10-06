@@ -9,7 +9,7 @@ List files in storage for the current artist. Use this to discover what files ex
 
 When to use:
 - Before creating a new file, check if it already exists
-- To show the user what files are available
+- To show the customer what files are available
 - To find files matching a pattern or in a specific directory
 - Before reading a file, to confirm it exists and get its exact name
 `,
