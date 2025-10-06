@@ -19,7 +19,7 @@ export async function findFileByName(
 
   const { data, error } = await supabase
     .from("files")
-    .select("*")
+    .select()
     .eq("owner_account_id", ownerAccountId)
     .eq("artist_account_id", artistAccountId)
     .eq("file_name", fileName)

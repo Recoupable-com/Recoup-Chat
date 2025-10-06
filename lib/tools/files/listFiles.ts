@@ -48,23 +48,13 @@ When to use:
         });
       }
 
-      // Format the response
-      const fileList = files.map((file) => ({
-        fileName: file.file_name,
-        storageKey: file.storage_key,
-        sizeBytes: file.size_bytes,
-        mimeType: file.mime_type,
-        isDirectory: file.is_directory || false,
-        createdAt: file.created_at,
-      }));
-
       return {
         success: true,
-        files: fileList,
-        count: fileList.length,
+        files: files,
+        count: files.length,
         path: path || "root",
         textFilesOnly,
-        message: `Found ${fileList.length} ${textFilesOnly ? "text " : ""}file(s)${path ? ` in '${path}'` : ""}.`,
+        message: `Found ${files.length} ${textFilesOnly ? "text " : ""}file(s)${path ? ` in '${path}'` : ""}.`,
       };
     } catch (error) {
       console.error("Error in listFiles tool:", error);

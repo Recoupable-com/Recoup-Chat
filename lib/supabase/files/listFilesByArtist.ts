@@ -22,7 +22,7 @@ export async function listFilesByArtist(
   // Query files owned by the artist with the full storage path
   const { data: ownedFiles, error: ownedError } = await supabase
     .from("files")
-    .select("*")
+    .select()
     .eq("owner_account_id", ownerAccountId)
     .eq("artist_account_id", artistAccountId)
     .ilike("storage_key", `${fullPath}%`)
