@@ -1,7 +1,7 @@
 import { z } from "zod";
 import { tool } from "ai";
 import { findFileByName } from "@/lib/supabase/files/findFileByName";
-import { fetchFileContent } from "@/lib/files/fetchFileContent";
+import { fetchFileContentServer } from "@/lib/supabase/storage/fetchFileContent";
 
 const readFile = tool({
   description: `
@@ -29,6 +29,7 @@ When to use:
       .describe("Pull active_artist_id from the system prompt"),
   }),
   execute: async ({ fileName, path, active_account_id, active_artist_id }) => {
+    console.log("readFile", { fileName, path, active_account_id, active_artist_id });
     try {
       // Find the file in the database
       const fileRecord = await findFileByName(
@@ -55,8 +56,8 @@ When to use:
         };
       }
 
-      // Fetch the file content
-      const content = await fetchFileContent(fileRecord.storage_key);
+      // Fetch the file content (server-side)
+      const content = await fetchFileContentServer(fileRecord.storage_key);
 
       return {
         success: true,

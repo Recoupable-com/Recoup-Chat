@@ -1,6 +1,7 @@
 import { z } from "zod";
 import { tool } from "ai";
 import { TEXT_EXTENSIONS } from "@/lib/consts/fileExtensions";
+import { listFilesByArtist } from "@/lib/supabase/files/listFilesByArtist";
 
 const listFiles = tool({
   description: `
@@ -30,31 +31,14 @@ When to use:
       .describe("Pull active_artist_id from the system prompt"),
   }),
   execute: async ({ path, textFilesOnly, active_account_id, active_artist_id }) => {
+    console.log("listFiles", { path, textFilesOnly, active_account_id, active_artist_id });
     try {
-      // Build the API URL with query parameters
-      const params = new URLSearchParams({
-        ownerAccountId: active_account_id,
-        artistAccountId: active_artist_id,
-      });
-
-      if (path) {
-        params.append("path", path);
-      }
-
-      const apiUrl = `/api/files/list?${params.toString()}`;
-      const response = await fetch(apiUrl, { cache: "no-store" });
-
-      if (!response.ok) {
-        const errorData = await response.json();
-        throw new Error(errorData.error || "Failed to list files");
-      }
-
-      const data = await response.json();
-      let files = data.files || [];
+      // Query files directly from database (server-side)
+      let files = await listFilesByArtist(active_account_id, active_artist_id, path);
 
       // Filter to text files only if requested
       if (textFilesOnly && files.length > 0) {
-        files = files.filter((file: { file_name: string; is_directory?: boolean }) => {
+        files = files.filter((file) => {
           // Keep directories (for navigation)
           if (file.is_directory) return true;
 
@@ -66,14 +50,7 @@ When to use:
       }
 
       // Format the response
-      const fileList = files.map((file: {
-        file_name: string;
-        storage_key: string;
-        size_bytes: number | null;
-        mime_type: string | null;
-        is_directory?: boolean;
-        created_at: string;
-      }) => ({
+      const fileList = files.map((file) => ({
         fileName: file.file_name,
         storageKey: file.storage_key,
         sizeBytes: file.size_bytes,
