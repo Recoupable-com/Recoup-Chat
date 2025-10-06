@@ -37,7 +37,7 @@ import createSegments from "./createSegments";
 import createReleaseReport from "./createReleaseReport";
 import youtubeTools from "./youtube";
 import getLocalTime from "./getLocalTime";
-import { readFile } from "./files";
+import readFile  from "./files/readFile";
 
 export function getMcpTools(): ToolSet {
   const tools = {
