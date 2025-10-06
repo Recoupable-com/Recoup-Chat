@@ -35,7 +35,11 @@ const KnowledgeDialog = ({ name, url, type, children }: KnowledgeDialogProps) =>
     return (part || "file").toUpperCase();
   })();
   const isText = isTextPath(url) || (name ? isTextPath(name) : false) || isTextMimeType(type);
-  const { content, loading, error } = useTextContent({ url: isText ? url : null });
+  const { content, loading, error } = useTextContent({ 
+    url: isText ? url : null,
+    fileName: name,
+    forceTextFile: isText
+  });
   const { bases, setBases, saveSetting } = useArtistProvider();
 
   // Setup save handler for Arweave

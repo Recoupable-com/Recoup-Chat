@@ -6,6 +6,7 @@ type UseTextContentParams = {
   url?: string | null;
   storageKey?: string | null;
   fileName?: string;
+  forceTextFile?: boolean;
 };
 
 type UseTextContentResult = {
@@ -26,12 +27,14 @@ export function useTextContent({
   url,
   storageKey,
   fileName,
+  forceTextFile = false,
 }: UseTextContentParams): UseTextContentResult {
   // Determine if this is a text file
   const fileNameToCheck = fileName || url || storageKey || "";
-  const isTextFile = TEXT_EXTENSIONS.some((ext) => 
+  const detectedIsTextFile = TEXT_EXTENSIONS.some((ext) => 
     fileNameToCheck.toLowerCase().endsWith(ext)
   );
+  const isTextFile = forceTextFile || detectedIsTextFile;
 
   // Determine query key and fetch strategy
   const isDirectUrl = !!url;
