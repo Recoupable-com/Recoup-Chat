@@ -37,8 +37,7 @@ import createSegments from "./createSegments";
 import createReleaseReport from "./createReleaseReport";
 import youtubeTools from "./youtube";
 import getLocalTime from "./getLocalTime";
-import readFile  from "./files/readFile";
-import listFiles  from "./files/listFiles";
+import filesTools from "./files";
 
 export function getMcpTools(): ToolSet {
   const tools = {
@@ -79,8 +78,7 @@ export function getMcpTools(): ToolSet {
     get_social_fans: getSocialFans,
     create_release_report: createReleaseReport,
     get_local_time: getLocalTime,
-    read_file: readFile,
-    list_files: listFiles,
+    ...filesTools,
     ...nanoBananaTools,
     ...youtubeTools,
   };
