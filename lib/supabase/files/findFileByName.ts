@@ -1,10 +1,7 @@
 import supabase from "@/lib/supabase/serverClient";
 import { Tables } from "@/types/database.types";
 
-type FileRecord = Pick<
-  Tables<"files">,
-  "id" | "file_name" | "storage_key" | "mime_type" | "size_bytes" | "is_directory" | "created_at"
->;
+type FileRecord = Tables<"files">;
 
 /**
  * Find a file by name within artist context
@@ -22,7 +19,7 @@ export async function findFileByName(
 
   const { data, error } = await supabase
     .from("files")
-    .select("id,file_name,storage_key,mime_type,size_bytes,is_directory,created_at")
+    .select("*")
     .eq("owner_account_id", ownerAccountId)
     .eq("artist_account_id", artistAccountId)
     .eq("file_name", fileName)

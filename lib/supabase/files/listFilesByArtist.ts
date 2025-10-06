@@ -1,10 +1,7 @@
 import supabase from "@/lib/supabase/serverClient";
 import { Tables } from "@/types/database.types";
 
-type FileRecord = Pick<
-  Tables<"files">,
-  "id" | "file_name" | "storage_key" | "mime_type" | "size_bytes" | "is_directory" | "created_at"
->;
+type FileRecord = Tables<"files">;
 
 /**
  * List files for an artist, optionally filtered by path
@@ -25,7 +22,7 @@ export async function listFilesByArtist(
   // Query files owned by the artist with the full storage path
   const { data: ownedFiles, error: ownedError } = await supabase
     .from("files")
-    .select("id,file_name,storage_key,mime_type,is_directory,size_bytes,created_at")
+    .select("*")
     .eq("owner_account_id", ownerAccountId)
     .eq("artist_account_id", artistAccountId)
     .ilike("storage_key", `${fullPath}%`)
