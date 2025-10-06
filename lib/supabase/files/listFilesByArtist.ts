@@ -1,14 +1,10 @@
 import supabase from "@/lib/supabase/serverClient";
+import { Tables } from "@/types/database.types";
 
-type FileRecord = {
-  id: string;
-  file_name: string;
-  storage_key: string;
-  mime_type: string | null;
-  size_bytes: number | null;
-  is_directory: boolean | null;
-  created_at: string;
-};
+type FileRecord = Pick<
+  Tables<"files">,
+  "id" | "file_name" | "storage_key" | "mime_type" | "size_bytes" | "is_directory" | "created_at"
+>;
 
 /**
  * List files for an artist, optionally filtered by path
