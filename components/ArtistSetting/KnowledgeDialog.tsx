@@ -7,17 +7,17 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
-import { ReactNode } from "react";
+import { ReactNode, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import isImagePath from "@/utils/isImagePath";
 import isTextPath from "@/utils/isTextPath";
 import isTextMimeType from "@/utils/isTextMimeType";
-import { useTextFileContent } from "@/hooks/useTextFileContent";
+import { useTextContent } from "@/hooks/useTextContent";
 import { useArtistProvider } from "@/providers/ArtistProvider";
-import useSaveKnowledgeEdit from "@/hooks/useSaveKnowledgeEdit";
-import useKnowledgeEditor from "@/hooks/useKnowledgeEditor";
-import KnowledgePreview from "./KnowledgePreview";
+import { useTextEditor } from "@/hooks/useTextEditor";
+import { useTextFileSave } from "@/hooks/useTextFileSave";
+import TextFileEditor from "@/components/shared/TextFileEditor";
 
 type KnowledgeDialogProps = {
   name: string;
@@ -27,19 +27,54 @@ type KnowledgeDialogProps = {
 };
 
 const KnowledgeDialog = ({ name, url, type, children }: KnowledgeDialogProps) => {
+  const [isOpen, setIsOpen] = useState(false);
   const isImage = isImagePath(url) || (name ? isImagePath(name) : false) || (!!type && type.startsWith("image/"));
   const ext = (() => {
     const base = (name || url).split("?")[0];
     const part = base.includes(".") ? base.split(".").pop() : undefined;
     return (part || "file").toUpperCase();
-  })(); // Create PNG, JPG, TXT etc. label etc.
+  })();
   const isText = isTextPath(url) || (name ? isTextPath(name) : false) || isTextMimeType(type);
-  const { content: textContent, loading, error } = useTextFileContent(isText ? url : null);
-  const { knowledgeUploading } = useArtistProvider();
-  const { isEditing, setIsEditing, editedText, setEditedText, isOpen, handleOpenChange } =
-    useKnowledgeEditor({ isText, textContent });
+  const { content, loading, error } = useTextContent({ url: isText ? url : null });
+  const { bases, setBases, saveSetting } = useArtistProvider();
 
-  const { handleSave } = useSaveKnowledgeEdit({ name, url, editedText });
+  // Setup save handler for Arweave
+  const { handleSave: saveFile } = useTextFileSave({
+    type: "arweave",
+    fileName: name,
+    originalUrl: url,
+    onSuccess: async (newUrl: string) => {
+      const updatedBases = bases.map((b) => 
+        b.url === url && b.name === name 
+          ? { ...b, url: newUrl }
+          : b
+      );
+      setBases(updatedBases);
+      await saveSetting(updatedBases);
+    },
+  });
+
+  // Setup text editor
+  const {
+    isEditing,
+    editedContent,
+    isSaving,
+    setEditedContent,
+    handleEditToggle,
+    handleSave,
+    handleDialogClose,
+  } = useTextEditor({
+    content,
+    isDialogOpen: isOpen,
+    onSave: saveFile,
+  });
+
+  const handleOpenChange = (open: boolean) => {
+    if (!open && !handleDialogClose()) {
+      return;
+    }
+    setIsOpen(open);
+  };
 
   return (
     <Dialog open={isOpen} onOpenChange={handleOpenChange}>
@@ -51,27 +86,33 @@ const KnowledgeDialog = ({ name, url, type, children }: KnowledgeDialogProps) =>
             <div className="mt-1"><Badge variant="secondary" className="text-[10px] sm:text-[11px]">{ext}</Badge></div>
           </div>
           <div className="ml-0 sm:ml-4 shrink-0 flex items-center gap-2 w-full sm:w-auto justify-end">
-            {isText && !isEditing && (<Button size="sm" variant="outline" className="h-8 px-2 text-xs sm:px-3" onClick={() => setIsEditing(true)}>Edit</Button>)}
+            {isText && !isEditing && (
+              <Button 
+                size="sm" 
+                variant="outline" 
+                className="h-8 px-2 text-xs sm:px-3" 
+                onClick={() => handleEditToggle(true)}
+              >
+                Edit
+              </Button>
+            )}
             {isText && isEditing && (
               <>
                 <Button
                   size="sm"
                   variant="secondary"
                   className="h-8 px-2 text-xs sm:px-3"
-                  onClick={() => {
-                    setEditedText(textContent);
-                    setIsEditing(false);
-                  }}
+                  onClick={() => handleEditToggle(false)}
                 >
                   Cancel
                 </Button>
                 <Button
                   size="sm"
                   className="h-8 px-2 text-xs sm:px-3"
-                  disabled={loading || knowledgeUploading}
+                  disabled={isSaving}
                   onClick={handleSave}
                 >
-                  Save
+                  {isSaving ? "Saving..." : "Save"}
                 </Button>
               </>
             )}
@@ -82,18 +123,30 @@ const KnowledgeDialog = ({ name, url, type, children }: KnowledgeDialogProps) =>
             </Button>
           </div>
         </div>
-        <KnowledgePreview
-          isImage={isImage}
-          isText={isText}
-          isEditing={isEditing}
-          editedText={editedText}
-          setEditedText={setEditedText}
-          loading={loading}
-          error={error || null}
-          textContent={textContent}
-          url={url}
-          name={name}
-        />
+        {isImage ? (
+          <div className="min-h-0 h-full overflow-auto bg-muted flex items-center justify-center">
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img src={url} alt={name || "image"} className="max-h-full max-w-full object-contain" />
+          </div>
+        ) : isText ? (
+          <div className="min-h-0 h-full overflow-auto bg-background p-3 sm:p-4">
+            <TextFileEditor
+              content={isEditing ? editedContent : content}
+              onChange={setEditedContent}
+              isEditing={isEditing}
+              loading={loading}
+              error={error}
+              showStats={true}
+            />
+          </div>
+        ) : (
+          <div className="min-h-0 overflow-auto flex items-center justify-center text-xs sm:text-sm text-muted-foreground px-4 py-6 sm:p-8">
+            <div className="text-center space-y-2">
+              <p className="font-medium">Preview not available</p>
+              <p>Use the button above to open the file in a new tab.</p>
+            </div>
+          </div>
+        )}
       </DialogContent>
     </Dialog>
   );

@@ -3,8 +3,9 @@
 import { Dialog, DialogContent } from "@/components/ui/dialog";
 import { toast } from "sonner";
 import type { FileRow } from "@/components/Files/types";
-import { useFileContent } from "@/hooks/useFileContent";
-import { useFileEdit } from "@/hooks/useFileEdit";
+import { useTextContent } from "@/hooks/useTextContent";
+import { useTextEditor } from "@/hooks/useTextEditor";
+import { useTextFileSave } from "@/hooks/useTextFileSave";
 import { useKeyboardSave } from "@/hooks/useKeyboardSave";
 import { isTextFile } from "@/utils/isTextFile";
 import { extractAccountIds } from "@/utils/extractAccountIds";
@@ -19,15 +20,29 @@ type FileInfoDialogProps = {
 };
 
 export default function FileInfoDialog({ file, open, onOpenChange }: FileInfoDialogProps) {
-  const { content } = useFileContent(file?.file_name || "", file?.storage_key || "");
-  
   // Extract account IDs and check if file is editable
   const { ownerAccountId, artistAccountId } = file 
     ? extractAccountIds(file.storage_key) 
     : { ownerAccountId: "", artistAccountId: "" };
   const canEdit = file ? isTextFile(file.file_name) : false;
 
-  // File editing state and operations
+  // Fetch file content
+  const { content, loading, error } = useTextContent({
+    storageKey: file?.storage_key || null,
+    fileName: file?.file_name,
+  });
+
+  // Setup save handler for Supabase
+  const { handleSave: saveFile } = useTextFileSave({
+    type: "supabase",
+    storageKey: file?.storage_key || "",
+    fileName: file?.file_name || "",
+    ownerAccountId,
+    artistAccountId,
+    mimeType: file?.mime_type || null,
+  });
+
+  // Setup text editor
   const {
     isEditing,
     editedContent,
@@ -36,13 +51,10 @@ export default function FileInfoDialog({ file, open, onOpenChange }: FileInfoDia
     setEditedContent,
     handleSave,
     handleEditToggle: baseHandleEditToggle,
-  } = useFileEdit({
+  } = useTextEditor({
     content,
-    storageKey: file?.storage_key || "",
-    mimeType: file?.mime_type || null,
-    ownerAccountId,
-    artistAccountId,
-    isOpen: open,
+    isDialogOpen: open,
+    onSave: saveFile,
   });
 
   // Keyboard shortcut for saving
@@ -82,9 +94,11 @@ export default function FileInfoDialog({ file, open, onOpenChange }: FileInfoDia
           <FileInfoDialogContent 
             isEditing={isEditing}
             fileName={file.file_name}
-            storageKey={file.storage_key}
+            content={content}
             editedContent={editedContent}
             onContentChange={setEditedContent}
+            loading={loading}
+            error={error}
           />
           <FileInfoDialogMetadata file={file} />
         </div>

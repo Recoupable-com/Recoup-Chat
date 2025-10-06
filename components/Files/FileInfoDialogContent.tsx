@@ -1,39 +1,43 @@
 "use client";
 
-import { useFileContent } from "@/hooks/useFileContent";
-import FilePreview from "./FilePreview";
-import FileEditor from "./FileEditor";
+import { isTextFile as checkIsTextFile } from "@/utils/isTextFile";
+import TextFileEditor from "@/components/shared/TextFileEditor";
 
 type FileInfoDialogContentProps = {
   isEditing: boolean;
   fileName: string;
-  storageKey: string;
+  content: string;
   editedContent: string;
   onContentChange: (value: string) => void;
+  loading: boolean;
+  error: string | null;
 };
 
 export default function FileInfoDialogContent({ 
   isEditing, 
-  fileName, 
-  storageKey,
+  fileName,
+  content,
   editedContent,
-  onContentChange
+  onContentChange,
+  loading,
+  error
 }: FileInfoDialogContentProps) {
-  const { content, loading, error, isTextFile } = useFileContent(fileName, storageKey);
+  const isTextFile = checkIsTextFile(fileName);
 
   return (
     <div className="flex-1 p-4 sm:p-6 bg-muted/20 flex flex-col">
-      {isEditing ? (
-        <FileEditor 
-          content={editedContent}
-          onChange={onContentChange}
-        />
+      {!isTextFile ? (
+        <div className="flex items-center justify-center h-full min-h-[300px] border-2 border-dashed border-border rounded-lg">
+          <p className="text-sm text-muted-foreground">Preview not available for this file type</p>
+        </div>
       ) : (
-        <FilePreview 
-          content={content}
+        <TextFileEditor
+          content={isEditing ? editedContent : content}
+          onChange={onContentChange}
+          isEditing={isEditing}
           loading={loading}
           error={error}
-          isTextFile={isTextFile}
+          showStats={true}
         />
       )}
     </div>
