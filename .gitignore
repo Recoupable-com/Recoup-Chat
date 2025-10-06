@@ -53,3 +53,6 @@ evals/**/*$py.class
 
 # vscode
 .vscode
+
+# supabase
+supabase/.temp
