@@ -42,7 +42,7 @@ export async function saveToSupabase(params: SupabaseSaveParams): Promise<boolea
 
     // Invalidate file content cache
     await params.queryClient.invalidateQueries({
-      queryKey: ["file-content", params.storageKey],
+      queryKey: ["text-content", "storage", params.storageKey],
     });
 
     toast.success("File saved successfully");
