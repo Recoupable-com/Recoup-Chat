@@ -83,7 +83,7 @@ const KnowledgeDialog = ({ name, url, type, children }: KnowledgeDialogProps) =>
   return (
     <Dialog open={isOpen} onOpenChange={handleOpenChange}>
       <DialogTrigger asChild>{children}</DialogTrigger>
-      <DialogContent className="w-[96vw] sm:w-[92vw] max-w-5xl pt-3 z-[1000] max-h-[90vh] overflow-hidden grid grid-rows-[auto,1fr]">
+      <DialogContent className="w-[96vw] sm:w-[92vw] max-w-5xl h-[90vh] p-0 gap-0 pt-3 z-[1000] flex flex-col overflow-hidden">
         <div className="flex flex-wrap items-start sm:items-center justify-between gap-2 sm:gap-3 border-b px-3 py-2 sm:px-4 sm:py-3 bg-background/80 backdrop-blur">
           <div className="min-w-0">
             <DialogHeader><DialogTitle className="truncate text-sm sm:text-base font-medium">{name || "File"}</DialogTitle></DialogHeader>
@@ -128,12 +128,12 @@ const KnowledgeDialog = ({ name, url, type, children }: KnowledgeDialogProps) =>
           </div>
         </div>
         {isImage ? (
-          <div className="min-h-0 h-full overflow-auto bg-muted flex items-center justify-center">
+          <div className="flex-1 overflow-auto bg-muted flex items-center justify-center">
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img src={url} alt={name || "image"} className="max-h-full max-w-full object-contain" />
           </div>
         ) : isText ? (
-          <div className="min-h-0 h-full overflow-auto bg-background p-3 sm:p-4">
+          <div className="flex-1 bg-background p-3 sm:p-4 flex flex-col overflow-hidden">
             <TextFileEditor
               content={isEditing ? editedContent : content}
               onChange={setEditedContent}
@@ -144,7 +144,7 @@ const KnowledgeDialog = ({ name, url, type, children }: KnowledgeDialogProps) =>
             />
           </div>
         ) : (
-          <div className="min-h-0 overflow-auto flex items-center justify-center text-xs sm:text-sm text-muted-foreground px-4 py-6 sm:p-8">
+          <div className="flex-1 overflow-auto flex items-center justify-center text-xs sm:text-sm text-muted-foreground px-4 py-6 sm:p-8">
             <div className="text-center space-y-2">
               <p className="font-medium">Preview not available</p>
               <p>Use the button above to open the file in a new tab.</p>

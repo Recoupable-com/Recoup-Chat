@@ -51,15 +51,15 @@ export default function TextFileEditor({
   // Edit mode
   if (isEditing) {
     return (
-      <div className={`flex-1 border border-border rounded-lg bg-background overflow-hidden flex flex-col ${className}`}>
+      <div className={`flex-1 border border-border rounded-lg bg-background flex flex-col overflow-hidden ${className}`}>
         <Textarea
           value={content}
           onChange={(e) => onChange(e.target.value)}
-          className="flex-1 resize-none border-0 focus-visible:ring-0 font-mono text-xs sm:text-sm rounded-none h-full"
+          className="flex-1 resize-none border-0 focus-visible:ring-0 font-mono text-xs sm:text-sm rounded-none overflow-auto"
           placeholder={placeholder}
         />
         {showStats && (
-          <div className="px-3 py-1.5 border-t text-[10px] sm:text-xs text-muted-foreground bg-muted/30 flex items-center gap-3">
+          <div className="px-3 py-1.5 border-t text-[10px] sm:text-xs text-muted-foreground bg-muted/30 flex items-center gap-3 shrink-0">
             <span>{lineCount} {lineCount === 1 ? "line" : "lines"}</span>
             <span>•</span>
             <span>{wordCount} {wordCount === 1 ? "word" : "words"}</span>
