@@ -16,23 +16,7 @@ alter table "public"."songs" add constraint "songs_pkey" PRIMARY KEY using index
 CREATE INDEX idx_songs_name ON public.songs USING btree (name);
 CREATE INDEX idx_songs_album ON public.songs USING btree (album);
 
--- Grant permissions to roles
-grant delete on table "public"."songs" to "anon";
-grant insert on table "public"."songs" to "anon";
-grant references on table "public"."songs" to "anon";
-grant select on table "public"."songs" to "anon";
-grant trigger on table "public"."songs" to "anon";
-grant truncate on table "public"."songs" to "anon";
-grant update on table "public"."songs" to "anon";
-
-grant delete on table "public"."songs" to "authenticated";
-grant insert on table "public"."songs" to "authenticated";
-grant references on table "public"."songs" to "authenticated";
-grant select on table "public"."songs" to "authenticated";
-grant trigger on table "public"."songs" to "authenticated";
-grant truncate on table "public"."songs" to "authenticated";
-grant update on table "public"."songs" to "authenticated";
-
+-- Grant permissions to service_role only
 grant delete on table "public"."songs" to "service_role";
 grant insert on table "public"."songs" to "service_role";
 grant references on table "public"."songs" to "service_role";
