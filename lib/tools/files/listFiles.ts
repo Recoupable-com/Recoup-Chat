@@ -31,7 +31,6 @@ When to use:
       .describe("Pull active_artist_id from the system prompt"),
   }),
   execute: async ({ path, textFilesOnly, active_account_id, active_artist_id }) => {
-    console.log("listFiles", { path, textFilesOnly, active_account_id, active_artist_id });
     try {
       // Query files directly from database (server-side)
       let files = await listFilesByArtist(active_account_id, active_artist_id, path);
