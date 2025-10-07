@@ -3,6 +3,7 @@ import { tool } from "ai";
 import { findFileByName } from "@/lib/supabase/files/findFileByName";
 import { uploadFileByKey } from "@/lib/supabase/storage/uploadFileByKey";
 import { createFileRecord } from "@/lib/supabase/files/createFileRecord";
+import { ensureDirectoryExists } from "@/lib/supabase/files/ensureDirectoryExists";
 
 const writeFile = tool({
   description: `
@@ -71,14 +72,19 @@ Important:
         };
       }
 
-      // 2. Generate storage key
+      // 2. Ensure parent directory exists (if path is provided)
+      if (path) {
+        await ensureDirectoryExists(active_account_id, active_artist_id, path);
+      }
+
+      // 3. Generate storage key
       const baseStoragePath = `files/${active_account_id}/${active_artist_id}/`;
       const fullPath = path
         ? `${baseStoragePath}${path.endsWith("/") ? path : path + "/"}`
         : baseStoragePath;
       const storageKey = `${fullPath}${fileName}`;
 
-      // 3. Auto-detect MIME type if not provided
+      // 4. Auto-detect MIME type if not provided
       let detectedMimeType = mimeType;
       if (!detectedMimeType) {
         const ext = fileName.toLowerCase().split(".").pop();
@@ -96,7 +102,7 @@ Important:
         detectedMimeType = mimeTypeMap[ext || ""] || "text/plain";
       }
 
-      // 4. Convert content to Blob and upload
+      // 5. Convert content to Blob and upload
       const blob = new Blob([content], { type: detectedMimeType });
       const file = new File([blob], fileName, { type: detectedMimeType });
 
@@ -105,7 +111,7 @@ Important:
         upsert: false,
       });
 
-      // 5. Calculate size and record metadata
+      // 6. Calculate size and record metadata
       const sizeBytes = new TextEncoder().encode(content).length;
 
       const fileRecord = await createFileRecord({
