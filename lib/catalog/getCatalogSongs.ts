@@ -1,6 +1,5 @@
 /**
- * Fetches all songs from a catalog by iterating through all pages
- * until all songs have been retrieved
+ * Fetches a single page of songs from a catalog
  */
 
 import { Tables } from "@/types/database.types";
@@ -9,12 +8,12 @@ import { Tables } from "@/types/database.types";
 type Song = Tables<"songs">;
 type Account = Tables<"accounts">;
 
-type CatalogSong = Song & {
+export type CatalogSong = Song & {
   catalog_id: string;
   artists: Array<Pick<Account, "id" | "name" | "timestamp">>;
 };
 
-interface CatalogSongsResponse {
+export interface CatalogSongsResponse {
   status: string;
   songs: CatalogSong[];
   pagination: {
@@ -28,51 +27,39 @@ interface CatalogSongsResponse {
 
 export async function getCatalogSongs(
   catalogId: string,
-  pageSize: number = 100
-): Promise<CatalogSong[]> {
-  const allSongs: CatalogSong[] = [];
-  let currentPage = 1;
-  let totalPages = 1;
-
+  pageSize: number = 100,
+  page: number = 1
+): Promise<CatalogSongsResponse> {
   try {
-    do {
-      // Build query parameters
-      const params = new URLSearchParams({
-        catalog_id: catalogId,
-        page: currentPage.toString(),
-        limit: pageSize.toString(),
-      });
+    // Build query parameters
+    const params = new URLSearchParams({
+      catalog_id: catalogId,
+      page: page.toString(),
+      limit: pageSize.toString(),
+    });
 
-      const response = await fetch(
-        `https://api.recoupable.com/api/catalogs/songs?${params}`,
-        {
-          method: "GET",
-          headers: {
-            "Content-Type": "application/json",
-          },
-        }
-      );
-
-      if (!response.ok) {
-        const errorText = await response.text();
-        throw new Error(`HTTP ${response.status}: ${errorText}`);
+    const response = await fetch(
+      `https://api.recoupable.com/api/catalogs/songs?${params}`,
+      {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+        },
       }
+    );
 
-      const data: CatalogSongsResponse = await response.json();
+    if (!response.ok) {
+      const errorText = await response.text();
+      throw new Error(`HTTP ${response.status}: ${errorText}`);
+    }
 
-      if (data.status === "error") {
-        throw new Error(data.error || "Unknown error occurred");
-      }
+    const data: CatalogSongsResponse = await response.json();
 
-      // Add songs from this page to our collection
-      allSongs.push(...data.songs);
+    if (data.status === "error") {
+      throw new Error(data.error || "Unknown error occurred");
+    }
 
-      // Update pagination info
-      totalPages = data.pagination.total_pages;
-      currentPage++;
-    } while (currentPage <= totalPages);
-
-    return allSongs;
+    return data;
   } catch (error) {
     console.error("Error fetching catalog songs:", error);
     throw error;

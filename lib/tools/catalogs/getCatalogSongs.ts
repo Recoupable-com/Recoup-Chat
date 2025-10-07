@@ -26,27 +26,15 @@ const getCatalogSongsTool: Tool = {
   }),
   execute: async ({ catalog_id, page = 1, limit = 20 }) => {
     try {
-      // Use the library function to get all songs
-      const allSongs = await getCatalogSongs(catalog_id, limit);
-
-      // Calculate pagination manually
-      const totalCount = allSongs.length;
-      const totalPages = Math.ceil(totalCount / limit);
-      const startIndex = (page - 1) * limit;
-      const endIndex = startIndex + limit;
-      const paginatedSongs = allSongs.slice(startIndex, endIndex);
+      // Use the library function to get a single page of songs
+      const response = await getCatalogSongs(catalog_id, limit, page);
 
       return {
         success: true,
-        songs: paginatedSongs,
-        pagination: {
-          total_count: totalCount,
-          page: page,
-          limit: limit,
-          total_pages: totalPages,
-        },
+        songs: response.songs,
+        pagination: response.pagination,
         catalog_id,
-        total_songs: totalCount,
+        total_songs: response.pagination.total_count,
       };
     } catch (error) {
       console.error("Error fetching catalog songs:", error);
