@@ -25,7 +25,6 @@ const getCatalogSongsTool: Tool = {
   }),
   execute: async ({ catalog_id, page = 1, limit = 20 }) => {
     try {
-      // Build query parameters
       const params = new URLSearchParams({
         catalog_id,
         page: page.toString(),
