@@ -2,12 +2,13 @@ import { z } from "zod";
 import { Tool } from "ai";
 
 const getCatalogsTool: Tool = {
-  description:
-    "Retrieve catalogs associated with a specific account. Returns catalog metadata including id, name, created_at, and updated_at.",
+  description: `Retrieve catalogs associated with the current account. 
+    Returns catalog metadata including id, name, created_at, and updated_at.
+    Call this tool first for any catalog-related operations.`,
   inputSchema: z.object({
     account_id: z
       .string()
-      .describe("The unique identifier of the account to query for catalogs"),
+      .describe("Use account_id from the system prompt. Never ask for this."),
   }),
   execute: async ({ account_id }) => {
     try {
