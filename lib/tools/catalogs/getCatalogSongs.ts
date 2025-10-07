@@ -2,8 +2,12 @@ import { z } from "zod";
 import { Tool } from "ai";
 
 const getCatalogSongsTool: Tool = {
-  description:
-    "Retrieve songs within a specific catalog with pagination. Returns comprehensive song information including artist details. IMPORTANT: Call select_catalogs first to get the catalog_id parameter.",
+  description: `Retrieve songs within a specific catalog with pagination. 
+    Returns comprehensive song information including artist details. 
+    IMPORTANT: Call select_catalogs first to get the catalog_id parameter.
+    Call this for any catalog-related operations.
+    Example prompts to trigger this tool:
+    - Peloton needs songs for a Halloween playlist`,
   inputSchema: z.object({
     catalog_id: z
       .string()
