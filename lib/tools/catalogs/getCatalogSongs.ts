@@ -1,5 +1,6 @@
 import { z } from "zod";
 import { Tool } from "ai";
+import { getCatalogSongs } from "@/lib/catalog/getCatalogSongs";
 
 const getCatalogSongsTool: Tool = {
   description: `Retrieve songs within a specific catalog with pagination. 
@@ -25,39 +26,27 @@ const getCatalogSongsTool: Tool = {
   }),
   execute: async ({ catalog_id, page = 1, limit = 20 }) => {
     try {
-      const params = new URLSearchParams({
-        catalog_id,
-        page: page.toString(),
-        limit: limit.toString(),
-      });
+      // Use the library function to get all songs
+      const allSongs = await getCatalogSongs(catalog_id, limit);
 
-      const response = await fetch(
-        `https://api.recoupable.com/api/catalogs/songs?${params}`,
-        {
-          method: "GET",
-          headers: {
-            "Content-Type": "application/json",
-          },
-        }
-      );
-
-      if (!response.ok) {
-        const errorText = await response.text();
-        throw new Error(`HTTP ${response.status}: ${errorText}`);
-      }
-
-      const data = await response.json();
-
-      if (data.status === "error") {
-        throw new Error(data.error || "Unknown error occurred");
-      }
+      // Calculate pagination manually
+      const totalCount = allSongs.length;
+      const totalPages = Math.ceil(totalCount / limit);
+      const startIndex = (page - 1) * limit;
+      const endIndex = startIndex + limit;
+      const paginatedSongs = allSongs.slice(startIndex, endIndex);
 
       return {
         success: true,
-        songs: data.songs,
-        pagination: data.pagination,
+        songs: paginatedSongs,
+        pagination: {
+          total_count: totalCount,
+          page: page,
+          limit: limit,
+          total_pages: totalPages,
+        },
         catalog_id,
-        total_songs: data.pagination?.total_count || data.songs?.length || 0,
+        total_songs: totalCount,
       };
     } catch (error) {
       console.error("Error fetching catalog songs:", error);
