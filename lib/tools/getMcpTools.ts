@@ -37,6 +37,7 @@ import createSegments from "./createSegments";
 import createReleaseReport from "./createReleaseReport";
 import youtubeTools from "./youtube";
 import getLocalTime from "./getLocalTime";
+import catalogTools from "./catalogs";
 import filesTools from "./files";
 
 export function getMcpTools(): ToolSet {
@@ -81,6 +82,7 @@ export function getMcpTools(): ToolSet {
     ...filesTools,
     ...nanoBananaTools,
     ...youtubeTools,
+    ...catalogTools,
   };
 
   // // Handle potential namespacing issues with beta AI SDK
