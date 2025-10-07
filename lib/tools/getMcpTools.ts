@@ -37,6 +37,7 @@ import createSegments from "./createSegments";
 import createReleaseReport from "./createReleaseReport";
 import youtubeTools from "./youtube";
 import getLocalTime from "./getLocalTime";
+import catalogTools from "./catalogs";
 
 export function getMcpTools(): ToolSet {
   const tools = {
@@ -79,6 +80,7 @@ export function getMcpTools(): ToolSet {
     get_local_time: getLocalTime,
     ...nanoBananaTools,
     ...youtubeTools,
+    ...catalogTools,
   };
 
   // // Handle potential namespacing issues with beta AI SDK
