@@ -11,7 +11,9 @@ const getCatalogSongsTool: Tool = {
   inputSchema: z.object({
     catalog_id: z
       .string()
-      .describe("The unique identifier of the catalog to query songs for"),
+      .describe(
+        "The unique identifier of the catalog to query songs for. Get this from the select_catalogs tool."
+      ),
     page: z
       .number()
       .optional()
