@@ -26,7 +26,6 @@ const getCatalogSongsTool: Tool = {
   }),
   execute: async ({ catalog_id, page = 1, limit = 20 }) => {
     try {
-      // Use the library function to get a single page of songs
       const response = await getCatalogSongs(catalog_id, limit, page);
 
       return {

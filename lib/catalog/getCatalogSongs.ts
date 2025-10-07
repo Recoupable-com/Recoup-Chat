@@ -4,7 +4,6 @@
 
 import { Tables } from "@/types/database.types";
 
-// Use types from database.types.ts
 type Song = Tables<"songs">;
 type Account = Tables<"accounts">;
 
@@ -31,7 +30,6 @@ export async function getCatalogSongs(
   page: number = 1
 ): Promise<CatalogSongsResponse> {
   try {
-    // Build query parameters
     const params = new URLSearchParams({
       catalog_id: catalogId,
       page: page.toString(),
