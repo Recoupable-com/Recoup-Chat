@@ -2,9 +2,17 @@ import { z } from "zod";
 import { Tool } from "ai";
 
 const getCatalogsTool: Tool = {
-  description: `Retrieve catalogs associated with the current account. 
+  description: `CRITICAL: Retrieve catalogs associated with the current account for ANY music recommendation request.
+    
+    MANDATORY: Call this tool FIRST when user requests:
+    - "[Brand/Platform] needs songs for [theme/playlist]" 
+    - Any playlist recommendations
+    - Music suggestions for specific themes, holidays, or events
+    - Sync licensing opportunities
+    - Curated collections for platforms
+    
     Returns catalog metadata including id, name, created_at, and updated_at.
-    Call this tool first for any catalog-related operations.`,
+    You MUST call this before calling select_catalog_songs to get the catalog_id parameter.`,
   inputSchema: z.object({
     account_id: z
       .string()

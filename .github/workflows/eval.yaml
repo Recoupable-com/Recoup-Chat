@@ -30,6 +30,10 @@ jobs:
       AI_GATEWAY_API_KEY: ${{ secrets.AI_GATEWAY_API_KEY }}
       PERPLEXITY_API_KEY: ${{ secrets.PERPLEXITY_API_KEY }}
       MUSIC_CATALOG_URL: ${{secrets.MUSIC_CATALOG_URL}}
+      CDP_WALLET_SECRET: ${{secrets.CDP_WALLET_SECRET}}
+      CDP_API_KEY_SECRET: ${{secrets.CDP_API_KEY_SECRET}}
+      NEXT_PUBLIC_CDP_CLIENT_API_KEY: ${{secrets.NEXT_PUBLIC_CDP_CLIENT_API_KEY}}
+      CDP_API_KEY_ID: ${{secrets.CDP_API_KEY_ID}}
 
     steps:
       - name: Checkout

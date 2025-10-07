@@ -3,12 +3,22 @@ import { Tool } from "ai";
 import { getCatalogSongs } from "@/lib/catalog/getCatalogSongs";
 
 const getCatalogSongsTool: Tool = {
-  description: `Retrieve songs within a specific catalog with pagination. 
-    Returns comprehensive song information including artist details. 
+  description: `CRITICAL: Use this tool to find ACTUAL SONGS from the available catalog for any playlist or music recommendation request.
+    
     IMPORTANT: Call select_catalogs first to get the catalog_id parameter.
-    Call this for any catalog-related operations.
-    Example prompts to trigger this tool:
-    - Peloton needs songs for a Halloween playlist`,
+    
+    MANDATORY use cases - ALWAYS call this tool when user requests:
+    - "[Brand/Platform] needs songs for [theme/playlist]" (e.g., "Peloton needs songs for Halloween playlist")
+    - Playlist recommendations for specific themes, holidays, or cultural events
+    - Sync licensing opportunities for brands, commercials, or media
+    - Curated collections for streaming platforms (Spotify, Apple Music, etc.)
+    - Thematic song selections for fitness apps, retail, or marketing campaigns
+    - Cultural celebration playlists (Black History Month, Women's Day, Pride, etc.)
+    - Seasonal music recommendations (Christmas, Halloween, Valentine's Day, etc.)
+    - Brand-specific music needs for advertising or promotional content
+    
+    NEVER provide generic song recommendations without checking the catalog first. 
+    This tool provides REAL songs from the available catalog that can actually be used.`,
   inputSchema: z.object({
     catalog_id: z
       .string()
