@@ -17,7 +17,7 @@ export function useUpdateFile() {
     onSuccess: (data) => {
       // Invalidate the file content cache to refetch updated content
       queryClient.invalidateQueries({
-        queryKey: ["file-content", data.storageKey],
+        queryKey: ["text-content", "storage", data.storageKey],
       });
 
       toast.success("File saved successfully");
