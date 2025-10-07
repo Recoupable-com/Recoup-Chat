@@ -8,6 +8,7 @@ const getCatalogSongsTool: Tool = {
     IMPORTANT: Call select_catalogs first to get the catalog_id parameter.
     Call this for any catalog-related operations.
     Example prompts to trigger this tool:
+    - X needs songs for Y
     - Peloton needs songs for a Halloween playlist`,
   inputSchema: z.object({
     catalog_id: z
