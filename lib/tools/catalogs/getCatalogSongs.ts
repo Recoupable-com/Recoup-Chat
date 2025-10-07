@@ -1,5 +1,6 @@
 import { z } from "zod";
 import { Tool } from "ai";
+import { getCatalogSongs } from "@/lib/catalog/getCatalogSongs";
 
 const getCatalogSongsTool: Tool = {
   description: `Retrieve songs within a specific catalog with pagination. 
@@ -25,39 +26,14 @@ const getCatalogSongsTool: Tool = {
   }),
   execute: async ({ catalog_id, page = 1, limit = 20 }) => {
     try {
-      const params = new URLSearchParams({
-        catalog_id,
-        page: page.toString(),
-        limit: limit.toString(),
-      });
-
-      const response = await fetch(
-        `https://api.recoupable.com/api/catalogs/songs?${params}`,
-        {
-          method: "GET",
-          headers: {
-            "Content-Type": "application/json",
-          },
-        }
-      );
-
-      if (!response.ok) {
-        const errorText = await response.text();
-        throw new Error(`HTTP ${response.status}: ${errorText}`);
-      }
-
-      const data = await response.json();
-
-      if (data.status === "error") {
-        throw new Error(data.error || "Unknown error occurred");
-      }
+      const response = await getCatalogSongs(catalog_id, limit, page);
 
       return {
         success: true,
-        songs: data.songs,
-        pagination: data.pagination,
+        songs: response.songs,
+        pagination: response.pagination,
         catalog_id,
-        total_songs: data.pagination?.total_count || data.songs?.length || 0,
+        total_songs: response.pagination.total_count,
       };
     } catch (error) {
       console.error("Error fetching catalog songs:", error);

@@ -1,6 +1,6 @@
 import { DEFAULT_MODEL } from "@/lib/consts";
 import { generateObject } from "ai";
-import { getCatalogData } from "@/lib/evals/scorers/getCatalogData";
+import { getCatalogDataAsCSV } from "@/lib/catalog/getCatalogDataAsCSV";
 import { z } from "zod";
 
 /**
@@ -14,7 +14,8 @@ export const CatalogAvailability = async ({
   input: string;
 }) => {
   try {
-    const catalog = await getCatalogData();
+    const catalogId = "325a0fa0-401e-4968-ae43-e9ce469b31f0";
+    const catalog = await getCatalogDataAsCSV(catalogId);
 
     const result = await generateObject({
       model: DEFAULT_MODEL,
