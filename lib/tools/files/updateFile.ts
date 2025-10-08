@@ -100,18 +100,39 @@ Important:
       // 4. Verify content actually changed by reading it back
       const updatedContent = await fetchFileContentServer(fileRecord.storage_key);
 
-      // Critical check: Ensure the file content is now different from original
-      if (updatedContent === currentContent) {
-        throw new Error(
-          "Update verification failed: File content did not change. The file still contains the old content."
-        );
+      // Normalize content for comparison (ignore minor formatting differences)
+      const normalizeContent = (content: string) => {
+        return content
+          .trim() // Remove leading/trailing whitespace
+          .replace(/\r\n/g, "\n") // Normalize line endings (Windows → Unix)
+          .replace(/\r/g, "\n") // Normalize old Mac line endings
+          .normalize("NFC"); // Normalize Unicode characters (e.g., é)
+      };
+
+      const normalizedCurrent = normalizeContent(currentContent);
+      const normalizedUpdated = normalizeContent(updatedContent);
+      const normalizedNew = normalizeContent(newContent);
+
+      // Critical check: Ensure the file content is now different from original (meaningful change)
+      if (normalizedUpdated === normalizedCurrent) {
+        return {
+          success: false,
+          verified: false,
+          error: "File content did not change after update attempt.",
+          message: `Update failed - '${fileName}' still contains the old content. The update operation did not take effect. Please try again or check if there are any storage issues.`,
+          suggestion: "Retry the update operation, or verify storage permissions.",
+        };
       }
 
-      // Verify the new content matches what we intended to write
-      if (updatedContent !== newContent) {
-        throw new Error(
-          "Update verification failed: File content does not match what was uploaded."
-        );
+      // Verify the new content matches what we intended to write (ignore minor whitespace differences)
+      if (normalizedUpdated !== normalizedNew) {
+        return {
+          success: false,
+          verified: false,
+          error: "File content does not match what was uploaded.",
+          message: `Update verification failed - '${fileName}' was modified but doesn't contain the expected content. Found ${updatedContent.length} bytes instead of expected ${newContent.length} bytes.`,
+          suggestion: "Read the current file content to see what it contains, then retry the update.",
+        };
       }
 
       // 5. Update file size in metadata
