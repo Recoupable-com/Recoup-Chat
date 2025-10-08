@@ -109,6 +109,7 @@ const Artist = ({
               isVisible={isHovered || isSelectedArtist}
               title={artist?.pinned ? "Unpin artist" : "Pin artist"}
               ariaLabel={artist?.pinned ? "Unpin artist" : "Pin artist"}
+              asChild
             >
               {artist?.pinned ? (
                 <Pin className="size-4 text-primary" />
@@ -126,6 +127,7 @@ const Artist = ({
               isVisible={isHovered || isSelectedArtist}
               title="Edit artist settings"
               ariaLabel="Edit artist settings"
+              asChild
             >
               <EllipsisVertical className="size-5 rotate-90" />
             </ArtistActionButton>

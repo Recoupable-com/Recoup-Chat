@@ -17,9 +17,9 @@ const UserProfileButtonSkeleton = () => {
         <Skeleton className="h-3 w-20 md:w-24" />
       </div>
       
-      <Button variant="ghost" className="p-0" disabled>
+      <div className="inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 hover:bg-accent hover:text-accent-foreground h-9 px-4 py-2 p-0">
         <Skeleton className="h-4 w-4 shrink-0 ml-auto" />
-      </Button>
+      </div>
     </Button>
   );
 };

@@ -16,6 +16,7 @@ import {
 } from "../ai-elements/prompt-input";
 import ModelSelect from "@/components/ModelSelect";
 import FileMentionsInput from "./FileMentionsInput";
+import { usePureFileAttachments } from "@/hooks/usePureFileAttachments";
 
 interface ChatInputProps {
   onSendMessage: (event: React.FormEvent<HTMLFormElement>) => void;
@@ -34,6 +35,7 @@ export function ChatInput({
 }: ChatInputProps) {
   const { selectedArtist, sorted } = useArtistProvider();
   const { hasPendingUploads, messages, status, model, isLoadingSignedUrls } = useVercelChatContext();
+  const { fileInputRef } = usePureFileAttachments();
   const isDisabled = !selectedArtist && sorted.length > 0;
 
   const handleSend = (event: React.FormEvent<HTMLFormElement>) => {
@@ -83,8 +85,14 @@ export function ChatInput({
           />
           <PromptInputToolbar>
             <PromptInputTools>
-              <PromptInputButton className="hover:scale-105 active:scale-95 transition-all">
-                <PureAttachmentsButton />
+              <PromptInputButton 
+                className="hover:scale-105 active:scale-95 transition-all"
+                onClick={(event) => {
+                  event.preventDefault();
+                  fileInputRef.current?.click();
+                }}
+              >
+                <PureAttachmentsButton asChild />
               </PromptInputButton>
               {/* YouTube connect button removed from ChatInput UI intentionally; preserved for future reuse */}
               <ModelSelect />
