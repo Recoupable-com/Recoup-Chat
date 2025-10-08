@@ -113,8 +113,8 @@ Important:
           success: false,
           verified: false,
           error: "File content did not change after update attempt.",
-          message: `Update failed - '${fileName}' still contains the old content. The update operation did not take effect. Please try again or check if there are any storage issues.`,
-          suggestion: "Retry the update operation, or verify storage permissions.",
+          message: `Update failed - '${fileName}' still contains the old content. The update operation did not take effect. Please try again or check if what's the issue.`,
+          suggestion: "Retry the update operation with requested, modified content.",
         };
       }
 
