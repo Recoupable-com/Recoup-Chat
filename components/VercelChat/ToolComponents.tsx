@@ -383,24 +383,32 @@ export function getToolResultComponent(part: ToolUIPart) {
 
       if (progress.status === 'streaming') {
         return (
-          <div key={toolCallId} className="flex flex-col gap-2 py-2 px-3 bg-primary/5 rounded-md border">
+          <div key={toolCallId} className="flex flex-col gap-3 py-3 px-4 bg-primary/5 rounded-md border">
             <div className="flex items-center gap-2">
               <Loader className="h-4 w-4 animate-spin text-primary" />
-              <span className="text-sm font-medium">{progress.message}</span>
+              <span className="text-sm font-medium">Searching the web...</span>
             </div>
+
             {progress.searchResults && progress.searchResults.length > 0 && (
-              <div className="ml-6 text-xs text-muted-foreground space-y-1">
-                <p className="font-medium">Sources found:</p>
-                {progress.searchResults.slice(0, 3).map((source, idx) => (
-                  <p key={idx} className="truncate">
-                    • {source.title || source.url}
-                  </p>
-                ))}
+              <div className="space-y-1 border-l-2 border-primary/20 pl-3">
+                <p className="text-xs font-medium text-muted-foreground">
+                  Found {progress.searchResults.length} sources
+                </p>
+                <div className="space-y-0.5">
+                  {progress.searchResults.slice(0, 3).map((source, idx) => (
+                    <p key={idx} className="text-xs text-muted-foreground truncate">
+                      • {source.title || source.url}
+                    </p>
+                  ))}
+                </div>
               </div>
             )}
+
             {progress.accumulatedContent && (
-              <div className="ml-6 text-xs text-muted-foreground mt-2">
-                <ChatMarkdown>{progress.accumulatedContent}</ChatMarkdown>
+              <div className="border-t border-primary/10 pt-3">
+                <div className="text-sm">
+                  <ChatMarkdown>{progress.accumulatedContent}</ChatMarkdown>
+                </div>
               </div>
             )}
           </div>

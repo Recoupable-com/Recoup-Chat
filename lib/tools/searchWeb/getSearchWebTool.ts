@@ -40,27 +40,33 @@ const getSearchWebTool = (model: string = "sonar-pro") => {
       let accumulatedContent = '';
       let finalCitations: string[] = [];
       let searchResults: Array<{ url: string; title?: string }> = [];
+      let chunkCount = 0;
+      const CHUNK_BATCH_SIZE = 5; // Yield every N chunks to reduce flickering
 
       try {
         for await (const chunk of performChatCompletionStream(messages, model)) {
           if (chunk.type === 'content' && chunk.content) {
             accumulatedContent += chunk.content;
+            chunkCount++;
 
-            // Yield streaming content update
-            yield {
-              status: 'streaming' as const,
-              message: 'Receiving results...',
-              query,
-              content: chunk.content,
-              accumulatedContent,
-            };
+            // Batch content updates to reduce flickering
+            if (chunkCount % CHUNK_BATCH_SIZE === 0) {
+              yield {
+                status: 'streaming' as const,
+                message: 'Receiving results...',
+                query,
+                content: chunk.content,
+                accumulatedContent,
+                searchResults: searchResults.length > 0 ? searchResults : undefined,
+              };
+            }
           } else if (chunk.type === 'search' && chunk.searchResults) {
             searchResults = chunk.searchResults;
 
-            // Yield search results info
+            // Always yield when search results are found (important info)
             yield {
               status: 'streaming' as const,
-              message: `Found ${chunk.searchResults.length} sources`,
+              message: 'Receiving results...',
               query,
               searchResults: chunk.searchResults,
               accumulatedContent,
@@ -73,6 +79,17 @@ const getSearchWebTool = (model: string = "sonar-pro") => {
               finalCitations = chunk.citations;
             }
           }
+        }
+
+        // Final streaming update with all content
+        if (chunkCount % CHUNK_BATCH_SIZE !== 0) {
+          yield {
+            status: 'streaming' as const,
+            message: 'Receiving results...',
+            query,
+            accumulatedContent,
+            searchResults: searchResults.length > 0 ? searchResults : undefined,
+          };
         }
 
         // Append citations to the final content
