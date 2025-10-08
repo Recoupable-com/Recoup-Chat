@@ -37,7 +37,11 @@ export async function retrieveVideoContent(
 
   const blob = await response.blob();
   const contentType = response.headers.get("content-type") || "video/mp4";
-  const dataUrl = URL.createObjectURL(blob);
+
+  // Convert blob to base64 data URL for browser compatibility
+  const arrayBuffer = await blob.arrayBuffer();
+  const base64 = Buffer.from(arrayBuffer).toString("base64");
+  const dataUrl = `data:${contentType};base64,${base64}`;
 
   return {
     blob,
