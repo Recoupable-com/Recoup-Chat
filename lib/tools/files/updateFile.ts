@@ -4,6 +4,7 @@ import { findFileByName } from "@/lib/supabase/files/findFileByName";
 import { uploadFileByKey } from "@/lib/supabase/storage/uploadFileByKey";
 import { updateFileSizeBytes } from "@/lib/supabase/files/updateFileSizeBytes";
 import { fetchFileContentServer } from "@/lib/supabase/storage/fetchFileContent";
+import { normalizeContent } from "@/lib/utils/normalizeContent";
 
 const updateFile = tool({
   description: `
@@ -101,14 +102,6 @@ Important:
       const updatedContent = await fetchFileContentServer(fileRecord.storage_key);
 
       // Normalize content for comparison (ignore minor formatting differences)
-      const normalizeContent = (content: string) => {
-        return content
-          .trim() // Remove leading/trailing whitespace
-          .replace(/\r\n/g, "\n") // Normalize line endings (Windows → Unix)
-          .replace(/\r/g, "\n") // Normalize old Mac line endings
-          .normalize("NFC"); // Normalize Unicode characters (e.g., é)
-      };
-
       const normalizedCurrent = normalizeContent(currentContent);
       const normalizedUpdated = normalizeContent(updatedContent);
       const normalizedNew = normalizeContent(newContent);
