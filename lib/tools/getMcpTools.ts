@@ -1,5 +1,6 @@
 import { ToolSet } from "ai";
 import generateImage from "./generateImage";
+import generateSora2Video from "./generateSora2Video";
 import nanoBananaTools from "./nanoBanana";
 import createTxtFile from "./createTxtFile";
 import getSegmentFans from "./getSegmentFans";
@@ -43,6 +44,7 @@ import filesTools from "./files";
 export function getMcpTools(): ToolSet {
   const tools = {
     generate_image: generateImage,
+    generate_sora_2_video: generateSora2Video,
     generate_txt_file: createTxtFile,
     contact_team: contactTeam,
     create_segments: createSegments,
