@@ -2,17 +2,23 @@ import { useRef } from "react";
 import { FileUIPart } from "ai";
 import { useVercelChatContext } from "@/providers/VercelChatProvider";
 import { CHAT_INPUT_SUPPORTED_FILE } from "@/lib/chat/config";
+import { useAttachCsv } from "./useAttachCsv";
 
 export function usePureFileAttachments() {
   const { setAttachments } = useVercelChatContext();
+  const { attachCsvToInput } = useAttachCsv();
   const fileInputRef = useRef<HTMLInputElement>(null);
   const MAX_FILES = 10;
   const allowedTypes = Object.keys(CHAT_INPUT_SUPPORTED_FILE);
 
   const uploadFile = async (file: File) => {
-    // Only allow image files for now
     if (!allowedTypes.includes(file.type)) {
       console.error("File type not supported:", file.type);
+      return;
+    }
+
+    if (file.type === "text/csv") {
+      await attachCsvToInput(file);
       return;
     }
 
