@@ -3,6 +3,7 @@ import { tool } from "ai";
 import { findFileByName } from "@/lib/supabase/files/findFileByName";
 import { uploadFileByKey } from "@/lib/supabase/storage/uploadFileByKey";
 import { updateFileSizeBytes } from "@/lib/supabase/files/updateFileSizeBytes";
+import { fetchFileContentServer } from "@/lib/supabase/storage/fetchFileContent";
 
 const updateFile = tool({
   description: `
@@ -70,7 +71,20 @@ Important:
         };
       }
 
-      // 2. Update file content in storage
+      // 2. Read current content to check if it's actually changing
+      const currentContent = await fetchFileContentServer(fileRecord.storage_key);
+
+      // Check if content is identical (no actual change)
+      if (currentContent === newContent) {
+        return {
+          success: false,
+          noChange: true,
+          error: "Content is identical to existing file.",
+          message: `No update needed - '${fileName}' already contains this exact content.`,
+        };
+      }
+
+      // 3. Update file content in storage
       const blob = new Blob([newContent], {
         type: fileRecord.mime_type || "text/plain",
       });
@@ -83,17 +97,35 @@ Important:
         upsert: true,
       });
 
-      // 3. Update file size in metadata
-      const newSizeBytes = new TextEncoder().encode(newContent).length;
+      // 4. Verify content actually changed by reading it back
+      const updatedContent = await fetchFileContentServer(fileRecord.storage_key);
+
+      // Critical check: Ensure the file content is now different from original
+      if (updatedContent === currentContent) {
+        throw new Error(
+          "Update verification failed: File content did not change. The file still contains the old content."
+        );
+      }
+
+      // Verify the new content matches what we intended to write
+      if (updatedContent !== newContent) {
+        throw new Error(
+          "Update verification failed: File content does not match what was uploaded."
+        );
+      }
+
+      // 5. Update file size in metadata
+      const newSizeBytes = new TextEncoder().encode(updatedContent).length;
       await updateFileSizeBytes(fileRecord.id, newSizeBytes);
 
       return {
         success: true,
+        verified: true,
         storageKey: fileRecord.storage_key,
         fileName,
         sizeBytes: newSizeBytes,
         path: path || "root",
-        message: `Successfully updated '${fileName}' (${newSizeBytes} bytes).`,
+        message: `Successfully updated and verified '${fileName}' (${newSizeBytes} bytes).`,
       };
     } catch (error) {
       console.error("Error in updateFile tool:", error);
