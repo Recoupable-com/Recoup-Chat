@@ -76,7 +76,8 @@ Important:
       const currentContent = await fetchFileContentServer(fileRecord.storage_key);
 
       // Check if content is identical (no actual change)
-      if (currentContent === newContent) {
+      // Normalize both to avoid false changes due to whitespace/encoding differences
+      if (normalizeContent(currentContent) === normalizeContent(newContent)) {
         return {
           success: false,
           noChange: true,
