@@ -81,6 +81,9 @@ import { DeleteScheduledActionsResult } from "@/lib/tools/scheduled_actions/dele
 import UpdateScheduledActionSuccess from "./tools/UpdateScheduledActionSuccess";
 import { UpdateScheduledActionResult } from "./tools/UpdateScheduledActionSuccess";
 import UpdateScheduledActionSkeleton from "./tools/UpdateScheduledActionSkeleton";
+import { Sora2VideoSkeleton } from "./tools/sora2/Sora2VideoSkeleton";
+import { Sora2VideoResult } from "./tools/sora2/Sora2VideoResult";
+import { RetrieveVideoContentResult } from "@/lib/tools/sora2/retrieveVideoContent";
 
 /**
  * Helper function to get the appropriate UI component for a tool call
@@ -216,6 +219,12 @@ export function getToolCallComponent(part: ToolUIPart) {
     return (
       <div key={toolCallId}>
         <UpdateScheduledActionSkeleton />
+      </div>
+    );
+  } else if (toolName === "retrieve_sora_2_video_content") {
+    return (
+      <div key={toolCallId}>
+        <Sora2VideoSkeleton />
       </div>
     );
   }
@@ -430,6 +439,12 @@ export function getToolResultComponent(part: ToolUIPart) {
         <UpdateScheduledActionSuccess
           result={result as UpdateScheduledActionResult}
         />
+      </div>
+    );
+  } else if (toolName === "retrieve_sora_2_video_content") {
+    return (
+      <div key={toolCallId}>
+        <Sora2VideoResult result={result as RetrieveVideoContentResult} />
       </div>
     );
   }
