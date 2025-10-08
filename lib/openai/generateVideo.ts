@@ -29,13 +29,18 @@ export async function generateVideo(
     throw new Error("OPENAI_API_KEY environment variable is not set");
   }
 
-  const response = await fetch("https://api.openai.com/v1/videos/generate", {
+  const formData = new FormData();
+  formData.append("model", request.model);
+  formData.append("prompt", request.prompt);
+  formData.append("seconds", request.seconds.toString());
+  formData.append("size", request.size);
+
+  const response = await fetch("https://api.openai.com/v1/videos", {
     method: "POST",
     headers: {
       Authorization: `Bearer ${apiKey}`,
-      "Content-Type": "application/json",
     },
-    body: JSON.stringify(request),
+    body: formData,
   });
 
   if (!response.ok) {

@@ -15,7 +15,7 @@ const schema = z.object({
     .number()
     .min(4)
     .optional()
-    .describe("Duration of the video in seconds (default: 5, max: 20)"),
+    .describe("Duration of the video in seconds (default: 4, max: 20)"),
   size: z
     .enum(["720x1280", "1280x720"])
     .optional()
@@ -37,7 +37,7 @@ const generateSora2Video = tool({
     
     IMPORTANT:
     - Provide detailed, vivid descriptions for best results
-    - Videos can be 5 to 20 seconds in length
+    - Videos can be 4 to 20 seconds in length
     - Supported sizes: 720x1280 (default portrait), 1280x720 (landscape)
     - Generation may take several minutes to complete`,
   inputSchema: schema,
