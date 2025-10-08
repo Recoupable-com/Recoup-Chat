@@ -1,7 +1,7 @@
 import { ToolSet } from "ai";
 import generateImage from "./generateImage";
-import generateSora2Video from "./generateSora2Video";
 import nanoBananaTools from "./nanoBanana";
+import sora2Tools from "./sora2";
 import createTxtFile from "./createTxtFile";
 import getSegmentFans from "./getSegmentFans";
 import contactTeam from "./contactTeam";
@@ -44,7 +44,6 @@ import filesTools from "./files";
 export function getMcpTools(): ToolSet {
   const tools = {
     generate_image: generateImage,
-    generate_sora_2_video: generateSora2Video,
     generate_txt_file: createTxtFile,
     contact_team: contactTeam,
     create_segments: createSegments,
@@ -85,15 +84,8 @@ export function getMcpTools(): ToolSet {
     ...nanoBananaTools,
     ...youtubeTools,
     ...catalogTools,
+    ...sora2Tools,
   };
-
-  // // Handle potential namespacing issues with beta AI SDK
-  // // Some models may try to call tools with 'default_api.' prefix
-  // const namespacedTools: ToolSet = { ...tools };
-  // Object.entries(tools).forEach(([key, tool]) => {
-  //   // Also register with default_api prefix for compatibility with beta AI SDK
-  //   namespacedTools[`default_api.${key}`] = tool;
-  // });
 
   return tools;
 }

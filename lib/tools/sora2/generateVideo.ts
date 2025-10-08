@@ -30,7 +30,7 @@ export interface VideoGenerationResult extends GenerateVideoResponse {
   error?: string;
 }
 
-const generateSora2Video = tool({
+const generateVideoTool = tool({
   description: `Generate a video from a text prompt using OpenAI's Sora 2 model.
     
     This tool creates high-quality videos based on detailed text descriptions.
@@ -91,4 +91,4 @@ const generateSora2Video = tool({
   },
 });
 
-export default generateSora2Video;
+export default generateVideoTool;
