@@ -3,6 +3,8 @@ import { tool } from "ai";
 import { findFileByName } from "@/lib/supabase/files/findFileByName";
 import { uploadFileByKey } from "@/lib/supabase/storage/uploadFileByKey";
 import { updateFileSizeBytes } from "@/lib/supabase/files/updateFileSizeBytes";
+import { fetchFileContentServer } from "@/lib/supabase/storage/fetchFileContent";
+import { normalizeContent } from "@/lib/utils/normalizeContent";
 
 const updateFile = tool({
   description: `
@@ -70,7 +72,21 @@ Important:
         };
       }
 
-      // 2. Update file content in storage
+      // 2. Read current content to check if it's actually changing
+      const currentContent = await fetchFileContentServer(fileRecord.storage_key);
+
+      // Check if content is identical (no actual change)
+      // Normalize both to avoid false changes due to whitespace/encoding differences
+      if (normalizeContent(currentContent) === normalizeContent(newContent)) {
+        return {
+          success: false,
+          noChange: true,
+          error: "Content is identical to existing file.",
+          message: `No update needed - '${fileName}' already contains this exact content.`,
+        };
+      }
+
+      // 3. Update file content in storage
       const blob = new Blob([newContent], {
         type: fileRecord.mime_type || "text/plain",
       });
@@ -83,17 +99,48 @@ Important:
         upsert: true,
       });
 
-      // 3. Update file size in metadata
-      const newSizeBytes = new TextEncoder().encode(newContent).length;
+      // 4. Verify content actually changed by reading it back
+      const updatedContent = await fetchFileContentServer(fileRecord.storage_key);
+
+      // Normalize content for comparison (ignore minor formatting differences)
+      const normalizedCurrent = normalizeContent(currentContent);
+      const normalizedUpdated = normalizeContent(updatedContent);
+      const normalizedNew = normalizeContent(newContent);
+
+      // Critical check: Ensure the file content is now different from original (meaningful change)
+      if (normalizedUpdated === normalizedCurrent) {
+        return {
+          success: false,
+          verified: false,
+          error: "File content did not change after update attempt.",
+          message: `Update failed - '${fileName}' still contains the old content. The update operation did not take effect. Please try again or check if what's the issue.`,
+          suggestion: "Retry the update operation with requested, modified content.",
+        };
+      }
+
+      // Verify the new content matches what we intended to write (ignore minor whitespace differences)
+      if (normalizedUpdated !== normalizedNew) {
+        return {
+          success: false,
+          verified: false,
+          error: "File content does not match what was uploaded.",
+          message: `Update verification failed - '${fileName}' was modified but doesn't contain the expected content. Found ${updatedContent.length} bytes instead of expected ${newContent.length} bytes.`,
+          suggestion: "Read the current file content to see what it contains, then retry the update.",
+        };
+      }
+
+      // 5. Update file size in metadata
+      const newSizeBytes = new TextEncoder().encode(updatedContent).length;
       await updateFileSizeBytes(fileRecord.id, newSizeBytes);
 
       return {
         success: true,
+        verified: true,
         storageKey: fileRecord.storage_key,
         fileName,
         sizeBytes: newSizeBytes,
         path: path || "root",
-        message: `Successfully updated '${fileName}' (${newSizeBytes} bytes).`,
+        message: `Successfully updated and verified '${fileName}' (${newSizeBytes} bytes).`,
       };
     } catch (error) {
       console.error("Error in updateFile tool:", error);
