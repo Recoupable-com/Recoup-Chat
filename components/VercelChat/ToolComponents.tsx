@@ -8,6 +8,7 @@ import MermaidDiagram from "@/components/VercelChat/tools/mermaid/MermaidDiagram
 import { MermaidDiagramSkeleton } from "@/components/VercelChat/tools/mermaid/MermaidDiagramSkeleton";
 import { GenerateMermaidDiagramResult } from "@/lib/tools/generateMermaidDiagram";
 import CreateArtistToolCall from "./tools/CreateArtistToolCall";
+import ChatMarkdown from "@/components/Chat/ChatMarkdown";
 import CreateArtistToolResult from "./tools/CreateArtistToolResult";
 import { CreateArtistResult } from "@/lib/tools/createArtist";
 import DeleteArtistToolCall from "./tools/DeleteArtistToolCall";
@@ -59,6 +60,7 @@ import SearchWebSkeleton from "./tools/SearchWebSkeleton";
 import SpotifyDeepResearchSkeleton from "./tools/SpotifyDeepResearchSkeleton";
 import SearchWebResult, { SearchWebResultType } from "./tools/SearchWebResult";
 import SpotifyDeepResearchResult from "./tools/SpotifyDeepResearchResult";
+import { SearchProgress } from "@/lib/tools/searchWeb/types";
 import GetArtistSocialsResult from "./tools/GetArtistSocialsResult";
 import GetArtistSocialsSkeleton from "./tools/GetArtistSocialsSkeleton";
 import GetSpotifyArtistAlbumsResult from "./tools/GetSpotifyArtistAlbumsResult";
@@ -359,6 +361,67 @@ export function getToolResultComponent(part: ToolUIPart) {
       </div>
     );
   } else if (isSearchWebTool) {
+    // Check if it's a streaming progress update
+    if (result && typeof result === 'object' && 'status' in result) {
+      const progress = result as SearchProgress;
+
+      if (progress.status === 'searching') {
+        return (
+          <div key={toolCallId} className="flex flex-col gap-2 py-2 px-3 bg-primary/5 rounded-md border">
+            <div className="flex items-center gap-2">
+              <Loader className="h-4 w-4 animate-spin text-primary" />
+              <span className="text-sm font-medium">Searching the web...</span>
+            </div>
+            {progress.query && (
+              <p className="text-xs text-muted-foreground ml-6">
+                {progress.query}
+              </p>
+            )}
+          </div>
+        );
+      }
+
+      if (progress.status === 'streaming') {
+        return (
+          <div key={toolCallId} className="flex flex-col gap-2 py-2 px-3 bg-primary/5 rounded-md border">
+            <div className="flex items-center gap-2">
+              <Loader className="h-4 w-4 animate-spin text-primary" />
+              <span className="text-sm font-medium">{progress.message}</span>
+            </div>
+            {progress.searchResults && progress.searchResults.length > 0 && (
+              <div className="ml-6 text-xs text-muted-foreground space-y-1">
+                <p className="font-medium">Sources found:</p>
+                {progress.searchResults.slice(0, 3).map((source, idx) => (
+                  <p key={idx} className="truncate">
+                    • {source.title || source.url}
+                  </p>
+                ))}
+              </div>
+            )}
+            {progress.accumulatedContent && (
+              <div className="ml-6 text-xs text-muted-foreground mt-2">
+                <ChatMarkdown>{progress.accumulatedContent}</ChatMarkdown>
+              </div>
+            )}
+          </div>
+        );
+      }
+
+      if (progress.status === 'complete' && progress.accumulatedContent) {
+        return (
+          <div key={toolCallId}>
+            <SearchWebResult
+              result={{
+                content: [{ type: "text", text: progress.accumulatedContent }],
+                isError: false
+              }}
+            />
+          </div>
+        );
+      }
+    }
+
+    // Fallback to regular result
     return (
       <div key={toolCallId}>
         <SearchWebResult result={result as SearchWebResultType} />
