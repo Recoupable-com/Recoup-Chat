@@ -1,103 +1,26 @@
 import { NextResponse } from "next/server";
-import { Readable } from "node:stream";
+import { uploadBufferToArweave } from "@/lib/arweave/uploadBase64ToArweave";
 
-// Ensure Node.js has browser-like base64 helpers used by downstream deps (e.g., cosmjs)
-function ensureBase64Polyfills() {
-  const atobImpl = (data: string) => Buffer.from(data, "base64").toString("binary");
-  const btoaImpl = (data: string) => Buffer.from(data, "binary").toString("base64");
-
-  // Apply to globalThis and global objects
-  const globals = [globalThis, global].filter(Boolean);
-  
-  globals.forEach((g) => {
-    if (typeof (g as typeof globalThis & { atob?: unknown }).atob === "undefined") {
-      (g as typeof globalThis & { atob: (data: string) => string }).atob = atobImpl;
-    }
-    if (typeof (g as typeof globalThis & { btoa?: unknown }).btoa === "undefined") {
-      (g as typeof globalThis & { btoa: (data: string) => string }).btoa = btoaImpl;
-    }
-  });
-
-  // Also ensure they're available as direct properties
-  if (typeof (globalThis as typeof globalThis & { atob?: unknown }).atob === "undefined") {
-    (globalThis as typeof globalThis & { atob: (data: string) => string }).atob = atobImpl;
-  }
-  if (typeof (globalThis as typeof globalThis & { btoa?: unknown }).btoa === "undefined") {
-    (globalThis as typeof globalThis & { btoa: (data: string) => string }).btoa = btoaImpl;
-  }
-}
-
-ensureBase64Polyfills();
-
-if (!process.env.ARWEAVE_KEY) {
-  throw new Error("ARWEAVE_KEY environment variable is not set");
-}
-
-const ARWEAVE_KEY = JSON.parse(
-  Buffer.from(
-    process.env.ARWEAVE_KEY.replace("ARWEAVE_KEY=", ""),
-    "base64",
-  ).toString(),
-);
+export const runtime = "nodejs";
 
 export async function POST(request: Request) {
   try {
     const formData = await request.formData();
-    const file = formData.get("file") as File;
+    const file = formData.get("file");
 
-    if (!file) {
+    if (!(file instanceof File)) {
       throw new Error("No file provided");
     }
 
-    // Lazy-load TurboFactory to ensure polyfills are applied first
-    const { TurboFactory } = await import("@ardrive/turbo-sdk");
-    const turbo = TurboFactory.authenticated({
-      privateKey: ARWEAVE_KEY,
-    });
-
     const fileBuffer = Buffer.from(await file.arrayBuffer());
-    const fileSize = fileBuffer.length;
+    const fileName = file.name || `upload-${Date.now()}`;
+    const fileType = file.type || "application/octet-stream";
 
-    const [{ winc: fileSizeCost }] = await turbo.getUploadCosts({
-      bytes: [fileSize],
-    });
-
-    const fileStreamFactory = () => Readable.from(fileBuffer);
-
-    const { id, dataCaches } = await turbo.uploadFile({
-      fileStreamFactory,
-      fileSizeFactory: () => fileSize,
-      dataItemOpts: {
-        tags: [
-          {
-            name: "Content-Type",
-            value: file.type || "application/octet-stream",
-          },
-          {
-            name: "File-Name",
-            value: file.name,
-          },
-          {
-            name: "App-Name",
-            value: "Recoup-Chat",
-          },
-          {
-            name: "Content-Type-Group",
-            value: "image",
-          },
-        ],
-      },
-    });
+    const result = await uploadBufferToArweave(fileBuffer, fileName, fileType);
 
     return NextResponse.json({
       success: true,
-      id,
-      dataCaches,
-      cost: fileSizeCost,
-      fileName: file.name,
-      fileType: file.type,
-      fileSize,
-      url: `https://arweave.net/${id}`,
+      ...result,
     });
   } catch (error) {
     console.error("Upload failed:", error);

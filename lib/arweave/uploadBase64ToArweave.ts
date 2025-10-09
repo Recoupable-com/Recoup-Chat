@@ -1,39 +1,4 @@
-import { Readable } from "node:stream";
-
-// Ensure Node.js has browser-like base64 helpers used by downstream deps (e.g., cosmjs)
-// This must run before importing packages that expect global atob/btoa.
-function ensureBase64Polyfills() {
-  const typedGlobal = globalThis as unknown as {
-    atob?: (data: string) => string;
-    btoa?: (data: string) => string;
-  };
-
-  if (typeof typedGlobal.atob === "undefined") {
-    // Decode base64 → binary string
-    // Note: Buffer is Node-only; safe on the server
-    typedGlobal.atob = (data: string) =>
-      Buffer.from(data, "base64").toString("binary");
-  }
-  if (typeof typedGlobal.btoa === "undefined") {
-    // Encode binary string → base64
-    typedGlobal.btoa = (data: string) =>
-      Buffer.from(data, "binary").toString("base64");
-  }
-}
-
-ensureBase64Polyfills();
-
-// Load and parse the Arweave key
-if (!process.env.ARWEAVE_KEY) {
-  throw new Error("ARWEAVE_KEY environment variable is not set");
-}
-
-const ARWEAVE_KEY = JSON.parse(
-  Buffer.from(
-    process.env.ARWEAVE_KEY.replace("ARWEAVE_KEY=", ""),
-    "base64"
-  ).toString()
-);
+import { getArweaveClient, getArweaveKey } from "./client";
 
 export type ArweaveUploadResult = {
   id: string;
@@ -48,58 +13,46 @@ export type ArweaveUploadResult = {
 /**
  * Upload a buffer to Arweave
  */
-async function uploadBufferToArweave(
+export async function uploadBufferToArweave(
   fileBuffer: Buffer,
   fileName: string,
   fileType: string
 ): Promise<ArweaveUploadResult> {
-  // Lazy-load to ensure polyfills are applied before depending libs initialize
-  const { TurboFactory } = await import("@ardrive/turbo-sdk");
+  const arweave = getArweaveClient();
+  const key = getArweaveKey();
+  const resolvedFileType = fileType || "application/octet-stream";
   const fileSize = fileBuffer.length;
 
-  const turbo = TurboFactory.authenticated({
-    privateKey: ARWEAVE_KEY,
-  });
+  const fileSizeCost = await arweave.transactions.getPrice(fileSize);
 
-  const [{ winc: fileSizeCost }] = await turbo.getUploadCosts({
-    bytes: [fileSize],
-  });
+  const transaction = await arweave.createTransaction(
+    { data: fileBuffer },
+    key
+  );
 
-  const fileStreamFactory = () => Readable.from(fileBuffer);
+  transaction.addTag("Content-Type", resolvedFileType);
+  transaction.addTag("File-Name", fileName);
+  transaction.addTag("App-Name", "Recoup-Chat");
+  transaction.addTag("Content-Type-Group", "image");
 
-  const { id, dataCaches } = await turbo.uploadFile({
-    fileStreamFactory,
-    fileSizeFactory: () => fileSize,
-    dataItemOpts: {
-      tags: [
-        {
-          name: "Content-Type",
-          value: fileType,
-        },
-        {
-          name: "File-Name",
-          value: fileName,
-        },
-        {
-          name: "App-Name",
-          value: "Recoup-Chat",
-        },
-        {
-          name: "Content-Type-Group",
-          value: "image",
-        },
-      ],
-    },
-  });
+  await arweave.transactions.sign(transaction, key);
+
+  const response = await arweave.transactions.post(transaction);
+
+  if (response.status >= 300) {
+    throw new Error(
+      `Arweave upload failed with status ${response.status}: ${response.statusText}`
+    );
+  }
 
   return {
-    id,
-    dataCaches,
-    cost: fileSizeCost,
+    id: transaction.id,
+    dataCaches: [],
+    cost: fileSizeCost.toString(),
     fileName,
-    fileType,
+    fileType: resolvedFileType,
     fileSize,
-    url: `https://arweave.net/${id}`,
+    url: `https://arweave.net/${transaction.id}`,
   };
 }
 
