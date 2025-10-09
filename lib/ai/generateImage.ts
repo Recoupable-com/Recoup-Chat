@@ -33,6 +33,9 @@ const generateImage = async (
       imageData.mimeType,
       `generated-image-${Date.now()}.png`
     );
+    if (arweaveData) {
+      arweaveData.previewUrl = `data:${imageData.mimeType};base64,${imageData.base64Data}`;
+    }
   } catch (arweaveError) {
     console.error("Error uploading to Arweave:", arweaveError);
     // We'll continue and return the image even if Arweave upload fails

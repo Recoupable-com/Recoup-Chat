@@ -52,7 +52,7 @@ export function ImageResult({ result }: ImageResultProps) {
 
             <div className="w-full h-auto max-w-md max-h-md">
               <Image
-                src={result.arweaveUrl}
+                src={result.previewUrl || result.arweaveUrl}
                 alt="Generated image"
                 width={448}
                 height={448}

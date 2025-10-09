@@ -16,7 +16,7 @@
     "@ai-sdk/google": "^2.0.15",
     "@ai-sdk/openai": "^2.0.32",
     "@ai-sdk/react": "^2.0.48",
-    "@ardrive/turbo-sdk": "^1.22.1",
+    "arweave": "^1.15.1",
     "@coinbase/cdp-sdk": "^1.4.0",
     "@coinbase/onchainkit": "^0.38.8",
     "@fal-ai/client": "^1.6.2",

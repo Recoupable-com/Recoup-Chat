@@ -17,6 +17,7 @@ const schema = z.object({
 export interface ImageGenerationResult {
   success: boolean;
   arweaveUrl: string | null;
+  previewUrl?: string | null;
   smartAccountAddress?: string;
   transactionHash?: string | null;
   blockExplorerUrl?: string | null;
@@ -38,6 +39,7 @@ const generateImage = tool({
       return {
         success: true,
         arweaveUrl: result.arweave?.url || null,
+        previewUrl: result.arweave?.previewUrl || null,
         smartAccountAddress: result.smartAccount.address,
         transactionHash: result.transactionHash,
         blockExplorerUrl: result.transactionHash
