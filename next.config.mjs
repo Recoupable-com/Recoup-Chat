@@ -24,6 +24,7 @@ const nextConfig = {
       "example.com", // Example domain from our mock data
       "arweave.net", // Arweave
       "storage.googleapis.com", // Fal AI image hosting (backup)
+      "fal.media", // Fal AI image hosting
     ],
     remotePatterns: [
       {
