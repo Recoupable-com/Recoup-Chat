@@ -1,0 +1,195 @@
+/**
+ * BACKUP: CSS Animations for Reasoning Components
+ * 
+ * Critical CSS animations and styles from our original reasoning system
+ * that create the shimmer effects and smooth transitions.
+ * 
+ * Created: 2025-01-10
+ * From: components/reasoning.tsx and global CSS
+ */
+
+/* Shimmer Animation Keyframes */
+@keyframes shimmer {
+  0% {
+    background-position: -200% 0;
+  }
+  100% {
+    background-position: 200% 0;
+  }
+}
+
+/* Shimmer Effect Classes */
+.shimmer-container {
+  position: relative;
+  overflow: hidden;
+}
+
+.shimmer-overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(255, 255, 255, 0.7),
+    transparent
+  );
+  background-size: 200% 100%;
+  animation: shimmer 4s ease-in-out infinite;
+}
+
+/* Dark mode shimmer variant */
+.dark .shimmer-overlay {
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(255, 255, 255, 0.1),
+    transparent
+  );
+}
+
+/* Reasoning-specific shimmer classes */
+.reasoning-shimmer {
+  @apply relative inline-block;
+}
+
+.reasoning-shimmer::after {
+  content: '';
+  @apply absolute inset-0;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(255, 255, 255, 0.7),
+    transparent
+  );
+  background-size: 200% 100%;
+  animation: shimmer 4s ease-in-out infinite;
+}
+
+.dark .reasoning-shimmer::after {
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(255, 255, 255, 0.1),
+    transparent
+  );
+}
+
+/* Thinking state container */
+.thinking-container {
+  @apply relative overflow-hidden;
+}
+
+/* Utility classes for shimmer states */
+.shimmer-text {
+  @apply relative inline-block;
+}
+
+.shimmer-text::after {
+  content: '';
+  @apply absolute inset-0 bg-gradient-to-l from-transparent via-white/70 to-transparent;
+  background-size: 200% 100%;
+  animation: shimmer 4s ease-in-out infinite;
+}
+
+/* Collapsible content animations (from Radix UI) */
+.reasoning-collapsible-content {
+  @apply data-[state=closed]:fade-out-0 data-[state=closed]:slide-out-to-top-2 data-[state=open]:slide-in-from-top-2 text-popover-foreground outline-none data-[state=closed]:animate-out data-[state=open]:animate-in;
+}
+
+/* Custom fade and slide animations */
+@keyframes fade-out {
+  from {
+    opacity: 1;
+  }
+  to {
+    opacity: 0;
+  }
+}
+
+@keyframes fade-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes slide-out-to-top {
+  from {
+    transform: translateY(0);
+  }
+  to {
+    transform: translateY(-2px);
+  }
+}
+
+@keyframes slide-in-from-top {
+  from {
+    transform: translateY(-2px);
+  }
+  to {
+    transform: translateY(0);
+  }
+}
+
+/* Reasoning content styling */
+.reasoning-content {
+  @apply mt-4 text-sm;
+}
+
+.reasoning-content h3 {
+  @apply text-base font-semibold mt-4 mb-2 text-foreground;
+}
+
+.reasoning-content h4 {
+  @apply text-sm font-semibold mt-3 mb-1 text-foreground;
+}
+
+.reasoning-content h5 {
+  @apply text-sm font-medium mt-2 mb-1 text-foreground;
+}
+
+.reasoning-content p {
+  @apply text-xs text-muted-foreground/70 mb-2;
+}
+
+.reasoning-content strong {
+  @apply font-semibold;
+}
+
+.reasoning-content code {
+  @apply bg-muted px-1 rounded;
+}
+
+/* Trigger styling */
+.reasoning-trigger {
+  @apply flex items-center gap-2 text-muted-foreground text-sm;
+}
+
+/* Icon rotation animation */
+.reasoning-chevron {
+  @apply size-4 text-muted-foreground transition-transform;
+}
+
+.reasoning-chevron[data-state="open"] {
+  transform: rotate(180deg);
+}
+
+.reasoning-chevron[data-state="closed"] {
+  transform: rotate(0deg);
+}
+
+/**
+ * USAGE IN TAILWIND CLASSES:
+ * 
+ * For shimmer effect:
+ * className="relative inline-block"
+ * <span className="absolute inset-0 bg-gradient-to-l from-transparent via-white/70 to-transparent bg-[length:200%_100%] animate-[shimmer_4s_ease-in-out_infinite]"></span>
+ * 
+ * For thinking indicator:
+ * className="relative overflow-hidden"
+ * 
+ * For collapsible content:
+ * className="data-[state=closed]:fade-out-0 data-[state=closed]:slide-out-to-top-2 data-[state=open]:slide-in-from-top-2"
+ */
