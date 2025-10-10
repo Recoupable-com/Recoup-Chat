@@ -12,8 +12,7 @@ import {
   BrainIcon, 
   SearchIcon, 
   LightbulbIcon, 
-  CheckCircleIcon, 
-  ArrowRightIcon,
+  CheckCircleIcon,
   ListIcon,
   TargetIcon,
   DotIcon,
@@ -40,10 +39,10 @@ export function parseReasoningSteps(
   }
 
   // Extract the title (first line) that will be shown in the header
-  const title = extractFirstLineAsLabel(content);
+  extractFirstLineAsLabel(content);
   
   // Remove the title from content to avoid duplication
-  const contentWithoutTitle = removeFirstLineFromContent(content, title);
+  const contentWithoutTitle = removeFirstLineFromContent(content);
   
   // Split remaining content into potential steps using various patterns
   const steps = extractSteps(contentWithoutTitle);
@@ -60,7 +59,7 @@ export function parseReasoningSteps(
 
   // Process each step and assign appropriate metadata
   return steps.map((step, index) => ({
-    icon: getStepIcon(step.content, index),
+    icon: getStepIcon(step.content),
     label: extractActionLabel(step.content), // Use action verbs like "Searching", "Analyzing"
     description: step.description,
     status: getStepStatus(index, steps.length, isStreaming),
@@ -353,7 +352,7 @@ function extractFirstLineAsLabel(content: string): string {
 /**
  * Remove the first line from content to avoid duplication with header
  */
-function removeFirstLineFromContent(content: string, title: string): string {
+function removeFirstLineFromContent(content: string): string {
   const lines = content.split('\n');
   if (lines.length <= 1) return '';
   
@@ -408,7 +407,7 @@ function extractActionLabel(content: string): string {
 /**
  * Determine appropriate icon based on step content and position
  */
-function getStepIcon(content: string, index: number): LucideIcon {
+function getStepIcon(content: string): LucideIcon {
   const lowerContent = content.toLowerCase();
   
   // Search-related keywords

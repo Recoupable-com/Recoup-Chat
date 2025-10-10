@@ -9,7 +9,6 @@ import {
 } from "@/components/ui/collapsible";
 import { cn } from "@/lib/utils";
 import {
-  BrainIcon,
   ChevronDownIcon,
   DotIcon,
   type LucideIcon,

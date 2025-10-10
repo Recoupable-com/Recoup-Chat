@@ -21,9 +21,7 @@ import {
 import { parseReasoningSteps } from '@/lib/reasoning/parseReasoningSteps';
 import { 
   StreamingShimmer,
-  ThinkingIndicator,
   getReasoningTitle,
-  useAutoCollapse,
   useDurationTracking
 } from '@/lib/reasoning/backup-features';
 import { cn } from '@/lib/utils';
