@@ -18,14 +18,58 @@ import {
   ChainOfThoughtHeader,
   ChainOfThoughtStep,
 } from '@/components/ai-elements/chain-of-thought';
-import { parseReasoningSteps } from '@/lib/reasoning/parseReasoningSteps';
-import { 
-  StreamingShimmer,
-  getReasoningTitle,
-  useDurationTracking
-} from '@/lib/reasoning/backup-features';
+// Inline the essential features we need
+const getReasoningTitle = (content?: string): string => {
+  if (!content) return "Chain of Thought";
+  
+  const lines = content.split('\n').filter(line => line.trim());
+  if (lines.length === 0) return "Chain of Thought";
+  
+  let firstLine = lines[0].trim();
+  
+  // Strip markdown formatting
+  firstLine = firstLine
+    .replace(/\*\*(.*?)\*\*/g, '$1') // Remove bold **text**
+    .replace(/\*(.*?)\*/g, '$1')     // Remove italic *text*
+    .replace(/`(.*?)`/g, '$1')       // Remove code `text`
+    .replace(/#{1,6}\s*/g, '')       // Remove headers # ## ###
+    .trim();
+  
+  // Truncate if too long
+  if (firstLine.length > 100) {
+    const firstSentence = firstLine.split('.')[0];
+    return firstSentence.length < 100 ? firstSentence : firstSentence.substring(0, 97) + '...';
+  }
+  
+  return firstLine;
+};
+
+const StreamingShimmer = ({ children }: { children: React.ReactNode }) => (
+  <span className="relative inline-block">
+    {children}
+    <span className="absolute inset-0 bg-gradient-to-l from-transparent via-white/70 to-transparent bg-[length:200%_100%] animate-[shimmer_4s_ease-in-out_infinite]"></span>
+  </span>
+);
+
+const useDurationTracking = (isStreaming: boolean) => {
+  const [startTime, setStartTime] = useState<number | null>(null);
+  const [duration, setDuration] = useState(0);
+
+  useEffect(() => {
+    if (isStreaming) {
+      if (startTime === null) {
+        setStartTime(Date.now());
+      }
+    } else if (startTime !== null) {
+      setDuration(Math.round((Date.now() - startTime) / 1000));
+      setStartTime(null);
+    }
+  }, [isStreaming, startTime]);
+
+  return { duration };
+};
 import { cn } from '@/lib/utils';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 
 export interface EnhancedReasoningProps {
   content?: string;
@@ -59,8 +103,7 @@ export const EnhancedReasoning = memo(({
   //   }
   // });
   
-  // Parse content into structured steps for better visualization
-  const steps = parseReasoningSteps(content || '', isStreaming);
+  // Simplified: No complex parsing needed for single-step approach
   
   // Handle case where we have no content yet (initial streaming state)
   if (!content && isStreaming) {
@@ -119,20 +162,14 @@ export const EnhancedReasoning = memo(({
       </ChainOfThoughtHeader>
       
       <ChainOfThoughtContent>
-        {steps.map((step, index) => (
-          <ChainOfThoughtStep
-            key={`step-${index}`}
-            icon={step.icon}
-            label={step.label}
-            status={step.status}
-          >
-            {step.content && step.content.trim() && step.content !== step.label && (
-              <div className="mt-2">
-                <StepContent content={step.content} />
-              </div>
-            )}
-          </ChainOfThoughtStep>
-        ))}
+        <ChainOfThoughtStep
+          label="Reasoning process"
+          status={isStreaming ? 'active' : 'complete'}
+        >
+          <div className="mt-2">
+            <StepContent content={content} />
+          </div>
+        </ChainOfThoughtStep>
       </ChainOfThoughtContent>
     </ChainOfThought>
   );
