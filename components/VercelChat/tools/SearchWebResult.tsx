@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Card, CardContent } from "@/components/ui/card";
-import ChatMarkdown from "@/components/Chat/ChatMarkdown";
+import { Response } from "@/components/response";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { Maximize2, Minimize2 } from "lucide-react";
@@ -76,7 +76,7 @@ const SearchWebResult = ({ result }: { result: SearchWebResultType }) => {
               }}
             >
               {item.type === "text" && (
-                <ChatMarkdown>{item?.text || ""}</ChatMarkdown>
+                <Response>{item?.text || ""}</Response>
               )}
             </div>
           ))}

@@ -4,7 +4,7 @@ import { useEffect, useMemo, useRef, memo } from "react";
 import { SpinnerIcon } from "./icons";
 import { ChatStatus, UIMessage } from "ai";
 import { UseChatHelpers } from "@ai-sdk/react";
-import ChatMarkdown from "../Chat/ChatMarkdown";
+import { Response } from "@/components/response";
 import Message from "./message";
 
 interface TextMessagePartProps {
@@ -14,7 +14,7 @@ interface TextMessagePartProps {
 export function TextMessagePart({ text }: TextMessagePartProps) {
   return (
     <div className="flex flex-col gap-4">
-      <ChatMarkdown>{text}</ChatMarkdown>
+      <Response>{text}</Response>
     </div>
   );
 }

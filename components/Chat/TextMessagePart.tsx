@@ -1,6 +1,6 @@
 "use client";
 
-import ChatMarkdown from "./ChatMarkdown";
+import { Response } from "@/components/response";
 import { TextUIPart } from "ai";
 
 interface TextMessagePartProps {
@@ -8,5 +8,5 @@ interface TextMessagePartProps {
 }
 
 export function TextMessagePart({ part }: TextMessagePartProps) {
-  return <ChatMarkdown>{part?.text || ""}</ChatMarkdown>;
+  return <Response>{part?.text || ""}</Response>;
 }

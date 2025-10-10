@@ -2,6 +2,8 @@
 @tailwind components;
 @tailwind utilities;
 
+@source "../node_modules/streamdown/dist/index.js";
+
 @font-face {
   font-family: "Inter Medium";
   src: url("/fonts/Inter-Medium.ttf") format("truetype");
