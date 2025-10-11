@@ -8,7 +8,7 @@ import ViewingMessage from "./ViewingMessage";
 import EditingMessage from "./EditingMessage";
 import { getToolCallComponent, getToolResultComponent } from "./ToolComponents";
 import MessageFileViewer from "./message-file-viewer";
-import { Reasoning, ReasoningTrigger, ReasoningContent } from "@/components/reasoning";
+import { EnhancedReasoning } from "@/components/reasoning/EnhancedReasoning";
 import { Actions, Action } from "@/components/actions";
 import { RefreshCcwIcon, Pencil } from "lucide-react";
 import CopyAction from "./CopyAction";
@@ -51,24 +51,17 @@ const Message = ({
               const key = `message-${message.id}-part-${partIndex}`;
 
               if (type === "reasoning") {
-                // Only show reasoning if there's actual text content
-                if (!part.text || part.text.trim().length === 0) {
-                  return null;
-                }
-                
                 return (
-                  <Reasoning
+                  <EnhancedReasoning
                     key={key}
                     className="w-full"
+                    content={part.text}
                     isStreaming={
                       status === "streaming" &&
                       partIndex === message.parts.length - 1
                     }
-                    defaultOpen={false}
-                  >
-                    <ReasoningTrigger content={part.text} />
-                    <ReasoningContent>{part.text}</ReasoningContent>
-                  </Reasoning>
+                    defaultOpen={true}
+                  />
                 );
               }
 
