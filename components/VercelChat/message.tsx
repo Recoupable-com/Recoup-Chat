@@ -80,6 +80,10 @@ const Message = ({
                       <ViewingMessage
                         message={message}
                         partText={part?.text || ""}
+                        isAnimating={
+                          status === "streaming" &&
+                          partIndex === message.parts.length - 1
+                        }
                       />
                       <Actions className={cn("mt-0.5 gap-0.5 opacity-0 pointer-events-none group-hover:opacity-100 group-hover:pointer-events-auto transition-opacity", {
                         "justify-start": message.role === "assistant",

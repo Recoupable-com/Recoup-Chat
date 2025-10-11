@@ -6,11 +6,13 @@ import { TextMessagePart } from "./messages";
 interface ViewingMessageProps {
   message: UIMessage;
   partText: string;
+  isAnimating?: boolean;
 }
 
 const ViewingMessageComponent: React.FC<ViewingMessageProps> = ({
   message,
   partText,
+  isAnimating = false,
 }) => {
   return (
     <div className="flex flex-row gap-2 items-center">
@@ -21,7 +23,7 @@ const ViewingMessageComponent: React.FC<ViewingMessageProps> = ({
             message.role === "user",
         })}
       >
-        <TextMessagePart text={partText} />
+        <TextMessagePart text={partText} isAnimating={isAnimating} />
       </div>
     </div>
   );
