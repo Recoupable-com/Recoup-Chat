@@ -19,11 +19,9 @@ import {
   ChainOfThoughtStep,
 } from '@/components/ai-elements/chain-of-thought';
 import { parseReasoningSteps } from '@/lib/reasoning/parseReasoningSteps';
-import { 
-  StreamingShimmer,
-  getReasoningTitle,
-  useDurationTracking
-} from '@/lib/reasoning/backup-features';
+import { StreamingShimmer } from '@/components/ui/StreamingShimmer';
+import { extractReasoningTitle } from '@/lib/reasoning/extractReasoningTitle';
+import { useDurationTracking } from '@/hooks/useDurationTracking';
 import { cn } from '@/lib/utils';
 import { useState } from 'react';
 
@@ -45,7 +43,7 @@ export const EnhancedReasoning = memo(({
   const [isOpen, setIsOpen] = useState(defaultOpen);
   
   // Use our advanced features from backup
-  const title = getReasoningTitle(content);
+  const title = extractReasoningTitle(content);
   const { duration } = useDurationTracking(isStreaming);
   
   // Disable auto-collapse - keep reasoning open after completion
