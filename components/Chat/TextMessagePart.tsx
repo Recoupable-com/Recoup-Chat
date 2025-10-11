@@ -1,6 +1,6 @@
 "use client";
 
-import { Response } from "@/components/response";
+import { Response } from "@/components/ai-elements/response";
 import { TextUIPart } from "ai";
 
 interface TextMessagePartProps {

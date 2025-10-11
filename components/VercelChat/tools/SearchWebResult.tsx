@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Card, CardContent } from "@/components/ui/card";
-import { Response } from "@/components/response";
+import { Response } from "@/components/ai-elements/response";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { Maximize2, Minimize2 } from "lucide-react";

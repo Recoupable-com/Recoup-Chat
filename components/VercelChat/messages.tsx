@@ -4,7 +4,7 @@ import { memo } from "react";
 import { SpinnerIcon } from "./icons";
 import { ChatStatus, UIMessage } from "ai";
 import { UseChatHelpers } from "@ai-sdk/react";
-import { Response } from "@/components/response";
+import { Response } from "@/components/ai-elements/response";
 import { 
   Conversation,
   ConversationContent,

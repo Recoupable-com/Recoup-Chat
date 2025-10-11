@@ -22,7 +22,7 @@ import { parseReasoningSteps } from '@/lib/reasoning/parseReasoningSteps';
 import { StreamingShimmer } from '@/components/ui/StreamingShimmer';
 import { extractReasoningTitle } from '@/lib/reasoning/extractReasoningTitle';
 import { useDurationTracking } from '@/hooks/useDurationTracking';
-import { Response } from '@/components/response';
+import StepContent from './StepContent';
 import { cn } from '@/lib/utils';
 import { useState } from 'react';
 
@@ -47,16 +47,6 @@ export const EnhancedReasoning = memo(({
   const title = extractReasoningTitle(content);
   const { duration } = useDurationTracking(isStreaming);
   
-  // Disable auto-collapse - keep reasoning open after completion
-  // useAutoCollapse({
-  //   defaultOpen,
-  //   isStreaming,
-  //   isOpen,
-  //   setIsOpen: (open) => {
-  //     setIsOpen(open);
-  //     onOpenChange?.(open);
-  //   }
-  // });
   
   // Parse content into structured steps for better visualization
   const steps = parseReasoningSteps(content || '', isStreaming);
@@ -137,16 +127,4 @@ export const EnhancedReasoning = memo(({
   );
 });
 
-/**
- * Component to render step content safely using Response component
- */
-const StepContent = memo(({ content }: { content: string }) => {
-  return (
-    <div className="text-sm text-muted-foreground/80 leading-relaxed">
-      <Response>{content}</Response>
-    </div>
-  );
-});
-
 EnhancedReasoning.displayName = 'EnhancedReasoning';
-StepContent.displayName = 'StepContent';
