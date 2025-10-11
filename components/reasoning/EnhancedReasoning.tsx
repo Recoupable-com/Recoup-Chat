@@ -19,7 +19,7 @@ import {
   ChainOfThoughtStep,
 } from '@/components/ai-elements/chain-of-thought';
 import { parseReasoningSteps } from '@/lib/reasoning/parseReasoningSteps';
-import { StreamingShimmer } from '@/components/ui/StreamingShimmer';
+import { StreamingShimmer } from './StreamingShimmer';
 import { extractReasoningTitle } from '@/lib/reasoning/extractReasoningTitle';
 import { useDurationTracking } from '@/hooks/useDurationTracking';
 import StepContent from './StepContent';
