@@ -5,9 +5,8 @@ import { TextUIPart } from "ai";
 
 interface TextMessagePartProps {
   part: TextUIPart;
-  isAnimating?: boolean;
 }
 
-export function TextMessagePart({ part, isAnimating = false }: TextMessagePartProps) {
-  return <Response isAnimating={isAnimating}>{part?.text || ""}</Response>;
+export function TextMessagePart({ part }: TextMessagePartProps) {
+  return <Response>{part?.text || ""}</Response>;
 }

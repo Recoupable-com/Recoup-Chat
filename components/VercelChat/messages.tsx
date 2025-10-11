@@ -14,13 +14,12 @@ import Message from "./message";
 
 interface TextMessagePartProps {
   text: string;
-  isAnimating?: boolean;
 }
 
-export function TextMessagePart({ text, isAnimating = false }: TextMessagePartProps) {
+export function TextMessagePart({ text }: TextMessagePartProps) {
   return (
     <div className="flex flex-col gap-4">
-      <Response isAnimating={isAnimating}>{text}</Response>
+      <Response>{text}</Response>
     </div>
   );
 }
