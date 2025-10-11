@@ -1,25 +1,17 @@
 import React from "react";
-import { Card, CardContent } from "@/components/ui/card";
-import { Loader } from "lucide-react";
+import { Search } from "lucide-react";
 
 const SearchWebSkeleton: React.FC = () => {
   return (
-    <Card className="w-full shadow-sm">
-      <CardContent className="p-3">
-        <div className="flex items-center gap-2 mb-2">
-          <Loader className="h-3 w-3 animate-spin text-primary" />
-          <p className="text-sm font-medium">Searching web...</p>
+    <div className="space-y-2">
+      <p className="text-sm text-gray-500 dark:text-gray-400">Searching</p>
+      <div className="space-y-1">
+        <div className="inline-flex items-center gap-2 px-3 py-1.5 bg-gray-50 dark:bg-zinc-900 rounded-full">
+          <Search className="h-3.5 w-3.5 text-gray-400 animate-pulse" />
+          <div className="h-3.5 bg-gray-200 dark:bg-zinc-700 rounded w-48 animate-pulse" />
         </div>
-        <div className="space-y-1">
-          <div className="h-4 bg-muted rounded-full w-full animate-pulse" />
-          <div className="h-4 bg-muted rounded-full w-5/6 animate-pulse" />
-          <div className="h-4 bg-muted rounded-full w-4/5 animate-pulse" />
-          <div className="h-4 bg-muted rounded-full w-3/4 animate-pulse" />
-          <div className="h-4 bg-muted rounded-full w-2/3 animate-pulse" />
-          <div className="h-4 bg-muted rounded-full w-1/2 animate-pulse" />
-        </div>
-      </CardContent>
-    </Card>
+      </div>
+    </div>
   );
 };
 

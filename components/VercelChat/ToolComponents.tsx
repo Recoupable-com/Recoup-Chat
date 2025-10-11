@@ -27,10 +27,11 @@ import UpdateArtistSocialsSuccess from "./tools/UpdateArtistSocialsSuccess";
 import { UpdateArtistSocialsResult } from "@/lib/tools/updateArtistSocials";
 import { TxtFileResult } from "@/components/ui/TxtFileResult";
 import { TxtFileGenerationResult } from "@/lib/tools/createTxtFile";
-import { Loader } from "lucide-react";
+import { Loader, Search } from "lucide-react";
 import { getDisplayToolName } from "@/lib/tools/get-tools-name";
 import GenericSuccess from "./tools/GenericSuccess";
 import getToolInfo from "@/lib/utils/getToolsInfo";
+import { SearchProgress } from "@/lib/tools/searchWeb/types";
 import { GetSpotifyPlayButtonClickedResult } from "@/lib/supabase/getSpotifyPlayButtonClicked";
 import GetVideoGameCampaignPlaysResultComponent from "./tools/GetVideoGameCampaignPlaysResult";
 import { CommentsResult } from "@/components/Chat/comments/CommentsResult";
@@ -57,7 +58,10 @@ import YouTubeSetThumbnailSkeleton from "./tools/youtube/YouTubeSetThumbnailSkel
 import type { YouTubeSetThumbnailResult as YouTubeSetThumbnailResultType } from "@/types/youtube";
 import SearchWebSkeleton from "./tools/SearchWebSkeleton";
 import SpotifyDeepResearchSkeleton from "./tools/SpotifyDeepResearchSkeleton";
-import SearchWebResult, { SearchWebResultType } from "./tools/SearchWebResult";
+import { SearchWebResultType } from "./tools/SearchWebResult";
+import SearchApiResult from "./tools/SearchApiResult";
+import SearchWebProgress from "./tools/SearchWebProgress";
+import WebDeepResearchProgress from "./tools/WebDeepResearchProgress";
 import SpotifyDeepResearchResult from "./tools/SpotifyDeepResearchResult";
 import GetArtistSocialsResult from "./tools/GetArtistSocialsResult";
 import GetArtistSocialsSkeleton from "./tools/GetArtistSocialsSkeleton";
@@ -91,8 +95,7 @@ import { RetrieveVideoContentResult } from "@/lib/tools/sora2/retrieveVideoConte
 export function getToolCallComponent(part: ToolUIPart) {
   const { toolCallId } = part as ToolUIPart;
   const toolName = getToolName(part);
-  const isSearchWebTool =
-    toolName === "search_web" || toolName === "web_deep_research";
+  const isSearchWebTool = toolName === "search_web";
 
   // Handle image generation tools (including nano banana variants)
   if (
@@ -165,6 +168,16 @@ export function getToolCallComponent(part: ToolUIPart) {
     return (
       <div key={toolCallId}>
         <SearchWebSkeleton />
+      </div>
+    );
+  } else if (toolName === "web_deep_research") {
+    return (
+      <div key={toolCallId} className="space-y-2">
+        <p className="text-sm text-gray-500 dark:text-gray-400">Conducting deep research</p>
+        <div className="inline-flex items-center gap-2 px-3 py-1.5 bg-gray-50 dark:bg-zinc-900 rounded-full">
+          <Search className="h-3.5 w-3.5 text-gray-400 animate-pulse" />
+          <div className="h-3.5 bg-gray-200 dark:bg-zinc-700 rounded w-64 animate-pulse" />
+        </div>
       </div>
     );
   } else if (toolName === "spotify_deep_research") {
@@ -247,8 +260,8 @@ export function getToolCallComponent(part: ToolUIPart) {
 export function getToolResultComponent(part: ToolUIPart) {
   const { toolCallId, output: result } = part as ToolUIPart;
   const toolName = getToolName(part);
-  const isSearchWebTool =
-    toolName === "search_web" || toolName === "web_deep_research";
+  const isSearchWebTool = toolName === "search_web";
+  const isDeepResearchTool = toolName === "web_deep_research";
 
   if (toolName === "generate_image") {
     return (
@@ -368,11 +381,35 @@ export function getToolResultComponent(part: ToolUIPart) {
       </div>
     );
   } else if (isSearchWebTool) {
+    // Check if it's a streaming progress update
+    if (result && typeof result === 'object' && 'status' in result) {
+      const progress = result as SearchProgress;
+      return (
+        <div key={toolCallId}>
+          <SearchWebProgress progress={progress} />
+        </div>
+      );
+    }
+
+    // Final result - use Search API result component with InlineCitation
     return (
       <div key={toolCallId}>
-        <SearchWebResult result={result as SearchWebResultType} />
+        <SearchApiResult result={result as SearchWebResultType} />
       </div>
     );
+  } else if (isDeepResearchTool) {
+    // Check if it's a streaming progress update
+    if (result && typeof result === 'object' && 'status' in result) {
+      const progress = result as SearchProgress;
+      return (
+        <div key={toolCallId}>
+          <WebDeepResearchProgress progress={progress} />
+        </div>
+      );
+    }
+
+    // Final result
+    return null;
   } else if (toolName === "spotify_deep_research") {
     return (
       <div key={toolCallId}>
