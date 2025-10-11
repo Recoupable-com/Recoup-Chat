@@ -1,4 +1,5 @@
 import fetchPerplexityApi from "./fetchPerplexityApi";
+import { parseCitationsFromText } from "@/lib/citations/parseCitations";
 
 /**
  * Performs a chat completion by sending a request to the Perplexity API.
@@ -39,15 +40,16 @@ async function performChatCompletion(
     );
   }
 
-  // Directly retrieve the main message content from the response
+  // Retrieve the main message content from the response
   let messageContent = data.choices[0].message.content;
 
-  // If citations are provided, append them to the message content
+  // If citations are provided, parse them for inline citation rendering
   if (
     data.citations &&
     Array.isArray(data.citations) &&
     data.citations.length > 0
   ) {
+    // Add citations in the traditional format for parsing
     messageContent += "\n\nCitations:\n";
     data.citations.forEach((citation: string, index: number) => {
       messageContent += `[${index + 1}] ${citation}\n`;
