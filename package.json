@@ -89,6 +89,7 @@
     "swiper": "^11.1.15",
     "tailwind-merge": "^2.6.0",
     "tailwindcss-animate": "^1.0.7",
+    "use-stick-to-bottom": "^1.1.1",
     "usehooks-ts": "^3.1.0",
     "uuid": "^10.0.0",
     "viem": "2.x",

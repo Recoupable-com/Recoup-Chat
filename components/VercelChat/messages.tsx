@@ -1,10 +1,15 @@
 "use client";
 
-import { useEffect, useMemo, useRef, memo } from "react";
+import { memo } from "react";
 import { SpinnerIcon } from "./icons";
 import { ChatStatus, UIMessage } from "ai";
 import { UseChatHelpers } from "@ai-sdk/react";
 import { Response } from "@/components/response";
+import { 
+  Conversation,
+  ConversationContent,
+  ConversationScrollButton,
+} from "@/components/ai-elements/conversation";
 import Message from "./message";
 
 interface TextMessagePartProps {
@@ -35,40 +40,34 @@ const MessagesComponent = ({
   reload,
   children,
 }: MessagesProps) => {
-  const messagesRef = useRef<HTMLDivElement>(null);
-  const messagesLength = useMemo(() => messages.length, [messages]);
-
-  useEffect(() => {
-    if (messagesRef.current) {
-      messagesRef.current.scrollTop = messagesRef.current.scrollHeight;
-    }
-  }, [messagesLength]);
+  // Conversation component handles scrolling automatically
+  // No need for manual scroll logic
 
   return (
-    <div
-      className="flex flex-col gap-8 overflow-y-scroll items-center w-full pt-6 pb-16 md:pt-8 md:pb-20"
-      ref={messagesRef}
-    >
-      {children || null}
-      {messages.map((message) => (
-        <Message
-          status={status}
-          key={message.id}
-          message={message}
-          setMessages={setMessages}
-          reload={reload}
-        />
-      ))}
+    <Conversation className="flex-1 w-full">
+      <ConversationContent className="flex flex-col gap-8 items-center w-full pt-6 pb-16 md:pt-8 md:pb-20">
+        {children || null}
+        {messages.map((message) => (
+          <Message
+            status={status}
+            key={message.id}
+            message={message}
+            setMessages={setMessages}
+            reload={reload}
+          />
+        ))}
 
-      {(status === "submitted" || status === "streaming") && (
-        <div className="text-zinc-500 w-full max-w-3xl mx-auto flex items-center gap-2">
-          Hmm...
-          <div className="inline-block animate-spin">
-            <SpinnerIcon />
+        {(status === "submitted" || status === "streaming") && (
+          <div className="text-zinc-500 w-full max-w-3xl mx-auto flex items-center gap-2">
+            Hmm...
+            <div className="inline-block animate-spin">
+              <SpinnerIcon />
+            </div>
           </div>
-        </div>
-      )}
-    </div>
+        )}
+      </ConversationContent>
+      <ConversationScrollButton />
+    </Conversation>
   );
 };
 
