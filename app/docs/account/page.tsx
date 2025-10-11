@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { CodeBlock } from "@/components/docs/CodeBlock";
+import { CodeBlock, CodeBlockCopyButton } from "@/components/ai-elements/code-block";
 import { LanguageSelector } from "@/components/docs/LanguageSelector";
 import { ResponseTable } from "@/components/docs/ResponseTable";
 import { codeExamples, exampleResponse, responseProperties } from "./constants";
@@ -43,7 +43,11 @@ export default function AccountDocs() {
             code={
               codeExamples[selectedLanguage.value as keyof typeof codeExamples]
             }
-          />
+            language={selectedLanguage.value}
+            showLineNumbers={true}
+          >
+            <CodeBlockCopyButton />
+          </CodeBlock>
         </div>
       </section>
 
@@ -52,7 +56,13 @@ export default function AccountDocs() {
         <p className="mb-4">
           The API returns JSON responses. Here&apos;s an example response:
         </p>
-        <CodeBlock code={JSON.stringify(exampleResponse, null, 2)} />
+        <CodeBlock 
+          code={JSON.stringify(exampleResponse, null, 2)} 
+          language="json"
+          showLineNumbers={true}
+        >
+          <CodeBlockCopyButton />
+        </CodeBlock>
       </section>
 
       <section className="mb-12">

@@ -1,7 +1,6 @@
 import React from "react";
 import { type Components } from "react-markdown";
-import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
-import { oneLight } from "react-syntax-highlighter/dist/cjs/styles/prism";
+import { CodeBlock, CodeBlockCopyButton } from "@/components/ai-elements/code-block";
 
 interface CodeBlockProps extends React.HTMLAttributes<HTMLElement> {
   inline?: boolean;
@@ -17,21 +16,15 @@ const MarkdownCode: Components['code'] = (props: CodeBlockProps) => {
   const language = match ? match[1] : "";
 
   if (!inline) {
+    const codeContent = String(children).replace(/\n$/, "");
     return (
-        <SyntaxHighlighter
-          language={language}
-          style={oneLight}
-          customStyle={{ 
-            margin: 0,
-            borderRadius: "0.75rem",
-            fontSize: "0.9em",
-            lineHeight: 1.6,
-          }}
-          wrapLines
-          wrapLongLines
-        >
-          {String(children).replace(/\n$/, "")}
-        </SyntaxHighlighter>
+      <CodeBlock 
+        code={codeContent}
+        language={language}
+        showLineNumbers={false}
+      >
+        <CodeBlockCopyButton />
+      </CodeBlock>
     );
   }
   
