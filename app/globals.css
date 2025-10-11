@@ -2,7 +2,7 @@
 @tailwind components;
 @tailwind utilities;
 
-@source "../node_modules/streamdown/dist/index.js";
+@import "../node_modules/streamdown/dist/index.css";
 
 @font-face {
   font-family: "Inter Medium";
