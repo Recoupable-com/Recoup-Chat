@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Card, CardContent } from "@/components/ui/card";
-import { Response } from "@/components/ai-elements/response";
+import { CitationRenderer } from "@/components/citations/CitationRenderer";
+import { parseCitationsFromText } from "@/lib/citations/parseCitations";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { Maximize2, Minimize2 } from "lucide-react";
@@ -75,9 +76,15 @@ const SearchWebResult = ({ result }: { result: SearchWebResultType }) => {
                 maxHeight: expanded ? 5000 : 200,
               }}
             >
-              {item.type === "text" && (
-                <Response>{item?.text || ""}</Response>
-              )}
+              {item.type === "text" && (() => {
+                const { contentWithCitations, citations } = parseCitationsFromText(item?.text || "");
+                return (
+                  <CitationRenderer 
+                    content={contentWithCitations}
+                    citations={citations}
+                  />
+                );
+              })()}
             </div>
           ))}
           {!expanded && (

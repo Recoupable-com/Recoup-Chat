@@ -14,8 +14,27 @@ export interface Citation {
 
 /**
  * Parse Perplexity-style citations from text content
+ * Handles both inline citations [1][2] and separate Citations: section
  */
 export function parseCitationsFromText(content: string): {
+  contentWithCitations: string;
+  citations: Citation[];
+} {
+  // First try to parse separate Citations: section
+  const { contentWithCitations: mainContent, citations: sectionCitations } = parseCitationsSection(content);
+  
+  if (sectionCitations.length > 0) {
+    return { contentWithCitations: mainContent, citations: sectionCitations };
+  }
+  
+  // If no separate section, look for inline citations [1][2][3] etc.
+  return parseInlineCitations(content);
+}
+
+/**
+ * Parse citations from separate "Citations:" section
+ */
+function parseCitationsSection(content: string): {
   contentWithCitations: string;
   citations: Citation[];
 } {
@@ -60,6 +79,32 @@ export function parseCitationsFromText(content: string): {
   });
   
   return { contentWithCitations: mainContent, citations };
+}
+
+/**
+ * Parse inline citations [1][2] from text content
+ */
+function parseInlineCitations(content: string): {
+  contentWithCitations: string;
+  citations: Citation[];
+} {
+  // Find all citation numbers in the text
+  const citationMatches = content.match(/\[(\d+)\]/g) || [];
+  const uniqueNumbers = [...new Set(citationMatches.map(match => match.match(/\[(\d+)\]/)?.[1]).filter(Boolean))];
+  
+  if (uniqueNumbers.length === 0) {
+    return { contentWithCitations: content, citations: [] };
+  }
+  
+  // Create citations with placeholder data (since we don't have URLs in inline format)
+  const citations: Citation[] = uniqueNumbers.map(number => ({
+    number,
+    title: `Source ${number}`,
+    url: `#citation-${number}`, // Placeholder URL
+    description: `Reference ${number} from search results`
+  }));
+  
+  return { contentWithCitations: content, citations };
 }
 
 /**
