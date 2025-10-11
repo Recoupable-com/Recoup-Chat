@@ -22,6 +22,7 @@ import { parseReasoningSteps } from '@/lib/reasoning/parseReasoningSteps';
 import { StreamingShimmer } from '@/components/ui/StreamingShimmer';
 import { extractReasoningTitle } from '@/lib/reasoning/extractReasoningTitle';
 import { useDurationTracking } from '@/hooks/useDurationTracking';
+import { Response } from '@/components/response';
 import { cn } from '@/lib/utils';
 import { useState } from 'react';
 
@@ -137,21 +138,13 @@ export const EnhancedReasoning = memo(({
 });
 
 /**
- * Component to render step content with basic markdown processing
+ * Component to render step content safely using Response component
  */
 const StepContent = memo(({ content }: { content: string }) => {
-  // Basic markdown processing for step content
-  const processedContent = content
-    .replace(/\*\*(.+?)\*\*/g, '<strong class="font-semibold">$1</strong>') // Bold
-    .replace(/\*(.+?)\*/g, '<em>$1</em>') // Italic
-    .replace(/`(.+?)`/g, '<code class="bg-muted px-1 rounded text-xs">$1</code>') // Code
-    .replace(/\n/g, '<br />'); // Line breaks
-  
   return (
-    <div 
-      className="text-sm text-muted-foreground/80 leading-relaxed"
-      dangerouslySetInnerHTML={{ __html: processedContent }}
-    />
+    <div className="text-sm text-muted-foreground/80 leading-relaxed">
+      <Response>{content}</Response>
+    </div>
   );
 });
 
