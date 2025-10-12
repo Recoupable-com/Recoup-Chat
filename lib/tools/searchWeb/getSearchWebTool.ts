@@ -3,6 +3,7 @@ import { tool } from "ai";
 import { searchPerplexity, formatSearchResults } from "@/lib/perplexity/searchApi";
 import type { SearchProgress } from "./types";
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 const getSearchWebTool = (_model?: string) => {
   return tool({
     description:

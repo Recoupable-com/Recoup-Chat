@@ -67,7 +67,7 @@ async function* streamChatCompletion(
           if (data.citations && data.citations.length > 0) {
             citations.push(...data.citations);
           }
-        } catch (parseError) {
+        } catch {
           // Skip malformed JSON chunks
           continue;
         }

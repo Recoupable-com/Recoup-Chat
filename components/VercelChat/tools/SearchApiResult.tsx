@@ -1,5 +1,4 @@
 import React from "react";
-import { ExternalLink } from "lucide-react";
 
 export interface SearchApiResultType {
   content: {

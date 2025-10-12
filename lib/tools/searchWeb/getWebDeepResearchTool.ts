@@ -69,6 +69,7 @@ const getWebDeepResearchTool = (model: string = "sonar-deep-research") => {
         }
 
         // Extract metadata from final result
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
         const searchResults = finalMetadata?.searchResults || [];
         const finalCitations = finalMetadata?.citations || [];
 
