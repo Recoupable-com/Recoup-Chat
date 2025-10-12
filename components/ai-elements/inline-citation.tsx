@@ -57,6 +57,18 @@ export type InlineCitationCardTriggerProps = ComponentProps<typeof Badge> & {
   sources: string[];
 };
 
+/**
+ * Helper function to extract domain from URL
+ */
+function getDomain(url: string): string {
+  try {
+    const urlObj = new URL(url);
+    return urlObj.hostname;
+  } catch {
+    return url;
+  }
+}
+
 export const InlineCitationCardTrigger = ({
   sources,
   className,
@@ -70,7 +82,7 @@ export const InlineCitationCardTrigger = ({
     >
       {sources.length ? (
         <>
-          {new URL(sources[0]).hostname}{" "}
+          {getDomain(sources[0])}{" "}
           {sources.length > 1 && `+${sources.length - 1}`}
         </>
       ) : (
