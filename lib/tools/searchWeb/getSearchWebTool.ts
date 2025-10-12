@@ -28,6 +28,9 @@ const getSearchWebTool = (_model?: string) => {
         query,
       } satisfies SearchProgress;
 
+      // Small delay to ensure UI renders the searching state
+      await new Promise(resolve => setTimeout(resolve, 500));
+
       try {
         // Use Perplexity Search API
         const searchResponse = await searchPerplexity({

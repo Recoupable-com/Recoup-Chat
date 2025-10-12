@@ -28,27 +28,37 @@ const getDomain = (url: string): string => {
 };
 
 export const SearchWebProgress: React.FC<SearchWebProgressProps> = ({ progress }) => {
+  // Query pill component - shown in both searching and reviewing states
+  const QueryPill = () => (
+    <div className="inline-flex items-center gap-2 px-3 py-1.5 bg-gray-50 dark:bg-zinc-900 rounded-full">
+      <Search className="h-3.5 w-3.5 text-gray-400" />
+      <span className="text-sm text-gray-600 dark:text-gray-400">{progress.query}</span>
+    </div>
+  );
+
   // Searching state: Display the query being searched
   if (progress.status === 'searching') {
     return (
       <div className="space-y-2">
         <p className="text-sm text-gray-500 dark:text-gray-400">Searching</p>
         <div className="space-y-1">
-          <div className="inline-flex items-center gap-2 px-3 py-1.5 bg-gray-50 dark:bg-zinc-900 rounded-full">
-            <Search className="h-3.5 w-3.5 text-gray-400" />
-            <span className="text-sm text-gray-600 dark:text-gray-400">{progress.query}</span>
-          </div>
+          <QueryPill />
         </div>
       </div>
     );
   }
 
-  // Reviewing state: Display list of sources being reviewed
+  // Reviewing state: Display query pill AND list of sources being reviewed
   if (progress.status === 'reviewing') {
     const searchResults = progress.searchResults || [];
 
     return (
       <div className="space-y-2">
+        <p className="text-sm text-gray-500 dark:text-gray-400">Searching</p>
+        <div className="space-y-1">
+          <QueryPill />
+        </div>
+        
         <p className="text-sm text-gray-500 dark:text-gray-400">
           Reviewing sources · {searchResults.length}
         </p>
