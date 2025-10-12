@@ -3,8 +3,8 @@ import { tool } from "ai";
 import streamChatCompletion from "@/lib/perplexity/streamChatCompletion";
 import type { SearchProgress } from "./types";
 
-// Batch size for streaming updates
-const CHUNK_BATCH_SIZE = 5;
+// Batch size for streaming updates - set to 1 for immediate UI updates
+const CHUNK_BATCH_SIZE = 1;
 
 const getWebDeepResearchTool = (model: string = "sonar-deep-research") => {
   return tool({
@@ -44,6 +44,8 @@ const getWebDeepResearchTool = (model: string = "sonar-deep-research") => {
         let finalMetadata;
 
         // Manually iterate to capture both yielded values and return value
+        let hasYieldedSources = false;
+        
         while (true) {
           const { value, done } = await stream.next();
           
@@ -69,9 +71,19 @@ const getWebDeepResearchTool = (model: string = "sonar-deep-research") => {
         }
 
         // Extract metadata from final result
-        // eslint-disable-next-line @typescript-eslint/no-unused-vars
         const searchResults = finalMetadata?.searchResults || [];
         const finalCitations = finalMetadata?.citations || [];
+        
+        // If we got search results, yield a reviewing status
+        if (searchResults.length > 0 && !hasYieldedSources) {
+          hasYieldedSources = true;
+          yield {
+            status: 'reviewing' as const,
+            message: `Reviewing sources · ${searchResults.length}`,
+            query,
+            searchResults,
+          } satisfies SearchProgress;
+        }
 
         // Use the full content from metadata if available
         if (finalMetadata?.content) {

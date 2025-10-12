@@ -13,7 +13,7 @@ export type SearchProgress = {
   searchResults?: Array<{
     title: string;
     url: string;
-    snippet: string;
+    snippet?: string;
     date?: string;
     last_updated?: string;
   }>;
