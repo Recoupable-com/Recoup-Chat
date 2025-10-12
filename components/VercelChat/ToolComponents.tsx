@@ -401,6 +401,7 @@ export function getToolResultComponent(part: ToolUIPart) {
     // Check if it's a streaming progress update
     if (result && typeof result === 'object' && 'status' in result) {
       const progress = result as SearchProgress;
+      
       return (
         <div key={toolCallId}>
           <WebDeepResearchProgress progress={progress} />
