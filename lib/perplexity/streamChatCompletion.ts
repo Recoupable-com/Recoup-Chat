@@ -31,6 +31,7 @@ async function* streamChatCompletion(
   let fullContent = "";
   const searchResults: StreamedResponse["searchResults"] = [];
   const citations: string[] = [];
+  let buffer = ""; // Buffer for incomplete lines
 
   try {
     while (true) {
@@ -38,8 +39,12 @@ async function* streamChatCompletion(
 
       if (done) break;
 
-      const chunk = decoder.decode(value, { stream: true });
-      const lines = chunk.split("\n");
+      // Append new chunk to buffer
+      buffer += decoder.decode(value, { stream: true });
+      
+      // Split on newlines, but keep the last incomplete line in buffer
+      const lines = buffer.split("\n");
+      buffer = lines.pop() || ""; // Keep the last (potentially incomplete) line
 
       for (const line of lines) {
         if (!line.trim() || !line.startsWith("data: ")) continue;

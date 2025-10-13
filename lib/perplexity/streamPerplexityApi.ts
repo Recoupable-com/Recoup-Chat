@@ -12,6 +12,15 @@ const streamPerplexityApi = async (
   messages: PerplexityMessage[],
   model: string = "sonar-pro"
 ): Promise<Response> => {
+  const apiKey = process.env.PERPLEXITY_API_KEY;
+  
+  if (!apiKey) {
+    throw new Error(
+      "PERPLEXITY_API_KEY environment variable is not set. " +
+      "Please add it to your environment variables."
+    );
+  }
+
   const url = "https://api.perplexity.ai/chat/completions";
   
   const body = {
@@ -25,7 +34,7 @@ const streamPerplexityApi = async (
       method: "POST",
       headers: {
         "Content-Type": "application/json",
-        Authorization: `Bearer ${process.env.PERPLEXITY_API_KEY}`,
+        Authorization: `Bearer ${apiKey}`,
       },
       body: JSON.stringify(body),
     });
