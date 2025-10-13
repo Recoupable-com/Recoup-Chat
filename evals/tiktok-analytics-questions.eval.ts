@@ -39,7 +39,7 @@ Eval("TikTok Analytics Questions Evaluation", {
       },
     },
     {
-      input: "show me Julius' 10 highest performing TikTok posts",
+      input: "show me @iamjuliusblack's 10 highest performing TikTok posts",
       expected:
         "A ranked list of 10 TikTok posts with URLs, view counts, likes, and captions",
       metadata: {
