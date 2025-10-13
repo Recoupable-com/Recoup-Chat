@@ -1,32 +1,38 @@
-// See the Sonar API documentation for more details:
-// https://docs.perplexity.ai/api-reference/chat-completions
+/**
+ * fetchPerplexityApi.ts
+ * Non-streaming Perplexity chat completions client.
+ * Single responsibility: Make non-streaming chat completion requests to Perplexity API.
+ * 
+ * See the Sonar API documentation for more details:
+ * https://docs.perplexity.ai/api-reference/chat-completions
+ */
+
+import { getPerplexityApiKey, getPerplexityHeaders, PERPLEXITY_BASE_URL } from "./config";
+
+/**
+ * Performs a non-streaming chat completion request to Perplexity API.
+ * 
+ * @param messages - Array of message objects with role and content
+ * @param model - Perplexity model to use (default: sonar-pro)
+ * @returns Promise resolving to the Response object
+ * @throws Error if API call fails or API key is missing
+ */
 const fetchPerplexityApi = async (
   messages: Array<{ role: string; content: string }>,
   model: string = "sonar-pro"
-) => {
-  const apiKey = process.env.PERPLEXITY_API_KEY;
+): Promise<Response> => {
+  const apiKey = getPerplexityApiKey();
+  const url = `${PERPLEXITY_BASE_URL}/chat/completions`;
   
-  if (!apiKey) {
-    throw new Error(
-      "PERPLEXITY_API_KEY environment variable is not set. " +
-      "Please add it to your environment variables."
-    );
-  }
-
-  const url = new URL("https://api.perplexity.ai/chat/completions");
   const body = {
     model,
-    messages: messages,
+    messages,
   };
 
-  let response;
   try {
-    response = await fetch(url.toString(), {
+    const response = await fetch(url, {
       method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${apiKey}`,
-      },
+      headers: getPerplexityHeaders(apiKey),
       body: JSON.stringify(body),
     });
     return response;

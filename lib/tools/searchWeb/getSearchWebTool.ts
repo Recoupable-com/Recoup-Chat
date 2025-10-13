@@ -1,6 +1,7 @@
 import { z } from "zod";
 import { tool } from "ai";
-import { searchPerplexity, formatSearchResults } from "@/lib/perplexity/searchApi";
+import { searchPerplexity } from "@/lib/perplexity/searchApi";
+import { formatSearchResultsAsMarkdown } from "@/lib/perplexity/formatters";
 import type { SearchProgress } from "./types";
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -49,7 +50,7 @@ const getSearchWebTool = (_model?: string) => {
         } satisfies SearchProgress;
 
         // Format results for the AI to read
-        const formattedResults = formatSearchResults(searchResponse);
+        const formattedResults = formatSearchResultsAsMarkdown(searchResponse);
 
         // Return final result for AI model
         return {
