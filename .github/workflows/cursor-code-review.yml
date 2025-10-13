@@ -1,0 +1,72 @@
+name: Cursor Code Review
+
+on:
+  pull_request:
+    types: [opened, synchronize, reopened, ready_for_review]
+
+jobs:
+  code-review:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      pull-requests: write
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          ref: ${{ github.event.pull_request.head.sha }}
+
+      - name: Install Cursor CLI
+        run: |
+          curl https://cursor.com/install -fsS | bash
+          echo "$HOME/.cursor/bin" >> $GITHUB_PATH
+
+      - name: Configure git identity
+        run: |
+          git config user.name "Cursor Agent"
+          git config user.email "cursoragent@cursor.com"
+
+      - name: Perform automated code review
+        env:
+          CURSOR_API_KEY: ${{ secrets.CURSOR_API_KEY }}
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          MODEL: gpt-5
+        run: |
+          cursor-agent --force --model "$MODEL" --output-format=text --print 'You are operating in a GitHub Actions runner performing automated code review. The gh CLI is available and authenticated via GH_TOKEN. You may comment on pull requests.
+
+          Context:
+          - Repo: ${{ github.repository }}
+          - PR Number: ${{ github.event.pull_request.number }}
+          - PR Head SHA: ${{ github.event.pull_request.head.sha }}
+          - PR Base SHA: ${{ github.event.pull_request.base.sha }}
+
+          Goals:
+          1) Re-evaluate existing review comments and respond resolved when addressed
+          2) Review the current PR diff and flag only clear, high-severity issues
+          3) Leave very short inline comments (1-2 sentences) only on changed lines and a brief summary at the end
+
+          Procedure:
+          - Fetch existing comments: gh pr view --json comments
+          - Fetch diff: gh pr diff
+          - If a previously reported issue appears resolved by nearby changes, respond: ✅ This issue appears to be resolved by recent changes
+          - Avoid duplicates: skip if similar feedback already exists on or near the same lines
+
+          Commenting rules:
+          - Maximum of 10 inline comments total; prioritize the most critical issues
+          - One issue per comment; place exactly on the changed line
+          - Natural tone, specific and actionable; do not mention automation or high confidence
+          - Use emojis: 🚨 Critical 🔒 Security ⚡ Performance ⚠️ Logic ✅ Resolved ✨ Improvement
+
+          Coding Principles to Enforce in Reviews:
+          - YAGNI (You Are Not Gonna Need It)
+          - DRY (Do Not Repeat Yourself)
+          - KISS (Keep It Simple Stupid)
+          - SOLID (Single Responsibility Principle, Open/Closed Principle, Liskov Substitution Principle, Interface Segregation Principle, Dependency Inversion Principle)
+          - Clean Code
+
+          Submission:
+          - Submit one review containing inline comments plus a concise summary body
+          - Use only: gh pr review --comment
+          - Do NOT use: gh pr review --approve or --request-changes'
