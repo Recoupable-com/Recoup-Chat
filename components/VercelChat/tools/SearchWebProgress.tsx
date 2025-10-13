@@ -47,8 +47,7 @@ export const SearchWebProgress: React.FC<SearchWebProgressProps> = ({ progress }
           {searchResults.map((item, index) => (
             <SearchResultItem 
               key={index} 
-              result={item} 
-              index={index} 
+              result={item}
             />
           ))}
         </div>

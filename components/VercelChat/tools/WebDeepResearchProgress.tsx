@@ -61,8 +61,7 @@ export const WebDeepResearchProgress: React.FC<WebDeepResearchProgressProps> = (
           {searchResults.map((item, index) => (
             <SearchResultItem 
               key={index} 
-              result={item} 
-              index={index} 
+              result={item}
             />
           ))}
         </div>

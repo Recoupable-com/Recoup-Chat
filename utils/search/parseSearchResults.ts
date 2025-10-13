@@ -7,8 +7,9 @@
 export interface ParsedSearchResult {
   title: string;
   url: string;
-  snippet: string;
+  snippet?: string;
   date?: string;
+  last_updated?: string;
 }
 
 /**
