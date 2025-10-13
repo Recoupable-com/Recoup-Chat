@@ -47,9 +47,22 @@ export async function getComposioTools(
   try {
     // Fetch tools using Composio SDK
     // The VercelProvider automatically formats tools with execute functions
-    const tools = await composio.tools.get(userId, options);
+    // Note: The SDK requires passing EITHER toolkits OR tools, not both
+    let fetchedTools;
     
-    return tools;
+    if (options.toolkits && options.toolkits.length > 0) {
+      // Prioritize toolkits if provided
+      fetchedTools = await composio.tools.get(userId, { toolkits: options.toolkits });
+    } else if (options.tools && options.tools.length > 0) {
+      // Otherwise use specific tools
+      fetchedTools = await composio.tools.get(userId, { tools: options.tools });
+    } else {
+      // No filters provided
+      console.warn('No toolkits or tools specified for Composio');
+      return {};
+    }
+    
+    return fetchedTools;
   } catch (error) {
     console.error('Error fetching Composio tools:', error);
     return {};
