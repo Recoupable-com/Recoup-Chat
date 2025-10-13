@@ -5,7 +5,10 @@ import { generateText } from "ai";
 import { type ChatRequest } from "@/lib/chat/types";
 
 /**
- * Call the chat functions and return the full result including tool calls
+ * Call the chat functions and return the full result including tool calls from ALL steps.
+ *
+ * Note: result.toolCalls only contains calls from the LAST step. When using multi-step
+ * tool chains, we need to collect toolCalls from result.steps to capture all tool usage.
  */
 export async function callChatFunctionsWithResult(input: string) {
   const messages: UIMessage[] = [
@@ -31,6 +34,15 @@ export async function callChatFunctionsWithResult(input: string) {
   };
 
   const chatConfig = await setupChatRequest(body);
-  return await generateText(chatConfig);
-}
+  const result = await generateText(chatConfig);
 
+  // Collect tool calls from ALL steps, not just the last one
+  const allToolCalls =
+    result.steps?.flatMap((step) => step.toolCalls || []) || result.toolCalls;
+
+  // Return result with all tool calls from all steps
+  return {
+    ...result,
+    toolCalls: allToolCalls,
+  };
+}
