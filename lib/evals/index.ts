@@ -1,5 +1,3 @@
-export {
-  callChatFunctions,
-  callChatFunctionsWithResult,
-  extractTextFromResult,
-} from "./callChatFunctions";
+export { callChatFunctions } from "./callChatFunctions";
+export { callChatFunctionsWithResult } from "./callChatFunctionsWithResult";
+export { extractTextFromResult } from "./extractTextFromResult";
