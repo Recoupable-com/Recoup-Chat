@@ -17,7 +17,7 @@ interface ComposioContextType {
 const ComposioContext = createContext<ComposioContextType | undefined>(undefined);
 
 const getComposioClient = () => {
-  const apiKey = process.env.NEXT_PUBLIC_COMPOSIO_API_KEY;
+  const apiKey = process.env.COMPOSIO_API_KEY;
   
   if (!apiKey) {
     console.warn('COMPOSIO_API_KEY not found in environment variables');
