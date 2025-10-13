@@ -7,7 +7,7 @@ import { SearchProgress } from "@/lib/tools/searchWeb/types";
  * Displays the various progress states of a deep research operation
  * - searching: Shows query with elapsed time and progress indicator
  * - streaming: Displays accumulated analysis content as it streams
- * - complete: Returns null (final result handled elsewhere)
+ * - complete: Displays final research summary with citations
  */
 interface WebDeepResearchProgressProps {
   progress: SearchProgress;
@@ -156,9 +156,16 @@ export const WebDeepResearchProgress: React.FC<WebDeepResearchProgressProps> = (
     );
   }
 
-  // Complete state: Don't show anything (final result handled elsewhere)
+  // Complete state: Display final research summary with all content and citations
   if (progress.status === 'complete') {
-    return null;
+    return (
+      <div className="space-y-3">
+        <p className="text-sm text-gray-500 dark:text-gray-400">Research complete</p>
+        <div className="border border-gray-200 dark:border-zinc-800 rounded-lg p-4 bg-white dark:bg-zinc-950">
+          <Response className="w-full">{progress.accumulatedContent}</Response>
+        </div>
+      </div>
+    );
   }
 
   // Fallback for unknown status
