@@ -83,6 +83,7 @@ export const ROSTRUM_ORG_ARTIST_IDS: string[] = [
   "94c884f9-34e8-46a4-9240-cf33ebf67390", // El Michels Affair
   "8f94490f-5141-4626-a955-e22043d3e3ca", // Teammate
   "d21d6bf6-900d-4e77-b15e-6830c03d3936", // Mike Taylor
+  "9bde0bd3-6236-4403-9dae-0eeecf380fbd", // FatBeats
 ];
 
 // Supabase Private Storage Bucket
