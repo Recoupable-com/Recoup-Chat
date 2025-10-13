@@ -3,7 +3,7 @@ import { generateObject } from "ai";
 import { z } from "zod";
 
 /**
- * Custom scorer that checks if the AI actually answered the user's question
+ * Custom scorer that checks if the AI actually answered the customer's question
  * with a specific answer, or if it deflected/explained why it couldn't answer
  */
 export const QuestionAnswered = async ({
@@ -18,10 +18,10 @@ export const QuestionAnswered = async ({
   try {
     const result = await generateObject({
       model: DEFAULT_MODEL,
-      system: `You are an AI evaluation expert. Your job is to determine if an AI assistant actually answered the user's question with a specific answer, or if it deflected, explained why it couldn't answer, or gave generic suggestions without providing the requested information.
+      system: `You are an AI evaluation expert. Your job is to determine if an AI assistant actually answered the customer's question with a specific answer, or if it deflected, explained why it couldn't answer, or gave generic suggestions without providing the requested information.
 
 Instructions:
-1. Read the user's question carefully to understand what specific information they're asking for
+1. Read the customer's question carefully to understand what specific information they're asking for
 2. Analyze the AI's response to see if it provides that specific information
 3. Distinguish between:
    - ANSWERED: The AI provided the specific information requested (even if approximate or with caveats)
@@ -31,9 +31,9 @@ Instructions:
    - 1.0 = Fully answered with specific information
    - 0.5-0.9 = Partially answered or answered with significant caveats
    - 0.0-0.4 = Did not answer, deflected, or only explained why it couldn't answer`,
-      prompt: `Evaluate whether this AI response actually answered the user's question:
+      prompt: `Evaluate whether this AI response actually answered the customer's question:
 
-USER QUESTION:
+CUSTOMER QUESTION:
 ${input}
 
 AI RESPONSE:
@@ -71,7 +71,7 @@ Return your evaluation as JSON.`,
           ),
         whatWasAsked: z
           .string()
-          .describe("What specific information did the user ask for?"),
+          .describe("What specific information did the customer ask for?"),
         whatWasProvided: z
           .string()
           .describe("What information did the AI actually provide?"),
