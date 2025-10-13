@@ -59,9 +59,9 @@ jobs:
           - Natural tone, specific and actionable; do not mention automation or high confidence
           - Use emojis: 🚨 Critical 🔒 Security ⚡ Performance ⚠️ Logic ✅ Resolved ✨ Improvement
 
-          Coding Principles to Enforce in Reviews
-          - YAGNI (You Aren't Gonna Need It)
-          - DRY (Don't Repeat Yourself)
+          Coding Principles to Enforce in Reviews:
+          - YAGNI (You Are Not Gonna Need It)
+          - DRY (Do Not Repeat Yourself)
           - KISS (Keep It Simple Stupid)
           - SOLID (Single Responsibility Principle, Open/Closed Principle, Liskov Substitution Principle, Interface Segregation Principle, Dependency Inversion Principle)
           - Clean Code
