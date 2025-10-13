@@ -55,4 +55,4 @@ evals/**/*$py.class
 .vscode
 
 # supabase
-supabase/.temp
+supabase/.temp.cursor/
