@@ -5,12 +5,9 @@ import { generateText } from "ai";
 import { type ChatRequest } from "@/lib/chat/types";
 
 /**
- * Call the chat functions directly instead of making HTTP requests
- * This function encapsulates the logic for calling the chat system
- * and can be reused across different evaluations.
+ * Call the chat functions and return the full result including tool calls
  */
-export async function callChatFunctions(input: string): Promise<string> {
-  // Create the message structure expected by your chat system
+export async function callChatFunctionsWithResult(input: string) {
   const messages: UIMessage[] = [
     {
       id: "user-message",
@@ -24,7 +21,6 @@ export async function callChatFunctions(input: string): Promise<string> {
     },
   ];
 
-  // Prepare the request body matching your ChatRequest type
   const body: ChatRequest = {
     messages,
     roomId: "3779c62e-7583-40c6-a0bb-6bbac841a531",
@@ -34,24 +30,36 @@ export async function callChatFunctions(input: string): Promise<string> {
     excludeTools: [], // Don't exclude any tools - we want to test tool usage
   };
 
+  const chatConfig = await setupChatRequest(body);
+  return await generateText(chatConfig);
+}
+
+/**
+ * Extract text from a GenerateTextResult
+ */
+export function extractTextFromResult(result: Awaited<ReturnType<typeof generateText>>): string {
+  if (typeof result.text === "string") {
+    return result.text;
+  }
+
+  if (typeof result.content === "string") {
+    return result.content;
+  }
+
+  return String(result.text || result.content || "No response content");
+}
+
+/**
+ * Call the chat functions directly instead of making HTTP requests
+ * This function encapsulates the logic for calling the chat system
+ * and can be reused across different evaluations.
+ *
+ * @deprecated Use callChatFunctionsWithResult for access to tool calls
+ */
+export async function callChatFunctions(input: string): Promise<string> {
   try {
-    // Use the same functions as your API endpoint
-    const chatConfig = await setupChatRequest(body);
-    const result = await generateText(chatConfig);
-
-    // Return the text content from the result
-    // Handle different possible response formats
-    if (typeof result.text === "string") {
-      return result.text;
-    }
-
-    // Try to extract text from content if available
-    if (typeof result.content === "string") {
-      return result.content;
-    }
-
-    // Fallback - convert result to string
-    return String(result.text || result.content || "No response content");
+    const result = await callChatFunctionsWithResult(input);
+    return extractTextFromResult(result);
   } catch (error) {
     console.error("Error calling chat functions:", error);
     throw error;
