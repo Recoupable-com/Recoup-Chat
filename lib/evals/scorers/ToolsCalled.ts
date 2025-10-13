@@ -30,16 +30,23 @@ export const ToolsCalled = async ({
       )
     );
 
-    // Calculate score
+    // Calculate score based on required tools
     let score = 0;
 
-    if (requiredTools.length > 0) {
-      // Score based on percentage of required tools called
-      score = calledRequiredTools.length / requiredTools.length;
-    } else {
-      // If no required tools specified, score is 1 if any tools were called
-      score = calledTools.length > 0 ? 1 : 0;
+    if (requiredTools.length === 0) {
+      // No required tools specified - scorer not properly configured
+      return {
+        name: "tools_called",
+        score: 0,
+        metadata: {
+          error: "No required tools specified",
+          calledTools,
+        },
+      };
     }
+
+    // Score based on percentage of required tools called
+    score = calledRequiredTools.length / requiredTools.length;
 
     // Penalize for calling penalized tools
     if (calledPenalizedTools.length > 0) {
@@ -74,4 +81,3 @@ export const ToolsCalled = async ({
     };
   }
 };
-
