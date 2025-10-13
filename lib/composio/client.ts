@@ -1,3 +1,5 @@
+"use server";
+
 import { Composio } from "@composio/core";
 import { VercelProvider } from "@composio/vercel";
 
@@ -9,6 +11,9 @@ import { VercelProvider } from "@composio/vercel";
  * 
  * This function should ONLY be called from server components or API routes
  * to prevent exposing the COMPOSIO_API_KEY to the client bundle.
+ * 
+ * The "use server" directive ensures this module cannot be imported by client code,
+ * protecting the API key from being exposed in the browser bundle.
  * 
  * @returns Composio client instance or null if API key is missing
  * 

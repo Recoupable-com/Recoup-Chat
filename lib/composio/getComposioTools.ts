@@ -1,11 +1,16 @@
+"use server";
+
 import { getComposioClient } from "./client";
-import { ToolSet } from "ai";
+import type { ToolSet } from "ai";
 
 /**
  * getComposioTools()
  * 
  * Fetches Composio tools for a specific user and toolkits/apps.
  * This function should ONLY be called from server-side code (API routes, Server Actions, Server Components).
+ * 
+ * The "use server" directive ensures this module cannot be imported by client code,
+ * protecting the Composio integration and API credentials from being exposed in the browser.
  * 
  * @param userId - User identifier (email or unique ID) for authorization
  * @param options - Configuration for which tools to fetch
