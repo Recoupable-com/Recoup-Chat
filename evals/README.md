@@ -17,5 +17,4 @@ npx braintrust eval
 
 # Run specific evaluation
 npx braintrust eval evals/first-week-album-sales.eval.ts
-npx braintrust eval evals/tiktok-analytics-questions.eval.ts
 ```
