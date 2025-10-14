@@ -17,6 +17,7 @@ import {
  * - "Scrape all social profiles" - Should attempt all available scrapers
  * - "How many Instagram followers do I have?" - Should use fresh scraping data
  * - "How many followers on TikTok and X?" - Should scrape/search for real counts, not return stale 0s
+ * - "What videos on IG reels caused the spike in 'The Thrill'?" - Should scrape Instagram for song usage data
  *
  * Required Tools: search_web, web_deep_research, get_apify_scraper, scrape_instagram_profile, scrape_instagram_comments, search_twitter, get_twitter_trends
  * Penalized Tools: contact_team
@@ -74,6 +75,22 @@ Eval("Social Scraping Evaluation", {
         platform: "tiktok_and_x",
         handle: "@fatbeats",
         request_type: "follower_counts",
+        requiredTools: REQUIRED_TOOLS,
+        penalizedTools: PENALIZED_TOOLS,
+      },
+    },
+    {
+      input:
+        'What videos on IG reels over the last 24 hours caused the spike in the song "The Thrill" being used in short form content?',
+      expected:
+        "List of Instagram Reels videos that used 'The Thrill' in the last 24 hours, with view counts and engagement data from scraping",
+      metadata: {
+        artist: "Unknown",
+        platform: "instagram",
+        handle: "various",
+        request_type: "song_usage_tracking",
+        song: "The Thrill",
+        timeframe: "24_hours",
         requiredTools: REQUIRED_TOOLS,
         penalizedTools: PENALIZED_TOOLS,
       },
