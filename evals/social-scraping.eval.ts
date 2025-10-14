@@ -2,8 +2,8 @@ import { Eval } from "braintrust";
 import {
   callChatFunctionsWithResult,
   extractTextFromResult,
+  createToolsCalledScorer,
 } from "@/lib/evals";
-import { ToolsCalled } from "@/lib/evals/scorers/ToolsCalled";
 
 /**
  * Social Scraping Evaluation
@@ -99,34 +99,5 @@ Eval("Social Scraping Evaluation", {
     }
   },
 
-  scores: [
-    async (args: { output: unknown; expected?: string; input: string }) => {
-      // Extract output text and toolCalls
-      const outputText =
-        typeof args.output === "object" &&
-        args.output &&
-        "output" in args.output
-          ? (args.output.output as string)
-          : (args.output as string);
-
-      const toolCalls =
-        typeof args.output === "object" &&
-        args.output &&
-        "toolCalls" in args.output
-          ? (args.output.toolCalls as Array<{
-              toolName: string;
-              args: Record<string, unknown>;
-            }>)
-          : undefined;
-
-      return await ToolsCalled({
-        output: outputText,
-        input: args.input,
-        expected: args.expected,
-        toolCalls,
-        requiredTools: REQUIRED_TOOLS,
-        penalizedTools: PENALIZED_TOOLS,
-      });
-    },
-  ],
+  scores: [createToolsCalledScorer(REQUIRED_TOOLS, PENALIZED_TOOLS)],
 });
