@@ -40,6 +40,7 @@ import youtubeTools from "./youtube";
 import getLocalTime from "./getLocalTime";
 import catalogTools from "./catalogs";
 import filesTools from "./files";
+import browserTools from "./browser";
 
 export function getMcpTools(): ToolSet {
   const tools = {
@@ -85,6 +86,7 @@ export function getMcpTools(): ToolSet {
     ...youtubeTools,
     ...catalogTools,
     ...sora2Tools,
+    ...browserTools,
   };
 
   return tools;
