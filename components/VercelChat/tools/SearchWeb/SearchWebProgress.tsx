@@ -1,9 +1,3 @@
-/**
- * SearchWebProgress.tsx
- * Displays the various progress states of a web search operation.
- * Single responsibility: Orchestrate progress state display for web search.
- */
-
 import React from "react";
 import { Loader } from "lucide-react";
 import { Response } from "@/components/ai-elements/response";

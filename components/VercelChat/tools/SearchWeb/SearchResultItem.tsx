@@ -1,9 +1,3 @@
-/**
- * SearchResultItem.tsx
- * Displays a single search result as a clickable link with favicon and domain.
- * Used within SearchApiResult component for rendering individual results.
- */
-
 import React from "react";
 import { getDomain, getFaviconUrl, getFallbackFaviconUrl } from "@/utils/urlUtils";
 import type { ParsedSearchResult } from "@/lib/search/parseSearchResults";

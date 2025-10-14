@@ -1,9 +1,3 @@
-/**
- * WebDeepResearchProgress.tsx
- * Displays the various progress states of a deep research operation.
- * Single responsibility: Orchestrate progress state display for deep research.
- */
-
 import React from "react";
 import { Response } from "@/components/ai-elements/response";
 import { SearchProgress } from "@/lib/tools/searchWeb/types";
