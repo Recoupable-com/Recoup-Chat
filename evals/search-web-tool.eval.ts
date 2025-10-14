@@ -245,6 +245,18 @@ These innovations aim to highlight songwriters' work, improve discovery, and sup
         requires_web_search: true,
       },
     },
+    {
+      input:
+        "whats going on at spotify for artists with terms and services. Artists do not like it",
+      expected:
+        "Spotify updated its Terms of Service in 2025, which has caused controversy among artists. The main concerns arise from language in the terms that grant Spotify broad rights to use any user-uploaded content through Spotify for Artists—such as music, photos, biographies, and promotional materials—in marketing and promotional activities worldwide and royalty-free. This means Spotify can use artists' uploaded content to promote its platform without additional compensation to the artists. Some artists feel this overreaches and infringes on their control over their intellectual property.",
+      metadata: {
+        category: "platform_policy",
+        expected_tool_usage: true,
+        data_type: "current_events",
+        requires_web_search: true,
+      },
+    },
   ],
 
   task: async (input: string): Promise<string> => {
