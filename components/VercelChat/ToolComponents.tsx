@@ -84,6 +84,10 @@ import UpdateScheduledActionSkeleton from "./tools/UpdateScheduledActionSkeleton
 import { Sora2VideoSkeleton } from "./tools/sora2/Sora2VideoSkeleton";
 import { Sora2VideoResult } from "./tools/sora2/Sora2VideoResult";
 import { RetrieveVideoContentResult } from "@/lib/tools/sora2/retrieveVideoContent";
+import InsertCatalogSongsSkeleton from "./tools/catalog/InsertCatalogSongsSkeleton";
+import InsertCatalogSongsResult, {
+  InsertCatalogSongsResult as InsertCatalogSongsResultType,
+} from "./tools/catalog/InsertCatalogSongsResult";
 
 /**
  * Helper function to get the appropriate UI component for a tool call
@@ -225,6 +229,12 @@ export function getToolCallComponent(part: ToolUIPart) {
     return (
       <div key={toolCallId}>
         <Sora2VideoSkeleton />
+      </div>
+    );
+  } else if (toolName === "insert_catalog_songs") {
+    return (
+      <div key={toolCallId}>
+        <InsertCatalogSongsSkeleton />
       </div>
     );
   }
@@ -445,6 +455,14 @@ export function getToolResultComponent(part: ToolUIPart) {
     return (
       <div key={toolCallId}>
         <Sora2VideoResult result={result as RetrieveVideoContentResult} />
+      </div>
+    );
+  } else if (toolName === "insert_catalog_songs") {
+    return (
+      <div key={toolCallId}>
+        <InsertCatalogSongsResult
+          result={result as InsertCatalogSongsResultType}
+        />
       </div>
     );
   }
