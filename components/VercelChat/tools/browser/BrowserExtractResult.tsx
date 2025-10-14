@@ -111,7 +111,22 @@ function formatExtractedData(data: unknown): React.ReactNode {
     );
   }
 
-  return entries.map(([key, value]) => {
+  // Filter and prioritize important fields
+  const priorityFields = ['followerCount', 'followingCount', 'postCount', 'likesCount', 
+                          'subscribers', 'views', 'price', 'rating', 'title', 'name'];
+  
+  // Separate priority and other fields
+  const priorityEntries = entries.filter(([key]) => 
+    priorityFields.some(field => key.toLowerCase().includes(field.toLowerCase()))
+  );
+  const otherEntries = entries.filter(([key]) => 
+    !priorityFields.some(field => key.toLowerCase().includes(field.toLowerCase()))
+  );
+
+  // Show priority fields first (like follower counts)
+  const displayEntries = [...priorityEntries, ...otherEntries].slice(0, 6); // Limit to 6 fields max
+
+  return displayEntries.map(([key, value]) => {
     // Format the key to be human-readable
     const label = formatFieldName(key);
     const displayValue = formatFieldValue(value);
@@ -121,12 +136,15 @@ function formatExtractedData(data: unknown): React.ReactNode {
       return null;
     }
 
+    // Highlight numeric metrics with larger text
+    const isMetric = priorityFields.some(field => key.toLowerCase().includes(field.toLowerCase()));
+
     return (
       <div key={key} className="flex flex-col gap-1">
         <span className="text-xs font-medium text-gray-600 dark:text-gray-400">
           {label}
         </span>
-        <span className="text-sm text-gray-900 dark:text-gray-100 font-medium">
+        <span className={`${isMetric ? 'text-2xl' : 'text-sm'} text-gray-900 dark:text-gray-100 font-semibold`}>
           {displayValue}
         </span>
       </div>
