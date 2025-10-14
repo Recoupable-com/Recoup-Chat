@@ -1,9 +1,3 @@
-/**
- * SearchQueryPill.tsx
- * Displays a search query in a styled pill format with search icon.
- * Single responsibility: Render search query badge UI.
- */
-
 import React from "react";
 import { Search } from "lucide-react";
 
