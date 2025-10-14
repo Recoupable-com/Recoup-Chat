@@ -21,7 +21,7 @@ export async function withBrowser<T>(
   } catch (error) {
     try {
       await stagehand.close();
-    } catch (closeError) {
+    } catch {
       // Cleanup failed, but still throw original error
     }
     throw error;

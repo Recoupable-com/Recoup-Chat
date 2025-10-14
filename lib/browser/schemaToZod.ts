@@ -4,7 +4,7 @@ import { z } from "zod";
  * Converts a plain object schema to a Zod schema
  * Allows passing schema definitions from tool calls as simple objects
  */
-export function schemaToZod(schema: Record<string, any>): z.ZodObject<any> {
+export function schemaToZod(schema: Record<string, string>): z.ZodObject<z.ZodRawShape> {
   const shape: Record<string, z.ZodTypeAny> = {};
 
   for (const [key, type] of Object.entries(schema)) {

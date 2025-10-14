@@ -31,9 +31,13 @@ export async function POST(req: NextRequest) {
       });
     });
 
-    const actions = Array.isArray(observeResult)
+    const actionsArray = Array.isArray(observeResult)
       ? observeResult
       : [observeResult];
+
+    const actions = actionsArray.map(result => 
+      typeof result === "string" ? result : JSON.stringify(result)
+    );
 
     return NextResponse.json({
       success: true,

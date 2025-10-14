@@ -21,7 +21,6 @@ export async function initStagehand(): Promise<{
     apiKey,
     projectId,
     enableCaching: true,
-    headless: true,
   });
 
   await stagehand.init();
@@ -30,11 +29,12 @@ export async function initStagehand(): Promise<{
   let sessionUrl: string | undefined;
 
   try {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const sessionId = (context as any)._browserbaseSessionId || (context as any).sessionId;
     if (sessionId) {
       sessionUrl = `https://www.browserbase.com/sessions/${sessionId}`;
     }
-  } catch (error) {
+  } catch {
     // Session URL retrieval failed, continue without it
   }
 

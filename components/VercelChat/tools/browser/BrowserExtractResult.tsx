@@ -4,7 +4,7 @@ import Image from "next/image";
 
 export interface BrowserExtractResultType {
   success: boolean;
-  data?: any;
+  data?: unknown;
   initialScreenshotUrl?: string;
   finalScreenshotUrl?: string;
   sessionUrl?: string;
@@ -37,7 +37,7 @@ export function BrowserExtractResult({ result }: { result: BrowserExtractResultT
             </span>
           </div>
           
-          {result.data && (
+          {result.data !== undefined && (
             <pre className="text-xs bg-gray-50 dark:bg-gray-800 p-3 rounded border border-gray-200 dark:border-gray-700 overflow-x-auto max-h-96">
               <code>{JSON.stringify(result.data, null, 2)}</code>
             </pre>

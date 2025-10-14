@@ -26,7 +26,7 @@ export async function uploadScreenshot(
     const signedUrl = await createSignedUrlForKey(filename, 3600);
 
     return signedUrl;
-  } catch (error) {
+  } catch {
     return "";
   }
 }

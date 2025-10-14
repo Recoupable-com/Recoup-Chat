@@ -7,7 +7,7 @@ import { schemaToZod } from "@/lib/browser/schemaToZod";
 
 export interface BrowserExtractResult {
   success: boolean;
-  data?: any;
+  data?: unknown;
   initialScreenshotUrl?: string;
   finalScreenshotUrl?: string;
   sessionUrl?: string;

@@ -12,12 +12,10 @@ export async function captureScreenshot(
   page: Page,
   url: string
 ): Promise<string> {
-  const screenshotBase64 = await page.screenshot({ encoding: "base64" });
+  const screenshotBuffer = await page.screenshot();
+  const screenshotBase64 = screenshotBuffer.toString("base64");
   const platformName = detectPlatform(url);
-  const screenshotUrl = await uploadScreenshot(
-    screenshotBase64 as string,
-    platformName
-  );
+  const screenshotUrl = await uploadScreenshot(screenshotBase64, platformName);
 
   return screenshotUrl;
 }

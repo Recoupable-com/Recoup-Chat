@@ -15,13 +15,13 @@ export interface BrowserActResponse {
 
 export interface BrowserExtractRequest {
   url: string;
-  schema: Record<string, any>;
+  schema: Record<string, string>;
   instruction?: string;
 }
 
 export interface BrowserExtractResponse {
   success: boolean;
-  data?: any;
+  data?: unknown;
   error?: string;
 }
 
