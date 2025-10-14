@@ -18,6 +18,7 @@ import {
  * - "How many Instagram followers do I have?" - Should use fresh scraping data
  * - "How many followers on TikTok and X?" - Should scrape/search for real counts, not return stale 0s
  * - "What videos on IG reels caused the spike in 'The Thrill'?" - Should scrape Instagram for song usage data
+ * - "Fetch streaming trend and playlist-add history for 90 days" - Should use web search and Spotify tools for trend data
  *
  * Required Tools: search_web, web_deep_research, get_apify_scraper, scrape_instagram_profile, scrape_instagram_comments, search_twitter, get_twitter_trends
  * Penalized Tools: contact_team
@@ -47,7 +48,6 @@ Eval("Social Scraping Evaluation", {
       metadata: {
         artist: "Julius Black",
         platform: "all",
-        handle: "@iamjuliusblack",
         request_type: "scrape_all_profiles",
         requiredTools: REQUIRED_TOOLS,
         penalizedTools: PENALIZED_TOOLS,
@@ -60,7 +60,6 @@ Eval("Social Scraping Evaluation", {
       metadata: {
         artist: "Fat Beats",
         platform: "instagram",
-        handle: "@fatbeats",
         request_type: "follower_count",
         requiredTools: REQUIRED_TOOLS,
         penalizedTools: PENALIZED_TOOLS,
@@ -73,7 +72,6 @@ Eval("Social Scraping Evaluation", {
       metadata: {
         artist: "Fat Beats",
         platform: "tiktok_and_x",
-        handle: "@fatbeats",
         request_type: "follower_counts",
         requiredTools: REQUIRED_TOOLS,
         penalizedTools: PENALIZED_TOOLS,
@@ -87,8 +85,20 @@ Eval("Social Scraping Evaluation", {
       metadata: {
         artist: "Unknown",
         platform: "instagram",
-        handle: "various",
         request_type: "song_usage_tracking",
+        requiredTools: REQUIRED_TOOLS,
+        penalizedTools: PENALIZED_TOOLS,
+      },
+    },
+    {
+      input:
+        "Fetch streaming trend and playlist-add history for the last 90 days (shows what's actually growing).",
+      expected:
+        "Streaming trend data and playlist-add history from Spotify tools and web search",
+      metadata: {
+        artist: "Unknown",
+        platform: "spotify",
+        request_type: "streaming_trends",
         requiredTools: REQUIRED_TOOLS,
         penalizedTools: PENALIZED_TOOLS,
       },
