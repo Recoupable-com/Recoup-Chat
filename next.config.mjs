@@ -6,6 +6,18 @@ import withPWA from "next-pwa";
 const nextConfig = {
   reactStrictMode: true,
   transpilePackages: ["geist"],
+  webpack: (config, { isServer }) => {
+    if (!isServer) {
+      // Externalize server-only packages from client bundle
+      config.externals = config.externals || [];
+      config.externals.push({
+        '@browserbasehq/stagehand': 'commonjs @browserbasehq/stagehand',
+        'pino': 'commonjs pino',
+        'pino-pretty': 'commonjs pino-pretty',
+      });
+    }
+    return config;
+  },
   images: {
     domains: [
       "i.imgur.com",
