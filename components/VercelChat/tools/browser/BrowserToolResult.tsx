@@ -39,7 +39,7 @@ export function BrowserToolResult({ result }: { result: BrowserToolResultType })
 
   // Determine which type of result this is
   const isExtractResult = result.data !== undefined;
-  const isActResult = result.message !== undefined;
+  const isMessageResult = result.message !== undefined;
   
   const displayScreenshot = 
     result.finalScreenshotUrl || 
@@ -48,22 +48,30 @@ export function BrowserToolResult({ result }: { result: BrowserToolResultType })
 
   return (
     <div className="flex flex-col gap-3 max-w-4xl">
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4 border border-gray-200 dark:border-gray-700 rounded-xl p-4 bg-white dark:bg-gray-900 shadow-sm">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-6 border border-gray-200 dark:border-gray-700 rounded-xl p-6 bg-white dark:bg-gray-900 shadow-sm">
         {/* LEFT SIDE: Data/Message */}
-        <div className="flex flex-col gap-3">
-          <div className="flex items-center gap-2">
-            <div className="w-2 h-2 rounded-full bg-gray-900 dark:bg-gray-100"></div>
-            <span className="font-medium text-sm text-gray-900 dark:text-gray-100">
+        <div className="flex flex-col gap-4">
+          {/* Header */}
+          <div className="flex items-center gap-2 pb-3 border-b border-gray-200 dark:border-gray-700">
+            <div className="w-2 h-2 rounded-full bg-green-500"></div>
+            <span className="font-semibold text-sm text-gray-900 dark:text-gray-100">
               {isExtractResult ? "Data Extracted Successfully" : 
-               isActResult ? result.message || "Action completed successfully" :
+               isMessageResult ? "Page Observed Successfully" :
                "Operation completed successfully"}
             </span>
           </div>
           
           {/* Extract result: show formatted data */}
           {isExtractResult && (
-            <div className="flex flex-col gap-2">
+            <div className="flex flex-col gap-3">
               {formatExtractedData(result.data)}
+            </div>
+          )}
+
+          {/* Message result: show the message text */}
+          {isMessageResult && !isExtractResult && (
+            <div className="text-sm leading-relaxed text-gray-700 dark:text-gray-300 whitespace-pre-wrap font-mono bg-gray-50 dark:bg-gray-800 p-4 rounded-lg border border-gray-200 dark:border-gray-700 overflow-x-auto max-h-96 overflow-y-auto">
+              {result.message}
             </div>
           )}
 
@@ -73,7 +81,7 @@ export function BrowserToolResult({ result }: { result: BrowserToolResultType })
               href={result.sessionUrl}
               target="_blank"
               rel="noopener noreferrer"
-              className="text-xs text-gray-900 dark:text-gray-100 hover:underline flex items-center gap-1 mt-2"
+              className="text-sm text-blue-600 dark:text-blue-400 hover:underline flex items-center gap-1 mt-auto"
             >
               🎥 View Browser Recording
             </a>
@@ -82,11 +90,13 @@ export function BrowserToolResult({ result }: { result: BrowserToolResultType })
 
         {/* RIGHT SIDE: Screenshot */}
         {displayScreenshot && (
-          <div className="flex flex-col gap-2">
-            <span className="text-xs font-medium text-gray-600 dark:text-gray-400">
-              {result.platformName || "Browser"} Screenshot
-            </span>
-            <div className="border border-gray-200 dark:border-gray-700 rounded-lg overflow-hidden">
+          <div className="flex flex-col gap-3">
+            <div className="pb-3 border-b border-gray-200 dark:border-gray-700">
+              <span className="text-sm font-semibold text-gray-900 dark:text-gray-100">
+                {result.platformName || "Browser"} Screenshot
+              </span>
+            </div>
+            <div className="border border-gray-200 dark:border-gray-700 rounded-lg overflow-hidden shadow-sm">
               <Image
                 src={displayScreenshot}
                 alt={`${result.platformName || "Browser"} screenshot`}
@@ -118,7 +128,7 @@ function formatExtractedData(data: unknown): React.ReactNode {
   // If it's not an object, display as simple value
   if (typeof data !== 'object' || Array.isArray(data)) {
     return (
-      <div className="text-sm text-gray-900 dark:text-gray-100">
+      <div className="text-sm text-gray-700 dark:text-gray-300">
         {String(data)}
       </div>
     );
@@ -148,7 +158,7 @@ function formatExtractedData(data: unknown): React.ReactNode {
   );
 
   // Show priority fields first (like follower counts)
-  const displayEntries = [...priorityEntries, ...otherEntries].slice(0, 6); // Limit to 6 fields max
+  const displayEntries = [...priorityEntries, ...otherEntries].slice(0, 8); // Show up to 8 fields
 
   return displayEntries.map(([key, value]) => {
     // Format the key to be human-readable
@@ -160,15 +170,18 @@ function formatExtractedData(data: unknown): React.ReactNode {
       return null;
     }
 
-    // Highlight numeric metrics with larger text
+    // Check if this is a priority metric
     const isMetric = priorityFields.some(field => key.toLowerCase().includes(field.toLowerCase()));
 
     return (
-      <div key={key} className="flex flex-col gap-1">
-        <span className="text-xs font-medium text-gray-600 dark:text-gray-400">
+      <div 
+        key={key} 
+        className="flex items-baseline justify-between gap-3 py-2 border-b border-gray-100 dark:border-gray-800 last:border-0"
+      >
+        <span className="text-sm font-medium text-gray-600 dark:text-gray-400 flex-shrink-0">
           {label}
         </span>
-        <span className={`${isMetric ? 'text-2xl' : 'text-sm'} text-gray-900 dark:text-gray-100 font-semibold`}>
+        <span className={`text-sm ${isMetric ? 'font-semibold' : 'font-normal'} text-gray-900 dark:text-gray-100 text-right`}>
           {displayValue}
         </span>
       </div>

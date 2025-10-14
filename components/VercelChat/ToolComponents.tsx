@@ -276,7 +276,9 @@ export function getToolResultComponent(part: ToolUIPart) {
     );
   } else if (
     toolName === "browser_extract" || 
-    toolName === "browser_act"
+    toolName === "browser_act" ||
+    toolName === "browser_observe" ||
+    toolName === "browser_agent"
   ) {
     return (
       <div key={toolCallId}>
