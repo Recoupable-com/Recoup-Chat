@@ -20,25 +20,42 @@ export interface BrowserExtractResult {
  * Extracts structured data from web pages using schemas
  */
 const browserExtract = tool({
-  description: `Extract structured data from websites using a defined schema.
+  description: `Extract structured data from websites using AI-powered data extraction.
 
-Use this tool to scrape specific information from web pages in a structured format.
+WHEN TO USE THIS TOOL:
+✓ Extracting specific data points (follower counts, prices, titles, stats)
+✓ Public profiles and pages (Instagram, TikTok, Twitter, LinkedIn)
+✓ Product pages, listings, articles
+✓ Data that's visible without authentication
 
-The schema should be an object where keys are field names and values are types:
-- "string" for text data
-- "number" for numeric data
-- "boolean" for true/false values
-- "array" for lists
+HANDLING LOGIN WALLS:
+• Many social platforms show public data WITHOUT requiring login
+• TikTok, Instagram, Twitter profiles are publicly visible
+• The AI can "see" and extract data even if there's a login popup overlay
+• If extraction fails due to login, try browser_act to dismiss the popup first:
+  - Use browser_act with action: "close the login dialog" or "click 'Not Now'"
+  - Then retry browser_extract
 
-Example schema:
+SCHEMA FORMAT:
+The schema defines what data to extract:
 {
-  "title": "string",
-  "price": "number",
-  "inStock": "boolean",
-  "features": "array"
+  "followerCount": "string",  // Use string for formatted numbers like "1.2M"
+  "followingCount": "string",
+  "postCount": "string",
+  "bio": "string",
+  "username": "string"
 }
 
-You can optionally provide an instruction to guide the extraction.`,
+BEST PRACTICES:
+• Use string type for social metrics (handles "1.2K" format)
+• Be specific in field names (followerCount not just count)
+• Add instruction parameter for complex pages
+• Extract only the data you need (max 6 fields recommended)
+
+EXAMPLE USE CASES:
+✓ "Extract follower count from https://tiktok.com/@username"
+✓ "Get price and rating from this product page"
+✓ "Scrape article title and publish date"`,
   inputSchema: z.object({
     url: z.string().url().describe("The URL of the webpage to extract data from"),
     schema: z

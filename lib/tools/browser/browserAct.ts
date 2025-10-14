@@ -18,17 +18,39 @@ export interface BrowserActResult {
  * Executes natural language actions on web pages (e.g., click, type, scroll)
  */
 const browserAct = tool({
-  description: `Execute actions on websites using natural language commands.
-  
-Use this tool to interact with web pages by describing actions in plain English.
+  description: `Execute actions on web pages using natural language commands.
 
-Examples:
-- "click the login button"
-- "type 'hello@example.com' into the email field"
-- "scroll down to the bottom of the page"
-- "click the 'Accept Cookies' button"
+WHEN TO USE THIS TOOL:
+✓ Dismissing login popups and modals
+✓ Clicking buttons, links, or interactive elements
+✓ Scrolling, navigating within a page
+✓ Accepting cookies or dismissing overlays
+✓ BEFORE browser_extract if a popup is blocking content
 
-This tool will navigate to the URL and perform the specified action.`,
+HANDLING LOGIN WALLS & POPUPS:
+CRITICAL: Most social media sites show public data even with login popups.
+• First, try to DISMISS the login popup rather than logging in:
+  ✓ "close the login dialog"
+  ✓ "click 'Not Now'"
+  ✓ "click the X button to close the popup"
+  ✓ "dismiss the sign in modal"
+• Instagram, TikTok, Twitter often have "Continue as Guest" or close buttons
+• If you can't dismiss it, the data might still be extractable in the background
+
+COMMON ACTIONS:
+• Popup dismissal: "close the login popup", "click 'Maybe Later'"
+• Cookie consent: "click 'Accept All Cookies'"
+• Navigation: "scroll to the bottom", "click 'Load More'"
+• Forms: "click the search button", "submit the form"
+
+WORKFLOW EXAMPLE:
+1. Use browser_act: "close the login dialog"
+2. Then use browser_extract to get the data
+
+IMPORTANT NOTES:
+• Don't try to actually log in unless you have credentials
+• Public profiles are viewable without authentication
+• Dismissing popups usually reveals the underlying content`,
   inputSchema: z.object({
     url: z
       .string()
