@@ -21,6 +21,7 @@ export async function initStagehand(): Promise<{
     apiKey,
     projectId,
     enableCaching: true,
+    verbose: 0,
   });
 
   await stagehand.init();
