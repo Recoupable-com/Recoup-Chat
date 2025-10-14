@@ -1,11 +1,6 @@
 import { SearchProgress } from "@/lib/tools/searchWeb/types";
 
 /**
- * Utility functions for handling search tool progress updates
- * Single responsibility: Detect and validate search progress objects
- */
-
-/**
  * Checks if a result object is a search progress update
  * @param result - The result object from tool execution
  * @returns true if it's a progress update, false otherwise

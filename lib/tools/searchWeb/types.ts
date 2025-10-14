@@ -1,7 +1,3 @@
-/**
- * Types for search web tool streaming progress
- */
-
 export type SearchProgressStatus = 'searching' | 'reviewing' | 'streaming' | 'complete';
 
 export type SearchProgress = {

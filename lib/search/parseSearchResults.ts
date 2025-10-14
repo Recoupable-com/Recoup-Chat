@@ -1,9 +1,3 @@
-/**
- * parseSearchResults.ts
- * Utility for parsing formatted search results from markdown text into structured data.
- * Used by SearchApiResult component to transform API responses.
- */
-
 export interface ParsedSearchResult {
   title: string;
   url: string;

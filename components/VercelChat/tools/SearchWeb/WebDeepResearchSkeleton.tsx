@@ -1,11 +1,6 @@
 import React from "react";
 import { Search } from "lucide-react";
 
-/**
- * WebDeepResearchSkeleton component
- * Shows loading state for deep web research operations
- * Single responsibility: Display skeleton UI for deep research tool calls
- */
 const WebDeepResearchSkeleton: React.FC = () => {
   return (
     <div className="space-y-2">
