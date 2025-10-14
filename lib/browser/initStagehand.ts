@@ -21,14 +21,9 @@ export async function initStagehand(): Promise<{
     apiKey,
     projectId,
     enableCaching: true,
-    verbose: 0,
-    // Disable pino-pretty to avoid serverless compatibility issues
-    logger: (message: string) => {
-      // Simple console logging instead of pino
-      if (process.env.NODE_ENV === 'development') {
-        console.log('[Stagehand]', message);
-      }
-    },
+    verbose: 1,
+    logger: console.log,
+    disablePino: true, // Required for Vercel/serverless environments
   });
 
   await stagehand.init();
