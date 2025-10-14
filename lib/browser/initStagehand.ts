@@ -22,6 +22,13 @@ export async function initStagehand(): Promise<{
     projectId,
     enableCaching: true,
     verbose: 0,
+    // Disable pino-pretty to avoid serverless compatibility issues
+    logger: (message: string) => {
+      // Simple console logging instead of pino
+      if (process.env.NODE_ENV === 'development') {
+        console.log('[Stagehand]', message);
+      }
+    },
   });
 
   await stagehand.init();
