@@ -1,10 +1,4 @@
 /**
- * timeFormatting.ts
- * Utility functions for formatting time values for display.
- * Single responsibility: Convert time values to human-readable strings.
- */
-
-/**
  * Formats a duration in seconds to a human-readable string.
  * Examples:
  *   - 30 seconds -> "30 seconds"

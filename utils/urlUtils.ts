@@ -1,10 +1,4 @@
 /**
- * urlUtils.ts
- * Utility functions for URL parsing and manipulation.
- * Provides domain extraction and favicon generation for search results and other features.
- */
-
-/**
  * Extracts the domain from a URL for display purposes.
  * Removes 'www.' prefix for cleaner presentation.
  * 
