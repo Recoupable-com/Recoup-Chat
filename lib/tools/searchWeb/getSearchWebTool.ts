@@ -1,7 +1,7 @@
 import { z } from "zod";
 import { tool } from "ai";
 import { searchPerplexity } from "@/lib/perplexity/searchApi";
-import { formatSearchResultsAsMarkdown } from "@/lib/perplexity/formatters";
+import { formatSearchResultsAsMarkdown } from "@/lib/perplexity/formatSearchResultsAsMarkdown";
 import type { SearchProgress } from "./types";
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
