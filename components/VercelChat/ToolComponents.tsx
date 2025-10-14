@@ -31,7 +31,7 @@ import { Loader } from "lucide-react";
 import { getDisplayToolName } from "@/lib/tools/get-tools-name";
 import GenericSuccess from "./tools/GenericSuccess";
 import getToolInfo from "@/lib/utils/getToolsInfo";
-import { isSearchProgressUpdate } from "./utils/searchProgressUtils";
+import { isSearchProgressUpdate } from "@/lib/search/searchProgressUtils";
 import { GetSpotifyPlayButtonClickedResult } from "@/lib/supabase/getSpotifyPlayButtonClicked";
 import GetVideoGameCampaignPlaysResultComponent from "./tools/GetVideoGameCampaignPlaysResult";
 import { CommentsResult } from "@/components/Chat/comments/CommentsResult";
