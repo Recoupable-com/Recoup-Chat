@@ -1,9 +1,3 @@
-/**
- * SearchApiResult.tsx
- * Container component for displaying web search results.
- * Orchestrates parsing and rendering of search results from API responses.
- */
-
 import React from "react";
 import { parseSearchResults } from "@/lib/search/parseSearchResults";
 import SearchResultItem from "./SearchResultItem";
