@@ -6,7 +6,7 @@ import {
 } from "@/lib/evals";
 
 /**
- * Spotify Pitch Tool Usage Evaluation
+ * Spotify Tools Evaluation
  *
  * This evaluation tests whether the AI properly uses tools when asked to craft
  * Spotify-related pitches and strategies. The AI should:
@@ -21,7 +21,7 @@ import {
  *
  * Required Tools: search_web, web_deep_research, get_spotify_search, get_spotify_artist_top_tracks, get_spotify_artist_albums
  *
- * Run: npx braintrust eval evals/spotify-pitch.eval.ts
+ * Run: npx braintrust eval evals/spotify-tools.eval.ts
  */
 
 const REQUIRED_TOOLS = [
@@ -32,7 +32,7 @@ const REQUIRED_TOOLS = [
   "get_spotify_artist_albums",
 ];
 
-Eval("Spotify Pitch Tool Usage Evaluation", {
+Eval("Spotify Tools Evaluation", {
   data: () => [
     {
       input:
