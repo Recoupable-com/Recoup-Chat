@@ -11,11 +11,15 @@ export interface UploadResult {
   message: string;
 }
 
-export function useCatalogSongsFileSelect() {
+export function useCatalogSongsFileSelect(catalogId?: string) {
   const mutation = useMutation({
     mutationFn: async (file: File): Promise<UploadResult> => {
+      if (!catalogId) {
+        throw new Error("No catalog selected. Please select a catalog first.");
+      }
+
       const text = await file.text();
-      const songs = parseCsvFile(text);
+      const songs = parseCsvFile(text, catalogId);
 
       if (songs.length === 0) {
         throw new Error("No valid songs found in CSV file");

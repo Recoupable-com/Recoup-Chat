@@ -4,15 +4,18 @@ import { Button } from "@/components/ui/button";
 interface CatalogCsvUploadButtonProps {
   isUploading: boolean;
   onFileSelect: (event: React.ChangeEvent<HTMLInputElement>) => void;
+  hasCatalogId?: boolean;
 }
 
 /**
  * CSV file upload button for catalog songs
- * Accepts CSV files with catalog_id and isrc columns
+ * Accepts CSV files with isrc column (case-insensitive)
+ * catalog_id is automatically used from the selected catalog
  */
 export default function CatalogCsvUploadButton({
   isUploading,
   onFileSelect,
+  hasCatalogId = true,
 }: CatalogCsvUploadButtonProps) {
   return (
     <div className="mt-2 pt-3 border-t">
@@ -21,7 +24,7 @@ export default function CatalogCsvUploadButton({
           type="button"
           variant="outline"
           size="sm"
-          disabled={isUploading}
+          disabled={isUploading || !hasCatalogId}
           className="w-full"
           onClick={() => document.getElementById("csv-upload")?.click()}
         >
@@ -46,13 +49,21 @@ export default function CatalogCsvUploadButton({
         />
       </label>
       <p className="text-xs text-muted-foreground mt-1.5 px-1">
-        CSV must include{" "}
-        <code className="text-[10px] bg-muted px-1 py-0.5 rounded">
-          catalog_id
-        </code>{" "}
-        and{" "}
-        <code className="text-[10px] bg-muted px-1 py-0.5 rounded">isrc</code>{" "}
-        columns
+        {hasCatalogId ? (
+          <>
+            CSV must include an{" "}
+            <code className="text-[10px] bg-muted px-1 py-0.5 rounded">
+              isrc
+            </code>{" "}
+            column (case-insensitive)
+          </>
+        ) : (
+          <>
+            <span className="text-destructive">
+              No catalog selected. Please select a catalog first.
+            </span>
+          </>
+        )}
       </p>
     </div>
   );

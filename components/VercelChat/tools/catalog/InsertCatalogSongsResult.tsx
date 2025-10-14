@@ -23,8 +23,9 @@ interface InsertCatalogSongsResultProps {
 export default function InsertCatalogSongsResult({
   result,
 }: InsertCatalogSongsResultProps) {
+  const catalogId = result.songs?.[0]?.catalog_id;
   const { isUploading, uploadResult, uploadError, handleFileSelect } =
-    useCatalogSongsFileSelect();
+    useCatalogSongsFileSelect(catalogId);
 
   const displayResult = uploadResult || result;
   const hasError = !!(uploadError || (!result.success && result.error));
@@ -52,6 +53,7 @@ export default function InsertCatalogSongsResult({
       <CatalogCsvUploadButton
         isUploading={isUploading}
         onFileSelect={handleFileSelect}
+        hasCatalogId={!!catalogId}
       />
     </div>
   );
