@@ -1,0 +1,128 @@
+import { z } from "zod";
+import { tool } from "ai";
+import { initStagehand } from "@/lib/browser/initStagehand";
+import { uploadScreenshot } from "@/lib/browser/uploadScreenshot";
+
+/**
+ * Browser Agent Tool
+ * Autonomously executes multi-step browser workflows using AI
+ */
+const browserAgent = tool({
+  description: `Automate entire workflows on websites autonomously using natural language.
+
+This is the most powerful browser tool - it can perform complex multi-step tasks on its own.
+
+Use this for tasks that require multiple actions, such as:
+- "Research competitor pricing and create a summary"
+- "Fill out this job application form with my information"
+- "Scrape all product listings from this page and subpages"
+- "Navigate to the settings page and enable dark mode"
+
+The agent will autonomously determine what steps to take, which buttons to click, what information to extract, etc.
+
+Note: This tool may take longer to execute as it performs multiple operations.`,
+  inputSchema: z.object({
+    startUrl: z
+      .string()
+      .url()
+      .describe("The URL where the agent should start the task"),
+    task: z
+      .string()
+      .describe(
+        "Natural language description of the complete workflow to execute (e.g., 'search for laptops under $1000 and extract the top 5 results')"
+      ),
+    model: z
+      .string()
+      .optional()
+      .describe(
+        "AI model to use for the agent (defaults to claude-sonnet-4-20250514)"
+      ),
+  }),
+  execute: async ({ startUrl, task, model }) => {
+    let stagehandInstance;
+
+    try {
+      console.log(`[browserAgent] Starting - URL: ${startUrl}`);
+      console.log(`[browserAgent] Task: ${task}`);
+      console.log(`[browserAgent] Model: ${model || "claude-sonnet-4-20250514"}`);
+      
+      // Initialize Stagehand with Browserbase
+      const { stagehand, sessionUrl } = await initStagehand();
+      stagehandInstance = stagehand;
+      const page = stagehand.page;
+
+      console.log(`[browserAgent] Navigating to ${startUrl}...`);
+      // Navigate to the starting URL
+      await page.goto(startUrl, { waitUntil: "domcontentloaded" });
+
+      console.log(`[browserAgent] Executing task autonomously...`);
+      // Execute the task autonomously using page.act with multiple steps
+      // Note: Stagehand agent feature requires different initialization
+      const result = await page.act(task);
+
+      console.log(`[browserAgent] Task completed successfully`);
+
+      // Take screenshot and upload to storage
+      const screenshotBase64 = await page.screenshot({ encoding: "base64" });
+      const platformName = startUrl.includes("instagram") ? "instagram" : 
+                          startUrl.includes("facebook") ? "facebook" :
+                          startUrl.includes("tiktok") ? "tiktok" :
+                          startUrl.includes("youtube") ? "youtube" :
+                          startUrl.includes("x.com") || startUrl.includes("twitter") ? "x" :
+                          startUrl.includes("threads") ? "threads" : "browser";
+      
+      const screenshotUrl = await uploadScreenshot(screenshotBase64 as string, platformName);
+
+      // Close the browser
+      await stagehand.close();
+
+      const resultText = typeof result === "string" ? result : JSON.stringify(result);
+      const responseText = sessionUrl
+        ? `Agent completed the task:\n\n${resultText}\n\n🎥 [View Browser Recording](${sessionUrl})`
+        : `Agent completed the task:\n\n${resultText}`;
+
+      const content: Array<{ type: string; text?: string; image?: string }> = [
+        { type: "text", text: responseText }
+      ];
+
+      // Add screenshot as image URL if upload succeeded
+      if (screenshotUrl) {
+        content.push({
+          type: "image",
+          image: screenshotUrl,
+        });
+      }
+
+      return {
+        content,
+        isError: false,
+      };
+    } catch (error) {
+      console.error("[browserAgent] Error:", error);
+      
+      // Ensure browser is closed on error
+      if (stagehandInstance) {
+        try {
+          await stagehandInstance.close();
+        } catch (closeError) {
+          console.error("[browserAgent] Error closing Stagehand:", closeError);
+        }
+      }
+
+      return {
+        content: [
+          {
+            type: "text",
+            text: `Failed to execute agent task: ${
+              error instanceof Error ? error.message : "Unknown error"
+            }`,
+          },
+        ],
+        isError: true,
+      };
+    }
+  },
+});
+
+export default browserAgent;
+

@@ -10,6 +10,7 @@ Recoup is an AI agent platform fueling smarter song rollouts, unforgettable fan 
 
 - AI-powered chatbot
 - Real-time streaming responses
+- Browser automation tools powered by Stagehand (act, extract, observe, agent)
 - Artist Mode for roster analytics
 - User authentication with Privy
 - Integration with Supabase for data storage
@@ -58,6 +59,8 @@ This project uses various configuration files:
 - `tailwind.config.ts`: Tailwind CSS configuration
 - `tsconfig.json`: TypeScript configuration
 - `.eslintrc.json`: ESLint configuration
+
+For browser automation tools setup, see [BROWSER_TOOLS_SETUP.md](./BROWSER_TOOLS_SETUP.md).
 
 ## Evals
 

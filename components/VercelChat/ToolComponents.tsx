@@ -31,6 +31,11 @@ import { Loader } from "lucide-react";
 import { getDisplayToolName } from "@/lib/tools/get-tools-name";
 import GenericSuccess from "./tools/GenericSuccess";
 import getToolInfo from "@/lib/utils/getToolsInfo";
+import { BrowserToolSkeleton } from "./BrowserToolSkeleton";
+import { BrowserExtractResult } from "./tools/browser/BrowserExtractResult";
+import { BrowserActResult } from "./tools/browser/BrowserActResult";
+import { BrowserExtractResult as BrowserExtractResultType } from "@/lib/tools/browser/browserExtract";
+import { BrowserActResult as BrowserActResultType } from "@/lib/tools/browser/browserAct";
 import { GetSpotifyPlayButtonClickedResult } from "@/lib/supabase/getSpotifyPlayButtonClicked";
 import GetVideoGameCampaignPlaysResultComponent from "./tools/GetVideoGameCampaignPlaysResult";
 import { CommentsResult } from "@/components/Chat/comments/CommentsResult";
@@ -91,6 +96,7 @@ import { RetrieveVideoContentResult } from "@/lib/tools/sora2/retrieveVideoConte
 export function getToolCallComponent(part: ToolUIPart) {
   const { toolCallId } = part as ToolUIPart;
   const toolName = getToolName(part);
+  console.log(`[getToolCallComponent] Tool: ${toolName}`);
   const isSearchWebTool =
     toolName === "search_web" || toolName === "web_deep_research";
 
@@ -227,6 +233,24 @@ export function getToolCallComponent(part: ToolUIPart) {
         <Sora2VideoSkeleton />
       </div>
     );
+  } else if (
+    toolName === "browser_act" ||
+    toolName === "browser_extract" ||
+    toolName === "browser_observe" ||
+    toolName === "browser_agent"
+  ) {
+    // Extract URL from tool arguments if available
+    const toolPart = part as ToolUIPart & {
+      args?: { url?: string; startUrl?: string };
+    };
+    const url = toolPart.args?.url || toolPart.args?.startUrl;
+    console.log(`[ToolComponents] Browser tool detected: ${toolName}, URL: ${url}`);
+    
+    return (
+      <div key={toolCallId}>
+        <BrowserToolSkeleton toolName={toolName} url={url} />
+      </div>
+    );
   }
 
   // Default for other tools
@@ -254,6 +278,18 @@ export function getToolResultComponent(part: ToolUIPart) {
     return (
       <div key={toolCallId}>
         <ImageResult result={result as ImageGenerationResult} />
+      </div>
+    );
+  } else if (toolName === "browser_extract") {
+    return (
+      <div key={toolCallId}>
+        <BrowserExtractResult result={result as BrowserExtractResultType} />
+      </div>
+    );
+  } else if (toolName === "browser_act") {
+    return (
+      <div key={toolCallId}>
+        <BrowserActResult result={result as BrowserActResultType} />
       </div>
     );
   } else if (

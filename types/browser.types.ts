@@ -1,0 +1,50 @@
+/**
+ * Type definitions for Stagehand browser automation
+ */
+
+export interface BrowserActRequest {
+  url: string;
+  action: string;
+}
+
+export interface BrowserActResponse {
+  success: boolean;
+  message: string;
+  error?: string;
+}
+
+export interface BrowserExtractRequest {
+  url: string;
+  schema: Record<string, any>;
+  instruction?: string;
+}
+
+export interface BrowserExtractResponse {
+  success: boolean;
+  data?: any;
+  error?: string;
+}
+
+export interface BrowserObserveRequest {
+  url: string;
+  instruction?: string;
+}
+
+export interface BrowserObserveResponse {
+  success: boolean;
+  actions?: string[];
+  error?: string;
+}
+
+export interface BrowserAgentRequest {
+  startUrl: string;
+  task: string;
+  model?: string;
+}
+
+export interface BrowserAgentResponse {
+  success: boolean;
+  result?: string;
+  error?: string;
+}
+
