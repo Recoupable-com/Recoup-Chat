@@ -19,6 +19,7 @@ import {
  * - "How many followers on TikTok and X?" - Should scrape/search for real counts, not return stale 0s
  * - "What videos on IG reels caused the spike in 'The Thrill'?" - Should scrape Instagram for song usage data
  * - "Fetch streaming trend and playlist-add history for 90 days" - Should use web search and Spotify tools for trend data
+ * - "Find press/interviews/moments for Wiz Khalifa" - Should use web search to find visibility events and streaming impact
  *
  * Required Tools: search_web, web_deep_research, get_apify_scraper, scrape_instagram_profile, scrape_instagram_comments, search_twitter, get_twitter_trends
  * Penalized Tools: contact_team
@@ -99,6 +100,19 @@ Eval("Social Scraping Evaluation", {
         artist: "Unknown",
         platform: "spotify",
         request_type: "streaming_trends",
+        requiredTools: REQUIRED_TOOLS,
+        penalizedTools: PENALIZED_TOOLS,
+      },
+    },
+    {
+      input:
+        "Can you help me find strong press, interviews or moments in the last year that Wiz Khalifa was part of? Example: He did NPR's Tiny Desk in June [https://www.youtube.com/watch?v=grWRQ0cONXA]. Trying to see what big moments he had that brought him more visibility and streaming uplift",
+      expected:
+        "List of press moments, interviews, and visibility events for Wiz Khalifa from web search, with streaming impact analysis",
+      metadata: {
+        artist: "Wiz Khalifa",
+        platform: "multiple",
+        request_type: "press_moments_research",
         requiredTools: REQUIRED_TOOLS,
         penalizedTools: PENALIZED_TOOLS,
       },
