@@ -31,8 +31,8 @@ export function BrowserExtractResult({ result }: { result: BrowserExtractResultT
         {/* LEFT SIDE: Extracted Data */}
         <div className="flex flex-col gap-3">
           <div className="flex items-center gap-2">
-            <div className="w-2 h-2 rounded-full bg-green-500"></div>
-            <span className="font-medium text-sm text-green-900 dark:text-green-100">
+            <div className="w-2 h-2 rounded-full bg-gray-900 dark:bg-gray-100"></div>
+            <span className="font-medium text-sm text-gray-900 dark:text-gray-100">
               Data Extracted Successfully
             </span>
           </div>

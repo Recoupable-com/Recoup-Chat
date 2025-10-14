@@ -65,17 +65,17 @@ export function BrowserToolSkeleton({ toolName, url }: BrowserToolSkeletonProps)
             {steps.map((step, index) => (
               <div key={index} className="flex items-center gap-2">
                 {step.completed ? (
-                  <Check className="h-3 w-3 text-green-500 flex-shrink-0" />
+                  <Check className="h-3 w-3 text-gray-900 dark:text-gray-100 flex-shrink-0" />
                 ) : step.active ? (
-                  <Loader className="h-3 w-3 animate-spin text-blue-500 flex-shrink-0" />
+                  <Loader className="h-3 w-3 animate-spin text-gray-900 dark:text-gray-100 flex-shrink-0" />
                 ) : (
                   <div className="h-3 w-3 rounded-full border-2 border-gray-300 dark:border-gray-600 flex-shrink-0" />
                 )}
                 <span className={`text-xs ${
                   step.completed 
-                    ? 'text-green-600 dark:text-green-400' 
+                    ? 'text-gray-900 dark:text-gray-100' 
                     : step.active 
-                    ? 'text-blue-600 dark:text-blue-400 font-medium' 
+                    ? 'text-gray-900 dark:text-gray-100 font-medium' 
                     : 'text-gray-400 dark:text-gray-500'
                 }`}>
                   {step.label}
