@@ -38,9 +38,9 @@ export function BrowserExtractResult({ result }: { result: BrowserExtractResultT
           </div>
           
           {result.data !== undefined && (
-            <pre className="text-xs bg-gray-50 dark:bg-gray-800 p-3 rounded border border-gray-200 dark:border-gray-700 overflow-x-auto max-h-96">
-              <code>{JSON.stringify(result.data, null, 2)}</code>
-            </pre>
+            <div className="flex flex-col gap-2">
+              {formatExtractedData(result.data)}
+            </div>
           )}
 
           {/* Session Link */}
@@ -77,5 +77,109 @@ export function BrowserExtractResult({ result }: { result: BrowserExtractResultT
       </div>
     </div>
   );
+}
+
+/**
+ * Format extracted data in a human-readable way
+ */
+function formatExtractedData(data: unknown): React.ReactNode {
+  if (data === null || data === undefined) {
+    return (
+      <div className="text-sm text-gray-500 dark:text-gray-400">
+        No data extracted
+      </div>
+    );
+  }
+
+  // If it's not an object, display as simple value
+  if (typeof data !== 'object' || Array.isArray(data)) {
+    return (
+      <div className="text-sm text-gray-900 dark:text-gray-100">
+        {String(data)}
+      </div>
+    );
+  }
+
+  // Display object properties in a readable format
+  const entries = Object.entries(data as Record<string, unknown>);
+  
+  if (entries.length === 0) {
+    return (
+      <div className="text-sm text-gray-500 dark:text-gray-400">
+        No data found
+      </div>
+    );
+  }
+
+  return entries.map(([key, value]) => {
+    // Format the key to be human-readable
+    const label = formatFieldName(key);
+    const displayValue = formatFieldValue(value);
+
+    // Skip empty values
+    if (displayValue === null || displayValue === '') {
+      return null;
+    }
+
+    return (
+      <div key={key} className="flex flex-col gap-1">
+        <span className="text-xs font-medium text-gray-600 dark:text-gray-400">
+          {label}
+        </span>
+        <span className="text-sm text-gray-900 dark:text-gray-100 font-medium">
+          {displayValue}
+        </span>
+      </div>
+    );
+  });
+}
+
+/**
+ * Convert camelCase or snake_case to Title Case
+ */
+function formatFieldName(fieldName: string): string {
+  return fieldName
+    // Handle camelCase: insert space before capitals
+    .replace(/([A-Z])/g, ' $1')
+    // Handle snake_case: replace underscores with spaces
+    .replace(/_/g, ' ')
+    // Capitalize first letter of each word
+    .split(' ')
+    .map(word => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase())
+    .join(' ')
+    .trim();
+}
+
+/**
+ * Format field values to be human-readable
+ */
+function formatFieldValue(value: unknown): string | null {
+  if (value === null || value === undefined) {
+    return null;
+  }
+
+  if (typeof value === 'string') {
+    return value.trim() || null;
+  }
+
+  if (typeof value === 'number') {
+    // Format large numbers with commas
+    return value.toLocaleString();
+  }
+
+  if (typeof value === 'boolean') {
+    return value ? 'Yes' : 'No';
+  }
+
+  if (Array.isArray(value)) {
+    return value.length > 0 ? value.join(', ') : null;
+  }
+
+  if (typeof value === 'object') {
+    // For nested objects, show a simplified version
+    return JSON.stringify(value, null, 2);
+  }
+
+  return String(value);
 }
 
