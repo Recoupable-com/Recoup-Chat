@@ -10,10 +10,6 @@ export interface SearchApiResultType {
   isError: boolean;
 }
 
-/**
- * Displays search results in a formatted list with source links.
- * Handles error states and empty results gracefully.
- */
 const SearchApiResult = ({ result }: { result: SearchApiResultType }) => {
   if (result.isError) {
     return (

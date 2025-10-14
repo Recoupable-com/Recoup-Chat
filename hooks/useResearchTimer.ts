@@ -14,12 +14,6 @@ interface UseResearchTimerResult {
   activityMessages: string[];
 }
 
-/**
- * Manages elapsed time tracking and rotating activity messages for research operations.
- * 
- * @param isActive - Whether the timer should be running
- * @returns Object containing elapsed seconds, current message index, and available messages
- */
 export function useResearchTimer(isActive: boolean): UseResearchTimerResult {
   const [elapsedSeconds, setElapsedSeconds] = useState(0);
   const [messageIndex, setMessageIndex] = useState(0);

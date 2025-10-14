@@ -6,13 +6,6 @@ export interface ParsedSearchResult {
   last_updated?: string;
 }
 
-/**
- * Parses formatted search results text (markdown) into structured data objects.
- * Expects input format with markdown headers (### N.) followed by title, URL, date, and snippet.
- * 
- * @param text - Markdown-formatted search results text
- * @returns Array of parsed search result objects
- */
 export function parseSearchResults(text: string): ParsedSearchResult[] {
   const results: ParsedSearchResult[] = [];
   

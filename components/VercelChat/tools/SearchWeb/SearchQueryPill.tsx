@@ -5,10 +5,6 @@ interface SearchQueryPillProps {
   query: string;
 }
 
-/**
- * Renders a search query as a pill-shaped badge.
- * Used in SearchWebProgress and WebDeepResearchProgress.
- */
 const SearchQueryPill: React.FC<SearchQueryPillProps> = ({ query }) => {
   return (
     <div className="inline-flex items-center gap-2 px-3 py-1.5 bg-gray-50 dark:bg-zinc-900 rounded-full">

@@ -6,10 +6,6 @@ interface SearchResultItemProps {
   result: ParsedSearchResult;
 }
 
-/**
- * Renders a single search result with favicon, title, and domain.
- * Provides hover effects and opens links in a new tab.
- */
 const SearchResultItem: React.FC<SearchResultItemProps> = ({ result }) => {
   const domain = getDomain(result.url);
   const faviconUrl = getFaviconUrl(domain);
