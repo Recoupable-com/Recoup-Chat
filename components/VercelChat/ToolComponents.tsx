@@ -32,10 +32,7 @@ import { getDisplayToolName } from "@/lib/tools/get-tools-name";
 import GenericSuccess from "./tools/GenericSuccess";
 import getToolInfo from "@/lib/utils/getToolsInfo";
 import { BrowserToolSkeleton } from "./BrowserToolSkeleton";
-import { BrowserExtractResult } from "./tools/browser/BrowserExtractResult";
-import { BrowserActResult } from "./tools/browser/BrowserActResult";
-import type { BrowserExtractResult as BrowserExtractResultType } from "@/lib/tools/browser/browserExtract";
-import type { BrowserActResult as BrowserActResultType } from "@/lib/tools/browser/browserAct";
+import { BrowserToolResult, type BrowserToolResultType } from "./tools/browser/BrowserToolResult";
 import { GetSpotifyPlayButtonClickedResult } from "@/lib/supabase/getSpotifyPlayButtonClicked";
 import GetVideoGameCampaignPlaysResultComponent from "./tools/GetVideoGameCampaignPlaysResult";
 import { CommentsResult } from "@/components/Chat/comments/CommentsResult";
@@ -277,16 +274,13 @@ export function getToolResultComponent(part: ToolUIPart) {
         <ImageResult result={result as ImageGenerationResult} />
       </div>
     );
-  } else if (toolName === "browser_extract") {
+  } else if (
+    toolName === "browser_extract" || 
+    toolName === "browser_act"
+  ) {
     return (
       <div key={toolCallId}>
-        <BrowserExtractResult result={result as BrowserExtractResultType} />
-      </div>
-    );
-  } else if (toolName === "browser_act") {
-    return (
-      <div key={toolCallId}>
-        <BrowserActResult result={result as BrowserActResultType} />
+        <BrowserToolResult result={result as BrowserToolResultType} />
       </div>
     );
   } else if (

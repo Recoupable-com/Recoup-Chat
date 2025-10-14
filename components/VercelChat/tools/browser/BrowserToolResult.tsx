@@ -2,42 +2,66 @@
 
 import Image from "next/image";
 
-export interface BrowserExtractResultType {
+/**
+ * Unified result type for all browser tools
+ */
+export interface BrowserToolResultType {
   success: boolean;
+  
+  // Common fields
+  error?: string;
+  sessionUrl?: string;
+  platformName?: string;
+  
+  // For browser_extract
   data?: unknown;
   initialScreenshotUrl?: string;
   finalScreenshotUrl?: string;
-  sessionUrl?: string;
-  platformName?: string;
-  error?: string;
+  
+  // For browser_act
+  message?: string;
+  screenshotUrl?: string;
 }
 
-export function BrowserExtractResult({ result }: { result: BrowserExtractResultType }) {
+/**
+ * Single unified component for all browser tool results
+ * Handles: browser_extract, browser_act, browser_observe, browser_agent
+ */
+export function BrowserToolResult({ result }: { result: BrowserToolResultType }) {
+  // Error state
   if (!result.success) {
     return (
-      <div className="p-4 rounded-xl bg-red-50 border-l-4 border-l-red-500 text-red-600 text-sm shadow-sm max-w-md">
-        {result.error || "Failed to extract data"}
+      <div className="p-4 rounded-xl bg-gray-100 dark:bg-gray-800 border-l-4 border-l-gray-900 dark:border-l-gray-100 text-gray-900 dark:text-gray-100 text-sm shadow-sm max-w-md">
+        {result.error || "Browser operation failed"}
       </div>
     );
   }
 
-  // Use final screenshot if available, otherwise use initial
-  const displayScreenshot = result.finalScreenshotUrl || result.initialScreenshotUrl;
+  // Determine which type of result this is
+  const isExtractResult = result.data !== undefined;
+  const isActResult = result.message !== undefined;
+  
+  const displayScreenshot = 
+    result.finalScreenshotUrl || 
+    result.initialScreenshotUrl || 
+    result.screenshotUrl;
 
   return (
     <div className="flex flex-col gap-3 max-w-4xl">
-      {/* Two-column card layout */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4 border border-gray-200 dark:border-gray-700 rounded-xl p-4 bg-white dark:bg-gray-900 shadow-sm">
-        {/* LEFT SIDE: Extracted Data */}
+        {/* LEFT SIDE: Data/Message */}
         <div className="flex flex-col gap-3">
           <div className="flex items-center gap-2">
             <div className="w-2 h-2 rounded-full bg-gray-900 dark:bg-gray-100"></div>
             <span className="font-medium text-sm text-gray-900 dark:text-gray-100">
-              Data Extracted Successfully
+              {isExtractResult ? "Data Extracted Successfully" : 
+               isActResult ? result.message || "Action completed successfully" :
+               "Operation completed successfully"}
             </span>
           </div>
           
-          {result.data !== undefined && (
+          {/* Extract result: show formatted data */}
+          {isExtractResult && (
             <div className="flex flex-col gap-2">
               {formatExtractedData(result.data)}
             </div>
@@ -49,7 +73,7 @@ export function BrowserExtractResult({ result }: { result: BrowserExtractResultT
               href={result.sessionUrl}
               target="_blank"
               rel="noopener noreferrer"
-              className="text-xs text-blue-600 dark:text-blue-400 hover:underline flex items-center gap-1 mt-2"
+              className="text-xs text-gray-900 dark:text-gray-100 hover:underline flex items-center gap-1 mt-2"
             >
               🎥 View Browser Recording
             </a>
