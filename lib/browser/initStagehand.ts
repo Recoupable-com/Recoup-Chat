@@ -20,7 +20,7 @@ export async function initStagehand(): Promise<{
     env: "BROWSERBASE",
     apiKey,
     projectId,
-    enableCaching: true,
+    enableCaching: false, // Disabled for Vercel serverless (no writable cache directory)
     verbose: 1,
     logger: console.log,
     disablePino: true, // Required for Vercel/serverless environments
