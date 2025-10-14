@@ -1,25 +1,11 @@
 "use client";
 
 import { Globe, Loader } from "lucide-react";
+import { getPlatformInfo } from "@/lib/browser/detectPlatform";
 
 interface BrowserToolSkeletonProps {
   toolName: string;
   url?: string;
-}
-
-// Platform detection
-function getPlatformInfo(url?: string) {
-  if (!url) return { name: "webpage", emoji: "🌐" };
-  
-  const urlLower = url.toLowerCase();
-  if (urlLower.includes("instagram")) return { name: "instagram", emoji: "📸" };
-  if (urlLower.includes("facebook")) return { name: "facebook", emoji: "👤" };
-  if (urlLower.includes("x.com") || urlLower.includes("twitter")) return { name: "x", emoji: "✖️" };
-  if (urlLower.includes("youtube")) return { name: "youtube", emoji: "📺" };
-  if (urlLower.includes("tiktok")) return { name: "tiktok", emoji: "🎵" };
-  if (urlLower.includes("threads")) return { name: "threads", emoji: "🧵" };
-  
-  return { name: "webpage", emoji: "🌐" };
 }
 
 /**

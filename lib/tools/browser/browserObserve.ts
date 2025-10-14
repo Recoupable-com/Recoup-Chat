@@ -1,7 +1,7 @@
 import { z } from "zod";
 import { tool } from "ai";
-import { initStagehand } from "@/lib/browser/initStagehand";
-import { uploadScreenshot } from "@/lib/browser/uploadScreenshot";
+import { withBrowser } from "@/lib/browser/withBrowser";
+import { captureScreenshot } from "@/lib/browser/captureScreenshot";
 
 /**
  * Browser Observe Tool
@@ -35,84 +35,45 @@ You can provide an optional instruction to focus the observation (e.g., "find al
       ),
   }),
   execute: async ({ url, instruction }) => {
-    let stagehandInstance;
-
     try {
-      console.log(`[browserObserve] Starting - URL: ${url}`);
-      console.log(`[browserObserve] Instruction: ${instruction || "default"}`);
-      
-      // Initialize Stagehand with Browserbase
-      const { stagehand, sessionUrl } = await initStagehand();
-      stagehandInstance = stagehand;
-      const page = stagehand.page;
+      return await withBrowser(async (page, sessionUrl) => {
+        await page.goto(url, { waitUntil: "domcontentloaded" });
 
-      console.log(`[browserObserve] Navigating to ${url}...`);
-      // Navigate to the URL
-      await page.goto(url, { waitUntil: "domcontentloaded" });
-
-      console.log(`[browserObserve] Observing page...`);
-      // Observe available actions on the page
-      const observeResult = await page.observe({
-        instruction: instruction || "Find all interactive elements and actions",
-      });
-
-      console.log(`[browserObserve] Observation completed`);
-
-      // Take screenshot and upload to storage
-      const screenshotBase64 = await page.screenshot({ encoding: "base64" });
-      const platformName = url.includes("instagram") ? "instagram" : 
-                          url.includes("facebook") ? "facebook" :
-                          url.includes("tiktok") ? "tiktok" :
-                          url.includes("youtube") ? "youtube" :
-                          url.includes("x.com") || url.includes("twitter") ? "x" :
-                          url.includes("threads") ? "threads" : "browser";
-      
-      const screenshotUrl = await uploadScreenshot(screenshotBase64 as string, platformName);
-
-      // Close the browser
-      await stagehand.close();
-
-      // Format the results as an array of action descriptions
-      const actions = Array.isArray(observeResult)
-        ? observeResult
-        : [observeResult];
-
-      const actionsText = actions.length > 0
-        ? actions.join("\n- ")
-        : "No specific actions identified";
-
-      const responseText = sessionUrl
-        ? `Available actions on the page:\n- ${actionsText}\n\n🎥 [View Browser Recording](${sessionUrl})`
-        : `Available actions on the page:\n- ${actionsText}`;
-
-      const content: Array<{ type: string; text?: string; image?: string }> = [
-        { type: "text", text: responseText }
-      ];
-
-      // Add screenshot as image URL if upload succeeded
-      if (screenshotUrl) {
-        content.push({
-          type: "image",
-          image: screenshotUrl,
+        const observeResult = await page.observe({
+          instruction: instruction || "Find all interactive elements and actions",
         });
-      }
 
-      return {
-        content,
-        isError: false,
-      };
-    } catch (error) {
-      console.error("[browserObserve] Error:", error);
-      
-      // Ensure browser is closed on error
-      if (stagehandInstance) {
-        try {
-          await stagehandInstance.close();
-        } catch (closeError) {
-          console.error("[browserObserve] Error closing Stagehand:", closeError);
+        const screenshotUrl = await captureScreenshot(page, url);
+
+        const actions = Array.isArray(observeResult)
+          ? observeResult
+          : [observeResult];
+
+        const actionsText = actions.length > 0
+          ? actions.join("\n- ")
+          : "No specific actions identified";
+
+        const responseText = sessionUrl
+          ? `Available actions on the page:\n- ${actionsText}\n\n🎥 [View Browser Recording](${sessionUrl})`
+          : `Available actions on the page:\n- ${actionsText}`;
+
+        const content: Array<{ type: string; text?: string; image?: string }> = [
+          { type: "text", text: responseText }
+        ];
+
+        if (screenshotUrl) {
+          content.push({
+            type: "image",
+            image: screenshotUrl,
+          });
         }
-      }
 
+        return {
+          content,
+          isError: false,
+        };
+      });
+    } catch (error) {
       return {
         content: [
           {

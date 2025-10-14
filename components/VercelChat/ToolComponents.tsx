@@ -96,7 +96,6 @@ import { RetrieveVideoContentResult } from "@/lib/tools/sora2/retrieveVideoConte
 export function getToolCallComponent(part: ToolUIPart) {
   const { toolCallId } = part as ToolUIPart;
   const toolName = getToolName(part);
-  console.log(`[getToolCallComponent] Tool: ${toolName}`);
   const isSearchWebTool =
     toolName === "search_web" || toolName === "web_deep_research";
 
@@ -239,12 +238,10 @@ export function getToolCallComponent(part: ToolUIPart) {
     toolName === "browser_observe" ||
     toolName === "browser_agent"
   ) {
-    // Extract URL from tool arguments if available
     const toolPart = part as ToolUIPart & {
       args?: { url?: string; startUrl?: string };
     };
     const url = toolPart.args?.url || toolPart.args?.startUrl;
-    console.log(`[ToolComponents] Browser tool detected: ${toolName}, URL: ${url}`);
     
     return (
       <div key={toolCallId}>

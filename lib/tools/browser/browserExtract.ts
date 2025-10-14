@@ -1,7 +1,9 @@
 import { z } from "zod";
 import { tool } from "ai";
-import { initStagehand, schemaToZod } from "@/lib/browser/initStagehand";
-import { uploadScreenshot } from "@/lib/browser/uploadScreenshot";
+import { withBrowser } from "@/lib/browser/withBrowser";
+import { captureScreenshot } from "@/lib/browser/captureScreenshot";
+import { detectPlatform } from "@/lib/browser/detectPlatform";
+import { schemaToZod } from "@/lib/browser/schemaToZod";
 
 export interface BrowserExtractResult {
   success: boolean;
@@ -52,69 +54,30 @@ You can optionally provide an instruction to guide the extraction.`,
       ),
   }),
   execute: async ({ url, schema, instruction }) => {
-    let stagehandInstance;
-
     try {
-      console.log(`[browserExtract] Starting - URL: ${url}`);
-      console.log(`[browserExtract] Schema:`, schema);
-      
-      // Initialize Stagehand with Browserbase
-      const { stagehand, sessionUrl } = await initStagehand();
-      stagehandInstance = stagehand;
-      const page = stagehand.page;
+      return await withBrowser(async (page, sessionUrl) => {
+        await page.goto(url, { waitUntil: "domcontentloaded" });
 
-      console.log(`[browserExtract] Navigating to ${url}...`);
-      // Navigate to the URL
-      await page.goto(url, { waitUntil: "domcontentloaded" });
+        const screenshotUrl = await captureScreenshot(page, url);
+        const platformName = detectPlatform(url);
 
-      const platformName = url.includes("instagram") ? "instagram" : 
-                          url.includes("facebook") ? "facebook" :
-                          url.includes("tiktok") ? "tiktok" :
-                          url.includes("youtube") ? "youtube" :
-                          url.includes("x.com") || url.includes("twitter") ? "x" :
-                          url.includes("threads") ? "threads" : "browser";
+        const zodSchema = schemaToZod(schema);
 
-      // Take screenshot right after page load
-      console.log(`[browserExtract] Taking screenshot...`);
-      const screenshotBase64 = await page.screenshot({ encoding: "base64" });
-      const screenshotUrl = await uploadScreenshot(screenshotBase64 as string, platformName);
-      console.log(`[browserExtract] Screenshot uploaded: ${screenshotUrl}`);
+        const extractResult = await page.extract({
+          instruction: instruction || `Extract data according to the provided schema`,
+          schema: zodSchema,
+        });
 
-      // Convert the plain schema object to a Zod schema
-      const zodSchema = schemaToZod(schema);
-
-      console.log(`[browserExtract] Extracting data with instruction: ${instruction || "default"}`);
-      // Extract data using the schema
-      const extractResult = await page.extract({
-        instruction: instruction || `Extract data according to the provided schema`,
-        schema: zodSchema,
+        return {
+          success: true,
+          data: extractResult,
+          initialScreenshotUrl: screenshotUrl,
+          finalScreenshotUrl: screenshotUrl,
+          sessionUrl,
+          platformName,
+        };
       });
-
-      console.log(`[browserExtract] Extraction completed successfully`);
-
-      // Close the browser
-      await stagehand.close();
-
-      return {
-        success: true,
-        data: extractResult,
-        initialScreenshotUrl: screenshotUrl,
-        finalScreenshotUrl: screenshotUrl, // Use same screenshot
-        sessionUrl,
-        platformName,
-      };
     } catch (error) {
-      console.error("[browserExtract] Error:", error);
-      
-      // Ensure browser is closed on error
-      if (stagehandInstance) {
-        try {
-          await stagehandInstance.close();
-        } catch (closeError) {
-          console.error("[browserExtract] Error closing Stagehand:", closeError);
-        }
-      }
-
       return {
         success: false,
         error: error instanceof Error ? error.message : "Unknown error",
