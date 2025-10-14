@@ -1,9 +1,3 @@
-/**
- * searchApi.ts
- * Perplexity Search API client for web search operations.
- * Single responsibility: Perform web searches using Perplexity's /search endpoint.
- */
-
 import { getPerplexityApiKey, getPerplexityHeaders, PERPLEXITY_BASE_URL } from "./config";
 
 export interface SearchResult {
@@ -27,14 +21,6 @@ export interface SearchParams {
   search_domain_filter?: string[];
 }
 
-/**
- * Performs a web search using Perplexity's Search API.
- * Returns ranked search results with snippets.
- * 
- * @param params - Search parameters including query and optional filters
- * @returns Promise resolving to search results
- * @throws Error if API call fails or API key is missing
- */
 export async function searchPerplexity(
   params: SearchParams
 ): Promise<SearchResponse> {

@@ -1,18 +1,5 @@
-/**
- * formatters.ts
- * Data formatting utilities for Perplexity API responses.
- * Single responsibility: Transform API data into different display formats.
- */
-
 import { SearchResponse } from "./searchApi";
 
-/**
- * Formats search results into a readable markdown string for AI consumption.
- * Creates a structured format with numbered results, URLs, dates, and snippets.
- * 
- * @param response - SearchResponse from Perplexity API
- * @returns Formatted markdown string
- */
 export function formatSearchResultsAsMarkdown(response: SearchResponse): string {
   const { results } = response;
   

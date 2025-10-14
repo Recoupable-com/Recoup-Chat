@@ -1,22 +1,6 @@
-/**
- * fetchPerplexityApi.ts
- * Non-streaming Perplexity chat completions client.
- * Single responsibility: Make non-streaming chat completion requests to Perplexity API.
- * 
- * See the Sonar API documentation for more details:
- * https://docs.perplexity.ai/api-reference/chat-completions
- */
-
+// See: https://docs.perplexity.ai/api-reference/chat-completions
 import { getPerplexityApiKey, getPerplexityHeaders, PERPLEXITY_BASE_URL } from "./config";
 
-/**
- * Performs a non-streaming chat completion request to Perplexity API.
- * 
- * @param messages - Array of message objects with role and content
- * @param model - Perplexity model to use (default: sonar-pro)
- * @returns Promise resolving to the Response object
- * @throws Error if API call fails or API key is missing
- */
 const fetchPerplexityApi = async (
   messages: Array<{ role: string; content: string }>,
   model: string = "sonar-pro"

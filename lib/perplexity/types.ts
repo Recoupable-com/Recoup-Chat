@@ -1,7 +1,3 @@
-/**
- * Types for Perplexity API streaming responses
- */
-
 export interface PerplexityMessage {
   role: string;
   content: string;

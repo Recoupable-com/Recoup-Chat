@@ -5,16 +5,6 @@ import {
   StreamedResponse,
 } from "./types";
 
-/**
- * Streams chat completion from Perplexity API, yielding content chunks in real-time
- * Parses SSE (Server-Sent Events) format and yields text as it arrives
- * Collects search results and citations from final chunks
- *
- * @param messages - Array of message objects with role and content
- * @param model - Perplexity model to use (default: sonar-pro)
- * @yields Content chunks as they arrive
- * @returns Final response with all content, search results, and citations
- */
 async function* streamChatCompletion(
   messages: PerplexityMessage[],
   model: string = "sonar-pro"
@@ -31,7 +21,7 @@ async function* streamChatCompletion(
   let fullContent = "";
   const searchResults: StreamedResponse["searchResults"] = [];
   const citations: string[] = [];
-  let buffer = ""; // Buffer for incomplete lines
+  let buffer = "";
 
   try {
     while (true) {
@@ -39,41 +29,35 @@ async function* streamChatCompletion(
 
       if (done) break;
 
-      // Append new chunk to buffer
       buffer += decoder.decode(value, { stream: true });
       
-      // Split on newlines, but keep the last incomplete line in buffer
       const lines = buffer.split("\n");
-      buffer = lines.pop() || ""; // Keep the last (potentially incomplete) line
+      buffer = lines.pop() || "";
 
       for (const line of lines) {
         if (!line.trim() || !line.startsWith("data: ")) continue;
 
-        const dataStr = line.slice(6); // Remove "data: " prefix
+        const dataStr = line.slice(6);
 
         if (dataStr === "[DONE]") continue;
 
         try {
           const data: PerplexityStreamChunk = JSON.parse(dataStr);
 
-          // Extract and yield content
           const content = data.choices[0]?.delta?.content;
           if (content) {
             fullContent += content;
             yield content;
           }
 
-          // Collect search results from final chunks
           if (data.search_results && data.search_results.length > 0) {
             searchResults.push(...data.search_results);
           }
 
-          // Collect citations from final chunks
           if (data.citations && data.citations.length > 0) {
             citations.push(...data.citations);
           }
         } catch {
-          // Skip malformed JSON chunks
           continue;
         }
       }
