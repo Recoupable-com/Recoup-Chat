@@ -1,9 +1,3 @@
-/**
- * useResearchTimer.ts
- * Custom hook for managing research timer state and rotating activity messages.
- * Single responsibility: Handle timer logic for research progress displays.
- */
-
 import { useState, useEffect } from "react";
 
 const ACTIVITY_MESSAGES = [
