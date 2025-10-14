@@ -5,7 +5,7 @@
  */
 
 import React from "react";
-import { parseSearchResults } from "@/utils/search/parseSearchResults";
+import { parseSearchResults } from "@/lib/search/parseSearchResults";
 import SearchResultItem from "./SearchResultItem";
 
 export interface SearchApiResultType {
