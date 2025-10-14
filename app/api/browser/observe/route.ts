@@ -5,6 +5,8 @@ import type {
   BrowserObserveResponse,
 } from "@/types/browser.types";
 
+export const runtime = 'nodejs';
+
 /**
  * API endpoint for discovering available actions on a web page
  */

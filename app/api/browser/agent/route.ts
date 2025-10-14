@@ -5,6 +5,8 @@ import type {
   BrowserAgentResponse,
 } from "@/types/browser.types";
 
+export const runtime = 'nodejs';
+
 /**
  * API endpoint for autonomous browser automation
  */

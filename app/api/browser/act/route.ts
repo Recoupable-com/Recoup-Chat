@@ -2,6 +2,8 @@ import { type NextRequest, NextResponse } from "next/server";
 import { withBrowser } from "@/lib/browser/withBrowser";
 import type { BrowserActRequest, BrowserActResponse } from "@/types/browser.types";
 
+export const runtime = 'nodejs';
+
 /**
  * API endpoint for executing natural language actions on web pages
  */

@@ -6,6 +6,8 @@ import type {
   BrowserExtractResponse,
 } from "@/types/browser.types";
 
+export const runtime = 'nodejs';
+
 /**
  * API endpoint for extracting structured data from web pages
  */
