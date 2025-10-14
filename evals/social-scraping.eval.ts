@@ -9,6 +9,14 @@ import { ToolsCalled } from "@/lib/evals/scorers/ToolsCalled";
  * Social Scraping Evaluation
  *
  * This evaluation tests whether the AI properly handles scraping requests by:
+ * 1. Attempting scraping tools (web search, Apify, Instagram/Twitter scrapers) before giving up
+ * 2. Using fresh data from scrapes instead of relying on stale database values
+ * 3. Providing specific numbers/data from scraping results
+ *
+ * Test cases:
+ * - "Scrape all social profiles" - Should attempt all available scrapers
+ * - "How many Instagram followers do I have?" - Should use fresh scraping data
+ * - "How many followers on TikTok and X?" - Should scrape/search for real counts, not return stale 0s
  *
  * Required Tools: search_web, web_deep_research, get_apify_scraper, scrape_instagram_profile, scrape_instagram_comments, search_twitter, get_twitter_trends
  * Penalized Tools: contact_team
@@ -40,6 +48,32 @@ Eval("Social Scraping Evaluation", {
         platform: "all",
         handle: "@iamjuliusblack",
         request_type: "scrape_all_profiles",
+        requiredTools: REQUIRED_TOOLS,
+        penalizedTools: PENALIZED_TOOLS,
+      },
+    },
+    {
+      input: "How many Instagram followers do I have?",
+      expected:
+        "Specific follower count from fresh scraping (e.g., '112,545 followers')",
+      metadata: {
+        artist: "Fat Beats",
+        platform: "instagram",
+        handle: "@fatbeats",
+        request_type: "follower_count",
+        requiredTools: REQUIRED_TOOLS,
+        penalizedTools: PENALIZED_TOOLS,
+      },
+    },
+    {
+      input: "How many followers do I have on TikTok and X?",
+      expected:
+        "Specific follower counts from scraping/web search (not stale database values showing 0)",
+      metadata: {
+        artist: "Fat Beats",
+        platform: "tiktok_and_x",
+        handle: "@fatbeats",
+        request_type: "follower_counts",
         requiredTools: REQUIRED_TOOLS,
         penalizedTools: PENALIZED_TOOLS,
       },
