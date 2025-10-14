@@ -89,8 +89,6 @@ Eval("Social Scraping Evaluation", {
         platform: "instagram",
         handle: "various",
         request_type: "song_usage_tracking",
-        song: "The Thrill",
-        timeframe: "24_hours",
         requiredTools: REQUIRED_TOOLS,
         penalizedTools: PENALIZED_TOOLS,
       },
