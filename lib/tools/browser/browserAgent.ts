@@ -49,11 +49,11 @@ Note: This tool may take longer to execute as it performs multiple operations.`,
       };
 
       const agent = stagehand.agent({
-        provider: "openai",
-        model: "computer-use-preview",
+        provider: "google",
+        model: "gemini-2.5-flash-latest",
         instructions: "You are a helpful assistant that can use a web browser to complete tasks.",
         options: {
-          apiKey: process.env.OPENAI_API_KEY,
+          apiKey: process.env.GOOGLE_AI_API_KEY,
         },
       });
 
