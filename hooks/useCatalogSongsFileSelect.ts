@@ -2,10 +2,7 @@ import { useState } from "react";
 import { useMutation } from "@tanstack/react-query";
 import { parseCsvFile } from "@/lib/catalog/parseCsvFile";
 import { uploadBatchSongs } from "@/lib/catalog/uploadBatchSongs";
-import {
-  CatalogSongsResponse,
-  getCatalogSongs,
-} from "@/lib/catalog/getCatalogSongs";
+import { CatalogSongsResponse } from "@/lib/catalog/getCatalogSongs";
 
 export interface UploadResult {
   success: boolean;
@@ -34,18 +31,16 @@ export function useCatalogSongsFileSelect(catalogId?: string) {
         throw new Error("No valid songs found in CSV file");
       }
 
-      await uploadBatchSongs(songs, (current, total) => {
+      const response = await uploadBatchSongs(songs, (current, total) => {
         setUploadProgress({ current, total });
       });
-
-      const catalogSongs = await getCatalogSongs(catalogId);
 
       setUploadProgress({ current: 0, total: 0 });
 
       return {
         success: true,
-        songs: catalogSongs.songs,
-        pagination: catalogSongs.pagination,
+        songs: response.songs,
+        pagination: response.pagination,
         total_added: songs.length,
         message: `Successfully uploaded ${songs.length} song(s) from CSV`,
       };
