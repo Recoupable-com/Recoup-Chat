@@ -31,6 +31,7 @@ import { Loader } from "lucide-react";
 import { getDisplayToolName } from "@/lib/tools/get-tools-name";
 import GenericSuccess from "./tools/GenericSuccess";
 import getToolInfo from "@/lib/utils/getToolsInfo";
+import { isSearchProgressUpdate } from "@/lib/search/searchProgressUtils";
 import { GetSpotifyPlayButtonClickedResult } from "@/lib/supabase/getSpotifyPlayButtonClicked";
 import GetVideoGameCampaignPlaysResultComponent from "./tools/GetVideoGameCampaignPlaysResult";
 import { CommentsResult } from "@/components/Chat/comments/CommentsResult";
@@ -55,9 +56,13 @@ import YouTubeChannelVideosListSkeleton from "./tools/youtube/YouTubeChannelVide
 import YouTubeSetThumbnailResult from "./tools/youtube/YouTubeSetThumbnailResult";
 import YouTubeSetThumbnailSkeleton from "./tools/youtube/YouTubeSetThumbnailSkeleton";
 import type { YouTubeSetThumbnailResult as YouTubeSetThumbnailResultType } from "@/types/youtube";
-import SearchWebSkeleton from "./tools/SearchWebSkeleton";
+import SearchWebSkeleton from "./tools/SearchWeb/SearchWebSkeleton";
 import SpotifyDeepResearchSkeleton from "./tools/SpotifyDeepResearchSkeleton";
-import SearchWebResult, { SearchWebResultType } from "./tools/SearchWebResult";
+import WebDeepResearchSkeleton from "./tools/SearchWeb/WebDeepResearchSkeleton";
+import { SearchWebResultType } from "./tools/SearchWeb/SearchWebResult";
+import SearchApiResult from "./tools/SearchWeb/SearchApiResult";
+import SearchWebProgress from "./tools/SearchWeb/SearchWebProgress";
+import WebDeepResearchProgress from "./tools/SearchWeb/WebDeepResearchProgress";
 import SpotifyDeepResearchResult from "./tools/SpotifyDeepResearchResult";
 import GetArtistSocialsResult from "./tools/GetArtistSocialsResult";
 import GetArtistSocialsSkeleton from "./tools/GetArtistSocialsSkeleton";
@@ -95,8 +100,7 @@ import CatalogSongsResult, {
 export function getToolCallComponent(part: ToolUIPart) {
   const { toolCallId } = part as ToolUIPart;
   const toolName = getToolName(part);
-  const isSearchWebTool =
-    toolName === "search_web" || toolName === "web_deep_research";
+  const isSearchWebTool = toolName === "search_web";
 
   // Handle image generation tools (including nano banana variants)
   if (
@@ -169,6 +173,12 @@ export function getToolCallComponent(part: ToolUIPart) {
     return (
       <div key={toolCallId}>
         <SearchWebSkeleton />
+      </div>
+    );
+  } else if (toolName === "web_deep_research") {
+    return (
+      <div key={toolCallId}>
+        <WebDeepResearchSkeleton />
       </div>
     );
   } else if (toolName === "spotify_deep_research") {
@@ -260,8 +270,8 @@ export function getToolCallComponent(part: ToolUIPart) {
 export function getToolResultComponent(part: ToolUIPart) {
   const { toolCallId, output: result } = part as ToolUIPart;
   const toolName = getToolName(part);
-  const isSearchWebTool =
-    toolName === "search_web" || toolName === "web_deep_research";
+  const isSearchWebTool = toolName === "search_web";
+  const isDeepResearchTool = toolName === "web_deep_research";
 
   if (toolName === "generate_image") {
     return (
@@ -381,11 +391,29 @@ export function getToolResultComponent(part: ToolUIPart) {
       </div>
     );
   } else if (isSearchWebTool) {
+    if (isSearchProgressUpdate(result)) {
+      return (
+        <div key={toolCallId}>
+          <SearchWebProgress progress={result} />
+        </div>
+      );
+    }
+
     return (
       <div key={toolCallId}>
-        <SearchWebResult result={result as SearchWebResultType} />
+        <SearchApiResult result={result as SearchWebResultType} />
       </div>
     );
+  } else if (isDeepResearchTool) {
+    if (isSearchProgressUpdate(result)) {
+      return (
+        <div key={toolCallId}>
+          <WebDeepResearchProgress progress={result} />
+        </div>
+      );
+    }
+
+    return null;
   } else if (toolName === "spotify_deep_research") {
     return (
       <div key={toolCallId}>

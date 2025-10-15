@@ -1,8 +1,8 @@
-// See: https://docs.perplexity.ai/api-reference/chat-completions
+import { PerplexityMessage } from "./types";
 import { getPerplexityApiKey, getPerplexityHeaders, PERPLEXITY_BASE_URL } from "./config";
 
-const fetchPerplexityApi = async (
-  messages: Array<{ role: string; content: string }>,
+const streamPerplexityApi = async (
+  messages: PerplexityMessage[],
   model: string = "sonar-pro"
 ): Promise<Response> => {
   const apiKey = getPerplexityApiKey();
@@ -11,6 +11,7 @@ const fetchPerplexityApi = async (
   const body = {
     model,
     messages,
+    stream: true,
   };
 
   try {
@@ -19,10 +20,19 @@ const fetchPerplexityApi = async (
       headers: getPerplexityHeaders(apiKey),
       body: JSON.stringify(body),
     });
+
+    if (!response.ok) {
+      const errorText = await response.text();
+      throw new Error(
+        `Perplexity API error: ${response.status} ${response.statusText}\n${errorText}`
+      );
+    }
+
     return response;
   } catch (error) {
     throw new Error(`Network error while calling Perplexity API: ${error}`);
   }
 };
 
-export default fetchPerplexityApi;
+export default streamPerplexityApi;
+

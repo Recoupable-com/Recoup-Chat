@@ -1,5 +1,5 @@
-import getSearchWebTool from "./getSearchWebTool";
+import getWebDeepResearchTool from "./getWebDeepResearchTool";
 
-const webDeepResearch = getSearchWebTool("sonar-deep-research");
+const webDeepResearch = getWebDeepResearchTool("sonar-deep-research");
 
 export default webDeepResearch;
