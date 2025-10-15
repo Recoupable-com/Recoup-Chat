@@ -4,8 +4,7 @@ import { searchPerplexity } from "@/lib/perplexity/searchApi";
 import { formatSearchResultsAsMarkdown } from "@/lib/perplexity/formatSearchResultsAsMarkdown";
 import type { SearchProgress } from "./types";
 
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-const getSearchWebTool = (_model?: string) => {
+const getSearchWebTool = () => {
   return tool({
     description:
       "DEFAULT TOOL: Use this tool FIRST for any information you're unsure about. " +

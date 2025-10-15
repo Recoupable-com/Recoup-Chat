@@ -1,5 +1,5 @@
 import React from "react";
-import { getDomain, getFaviconUrl, getFallbackFaviconUrl } from "@/utils/urlUtils";
+import { getDomain, getFaviconUrl, getFallbackFaviconUrl } from "@/lib/search/urlUtils";
 import type { ParsedSearchResult } from "@/lib/search/parseSearchResults";
 
 interface SearchResultItemProps {

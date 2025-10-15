@@ -2,7 +2,7 @@ import React from "react";
 import { Response } from "@/components/ai-elements/response";
 import { SearchProgress } from "@/lib/tools/searchWeb/types";
 import { useResearchTimer } from "@/hooks/useResearchTimer";
-import { formatTimeRemaining, calculateProgressPercent } from "@/utils/timeFormatting";
+import { formatTimeRemaining, calculateProgressPercent } from "@/lib/search/timeFormatting";
 import SearchResultItem from "./SearchResultItem";
 
 interface WebDeepResearchProgressProps {
