@@ -3,7 +3,7 @@ import { Tool, generateObject } from "ai";
 import { getCatalogSongs } from "@/lib/catalog/getCatalogSongs";
 import { DEFAULT_MODEL } from "@/lib/consts";
 
-const BATCH_SIZE = 500;
+const BATCH_SIZE = 100;
 
 const getCatalogSongsTool: Tool = {
   description: `CRITICAL: Use this tool to find ACTUAL SONGS from the available catalog for any playlist or music recommendation request.
