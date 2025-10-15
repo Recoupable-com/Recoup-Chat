@@ -21,7 +21,7 @@ export default function InsertCatalogSongsSummary({
       <div className="flex items-center gap-4">
         <div>
           <div className="text-lg font-semibold">{totalAdded}</div>
-          <div className="text-xs text-muted-foreground">Songs Added</div>
+          <div className="text-xs text-muted-foreground">Songs Processed</div>
         </div>
         {pagination && (
           <div>
