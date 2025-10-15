@@ -29,22 +29,18 @@ const uploadInBatches = async (
     batches.push(songs.slice(i, i + BATCH_SIZE));
   }
 
-  console.log(
-    `SWEETS UPLOADING ${songs.length} songs in ${batches.length} batch(es)`
-  );
-
   for (let i = 0; i < batches.length; i++) {
     const batch = batches[i];
-    console.log(
-      `SWEETS UPLOADING BATCH ${i + 1}/${batches.length} (${batch.length} songs)`
-    );
     onProgress?.(i + 1, batches.length);
     await postCatalogSongs(batch);
   }
 };
 
 export function useCatalogSongsFileSelect(catalogId?: string) {
-  const [uploadProgress, setUploadProgress] = useState({ current: 0, total: 0 });
+  const [uploadProgress, setUploadProgress] = useState({
+    current: 0,
+    total: 0,
+  });
 
   const mutation = useMutation({
     mutationFn: async (file: File): Promise<UploadResult> => {
@@ -54,7 +50,6 @@ export function useCatalogSongsFileSelect(catalogId?: string) {
 
       const text = await file.text();
       const songs = parseCsvFile(text, catalogId);
-      console.log("SWEETS SONGS: ", songs);
 
       if (songs.length === 0) {
         throw new Error("No valid songs found in CSV file");
@@ -65,7 +60,6 @@ export function useCatalogSongsFileSelect(catalogId?: string) {
       });
 
       const catalogSongs = await getCatalogSongs(catalogId);
-      console.log("SWEETS CATALOG SONGS: ", catalogSongs);
 
       setUploadProgress({ current: 0, total: 0 });
 
