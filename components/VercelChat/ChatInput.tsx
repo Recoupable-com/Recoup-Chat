@@ -83,9 +83,7 @@ export function ChatInput({
           />
           <PromptInputToolbar>
             <PromptInputTools>
-              <PromptInputButton className="hover:scale-105 active:scale-95 transition-all">
-                <PureAttachmentsButton />
-              </PromptInputButton>
+              <PureAttachmentsButton />
               {/* YouTube connect button removed from ChatInput UI intentionally; preserved for future reuse */}
               <ModelSelect />
               
