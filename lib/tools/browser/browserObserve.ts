@@ -72,7 +72,7 @@ This tool handles login modals automatically - just give it a URL and it will ge
   }),
   execute: async ({ url, instruction }) => {
     try {
-      return await withBrowser(async (page, sessionUrl) => {
+      return await withBrowser(async (page, liveViewUrl, sessionUrl) => {
         // Convert to mobile URL if it's Instagram (less aggressive rate limiting)
         let targetUrl = url;
         if (url.includes('instagram.com') && !url.includes('https://www.instagram.com')) {

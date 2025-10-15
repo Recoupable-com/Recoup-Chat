@@ -70,7 +70,7 @@ EXAMPLE USE CASES:
     try {
       console.log('[browser_extract] Starting extraction:', { url, schema, instruction });
       
-      return await withBrowser(async (page, sessionUrl) => {
+      return await withBrowser(async (page, liveViewUrl, sessionUrl) => {
         console.log('[browser_extract] Browser initialized, navigating to:', url);
         await page.goto(url, { waitUntil: "domcontentloaded" });
 

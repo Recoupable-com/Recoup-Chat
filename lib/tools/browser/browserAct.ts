@@ -60,7 +60,7 @@ IMPORTANT NOTES:
   }),
   execute: async ({ url, action }) => {
     try {
-      return await withBrowser(async (page, sessionUrl) => {
+      return await withBrowser(async (page, liveViewUrl, sessionUrl) => {
         await page.goto(url, { waitUntil: "domcontentloaded" });
         await page.act(action);
 
