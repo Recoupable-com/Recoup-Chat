@@ -23,6 +23,7 @@
     "@fal-ai/client": "^1.6.2",
     "@farcaster/frame-sdk": "^0.0.44",
     "@farcaster/frame-wagmi-connector": "^0.0.37",
+    "@google/genai": "^1.24.0",
     "@hookform/resolvers": "^3.9.1",
     "@privy-io/react-auth": "^1.88.4",
     "@radix-ui/react-alert-dialog": "^1.1.15",

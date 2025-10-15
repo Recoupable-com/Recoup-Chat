@@ -58,7 +58,8 @@ Note: This tool may take longer to execute as it performs multiple operations.`,
 
       yield {
         status: 'navigating',
-        message: `Navigating to ${startUrl}...`,
+        message: `Navigating to ${startUrl}...\n\n🎥 **WATCH LIVE:** ${liveViewUrl || sessionUrl}`,
+        liveViewUrl,
         sessionUrl,
       };
 
@@ -66,7 +67,8 @@ Note: This tool may take longer to execute as it performs multiple operations.`,
 
       yield {
         status: 'executing',
-        message: `🤖 Agent is working autonomously...\n\n**Task:** ${task}\n\n💡 **Tip:** Click the live link above to watch the AI control the browser in real-time!`,
+        message: `🤖 Agent is working autonomously...\n\n**Task:** ${task}\n\n🎥 **WATCH LIVE:** ${liveViewUrl || sessionUrl}\n\n💡 Watch the AI click, type, and navigate the browser above!`,
+        liveViewUrl,
         sessionUrl,
       };
 

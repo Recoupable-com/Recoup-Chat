@@ -3,6 +3,8 @@ import { Stagehand } from "@browserbasehq/stagehand";
 export async function initStagehand(): Promise<{
   stagehand: Stagehand;
   sessionUrl?: string;
+  liveViewUrl?: string;
+  debugUrl?: string;
 }> {
   const apiKey = process.env.BROWSERBASE_API_KEY;
   const projectId = process.env.BROWSERBASE_PROJECT_ID;
@@ -17,27 +19,19 @@ export async function initStagehand(): Promise<{
     env: "BROWSERBASE",
     apiKey,
     projectId,
-    enableCaching: false, // Disabled for Vercel serverless (no writable cache directory)
+    enableCaching: false,
     verbose: 1,
     logger: console.log,
-    disablePino: true, // Required for Vercel/serverless environments
+    disablePino: true,
   });
 
-  await stagehand.init();
+  const initResult = await stagehand.init();
 
-  const context = stagehand.context;
-  let sessionUrl: string | undefined;
-
-  try {
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const sessionId = (context as any)._browserbaseSessionId || (context as any).sessionId;
-    if (sessionId) {
-      sessionUrl = `https://www.browserbase.com/sessions/${sessionId}`;
-    }
-  } catch {
-    // Session URL retrieval failed, continue without it
-  }
-
-  return { stagehand, sessionUrl };
+  return {
+    stagehand,
+    sessionUrl: initResult.sessionUrl,
+    liveViewUrl: initResult.debugUrl,
+    debugUrl: initResult.debugUrl,
+  };
 }
 
