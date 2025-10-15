@@ -1,5 +1,5 @@
 import { getCatalogSongs, type CatalogSong } from "./getCatalogSongs";
-import { analyzeCatalogBatch } from "./analyzeCatalogBatch";
+import { refineResults } from "./refineResults";
 
 const BATCH_SIZE = 100;
 
@@ -25,22 +25,19 @@ export async function analyzeFullCatalog({
   const totalPages = firstPage.pagination.total_pages;
   const totalSongs = firstPage.pagination.total_count;
 
-  // Create array of page numbers to fetch
+  // Fetch all pages in parallel
   const pageNumbers = Array.from({ length: totalPages }, (_, i) => i + 1);
+  const pagePromises = pageNumbers.map(async (pageNum) =>
+    pageNum === 1
+      ? firstPage.songs
+      : (await getCatalogSongs(catalogId, BATCH_SIZE, pageNum)).songs
+  );
 
-  // Process all pages in parallel
-  const batchPromises = pageNumbers.map(async (pageNum) => {
-    const pageData =
-      pageNum === 1
-        ? firstPage
-        : await getCatalogSongs(catalogId, BATCH_SIZE, pageNum);
+  const allPages = await Promise.all(pagePromises);
+  const allSongs = allPages.flat();
 
-    return analyzeCatalogBatch(pageData.songs, criteria);
-  });
-
-  // Wait for all batches to complete
-  const batchResults = await Promise.all(batchPromises);
-  const results = batchResults.flat();
+  // Recursively filter and refine until results are under MAX_RESULTS
+  const results = await refineResults(allSongs, criteria);
 
   return {
     results,
