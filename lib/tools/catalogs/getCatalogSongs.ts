@@ -1,7 +1,6 @@
 import { z } from "zod";
 import { Tool } from "ai";
 import { analyzeFullCatalog } from "@/lib/catalog/analyzeFullCatalog";
-import type { CatalogSong } from "@/lib/catalog/getCatalogSongs";
 
 const getCatalogSongsTool: Tool = {
   description: `CRITICAL: Use this tool to find ACTUAL SONGS from the available catalog for any playlist or music recommendation request.
@@ -39,8 +38,6 @@ const getCatalogSongsTool: Tool = {
       const { results: selectedSongs, totalSongs } = await analyzeFullCatalog({
         catalogId: catalog_id,
         criteria,
-        filterSongs: (songs: CatalogSong[], selectedIsrcs: string[]) =>
-          songs.filter((song) => selectedIsrcs.includes(song.isrc)),
       });
 
       return {
