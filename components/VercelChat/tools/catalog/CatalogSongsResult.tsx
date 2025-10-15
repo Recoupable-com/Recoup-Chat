@@ -8,7 +8,7 @@ import InsertCatalogSongsList from "./InsertCatalogSongsList";
 import InsertCatalogSongsSummary from "./InsertCatalogSongsSummary";
 import InsertCatalogSongsStatus from "./InsertCatalogSongsStatus";
 
-export interface InsertCatalogSongsResult {
+export interface CatalogSongsResult {
   success: boolean;
   songs?: CatalogSongsResponse["songs"];
   pagination?: CatalogSongsResponse["pagination"];
@@ -17,13 +17,13 @@ export interface InsertCatalogSongsResult {
   error?: string;
 }
 
-interface InsertCatalogSongsResultProps {
-  result: InsertCatalogSongsResult;
+interface CatalogSongsResultProps {
+  result: CatalogSongsResult;
 }
 
-export default function InsertCatalogSongsResult({
+export default function CatalogSongsResult({
   result,
-}: InsertCatalogSongsResultProps) {
+}: CatalogSongsResultProps) {
   const catalogId = result.songs?.[0]?.catalog_id;
   const {
     isUploading,
