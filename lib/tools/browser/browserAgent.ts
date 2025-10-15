@@ -48,11 +48,11 @@ Note: This tool may take longer to execute as it performs multiple operations.`,
       };
 
       const agent = stagehand.agent({
-        provider: "anthropic",
-        model: "claude-sonnet-4-20250514",
+        provider: "openai",
+        model: "computer-use-preview",
         instructions: "You are a helpful assistant that can use a web browser to complete tasks.",
         options: {
-          apiKey: process.env.ANTHROPIC_API_KEY,
+          apiKey: process.env.OPENAI_API_KEY,
         },
       });
 
