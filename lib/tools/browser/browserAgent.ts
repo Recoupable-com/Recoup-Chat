@@ -104,19 +104,29 @@ Note: This tool may take longer to execute as it performs multiple operations.`,
         isError: false,
       };
     } catch (error) {
+      console.error('[browser_agent] EXECUTION FAILED');
+      console.error('[browser_agent] Error:', error);
+      console.error('[browser_agent] Error message:', error instanceof Error ? error.message : 'Unknown');
+      console.error('[browser_agent] Error stack:', error instanceof Error ? error.stack : 'No stack');
+      console.error('[browser_agent] Error details:', JSON.stringify(error, null, 2));
+      
       try {
         await stagehand.close();
-      } catch {
-        // Cleanup failed
+        console.log('[browser_agent] Stagehand closed after error');
+      } catch (closeError) {
+        console.error('[browser_agent] Failed to close Stagehand:', closeError);
       }
+
+      const errorMessage = error instanceof Error ? error.message : "Unknown error";
+      const errorDetails = error instanceof Error && (error as any).cause 
+        ? ` | Cause: ${JSON.stringify((error as any).cause)}` 
+        : '';
 
       return {
         content: [
           {
             type: "text",
-            text: `Failed to execute agent task: ${
-              error instanceof Error ? error.message : "Unknown error"
-            }`,
+            text: `❌ Browser agent failed: ${errorMessage}${errorDetails}\n\nCheck server logs for detailed error information.`,
           },
         ],
         isError: true,
