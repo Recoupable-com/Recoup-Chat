@@ -4,9 +4,6 @@ import { withBrowser } from "@/lib/browser/withBrowser";
 import { captureScreenshot } from "@/lib/browser/captureScreenshot";
 import { detectPlatform } from "@/lib/browser/detectPlatform";
 
-/**
- * Result type for browser_observe tool
- */
 export interface BrowserObserveResult {
   success: boolean;
   message?: string;
@@ -16,10 +13,6 @@ export interface BrowserObserveResult {
   error?: string;
 }
 
-/**
- * Browser Observe Tool
- * Discovers available actions and interactive elements on web pages
- */
 const browserObserve = tool({
   description: `Observe and VIEW web pages like a human - automatically dismisses login modals and extracts all visible content.
 

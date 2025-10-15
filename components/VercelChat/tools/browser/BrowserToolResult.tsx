@@ -2,9 +2,6 @@
 
 import Image from "next/image";
 
-/**
- * Unified result type for all browser tools
- */
 export interface BrowserToolResultType {
   success: boolean;
   
@@ -23,10 +20,6 @@ export interface BrowserToolResultType {
   screenshotUrl?: string;
 }
 
-/**
- * Single unified component for all browser tool results
- * Handles: browser_extract, browser_act, browser_observe, browser_agent
- */
 export function BrowserToolResult({ result }: { result: BrowserToolResultType }) {
   // Error state
   if (!result.success) {
@@ -113,9 +106,6 @@ export function BrowserToolResult({ result }: { result: BrowserToolResultType })
   );
 }
 
-/**
- * Format extracted data in a human-readable way
- */
 function formatExtractedData(data: unknown): React.ReactNode {
   if (data === null || data === undefined) {
     return (
@@ -189,9 +179,6 @@ function formatExtractedData(data: unknown): React.ReactNode {
   });
 }
 
-/**
- * Convert camelCase or snake_case to Title Case
- */
 function formatFieldName(fieldName: string): string {
   return fieldName
     // Handle camelCase: insert space before capitals
@@ -205,9 +192,6 @@ function formatFieldName(fieldName: string): string {
     .trim();
 }
 
-/**
- * Format field values to be human-readable
- */
 function formatFieldValue(value: unknown): string | null {
   if (value === null || value === undefined) {
     return null;

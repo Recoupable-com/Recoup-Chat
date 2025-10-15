@@ -7,9 +7,6 @@ import type {
 
 export const runtime = 'nodejs';
 
-/**
- * API endpoint for autonomous browser automation
- */
 export async function POST(req: NextRequest) {
   try {
     const body: BrowserAgentRequest = await req.json();

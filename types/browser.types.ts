@@ -1,7 +1,3 @@
-/**
- * Type definitions for Stagehand browser automation
- */
-
 export interface BrowserActRequest {
   url: string;
   action: string;

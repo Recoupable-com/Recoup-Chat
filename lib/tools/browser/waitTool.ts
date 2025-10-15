@@ -1,10 +1,6 @@
 import { z } from "zod";
 import { tool } from "ai";
 
-/**
- * Wait/Delay Tool
- * Adds delays between browser operations to avoid rate limiting
- */
 const waitTool = tool({
   description: `Wait for a specified number of seconds before continuing.
 

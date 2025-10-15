@@ -8,9 +8,6 @@ import type {
 
 export const runtime = 'nodejs';
 
-/**
- * API endpoint for extracting structured data from web pages
- */
 export async function POST(req: NextRequest) {
   try {
     const body: BrowserExtractRequest = await req.json();

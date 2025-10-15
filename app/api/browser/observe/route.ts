@@ -7,9 +7,6 @@ import type {
 
 export const runtime = 'nodejs';
 
-/**
- * API endpoint for discovering available actions on a web page
- */
 export async function POST(req: NextRequest) {
   try {
     const body: BrowserObserveRequest = await req.json();

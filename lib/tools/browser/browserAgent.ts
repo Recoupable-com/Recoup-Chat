@@ -3,10 +3,6 @@ import { tool } from "ai";
 import { withBrowser } from "@/lib/browser/withBrowser";
 import { captureScreenshot } from "@/lib/browser/captureScreenshot";
 
-/**
- * Browser Agent Tool
- * Autonomously executes multi-step browser workflows using AI
- */
 const browserAgent = tool({
   description: `Automate entire workflows on websites autonomously using natural language.
 

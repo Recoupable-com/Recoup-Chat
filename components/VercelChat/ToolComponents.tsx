@@ -87,9 +87,6 @@ import { Sora2VideoSkeleton } from "./tools/sora2/Sora2VideoSkeleton";
 import { Sora2VideoResult } from "./tools/sora2/Sora2VideoResult";
 import { RetrieveVideoContentResult } from "@/lib/tools/sora2/retrieveVideoContent";
 
-/**
- * Helper function to get the appropriate UI component for a tool call
- */
 export function getToolCallComponent(part: ToolUIPart) {
   const { toolCallId } = part as ToolUIPart;
   const toolName = getToolName(part);
@@ -259,9 +256,6 @@ export function getToolCallComponent(part: ToolUIPart) {
   );
 }
 
-/**
- * Helper function to get the appropriate UI component for a tool result
- */
 export function getToolResultComponent(part: ToolUIPart) {
   const { toolCallId, output: result } = part as ToolUIPart;
   const toolName = getToolName(part);
@@ -490,9 +484,6 @@ export function getToolResultComponent(part: ToolUIPart) {
   );
 }
 
-/**
- * Main ToolComponents component - Export a single object with all tool-related UI components
- */
 export const ToolComponents = {
   getToolCallComponent,
   getToolResultComponent,

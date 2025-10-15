@@ -4,9 +4,6 @@ import type { BrowserActRequest, BrowserActResponse } from "@/types/browser.type
 
 export const runtime = 'nodejs';
 
-/**
- * API endpoint for executing natural language actions on web pages
- */
 export async function POST(req: NextRequest) {
   try {
     const body: BrowserActRequest = await req.json();

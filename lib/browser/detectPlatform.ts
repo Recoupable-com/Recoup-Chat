@@ -1,7 +1,3 @@
-/**
- * Detects the social media platform from a URL
- * Single source of truth for platform detection across browser tools
- */
 export function detectPlatform(url?: string): string {
   if (!url) return "browser";
 
@@ -17,9 +13,6 @@ export function detectPlatform(url?: string): string {
   return "browser";
 }
 
-/**
- * Gets platform info with emoji for UI display
- */
 export function getPlatformInfo(url?: string) {
   const platform = detectPlatform(url);
 

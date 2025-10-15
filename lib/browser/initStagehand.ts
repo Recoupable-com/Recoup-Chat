@@ -1,8 +1,5 @@
 import { Stagehand } from "@browserbasehq/stagehand";
 
-/**
- * Initializes a Stagehand instance with Browserbase configuration
- */
 export async function initStagehand(): Promise<{
   stagehand: Stagehand;
   sessionUrl?: string;

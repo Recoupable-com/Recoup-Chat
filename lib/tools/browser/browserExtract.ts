@@ -15,10 +15,6 @@ export interface BrowserExtractResult {
   error?: string;
 }
 
-/**
- * Browser Extract Tool
- * Extracts structured data from web pages using schemas
- */
 const browserExtract = tool({
   description: `Extract structured data from websites using AI-powered data extraction.
 

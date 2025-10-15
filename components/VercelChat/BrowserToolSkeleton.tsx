@@ -15,10 +15,6 @@ interface ProgressStep {
   active: boolean;
 }
 
-/**
- * Enhanced browser tool skeleton with animated progress steps
- * Two-column layout: progress on left, browser preview on right
- */
 export function BrowserToolSkeleton({ toolName, url }: BrowserToolSkeletonProps) {
   const platform = getPlatformInfo(url);
   const [steps, setSteps] = useState<ProgressStep[]>(getInitialSteps(toolName));

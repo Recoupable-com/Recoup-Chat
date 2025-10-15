@@ -13,10 +13,6 @@ export interface BrowserActResult {
   error?: string;
 }
 
-/**
- * Browser Act Tool
- * Executes natural language actions on web pages (e.g., click, type, scroll)
- */
 const browserAct = tool({
   description: `Execute actions on web pages using natural language commands.
 
