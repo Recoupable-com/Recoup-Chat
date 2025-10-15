@@ -35,15 +35,16 @@ Note: This tool may take longer to execute as it performs multiple operations.`,
       ),
   }),
   execute: async function* ({ startUrl, task }) {
-    const { stagehand, sessionUrl } = await initStagehand();
+    const { stagehand, liveViewUrl, sessionUrl } = await initStagehand();
     
     try {
-      // Yield initial status with live browser link IMMEDIATELY
+      // Yield initial status with LIVE browser link IMMEDIATELY
       yield {
         status: 'initializing',
-        message: sessionUrl 
-          ? `🎥 **Watch Live:** ${sessionUrl}\n\nInitializing autonomous agent...`
+        message: liveViewUrl 
+          ? `🎥 **WATCH LIVE:** ${liveViewUrl}\n\n🤖 Initializing autonomous agent...\n\n💡 Click the link above to watch AI control the browser in real-time!`
           : 'Initializing autonomous agent...',
+        liveViewUrl,
         sessionUrl,
       };
 
