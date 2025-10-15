@@ -1,6 +1,6 @@
 import { z } from "zod";
 import { tool } from "ai";
-import { withBrowser } from "@/lib/browser/withBrowser";
+import { initStagehand } from "@/lib/browser/initStagehand";
 import { captureScreenshot } from "@/lib/browser/captureScreenshot";
 
 const browserAgent = tool({
@@ -35,36 +35,57 @@ Note: This tool may take longer to execute as it performs multiple operations.`,
       ),
   }),
   execute: async ({ startUrl, task }) => {
+    const { stagehand, sessionUrl } = await initStagehand();
+    
     try {
-      return await withBrowser(async (page, sessionUrl) => {
-        await page.goto(startUrl, { waitUntil: "domcontentloaded" });
-
-        const result = await page.act(task);
-
-        const screenshotUrl = await captureScreenshot(page, startUrl);
-
-        const resultText = typeof result === "string" ? result : JSON.stringify(result);
-        const responseText = sessionUrl
-          ? `Agent completed the task:\n\n${resultText}\n\n🎥 [View Browser Recording](${sessionUrl})`
-          : `Agent completed the task:\n\n${resultText}`;
-
-        const content: Array<{ type: string; text?: string; image?: string }> = [
-          { type: "text", text: responseText }
-        ];
-
-        if (screenshotUrl) {
-          content.push({
-            type: "image",
-            image: screenshotUrl,
-          });
-        }
-
-        return {
-          content,
-          isError: false,
-        };
+      const agent = stagehand.agent({
+        provider: "anthropic",
+        model: "claude-sonnet-4-20250514",
+        instructions: "You are a helpful assistant that can use a web browser to complete tasks.",
+        options: {
+          apiKey: process.env.ANTHROPIC_API_KEY,
+        },
       });
+
+      await stagehand.page.goto(startUrl, { waitUntil: "domcontentloaded" });
+
+      const result = await agent.execute({
+        instruction: task,
+        maxSteps: 20,
+        autoScreenshot: true,
+      });
+
+      const screenshotUrl = await captureScreenshot(stagehand.page, startUrl);
+
+      const resultText = typeof result === "string" ? result : JSON.stringify(result);
+      const responseText = sessionUrl
+        ? `Agent completed the task:\n\n${resultText}\n\n🎥 [View Browser Recording](${sessionUrl})`
+        : `Agent completed the task:\n\n${resultText}`;
+
+      const content: Array<{ type: string; text?: string; image?: string }> = [
+        { type: "text", text: responseText }
+      ];
+
+      if (screenshotUrl) {
+        content.push({
+          type: "image",
+          image: screenshotUrl,
+        });
+      }
+
+      await stagehand.close();
+
+      return {
+        content,
+        isError: false,
+      };
     } catch (error) {
+      try {
+        await stagehand.close();
+      } catch {
+        // Cleanup failed
+      }
+
       return {
         content: [
           {

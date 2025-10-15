@@ -123,21 +123,19 @@ This tool handles login modals automatically - just give it a URL and it will ge
           // Continue anyway - maybe there was no modal
         }
 
-        console.log('[browser_observe] Extracting page content...');
+        console.log('[browser_observe] Extracting page content using AI-powered extraction...');
         
-        // Get page content as text to extract visible data
-        const pageContent = await page.evaluate(() => {
-          // Remove script and style tags
-          const clone = document.body.cloneNode(true) as HTMLElement;
-          clone.querySelectorAll('script, style, noscript').forEach(el => el.remove());
-          return clone.innerText;
+        const { visibleContent } = await page.extract({
+          instruction: "Extract all visible text content from the page including follower counts, bios, and stats",
+          schema: z.object({
+            visibleContent: z.string().describe("All visible text content on the page"),
+          }),
         });
         
-        console.log('[browser_observe] Page content extracted, length:', pageContent.length);
+        console.log('[browser_observe] Page content extracted, length:', visibleContent.length);
         
-        // Check if Instagram is rate limiting
-        const isRateLimited = pageContent.includes('Take a quick pause') || 
-                             pageContent.includes('more requests than usual');
+        const isRateLimited = visibleContent.includes('Take a quick pause') || 
+                             visibleContent.includes('more requests than usual');
         
         if (isRateLimited) {
           console.warn('[browser_observe] ⚠️ Instagram rate limit detected! Trying to extract data anyway...');
@@ -181,8 +179,8 @@ This tool handles login modals automatically - just give it a URL and it will ge
         
         responseText += "📄 VISIBLE PAGE CONTENT:\n";
         responseText += "════════════════════════════════════════\n";
-        responseText += pageContent.trim().slice(0, 3000); // Limit to first 3000 chars
-        if (pageContent.length > 3000) {
+        responseText += visibleContent.trim().slice(0, 3000);
+        if (visibleContent.length > 3000) {
           responseText += "\n... (content truncated)";
         }
         responseText += "\n\n🎯 AVAILABLE ACTIONS:\n";
