@@ -2,6 +2,7 @@
 
 import { CatalogSongsResponse } from "@/lib/catalog/getCatalogSongs";
 import { useCatalogSongsFileSelect } from "@/hooks/useCatalogSongsFileSelect";
+import { Progress } from "@/components/ui/progress";
 import CatalogCsvUploadButton from "./CatalogCsvUploadButton";
 import InsertCatalogSongsList from "./InsertCatalogSongsList";
 import InsertCatalogSongsSummary from "./InsertCatalogSongsSummary";
@@ -24,11 +25,21 @@ export default function InsertCatalogSongsResult({
   result,
 }: InsertCatalogSongsResultProps) {
   const catalogId = result.songs?.[0]?.catalog_id;
-  const { isUploading, uploadResult, uploadError, uploadProgress, handleFileSelect } =
-    useCatalogSongsFileSelect(catalogId);
+  const {
+    isUploading,
+    uploadResult,
+    uploadError,
+    uploadProgress,
+    handleFileSelect,
+  } = useCatalogSongsFileSelect(catalogId);
 
   const displayResult = uploadResult || result;
   const hasError = !!(uploadError || (!result.success && result.error));
+
+  const progressPercentage =
+    uploadProgress.total > 0
+      ? (uploadProgress.current / uploadProgress.total) * 100
+      : 0;
 
   return (
     <div className="flex flex-col gap-3 py-2">
@@ -50,12 +61,20 @@ export default function InsertCatalogSongsResult({
         <InsertCatalogSongsList songs={displayResult.songs} />
       )}
 
-      <CatalogCsvUploadButton
-        isUploading={isUploading}
-        uploadProgress={uploadProgress}
-        onFileSelect={handleFileSelect}
-        hasCatalogId={!!catalogId}
-      />
+      {isUploading && uploadProgress.total > 0 ? (
+        <div className="space-y-1">
+          <Progress value={progressPercentage} className="h-2" />
+          <p className="text-xs text-muted-foreground text-center">
+            {Math.round(progressPercentage)}%
+          </p>
+        </div>
+      ) : (
+        <CatalogCsvUploadButton
+          isUploading={isUploading}
+          onFileSelect={handleFileSelect}
+          hasCatalogId={!!catalogId}
+        />
+      )}
     </div>
   );
 }
