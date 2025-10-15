@@ -11,7 +11,7 @@ export const getRoomReports = async (roomId: string) => {
       .from("room_reports")
       .select("report_id")
       .eq("room_id", roomId)
-      .single();
+      .maybeSingle();
 
     if (error) {
       console.error("Error fetching room reports:", error);
