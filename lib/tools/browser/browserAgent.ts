@@ -2,6 +2,7 @@ import { z } from "zod";
 import { tool } from "ai";
 import { initStagehand } from "@/lib/browser/initStagehand";
 import { captureScreenshot } from "@/lib/browser/captureScreenshot";
+import { detectPlatform } from "@/lib/browser/detectPlatform";
 
 const browserAgent = tool({
   description: `Automate entire workflows on websites autonomously using natural language.
@@ -53,7 +54,7 @@ Note: This tool may take longer to execute as it performs multiple operations.`,
         model: "gemini-2.5-computer-use-preview-10-2025",
         instructions: "You are a helpful assistant that can use a web browser to complete tasks.",
         options: {
-          apiKey: process.env.GOOGLE_AI_API_KEY,
+          apiKey: process.env.GEMINI_API_KEY || process.env.GOOGLE_API_KEY || process.env.GOOGLE_AI_API_KEY,
         },
       });
 
@@ -82,26 +83,16 @@ Note: This tool may take longer to execute as it performs multiple operations.`,
       const screenshotUrl = await captureScreenshot(stagehand.page, startUrl);
 
       const resultText = typeof result === "string" ? result : JSON.stringify(result);
-      const responseText = sessionUrl
-        ? `✅ Agent completed the task!\n\n${resultText}\n\n🎥 [View Browser Recording](${sessionUrl})`
-        : `✅ Agent completed the task!\n\n${resultText}`;
-
-      const content: Array<{ type: string; text?: string; image?: string }> = [
-        { type: "text", text: responseText }
-      ];
-
-      if (screenshotUrl) {
-        content.push({
-          type: "image",
-          image: screenshotUrl,
-        });
-      }
+      const platformName = detectPlatform(startUrl);
 
       await stagehand.close();
 
       return {
-        content,
-        isError: false,
+        success: true,
+        message: resultText,
+        screenshotUrl,
+        sessionUrl,
+        platformName,
       };
     } catch (error) {
       console.error('[browser_agent] EXECUTION FAILED');
@@ -118,18 +109,10 @@ Note: This tool may take longer to execute as it performs multiple operations.`,
       }
 
       const errorMessage = error instanceof Error ? error.message : "Unknown error";
-      const errorDetails = error instanceof Error && (error as any).cause 
-        ? ` | Cause: ${JSON.stringify((error as any).cause)}` 
-        : '';
 
       return {
-        content: [
-          {
-            type: "text",
-            text: `❌ Browser agent failed: ${errorMessage}${errorDetails}\n\nCheck server logs for detailed error information.`,
-          },
-        ],
-        isError: true,
+        success: false,
+        error: `${errorMessage}\n\nCheck server logs for details.`,
       };
     }
   },
