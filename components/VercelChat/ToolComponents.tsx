@@ -237,6 +237,12 @@ export function getToolCallComponent(part: ToolUIPart) {
         <InsertCatalogSongsSkeleton />
       </div>
     );
+  } else if (toolName === "select_catalog_songs") {
+    return (
+      <div key={toolCallId}>
+        <InsertCatalogSongsSkeleton />
+      </div>
+    );
   }
 
   // Default for other tools
@@ -458,6 +464,14 @@ export function getToolResultComponent(part: ToolUIPart) {
       </div>
     );
   } else if (toolName === "insert_catalog_songs") {
+    return (
+      <div key={toolCallId}>
+        <InsertCatalogSongsResult
+          result={result as InsertCatalogSongsResultType}
+        />
+      </div>
+    );
+  } else if (toolName === "select_catalog_songs") {
     return (
       <div key={toolCallId}>
         <InsertCatalogSongsResult

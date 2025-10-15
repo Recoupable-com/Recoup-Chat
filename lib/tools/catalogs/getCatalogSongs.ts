@@ -43,10 +43,14 @@ const getCatalogSongsTool: Tool = {
       return {
         success: true,
         songs: selectedSongs,
-        catalog_id,
-        total_songs: totalSongs,
-        selected_songs: selectedSongs.length,
-        criteria,
+        pagination: {
+          total_count: totalSongs,
+          page: 1,
+          limit: selectedSongs.length,
+          total_pages: 1,
+        },
+        total_added: selectedSongs.length,
+        message: `Found ${selectedSongs.length} song(s) matching "${criteria}"`,
       };
     } catch (error) {
       console.error("Error fetching catalog songs:", error);
@@ -57,10 +61,7 @@ const getCatalogSongsTool: Tool = {
             ? error.message
             : "Failed to fetch catalog songs",
         songs: [],
-        catalog_id,
-        total_songs: 0,
-        selected_songs: 0,
-        criteria,
+        total_added: 0,
       };
     }
   },
