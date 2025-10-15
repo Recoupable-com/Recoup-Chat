@@ -1,9 +1,7 @@
 import { z } from "zod";
-import { Tool, generateObject } from "ai";
-import { getCatalogSongs } from "@/lib/catalog/getCatalogSongs";
-import { DEFAULT_MODEL } from "@/lib/consts";
-
-const BATCH_SIZE = 100;
+import { Tool } from "ai";
+import { analyzeFullCatalog } from "@/lib/catalog/analyzeFullCatalog";
+import type { CatalogSong } from "@/lib/catalog/getCatalogSongs";
 
 const getCatalogSongsTool: Tool = {
   description: `CRITICAL: Use this tool to find ACTUAL SONGS from the available catalog for any playlist or music recommendation request.
@@ -38,59 +36,18 @@ const getCatalogSongsTool: Tool = {
   }),
   execute: async ({ catalog_id, criteria }) => {
     try {
-      // Fetch first page to get total count
-      const firstPage = await getCatalogSongs(catalog_id, BATCH_SIZE, 1);
-      const totalPages = firstPage.pagination.total_pages;
-
-      // Create array of page numbers to fetch
-      const pageNumbers = Array.from({ length: totalPages }, (_, i) => i + 1);
-
-      // Fetch and filter all pages in parallel
-      const batchPromises = pageNumbers.map(async (pageNum) => {
-        const pageData =
-          pageNum === 1
-            ? firstPage
-            : await getCatalogSongs(catalog_id, BATCH_SIZE, pageNum);
-
-        // Use AI to select relevant songs from this batch
-        const { object } = await generateObject({
-          model: DEFAULT_MODEL,
-          schema: z.object({
-            selected_song_isrcs: z
-              .array(z.string())
-              .describe("Array of song ISRCs that match the criteria"),
-          }),
-          prompt: `Given these songs and the criteria: "${criteria}", select the song ISRCs that are most relevant.
-          
-Songs:
-${JSON.stringify(
-  pageData.songs.map((s) => ({
-    isrc: s.isrc,
-    name: s.name,
-    artist: s.artists.map((a) => a.name).join(", "),
-  })),
-  null,
-  2
-)}
-
-Return only the ISRCs of songs that match the criteria.`,
-        });
-
-        // Filter songs based on AI selection
-        return pageData.songs.filter((song) =>
-          object.selected_song_isrcs.includes(song.isrc)
-        );
+      const { results: selectedSongs, totalSongs } = await analyzeFullCatalog({
+        catalogId: catalog_id,
+        criteria,
+        filterSongs: (songs: CatalogSong[], selectedIsrcs: string[]) =>
+          songs.filter((song) => selectedIsrcs.includes(song.isrc)),
       });
-
-      // Wait for all batches to complete
-      const batchResults = await Promise.all(batchPromises);
-      const selectedSongs = batchResults.flat();
 
       return {
         success: true,
         songs: selectedSongs,
         catalog_id,
-        total_songs: firstPage.pagination.total_count,
+        total_songs: totalSongs,
         selected_songs: selectedSongs.length,
         criteria,
       };
