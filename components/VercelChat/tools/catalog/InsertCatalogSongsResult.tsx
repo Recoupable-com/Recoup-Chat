@@ -70,7 +70,6 @@ export default function InsertCatalogSongsResult({
         </div>
       ) : (
         <CatalogCsvUploadButton
-          isUploading={isUploading}
           onFileSelect={handleFileSelect}
           hasCatalogId={!!catalogId}
         />

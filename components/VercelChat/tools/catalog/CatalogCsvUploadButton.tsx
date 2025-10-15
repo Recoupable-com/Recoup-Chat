@@ -2,7 +2,6 @@ import { Upload } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
 interface CatalogCsvUploadButtonProps {
-  isUploading: boolean;
   onFileSelect: (event: React.ChangeEvent<HTMLInputElement>) => void;
   hasCatalogId?: boolean;
 }
@@ -13,7 +12,6 @@ interface CatalogCsvUploadButtonProps {
  * catalog_id is automatically used from the selected catalog
  */
 export default function CatalogCsvUploadButton({
-  isUploading,
   onFileSelect,
   hasCatalogId = true,
 }: CatalogCsvUploadButtonProps) {
@@ -24,7 +22,7 @@ export default function CatalogCsvUploadButton({
           type="button"
           variant="outline"
           size="sm"
-          disabled={isUploading || !hasCatalogId}
+          disabled={!hasCatalogId}
           className="w-full"
           onClick={() => document.getElementById("csv-upload")?.click()}
         >
