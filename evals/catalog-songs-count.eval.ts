@@ -1,8 +1,8 @@
 import { Eval } from "braintrust";
-import { Factuality } from "autoevals";
+import { AnswerCorrectness } from "autoevals";
 import {
-  extractTextFromResult,
   callChatFunctionsWithResult,
+  extractTextFromResult,
 } from "@/lib/evals";
 import getCatalogSongsCountData from "@/lib/evals/getCatalogSongsCountData";
 
@@ -27,5 +27,5 @@ Eval("Catalog Songs Count Evaluation", {
     }
   },
 
-  scores: [Factuality],
+  scores: [AnswerCorrectness],
 });
