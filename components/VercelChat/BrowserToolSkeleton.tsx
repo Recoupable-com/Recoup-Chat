@@ -23,9 +23,8 @@ export function BrowserToolSkeleton({ toolName, url }: BrowserToolSkeletonProps)
     const intervals: NodeJS.Timeout[] = [];
     const initialSteps = getInitialSteps(toolName);
 
-    // Animate through steps to show progress
     initialSteps.forEach((_, index) => {
-      const delay = index * 2000; // 2 seconds per step
+      const delay = index * 2000;
       const timeout = setTimeout(() => {
         setSteps(prev => prev.map((step, i) => ({
           ...step,
@@ -38,7 +37,7 @@ export function BrowserToolSkeleton({ toolName, url }: BrowserToolSkeletonProps)
 
     return () => intervals.forEach(clearTimeout);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []); // Only run once on mount
+  }, []);
 
   return (
     <div className="max-w-4xl my-2">
@@ -55,6 +54,23 @@ export function BrowserToolSkeleton({ toolName, url }: BrowserToolSkeletonProps)
           <div className="text-xs text-gray-600 dark:text-gray-400">
             {getTaskDescription(toolName, platform.name, url)}
           </div>
+          
+          {/* LIVE SESSION CALLOUT for agent */}
+          {toolName === "browser_agent" && (
+            <div className="mt-2 p-3 bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded-lg">
+              <div className="flex items-start gap-2">
+                <span className="text-lg">🎥</span>
+                <div className="flex-1">
+                  <p className="text-xs font-semibold text-blue-900 dark:text-blue-100 mb-1">
+                    Watch AI Control the Browser Live!
+                  </p>
+                  <p className="text-xs text-blue-700 dark:text-blue-300">
+                    A live session link will appear above. Click it to watch the agent work in real-time.
+                  </p>
+                </div>
+              </div>
+            </div>
+          )}
 
           {/* Progress Steps */}
           <div className="flex flex-col gap-2 mt-2">

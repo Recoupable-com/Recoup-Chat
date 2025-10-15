@@ -34,10 +34,19 @@ Note: This tool may take longer to execute as it performs multiple operations.`,
         "AI model to use for the agent (defaults to claude-sonnet-4-20250514)"
       ),
   }),
-  execute: async ({ startUrl, task }) => {
+  execute: async function* ({ startUrl, task }) {
     const { stagehand, sessionUrl } = await initStagehand();
     
     try {
+      // Yield initial status with live browser link IMMEDIATELY
+      yield {
+        status: 'initializing',
+        message: sessionUrl 
+          ? `🎥 **Watch Live:** ${sessionUrl}\n\nInitializing autonomous agent...`
+          : 'Initializing autonomous agent...',
+        sessionUrl,
+      };
+
       const agent = stagehand.agent({
         provider: "anthropic",
         model: "claude-sonnet-4-20250514",
@@ -47,7 +56,19 @@ Note: This tool may take longer to execute as it performs multiple operations.`,
         },
       });
 
+      yield {
+        status: 'navigating',
+        message: `Navigating to ${startUrl}...`,
+        sessionUrl,
+      };
+
       await stagehand.page.goto(startUrl, { waitUntil: "domcontentloaded" });
+
+      yield {
+        status: 'executing',
+        message: `🤖 Agent is working autonomously...\n\n**Task:** ${task}\n\n💡 **Tip:** Click the live link above to watch the AI control the browser in real-time!`,
+        sessionUrl,
+      };
 
       const result = await agent.execute({
         instruction: task,
@@ -59,8 +80,8 @@ Note: This tool may take longer to execute as it performs multiple operations.`,
 
       const resultText = typeof result === "string" ? result : JSON.stringify(result);
       const responseText = sessionUrl
-        ? `Agent completed the task:\n\n${resultText}\n\n🎥 [View Browser Recording](${sessionUrl})`
-        : `Agent completed the task:\n\n${resultText}`;
+        ? `✅ Agent completed the task!\n\n${resultText}\n\n🎥 [View Browser Recording](${sessionUrl})`
+        : `✅ Agent completed the task!\n\n${resultText}`;
 
       const content: Array<{ type: string; text?: string; image?: string }> = [
         { type: "text", text: responseText }
