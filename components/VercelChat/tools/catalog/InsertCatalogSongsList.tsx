@@ -16,7 +16,7 @@ export default function InsertCatalogSongsList({
   return (
     <div className="mt-1">
       <div className="text-xs text-muted-foreground mb-2">
-        Recently Added ({Math.min(5, songs.length)} of {songs.length})
+        Recently Processed ({Math.min(5, songs.length)} of {songs.length})
       </div>
       <div className="space-y-1">
         {songs.slice(0, 5).map((song, index) => (
