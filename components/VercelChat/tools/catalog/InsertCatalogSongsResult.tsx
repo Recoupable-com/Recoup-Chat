@@ -24,7 +24,7 @@ export default function InsertCatalogSongsResult({
   result,
 }: InsertCatalogSongsResultProps) {
   const catalogId = result.songs?.[0]?.catalog_id;
-  const { isUploading, uploadResult, uploadError, handleFileSelect } =
+  const { isUploading, uploadResult, uploadError, uploadProgress, handleFileSelect } =
     useCatalogSongsFileSelect(catalogId);
 
   const displayResult = uploadResult || result;
@@ -52,6 +52,7 @@ export default function InsertCatalogSongsResult({
 
       <CatalogCsvUploadButton
         isUploading={isUploading}
+        uploadProgress={uploadProgress}
         onFileSelect={handleFileSelect}
         hasCatalogId={!!catalogId}
       />
