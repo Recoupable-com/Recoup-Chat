@@ -1,5 +1,6 @@
 import { z } from "zod";
 import { Tool } from "ai";
+import { getCatalogs } from "@/lib/catalog/getCatalogs";
 
 const getCatalogsTool: Tool = {
   description: `CRITICAL: Retrieve catalogs associated with the current account for ANY music recommendation request.
@@ -20,26 +21,7 @@ const getCatalogsTool: Tool = {
   }),
   execute: async ({ account_id }) => {
     try {
-      const response = await fetch(
-        `https://api.recoupable.com/api/catalogs?account_id=${account_id}`,
-        {
-          method: "GET",
-          headers: {
-            "Content-Type": "application/json",
-          },
-        }
-      );
-
-      if (!response.ok) {
-        const errorText = await response.text();
-        throw new Error(`HTTP ${response.status}: ${errorText}`);
-      }
-
-      const data = await response.json();
-
-      if (data.status === "error") {
-        throw new Error(data.error || "Unknown error occurred");
-      }
+      const data = await getCatalogs(account_id);
 
       return {
         success: true,
