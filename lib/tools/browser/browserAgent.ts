@@ -50,7 +50,7 @@ Note: This tool may take longer to execute as it performs multiple operations.`,
 
       const agent = stagehand.agent({
         provider: "google",
-        model: "gemini-2.5-flash-latest",
+        model: "gemini-2.0-flash",
         instructions: "You are a helpful assistant that can use a web browser to complete tasks.",
         options: {
           apiKey: process.env.GOOGLE_AI_API_KEY,
