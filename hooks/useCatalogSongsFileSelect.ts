@@ -1,6 +1,9 @@
 import { useMutation } from "@tanstack/react-query";
 import { parseCsvFile } from "@/lib/catalog/parseCsvFile";
-import { postCatalogSongs } from "@/lib/catalog/postCatalogSongs";
+import {
+  postCatalogSongs,
+  CatalogSongInput,
+} from "@/lib/catalog/postCatalogSongs";
 import {
   CatalogSongsResponse,
   getCatalogSongs,
@@ -14,6 +17,27 @@ export interface UploadResult {
   message: string;
 }
 
+const BATCH_SIZE = 1000;
+
+const uploadInBatches = async (songs: CatalogSongInput[]) => {
+  const batches = [];
+  for (let i = 0; i < songs.length; i += BATCH_SIZE) {
+    batches.push(songs.slice(i, i + BATCH_SIZE));
+  }
+
+  console.log(
+    `SWEETS UPLOADING ${songs.length} songs in ${batches.length} batch(es)`
+  );
+
+  for (let i = 0; i < batches.length; i++) {
+    const batch = batches[i];
+    console.log(
+      `SWEETS UPLOADING BATCH ${i + 1}/${batches.length} (${batch.length} songs)`
+    );
+    await postCatalogSongs(batch);
+  }
+};
+
 export function useCatalogSongsFileSelect(catalogId?: string) {
   const mutation = useMutation({
     mutationFn: async (file: File): Promise<UploadResult> => {
@@ -23,13 +47,16 @@ export function useCatalogSongsFileSelect(catalogId?: string) {
 
       const text = await file.text();
       const songs = parseCsvFile(text, catalogId);
+      console.log("SWEETS SONGS: ", songs);
 
       if (songs.length === 0) {
         throw new Error("No valid songs found in CSV file");
       }
 
-      await postCatalogSongs(songs);
+      await uploadInBatches(songs);
+
       const catalogSongs = await getCatalogSongs(catalogId);
+      console.log("SWEETS CATALOG SONGS: ", catalogSongs);
 
       return {
         success: true,
