@@ -14,7 +14,8 @@ async function getCatalogSongsCountExpected() {
     const catalogSongs = await getCatalogSongs(firstCatalog.id);
 
     const count = catalogSongs.pagination.total_count;
-    const expected = `The catalog "${firstCatalog.name}" (id: ${firstCatalog.id}) contains ${count} songs.`;
+    const formattedCount = count.toLocaleString();
+    const expected = `The catalog "${firstCatalog.name}" (id: ${firstCatalog.id}) contains ${formattedCount} songs.`;
 
     return {
       catalogId: firstCatalog.id,
