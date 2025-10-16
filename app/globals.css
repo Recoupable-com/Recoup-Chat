@@ -146,3 +146,20 @@ body {
     @apply bg-background text-foreground;
   }
 }
+
+/* File mention styling - ensures tags don't extend beyond filename */
+.mentions__mention {
+  position: relative;
+  z-index: 1;
+  vertical-align: baseline;
+}
+
+/* Force strong tags in mentions to be constrained inline-blocks */
+.mentions__highlighter strong,
+.mentions strong {
+  display: inline-block !important;
+  width: max-content !important;
+  max-width: fit-content !important;
+  font-weight: inherit !important;
+  vertical-align: baseline !important;
+}

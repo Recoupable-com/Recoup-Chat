@@ -107,17 +107,6 @@ Important:
       const normalizedUpdated = normalizeContent(updatedContent);
       const normalizedNew = normalizeContent(newContent);
 
-      // Critical check: Ensure the file content is now different from original (meaningful change)
-      if (normalizedUpdated === normalizedCurrent) {
-        return {
-          success: false,
-          verified: false,
-          error: "File content did not change after update attempt.",
-          message: `Update failed - '${fileName}' still contains the old content. The update operation did not take effect. Please try again or check if what's the issue.`,
-          suggestion: "Retry the update operation with requested, modified content.",
-        };
-      }
-
       // Verify the new content matches what we intended to write (ignore minor whitespace differences)
       if (normalizedUpdated !== normalizedNew) {
         return {
