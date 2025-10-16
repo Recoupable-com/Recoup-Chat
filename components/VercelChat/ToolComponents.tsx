@@ -93,7 +93,7 @@ import CatalogSongsSkeleton from "./tools/catalog/CatalogSongsSkeleton";
 import CatalogSongsResult, {
   CatalogSongsResult as CatalogSongsResultType,
 } from "./tools/catalog/CatalogSongsResult";
-import { UpdateFileResult } from "./tools/files/UpdateFileResult";
+import { UpdateFileResult, UpdateFileResultType } from "./tools/files/UpdateFileResult";
 
 /**
  * Helper function to get the appropriate UI component for a tool call
@@ -501,7 +501,7 @@ export function getToolResultComponent(part: ToolUIPart) {
   } else if (toolName === "update_file") {
     return (
       <div key={toolCallId}>
-        <UpdateFileResult result={result as any} />
+        <UpdateFileResult result={result as UpdateFileResultType} />
       </div>
     );
   }

@@ -9,7 +9,6 @@ import { motion } from "framer-motion";
 import PromptSuggestions from "./PromptSuggestions";
 import {
   PromptInput,
-  PromptInputButton,
   PromptInputSubmit,
   PromptInputToolbar,
   PromptInputTools,

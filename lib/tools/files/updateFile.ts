@@ -103,7 +103,6 @@ Important:
       const updatedContent = await fetchFileContentServer(fileRecord.storage_key);
 
       // Normalize content for comparison (ignore minor formatting differences)
-      const normalizedCurrent = normalizeContent(currentContent);
       const normalizedUpdated = normalizeContent(updatedContent);
       const normalizedNew = normalizeContent(newContent);
 

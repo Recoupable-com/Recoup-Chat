@@ -7,7 +7,7 @@ import { CheckCircle2 } from "lucide-react";
 /**
  * Result type returned by the update_file tool
  */
-type UpdateFileResult = {
+export type UpdateFileResultType = {
   success: boolean;
   verified?: boolean;
   storageKey?: string;
@@ -19,7 +19,7 @@ type UpdateFileResult = {
 };
 
 interface UpdateFileResultProps {
-  result: UpdateFileResult;
+  result: UpdateFileResultType;
 }
 
 /**
