@@ -12,6 +12,8 @@ export function normalizeContent(content: string): string {
     .trim() // Remove leading/trailing whitespace
     .replace(/\r\n/g, "\n") // Normalize line endings (Windows → Unix)
     .replace(/\r/g, "\n") // Normalize old Mac line endings
+    .replace(/\n+$/g, "\n") // Normalize trailing newlines to single newline
+    .replace(/[ \t]+$/gm, "") // Remove trailing spaces/tabs from each line
     .normalize("NFC") // Normalize Unicode characters (e.g., é)
     .toLowerCase(); // Normalize case for case-insensitive comparison
 }
