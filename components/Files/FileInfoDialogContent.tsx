@@ -34,6 +34,7 @@ export default function FileInfoDialogContent({
           loading={loading}
           error={error}
           isTextFile={isTextFile}
+          fileName={fileName}
         />
       )}
     </div>

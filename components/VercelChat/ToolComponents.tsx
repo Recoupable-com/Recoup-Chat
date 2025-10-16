@@ -93,6 +93,7 @@ import CatalogSongsSkeleton from "./tools/catalog/CatalogSongsSkeleton";
 import CatalogSongsResult, {
   CatalogSongsResult as CatalogSongsResultType,
 } from "./tools/catalog/CatalogSongsResult";
+import { UpdateFileResult, UpdateFileResultType } from "./tools/files/UpdateFileResult";
 
 /**
  * Helper function to get the appropriate UI component for a tool call
@@ -497,11 +498,18 @@ export function getToolResultComponent(part: ToolUIPart) {
         <CatalogSongsResult result={result as CatalogSongsResultType} />
       </div>
     );
+  } else if (toolName === "update_file") {
+    return (
+      <div key={toolCallId}>
+        <UpdateFileResult result={result as UpdateFileResultType} />
+      </div>
+    );
   }
 
   // Default generic result for other tools
   return (
     <GenericSuccess
+      key={toolCallId}
       name={getDisplayToolName(toolName)}
       message={
         (result as { message?: string }).message ??

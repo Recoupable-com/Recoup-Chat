@@ -61,7 +61,7 @@ export default function FileMentionsInput({ value, onChange, disabled, model }: 
 				data={(query: string, callback: (results: SuggestionDataItem[]) => void) => provideSuggestions(query, callback)}
 				displayTransform={(_id: string, display: string) => display}
 				appendSpaceOnAdd
-				style={{ backgroundColor: "rgb(0 0 0 / 0.25)", borderRadius: 6 }}
+				style={{}}
 				renderSuggestion={(
 					entry: SuggestionDataItem,
 					_search: string,

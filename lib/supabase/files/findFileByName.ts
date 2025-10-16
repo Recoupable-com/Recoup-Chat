@@ -15,9 +15,9 @@ export async function findFileByName(
 ): Promise<FileRecord | null> {
   const pathPattern = path
     ? `files/${ownerAccountId}/${artistAccountId}/${path}/${fileName}`
-    : `files/${ownerAccountId}/${artistAccountId}%${fileName}`;
+    : `files/${ownerAccountId}/${artistAccountId}/%${fileName}`;
 
-  const { data, error } = await supabase
+  const { data, error} = await supabase
     .from("files")
     .select()
     .eq("owner_account_id", ownerAccountId)
