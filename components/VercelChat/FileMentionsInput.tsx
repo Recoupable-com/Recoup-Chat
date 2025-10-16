@@ -25,8 +25,6 @@ export default function FileMentionsInput({ value, onChange, disabled, model }: 
 
 
 	const handleMentionsChange: OnChangeHandlerFunc = (_event, newValue) => {
-		console.log("📝 Mention value:", newValue);
-		console.log("📝 Mention plain:", newValue.replace(/@\[([^\]]+)\]\([^)]+\)/g, "@$1"));
 		onChange(newValue);
 	};
 
