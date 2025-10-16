@@ -63,7 +63,16 @@ export default function FilePreview({ content, loading, error, isTextFile, fileN
             prose-code:bg-muted prose-code:px-1.5 prose-code:py-0.5 prose-code:rounded prose-code:text-sm
             prose-pre:bg-muted prose-pre:p-4 prose-pre:rounded-lg
             prose-blockquote:border-l-4 prose-blockquote:border-border prose-blockquote:pl-4 prose-blockquote:italic">
-            <ReactMarkdown remarkPlugins={[remarkGfm, remarkBreaks]}>{contentToShow || ""}</ReactMarkdown>
+            <ReactMarkdown 
+              remarkPlugins={[remarkGfm, remarkBreaks]}
+              components={{
+                a: ({ node, ...props }) => (
+                  <a {...props} target="_blank" rel="noopener noreferrer" />
+                )
+              }}
+            >
+              {contentToShow || ""}
+            </ReactMarkdown>
           </article>
         ) : (
           <pre className="text-xs sm:text-sm font-mono whitespace-pre-wrap break-words">
