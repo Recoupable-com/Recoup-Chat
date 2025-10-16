@@ -56,6 +56,8 @@ const Artist = ({
     <motion.div
       initial={isMini ? false : true}
       layout="position"
+      role="button"
+      tabIndex={0}
       className={cn(
         "py-2 w-full outline-none cursor-pointer",
         isMini
@@ -71,6 +73,12 @@ const Artist = ({
         shouldHighlight && "z-50 relative"
       )}
       onClick={handleClick}
+      onKeyDown={(e) => {
+        if (e.key === 'Enter' || e.key === ' ') {
+          e.preventDefault();
+          handleClick();
+        }
+      }}
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
     >

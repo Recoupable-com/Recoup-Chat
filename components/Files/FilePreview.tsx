@@ -36,7 +36,8 @@ export default function FilePreview({ content, loading, error, isTextFile, fileN
   }
 
   // Check if file is markdown
-  const isMarkdown = fileName?.toLowerCase().endsWith('.md') || fileName?.toLowerCase().endsWith('.markdown');
+  const lowerFileName = fileName?.toLowerCase() ?? '';
+  const isMarkdown = lowerFileName.endsWith('.md') || lowerFileName.endsWith('.markdown');
 
   return (
     <div className="flex-1 border border-border rounded-lg bg-background overflow-hidden flex flex-col">
