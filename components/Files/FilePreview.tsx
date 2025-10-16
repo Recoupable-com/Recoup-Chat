@@ -38,6 +38,12 @@ export default function FilePreview({ content, loading, error, isTextFile, fileN
   // Check if file is markdown
   const lowerFileName = fileName?.toLowerCase() ?? '';
   const isMarkdown = lowerFileName.endsWith('.md') || lowerFileName.endsWith('.markdown');
+  
+  // Limit preview size for performance (10MB - matches upload limit)
+  const MAX_PREVIEW_SIZE = 10 * 1024 * 1024;
+  const contentToShow = content && content.length > MAX_PREVIEW_SIZE 
+    ? content.substring(0, MAX_PREVIEW_SIZE) + '\n\n...(content truncated for preview)'
+    : content;
 
   return (
     <div className="flex-1 border border-border rounded-lg bg-background overflow-hidden flex flex-col">
@@ -57,11 +63,11 @@ export default function FilePreview({ content, loading, error, isTextFile, fileN
             prose-code:bg-muted prose-code:px-1.5 prose-code:py-0.5 prose-code:rounded prose-code:text-sm
             prose-pre:bg-muted prose-pre:p-4 prose-pre:rounded-lg
             prose-blockquote:border-l-4 prose-blockquote:border-border prose-blockquote:pl-4 prose-blockquote:italic">
-            <ReactMarkdown remarkPlugins={[remarkGfm, remarkBreaks]}>{content || ""}</ReactMarkdown>
+            <ReactMarkdown remarkPlugins={[remarkGfm, remarkBreaks]}>{contentToShow || ""}</ReactMarkdown>
           </article>
         ) : (
           <pre className="text-xs sm:text-sm font-mono whitespace-pre-wrap break-words">
-            {content}
+            {contentToShow}
           </pre>
         )}
       </div>
