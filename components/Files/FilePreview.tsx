@@ -66,7 +66,7 @@ export default function FilePreview({ content, loading, error, isTextFile, fileN
             <ReactMarkdown 
               remarkPlugins={[remarkGfm, remarkBreaks]}
               components={{
-                a: ({ node, ...props }) => (
+                a: ({ ...props }) => (
                   <a {...props} target="_blank" rel="noopener noreferrer" />
                 )
               }}
