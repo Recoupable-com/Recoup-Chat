@@ -15,11 +15,11 @@ reviews:
   # Pre-merge checks for SOLID principles and clean code
   pre_merge_checks:
     docstrings:
-      - mode: "off"
+      mode: "off"
     title:
-      - mode: "off"
+      mode: "off"
     description:
-      - mode: "off"
+      mode: "off"
     custom_checks:
       - mode: "warning" # Change to "error" to block merges on violations
         name: "SOLID & Clean Code"
