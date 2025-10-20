@@ -12,48 +12,49 @@ reviews:
     enabled: true
     drafts: false
 
-  # Custom review instructions for SOLID principles
-  review_instructions: |
-    ## SOLID Principles Review Guidelines
+  # Custom checks for SOLID principles and clean code
+  custom_checks:
+    - name: "SOLID Principles Check"
+      description: "Ensure code follows SOLID principles"
+      check: |
+        ## Single Responsibility Principle (SRP)
+        - Each class/function should have only one reason to change
+        - Functions should do one thing and do it well
+        - Avoid god classes or functions with multiple responsibilities
+        - Look for functions longer than 20 lines or classes with >200 lines
 
-    ### Single Responsibility Principle (SRP)
-    - Each class/function should have only one reason to change
-    - Functions should do one thing and do it well
-    - Avoid god classes or functions with multiple responsibilities
-    - Look for functions longer than 20 lines or classes with >200 lines
+        ## Open/Closed Principle (OCP)
+        - Classes should be open for extension but closed for modification
+        - Prefer composition over inheritance
+        - Use interfaces and abstract classes for extensibility
+        - Avoid modifying existing code when adding new features
 
-    ### Open/Closed Principle (OCP)
-    - Classes should be open for extension but closed for modification
-    - Prefer composition over inheritance
-    - Use interfaces and abstract classes for extensibility
-    - Avoid modifying existing code when adding new features
+        ## DRY Principle (Don't Repeat Yourself)
+        - Eliminate code duplication by extracting common functionality
+        - Create reusable functions, components, and utilities
+        - Use constants for repeated values
+        - Consolidate similar logic into shared modules
+        - Avoid copy-paste programming
+        - Extract repeated patterns into abstractions
+        - Use configuration objects instead of hardcoded values
 
-    ## DRY Principle (Don't Repeat Yourself)
-    - Eliminate code duplication by extracting common functionality
-    - Create reusable functions, components, and utilities
-    - Use constants for repeated values
-    - Consolidate similar logic into shared modules
-    - Avoid copy-paste programming
-    - Extract repeated patterns into abstractions
-    - Use configuration objects instead of hardcoded values
+        ## KISS Principle (Keep It Simple, Stupid)
+        - Prefer simple solutions over complex ones
+        - Avoid over-engineering and premature optimization
+        - Use clear, readable code over clever code
+        - Choose straightforward algorithms over complex ones
+        - Avoid unnecessary abstractions and layers
+        - Write code that's easy to understand and maintain
+        - Prefer explicit over implicit behavior
 
-    ## KISS Principle (Keep It Simple, Stupid)
-    - Prefer simple solutions over complex ones
-    - Avoid over-engineering and premature optimization
-    - Use clear, readable code over clever code
-    - Choose straightforward algorithms over complex ones
-    - Avoid unnecessary abstractions and layers
-    - Write code that's easy to understand and maintain
-    - Prefer explicit over implicit behavior
-
-    ## Clean Code Practices
-    - Use descriptive names for variables, functions, and classes
-    - Keep functions small and focused
-    - Avoid deep nesting (max 3 levels)
-    - Use meaningful comments, not obvious ones
-    - Follow consistent naming conventions
-    - Handle errors gracefully
-    - Write self-documenting code
+        ## Clean Code Practices
+        - Use descriptive names for variables, functions, and classes
+        - Keep functions small and focused
+        - Avoid deep nesting (max 3 levels)
+        - Use meaningful comments, not obvious ones
+        - Follow consistent naming conventions
+        - Handle errors gracefully
+        - Write self-documenting code
 
   # Path-specific instructions for different file types
   path_instructions:
@@ -123,6 +124,25 @@ reviews:
         - DRY: Extract common provider patterns into reusable hooks
         - KISS: Avoid over-abstracting state management, keep it simple
 
+    # Utils folder restrictions
+    - path: "utils/**"
+      instructions: |
+        ❌ NEVER use the utils folder!
+        - This folder is deprecated and should not be used
+        - Instead, organize utilities by domain: lib/[domain]/[functionName].ts
+        - Example: lib/auth/validateToken.ts instead of utils/auth.ts
+        - This provides better organization and discoverability
+
+    # Generic lib/utils restrictions
+    - path: "lib/utils/**"
+      instructions: |
+        ❌ NEVER use a generic utils folder in lib!
+        - Avoid lib/utils/ as it creates a catch-all dumping ground
+        - Instead, organize by domain: lib/[domain]/[functionName].ts
+        - Example: lib/validation/emailValidator.ts instead of lib/utils/validation.ts
+        - Example: lib/formatting/dateFormatter.ts instead of lib/utils/formatters.ts
+        - This makes code more discoverable and maintainable
+
   # File patterns to include/exclude
   path_filters:
     - "src/**"
@@ -136,15 +156,6 @@ reviews:
     - "!**/node_modules/**"
     - "!**/dist/**"
     - "!**/build/**"
-
-  # Tools for code analysis
-  tools:
-    eslint:
-      enabled: true
-    typescript:
-      enabled: true
-    security:
-      enabled: true
 
   # Additional checks
   commit_status: true
