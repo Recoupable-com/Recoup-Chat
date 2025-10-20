@@ -95,9 +95,6 @@ importers:
       '@radix-ui/react-use-controllable-state':
         specifier: ^1.2.2
         version: 1.2.2(@types/react@18.3.23)(react@18.3.1)
-      '@stackso/js-core':
-        specifier: ^0.4.16
-        version: 0.4.19(bufferutil@4.0.9)(typescript@5.8.3)(utf-8-validate@5.0.10)(zod@3.25.76)
       '@supabase/supabase-js':
         specifier: ^2.45.1
         version: 2.52.0(bufferutil@4.0.9)(utf-8-validate@5.0.10)
@@ -2749,9 +2746,6 @@ packages:
 
   '@solana/web3.js@1.98.2':
     resolution: {integrity: sha512-BqVwEG+TaG2yCkBMbD3C4hdpustR4FpuUFRPUmqRZYYlPI9Hg4XMWxHWOWRzHE9Lkc9NDjzXFX7lDXSgzC7R1A==}
-
-  '@stackso/js-core@0.4.19':
-    resolution: {integrity: sha512-V9yvf3EhLCOwAft8A9c2Uq6e0AvTUhliU9fbjl4aYpF12K8KzY7SWFOkInE5PBszvUbYeUXUiMfrOwP67f/iPQ==}
 
   '@standard-schema/spec@1.0.0':
     resolution: {integrity: sha512-m2bOd0f2RT9k8QJx1JN85cZYyH1RqFBdlwtkSlf4tBDYLCiiZnv1fIIwacK6cqwXavOydf0NPToMQgpKq+dVlA==}
@@ -12289,17 +12283,6 @@ snapshots:
       - encoding
       - typescript
       - utf-8-validate
-
-  '@stackso/js-core@0.4.19(bufferutil@4.0.9)(typescript@5.8.3)(utf-8-validate@5.0.10)(zod@3.25.76)':
-    dependencies:
-      axios: 1.10.0
-      viem: 2.33.0(bufferutil@4.0.9)(typescript@5.8.3)(utf-8-validate@5.0.10)(zod@3.25.76)
-    transitivePeerDependencies:
-      - bufferutil
-      - debug
-      - typescript
-      - utf-8-validate
-      - zod
 
   '@standard-schema/spec@1.0.0': {}
 
