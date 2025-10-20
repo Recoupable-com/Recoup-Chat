@@ -6,10 +6,7 @@ import React, {
   useCallback,
 } from "react";
 import { useVercelChat } from "@/hooks/useVercelChat";
-import {
-  UseChatHelpers,
-  Provider as ChatStoreProvider,
-} from "@ai-sdk-tools/store";
+import { UseChatHelpers } from "@ai-sdk-tools/store";
 import useAttachments from "@/hooks/useAttachments";
 import { ChatStatus, FileUIPart, UIMessage } from "ai";
 import { useArtistProvider } from "./ArtistProvider";
@@ -146,11 +143,9 @@ export function VercelChatProvider({
 
   // Provide the context value to children
   return (
-    <ChatStoreProvider initialMessages={initialMessages || []}>
-      <VercelChatContext.Provider value={contextValue}>
-        {children}
-      </VercelChatContext.Provider>
-    </ChatStoreProvider>
+    <VercelChatContext.Provider value={contextValue}>
+      {children}
+    </VercelChatContext.Provider>
   );
 }
 
