@@ -20,7 +20,7 @@ import { UIMessage } from "ai";
 import { useDropzone } from "@/hooks/useDropzone";
 import FileDragOverlay from "./FileDragOverlay";
 import { Loader } from "lucide-react";
-import { memo, useCallback, useEffect } from "react";
+import { memo, useCallback } from "react";
 
 interface ChatProps {
   id: string;
@@ -37,13 +37,7 @@ export function Chat({ id, reportId, initialMessages }: ChatProps) {
 }
 
 // Inner component that uses the context
-function ChatContentMemoized({
-  reportId,
-  id,
-}: {
-  reportId?: string;
-  id: string;
-}) {
+function ChatContentMemoized({ reportId, id }: {reportId?: string; id: string;}) {
   const {
     messages,
     status,
@@ -66,15 +60,6 @@ function ChatContentMemoized({
     shouldBeVisible: messages.length === 0 && !reportId && status === "ready",
     deps: [messages.length, reportId, status],
   });
-
-  useEffect(() => {
-    const getMessagesCount = () => {
-      console.log("getMessagesCount", messages.length);
-      return messages.length;
-    };
-
-    getMessagesCount();
-  }, [messages]);
 
   // Memoize the handler to prevent re-renders
   const handleSendMessageMemoized = useCallback(
@@ -148,11 +133,7 @@ function ChatContentMemoized({
             setMessages={setMessages}
             reload={reload}
           >
-            {reportId && (
-              <div className="w-full max-w-3xl mx-auto">
-                <ChatReport reportId={reportId} />
-              </div>
-            )}
+            {reportId && (<div className="w-full max-w-3xl mx-auto"><ChatReport reportId={reportId} /></div>)}
           </Messages>
           <div className="w-full max-w-3xl mx-auto">
             <ChatInput
