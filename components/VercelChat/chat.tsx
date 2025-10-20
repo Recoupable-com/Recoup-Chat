@@ -5,8 +5,6 @@ import { Messages } from "./messages";
 import ChatInput from "./ChatInput";
 import ChatSkeleton from "../Chat/ChatSkeleton";
 import ChatGreeting from "../Chat/ChatGreeting";
-
-// import StarterAgents from "../Chat/StarterAgents";
 import useVisibilityDelay from "@/hooks/useVisibilityDelay";
 import { ChatReport } from "../Chat/ChatReport";
 import { useParams } from "next/navigation";
@@ -21,11 +19,7 @@ import { useDropzone } from "@/hooks/useDropzone";
 import FileDragOverlay from "./FileDragOverlay";
 import { Loader } from "lucide-react";
 import { memo, useCallback } from "react";
-import {
-  useChatMessages,
-  useMessageCount,
-  Provider as ChatStoreProvider,
-} from "@ai-sdk-tools/store";
+import { Provider as ChatStoreProvider } from "@ai-sdk-tools/store";
 
 interface ChatProps {
   id: string;
@@ -33,23 +27,12 @@ interface ChatProps {
   initialMessages?: UIMessage[];
 }
 
-// Inner component that uses the store
-function ChatWithStore({ id, reportId, initialMessages }: ChatProps) {
-  return (
-    <VercelChatProvider chatId={id} initialMessages={initialMessages}>
-      <ChatContent reportId={reportId} id={id} />
-    </VercelChatProvider>
-  );
-}
-
 export function Chat({ id, reportId, initialMessages }: ChatProps) {
   return (
     <ChatStoreProvider initialMessages={initialMessages || []}>
-      <ChatWithStore
-        id={id}
-        reportId={reportId}
-        initialMessages={initialMessages}
-      />
+      <VercelChatProvider chatId={id} initialMessages={initialMessages}>
+        <ChatContent reportId={reportId} id={id} />
+      </VercelChatProvider>
     </ChatStoreProvider>
   );
 }
