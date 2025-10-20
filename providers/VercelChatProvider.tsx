@@ -6,7 +6,7 @@ import React, {
   useCallback,
 } from "react";
 import { useVercelChat } from "@/hooks/useVercelChat";
-import { UseChatHelpers } from "@ai-sdk/react";
+import { UseChatHelpers } from "@ai-sdk-tools/store";
 import useAttachments from "@/hooks/useAttachments";
 import { ChatStatus, FileUIPart, UIMessage } from "ai";
 import { useArtistProvider } from "./ArtistProvider";

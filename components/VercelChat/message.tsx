@@ -1,6 +1,6 @@
 import { ChatStatus, ToolUIPart, UIMessage, isToolUIPart } from "ai";
 import { useState } from "react";
-import { UseChatHelpers } from "@ai-sdk/react";
+import { UseChatHelpers } from "@ai-sdk-tools/store";
 import { motion } from "framer-motion";
 import { AnimatePresence } from "framer-motion";
 import { cn } from "@/lib/utils";
@@ -70,8 +70,9 @@ const Message = ({
               }
 
               if (type === "text") {
-                const isLastMessage = message.role === "assistant" && 
-                  status !== "streaming" && 
+                const isLastMessage =
+                  message.role === "assistant" &&
+                  status !== "streaming" &&
                   partIndex === message.parts.length - 1;
 
                 if (mode === "view") {
@@ -81,10 +82,15 @@ const Message = ({
                         message={message}
                         partText={part?.text || ""}
                       />
-                      <Actions className={cn("mt-0.5 gap-0.5 opacity-0 pointer-events-none group-hover:opacity-100 group-hover:pointer-events-auto transition-opacity", {
-                        "justify-start": message.role === "assistant",
-                        "justify-end": message.role === "user"
-                      })}>
+                      <Actions
+                        className={cn(
+                          "mt-0.5 gap-0.5 opacity-0 pointer-events-none group-hover:opacity-100 group-hover:pointer-events-auto transition-opacity",
+                          {
+                            "justify-start": message.role === "assistant",
+                            "justify-end": message.role === "user",
+                          }
+                        )}
+                      >
                         {message.role === "user" && (
                           <Action
                             onClick={() => setMode("edit")}

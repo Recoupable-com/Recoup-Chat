@@ -3,9 +3,9 @@
 import { memo } from "react";
 import { SpinnerIcon } from "./icons";
 import { ChatStatus, UIMessage } from "ai";
-import { UseChatHelpers } from "@ai-sdk/react";
+import { UseChatHelpers } from "@ai-sdk-tools/store";
 import { Response } from "@/components/ai-elements/response";
-import { 
+import {
   Conversation,
   ConversationContent,
   ConversationScrollButton,
@@ -20,7 +20,7 @@ interface TextMessagePartProps {
 export function TextMessagePart({ text }: TextMessagePartProps) {
   // Clean file mention markup to prevent [blocked] display
   const cleanedText = cleanFileMentions(text);
-  
+
   return (
     <div className="flex flex-col gap-4">
       <Response>{cleanedText}</Response>
