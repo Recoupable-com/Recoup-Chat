@@ -6,12 +6,23 @@ import { ParsedSmsMessage } from "@/types/twilio";
  * @returns Parsed SMS message data
  */
 export const parseSmsWebhook = (formData: FormData): ParsedSmsMessage => {
+  const from = formData.get("From");
+  const to = formData.get("To");
+  const body = formData.get("Body");
+  const messageSid = formData.get("MessageSid");
+  const accountSid = formData.get("AccountSid");
+  const numMedia = formData.get("NumMedia");
+
+  if (!from || !to || !body || !messageSid || !accountSid) {
+    throw new Error("Missing required webhook fields");
+  }
+
   return {
-    from: formData.get("From") as string,
-    to: formData.get("To") as string,
-    body: formData.get("Body") as string,
-    messageSid: formData.get("MessageSid") as string,
-    accountSid: formData.get("AccountSid") as string,
-    mediaCount: parseInt(formData.get("NumMedia") as string) || 0,
+    from: from.toString(),
+    to: to.toString(),
+    body: body.toString(),
+    messageSid: messageSid.toString(),
+    accountSid: accountSid.toString(),
+    mediaCount: numMedia ? parseInt(numMedia.toString(), 10) : 0,
   };
 };
