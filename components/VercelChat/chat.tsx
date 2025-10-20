@@ -37,13 +37,7 @@ export function Chat({ id, reportId, initialMessages }: ChatProps) {
 }
 
 // Inner component that uses the context
-function ChatContentMemoized({
-  reportId,
-  id,
-}: {
-  reportId?: string;
-  id: string;
-}) {
+function ChatContentMemoized({ reportId, id }: {reportId?: string; id: string;}) {
   const {
     messages,
     status,
@@ -139,11 +133,7 @@ function ChatContentMemoized({
             setMessages={setMessages}
             reload={reload}
           >
-            {reportId && (
-              <div className="w-full max-w-3xl mx-auto">
-                <ChatReport reportId={reportId} />
-              </div>
-            )}
+            {reportId && (<div className="w-full max-w-3xl mx-auto"><ChatReport reportId={reportId} /></div>)}
           </Messages>
           <div className="w-full max-w-3xl mx-auto">
             <ChatInput
