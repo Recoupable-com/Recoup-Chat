@@ -1,0 +1,184 @@
+# CodeRabbit Configuration for SOLID Principles & Clean Code
+# Reference: https://docs.coderabbit.ai/reference/configuration
+
+language: en-US
+tone_instructions: "Focus on SOLID principles, clean code practices, and maintainable architecture. Be thorough but constructive in feedback."
+
+reviews:
+  profile: chill
+  high_level_summary: true
+  poem: true
+  auto_review:
+    enabled: true
+    drafts: false
+
+  # Pre-merge checks for SOLID principles and clean code
+  pre_merge_checks:
+    custom_checks:
+      - mode: "warning" # Change to "error" to block merges on violations
+        name: "SOLID & Clean Code"
+        instructions: |
+          ## Single Responsibility Principle (SRP)
+          - Each class/function should have only one reason to change
+          - Functions should do one thing and do it well
+          - Avoid god classes or functions with multiple responsibilities
+          - Look for functions longer than 20 lines or classes with >200 lines
+
+          ## Open/Closed Principle (OCP)
+          - Classes should be open for extension but closed for modification
+          - Prefer composition over inheritance
+          - Use interfaces and abstract classes for extensibility
+          - Avoid modifying existing code when adding new features
+
+          ## DRY Principle (Don't Repeat Yourself)
+          - Eliminate code duplication by extracting common functionality
+          - Create reusable functions, components, and utilities
+          - Use constants for repeated values
+          - Consolidate similar logic into shared modules
+          - Avoid copy-paste programming
+          - Extract repeated patterns into abstractions
+          - Use configuration objects instead of hardcoded values
+
+          ## KISS Principle (Keep It Simple, Stupid)
+          - Prefer simple solutions over complex ones
+          - Avoid over-engineering and premature optimization
+          - Use clear, readable code over clever code
+          - Choose straightforward algorithms over complex ones
+          - Avoid unnecessary abstractions and layers
+          - Write code that's easy to understand and maintain
+          - Prefer explicit over implicit behavior
+
+          ## Clean Code Practices
+          - Use descriptive names for variables, functions, and classes
+          - Keep functions small and focused
+          - Avoid deep nesting (max 3 levels)
+          - Use meaningful comments, not obvious ones
+          - Follow consistent naming conventions
+          - Handle errors gracefully
+          - Write self-documenting code
+
+  # Path-specific instructions for different file types
+  path_instructions:
+    # React Components
+    - path: "components/**/*.tsx"
+      instructions: |
+        For React components, ensure:
+        - Single responsibility per component
+        - Proper prop interfaces (ISP)
+        - Use composition over inheritance
+        - Avoid prop drilling (use context or state management)
+        - Keep components under 200 lines
+        - Extract custom hooks for complex logic
+        - Use TypeScript interfaces for props
+        - DRY: Extract common UI patterns into reusable components
+        - KISS: Prefer simple component structure over complex abstractions
+
+    # Hooks
+    - path: "hooks/**/*.ts"
+      instructions: |
+        For custom hooks, ensure:
+        - Single responsibility per hook
+        - Return consistent interface
+        - Handle edge cases and errors
+        - Use proper dependency arrays
+        - Keep hooks focused and reusable
+        - Follow naming convention (use prefix)
+        - DRY: Extract common hook logic into shared utilities
+        - KISS: Avoid complex hook compositions, prefer simple state management
+
+    # API Routes
+    - path: "app/api/**/*.ts"
+      instructions: |
+        For API routes, ensure:
+        - Single responsibility per route handler
+        - Proper error handling and validation
+        - Use dependency injection for services
+        - Follow RESTful principles
+        - Validate input parameters
+        - Return consistent response formats
+        - DRY: Extract common validation and error handling logic
+        - KISS: Use simple, straightforward request/response patterns
+
+    # Utility Functions
+    - path: "lib/**/*.ts"
+      instructions: |
+        For utility functions, ensure:
+        - Pure functions when possible
+        - Single responsibility per function
+        - Proper error handling
+        - Use TypeScript for type safety
+        - Avoid side effects
+        - Keep functions under 50 lines
+        - DRY: Consolidate similar logic into shared utilities
+        - KISS: Prefer simple, readable implementations over clever optimizations
+
+    # Providers/Context
+    - path: "providers/**/*.tsx"
+      instructions: |
+        For React providers, ensure:
+        - Single responsibility per provider
+        - Proper context interface design
+        - Avoid prop drilling
+        - Use composition for complex state
+        - Handle loading and error states
+        - Keep providers focused and testable
+        - DRY: Extract common provider patterns into reusable hooks
+        - KISS: Avoid over-abstracting state management, keep it simple
+
+    # Utils folder restrictions
+    - path: "utils/**"
+      instructions: |
+        ❌ NEVER use the utils folder!
+        - This folder is deprecated and should not be used
+        - Instead, organize utilities by domain: lib/[domain]/[functionName].ts
+        - Example: lib/auth/validateToken.ts instead of utils/auth.ts
+        - This provides better organization and discoverability
+
+    # Generic lib/utils restrictions
+    - path: "lib/utils/**"
+      instructions: |
+        ❌ NEVER use a generic utils folder in lib!
+        - Avoid lib/utils/ as it creates a catch-all dumping ground
+        - Instead, organize by domain: lib/[domain]/[functionName].ts
+        - Example: lib/validation/emailValidator.ts instead of lib/utils/validation.ts
+        - Example: lib/formatting/dateFormatter.ts instead of lib/utils/formatters.ts
+        - This makes code more discoverable and maintainable
+
+  # File patterns to include/exclude
+  path_filters:
+    - "src/**"
+    - "components/**"
+    - "hooks/**"
+    - "lib/**"
+    - "providers/**"
+    - "app/**"
+    - "!**/*.test.*"
+    - "!**/*.spec.*"
+    - "!**/node_modules/**"
+    - "!**/dist/**"
+    - "!**/build/**"
+
+  # Additional checks
+  commit_status: true
+  review_status: true
+  changed_files_summary: true
+  sequence_diagrams: true
+  estimate_code_review_effort: true
+  assess_linked_issues: true
+  related_issues: true
+  related_prs: true
+  suggested_labels: true
+  suggested_reviewers: true
+
+# Knowledge base configuration
+knowledge_base:
+  learnings:
+    scope: auto
+  issues:
+    scope: auto
+  pull_requests:
+    scope: auto
+
+# Global settings
+early_access: false
+enable_free_tier: true
