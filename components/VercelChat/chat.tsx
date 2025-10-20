@@ -21,6 +21,7 @@ import { useDropzone } from "@/hooks/useDropzone";
 import FileDragOverlay from "./FileDragOverlay";
 import { Loader } from "lucide-react";
 import { memo, useCallback } from "react";
+import { useChatMessages, useMessageCount } from "@ai-sdk-tools/store";
 
 interface ChatProps {
   id: string;
@@ -28,7 +29,20 @@ interface ChatProps {
   initialMessages?: UIMessage[];
 }
 
+// Hook to log store data using ai-sdk-tools
+const useLogStore = () => {
+  const messages = useChatMessages();
+  const messageCount = useMessageCount();
+  
+  console.log("Store Messages Count:", messageCount);
+  console.log("Latest Message:", messages[messages.length - 1]);
+  console.log("All Messages:", messages);
+};
+
 export function Chat({ id, reportId, initialMessages }: ChatProps) {
+  // Log store data using ai-sdk-tools
+  useLogStore();
+  
   return (
     <VercelChatProvider chatId={id} initialMessages={initialMessages}>
       <ChatContent reportId={reportId} id={id} />
