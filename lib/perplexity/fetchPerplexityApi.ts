@@ -1,23 +1,22 @@
-// See the Sonar API documentation for more details:
-// https://docs.perplexity.ai/api-reference/chat-completions
+// See: https://docs.perplexity.ai/api-reference/chat-completions
+import { getPerplexityApiKey, getPerplexityHeaders, PERPLEXITY_BASE_URL } from "./config";
+
 const fetchPerplexityApi = async (
   messages: Array<{ role: string; content: string }>,
   model: string = "sonar-pro"
-) => {
-  const url = new URL("https://api.perplexity.ai/chat/completions");
+): Promise<Response> => {
+  const apiKey = getPerplexityApiKey();
+  const url = `${PERPLEXITY_BASE_URL}/chat/completions`;
+  
   const body = {
     model,
-    messages: messages,
+    messages,
   };
 
-  let response;
   try {
-    response = await fetch(url.toString(), {
+    const response = await fetch(url, {
       method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${process.env.PERPLEXITY_API_KEY}`,
-      },
+      headers: getPerplexityHeaders(apiKey),
       body: JSON.stringify(body),
     });
     return response;

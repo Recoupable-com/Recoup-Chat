@@ -17,9 +17,7 @@ const UserProfileButtonSkeleton = () => {
         <Skeleton className="h-3 w-20 md:w-24" />
       </div>
       
-      <Button variant="ghost" className="p-0" disabled>
-        <Skeleton className="h-4 w-4 shrink-0 ml-auto" />
-      </Button>
+      <Skeleton className="h-4 w-4 shrink-0 ml-auto" />
     </Button>
   );
 };

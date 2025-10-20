@@ -1,4 +1,5 @@
 import { generateText } from "ai";
+import { extractTextResultFromSteps } from "./extractTextResultFromSteps";
 
 /**
  * Extract text from a GenerateTextResult
@@ -6,6 +7,11 @@ import { generateText } from "ai";
 export function extractTextFromResult(
   result: Awaited<ReturnType<typeof generateText>>
 ): string {
+  // Handle multi-step responses (when maxSteps > 1)
+  const stepsText = extractTextResultFromSteps(result);
+  if (stepsText) return stepsText;
+
+  // Fallback to direct text/content properties
   if (typeof result.text === "string") {
     return result.text;
   }
@@ -16,4 +22,3 @@ export function extractTextFromResult(
 
   return String(result.text || result.content || "No response content");
 }
-

@@ -11,15 +11,19 @@ import {
   ConversationScrollButton,
 } from "@/components/ai-elements/conversation";
 import Message from "./message";
+import { cleanFileMentions } from "@/lib/chat/cleanFileMentions";
 
 interface TextMessagePartProps {
   text: string;
 }
 
 export function TextMessagePart({ text }: TextMessagePartProps) {
+  // Clean file mention markup to prevent [blocked] display
+  const cleanedText = cleanFileMentions(text);
+  
   return (
     <div className="flex flex-col gap-4">
-      <Response>{text}</Response>
+      <Response>{cleanedText}</Response>
     </div>
   );
 }

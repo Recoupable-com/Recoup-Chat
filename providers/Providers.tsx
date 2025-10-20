@@ -15,8 +15,8 @@ import { MiniAppProvider } from "./MiniAppProvider";
 const queryClient = new QueryClient();
 
 const Providers = ({ children }: { children: React.ReactNode }) => (
-  <WagmiProvider>
-    <QueryClientProvider client={queryClient}>
+  <QueryClientProvider client={queryClient}>
+    <WagmiProvider>
       <PrivyProvider>
         <MiniKitProvider>
           <MiniAppProvider>
@@ -34,8 +34,8 @@ const Providers = ({ children }: { children: React.ReactNode }) => (
           </MiniAppProvider>
         </MiniKitProvider>
       </PrivyProvider>
-    </QueryClientProvider>
-  </WagmiProvider>
+    </WagmiProvider>
+  </QueryClientProvider>
 );
 
 export default Providers;

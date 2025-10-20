@@ -33,6 +33,7 @@ import GenericSuccess from "./tools/GenericSuccess";
 import getToolInfo from "@/lib/utils/getToolsInfo";
 import { BrowserToolSkeleton } from "./BrowserToolSkeleton";
 import { BrowserToolResult, type BrowserToolResultType } from "./tools/browser/BrowserToolResult";
+import { isSearchProgressUpdate } from "@/lib/search/searchProgressUtils";
 import { GetSpotifyPlayButtonClickedResult } from "@/lib/supabase/getSpotifyPlayButtonClicked";
 import GetVideoGameCampaignPlaysResultComponent from "./tools/GetVideoGameCampaignPlaysResult";
 import { CommentsResult } from "@/components/Chat/comments/CommentsResult";
@@ -57,9 +58,13 @@ import YouTubeChannelVideosListSkeleton from "./tools/youtube/YouTubeChannelVide
 import YouTubeSetThumbnailResult from "./tools/youtube/YouTubeSetThumbnailResult";
 import YouTubeSetThumbnailSkeleton from "./tools/youtube/YouTubeSetThumbnailSkeleton";
 import type { YouTubeSetThumbnailResult as YouTubeSetThumbnailResultType } from "@/types/youtube";
-import SearchWebSkeleton from "./tools/SearchWebSkeleton";
+import SearchWebSkeleton from "./tools/SearchWeb/SearchWebSkeleton";
 import SpotifyDeepResearchSkeleton from "./tools/SpotifyDeepResearchSkeleton";
-import SearchWebResult, { SearchWebResultType } from "./tools/SearchWebResult";
+import WebDeepResearchSkeleton from "./tools/SearchWeb/WebDeepResearchSkeleton";
+import { SearchWebResultType } from "./tools/SearchWeb/SearchWebResult";
+import SearchApiResult from "./tools/SearchWeb/SearchApiResult";
+import SearchWebProgress from "./tools/SearchWeb/SearchWebProgress";
+import WebDeepResearchProgress from "./tools/SearchWeb/WebDeepResearchProgress";
 import SpotifyDeepResearchResult from "./tools/SpotifyDeepResearchResult";
 import GetArtistSocialsResult from "./tools/GetArtistSocialsResult";
 import GetArtistSocialsSkeleton from "./tools/GetArtistSocialsSkeleton";
@@ -86,12 +91,16 @@ import UpdateScheduledActionSkeleton from "./tools/UpdateScheduledActionSkeleton
 import { Sora2VideoSkeleton } from "./tools/sora2/Sora2VideoSkeleton";
 import { Sora2VideoResult } from "./tools/sora2/Sora2VideoResult";
 import { RetrieveVideoContentResult } from "@/lib/tools/sora2/retrieveVideoContent";
+import CatalogSongsSkeleton from "./tools/catalog/CatalogSongsSkeleton";
+import CatalogSongsResult, {
+  CatalogSongsResult as CatalogSongsResultType,
+} from "./tools/catalog/CatalogSongsResult";
+import { UpdateFileResult, UpdateFileResultType } from "./tools/files/UpdateFileResult";
 
 export function getToolCallComponent(part: ToolUIPart) {
   const { toolCallId } = part as ToolUIPart;
   const toolName = getToolName(part);
-  const isSearchWebTool =
-    toolName === "search_web" || toolName === "web_deep_research";
+  const isSearchWebTool = toolName === "search_web";
 
   // Handle image generation tools (including nano banana variants)
   if (
@@ -166,6 +175,12 @@ export function getToolCallComponent(part: ToolUIPart) {
         <SearchWebSkeleton />
       </div>
     );
+  } else if (toolName === "web_deep_research") {
+    return (
+      <div key={toolCallId}>
+        <WebDeepResearchSkeleton />
+      </div>
+    );
   } else if (toolName === "spotify_deep_research") {
     return (
       <div key={toolCallId}>
@@ -227,6 +242,7 @@ export function getToolCallComponent(part: ToolUIPart) {
       </div>
     );
   } else if (
+<<<<<<< HEAD
     toolName === "browser_act" ||
     toolName === "browser_extract" ||
     toolName === "browser_observe" ||
@@ -240,6 +256,14 @@ export function getToolCallComponent(part: ToolUIPart) {
     return (
       <div key={toolCallId}>
         <BrowserToolSkeleton toolName={toolName} url={url} />
+=======
+    toolName === "insert_catalog_songs" ||
+    toolName === "select_catalog_songs"
+  ) {
+    return (
+      <div key={toolCallId}>
+        <CatalogSongsSkeleton />
+>>>>>>> 1db799d4aff2fb6de5ec6d7b5f42688ec25d2cde
       </div>
     );
   }
@@ -259,8 +283,8 @@ export function getToolCallComponent(part: ToolUIPart) {
 export function getToolResultComponent(part: ToolUIPart) {
   const { toolCallId, output: result } = part as ToolUIPart;
   const toolName = getToolName(part);
-  const isSearchWebTool =
-    toolName === "search_web" || toolName === "web_deep_research";
+  const isSearchWebTool = toolName === "search_web";
+  const isDeepResearchTool = toolName === "web_deep_research";
 
   if (toolName === "generate_image") {
     return (
@@ -391,11 +415,29 @@ export function getToolResultComponent(part: ToolUIPart) {
       </div>
     );
   } else if (isSearchWebTool) {
+    if (isSearchProgressUpdate(result)) {
+      return (
+        <div key={toolCallId}>
+          <SearchWebProgress progress={result} />
+        </div>
+      );
+    }
+
     return (
       <div key={toolCallId}>
-        <SearchWebResult result={result as SearchWebResultType} />
+        <SearchApiResult result={result as SearchWebResultType} />
       </div>
     );
+  } else if (isDeepResearchTool) {
+    if (isSearchProgressUpdate(result)) {
+      return (
+        <div key={toolCallId}>
+          <WebDeepResearchProgress progress={result} />
+        </div>
+      );
+    }
+
+    return null;
   } else if (toolName === "spotify_deep_research") {
     return (
       <div key={toolCallId}>
@@ -470,11 +512,27 @@ export function getToolResultComponent(part: ToolUIPart) {
         <Sora2VideoResult result={result as RetrieveVideoContentResult} />
       </div>
     );
+  } else if (
+    toolName === "insert_catalog_songs" ||
+    toolName === "select_catalog_songs"
+  ) {
+    return (
+      <div key={toolCallId}>
+        <CatalogSongsResult result={result as CatalogSongsResultType} />
+      </div>
+    );
+  } else if (toolName === "update_file") {
+    return (
+      <div key={toolCallId}>
+        <UpdateFileResult result={result as UpdateFileResultType} />
+      </div>
+    );
   }
 
   // Default generic result for other tools
   return (
     <GenericSuccess
+      key={toolCallId}
       name={getDisplayToolName(toolName)}
       message={
         (result as { message?: string }).message ??

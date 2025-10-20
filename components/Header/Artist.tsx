@@ -53,11 +53,13 @@ const Artist = ({
     : "";
 
   return (
-    <motion.button
+    <motion.div
       initial={isMini ? false : true}
       layout="position"
+      role="button"
+      tabIndex={0}
       className={cn(
-        "py-2 w-full outline-none",
+        "py-2 w-full outline-none cursor-pointer",
         isMini
           ? [
               "flex justify-center items-center",
@@ -70,8 +72,13 @@ const Artist = ({
             ],
         shouldHighlight && "z-50 relative"
       )}
-      type="button"
       onClick={handleClick}
+      onKeyDown={(e) => {
+        if (e.key === 'Enter' || e.key === ' ') {
+          e.preventDefault();
+          handleClick();
+        }
+      }}
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
     >
@@ -132,7 +139,7 @@ const Artist = ({
           </div>
         </>
       )}
-    </motion.button>
+    </motion.div>
   );
 };
 
