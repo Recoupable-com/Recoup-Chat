@@ -1,4 +1,4 @@
-import { useChat } from "@ai-sdk/react";
+import { useChat } from "@ai-sdk-tools/store";
 import { useMessageLoader } from "./useMessageLoader";
 import { useUserProvider } from "@/providers/UserProvder";
 import { useArtistProvider } from "@/providers/ArtistProvider";
@@ -73,7 +73,9 @@ export function useVercelChat({
   }, [input]);
 
   // Resolve selected files to signed URLs for attachment
-  const [knowledgeFiles, setKnowledgeFiles] = useState<KnowledgeBaseEntry[]>([]);
+  const [knowledgeFiles, setKnowledgeFiles] = useState<KnowledgeBaseEntry[]>(
+    []
+  );
   const [isLoadingSignedUrls, setIsLoadingSignedUrls] = useState(false);
   // Cache signed URLs by storage_key to avoid redundant refetches
   const signedUrlCacheRef = useRef<Map<string, KnowledgeBaseEntry>>(new Map());
@@ -146,7 +148,10 @@ export function useVercelChat({
   }, [selectedFileIds, allArtistFiles]);
 
   // Build knowledge base text from selected files (text-like types only)
-  const { data: knowledgeBaseText } = useArtistKnowledgeText(artistId, knowledgeFiles);
+  const { data: knowledgeBaseText } = useArtistKnowledgeText(
+    artistId,
+    knowledgeFiles
+  );
 
   // Convert selected signed files to FileUIPart attachments (pdf/images)
   const selectedFileAttachments = useMemo(() => {
@@ -159,8 +164,11 @@ export function useVercelChat({
     return outputs;
   }, [knowledgeFiles]);
 
-  const timezone = useMemo(() => Intl.DateTimeFormat().resolvedOptions().timeZone, []);
-  
+  const timezone = useMemo(
+    () => Intl.DateTimeFormat().resolvedOptions().timeZone,
+    []
+  );
+
   const chatRequestOptions = useMemo(
     () => ({
       body: {
@@ -174,7 +182,16 @@ export function useVercelChat({
         knowledgeBaseText,
       },
     }),
-    [id, artistId, userId, email, model, timezone, artistInstruction, knowledgeBaseText]
+    [
+      id,
+      artistId,
+      userId,
+      email,
+      model,
+      timezone,
+      artistInstruction,
+      knowledgeBaseText,
+    ]
   );
 
   const { messages, status, stop, sendMessage, setMessages, regenerate } =
@@ -201,7 +218,8 @@ export function useVercelChat({
     };
     const combined: FileUIPart[] = [];
     if (attachments && attachments.length > 0) combined.push(...attachments);
-    if (selectedFileAttachments.length > 0) combined.push(...selectedFileAttachments);
+    if (selectedFileAttachments.length > 0)
+      combined.push(...selectedFileAttachments);
     if (combined.length > 0) payload.files = combined;
     sendMessage(payload, chatRequestOptions);
     setInput("");
@@ -219,7 +237,6 @@ export function useVercelChat({
     userId,
     setMessages
   );
-
 
   // Only show loading state if:
   // 1. We're loading messages
@@ -278,10 +295,13 @@ export function useVercelChat({
     }
   };
 
-  const handleSendQueryMessages = useCallback(async (initialMessage: UIMessage) => {
-    silentlyUpdateUrl();
-    sendMessage(initialMessage, chatRequestOptions);
-  }, [silentlyUpdateUrl, sendMessage, chatRequestOptions]);
+  const handleSendQueryMessages = useCallback(
+    async (initialMessage: UIMessage) => {
+      silentlyUpdateUrl();
+      sendMessage(initialMessage, chatRequestOptions);
+    },
+    [silentlyUpdateUrl, sendMessage, chatRequestOptions]
+  );
 
   useEffect(() => {
     const isFullyLoggedIn = userId;
@@ -291,7 +311,13 @@ export function useVercelChat({
     if (!hasInitialMessages || !isReady || hasMessages || !isFullyLoggedIn)
       return;
     handleSendQueryMessages(initialMessages[0]);
-  }, [initialMessages, status, userId, handleSendQueryMessages, messages.length]);
+  }, [
+    initialMessages,
+    status,
+    userId,
+    handleSendQueryMessages,
+    messages.length,
+  ]);
 
   // Sync state when models first load and prioritize preferred model
   useEffect(() => {
@@ -300,7 +326,6 @@ export function useVercelChat({
     const defaultId = preferred ? preferred.id : availableModels[0].id;
     setModel(defaultId);
   }, [availableModels, model, setModel]);
-
 
   return {
     // States
@@ -324,4 +349,3 @@ export function useVercelChat({
     append,
   };
 }
-

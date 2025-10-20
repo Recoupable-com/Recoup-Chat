@@ -5,8 +5,6 @@ import { Messages } from "./messages";
 import ChatInput from "./ChatInput";
 import ChatSkeleton from "../Chat/ChatSkeleton";
 import ChatGreeting from "../Chat/ChatGreeting";
-
-// import StarterAgents from "../Chat/StarterAgents";
 import useVisibilityDelay from "@/hooks/useVisibilityDelay";
 import { ChatReport } from "../Chat/ChatReport";
 import { useParams } from "next/navigation";
@@ -21,6 +19,7 @@ import { useDropzone } from "@/hooks/useDropzone";
 import FileDragOverlay from "./FileDragOverlay";
 import { Loader } from "lucide-react";
 import { memo, useCallback } from "react";
+import { Provider as ChatStoreProvider } from "@ai-sdk-tools/store";
 
 interface ChatProps {
   id: string;
@@ -30,14 +29,22 @@ interface ChatProps {
 
 export function Chat({ id, reportId, initialMessages }: ChatProps) {
   return (
-    <VercelChatProvider chatId={id} initialMessages={initialMessages}>
-      <ChatContent reportId={reportId} id={id} />
-    </VercelChatProvider>
+    <ChatStoreProvider initialMessages={initialMessages || []}>
+      <VercelChatProvider chatId={id} initialMessages={initialMessages}>
+        <ChatContent reportId={reportId} id={id} />
+      </VercelChatProvider>
+    </ChatStoreProvider>
   );
 }
 
 // Inner component that uses the context
-function ChatContentMemoized({ reportId, id }: {reportId?: string; id: string;}) {
+function ChatContentMemoized({
+  reportId,
+  id,
+}: {
+  reportId?: string;
+  id: string;
+}) {
   const {
     messages,
     status,
@@ -133,7 +140,11 @@ function ChatContentMemoized({ reportId, id }: {reportId?: string; id: string;})
             setMessages={setMessages}
             reload={reload}
           >
-            {reportId && (<div className="w-full max-w-3xl mx-auto"><ChatReport reportId={reportId} /></div>)}
+            {reportId && (
+              <div className="w-full max-w-3xl mx-auto">
+                <ChatReport reportId={reportId} />
+              </div>
+            )}
           </Messages>
           <div className="w-full max-w-3xl mx-auto">
             <ChatInput

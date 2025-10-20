@@ -11,11 +11,11 @@
     "update-types": "npx supabase gen types typescript --project-id godremdqwajrwazhbrue --schema public > types/database.types.ts"
   },
   "dependencies": {
+    "@ai-sdk-tools/store": "^0.8.2",
     "@ai-sdk/anthropic": "^2.0.17",
     "@ai-sdk/gateway": "^1.0.25",
     "@ai-sdk/google": "^2.0.15",
     "@ai-sdk/openai": "^2.0.32",
-    "@ai-sdk/react": "^2.0.48",
     "@ardrive/turbo-sdk": "^1.22.1",
     "@coinbase/cdp-sdk": "^1.4.0",
     "@coinbase/onchainkit": "^0.38.8",

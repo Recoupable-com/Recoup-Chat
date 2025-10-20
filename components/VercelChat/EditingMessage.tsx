@@ -1,7 +1,7 @@
 import React, { Dispatch, SetStateAction, memo } from "react";
 import { UIMessage } from "ai";
 import { MessageEditor } from "./message-editor";
-import { UseChatHelpers } from "@ai-sdk/react";
+import { UseChatHelpers } from "@ai-sdk-tools/store";
 
 export interface EditingMessageProps {
   message: UIMessage;
