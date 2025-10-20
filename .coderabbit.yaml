@@ -12,49 +12,50 @@ reviews:
     enabled: true
     drafts: false
 
-  # Custom checks for SOLID principles and clean code
-  custom_checks:
-    - name: "SOLID Principles Check"
-      description: "Ensure code follows SOLID principles"
-      check: |
-        ## Single Responsibility Principle (SRP)
-        - Each class/function should have only one reason to change
-        - Functions should do one thing and do it well
-        - Avoid god classes or functions with multiple responsibilities
-        - Look for functions longer than 20 lines or classes with >200 lines
+  # Pre-merge checks for SOLID principles and clean code
+  pre_merge_checks:
+    custom_checks:
+      - mode: "warning" # Change to "error" to block merges on violations
+        name: "SOLID & Clean Code"
+        instructions: |
+          ## Single Responsibility Principle (SRP)
+          - Each class/function should have only one reason to change
+          - Functions should do one thing and do it well
+          - Avoid god classes or functions with multiple responsibilities
+          - Look for functions longer than 20 lines or classes with >200 lines
 
-        ## Open/Closed Principle (OCP)
-        - Classes should be open for extension but closed for modification
-        - Prefer composition over inheritance
-        - Use interfaces and abstract classes for extensibility
-        - Avoid modifying existing code when adding new features
+          ## Open/Closed Principle (OCP)
+          - Classes should be open for extension but closed for modification
+          - Prefer composition over inheritance
+          - Use interfaces and abstract classes for extensibility
+          - Avoid modifying existing code when adding new features
 
-        ## DRY Principle (Don't Repeat Yourself)
-        - Eliminate code duplication by extracting common functionality
-        - Create reusable functions, components, and utilities
-        - Use constants for repeated values
-        - Consolidate similar logic into shared modules
-        - Avoid copy-paste programming
-        - Extract repeated patterns into abstractions
-        - Use configuration objects instead of hardcoded values
+          ## DRY Principle (Don't Repeat Yourself)
+          - Eliminate code duplication by extracting common functionality
+          - Create reusable functions, components, and utilities
+          - Use constants for repeated values
+          - Consolidate similar logic into shared modules
+          - Avoid copy-paste programming
+          - Extract repeated patterns into abstractions
+          - Use configuration objects instead of hardcoded values
 
-        ## KISS Principle (Keep It Simple, Stupid)
-        - Prefer simple solutions over complex ones
-        - Avoid over-engineering and premature optimization
-        - Use clear, readable code over clever code
-        - Choose straightforward algorithms over complex ones
-        - Avoid unnecessary abstractions and layers
-        - Write code that's easy to understand and maintain
-        - Prefer explicit over implicit behavior
+          ## KISS Principle (Keep It Simple, Stupid)
+          - Prefer simple solutions over complex ones
+          - Avoid over-engineering and premature optimization
+          - Use clear, readable code over clever code
+          - Choose straightforward algorithms over complex ones
+          - Avoid unnecessary abstractions and layers
+          - Write code that's easy to understand and maintain
+          - Prefer explicit over implicit behavior
 
-        ## Clean Code Practices
-        - Use descriptive names for variables, functions, and classes
-        - Keep functions small and focused
-        - Avoid deep nesting (max 3 levels)
-        - Use meaningful comments, not obvious ones
-        - Follow consistent naming conventions
-        - Handle errors gracefully
-        - Write self-documenting code
+          ## Clean Code Practices
+          - Use descriptive names for variables, functions, and classes
+          - Keep functions small and focused
+          - Avoid deep nesting (max 3 levels)
+          - Use meaningful comments, not obvious ones
+          - Follow consistent naming conventions
+          - Handle errors gracefully
+          - Write self-documenting code
 
   # Path-specific instructions for different file types
   path_instructions:
