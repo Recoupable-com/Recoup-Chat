@@ -67,14 +67,6 @@ function ChatContentMemoized({
     deps: [messages.length, reportId, status],
   });
 
-  useEffect(() => {
-    const getMessagesCount = () => {
-      console.log("getMessagesCount", messages.length);
-      return messages.length;
-    };
-
-    getMessagesCount();
-  }, [messages]);
 
   // Memoize the handler to prevent re-renders
   const handleSendMessageMemoized = useCallback(
