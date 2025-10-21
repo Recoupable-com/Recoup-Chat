@@ -1,6 +1,8 @@
 ---
-alwaysApply: true
+description: Stagehand browser automation - AI-powered act, extract, and observe methods for Playwright with autonomous agent capabilities
+alwaysApply: false
 ---
+
 # Stagehand Project
 
 This is a project that uses [Stagehand](https://github.com/browserbase/stagehand), which amplifies Playwright with AI-powered `act`, `extract`, and `observe` methods added to the Page class.

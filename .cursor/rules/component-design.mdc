@@ -1,0 +1,362 @@
+---
+description: Modern UI Component Building Standards - Comprehensive guidelines for building accessible, composable, and maintainable UI components
+alwaysApply: false
+---
+
+# Modern UI Component Building Standards
+
+## 🚨 CRITICAL REQUIREMENTS (Must Follow)
+
+### Accessibility (NON-NEGOTIABLE)
+
+- **ALWAYS** use semantic HTML elements appropriate to the component's role
+- **ALWAYS** ensure keyboard navigation and focus management
+- **ALWAYS** provide proper ARIA roles/states and test with screen readers
+- **NEVER** create components that aren't accessible - this is a baseline requirement
+- **ALWAYS** start with semantic HTML first, then augment with ARIA if needed
+
+### TypeScript Standards (MANDATORY)
+
+- **ALWAYS** extend native HTML attributes: `React.ComponentProps<"div">`
+- **ALWAYS** export component prop types: `export type ComponentNameProps`
+- **ALWAYS** support both controlled and uncontrolled state
+- **ALWAYS** wrap a single HTML element per component
+- **NEVER** create components that wrap multiple elements
+
+### Composition Patterns (ESSENTIAL)
+
+- **ALWAYS** favor composition over inheritance
+- **ALWAYS** expose clear APIs via props/slots for customization
+- **ALWAYS** make components composable and reusable
+- **ALWAYS** use `asChild` pattern for flexible element types
+- **ALWAYS** support polymorphism with `as` prop when appropriate
+
+## 🎯 HIGH PRIORITY PATTERNS
+
+### Framework Standards (shadcn/ui + Radix UI)
+
+- **MUST** use `@radix-ui/react-*` primitives for behavior and accessibility
+- **MUST** use `class-variance-authority` (CVA) for component variants
+- **MUST** use `@radix-ui/react-slot` for `asChild` pattern
+- **MUST** use `@radix-ui/react-use-controllable-state` for state management
+- **MUST** follow shadcn/ui component structure and naming conventions
+- **MUST** use `cn()` utility combining `clsx` and `tailwind-merge`
+- **MUST** export both component and variant functions (e.g., `Button, buttonVariants`)
+
+### Project-Specific Dependencies
+
+- **MUST** use `@radix-ui/react-icons` for icons (not Lucide React for UI components)
+- **MUST** use `lucide-react` for application icons and illustrations
+- **MUST** use `framer-motion` for animations and transitions
+- **MUST** use `next-themes` for theme management
+- **MUST** use `tailwindcss-animate` for CSS animations
+- **MUST** use `sonner` for toast notifications
+- **MUST** use `embla-carousel-react` for carousels
+- **MUST** use `react-resizable-panels` for resizable layouts
+
+### State Management
+
+- **MUST** support both controlled and uncontrolled modes
+- **MUST** use `useControllableState` pattern for state merging
+- **MUST** provide `defaultValue` and `onValueChange` props
+- **MUST** allow parent to control state or component to manage internally
+
+### Styling with Tailwind
+
+- **MUST** use `cn()` utility combining `clsx` and `tailwind-merge`
+- **MUST** follow class order: base → variants → conditionals → user overrides
+- **MUST** use `data-state` for visual states: `data-state="open|closed"`
+- **MUST** use `data-slot` for component identification: `data-slot="button"`
+- **MUST** define variants outside components to avoid recreation
+
+### Data Attributes (REQUIRED)
+
+- **ALWAYS** use `data-state` for component states (open/closed, loading, etc.)
+- **ALWAYS** use `data-slot` for component identification
+- **ALWAYS** use kebab-case naming: `data-slot="form-field"`
+- **ALWAYS** enable parent-aware styling with `has-[]` selectors
+
+## 📋 STANDARD PRACTICES
+
+### Component Architecture
+
+- **Primitive**: Unstyled, behavior-focused building blocks
+- **Component**: Styled, immediately usable UI units
+- **Pattern**: Documented solutions for common problems
+- **Block**: Production-ready compositions
+
+### API Design
+
+- **Props API**: Stable, typed, documented with defaults
+- **Children/Slots**: Support implicit and named slots
+- **Render Props**: Use function-as-child when parent owns data
+- **Provider/Context**: Top-level components for shared state
+- **Portal**: For layering/stacking context with a11y
+
+### Styling and Theming
+
+- **Design Tokens**: Named, platform-agnostic values
+- **Headless vs Styled**: Choose based on use case
+- **Variants**: Discrete style/behavior permutations via props
+- **Class Variance Authority**: For complex variant management
+
+## 🔧 IMPLEMENTATION GUIDELINES
+
+### TypeScript Best Practices (shadcn/ui Pattern)
+
+```tsx
+// ✅ CORRECT: shadcn/ui component structure
+import { cva, type VariantProps } from "class-variance-authority";
+import { Slot } from "@radix-ui/react-slot";
+import { cn } from "@/lib/utils";
+
+const buttonVariants = cva(
+  "inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50",
+  {
+    variants: {
+      variant: {
+        default: "bg-primary text-primary-foreground hover:bg-primary/90",
+        destructive:
+          "bg-destructive text-destructive-foreground hover:bg-destructive/90",
+        outline:
+          "border border-input bg-background hover:bg-accent hover:text-accent-foreground",
+        secondary:
+          "bg-secondary text-secondary-foreground hover:bg-secondary/80",
+        ghost: "hover:bg-accent hover:text-accent-foreground",
+        link: "text-primary underline-offset-4 hover:underline",
+      },
+      size: {
+        default: "h-10 px-4 py-2",
+        sm: "h-9 rounded-md px-3",
+        lg: "h-11 rounded-md px-8",
+        icon: "h-10 w-10",
+      },
+    },
+    defaultVariants: {
+      variant: "default",
+      size: "default",
+    },
+  }
+);
+
+export interface ButtonProps
+  extends React.ButtonHTMLAttributes<HTMLButtonElement>,
+    VariantProps<typeof buttonVariants> {
+  asChild?: boolean;
+}
+
+const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
+  ({ className, variant, size, asChild = false, ...props }, ref) => {
+    const Comp = asChild ? Slot : "button";
+    return (
+      <Comp
+        className={cn(buttonVariants({ variant, size, className }))}
+        ref={ref}
+        {...props}
+      />
+    );
+  }
+);
+Button.displayName = "Button";
+
+export { Button, buttonVariants };
+```
+
+### Accessibility Implementation
+
+```tsx
+// ✅ CORRECT: Semantic HTML first
+<button onClick={handleClick} aria-label="Close dialog">
+  <CloseIcon aria-hidden="true" />
+</button>
+
+// ✅ CORRECT: ARIA patterns
+<div role="dialog" aria-modal="true" aria-labelledby="dialog-title">
+  <h2 id="dialog-title">Dialog Title</h2>
+</div>
+```
+
+### State Management Pattern
+
+```tsx
+// ✅ CORRECT: Support both modes
+type StepperProps = {
+  value?: number;
+  defaultValue?: number;
+  onValueChange?: (value: number) => void;
+};
+
+const Stepper = ({ value, defaultValue, onValueChange }: StepperProps) => {
+  const [internalValue, setInternalValue] = useControllableState({
+    prop: value,
+    defaultProp: defaultValue,
+    onChange: onValueChange,
+  });
+  // ...
+};
+```
+
+### Styling Pattern
+
+```tsx
+// ✅ CORRECT: Class merging with proper order
+const Button = ({ variant, size, className, ...props }: ButtonProps) => (
+  <button
+    className={cn(
+      // 1. Base styles
+      "inline-flex items-center justify-center rounded-md font-medium",
+      // 2. Variant styles
+      buttonVariants({ variant, size }),
+      // 3. Conditional styles
+      isDisabled && "opacity-50 cursor-not-allowed",
+      // 4. User overrides
+      className
+    )}
+    {...props}
+  />
+);
+```
+
+## 🚫 COMMON ANTI-PATTERNS (AVOID)
+
+### ❌ DON'T DO THIS
+
+```tsx
+// ❌ BAD: Multiple elements in one component
+const Card = ({ title, content, footer }) => (
+  <div>
+    <h2>{title}</h2>
+    <p>{content}</p>
+    <footer>{footer}</footer>
+  </div>
+);
+
+// ❌ BAD: No accessibility
+<div onClick={handleClick}>Click me</div>
+
+// ❌ BAD: Hardcoded styles
+<button style={{ backgroundColor: 'blue' }}>Button</button>
+
+// ❌ BAD: No TypeScript
+const Button = (props) => <button {...props} />;
+```
+
+### ✅ DO THIS INSTEAD
+
+```tsx
+// ✅ GOOD: Single element with composition
+const Card = ({ children, ...props }) => (
+  <div data-slot="card" {...props}>{children}</div>
+);
+
+// ✅ GOOD: Semantic HTML with accessibility
+<button onClick={handleClick} aria-label="Submit form">
+  Submit
+</button>
+
+// ✅ GOOD: Design tokens and variants
+<button className={cn(buttonVariants({ variant }), className)}>
+  Button
+</button>
+
+// ✅ GOOD: Proper TypeScript
+const Button = ({ variant, ...props }: ButtonProps) => (
+  <button data-slot="button" {...props} />
+);
+```
+
+## 🎨 COMPONENT PATTERNS
+
+### Modal/Dialog Requirements
+
+- **MUST** implement focus trapping
+- **MUST** store and restore focus
+- **MUST** prevent body scroll when open
+- **MUST** handle escape key and tab navigation
+- **MUST** use `role="dialog"` and `aria-modal="true"`
+
+### Dropdown Menu Requirements
+
+- **MUST** support arrow key navigation
+- **MUST** handle enter/space activation
+- **MUST** close on escape
+- **MUST** implement proper focus management
+- **MUST** use `role="menu"` and `role="menuitem"`
+
+### Form Requirements
+
+- **MUST** provide clear labels and error messages
+- **MUST** use `aria-describedby` for error associations
+- **MUST** support fieldset/legend for grouped inputs
+- **MUST** handle validation states with ARIA
+
+## 📚 DOCUMENTATION REQUIREMENTS
+
+### Essential Sections (MUST INCLUDE)
+
+- **Overview**: What it does and when to use
+- **Demo/Source**: Live examples with code
+- **Installation**: Clear setup instructions
+- **Features**: Key capabilities and advantages
+- **Examples**: Variants, states, advanced usage
+- **Props/API**: Complete prop documentation
+- **Accessibility**: Keyboard navigation, ARIA, screen reader support
+
+### Code Examples (MUST BE)
+
+- Runnable and tested
+- Real-world scenarios
+- Include accessibility considerations
+- Show both controlled and uncontrolled usage
+- Demonstrate composition patterns
+
+## 🚀 DISTRIBUTION CONSIDERATIONS
+
+### Registry (Source Distribution)
+
+- Copy-and-paste friendly
+- Full ownership and customization
+- No dependency management required
+
+### NPM (Package Distribution)
+
+- Pre-built, versioned code
+- Automatic dependency resolution
+- TypeScript support out of the box
+
+### Performance Requirements
+
+- **MUST** define variants outside components
+- **MUST** memoize complex computations when needed
+- **MUST** use CSS variables for dynamic values
+- **MUST** consider virtualization for large lists
+- **MUST** minimize bundle size and dependencies
+
+## 🧪 TESTING REQUIREMENTS
+
+### Accessibility Testing (MANDATORY)
+
+- Test with screen readers
+- Verify keyboard navigation
+- Check color contrast ratios
+- Validate ARIA implementation
+
+### Component Testing (REQUIRED)
+
+- Test both controlled and uncontrolled modes
+- Verify prop forwarding and event handling
+- Test edge cases and error states
+- Ensure proper cleanup and memory management
+
+## 📈 MIGRATION AND VERSIONING
+
+### Breaking Changes (MUST DOCUMENT)
+
+- Clear migration guides with before/after examples
+- Use semantic versioning
+- Maintain backward compatibility when possible
+- Plan for future enhancements
+
+---
+
+**Remember**: These standards ensure professional-quality, accessible, and maintainable components. Every component must follow these guidelines to be considered production-ready.
