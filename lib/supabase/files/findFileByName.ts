@@ -17,14 +17,6 @@ export async function findFileByName(
     ? `files/${ownerAccountId}/${artistAccountId}/${path}/${fileName}`
     : `files/${ownerAccountId}/${artistAccountId}%`;
 
-  console.log('[findFileByName] Searching for file:', {
-    fileName,
-    ownerAccountId,
-    artistAccountId,
-    path,
-    pathPattern
-  });
-
   // Try to find by file_name first
   const { data, error} = await supabase
     .from("files")
@@ -40,8 +32,6 @@ export async function findFileByName(
   if (error && error.code === 'PGRST116') {
     // No rows found - try matching by storage_key pattern instead
     // This handles cases where file_name has spaces but storage_key has underscores
-    console.log('[findFileByName] No match by file_name, trying storage_key pattern...');
-    
     const storageKeyPattern = path
       ? `files/${ownerAccountId}/${artistAccountId}/${path}/${fileName}`
       : `files/${ownerAccountId}/${artistAccountId}/${fileName}`;
@@ -56,38 +46,16 @@ export async function findFileByName(
       .limit(1)
       .single();
 
-    if (errorByKey) {
-      console.log('[findFileByName] Error finding file by storage_key:', errorByKey);
+    if (errorByKey || !dataByKey) {
       return null;
     }
 
-    if (dataByKey) {
-      console.log('[findFileByName] File found by storage_key:', {
-        fileName: dataByKey.file_name,
-        storageKey: dataByKey.storage_key,
-        id: dataByKey.id
-      });
-      return dataByKey;
-    }
-
-    return null;
+    return dataByKey;
   }
 
-  if (error) {
-    console.log('[findFileByName] Error finding file:', error);
+  if (error || !data) {
     return null;
   }
-
-  if (!data) {
-    console.log('[findFileByName] No file found matching criteria');
-    return null;
-  }
-
-  console.log('[findFileByName] File found:', {
-    fileName: data.file_name,
-    storageKey: data.storage_key,
-    id: data.id
-  });
 
   return data;
 }

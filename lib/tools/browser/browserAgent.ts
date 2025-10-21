@@ -95,24 +95,17 @@ Note: This tool may take longer to execute as it performs multiple operations.`,
         platformName,
       };
     } catch (error) {
-      console.error('[browser_agent] EXECUTION FAILED');
-      console.error('[browser_agent] Error:', error);
-      console.error('[browser_agent] Error message:', error instanceof Error ? error.message : 'Unknown');
-      console.error('[browser_agent] Error stack:', error instanceof Error ? error.stack : 'No stack');
-      console.error('[browser_agent] Error details:', JSON.stringify(error, null, 2));
-      
       try {
         await stagehand.close();
-        console.log('[browser_agent] Stagehand closed after error');
-      } catch (closeError) {
-        console.error('[browser_agent] Failed to close Stagehand:', closeError);
+      } catch {
+        // Failed to close
       }
 
       const errorMessage = error instanceof Error ? error.message : "Unknown error";
 
       return {
         success: false,
-        error: `${errorMessage}\n\nCheck server logs for details.`,
+        error: errorMessage,
       };
     }
   },

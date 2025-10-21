@@ -79,17 +79,13 @@ This tool handles login modals automatically - just give it a URL and it will ge
           targetUrl = url.replace('instagram.com', 'www.instagram.com');
         }
         
-        console.log('[browser_observe] Navigating to:', targetUrl);
         await page.goto(targetUrl, { waitUntil: "domcontentloaded" });
-
-        console.log('[browser_observe] Page loaded, waiting for content to render...');
         
         // Wait longer for initial page load - seem more human
         await page.waitForTimeout(3000);
 
         // Add human-like behavior: scroll down slightly
         try {
-          console.log('[browser_observe] Simulating human behavior: scrolling...');
           await page.evaluate(() => {
             window.scrollTo({ top: 300, behavior: 'smooth' });
           });
@@ -100,30 +96,22 @@ This tool handles login modals automatically - just give it a URL and it will ge
             window.scrollTo({ top: 0, behavior: 'smooth' });
           });
           await page.waitForTimeout(1000);
-        } catch (scrollError) {
-          console.log('[browser_observe] Scrolling behavior skipped:', scrollError);
+        } catch {
+          // Scrolling behavior skipped
         }
 
         // Attempt to automatically dismiss common login modals
         let modalDismissed = false;
         try {
-          console.log('[browser_observe] Attempting to dismiss login modals...');
-          
           // Try to dismiss modal using the same method as browserAct
           await page.act("close the login popup");
-          
           modalDismissed = true;
-          console.log('[browser_observe] Successfully dismissed login modal');
           
           // Wait longer for modal to close and content to be visible
           await page.waitForTimeout(2000);
-        } catch (modalError) {
-          console.log('[browser_observe] No login modal found or could not dismiss:', 
-            modalError instanceof Error ? modalError.message : 'Unknown error');
+        } catch {
           // Continue anyway - maybe there was no modal
         }
-
-        console.log('[browser_observe] Extracting page content using AI-powered extraction...');
         
         const { visibleContent } = await page.extract({
           instruction: "Extract all visible text content from the page including follower counts, bios, and stats",
@@ -132,26 +120,14 @@ This tool handles login modals automatically - just give it a URL and it will ge
           }),
         });
         
-        console.log('[browser_observe] Page content extracted, length:', visibleContent.length);
-        
         const isRateLimited = visibleContent.includes('Take a quick pause') || 
                              visibleContent.includes('more requests than usual');
-        
-        if (isRateLimited) {
-          console.warn('[browser_observe] ⚠️ Instagram rate limit detected! Trying to extract data anyway...');
-        }
-
-        console.log('[browser_observe] Running observe to find interactive elements...');
         
         const observeResult = await page.observe({
           instruction: instruction || "Find all interactive elements and actions",
         });
-        
-        console.log('[browser_observe] Observe complete, capturing screenshot...');
 
         const screenshotUrl = await captureScreenshot(page, url);
-        
-        console.log('[browser_observe] Screenshot captured:', screenshotUrl ? 'success' : 'failed');
 
         const actions = Array.isArray(observeResult)
           ? observeResult
@@ -189,8 +165,6 @@ This tool handles login modals automatically - just give it a URL and it will ge
 
         // Detect platform from URL using the same helper as other browser tools
         const platformName = detectPlatform(url);
-        
-        console.log('[browser_observe] Building result for platform:', platformName);
 
         // Return in the same format as other browser tools for consistent UI
         const result: BrowserObserveResult = {
@@ -201,13 +175,9 @@ This tool handles login modals automatically - just give it a URL and it will ge
           platformName,
         };
         
-        console.log('[browser_observe] Returning successful result');
         return result;
       });
     } catch (error) {
-      console.error('[browser_observe] Tool execution failed:', error);
-      console.error('[browser_observe] Error stack:', error instanceof Error ? error.stack : 'No stack');
-      
       const errorResult: BrowserObserveResult = {
         success: false,
         error: `Failed to observe page: ${

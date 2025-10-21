@@ -68,25 +68,19 @@ EXAMPLE USE CASES:
   }),
   execute: async ({ url, schema, instruction }) => {
     try {
-      console.log('[browser_extract] Starting extraction:', { url, schema, instruction });
-      
       return await withBrowser(async (page, liveViewUrl, sessionUrl) => {
-        console.log('[browser_extract] Browser initialized, navigating to:', url);
         await page.goto(url, { waitUntil: "domcontentloaded" });
 
         const screenshotUrl = await captureScreenshot(page, url);
         const platformName = detectPlatform(url);
 
-        console.log('[browser_extract] Converting schema to Zod');
         const zodSchema = schemaToZod(schema);
 
-        console.log('[browser_extract] Extracting data with schema:', zodSchema);
         const extractResult = await page.extract({
           instruction: instruction || `Extract data according to the provided schema`,
           schema: zodSchema,
         });
 
-        console.log('[browser_extract] Extraction successful:', extractResult);
         return {
           success: true,
           data: extractResult,
@@ -97,9 +91,6 @@ EXAMPLE USE CASES:
         };
       });
     } catch (error) {
-      console.error('[browser_extract] Error occurred:', error);
-      console.error('[browser_extract] Error stack:', error instanceof Error ? error.stack : 'No stack trace');
-      
       return {
         success: false,
         error: error instanceof Error ? error.message : "Unknown error",
