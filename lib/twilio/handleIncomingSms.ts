@@ -46,9 +46,27 @@ export const handleIncomingSms = async (
     const chatConfig = await setupChatRequest(chatRequest);
     const result = await generateText(chatConfig);
 
-    return result.text || "Thanks for your message!";
+    // Return AI-generated response (truncate if too long for SMS)
+    const responseText = result.text || "Thanks for your message!";
+    return truncateSmsResponse(responseText);
   } catch (error) {
     console.error("Error processing SMS with AI:", error);
     return "Thanks for your message to Recoup! We'll get back to you soon.";
   }
+};
+
+/**
+ * Truncates response to fit SMS character limits (160 characters for single SMS)
+ * @param text - Full response text
+ * @returns Truncated text
+ */
+const truncateSmsResponse = (text: string): string => {
+  const MAX_SMS_LENGTH = 160;
+
+  if (text.length <= MAX_SMS_LENGTH) {
+    return text;
+  }
+
+  // Truncate and add ellipsis
+  return text.substring(0, MAX_SMS_LENGTH - 3) + "...";
 };
