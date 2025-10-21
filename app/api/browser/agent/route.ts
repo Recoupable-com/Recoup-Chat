@@ -6,6 +6,16 @@ import type { BrowserAgentResponse } from "@/types/browser.types";
 
 export const runtime = 'nodejs';
 
+// Type guard: Check if value has a boolean success property
+function hasBooleanSuccess(x: unknown): x is { success: boolean } {
+  return (
+    typeof x === "object" && 
+    x !== null && 
+    "success" in x && 
+    typeof (x as { success: unknown }).success === "boolean"
+  );
+}
+
 const AgentSchema = z.object({
   startUrl: z.string().url().refine((url) => url.startsWith("https://") || url.startsWith("http://"), "startUrl must be http or https"),
   task: z.string().min(1, "task is required"),
@@ -53,16 +63,13 @@ export async function POST(req: NextRequest) {
       return await page.act(task);
     });
 
-    // Check if result is an object with success property, otherwise assume success
-    const isObject = typeof result === "object" && result !== null && !Array.isArray(result);
-    const hasSuccess = isObject && "success" in result;
-    
+    const success = hasBooleanSuccess(result) ? result.success : true;
     const out = typeof result === "string" ? result : JSON.stringify(result);
     
-    return NextResponse.json({
-      success: hasSuccess ? Boolean((result as any).success) : true,
-      result: out,
-    } as BrowserAgentResponse, { status: hasSuccess && !(result as any).success ? 422 : 200 });
+    return NextResponse.json<BrowserAgentResponse>(
+      { success, result: out }, 
+      { status: hasBooleanSuccess(result) && !result.success ? 422 : 200 }
+    );
   } catch (error) {
     return NextResponse.json(
       {

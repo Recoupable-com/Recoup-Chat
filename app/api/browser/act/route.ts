@@ -48,7 +48,7 @@ export async function POST(req: NextRequest) {
   try {
 
     await withBrowser(async (page) => {
-      await page.goto(url, { waitUntil: "domcontentloaded" });
+      await page.goto(url, { waitUntil: "domcontentloaded", timeout: 20000 });
       await page.act(action);
     });
 

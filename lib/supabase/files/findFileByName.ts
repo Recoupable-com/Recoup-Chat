@@ -13,11 +13,12 @@ export async function findFileByName(
   artistAccountId: string,
   path?: string
 ): Promise<FileRecord | null> {
+  // Build storage key pattern with exact filename
   const pathPattern = path
     ? `files/${ownerAccountId}/${artistAccountId}/${path}/${fileName}`
-    : `files/${ownerAccountId}/${artistAccountId}%`;
+    : `files/${ownerAccountId}/${artistAccountId}/${fileName}`;
 
-  // Try to find by file_name first
+  // Try to find by file_name first (exact match)
   const { data, error} = await supabase
     .from("files")
     .select()
@@ -30,11 +31,12 @@ export async function findFileByName(
     .single();
 
   if (error && error.code === 'PGRST116') {
-    // No rows found - try matching by storage_key pattern instead
-    // This handles cases where file_name has spaces but storage_key has underscores
+    // No rows found - try normalizing spaces to underscores
+    // Handles mismatch where fileName has spaces but storage_key has underscores
+    const normalizedFileName = fileName.replace(/ /g, '_');
     const storageKeyPattern = path
-      ? `files/${ownerAccountId}/${artistAccountId}/${path}/${fileName}`
-      : `files/${ownerAccountId}/${artistAccountId}/${fileName}`;
+      ? `files/${ownerAccountId}/${artistAccountId}/${path}/${normalizedFileName}`
+      : `files/${ownerAccountId}/${artistAccountId}/${normalizedFileName}`;
 
     const { data: dataByKey, error: errorByKey } = await supabase
       .from("files")
