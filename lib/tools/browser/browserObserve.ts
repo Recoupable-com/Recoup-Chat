@@ -73,10 +73,20 @@ This tool handles login modals automatically - just give it a URL and it will ge
   execute: async ({ url, instruction }) => {
     try {
       return await withBrowser(async (page, liveViewUrl, sessionUrl) => {
-        // Convert to mobile URL if it's Instagram (less aggressive rate limiting)
+        // Normalize Instagram URLs to use www subdomain (less aggressive rate limiting)
         let targetUrl = url;
-        if (url.includes('instagram.com') && !url.includes('https://www.instagram.com')) {
-          targetUrl = url.replace('instagram.com', 'www.instagram.com');
+        if (url.includes('instagram.com')) {
+          // Only normalize URLs that are exactly 'instagram.com' (no subdomain)
+          try {
+            const urlObj = new URL(url);
+            if (urlObj.hostname === 'instagram.com') {
+              urlObj.hostname = 'www.instagram.com';
+              targetUrl = urlObj.toString();
+            }
+          } catch {
+            // Fallback for malformed URLs - use safer regex approach
+            targetUrl = url.replace(/^(https?:\/\/)instagram\.com/, '$1www.instagram.com');
+          }
         }
         
         await page.goto(targetUrl, { waitUntil: "domcontentloaded" });
