@@ -11,11 +11,11 @@
     "update-types": "npx supabase gen types typescript --project-id godremdqwajrwazhbrue --schema public > types/database.types.ts"
   },
   "dependencies": {
+    "@ai-sdk-tools/store": "^0.8.2",
     "@ai-sdk/anthropic": "^2.0.17",
     "@ai-sdk/gateway": "^1.0.25",
     "@ai-sdk/google": "^2.0.15",
     "@ai-sdk/openai": "^2.0.32",
-    "@ai-sdk/react": "^2.0.48",
     "@ardrive/turbo-sdk": "^1.22.1",
     "@browserbasehq/stagehand": "^2.5.2",
     "@coinbase/cdp-sdk": "^1.4.0",
@@ -42,7 +42,6 @@
     "@radix-ui/react-switch": "^1.2.6",
     "@radix-ui/react-tooltip": "^1.2.4",
     "@radix-ui/react-use-controllable-state": "^1.2.2",
-    "@stackso/js-core": "^0.4.16",
     "@supabase/supabase-js": "^2.45.1",
     "@tabler/icons-react": "^3.31.0",
     "@tanstack/react-query": "^5.66.0",
@@ -97,6 +96,7 @@
     "swiper": "^11.1.15",
     "tailwind-merge": "^2.6.0",
     "tailwindcss-animate": "^1.0.7",
+    "twilio": "^5.10.3",
     "use-stick-to-bottom": "^1.1.1",
     "usehooks-ts": "^3.1.0",
     "uuid": "^10.0.0",
