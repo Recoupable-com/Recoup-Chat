@@ -8,8 +8,6 @@ import { sendSmsMessage } from "@/lib/twilio/sendSmsMessage";
  * Webhook endpoint to receive SMS messages from Twilio
  *
  * Strategy: Respond immediately (within 15s timeout), then process AI asynchronously
- * Reference: https://www.twilio.com/docs/messaging/api/message-resource#create-a-message-resource
- * Stack Overflow: https://stackoverflow.com/questions/72626751/increase-twilio-total-timeout-from-15000ms-sms
  */
 export async function POST(request: NextRequest) {
   try {
