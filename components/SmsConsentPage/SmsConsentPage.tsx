@@ -4,7 +4,6 @@ import {
   SmsHowItWorks,
   SmsFeatures,
   SmsPrivacyConsent,
-  SmsCallToAction,
 } from "./index";
 
 export function SmsConsentPage() {
@@ -17,7 +16,6 @@ export function SmsConsentPage() {
         <SmsHowItWorks />
         <SmsFeatures />
         <SmsPrivacyConsent />
-        <SmsCallToAction />
       </div>
     </div>
   );
