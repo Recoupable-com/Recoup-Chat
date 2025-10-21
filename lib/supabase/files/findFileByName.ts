@@ -31,19 +31,24 @@ export async function findFileByName(
     .single();
 
   if (error && error.code === 'PGRST116') {
-    // No rows found - try normalizing spaces to underscores
-    // Handles mismatch where fileName has spaces but storage_key has underscores
-    const normalizedFileName = fileName.replace(/ /g, '_');
-    const storageKeyPattern = path
-      ? `files/${ownerAccountId}/${artistAccountId}/${path}/${normalizedFileName}`
-      : `files/${ownerAccountId}/${artistAccountId}/${normalizedFileName}`;
+    // No rows found - try bidirectional normalization (spaces ↔ underscores)
+    const fileNameWithSpaces = fileName.replace(/_/g, ' ');
+    const fileNameWithUnderscores = fileName.replace(/ /g, '_');
+    
+    const storageKeyPatternSpaces = path
+      ? `files/${ownerAccountId}/${artistAccountId}/${path}/${fileNameWithSpaces}`
+      : `files/${ownerAccountId}/${artistAccountId}/${fileNameWithSpaces}`;
+    
+    const storageKeyPatternUnderscores = path
+      ? `files/${ownerAccountId}/${artistAccountId}/${path}/${fileNameWithUnderscores}`
+      : `files/${ownerAccountId}/${artistAccountId}/${fileNameWithUnderscores}`;
 
     const { data: dataByKey, error: errorByKey } = await supabase
       .from("files")
       .select()
       .eq("owner_account_id", ownerAccountId)
       .eq("artist_account_id", artistAccountId)
-      .ilike("storage_key", storageKeyPattern)
+      .or(`file_name.eq.${fileNameWithSpaces},file_name.eq.${fileNameWithUnderscores},storage_key.ilike.${storageKeyPatternSpaces},storage_key.ilike.${storageKeyPatternUnderscores}`)
       .order("created_at", { ascending: false })
       .limit(1)
       .single();
