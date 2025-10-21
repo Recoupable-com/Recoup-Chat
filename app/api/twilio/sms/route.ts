@@ -16,8 +16,8 @@ export async function POST(request: NextRequest) {
     // Parse SMS data
     const smsData = parseSmsWebhook(formData);
 
-    // Process SMS and generate response
-    const responseMessage = handleIncomingSms(smsData);
+    // Process SMS and generate AI response
+    const responseMessage = await handleIncomingSms(smsData);
 
     // Create TwiML response
     const twimlResponse = createSmsResponse(responseMessage);
