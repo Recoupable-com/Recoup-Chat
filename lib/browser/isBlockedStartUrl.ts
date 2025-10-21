@@ -1,6 +1,6 @@
 /**
  * Check if a startURL points to a private or disallowed host
- * Blocks SSRF attacks by rejecting internal/private hosts and adding DNS resolution checks
+ * Blocks SSRF attacks by rejecting internal/private hosts (IPv4 and IPv6)
  */
 export function isBlockedStartUrl(startUrl: string): boolean {
   try {
@@ -18,7 +18,13 @@ export function isBlockedStartUrl(startUrl: string): boolean {
       return true;
     }
     
-    // Block common private IP ranges
+    // Block IPv6 localhost and private ranges
+    if (host === '::1' || host === '[::1]') return true; // IPv6 localhost
+    if (host.startsWith('fc') || host.startsWith('fd')) return true; // fc00::/7 unique local
+    if (host.startsWith('fe80:')) return true; // fe80::/10 link-local
+    if (host.startsWith('::ffff:127.') || host.startsWith('::ffff:10.')) return true; // IPv4-mapped
+    
+    // Block IPv4 private ranges
     if (/^127\.\d+\.\d+\.\d+$/.test(host)) return true; // 127.x.x.x
     if (/^10\.\d+\.\d+\.\d+$/.test(host)) return true; // 10.x.x.x
     if (/^192\.168\.\d+\.\d+$/.test(host)) return true; // 192.168.x.x

@@ -1,5 +1,6 @@
 import { uploadFileByKey } from "@/lib/supabase/storage/uploadFileByKey";
 import { createSignedUrlForKey } from "@/lib/supabase/storage/createSignedUrl";
+import { BROWSER_TIMEOUTS } from "./constants";
 
 export async function uploadScreenshot(
   screenshot: string,
@@ -17,7 +18,7 @@ export async function uploadScreenshot(
       upsert: true,
     });
 
-    const signedUrl = await createSignedUrlForKey(filename, 3600);
+    const signedUrl = await createSignedUrlForKey(filename, BROWSER_TIMEOUTS.SCREENSHOT_URL_TTL);
 
     return signedUrl;
   } catch {

@@ -13,8 +13,8 @@ export async function withBrowser<T>(
   } catch (error) {
     try {
       await stagehand.close();
-    } catch {
-      // Cleanup failed, but still throw original error
+    } catch (closeError) {
+      console.warn('[withBrowser] Failed to close stagehand during error cleanup:', closeError);
     }
     throw error;
   }
