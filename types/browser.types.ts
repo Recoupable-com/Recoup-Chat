@@ -5,8 +5,11 @@ export interface BrowserActRequest {
 
 export interface BrowserActResponse {
   success: boolean;
-  message: string;
+  message?: string;
   error?: string;
+  screenshotUrl?: string;
+  sessionUrl?: string;
+  platformName?: string;
 }
 
 export interface BrowserExtractRequest {
@@ -19,6 +22,10 @@ export interface BrowserExtractResponse {
   success: boolean;
   data?: unknown;
   error?: string;
+  initialScreenshotUrl?: string;
+  finalScreenshotUrl?: string;
+  sessionUrl?: string;
+  platformName?: string;
 }
 
 export interface BrowserObserveRequest {
@@ -29,7 +36,11 @@ export interface BrowserObserveRequest {
 export interface BrowserObserveResponse {
   success: boolean;
   actions?: string[];
+  message?: string;
   error?: string;
+  screenshotUrl?: string;
+  sessionUrl?: string;
+  platformName?: string;
 }
 
 export interface BrowserAgentRequest {
@@ -42,5 +53,8 @@ export interface BrowserAgentResponse {
   success: boolean;
   result?: string;
   error?: string;
+  screenshotUrl?: string;
+  sessionUrl?: string;
+  platformName?: string;
 }
 
