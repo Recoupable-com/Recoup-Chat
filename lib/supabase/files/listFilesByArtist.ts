@@ -19,6 +19,14 @@ export async function listFilesByArtist(
     ? `${baseStoragePath}${path.endsWith("/") ? path : path + "/"}`
     : baseStoragePath;
 
+  console.log('[listFilesByArtist] Listing files:', {
+    ownerAccountId,
+    artistAccountId,
+    path,
+    fullPath,
+    pattern: `${fullPath}%`
+  });
+
   // Query files owned by the artist with the full storage path
   const { data: ownedFiles, error: ownedError } = await supabase
     .from("files")
@@ -29,7 +37,15 @@ export async function listFilesByArtist(
     .order("created_at", { ascending: false });
 
   if (ownedError) {
+    console.log('[listFilesByArtist] Error:', ownedError);
     throw new Error(ownedError.message);
+  }
+
+  console.log(`[listFilesByArtist] Found ${ownedFiles?.length || 0} total files before filtering`);
+  if (ownedFiles && ownedFiles.length > 0) {
+    console.log('[listFilesByArtist] Sample storage keys:', 
+      ownedFiles.slice(0, 3).map(f => ({ name: f.file_name, key: f.storage_key }))
+    );
   }
 
   // Filter to immediate children only (single level directory listing)
@@ -41,6 +57,8 @@ export async function listFilesByArtist(
     // Only include immediate children (no slashes in relative path)
     return trimmed.length > 0 && !trimmed.includes("/");
   });
+
+  console.log(`[listFilesByArtist] Returning ${files.length} files after filtering to immediate children`);
 
   return files;
 }

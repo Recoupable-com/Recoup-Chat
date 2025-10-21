@@ -17,6 +17,14 @@ export async function findFileByName(
     ? `files/${ownerAccountId}/${artistAccountId}/${path}/${fileName}`
     : `files/${ownerAccountId}/${artistAccountId}%`;
 
+  console.log('[findFileByName] Searching for file:', {
+    fileName,
+    ownerAccountId,
+    artistAccountId,
+    path,
+    pathPattern
+  });
+
   const { data, error} = await supabase
     .from("files")
     .select()
@@ -28,9 +36,21 @@ export async function findFileByName(
     .limit(1)
     .single();
 
-  if (error || !data) {
+  if (error) {
+    console.log('[findFileByName] Error finding file:', error);
     return null;
   }
+
+  if (!data) {
+    console.log('[findFileByName] No file found matching criteria');
+    return null;
+  }
+
+  console.log('[findFileByName] File found:', {
+    fileName: data.file_name,
+    storageKey: data.storage_key,
+    id: data.id
+  });
 
   return data;
 }
