@@ -29,16 +29,18 @@ export const handleIncomingSms = async (
       parts: [
         {
           type: "text",
-          text:
-            body +
-            "keep the response short and concise with text short enough to fit in a single SMS message.",
+          text: body,
         },
       ],
     };
 
+    const artistInstruction =
+      "keep the response short and concise with text short enough to fit in a single SMS message.";
+
     const chatRequest: ChatRequest = {
       roomId: SMS_ROOM_ID,
       messages: [userMessage],
+      artistInstruction,
       accountId: SMS_ACCOUNT_ID,
     };
 
