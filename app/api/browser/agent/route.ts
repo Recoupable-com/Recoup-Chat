@@ -44,7 +44,8 @@ export async function POST(req: NextRequest) {
     );
   }
 
-  const { startUrl, task, model } = parsed.data;
+  const { startUrl, task } = parsed.data;
+  // Note: model parameter accepted but unused in this simplified route
 
   if (isBlockedStartUrl(startUrl)) {
     return NextResponse.json(
