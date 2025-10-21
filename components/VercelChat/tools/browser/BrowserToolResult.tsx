@@ -38,8 +38,8 @@ function SectionHeader({ title, className }: { title: string; className?: string
   );
 }
 
-// Custom hook: Detect result type
-function useBrowserResultType(result: BrowserToolResultType) {
+// Helper: Detect result type and compute display values
+function getBrowserResultType(result: BrowserToolResultType) {
   const isExtractResult = result.data !== undefined;
   const isMessageResult = result.message !== undefined;
   const displayScreenshot = result.finalScreenshotUrl || result.initialScreenshotUrl || result.screenshotUrl;
@@ -65,7 +65,7 @@ export function BrowserToolResult({ result }: { result: BrowserToolResultType })
     );
   }
 
-  const { isExtractResult, isMessageResult, displayScreenshot, title } = useBrowserResultType(result);
+  const { isExtractResult, isMessageResult, displayScreenshot, title } = getBrowserResultType(result);
 
   return (
     <div className="flex flex-col gap-3 max-w-4xl">
