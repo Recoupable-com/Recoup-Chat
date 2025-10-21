@@ -1,27 +1,53 @@
 import { type NextRequest, NextResponse } from "next/server";
+import { z } from "zod";
 import { withBrowser } from "@/lib/browser/withBrowser";
 import { schemaToZod } from "@/lib/browser/schemaToZod";
-import type {
-  BrowserExtractRequest,
-  BrowserExtractResponse,
-} from "@/types/browser.types";
+import { isBlockedStartUrl } from "@/lib/browser/isBlockedStartUrl";
+import type { BrowserExtractResponse } from "@/types/browser.types";
 
 export const runtime = 'nodejs';
 
-export async function POST(req: NextRequest) {
-  try {
-    const body: BrowserExtractRequest = await req.json();
-    const { url, schema, instruction } = body;
+const ExtractSchema = z.object({
+  url: z.string().url(),
+  schema: z.record(z.string()),
+  instruction: z.string().optional(),
+});
 
-    if (!url || !schema) {
-      return NextResponse.json(
-        {
-          success: false,
-          error: "Both 'url' and 'schema' are required",
-        } as BrowserExtractResponse,
-        { status: 400 }
-      );
-    }
+export async function POST(req: NextRequest) {
+  let raw: unknown;
+  try {
+    raw = await req.json();
+  } catch {
+    return NextResponse.json(
+      { success: false, error: "Invalid JSON body" } as BrowserExtractResponse,
+      { status: 400 }
+    );
+  }
+
+  const parsed = ExtractSchema.safeParse(raw);
+  if (!parsed.success) {
+    return NextResponse.json(
+      { 
+        success: false, 
+        error: parsed.error.flatten().formErrors.join(", ") || "Invalid request" 
+      } as BrowserExtractResponse,
+      { status: 400 }
+    );
+  }
+
+  const { url, schema, instruction } = parsed.data;
+
+  if (isBlockedStartUrl(url)) {
+    return NextResponse.json(
+      { 
+        success: false, 
+        error: "url points to a private or disallowed host" 
+      } as BrowserExtractResponse,
+      { status: 400 }
+    );
+  }
+
+  try {
 
     const data = await withBrowser(async (page) => {
       await page.goto(url, { waitUntil: "domcontentloaded" });

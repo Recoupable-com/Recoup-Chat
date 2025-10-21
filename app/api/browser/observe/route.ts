@@ -1,26 +1,51 @@
 import { type NextRequest, NextResponse } from "next/server";
+import { z } from "zod";
 import { withBrowser } from "@/lib/browser/withBrowser";
-import type {
-  BrowserObserveRequest,
-  BrowserObserveResponse,
-} from "@/types/browser.types";
+import { isBlockedStartUrl } from "@/lib/browser/isBlockedStartUrl";
+import type { BrowserObserveResponse } from "@/types/browser.types";
 
 export const runtime = 'nodejs';
 
-export async function POST(req: NextRequest) {
-  try {
-    const body: BrowserObserveRequest = await req.json();
-    const { url, instruction } = body;
+const ObserveSchema = z.object({
+  url: z.string().url(),
+  instruction: z.string().optional(),
+});
 
-    if (!url) {
-      return NextResponse.json(
-        {
-          success: false,
-          error: "'url' is required",
-        } as BrowserObserveResponse,
-        { status: 400 }
-      );
-    }
+export async function POST(req: NextRequest) {
+  let raw: unknown;
+  try {
+    raw = await req.json();
+  } catch {
+    return NextResponse.json(
+      { success: false, error: "Invalid JSON body" } as BrowserObserveResponse,
+      { status: 400 }
+    );
+  }
+
+  const parsed = ObserveSchema.safeParse(raw);
+  if (!parsed.success) {
+    return NextResponse.json(
+      { 
+        success: false, 
+        error: parsed.error.flatten().formErrors.join(", ") || "Invalid request" 
+      } as BrowserObserveResponse,
+      { status: 400 }
+    );
+  }
+
+  const { url, instruction } = parsed.data;
+
+  if (isBlockedStartUrl(url)) {
+    return NextResponse.json(
+      { 
+        success: false, 
+        error: "url points to a private or disallowed host" 
+      } as BrowserObserveResponse,
+      { status: 400 }
+    );
+  }
+
+  try {
 
     const observeResult = await withBrowser(async (page) => {
       await page.goto(url, { waitUntil: "domcontentloaded" });

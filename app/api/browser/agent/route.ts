@@ -1,26 +1,52 @@
 import { type NextRequest, NextResponse } from "next/server";
+import { z } from "zod";
 import { withBrowser } from "@/lib/browser/withBrowser";
-import type {
-  BrowserAgentRequest,
-  BrowserAgentResponse,
-} from "@/types/browser.types";
+import { isBlockedStartUrl } from "@/lib/browser/isBlockedStartUrl";
+import type { BrowserAgentResponse } from "@/types/browser.types";
 
 export const runtime = 'nodejs';
 
-export async function POST(req: NextRequest) {
-  try {
-    const body: BrowserAgentRequest = await req.json();
-    const { startUrl, task } = body;
+const AgentSchema = z.object({
+  startUrl: z.string().url().refine((url) => url.startsWith("https://") || url.startsWith("http://"), "startUrl must be http or https"),
+  task: z.string().min(1, "task is required"),
+  model: z.string().optional(),
+});
 
-    if (!startUrl || !task) {
-      return NextResponse.json(
-        {
-          success: false,
-          error: "Both 'startUrl' and 'task' are required",
-        } as BrowserAgentResponse,
-        { status: 400 }
-      );
-    }
+export async function POST(req: NextRequest) {
+  let raw: unknown;
+  try {
+    raw = await req.json();
+  } catch {
+    return NextResponse.json(
+      { success: false, error: "Invalid JSON body" } as BrowserAgentResponse,
+      { status: 400 }
+    );
+  }
+
+  const parsed = AgentSchema.safeParse(raw);
+  if (!parsed.success) {
+    return NextResponse.json(
+      { 
+        success: false, 
+        error: parsed.error.flatten().formErrors.join(", ") || "Invalid request" 
+      } as BrowserAgentResponse,
+      { status: 400 }
+    );
+  }
+
+  const { startUrl, task } = parsed.data;
+
+  if (isBlockedStartUrl(startUrl)) {
+    return NextResponse.json(
+      { 
+        success: false, 
+        error: "startUrl points to a private or disallowed host" 
+      } as BrowserAgentResponse,
+      { status: 400 }
+    );
+  }
+
+  try {
 
     const result = await withBrowser(async (page) => {
       await page.goto(startUrl, { waitUntil: "domcontentloaded", timeout: 20000 });
