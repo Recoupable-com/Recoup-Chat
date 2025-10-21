@@ -7,6 +7,7 @@ import { normalizeInstagramUrl } from "@/lib/browser/normalizeInstagramUrl";
 import { simulateHumanScrolling } from "@/lib/browser/simulateHumanScrolling";
 import { dismissLoginModal } from "@/lib/browser/dismissLoginModal";
 import { formatActionsToString } from "@/lib/browser/formatActionsToString";
+import { BROWSER_TIMEOUTS, CONTENT_LIMITS } from "@/lib/browser/constants";
 
 export interface BrowserObserveResult {
   success: boolean;
@@ -81,7 +82,7 @@ This tool handles login modals automatically - just give it a URL and it will ge
         await page.goto(targetUrl, { waitUntil: "domcontentloaded" });
         
         // Wait for initial page load
-        await page.waitForTimeout(3000);
+        await page.waitForTimeout(BROWSER_TIMEOUTS.INITIAL_PAGE_LOAD);
 
         await simulateHumanScrolling(page);
 
@@ -122,8 +123,8 @@ This tool handles login modals automatically - just give it a URL and it will ge
         
         responseText += "📄 VISIBLE PAGE CONTENT:\n";
         responseText += "════════════════════════════════════════\n";
-        responseText += visibleContent.trim().slice(0, 3000);
-        if (visibleContent.length > 3000) {
+        responseText += visibleContent.trim().slice(0, CONTENT_LIMITS.MAX_VISIBLE_CONTENT_LENGTH);
+        if (visibleContent.length > CONTENT_LIMITS.MAX_VISIBLE_CONTENT_LENGTH) {
           responseText += "\n... (content truncated)";
         }
         responseText += "\n\n🎯 AVAILABLE ACTIONS:\n";
