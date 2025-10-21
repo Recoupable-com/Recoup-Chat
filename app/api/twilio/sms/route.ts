@@ -1,7 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { parseSmsWebhook } from "@/lib/twilio/parseSmsWebhook";
-import { handleIncomingSms } from "@/lib/twilio/handleIncomingSms";
-import { sendSmsMessage } from "@/lib/twilio/sendSmsMessage";
+import { processAndReply } from "@/lib/twilio/processAndReply";
 
 /**
  * POST /api/twilio/sms
@@ -36,34 +35,6 @@ export async function POST(request: NextRequest) {
     return new NextResponse(null, {
       status: 200,
     });
-  }
-}
-
-/**
- * Process AI generation and send reply via Twilio API
- * This runs asynchronously after webhook response
- */
-async function processAndReply(smsData: {
-  from: string;
-  body: string;
-  to: string;
-  messageSid: string;
-  accountSid: string;
-  mediaCount: number;
-}) {
-  try {
-    const responseMessage = await handleIncomingSms(smsData);
-
-    // Send response via Twilio REST API
-    await sendSmsMessage(smsData.from, responseMessage);
-  } catch (error) {
-    console.error("Error in processAndReply:", error);
-
-    // Send fallback message on error
-    await sendSmsMessage(
-      smsData.from,
-      "Thanks for your message to Recoup! We'll get back to you soon."
-    );
   }
 }
 
