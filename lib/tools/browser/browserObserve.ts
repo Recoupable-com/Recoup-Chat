@@ -139,12 +139,38 @@ This tool handles login modals automatically - just give it a URL and it will ge
 
         const screenshotUrl = await captureScreenshot(page, url);
 
+        // Normalize observeResult to an array
         const actions = Array.isArray(observeResult)
           ? observeResult
           : [observeResult];
 
-        const actionsText = actions.length > 0
-          ? actions.join("\n- ")
+        // Convert each action to a human-readable string
+        const actionStrings = actions
+          .map(action => {
+            if (typeof action === 'string') {
+              return action.trim();
+            }
+            if (action && typeof action === 'object') {
+              // Try to extract a descriptive property
+              if ('description' in action && typeof action.description === 'string') {
+                return action.description.trim();
+              }
+              if ('action' in action && typeof action.action === 'string') {
+                return action.action.trim();
+              }
+              // Fallback to JSON.stringify for unknown objects
+              try {
+                return JSON.stringify(action);
+              } catch {
+                return '[Unknown action]';
+              }
+            }
+            return '';
+          })
+          .filter(str => str.length > 0); // Remove empty strings
+
+        const actionsText = actionStrings.length > 0
+          ? actionStrings.map(str => `- ${str}`).join("\n")
           : "No specific actions identified";
 
         // Build comprehensive response with visible content and actions
@@ -171,7 +197,7 @@ This tool handles login modals automatically - just give it a URL and it will ge
         }
         responseText += "\n\n🎯 AVAILABLE ACTIONS:\n";
         responseText += "════════════════════════════════════════\n";
-        responseText += `- ${actionsText}`;
+        responseText += actionsText;
 
         // Detect platform from URL using the same helper as other browser tools
         const platformName = detectPlatform(url);
