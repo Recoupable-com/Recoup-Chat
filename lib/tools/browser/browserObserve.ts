@@ -109,21 +109,13 @@ This tool handles login modals automatically - just give it a URL and it will ge
         // Build comprehensive response with visible content and actions
         let responseText = "";
         
-        // Add platform-aware rate limit warning if detected
+        // Add rate limit warning if detected
         if (isRateLimited) {
-          if (platformName.toLowerCase() === 'instagram') {
-            responseText += "⚠️ INSTAGRAM RATE LIMIT DETECTED\n";
-            responseText += "Instagram is blocking automated requests. Try:\n";
-            responseText += "1. Wait 5-10 minutes before trying again\n";
-            responseText += "2. Use fewer requests at once (one profile at a time)\n";
-            responseText += "3. Add delays between requests\n\n";
-          } else {
-            responseText += "⚠️ RATE LIMIT DETECTED\n";
-            responseText += `${platformName || 'The website'} is limiting automated requests. Try:\n`;
-            responseText += "1. Wait a few minutes before trying again\n";
-            responseText += "2. Reduce request frequency\n";
-            responseText += "3. Add delays between requests\n\n";
-          }
+          responseText += "⚠️ RATE LIMIT DETECTED\n";
+          responseText += `${platformName || 'The website'} is limiting automated requests. Try:\n`;
+          responseText += "1. Wait a few minutes before trying again\n";
+          responseText += "2. Reduce request frequency\n";
+          responseText += "3. Add delays between requests\n\n";
         }
         
         if (modalDismissed) {
