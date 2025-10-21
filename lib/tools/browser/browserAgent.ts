@@ -3,6 +3,7 @@ import { tool } from "ai";
 import { initStagehand } from "@/lib/browser/initStagehand";
 import { captureScreenshot } from "@/lib/browser/captureScreenshot";
 import { detectPlatform } from "@/lib/browser/detectPlatform";
+import { normalizeInstagramUrl } from "@/lib/browser/normalizeInstagramUrl";
 
 const browserAgent = tool({
   description: `Automate entire workflows on websites autonomously using natural language.
@@ -58,14 +59,16 @@ Note: This tool may take longer to execute as it performs multiple operations.`,
         },
       });
 
+      const targetUrl = normalizeInstagramUrl(startUrl);
+
       yield {
         status: 'navigating',
-        message: `Navigating to ${startUrl}...\n\n🎥 **WATCH LIVE:** ${liveViewUrl || sessionUrl}`,
+        message: `Navigating to ${targetUrl}...\n\n🎥 **WATCH LIVE:** ${liveViewUrl || sessionUrl}`,
         liveViewUrl,
         sessionUrl,
       };
 
-      await stagehand.page.goto(startUrl, { waitUntil: "domcontentloaded" });
+      await stagehand.page.goto(targetUrl, { waitUntil: "domcontentloaded" });
 
       yield {
         status: 'executing',

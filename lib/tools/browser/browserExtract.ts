@@ -4,6 +4,7 @@ import { withBrowser } from "@/lib/browser/withBrowser";
 import { captureScreenshot } from "@/lib/browser/captureScreenshot";
 import { detectPlatform } from "@/lib/browser/detectPlatform";
 import { schemaToZod } from "@/lib/browser/schemaToZod";
+import { normalizeInstagramUrl } from "@/lib/browser/normalizeInstagramUrl";
 
 export interface BrowserExtractResult {
   success: boolean;
@@ -69,7 +70,8 @@ EXAMPLE USE CASES:
   execute: async ({ url, schema, instruction }) => {
     try {
       return await withBrowser(async (page, liveViewUrl, sessionUrl) => {
-        await page.goto(url, { waitUntil: "domcontentloaded" });
+        const targetUrl = normalizeInstagramUrl(url);
+        await page.goto(targetUrl, { waitUntil: "domcontentloaded" });
 
         const screenshotUrl = await captureScreenshot(page, url);
         const platformName = detectPlatform(url);

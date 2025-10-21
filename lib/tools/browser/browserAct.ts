@@ -3,6 +3,7 @@ import { tool } from "ai";
 import { withBrowser } from "@/lib/browser/withBrowser";
 import { captureScreenshot } from "@/lib/browser/captureScreenshot";
 import { detectPlatform } from "@/lib/browser/detectPlatform";
+import { normalizeInstagramUrl } from "@/lib/browser/normalizeInstagramUrl";
 
 export interface BrowserActResult {
   success: boolean;
@@ -61,7 +62,8 @@ IMPORTANT NOTES:
   execute: async ({ url, action }) => {
     try {
       return await withBrowser(async (page, liveViewUrl, sessionUrl) => {
-        await page.goto(url, { waitUntil: "domcontentloaded" });
+        const targetUrl = normalizeInstagramUrl(url);
+        await page.goto(targetUrl, { waitUntil: "domcontentloaded" });
         await page.act(action);
 
         const screenshotUrl = await captureScreenshot(page, url);
