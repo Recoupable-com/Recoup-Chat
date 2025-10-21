@@ -1,6 +1,7 @@
 import { ParsedSmsMessage } from "@/types/twilio";
 import { handleIncomingSms } from "./handleIncomingSms";
 import { sendSmsMessage } from "./sendSmsMessage";
+import { SMS_FALLBACK_MESSAGE } from "./constants";
 
 /**
  * Processes incoming SMS with AI and sends reply via Twilio API
@@ -21,9 +22,6 @@ export const processAndReply = async (
     console.error("Error in processAndReply:", error);
 
     // Send fallback message on error
-    await sendSmsMessage(
-      smsData.from,
-      "Thanks for your message to Recoup! We'll get back to you soon."
-    );
+    await sendSmsMessage(smsData.from, SMS_FALLBACK_MESSAGE);
   }
 };
