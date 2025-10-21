@@ -1,15 +1,15 @@
 import { useQuery } from "@tanstack/react-query";
 
 export function useArtistInstruction(artistId?: string) {
-  return useQuery<string | undefined>({
+  return useQuery<string>({
     queryKey: ["artist-instruction", artistId],
     enabled: Boolean(artistId),
     queryFn: async () => {
-      if (!artistId) return undefined;
+      if (!artistId) return "";
       const res = await fetch(`/api/artist?artistId=${encodeURIComponent(artistId)}`);
-      if (!res.ok) return undefined;
+      if (!res.ok) return "";
       const json = await res.json();
-      return json?.artist.instruction || undefined;
+      return json?.artist?.instruction || "";
     },
     staleTime: 5 * 60 * 1000,
   });

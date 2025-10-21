@@ -242,7 +242,6 @@ export function getToolCallComponent(part: ToolUIPart) {
       </div>
     );
   } else if (
-<<<<<<< HEAD
     toolName === "browser_act" ||
     toolName === "browser_extract" ||
     toolName === "browser_observe" ||
@@ -256,14 +255,15 @@ export function getToolCallComponent(part: ToolUIPart) {
     return (
       <div key={toolCallId}>
         <BrowserToolSkeleton toolName={toolName} url={url} />
-=======
+      </div>
+    );
+  } else if (
     toolName === "insert_catalog_songs" ||
     toolName === "select_catalog_songs"
   ) {
     return (
       <div key={toolCallId}>
         <CatalogSongsSkeleton />
->>>>>>> 1db799d4aff2fb6de5ec6d7b5f42688ec25d2cde
       </div>
     );
   }
