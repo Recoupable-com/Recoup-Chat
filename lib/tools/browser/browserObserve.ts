@@ -19,25 +19,28 @@ export interface BrowserObserveResult {
 }
 
 const browserObserve = tool({
-  description: `**USE WHEN:** User asks to "see", "show me", "what's on", "view", or "check out" a page WITHOUT specifying exact fields to extract.
+  description: `🌐 WEBSITE/WEB PAGE REQUIRED - Only use when user mentions a website, URL, or social media platform.
 
-Quick page viewing that returns ALL visible text content (up to 3000 chars). Perfect for exploration and general questions about what's on a page.
+**USE WHEN:** User says "see/show/view [WEBSITE]" to view general page content WITHOUT requesting specific data fields.
 
-TRIGGER WORDS that indicate this tool:
-- "show me", "what's on", "see", "view", "check out", "look at"
-- "what does [url] say", "what's visible on", "read the page"
-- Questions WITHOUT specific field names
+MUST HAVE website context (one of these):
+- Domain name: "instagram.com", "fatbeats.com", "website.com"
+- Social platform: "Instagram profile", "TikTok page", "Facebook", "Twitter"
+- URL: "http://...", "https://..."
+- Web words: "their website", "the page", "this site"
 
-EXAMPLES that should use browser_observe:
-✓ "What's on instagram.com/artist"
-✓ "Show me this TikTok profile"
-✓ "See what's on their Facebook page"
-✓ "View the homepage at fatbeats.com"
-✓ "What's visible on this website"
+EXAMPLES (website context present):
+✓ "Show me instagram.com/artist"
+✓ "What's on fatbeats.com"
+✓ "View their Instagram profile"
 
-DO NOT USE if user specifies exact fields (use browser_extract instead):
-✗ "Get follower count and bio" → use browser_extract
-✗ "Extract the price and rating" → use browser_extract
+DO NOT USE (no website context):
+✗ "Show me the image" → NOT a browser task
+✗ "See the results" → NOT a browser task
+✗ "What's next" → NOT a browser task
+
+Also DON'T USE if specific fields mentioned:
+✗ "Get follower count from Instagram" → use browser_extract
 
 AUTOMATIC FEATURES:
 • Dismisses login popups automatically

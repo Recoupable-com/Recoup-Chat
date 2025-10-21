@@ -15,28 +15,25 @@ export interface BrowserActResult {
 }
 
 const browserAct = tool({
-  description: `**USE WHEN:** User requests a SINGLE, SPECIFIC ACTION using verbs: "click", "scroll", "close", "dismiss", "accept", "submit".
+  description: `🌐 WEBSITE/WEB PAGE REQUIRED - Only use when user wants to perform an action ON A WEBSITE.
 
-Performs one interactive action on a page. Use for popups, buttons, links, or navigation.
+**USE WHEN:** User says "click/scroll/close [SOMETHING] on [WEBSITE]" - a SINGLE action on a web page.
 
-TRIGGER WORDS that indicate this tool:
-- "click", "press", "tap", "select", "choose"
-- "scroll", "swipe", "navigate to"
-- "close", "dismiss", "hide", "remove"
-- "accept", "decline", "agree", "submit"
+MUST HAVE both:
+1. Website context: domain, URL, "on the page", "on their site"
+2. Action verb: "click", "scroll", "close", "dismiss", "accept"
 
-EXAMPLES that should use browser_act:
+EXAMPLES (both requirements met):
 ✓ "Click the About link on fatbeats.com"
-✓ "Close the login popup"
 ✓ "Scroll to the bottom of the page"
-✓ "Accept the cookie consent"
-✓ "Dismiss the newsletter signup"
+✓ "Close the popup on this website"
 
-DO NOT USE for multi-step tasks (use browser_agent instead):
-✗ "Click About and then tell me what you find" → use browser_agent
-✗ "Navigate through the site and find contact info" → use browser_agent
+DO NOT USE (no website context):
+✗ "Click the button" → NOT a browser task
+✗ "Close the modal" → NOT a browser task (could be in-app modal)
 
-NOTE: Most social media sites don't require login - browser_observe handles popups automatically.`,
+DO NOT USE (multi-step):
+✗ "Click About and tell me what you find" → use browser_agent`,
   inputSchema: z.object({
     url: z
       .string()

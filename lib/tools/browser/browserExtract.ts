@@ -17,30 +17,27 @@ export interface BrowserExtractResult {
 }
 
 const browserExtract = tool({
-  description: `**USE WHEN:** User requests SPECIFIC data fields by name (follower count, price, bio, etc.) or says "extract", "get", "pull", "scrape" with field names.
+  description: `🌐 WEBSITE/WEB PAGE REQUIRED - Only use when user mentions a website + wants SPECIFIC data fields.
 
-Returns clean, structured JSON data. Requires knowing what fields you want.
+**USE WHEN:** User says "extract/get/pull [SPECIFIC FIELDS] from [WEBSITE]" mentioning exact data they want.
 
-TRIGGER WORDS that indicate this tool:
-- "extract", "get", "pull", "scrape", "fetch" + specific field names
-- Mentions exact data: "follower count", "price", "rating", "bio", "title"
-- "I need [field1], [field2], and [field3]"
+MUST HAVE both:
+1. Website context: domain, URL, social platform name
+2. Specific fields: "follower count", "price", "bio", "rating", etc.
 
-EXAMPLES that should use browser_extract:
+EXAMPLES (both requirements met):
 ✓ "Extract follower count and bio from instagram.com/artist"
-✓ "Get the price and rating from this product page"
-✓ "Pull subscriber count and video count from YouTube"
-✓ "Scrape title, author, and publish date from this article"
+✓ "Get price and rating from this product page"
+✓ "Pull subscriber count from YouTube channel"
 
-DO NOT USE for general viewing (use browser_observe instead):
-✗ "What's on this page" → use browser_observe
-✗ "Show me their profile" → use browser_observe  
-✗ "See what's on fatbeats.com" → use browser_observe
+DO NOT USE (no website context):
+✗ "Get the follower count" → NOT a browser task
+✗ "Extract the data" → NOT a browser task
 
-SCHEMA NOTES:
-- User doesn't need to provide schema - you build it from their request
-- Use "string" type for social metrics (handles "1.2M" format)
-- Max 6 fields recommended for best results`,
+DO NOT USE (no specific fields):
+✗ "Show me fatbeats.com" → use browser_observe
+
+SCHEMA: Build from user's request (they don't provide it). Use "string" type for social metrics.`,
   inputSchema: z.object({
     url: z.string().url().describe("The URL of the webpage to extract data from"),
     schema: z

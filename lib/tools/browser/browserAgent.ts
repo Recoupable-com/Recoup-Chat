@@ -7,29 +7,28 @@ import { normalizeInstagramUrl } from "@/lib/browser/normalizeInstagramUrl";
 import { BROWSER_AGENT_CONFIG } from "@/lib/browser/constants";
 
 const browserAgent = tool({
-  description: `**USE WHEN:** User requests MULTI-STEP tasks, uses "and then" phrasing, or asks to "navigate", "find", "research", or "explore" requiring multiple actions.
+  description: `🌐 WEBSITE/WEB PAGE REQUIRED - Only use for MULTI-STEP tasks ON WEBSITES.
 
-Autonomous browser agent that performs complex workflows. Can click, navigate, extract, and reason through multi-step tasks.
+**USE WHEN:** User says "go to [WEBSITE] and [DO MULTIPLE THINGS]" or uses "and then", "find", "navigate" with website context.
 
-TRIGGER WORDS that indicate this tool:
-- "and then", "after that", "navigate to", "go to [X] and [Y]"
-- "find", "search for", "look for", "locate", "discover"
-- "research", "investigate", "explore", "browse through"
-- "summarize", "compare", "analyze" (requires gathering data first)
+MUST HAVE both:
+1. Website context: domain, URL, social platform
+2. Multi-step indicators: "and", "then", "find", "navigate", "research"
 
-EXAMPLES that should use browser_agent:
+EXAMPLES (both requirements met):
 ✓ "Go to fatbeats.com and find their Instagram handle"
-✓ "Navigate to the About page and tell me about the company"
-✓ "Visit their site and find contact information"
-✓ "Click into the products section and tell me what's featured"
-✓ "Research pricing on this site and create a summary"
+✓ "Visit their website and tell me about their products"
+✓ "Navigate to the About page and summarize"
+✓ "Click into something on fatbeats.com and tell me more"
 
-DO NOT USE for single-step actions or viewing:
-✗ "What's on this page" → use browser_observe
-✗ "Click the About link" → use browser_act
-✗ "Extract follower count" → use browser_extract
+DO NOT USE (no website context):
+✗ "Find their contact info" → NOT a browser task
+✗ "Research and summarize" → NOT a browser task
 
-NOTE: Takes longer than other tools (performs up to 20 autonomous steps).`,
+DO NOT USE (single-step):
+✗ "Show me fatbeats.com" → use browser_observe
+
+NOTE: Takes longer (up to 20 autonomous steps).`,
   inputSchema: z.object({
     startUrl: z
       .string()
