@@ -1,6 +1,22 @@
 "use client";
 
 import Image from "next/image";
+import { cn } from "@/lib/utils";
+
+// Style constants following component-design standards
+const STYLES = {
+  text: {
+    primary: "text-gray-900 dark:text-gray-100",
+    secondary: "text-gray-700 dark:text-gray-300",
+    muted: "text-gray-600 dark:text-gray-400",
+  },
+  bg: {
+    card: "bg-white dark:bg-gray-900",
+    error: "bg-gray-100 dark:bg-gray-800",
+    code: "bg-gray-50 dark:bg-gray-800",
+  },
+  border: "border-gray-200 dark:border-gray-700",
+} as const;
 
 export interface BrowserToolResultType {
   success: boolean;
@@ -20,39 +36,52 @@ export interface BrowserToolResultType {
   screenshotUrl?: string;
 }
 
+// Sub-component: Section header following composition pattern
+function SectionHeader({ title, className }: { title: string; className?: string }) {
+  return (
+    <div className={cn("pb-3", STYLES.border, "border-b", className)}>
+      <span className={cn("text-sm font-semibold", STYLES.text.primary)}>
+        {title}
+      </span>
+    </div>
+  );
+}
+
 export function BrowserToolResult({ result }: { result: BrowserToolResultType }) {
   // Error state
   if (!result.success) {
     return (
-      <div className="p-4 rounded-xl bg-gray-100 dark:bg-gray-800 border-l-4 border-l-gray-900 dark:border-l-gray-100 text-gray-900 dark:text-gray-100 text-sm shadow-sm max-w-md">
+      <div className={cn(
+        "p-4 rounded-xl border-l-4 border-l-gray-900 dark:border-l-gray-100 text-sm shadow-sm max-w-md",
+        STYLES.bg.error,
+        STYLES.text.primary
+      )}>
         {result.error || "Browser operation failed"}
       </div>
     );
   }
 
-  // Determine which type of result this is
+  // Determine result type and screenshot
   const isExtractResult = result.data !== undefined;
   const isMessageResult = result.message !== undefined;
-  
-  const displayScreenshot = 
-    result.finalScreenshotUrl || 
-    result.initialScreenshotUrl || 
-    result.screenshotUrl;
+  const displayScreenshot = result.finalScreenshotUrl || result.initialScreenshotUrl || result.screenshotUrl;
 
   return (
     <div className="flex flex-col gap-3 max-w-4xl">
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6 border border-gray-200 dark:border-gray-700 rounded-xl p-6 bg-white dark:bg-gray-900 shadow-sm">
+      <div className={cn(
+        "grid grid-cols-1 md:grid-cols-2 gap-6 rounded-xl p-6 shadow-sm",
+        STYLES.border,
+        STYLES.bg.card,
+        "border"
+      )}>
         {/* LEFT SIDE: Data/Message */}
         <div className="flex flex-col gap-4">
-          {/* Header */}
-          <div className="flex items-center gap-2 pb-3 border-b border-gray-200 dark:border-gray-700">
-            <div className="w-2 h-2 rounded-full bg-green-500"></div>
-            <span className="font-semibold text-sm text-gray-900 dark:text-gray-100">
-              {isExtractResult ? "Data Extracted Successfully" : 
-               isMessageResult ? "Page Observed Successfully" :
-               "Operation completed successfully"}
-            </span>
-          </div>
+          <SectionHeader 
+            title={isExtractResult ? "Data Extracted Successfully" : 
+                   isMessageResult ? "Page Observed Successfully" :
+                   "Operation completed successfully"}
+            className="flex items-center gap-2"
+          />
           
           {/* Extract result: show formatted data */}
           {isExtractResult && (
@@ -63,7 +92,12 @@ export function BrowserToolResult({ result }: { result: BrowserToolResultType })
 
           {/* Message result: show the message text */}
           {isMessageResult && !isExtractResult && (
-            <div className="text-sm leading-relaxed text-gray-700 dark:text-gray-300 whitespace-pre-wrap font-mono bg-gray-50 dark:bg-gray-800 p-4 rounded-lg border border-gray-200 dark:border-gray-700 overflow-x-auto max-h-96 overflow-y-auto">
+            <div className={cn(
+              "text-sm leading-relaxed whitespace-pre-wrap font-mono p-4 rounded-lg border overflow-x-auto max-h-96 overflow-y-auto",
+              STYLES.text.secondary,
+              STYLES.bg.code,
+              STYLES.border
+            )}>
               {result.message}
             </div>
           )}
@@ -84,12 +118,8 @@ export function BrowserToolResult({ result }: { result: BrowserToolResultType })
         {/* RIGHT SIDE: Screenshot */}
         {displayScreenshot && (
           <div className="flex flex-col gap-3">
-            <div className="pb-3 border-b border-gray-200 dark:border-gray-700">
-              <span className="text-sm font-semibold text-gray-900 dark:text-gray-100">
-                {result.platformName || "Browser"} Screenshot
-              </span>
-            </div>
-            <div className="border border-gray-200 dark:border-gray-700 rounded-lg overflow-hidden shadow-sm">
+            <SectionHeader title={`${result.platformName || "Browser"} Screenshot`} />
+            <div className={cn("rounded-lg overflow-hidden shadow-sm border", STYLES.border)}>
               <Image
                 src={displayScreenshot}
                 alt={`${result.platformName || "Browser"} screenshot`}
@@ -106,10 +136,20 @@ export function BrowserToolResult({ result }: { result: BrowserToolResultType })
   );
 }
 
+// Priority metric field names
+const PRIORITY_FIELDS = [
+  'followerCount', 'followingCount', 'postCount', 'likesCount', 
+  'subscribers', 'views', 'price', 'rating', 'title', 'name'
+] as const;
+
+// Helper: Check if field name is a priority metric
+const isPriorityField = (key: string): boolean =>
+  PRIORITY_FIELDS.some(field => key.toLowerCase().includes(field.toLowerCase()));
+
 function formatExtractedData(data: unknown): React.ReactNode {
   if (data === null || data === undefined) {
     return (
-      <div className="text-sm text-gray-500 dark:text-gray-400">
+      <div className={cn("text-sm", STYLES.text.muted)}>
         No data extracted
       </div>
     );
@@ -118,7 +158,7 @@ function formatExtractedData(data: unknown): React.ReactNode {
   // If it's not an object, display as simple value
   if (typeof data !== 'object' || Array.isArray(data)) {
     return (
-      <div className="text-sm text-gray-700 dark:text-gray-300">
+      <div className={cn("text-sm", STYLES.text.secondary)}>
         {String(data)}
       </div>
     );
@@ -129,29 +169,20 @@ function formatExtractedData(data: unknown): React.ReactNode {
   
   if (entries.length === 0) {
     return (
-      <div className="text-sm text-gray-500 dark:text-gray-400">
+      <div className={cn("text-sm", STYLES.text.muted)}>
         No data found
       </div>
     );
   }
 
-  // Filter and prioritize important fields
-  const priorityFields = ['followerCount', 'followingCount', 'postCount', 'likesCount', 
-                          'subscribers', 'views', 'price', 'rating', 'title', 'name'];
-  
-  // Separate priority and other fields
-  const priorityEntries = entries.filter(([key]) => 
-    priorityFields.some(field => key.toLowerCase().includes(field.toLowerCase()))
-  );
-  const otherEntries = entries.filter(([key]) => 
-    !priorityFields.some(field => key.toLowerCase().includes(field.toLowerCase()))
-  );
+  // Separate priority and other fields using extracted helper
+  const priorityEntries = entries.filter(([key]) => isPriorityField(key));
+  const otherEntries = entries.filter(([key]) => !isPriorityField(key));
 
-  // Show priority fields first (like follower counts)
-  const displayEntries = [...priorityEntries, ...otherEntries].slice(0, 8); // Show up to 8 fields
+  // Show priority fields first (like follower counts), max 8 fields
+  const displayEntries = [...priorityEntries, ...otherEntries].slice(0, 8);
 
   return displayEntries.map(([key, value]) => {
-    // Format the key to be human-readable
     const label = formatFieldName(key);
     const displayValue = formatFieldValue(value);
 
@@ -160,18 +191,21 @@ function formatExtractedData(data: unknown): React.ReactNode {
       return null;
     }
 
-    // Check if this is a priority metric
-    const isMetric = priorityFields.some(field => key.toLowerCase().includes(field.toLowerCase()));
+    const isMetric = isPriorityField(key);
 
     return (
       <div 
         key={key} 
         className="flex items-baseline justify-between gap-3 py-2 border-b border-gray-100 dark:border-gray-800 last:border-0"
       >
-        <span className="text-sm font-medium text-gray-600 dark:text-gray-400 flex-shrink-0">
+        <span className={cn("text-sm font-medium flex-shrink-0", STYLES.text.muted)}>
           {label}
         </span>
-        <span className={`text-sm ${isMetric ? 'font-semibold' : 'font-normal'} text-gray-900 dark:text-gray-100 text-right`}>
+        <span className={cn(
+          "text-sm text-right",
+          isMetric ? "font-semibold" : "font-normal",
+          STYLES.text.primary
+        )}>
           {displayValue}
         </span>
       </div>
