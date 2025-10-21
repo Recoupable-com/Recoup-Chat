@@ -17,27 +17,7 @@ export interface BrowserExtractResult {
 }
 
 const browserExtract = tool({
-  description: `🌐 WEBSITE/WEB PAGE REQUIRED - Only use when user mentions a website + wants SPECIFIC data fields.
-
-**USE WHEN:** User says "extract/get/pull [SPECIFIC FIELDS] from [WEBSITE]" mentioning exact data they want.
-
-MUST HAVE both:
-1. Website context: domain, URL, social platform name
-2. Specific fields: "follower count", "price", "bio", "rating", etc.
-
-EXAMPLES (both requirements met):
-✓ "Extract follower count and bio from instagram.com/artist"
-✓ "Get price and rating from this product page"
-✓ "Pull subscriber count from YouTube channel"
-
-DO NOT USE (no website context):
-✗ "Get the follower count" → NOT a browser task
-✗ "Extract the data" → NOT a browser task
-
-DO NOT USE (no specific fields):
-✗ "Show me fatbeats.com" → use browser_observe
-
-SCHEMA: Build from user's request (they don't provide it). Use "string" type for social metrics.`,
+  description: `Extract website data as JSON. Only use when user explicitly needs structured data format or mentions "as JSON"/"to save"/"to database". For normal data viewing, use browser_observe instead.`,
   inputSchema: z.object({
     url: z.string().url().describe("The URL of the webpage to extract data from"),
     schema: z

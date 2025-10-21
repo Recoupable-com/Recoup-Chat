@@ -7,28 +7,7 @@ import { normalizeInstagramUrl } from "@/lib/browser/normalizeInstagramUrl";
 import { BROWSER_AGENT_CONFIG } from "@/lib/browser/constants";
 
 const browserAgent = tool({
-  description: `🌐 WEBSITE/WEB PAGE REQUIRED - Only use for MULTI-STEP tasks ON WEBSITES.
-
-**USE WHEN:** User says "go to [WEBSITE] and [DO MULTIPLE THINGS]" or uses "and then", "find", "navigate" with website context.
-
-MUST HAVE both:
-1. Website context: domain, URL, social platform
-2. Multi-step indicators: "and", "then", "find", "navigate", "research"
-
-EXAMPLES (both requirements met):
-✓ "Go to fatbeats.com and find their Instagram handle"
-✓ "Visit their website and tell me about their products"
-✓ "Navigate to the About page and summarize"
-✓ "Click into something on fatbeats.com and tell me more"
-
-DO NOT USE (no website context):
-✗ "Find their contact info" → NOT a browser task
-✗ "Research and summarize" → NOT a browser task
-
-DO NOT USE (single-step):
-✗ "Show me fatbeats.com" → use browser_observe
-
-NOTE: Takes longer (up to 20 autonomous steps).`,
+  description: `Autonomous multi-step website navigation. Use when task requires multiple actions: "go to [site] and [do something]", "find [X] on [site]", "navigate and tell me". Example: "Go to fatbeats.com and find Instagram handle". Takes longer (up to 20 steps).`,
   inputSchema: z.object({
     startUrl: z
       .string()

@@ -19,35 +19,7 @@ export interface BrowserObserveResult {
 }
 
 const browserObserve = tool({
-  description: `🌐 WEBSITE/WEB PAGE REQUIRED - Only use when user mentions a website, URL, or social media platform.
-
-**USE WHEN:** User says "see/show/view [WEBSITE]" to view general page content WITHOUT requesting specific data fields.
-
-MUST HAVE website context (one of these):
-- Domain name: "instagram.com", "fatbeats.com", "website.com"
-- Social platform: "Instagram profile", "TikTok page", "Facebook", "Twitter"
-- URL: "http://...", "https://..."
-- Web words: "their website", "the page", "this site"
-
-EXAMPLES (website context present):
-✓ "Show me instagram.com/artist"
-✓ "What's on fatbeats.com"
-✓ "View their Instagram profile"
-
-DO NOT USE (no website context):
-✗ "Show me the image" → NOT a browser task
-✗ "See the results" → NOT a browser task
-✗ "What's next" → NOT a browser task
-
-Also DON'T USE if specific fields mentioned:
-✗ "Get follower count from Instagram" → use browser_extract
-
-AUTOMATIC FEATURES:
-• Dismisses login popups automatically
-• Returns all visible text (follower counts, bios, stats, prices, dates)
-• Takes screenshot for visual confirmation
-• Works on Instagram, TikTok, Twitter, YouTube, Facebook
-• Provides session recording link`,
+  description: `View any website and return all visible text. Use when user mentions a website/URL/social platform and wants to see content. Example: "What's on instagram.com/artist" or "Show me fatbeats.com"`,
   inputSchema: z.object({
     url: z
       .string()
