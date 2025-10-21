@@ -44,7 +44,7 @@ export async function POST(req: NextRequest) {
     );
   }
 
-  const { startUrl, task } = parsed.data;
+  const { startUrl, task, model } = parsed.data;
 
   if (isBlockedStartUrl(startUrl)) {
     return NextResponse.json(
@@ -56,8 +56,9 @@ export async function POST(req: NextRequest) {
     );
   }
 
+  // Note: This route is deprecated/simplified - for full multi-step agent, use browser_agent tool directly
+  // This route provides a simple HTTP interface for single-action browser automation
   try {
-
     const result = await withBrowser(async (page) => {
       await page.goto(startUrl, { waitUntil: "domcontentloaded", timeout: 20000 });
       return await page.act(task);
