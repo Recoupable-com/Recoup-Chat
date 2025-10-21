@@ -7,19 +7,29 @@ import { normalizeInstagramUrl } from "@/lib/browser/normalizeInstagramUrl";
 import { BROWSER_AGENT_CONFIG } from "@/lib/browser/constants";
 
 const browserAgent = tool({
-  description: `Automate entire workflows on websites autonomously using natural language.
+  description: `**USE WHEN:** User requests MULTI-STEP tasks, uses "and then" phrasing, or asks to "navigate", "find", "research", or "explore" requiring multiple actions.
 
-This is the most powerful browser tool - it can perform complex multi-step tasks on its own.
+Autonomous browser agent that performs complex workflows. Can click, navigate, extract, and reason through multi-step tasks.
 
-Use this for tasks that require multiple actions, such as:
-- "Research competitor pricing and create a summary"
-- "Fill out this job application form with my information"
-- "Scrape all product listings from this page and subpages"
-- "Navigate to the settings page and enable dark mode"
+TRIGGER WORDS that indicate this tool:
+- "and then", "after that", "navigate to", "go to [X] and [Y]"
+- "find", "search for", "look for", "locate", "discover"
+- "research", "investigate", "explore", "browse through"
+- "summarize", "compare", "analyze" (requires gathering data first)
 
-The agent will autonomously determine what steps to take, which buttons to click, what information to extract, etc.
+EXAMPLES that should use browser_agent:
+✓ "Go to fatbeats.com and find their Instagram handle"
+✓ "Navigate to the About page and tell me about the company"
+✓ "Visit their site and find contact information"
+✓ "Click into the products section and tell me what's featured"
+✓ "Research pricing on this site and create a summary"
 
-Note: This tool may take longer to execute as it performs multiple operations.`,
+DO NOT USE for single-step actions or viewing:
+✗ "What's on this page" → use browser_observe
+✗ "Click the About link" → use browser_act
+✗ "Extract follower count" → use browser_extract
+
+NOTE: Takes longer than other tools (performs up to 20 autonomous steps).`,
   inputSchema: z.object({
     startUrl: z
       .string()

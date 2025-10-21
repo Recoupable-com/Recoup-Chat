@@ -15,39 +15,28 @@ export interface BrowserActResult {
 }
 
 const browserAct = tool({
-  description: `Execute actions on web pages using natural language commands.
+  description: `**USE WHEN:** User requests a SINGLE, SPECIFIC ACTION using verbs: "click", "scroll", "close", "dismiss", "accept", "submit".
 
-WHEN TO USE THIS TOOL:
-✓ Dismissing login popups and modals
-✓ Clicking buttons, links, or interactive elements
-✓ Scrolling, navigating within a page
-✓ Accepting cookies or dismissing overlays
-✓ BEFORE browser_extract if a popup is blocking content
+Performs one interactive action on a page. Use for popups, buttons, links, or navigation.
 
-HANDLING LOGIN WALLS & POPUPS:
-CRITICAL: Most social media sites show public data even with login popups.
-• First, try to DISMISS the login popup rather than logging in:
-  ✓ "close the login dialog"
-  ✓ "click 'Not Now'"
-  ✓ "click the X button to close the popup"
-  ✓ "dismiss the sign in modal"
-• Instagram, TikTok, Twitter often have "Continue as Guest" or close buttons
-• If you can't dismiss it, the data might still be extractable in the background
+TRIGGER WORDS that indicate this tool:
+- "click", "press", "tap", "select", "choose"
+- "scroll", "swipe", "navigate to"
+- "close", "dismiss", "hide", "remove"
+- "accept", "decline", "agree", "submit"
 
-COMMON ACTIONS:
-• Popup dismissal: "close the login popup", "click 'Maybe Later'"
-• Cookie consent: "click 'Accept All Cookies'"
-• Navigation: "scroll to the bottom", "click 'Load More'"
-• Forms: "click the search button", "submit the form"
+EXAMPLES that should use browser_act:
+✓ "Click the About link on fatbeats.com"
+✓ "Close the login popup"
+✓ "Scroll to the bottom of the page"
+✓ "Accept the cookie consent"
+✓ "Dismiss the newsletter signup"
 
-WORKFLOW EXAMPLE:
-1. Use browser_act: "close the login dialog"
-2. Then use browser_extract to get the data
+DO NOT USE for multi-step tasks (use browser_agent instead):
+✗ "Click About and then tell me what you find" → use browser_agent
+✗ "Navigate through the site and find contact info" → use browser_agent
 
-IMPORTANT NOTES:
-• Don't try to actually log in unless you have credentials
-• Public profiles are viewable without authentication
-• Dismissing popups usually reveals the underlying content`,
+NOTE: Most social media sites don't require login - browser_observe handles popups automatically.`,
   inputSchema: z.object({
     url: z
       .string()

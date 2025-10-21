@@ -19,50 +19,32 @@ export interface BrowserObserveResult {
 }
 
 const browserObserve = tool({
-  description: `Observe and VIEW web pages like a human - automatically dismisses login modals and extracts all visible content.
+  description: `**USE WHEN:** User asks to "see", "show me", "what's on", "view", or "check out" a page WITHOUT specifying exact fields to extract.
 
-WHEN TO USE THIS TOOL:
-✓ To see ALL visible text on a page (follower counts, bios, stats, prices)
-✓ Social media profiles with login walls (Instagram, TikTok, Twitter, YouTube)
-✓ Quick data viewing without defining a schema
-✓ When you need to get past login popups automatically
-✓ BEST CHOICE for scraping public social media profiles
+Quick page viewing that returns ALL visible text content (up to 3000 chars). Perfect for exploration and general questions about what's on a page.
 
-KEY CAPABILITY - AUTOMATIC LOGIN BYPASS:
-• Automatically detects and dismisses login modals/popups
-• Waits for page to load completely before extraction
-• Returns ALL visible text from the page (up to 3000 characters)
-• Takes a screenshot for visual confirmation
-• Works on public profiles even with aggressive login overlays
-• Extracts follower counts, bios, posts without authentication
-• Instagram, TikTok, Twitter, YouTube, Facebook profiles all work
-• Also discovers interactive elements (buttons, links)
+TRIGGER WORDS that indicate this tool:
+- "show me", "what's on", "see", "view", "check out", "look at"
+- "what does [url] say", "what's visible on", "read the page"
+- Questions WITHOUT specific field names
 
-HOW IT WORKS:
-1. Loads the page and waits for content to render
-2. Automatically detects and closes login popups
-3. Extracts all visible text content
-4. Takes a screenshot
-5. Returns everything to you
+EXAMPLES that should use browser_observe:
+✓ "What's on instagram.com/artist"
+✓ "Show me this TikTok profile"
+✓ "See what's on their Facebook page"
+✓ "View the homepage at fatbeats.com"
+✓ "What's visible on this website"
 
-WHAT YOU GET:
-1. Full visible page text (follower counts, usernames, bios, stats, dates)
-2. A screenshot of the page after modal dismissal
-3. Available interactive actions (if needed)
-4. Browser session recording link
-5. Confirmation if a modal was dismissed
+DO NOT USE if user specifies exact fields (use browser_extract instead):
+✗ "Get follower count and bio" → use browser_extract
+✗ "Extract the price and rating" → use browser_extract
 
-USE THIS WHEN:
-✓ "Get follower count from Instagram/TikTok/Twitter profile"
-✓ "Read all visible stats from this YouTube channel"
-✓ "What's on this social media page?"
-✓ "Extract profile information from [any public profile]"
-
-VS browser_extract:
-- browser_observe: Automatic modal dismissal, reads ALL text, no schema needed
-- browser_extract: Requires schema, may fail on login walls, needs structured data
-
-This tool handles login modals automatically - just give it a URL and it will get past the popup.`,
+AUTOMATIC FEATURES:
+• Dismisses login popups automatically
+• Returns all visible text (follower counts, bios, stats, prices, dates)
+• Takes screenshot for visual confirmation
+• Works on Instagram, TikTok, Twitter, YouTube, Facebook
+• Provides session recording link`,
   inputSchema: z.object({
     url: z
       .string()

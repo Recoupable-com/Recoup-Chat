@@ -17,42 +17,30 @@ export interface BrowserExtractResult {
 }
 
 const browserExtract = tool({
-  description: `Extract structured data from websites using AI-powered data extraction.
+  description: `**USE WHEN:** User requests SPECIFIC data fields by name (follower count, price, bio, etc.) or says "extract", "get", "pull", "scrape" with field names.
 
-WHEN TO USE THIS TOOL:
-✓ Extracting specific data points (follower counts, prices, titles, stats)
-✓ Public profiles and pages (Instagram, TikTok, Twitter, LinkedIn)
-✓ Product pages, listings, articles
-✓ Data that's visible without authentication
+Returns clean, structured JSON data. Requires knowing what fields you want.
 
-HANDLING LOGIN WALLS:
-• Many social platforms show public data WITHOUT requiring login
-• TikTok, Instagram, Twitter profiles are publicly visible
-• The AI can "see" and extract data even if there's a login popup overlay
-• If extraction fails due to login, try browser_act to dismiss the popup first:
-  - Use browser_act with action: "close the login dialog" or "click 'Not Now'"
-  - Then retry browser_extract
+TRIGGER WORDS that indicate this tool:
+- "extract", "get", "pull", "scrape", "fetch" + specific field names
+- Mentions exact data: "follower count", "price", "rating", "bio", "title"
+- "I need [field1], [field2], and [field3]"
 
-SCHEMA FORMAT:
-The schema defines what data to extract:
-{
-  "followerCount": "string",  // Use string for formatted numbers like "1.2M"
-  "followingCount": "string",
-  "postCount": "string",
-  "bio": "string",
-  "username": "string"
-}
+EXAMPLES that should use browser_extract:
+✓ "Extract follower count and bio from instagram.com/artist"
+✓ "Get the price and rating from this product page"
+✓ "Pull subscriber count and video count from YouTube"
+✓ "Scrape title, author, and publish date from this article"
 
-BEST PRACTICES:
-• Use string type for social metrics (handles "1.2K" format)
-• Be specific in field names (followerCount not just count)
-• Add instruction parameter for complex pages
-• Extract only the data you need (max 6 fields recommended)
+DO NOT USE for general viewing (use browser_observe instead):
+✗ "What's on this page" → use browser_observe
+✗ "Show me their profile" → use browser_observe  
+✗ "See what's on fatbeats.com" → use browser_observe
 
-EXAMPLE USE CASES:
-✓ "Extract follower count from https://tiktok.com/@username"
-✓ "Get price and rating from this product page"
-✓ "Scrape article title and publish date"`,
+SCHEMA NOTES:
+- User doesn't need to provide schema - you build it from their request
+- Use "string" type for social metrics (handles "1.2M" format)
+- Max 6 fields recommended for best results`,
   inputSchema: z.object({
     url: z.string().url().describe("The URL of the webpage to extract data from"),
     schema: z
