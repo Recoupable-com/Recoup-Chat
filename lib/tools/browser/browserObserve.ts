@@ -3,6 +3,10 @@ import { tool } from "ai";
 import { withBrowser } from "@/lib/browser/withBrowser";
 import { captureScreenshot } from "@/lib/browser/captureScreenshot";
 import { detectPlatform } from "@/lib/browser/detectPlatform";
+import { normalizeInstagramUrl } from "@/lib/browser/normalizeInstagramUrl";
+import { simulateHumanScrolling } from "@/lib/browser/simulateHumanScrolling";
+import { dismissLoginModal } from "@/lib/browser/dismissLoginModal";
+import { formatActionsToString } from "@/lib/browser/formatActionsToString";
 
 export interface BrowserObserveResult {
   success: boolean;
@@ -73,55 +77,15 @@ This tool handles login modals automatically - just give it a URL and it will ge
   execute: async ({ url, instruction }) => {
     try {
       return await withBrowser(async (page, liveViewUrl, sessionUrl) => {
-        // Normalize Instagram URLs to use www subdomain (less aggressive rate limiting)
-        let targetUrl = url;
-        if (url.includes('instagram.com')) {
-          // Only normalize URLs that are exactly 'instagram.com' (no subdomain)
-          try {
-            const urlObj = new URL(url);
-            if (urlObj.hostname === 'instagram.com') {
-              urlObj.hostname = 'www.instagram.com';
-              targetUrl = urlObj.toString();
-            }
-          } catch {
-            // Fallback for malformed URLs - use safer regex approach
-            targetUrl = url.replace(/^(https?:\/\/)instagram\.com/, '$1www.instagram.com');
-          }
-        }
-        
+        const targetUrl = normalizeInstagramUrl(url);
         await page.goto(targetUrl, { waitUntil: "domcontentloaded" });
         
-        // Wait longer for initial page load - seem more human
+        // Wait for initial page load
         await page.waitForTimeout(3000);
 
-        // Add human-like behavior: scroll down slightly
-        try {
-          await page.evaluate(() => {
-            window.scrollTo({ top: 300, behavior: 'smooth' });
-          });
-          await page.waitForTimeout(1500);
-          
-          // Scroll back up
-          await page.evaluate(() => {
-            window.scrollTo({ top: 0, behavior: 'smooth' });
-          });
-          await page.waitForTimeout(1000);
-        } catch {
-          // Scrolling behavior skipped
-        }
+        await simulateHumanScrolling(page);
 
-        // Attempt to automatically dismiss common login modals
-        let modalDismissed = false;
-        try {
-          // Try to dismiss modal using the same method as browserAct
-          await page.act("close the login popup");
-          modalDismissed = true;
-          
-          // Wait longer for modal to close and content to be visible
-          await page.waitForTimeout(2000);
-        } catch {
-          // Continue anyway - maybe there was no modal
-        }
+        const modalDismissed = await dismissLoginModal(page);
         
         const { visibleContent } = await page.extract({
           instruction: "Extract all visible text content from the page including follower counts, bios, and stats",
@@ -138,40 +102,7 @@ This tool handles login modals automatically - just give it a URL and it will ge
         });
 
         const screenshotUrl = await captureScreenshot(page, url);
-
-        // Normalize observeResult to an array
-        const actions = Array.isArray(observeResult)
-          ? observeResult
-          : [observeResult];
-
-        // Convert each action to a human-readable string
-        const actionStrings = actions
-          .map(action => {
-            if (typeof action === 'string') {
-              return action.trim();
-            }
-            if (action && typeof action === 'object') {
-              // Try to extract a descriptive property
-              if ('description' in action && typeof action.description === 'string') {
-                return action.description.trim();
-              }
-              if ('action' in action && typeof action.action === 'string') {
-                return action.action.trim();
-              }
-              // Fallback to JSON.stringify for unknown objects
-              try {
-                return JSON.stringify(action);
-              } catch {
-                return '[Unknown action]';
-              }
-            }
-            return '';
-          })
-          .filter(str => str.length > 0); // Remove empty strings
-
-        const actionsText = actionStrings.length > 0
-          ? actionStrings.map(str => `- ${str}`).join("\n")
-          : "No specific actions identified";
+        const actionsText = formatActionsToString(observeResult);
 
         // Build comprehensive response with visible content and actions
         let responseText = "";
