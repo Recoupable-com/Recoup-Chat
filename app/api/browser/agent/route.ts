@@ -2,9 +2,10 @@ import { type NextRequest, NextResponse } from "next/server";
 import { z } from "zod";
 import { withBrowser } from "@/lib/browser/withBrowser";
 import { isBlockedStartUrl } from "@/lib/browser/isBlockedStartUrl";
+import { browserRouteConfig } from "@/lib/browser/routeConfig";
 import type { BrowserAgentResponse } from "@/types/browser.types";
 
-export const runtime = 'nodejs';
+export const runtime = browserRouteConfig.runtime;
 
 // Type guard: Check if value has a boolean success property
 function hasBooleanSuccess(x: unknown): x is { success: boolean } {
@@ -19,7 +20,6 @@ function hasBooleanSuccess(x: unknown): x is { success: boolean } {
 const AgentSchema = z.object({
   startUrl: z.string().url().refine((url) => url.startsWith("https://") || url.startsWith("http://"), "startUrl must be http or https"),
   task: z.string().min(1, "task is required"),
-  model: z.string().optional(),
 });
 
 export async function POST(req: NextRequest) {
@@ -45,7 +45,6 @@ export async function POST(req: NextRequest) {
   }
 
   const { startUrl, task } = parsed.data;
-  // Note: model parameter accepted but unused in this simplified route
 
   if (isBlockedStartUrl(startUrl)) {
     return NextResponse.json(
@@ -83,8 +82,8 @@ export async function POST(req: NextRequest) {
   }
 }
 
-export const dynamic = "force-dynamic";
-export const revalidate = 0;
-export const fetchCache = "force-no-store";
-export const maxDuration = 300;
+export const dynamic = browserRouteConfig.dynamic;
+export const revalidate = browserRouteConfig.revalidate;
+export const fetchCache = browserRouteConfig.fetchCache;
+export const maxDuration = browserRouteConfig.maxDuration;
 
