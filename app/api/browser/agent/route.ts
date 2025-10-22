@@ -2,10 +2,9 @@ import { type NextRequest, NextResponse } from "next/server";
 import { z } from "zod";
 import { withBrowser } from "@/lib/browser/withBrowser";
 import { isBlockedStartUrl } from "@/lib/browser/isBlockedStartUrl";
-import { browserRouteConfig } from "@/lib/browser/routeConfig";
 import type { BrowserAgentResponse } from "@/types/browser.types";
 
-export const runtime = browserRouteConfig.runtime;
+export const runtime = 'nodejs';
 
 // Type guard: Check if value has a boolean success property
 function hasBooleanSuccess(x: unknown): x is { success: boolean } {
@@ -82,8 +81,8 @@ export async function POST(req: NextRequest) {
   }
 }
 
-export const dynamic = browserRouteConfig.dynamic;
-export const revalidate = browserRouteConfig.revalidate;
-export const fetchCache = browserRouteConfig.fetchCache;
-export const maxDuration = browserRouteConfig.maxDuration;
+export const dynamic = "force-dynamic";
+export const revalidate = 0;
+export const fetchCache = "force-no-store";
+export const maxDuration = 300;
 

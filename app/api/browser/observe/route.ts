@@ -2,10 +2,9 @@ import { type NextRequest, NextResponse } from "next/server";
 import { z } from "zod";
 import { withBrowser } from "@/lib/browser/withBrowser";
 import { isBlockedStartUrl } from "@/lib/browser/isBlockedStartUrl";
-import { browserRouteConfig } from "@/lib/browser/routeConfig";
 import type { BrowserObserveResponse } from "@/types/browser.types";
 
-export const runtime = browserRouteConfig.runtime;
+export const runtime = 'nodejs';
 
 const ObserveSchema = z.object({
   url: z.string().url(),
@@ -79,7 +78,7 @@ export async function POST(req: NextRequest) {
   }
 }
 
-export const dynamic = browserRouteConfig.dynamic;
-export const revalidate = browserRouteConfig.revalidate;
-export const fetchCache = browserRouteConfig.fetchCache;
+export const dynamic = "force-dynamic";
+export const revalidate = 0;
+export const fetchCache = "force-no-store";
 
