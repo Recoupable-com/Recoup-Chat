@@ -5,6 +5,7 @@ import { captureScreenshot } from "@/lib/browser/captureScreenshot";
 import { detectPlatform } from "@/lib/browser/detectPlatform";
 import { schemaToZod } from "@/lib/browser/schemaToZod";
 import { normalizeInstagramUrl } from "@/lib/browser/normalizeInstagramUrl";
+import { BROWSER_TIMEOUTS } from "@/lib/browser/constants";
 
 export interface BrowserExtractResult {
   success: boolean;
@@ -36,7 +37,10 @@ const browserExtract = tool({
     try {
       return await withBrowser(async (page, liveViewUrl, sessionUrl) => {
         const targetUrl = normalizeInstagramUrl(url);
-        await page.goto(targetUrl, { waitUntil: "domcontentloaded" });
+        await page.goto(targetUrl, { 
+          waitUntil: "domcontentloaded", 
+          timeout: BROWSER_TIMEOUTS.PAGE_NAVIGATION 
+        });
 
         const screenshotUrl = await captureScreenshot(page, url);
         const platformName = detectPlatform(url);

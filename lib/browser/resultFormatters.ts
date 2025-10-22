@@ -63,19 +63,30 @@ export function formatFieldValue(value: unknown): string | null {
 // Safe JSON serialization with depth and length limits
 function safeStringifyObject(obj: object): string {
   try {
-    let depth = 0;
-    
-    const depthLimitedReplacer = (_key: string, value: unknown) => {
-      if (typeof value === 'object' && value !== null) {
-        depth++;
-        if (depth > MAX_JSON_DEPTH) {
-          return '[Object (max depth)]';
-        }
+    // Recursively walk object with per-branch depth tracking
+    const limitDepth = (value: unknown, currentDepth: number): unknown => {
+      if (currentDepth > MAX_JSON_DEPTH) {
+        return '[Max depth]';
       }
-      return value;
+      
+      if (value === null || typeof value !== 'object') {
+        return value;
+      }
+      
+      if (Array.isArray(value)) {
+        return value.map(item => limitDepth(item, currentDepth + 1));
+      }
+      
+      // Plain object - recurse into each property
+      const limited: Record<string, unknown> = {};
+      for (const [key, val] of Object.entries(value)) {
+        limited[key] = limitDepth(val, currentDepth + 1);
+      }
+      return limited;
     };
 
-    const result = JSON.stringify(obj, depthLimitedReplacer, 2);
+    const depthLimited = limitDepth(obj, 0);
+    const result = JSON.stringify(depthLimited, null, 2);
     
     if (result.length > MAX_JSON_LENGTH) {
       return result.slice(0, MAX_JSON_LENGTH) + '...';

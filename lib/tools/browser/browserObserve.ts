@@ -3,11 +3,10 @@ import { tool } from "ai";
 import { withBrowser } from "@/lib/browser/withBrowser";
 import { captureScreenshot } from "@/lib/browser/captureScreenshot";
 import { detectPlatform } from "@/lib/browser/detectPlatform";
-import { normalizeInstagramUrl } from "@/lib/browser/normalizeInstagramUrl";
-import { simulateHumanScrolling } from "@/lib/browser/simulateHumanScrolling";
-import { dismissLoginModal } from "@/lib/browser/dismissLoginModal";
 import { formatActionsToString } from "@/lib/browser/formatActionsToString";
-import { BROWSER_TIMEOUTS, CONTENT_LIMITS } from "@/lib/browser/constants";
+import { performPageSetup } from "@/lib/browser/performPageSetup";
+import { extractPageData } from "@/lib/browser/extractPageData";
+import { buildResponseText } from "@/lib/browser/buildResponseText";
 
 export interface BrowserObserveResult {
   success: boolean;
@@ -35,80 +34,43 @@ const browserObserve = tool({
   execute: async ({ url, instruction }) => {
     try {
       return await withBrowser(async (page, liveViewUrl, sessionUrl) => {
-        const targetUrl = normalizeInstagramUrl(url);
-        await page.goto(targetUrl, { waitUntil: "domcontentloaded" });
+        // 1. Setup: navigate, scroll, dismiss modals
+        const modalDismissed = await performPageSetup(page, url);
         
-        // Wait for initial page load
-        await page.waitForTimeout(BROWSER_TIMEOUTS.INITIAL_PAGE_LOAD);
-
-        await simulateHumanScrolling(page);
-
-        const modalDismissed = await dismissLoginModal(page);
+        // 2. Extract: get page content and interactive elements
+        const { visibleContent, observeResult } = await extractPageData(page, instruction);
         
-        const { visibleContent } = await page.extract({
-          instruction: "Extract all visible text content from the page including follower counts, bios, and stats",
-          schema: z.object({
-            visibleContent: z.string().describe("All visible text content on the page"),
-          }),
-        });
-        
-        const isRateLimited = visibleContent.includes('Take a quick pause') || 
-                             visibleContent.includes('more requests than usual');
-        
-        const observeResult = await page.observe({
-          instruction: instruction || "Find all interactive elements and actions",
-        });
-
+        // 3. Capture: screenshot and metadata
         const screenshotUrl = await captureScreenshot(page, url);
         const actionsText = formatActionsToString(observeResult);
         const platformName = detectPlatform(url);
+        
+        // 4. Build: formatted response text
+        const isRateLimited = visibleContent.includes('Take a quick pause') || 
+                             visibleContent.includes('more requests than usual');
+        const responseText = buildResponseText(
+          visibleContent,
+          actionsText,
+          modalDismissed,
+          platformName,
+          isRateLimited
+        );
 
-        // Build comprehensive response with visible content and actions
-        let responseText = "";
-        
-        // Add rate limit warning if detected
-        if (isRateLimited) {
-          responseText += "⚠️ RATE LIMIT DETECTED\n";
-          responseText += `${platformName || 'The website'} is limiting automated requests. Try:\n`;
-          responseText += "1. Wait a few minutes before trying again\n";
-          responseText += "2. Reduce request frequency\n";
-          responseText += "3. Add delays between requests\n\n";
-        }
-        
-        if (modalDismissed) {
-          responseText += "✅ Login modal detected and dismissed\n\n";
-        }
-        
-        responseText += "📄 VISIBLE PAGE CONTENT:\n";
-        responseText += "════════════════════════════════════════\n";
-        responseText += visibleContent.trim().slice(0, CONTENT_LIMITS.MAX_VISIBLE_CONTENT_LENGTH);
-        if (visibleContent.length > CONTENT_LIMITS.MAX_VISIBLE_CONTENT_LENGTH) {
-          responseText += "\n... (content truncated)";
-        }
-        responseText += "\n\n🎯 AVAILABLE ACTIONS:\n";
-        responseText += "════════════════════════════════════════\n";
-        responseText += actionsText;
-
-        // Return in the same format as other browser tools for consistent UI
-        const result: BrowserObserveResult = {
+        return {
           success: true,
           message: responseText,
-          screenshotUrl: screenshotUrl,
+          screenshotUrl,
           sessionUrl,
           platformName,
         };
-        
-        return result;
       });
     } catch (error) {
-      const errorResult: BrowserObserveResult = {
+      return {
         success: false,
         error: `Failed to observe page: ${
           error instanceof Error ? error.message : "Unknown error"
         }`,
       };
-      
-      return errorResult;
     }
   },
 });

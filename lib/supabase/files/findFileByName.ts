@@ -1,5 +1,6 @@
 import supabase from "@/lib/supabase/serverClient";
 import { Tables } from "@/types/database.types";
+import { escapePostgrestValue } from "./escapePostgrestValue";
 
 type FileRecord = Tables<"files">;
 
@@ -43,12 +44,18 @@ export async function findFileByName(
       ? `files/${ownerAccountId}/${artistAccountId}/${path}/${fileNameWithUnderscores}`
       : `files/${ownerAccountId}/${artistAccountId}/${fileNameWithUnderscores}`;
 
+    // Escape values for PostgREST (handles filenames with commas, periods, etc.)
+    const escapedSpaces = escapePostgrestValue(fileNameWithSpaces);
+    const escapedUnderscores = escapePostgrestValue(fileNameWithUnderscores);
+    const escapedPatternSpaces = escapePostgrestValue(storageKeyPatternSpaces);
+    const escapedPatternUnderscores = escapePostgrestValue(storageKeyPatternUnderscores);
+
     const { data: dataByKey, error: errorByKey } = await supabase
       .from("files")
       .select()
       .eq("owner_account_id", ownerAccountId)
       .eq("artist_account_id", artistAccountId)
-      .or(`file_name.eq.${fileNameWithSpaces},file_name.eq.${fileNameWithUnderscores},storage_key.ilike.${storageKeyPatternSpaces},storage_key.ilike.${storageKeyPatternUnderscores}`)
+      .or(`file_name.eq.${escapedSpaces},file_name.eq.${escapedUnderscores},storage_key.ilike.${escapedPatternSpaces},storage_key.ilike.${escapedPatternUnderscores}`)
       .order("created_at", { ascending: false })
       .limit(1)
       .single();

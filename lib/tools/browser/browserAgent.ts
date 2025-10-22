@@ -4,7 +4,7 @@ import { initStagehand } from "@/lib/browser/initStagehand";
 import { captureScreenshot } from "@/lib/browser/captureScreenshot";
 import { detectPlatform } from "@/lib/browser/detectPlatform";
 import { normalizeInstagramUrl } from "@/lib/browser/normalizeInstagramUrl";
-import { BROWSER_AGENT_CONFIG } from "@/lib/browser/constants";
+import { BROWSER_AGENT_CONFIG, BROWSER_TIMEOUTS } from "@/lib/browser/constants";
 
 const browserAgent = tool({
   description: `Autonomous multi-step website navigation. Use when task requires multiple actions: "go to [site] and [do something]", "find [X] on [site]", "navigate and tell me". Example: "Go to fatbeats.com and find Instagram handle". Takes longer (up to 20 steps).`,
@@ -59,7 +59,10 @@ const browserAgent = tool({
         sessionUrl,
       };
 
-      await stagehand.page.goto(targetUrl, { waitUntil: "domcontentloaded" });
+      await stagehand.page.goto(targetUrl, { 
+        waitUntil: "domcontentloaded", 
+        timeout: BROWSER_TIMEOUTS.PAGE_NAVIGATION 
+      });
 
       yield {
         status: 'executing',

@@ -31,11 +31,7 @@ This tool helps avoid detection as automated traffic by spacing out requests nat
   }),
   execute: async ({ seconds }) => {
     try {
-      console.log(`[wait_tool] Waiting for ${seconds} seconds...`);
-      
       await new Promise(resolve => setTimeout(resolve, seconds * 1000));
-      
-      console.log(`[wait_tool] Wait complete`);
       
       return {
         success: true,

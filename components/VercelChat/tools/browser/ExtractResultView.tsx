@@ -1,5 +1,5 @@
 import { cn } from "@/lib/utils";
-import { formatFieldName, formatFieldValue, isPriorityField } from "@/lib/utils/BrowserResultFormatters";
+import { formatFieldName, formatFieldValue, isPriorityField } from "@/lib/browser/resultFormatters";
 
 const STYLES = {
   text: {
