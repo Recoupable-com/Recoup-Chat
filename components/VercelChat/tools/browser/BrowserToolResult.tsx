@@ -87,17 +87,6 @@ export function BrowserToolResult({ result }: { result: BrowserToolResultType })
           {isMessageResult && !isExtractResult && (
             <MessageResultView message={result.message!} />
           )}
-
-          {result.sessionUrl && (
-            <a
-              href={result.sessionUrl}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="text-sm text-blue-600 dark:text-blue-400 hover:underline flex items-center gap-1 mt-auto"
-            >
-              🎥 View Browser Recording
-            </a>
-          )}
         </div>
 
         {/* RIGHT SIDE: Screenshot */}
