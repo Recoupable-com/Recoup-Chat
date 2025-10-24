@@ -1,6 +1,5 @@
 "use client";
 
-import { useEffect, useRef } from "react";
 import useCatalogSongs from "@/hooks/useCatalogSongs";
 import { CatalogSongsResponse } from "@/lib/catalog/getCatalogSongs";
 import CatalogSongsResult, {
@@ -15,42 +14,11 @@ interface CatalogSongsPageContentProps {
 const CatalogSongsPageContent = ({
   catalogId,
 }: CatalogSongsPageContentProps) => {
-  const {
-    data,
-    isLoading,
-    error,
-    fetchNextPage,
-    hasNextPage,
-    isFetchingNextPage,
-  } = useCatalogSongs({
-    catalogId,
-    pageSize: 50,
-  });
-
-  const observerTarget = useRef<HTMLDivElement>(null);
-
-  // Infinite scroll observer
-  useEffect(() => {
-    const observer = new IntersectionObserver(
-      (entries) => {
-        if (entries[0].isIntersecting && hasNextPage && !isFetchingNextPage) {
-          fetchNextPage();
-        }
-      },
-      { threshold: 0.1 }
-    );
-
-    const currentTarget = observerTarget.current;
-    if (currentTarget) {
-      observer.observe(currentTarget);
-    }
-
-    return () => {
-      if (currentTarget) {
-        observer.unobserve(currentTarget);
-      }
-    };
-  }, [hasNextPage, isFetchingNextPage, fetchNextPage]);
+  const { data, isLoading, error, isFetchingNextPage, observerTarget } =
+    useCatalogSongs({
+      catalogId,
+      pageSize: 50,
+    });
 
   if (isLoading) {
     return <CatalogSongsSkeleton />;
