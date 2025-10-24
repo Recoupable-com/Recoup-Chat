@@ -1,5 +1,5 @@
-import CatalogPage from "@/components/Catalog/CatalogPage";
+import CatalogsPage from "@/components/Catalog/CatalogsPage";
 
-const Catalog = () => <CatalogPage />;
+const Catalog = () => <CatalogsPage />;
 
 export default Catalog;
