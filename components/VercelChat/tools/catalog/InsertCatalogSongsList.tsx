@@ -59,7 +59,7 @@ export default function InsertCatalogSongsList({
               </td>
               <td className="py-2 px-3 font-mono text-[10px]">{song.isrc}</td>
               <td className="py-2 px-3 max-w-[200px] truncate text-gray-600">
-                {song.lyrics || "—"}
+                {song.notes || "—"}
               </td>
             </tr>
           ))}

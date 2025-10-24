@@ -2699,22 +2699,22 @@ export type Database = {
         Row: {
           album: string | null
           isrc: string
-          lyrics: string | null
           name: string | null
+          notes: string | null
           updated_at: string
         }
         Insert: {
           album?: string | null
           isrc: string
-          lyrics?: string | null
           name?: string | null
+          notes?: string | null
           updated_at?: string
         }
         Update: {
           album?: string | null
           isrc?: string
-          lyrics?: string | null
           name?: string | null
+          notes?: string | null
           updated_at?: string
         }
         Relationships: []
@@ -3337,15 +3337,18 @@ export type Database = {
           role: string
           updated_at: string
         }
+        SetofOptions: {
+          from: "*"
+          to: "invitations"
+          isOneToOne: true
+          isSetofReturn: false
+        }
       }
       deduct_credits: {
         Args: { account_id: string; amount: number }
         Returns: undefined
       }
-      extract_domain: {
-        Args: { email: string }
-        Returns: string
-      }
+      extract_domain: { Args: { email: string }; Returns: string }
       get_account_invitations: {
         Args: { account_slug: string }
         Returns: {
@@ -3377,31 +3380,36 @@ export type Database = {
           user_id: string
         }[]
       }
-      get_campaign: {
-        Args:
-          | { artistid: string; campaignid: string; email: string }
-          | { clientid: string }
-        Returns: Json
-      }
+      get_campaign:
+        | {
+            Args: { artistid: string; campaignid: string; email: string }
+            Returns: Json
+          }
+        | { Args: { clientid: string }; Returns: Json }
       get_campaign_fans: {
         Args: { artistid: string; email: string }
         Returns: Json
       }
-      get_config: {
-        Args: Record<PropertyKey, never>
-        Returns: Json
-      }
+      get_config: { Args: never; Returns: Json }
       get_fans_listening_top_songs: {
         Args: { artistid: string; email: string }
         Returns: Json
       }
-      get_message_counts_by_user: {
-        Args: { end_date: string; start_date: string } | { start_date: string }
-        Returns: {
-          account_email: string
-          message_count: number
-        }[]
-      }
+      get_message_counts_by_user:
+        | {
+            Args: { end_date: string; start_date: string }
+            Returns: {
+              account_email: string
+              message_count: number
+            }[]
+          }
+        | {
+            Args: { start_date: string }
+            Returns: {
+              account_email: string
+              message_count: number
+            }[]
+          }
       get_rooms_created_by_user: {
         Args: { start_date: string }
         Returns: {
@@ -3416,18 +3424,12 @@ export type Database = {
           segment_report_count: number
         }[]
       }
-      get_upper_system_role: {
-        Args: Record<PropertyKey, never>
-        Returns: string
-      }
+      get_upper_system_role: { Args: never; Returns: string }
       has_active_subscription: {
         Args: { target_account_id: string }
         Returns: boolean
       }
-      has_credits: {
-        Args: { account_id: string }
-        Returns: boolean
-      }
+      has_credits: { Args: { account_id: string }; Returns: boolean }
       has_more_elevated_role: {
         Args: {
           role_name: string
@@ -3456,18 +3458,12 @@ export type Database = {
         }
         Returns: boolean
       }
-      is_account_owner: {
-        Args: { account_id: string }
-        Returns: boolean
-      }
+      is_account_owner: { Args: { account_id: string }; Returns: boolean }
       is_account_team_member: {
         Args: { target_account_id: string }
         Returns: boolean
       }
-      is_set: {
-        Args: { field_name: string }
-        Returns: boolean
-      }
+      is_set: { Args: { field_name: string }; Returns: boolean }
       is_team_member: {
         Args: { account_id: string; user_id: string }
         Returns: boolean
@@ -3512,6 +3508,12 @@ export type Database = {
           total_amount: number
           updated_at: string
         }
+        SetofOptions: {
+          from: "*"
+          to: "orders"
+          isOneToOne: true
+          isSetofReturn: false
+        }
       }
       upsert_subscription: {
         Args: {
@@ -3544,6 +3546,12 @@ export type Database = {
           trial_ends_at: string | null
           trial_starts_at: string | null
           updated_at: string
+        }
+        SetofOptions: {
+          from: "*"
+          to: "subscriptions"
+          isOneToOne: true
+          isSetofReturn: false
         }
       }
     }
