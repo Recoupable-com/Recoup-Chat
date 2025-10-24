@@ -2,7 +2,7 @@
 
 import useCatalogSongs from "@/hooks/useCatalogSongs";
 import CatalogSongsResult, {
-  CatalogSongsResult as CatalogSongsResultType,
+  type CatalogSongsResult as CatalogSongsResultType,
 } from "@/components/VercelChat/tools/catalog/CatalogSongsResult";
 import CatalogSongsSkeleton from "@/components/VercelChat/tools/catalog/CatalogSongsSkeleton";
 
