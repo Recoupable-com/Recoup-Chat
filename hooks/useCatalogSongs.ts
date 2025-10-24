@@ -8,6 +8,7 @@ import {
   getCatalogSongs,
 } from "@/lib/catalog/getCatalogSongs";
 import useObserverTarget from "./useObserverTarget";
+import { RefObject } from "react";
 
 interface UseCatalogSongsOptions {
   catalogId: string;
@@ -18,7 +19,7 @@ interface UseCatalogSongsOptions {
 type UseCatalogSongsReturn = UseInfiniteQueryResult<
   InfiniteData<CatalogSongsResponse>
 > & {
-  observerTarget: React.RefObject<HTMLDivElement>;
+  observerTarget: RefObject<HTMLDivElement>;
 };
 
 const useCatalogSongs = ({
