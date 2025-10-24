@@ -2,19 +2,10 @@ import { type NextRequest, NextResponse } from "next/server";
 import { z } from "zod";
 import { withBrowser } from "@/lib/browser/withBrowser";
 import { isBlockedStartUrl } from "@/lib/browser/isBlockedStartUrl";
+import { hasBooleanSuccess } from "@/lib/browser/hasBooleanSuccess";
 import type { BrowserAgentResponse } from "@/types/browser.types";
 
 export const runtime = 'nodejs';
-
-// Type guard: Check if value has a boolean success property
-function hasBooleanSuccess(x: unknown): x is { success: boolean } {
-  return (
-    typeof x === "object" && 
-    x !== null && 
-    "success" in x && 
-    typeof (x as { success: unknown }).success === "boolean"
-  );
-}
 
 const AgentSchema = z.object({
   startUrl: z.string().url().refine((url) => url.startsWith("https://") || url.startsWith("http://"), "startUrl must be http or https"),

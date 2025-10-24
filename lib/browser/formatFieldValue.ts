@@ -1,36 +1,10 @@
-/**
- * Data formatting utilities for browser tool results
- */
-
 // Limits for safe serialization
 const MAX_JSON_LENGTH = 500;
 const MAX_JSON_DEPTH = 3;
 
-// Priority metric field names
-export const PRIORITY_FIELDS = [
-  'followerCount', 'followingCount', 'postCount', 'likesCount', 
-  'subscribers', 'views', 'price', 'rating', 'title', 'name'
-] as const;
-
-// Helper: Check if field name is a priority metric
-export const isPriorityField = (key: string): boolean =>
-  PRIORITY_FIELDS.some(field => key.toLowerCase().includes(field.toLowerCase()));
-
-// Format camelCase or snake_case field names to readable labels
-export function formatFieldName(fieldName: string): string {
-  return fieldName
-    // Handle camelCase: insert space before capitals
-    .replace(/([A-Z])/g, ' $1')
-    // Handle snake_case: replace underscores with spaces
-    .replace(/_/g, ' ')
-    // Capitalize first letter of each word
-    .split(' ')
-    .map(word => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase())
-    .join(' ')
-    .trim();
-}
-
-// Format field values with appropriate type handling
+/**
+ * Format field values with appropriate type handling
+ */
 export function formatFieldValue(value: unknown): string | null {
   if (value === null || value === undefined) {
     return null;

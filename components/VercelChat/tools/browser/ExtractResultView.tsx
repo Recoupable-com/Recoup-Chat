@@ -1,5 +1,8 @@
 import { cn } from "@/lib/utils";
-import { formatFieldName, formatFieldValue, isPriorityField } from "@/lib/browser/resultFormatters";
+import { formatFieldName } from "@/lib/browser/formatFieldName";
+import { formatFieldValue } from "@/lib/browser/formatFieldValue";
+import { isPriorityField } from "@/lib/browser/isPriorityField";
+import { isPlainObject } from "@/lib/browser/isPlainObject";
 
 const STYLES = {
   text: {
@@ -9,16 +12,6 @@ const STYLES = {
 } as const;
 
 const MAX_DISPLAYED_FIELDS = 8;
-
-// Runtime guard: Ensure value is a plain object
-function isPlainObject(value: unknown): value is Record<string, unknown> {
-  return (
-    typeof value === 'object' && 
-    value !== null && 
-    !Array.isArray(value) && 
-    Object.getPrototypeOf(value) === Object.prototype
-  );
-}
 
 export function ExtractResultView({ data }: { data: unknown }) {
   if (data === null || data === undefined) {

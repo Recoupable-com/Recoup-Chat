@@ -46,7 +46,7 @@ const browserAgent = tool({
         model: chosenModel,
         instructions: "You are a helpful assistant that can use a web browser to complete tasks.",
         options: {
-          apiKey: process.env.GEMINI_API_KEY || process.env.GOOGLE_API_KEY || process.env.GOOGLE_AI_API_KEY,
+          apiKey: process.env.GOOGLE_AI_API_KEY,
         },
       });
 

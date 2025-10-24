@@ -1,9 +1,11 @@
 "use client";
 
 import { cn } from "@/lib/utils";
+import { getBrowserResultType } from "@/lib/browser/getBrowserResultType";
 import { ExtractResultView } from "./ExtractResultView";
 import { MessageResultView } from "./MessageResultView";
 import { ScreenshotView } from "./ScreenshotView";
+import { SectionHeader } from "./SectionHeader";
 
 // Style constants
 const STYLES = {
@@ -25,30 +27,6 @@ export interface BrowserToolResultType {
   finalScreenshotUrl?: string;
   message?: string;
   screenshotUrl?: string;
-}
-
-// Sub-component: Section header
-function SectionHeader({ title, className }: { title: string; className?: string }) {
-  return (
-    <div className={cn("pb-3", STYLES.border, "border-b", className)}>
-      <span className={cn("text-sm font-semibold", STYLES.text.primary)}>
-        {title}
-      </span>
-    </div>
-  );
-}
-
-// Helper: Detect result type and compute display values
-function getBrowserResultType(result: BrowserToolResultType) {
-  const isExtractResult = result.data !== undefined;
-  const isMessageResult = result.message !== undefined;
-  const displayScreenshot = result.finalScreenshotUrl || result.initialScreenshotUrl || result.screenshotUrl;
-  
-  const title = isExtractResult ? "Data Extracted Successfully" : 
-                isMessageResult ? "Page Observed Successfully" :
-                "Operation completed successfully";
-  
-  return { isExtractResult, isMessageResult, displayScreenshot, title };
 }
 
 export function BrowserToolResult({ result }: { result: BrowserToolResultType }) {

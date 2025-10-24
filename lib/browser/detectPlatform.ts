@@ -1,3 +1,6 @@
+/**
+ * Detect platform/social network from URL
+ */
 export function detectPlatform(url?: string): string {
   if (!url) return "browser";
 
@@ -11,24 +14,5 @@ export function detectPlatform(url?: string): string {
   if (urlLower.includes("threads")) return "threads";
 
   return "browser";
-}
-
-export function getPlatformInfo(url?: string) {
-  const platform = detectPlatform(url);
-
-  const platformEmojis: Record<string, string> = {
-    instagram: "📸",
-    facebook: "👤",
-    x: "✖️",
-    youtube: "📺",
-    tiktok: "🎵",
-    threads: "🧵",
-    browser: "🌐",
-  };
-
-  return {
-    name: platform,
-    emoji: platformEmojis[platform] || "🌐",
-  };
 }
 
