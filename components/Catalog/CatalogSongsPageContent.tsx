@@ -23,20 +23,17 @@ const CatalogSongsPageContent = ({
     return <CatalogSongsSkeleton />;
   }
 
-  if (error) {
+  if (error || !data) {
     const errorResult: CatalogSongsResultType = {
       success: false,
-      error: error instanceof Error ? error.message : "Failed to load songs",
+      error:
+        error instanceof Error
+          ? error.message
+          : error
+            ? "Failed to load songs"
+            : "No data available",
     };
     return <CatalogSongsResult result={errorResult} />;
-  }
-
-  if (!data) {
-    const emptyResult: CatalogSongsResultType = {
-      success: false,
-      error: "No data available",
-    };
-    return <CatalogSongsResult result={emptyResult} />;
   }
 
   const result: CatalogSongsResultType = {
