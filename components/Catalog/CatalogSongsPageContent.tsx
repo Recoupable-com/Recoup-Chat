@@ -6,6 +6,7 @@ import CatalogSongsResult, {
   type CatalogSongsResult as CatalogSongsResultType,
 } from "@/components/VercelChat/tools/catalog/CatalogSongsResult";
 import CatalogSongsSkeleton from "@/components/VercelChat/tools/catalog/CatalogSongsSkeleton";
+import CatalogSongsInfiniteScrollTrigger from "./CatalogSongsInfiniteScrollTrigger";
 
 interface CatalogSongsPageContentProps {
   catalogId: string;
@@ -59,15 +60,10 @@ const CatalogSongsPageContent = ({
   return (
     <div>
       <CatalogSongsResult result={result} />
-      {/* Infinite scroll trigger */}
-      <div
-        ref={observerTarget}
-        className="h-20 flex items-center justify-center"
-      >
-        {isFetchingNextPage && (
-          <p className="text-sm text-gray-500">Loading more songs...</p>
-        )}
-      </div>
+      <CatalogSongsInfiniteScrollTrigger
+        observerTarget={observerTarget}
+        isFetchingNextPage={isFetchingNextPage}
+      />
     </div>
   );
 };
