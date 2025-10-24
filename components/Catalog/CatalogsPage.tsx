@@ -3,6 +3,7 @@
 import { useAutoLogin } from "@/hooks/useAutoLogin";
 import useCatalogs from "@/hooks/useCatalogs";
 import CatalogCard from "./CatalogCard";
+import { Skeleton } from "@/components/ui/skeleton";
 
 const Title = () => (
   <h1 className="text-lg md:text-xl font-bold pb-4">Catalogs</h1>
@@ -16,7 +17,15 @@ const CatalogsPage = () => {
     return (
       <div className="max-w-screen min-h-screen p-4">
         <Title />
-        <p className="text-sm text-gray-600">Loading catalogs...</p>
+        <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+          {Array.from({ length: 3 }).map((_, index) => (
+            <div key={index} className="p-4 border rounded-lg">
+              <Skeleton className="h-6 w-3/4 mb-3" />
+              <Skeleton className="h-5 w-20 mb-2" />
+              <Skeleton className="h-4 w-32" />
+            </div>
+          ))}
+        </div>
       </div>
     );
   }

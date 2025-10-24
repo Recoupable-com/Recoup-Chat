@@ -3,6 +3,7 @@
 import { useRouter } from "next/navigation";
 import { Tables } from "@/types/database.types";
 import useCatalogSongs from "@/hooks/useCatalogSongs";
+import { Skeleton } from "@/components/ui/skeleton";
 
 type Catalog = Tables<"catalogs">;
 
@@ -28,7 +29,7 @@ const CatalogCard = ({ catalog }: CatalogCardProps) => {
       <h2 className="font-semibold text-base">{catalog.name}</h2>
       <p className="text-sm text-gray-600 mt-1">
         {isLoading ? (
-          "Loading songs..."
+          <Skeleton className="h-5 w-20" />
         ) : (
           <>
             {songCount} {songCount === 1 ? "song" : "songs"}
