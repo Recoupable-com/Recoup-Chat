@@ -17,14 +17,15 @@ const CatalogCard = ({ catalog }: CatalogCardProps) => {
 
   const songCount = data?.pagination.total_count ?? 0;
 
-  const handleCatalogClick = (catalogId: string) => {
-    router.push(`/catalog/${catalogId}`);
+  const handleCatalogClick = () => {
+    router.push(`/catalog/${catalog.id}`);
   };
 
   return (
-    <div
-      onClick={() => handleCatalogClick(catalog.id)}
-      className="p-4 border rounded-lg hover:bg-gray-50 cursor-pointer transition-colors"
+    <button
+      type="button"
+      onClick={handleCatalogClick}
+      className="w-full text-left p-4 border rounded-lg hover:bg-gray-50 transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
     >
       <h2 className="font-semibold text-base">{catalog.name}</h2>
       <p className="text-sm text-gray-600 mt-1">
@@ -39,7 +40,7 @@ const CatalogCard = ({ catalog }: CatalogCardProps) => {
       <p className="text-xs text-gray-500 mt-2">
         Created: {new Date(catalog.created_at).toLocaleDateString()}
       </p>
-    </div>
+    </button>
   );
 };
 
