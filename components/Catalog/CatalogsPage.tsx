@@ -1,6 +1,5 @@
 "use client";
 
-import { useRouter } from "next/navigation";
 import { useAutoLogin } from "@/hooks/useAutoLogin";
 import useCatalogs from "@/hooks/useCatalogs";
 import CatalogCard from "./CatalogCard";
@@ -11,12 +10,7 @@ const Title = () => (
 
 const CatalogsPage = () => {
   useAutoLogin();
-  const router = useRouter();
   const { data, isLoading, error } = useCatalogs();
-
-  const handleCatalogClick = (catalogId: string) => {
-    router.push(`/catalog/${catalogId}`);
-  };
 
   if (isLoading) {
     return (
@@ -54,11 +48,7 @@ const CatalogsPage = () => {
       <Title />
       <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
         {catalogs.map((catalog) => (
-          <CatalogCard
-            key={catalog.id}
-            catalog={catalog}
-            onClick={handleCatalogClick}
-          />
+          <CatalogCard key={catalog.id} catalog={catalog} />
         ))}
       </div>
     </div>

@@ -1,5 +1,6 @@
 "use client";
 
+import { useRouter } from "next/navigation";
 import { Tables } from "@/types/database.types";
 import useCatalogSongs from "@/hooks/useCatalogSongs";
 
@@ -7,17 +8,21 @@ type Catalog = Tables<"catalogs">;
 
 interface CatalogCardProps {
   catalog: Catalog;
-  onClick: (catalogId: string) => void;
 }
 
-const CatalogCard = ({ catalog, onClick }: CatalogCardProps) => {
+const CatalogCard = ({ catalog }: CatalogCardProps) => {
+  const router = useRouter();
   const { data, isLoading } = useCatalogSongs(catalog.id);
 
   const songCount = data?.pagination.total_count ?? 0;
 
+  const handleCatalogClick = (catalogId: string) => {
+    router.push(`/catalog/${catalogId}`);
+  };
+
   return (
     <div
-      onClick={() => onClick(catalog.id)}
+      onClick={() => handleCatalogClick(catalog.id)}
       className="p-4 border rounded-lg hover:bg-gray-50 cursor-pointer transition-colors"
     >
       <h2 className="font-semibold text-base">{catalog.name}</h2>
