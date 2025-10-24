@@ -13,7 +13,11 @@ interface CatalogCardProps {
 
 const CatalogCard = ({ catalog }: CatalogCardProps) => {
   const router = useRouter();
-  const { data, isLoading } = useCatalogSongs(catalog.id);
+  const { data, isLoading } = useCatalogSongs({
+    catalogId: catalog.id,
+    pageSize: 1,
+    page: 1,
+  });
 
   const songCount = data?.pagination.total_count ?? 0;
 

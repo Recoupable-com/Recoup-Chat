@@ -4,13 +4,22 @@ import {
   CatalogSongsResponse,
 } from "@/lib/catalog/getCatalogSongs";
 
-const useCatalogSongs = (
-  catalogId: string,
-  enabled: boolean = true
-): UseQueryResult<CatalogSongsResponse> => {
+interface UseCatalogSongsOptions {
+  catalogId: string;
+  pageSize?: number;
+  page?: number;
+  enabled?: boolean;
+}
+
+const useCatalogSongs = ({
+  catalogId,
+  pageSize = 1,
+  page = 1,
+  enabled = true,
+}: UseCatalogSongsOptions): UseQueryResult<CatalogSongsResponse> => {
   return useQuery({
-    queryKey: ["catalogSongs", catalogId],
-    queryFn: () => getCatalogSongs(catalogId, 1, 1), // Fetch only 1 song to get total_count
+    queryKey: ["catalogSongs", catalogId, pageSize, page],
+    queryFn: () => getCatalogSongs(catalogId, pageSize, page),
     enabled: enabled && !!catalogId,
     staleTime: 5 * 60 * 1000, // 5 minutes
     refetchOnWindowFocus: false,
@@ -18,4 +27,3 @@ const useCatalogSongs = (
 };
 
 export default useCatalogSongs;
-
