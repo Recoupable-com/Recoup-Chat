@@ -3,11 +3,14 @@
 import useCatalogs from "@/hooks/useCatalogs";
 import CatalogCard from "./CatalogCard";
 import { Skeleton } from "@/components/ui/skeleton";
+import { useUserProvider } from "@/providers/UserProvder";
 
 const CatalogsPageContent = () => {
   const { data, isLoading, error } = useCatalogs();
+  const { userData } = useUserProvider();
+  const accountId = userData?.account_id || "";
 
-  if (isLoading) {
+  if (isLoading || !accountId) {
     return (
       <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
         {Array.from({ length: 3 }).map((_, index) => (
