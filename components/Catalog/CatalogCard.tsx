@@ -16,10 +16,9 @@ const CatalogCard = ({ catalog }: CatalogCardProps) => {
   const { data, isLoading } = useCatalogSongs({
     catalogId: catalog.id,
     pageSize: 1,
-    page: 1,
   });
 
-  const songCount = data?.pagination.total_count ?? 0;
+  const songCount = data?.pages[0]?.pagination?.total_count ?? 0;
 
   const handleCatalogClick = () => {
     router.push(`/catalogs/${catalog.id}`);
