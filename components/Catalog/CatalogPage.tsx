@@ -1,3 +1,5 @@
+"use client";
+
 import { useAutoLogin } from "@/hooks/useAutoLogin";
 
 const CatalogPage = () => {
