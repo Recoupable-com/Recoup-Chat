@@ -22,7 +22,7 @@ const CatalogCard = ({ catalog }: CatalogCardProps) => {
   const songCount = data?.pagination.total_count ?? 0;
 
   const handleCatalogClick = () => {
-    router.push(`/catalog/${catalog.id}`);
+    router.push(`/catalogs/${catalog.id}`);
   };
 
   return (
