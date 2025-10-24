@@ -48,7 +48,7 @@ const useCatalogSongs = ({
 
   const observerTarget = useObserverTarget({
     onIntersect: fetchNextPage,
-    enabled: hasNextPage && !isFetchingNextPage,
+    enabled: !!hasNextPage && !isFetchingNextPage,
   });
 
   return {
