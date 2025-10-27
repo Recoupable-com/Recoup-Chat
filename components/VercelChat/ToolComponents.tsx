@@ -31,6 +31,8 @@ import { Loader } from "lucide-react";
 import { getDisplayToolName } from "@/lib/tools/get-tools-name";
 import GenericSuccess from "./tools/GenericSuccess";
 import getToolInfo from "@/lib/utils/getToolsInfo";
+import { BrowserToolSkeleton } from "./BrowserToolSkeleton";
+import { BrowserToolResult, type BrowserToolResultType } from "./tools/browser/BrowserToolResult";
 import { isSearchProgressUpdate } from "@/lib/search/searchProgressUtils";
 import { GetSpotifyPlayButtonClickedResult } from "@/lib/supabase/getSpotifyPlayButtonClicked";
 import GetVideoGameCampaignPlaysResultComponent from "./tools/GetVideoGameCampaignPlaysResult";
@@ -95,9 +97,6 @@ import CatalogSongsResult, {
 } from "./tools/catalog/CatalogSongsResult";
 import { UpdateFileResult, UpdateFileResultType } from "./tools/files/UpdateFileResult";
 
-/**
- * Helper function to get the appropriate UI component for a tool call
- */
 export function getToolCallComponent(part: ToolUIPart) {
   const { toolCallId } = part as ToolUIPart;
   const toolName = getToolName(part);
@@ -243,6 +242,22 @@ export function getToolCallComponent(part: ToolUIPart) {
       </div>
     );
   } else if (
+    toolName === "browser_act" ||
+    toolName === "browser_extract" ||
+    toolName === "browser_observe" ||
+    toolName === "browser_agent"
+  ) {
+    const toolPart = part as ToolUIPart & {
+      args?: { url?: string; startUrl?: string };
+    };
+    const url = toolPart.args?.url || toolPart.args?.startUrl;
+    
+    return (
+      <div key={toolCallId}>
+        <BrowserToolSkeleton toolName={toolName} url={url} />
+      </div>
+    );
+  } else if (
     toolName === "insert_catalog_songs" ||
     toolName === "select_catalog_songs"
   ) {
@@ -265,9 +280,6 @@ export function getToolCallComponent(part: ToolUIPart) {
   );
 }
 
-/**
- * Helper function to get the appropriate UI component for a tool result
- */
 export function getToolResultComponent(part: ToolUIPart) {
   const { toolCallId, output: result } = part as ToolUIPart;
   const toolName = getToolName(part);
@@ -278,6 +290,17 @@ export function getToolResultComponent(part: ToolUIPart) {
     return (
       <div key={toolCallId}>
         <ImageResult result={result as ImageGenerationResult} />
+      </div>
+    );
+  } else if (
+    toolName === "browser_extract" || 
+    toolName === "browser_act" ||
+    toolName === "browser_observe" ||
+    toolName === "browser_agent"
+  ) {
+    return (
+      <div key={toolCallId}>
+        <BrowserToolResult result={result as BrowserToolResultType} />
       </div>
     );
   } else if (
@@ -519,9 +542,6 @@ export function getToolResultComponent(part: ToolUIPart) {
   );
 }
 
-/**
- * Main ToolComponents component - Export a single object with all tool-related UI components
- */
 export const ToolComponents = {
   getToolCallComponent,
   getToolResultComponent,

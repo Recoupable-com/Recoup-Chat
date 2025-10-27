@@ -9,7 +9,7 @@ export function useArtistInstruction(artistId?: string) {
       const res = await fetch(`/api/artist?artistId=${encodeURIComponent(artistId)}`);
       if (!res.ok) return undefined;
       const json = await res.json();
-      return json?.artist.instruction || undefined;
+      return json?.artist?.instruction || undefined;
     },
     staleTime: 5 * 60 * 1000,
   });
