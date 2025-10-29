@@ -84,6 +84,9 @@ export const ROSTRUM_ORG_ARTIST_IDS: string[] = [
   "8f94490f-5141-4626-a955-e22043d3e3ca", // Teammate
   "d21d6bf6-900d-4e77-b15e-6830c03d3936", // Mike Taylor
   "9bde0bd3-6236-4403-9dae-0eeecf380fbd", // FatBeats
+  "a1fdc861-d1c2-4582-99da-6ac755b52f0a", // Cantora Records
+  "29cfd55a-98d9-45a5-96c9-c751a88f7799", // Rostrum Pacific
+  "4e8b9e7d-01f6-4bb8-b333-7673c357b77c", // SpaceHeater
 ];
 
 // Supabase Private Storage Bucket
