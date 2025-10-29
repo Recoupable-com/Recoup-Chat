@@ -2,8 +2,9 @@ import { CatalogSongInput } from "./postCatalogSongs";
 
 /**
  * Parses a CSV file containing catalog songs
- * Expected columns: isrc (case-insensitive)
- * catalog_id is provided as a parameter from the tool results
+ * Required columns: isrc (case-insensitive)
+ * Optional columns: name, album, notes (case-insensitive)
+ * catalog_id is provided as a parameter
  */
 export function parseCsvFile(
   text: string,
@@ -14,11 +15,12 @@ export function parseCsvFile(
     throw new Error("CSV file must contain headers and at least one row");
   }
 
-  // Parse header to find ISRC column (case-insensitive)
-  const headers = lines[0].split(",").map((h) => h.trim());
-  const isrcIndex = headers.findIndex(
-    (header) => header.toLowerCase() === "isrc"
-  );
+  // Parse headers and find column indices (case-insensitive)
+  const headers = lines[0].split(",").map((h) => h.trim().toLowerCase());
+  const isrcIndex = headers.indexOf("isrc");
+  const nameIndex = headers.indexOf("name");
+  const albumIndex = headers.indexOf("album");
+  const notesIndex = headers.indexOf("notes");
 
   if (isrcIndex === -1) {
     throw new Error("CSV must contain an 'isrc' column (case-insensitive)");
@@ -28,12 +30,19 @@ export function parseCsvFile(
   const songs: CatalogSongInput[] = [];
   for (let i = 1; i < lines.length; i++) {
     const row = lines[i].split(",").map((cell) => cell.trim());
-    if (row.length > isrcIndex && row[isrcIndex]) {
-      songs.push({
-        catalog_id: catalogId,
-        isrc: row[isrcIndex],
-      });
+
+    // Skip rows without ISRC
+    if (!row[isrcIndex]) {
+      continue;
     }
+
+    songs.push({
+      catalog_id: catalogId,
+      isrc: row[isrcIndex],
+      name: nameIndex !== -1 ? row[nameIndex] || undefined : undefined,
+      album: albumIndex !== -1 ? row[albumIndex] || undefined : undefined,
+      notes: notesIndex !== -1 ? row[notesIndex] || undefined : undefined,
+    });
   }
 
   return songs;
