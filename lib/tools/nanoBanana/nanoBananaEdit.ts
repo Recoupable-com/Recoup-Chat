@@ -73,16 +73,6 @@ const nanoBananaEdit = tool({
     } catch (error) {
       console.error("🍌 nano_banana_edit ERROR", error);
       
-      // Log detailed error information for debugging
-      if (error && typeof error === 'object') {
-        const errorObj = error as { status?: unknown; body?: unknown; message?: unknown };
-        console.error("🍌 Error details:", {
-          status: errorObj.status,
-          body: errorObj.body,
-          message: errorObj.message,
-        });
-      }
-      
       // Format helpful error messages using centralized error handler
       const originalError =
         error instanceof Error ? error.message : "An unexpected error occurred";
