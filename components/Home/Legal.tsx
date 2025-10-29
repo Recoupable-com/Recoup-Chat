@@ -26,12 +26,12 @@ const Legal = ({ className = "mt-6 mb-4" }: LegalProps) => {
       </Link>
       <span className="mx-2">|</span>
       <Link
-        href="https://recoupable.com/terms-of-service"
+        href="https://recoupable.com/terms-of-use"
         className="underline hover:text-gray-700"
         target="_blank"
         rel="noopener noreferrer"
       >
-        Terms of Service
+        Terms of Use
       </Link>
     </div>
   );
