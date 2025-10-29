@@ -1,5 +1,4 @@
 import generateUUID from "@/lib/generateUUID";
-import { getMcpTools } from "@/lib/tools/getMcpTools";
 import getSystemPrompt from "@/lib/prompts/getSystemPrompt";
 import { MAX_MESSAGES } from "./const";
 import { type ChatRequest, type ChatConfig } from "./types";
@@ -7,8 +6,10 @@ import { AnthropicProviderOptions } from "@ai-sdk/anthropic";
 import { DEFAULT_MODEL } from "../consts";
 import { convertToModelMessages, stepCountIs } from "ai";
 import getPrepareStepResult from "./toolChains/getPrepareStepResult";
-import { filterExcludedTools } from "./filterExcludedTools";
 import { handleNanoBananaModel } from "./handleNanoBananaModel";
+import { extractImageUrlsFromMessages } from "./extractImageUrlsFromMessages";
+import { buildSystemPromptWithImages } from "./buildSystemPromptWithImages";
+import { setupToolsForRequest } from "./setupToolsForRequest";
 
 export async function setupChatRequest(body: ChatRequest): Promise<ChatConfig> {
   const {
@@ -21,14 +22,20 @@ export async function setupChatRequest(body: ChatRequest): Promise<ChatConfig> {
     timezone,
   } = body;
 
-  // Handle Fal nano banana model selection
+  // Configure model and tools based on nano banana selection
   const nanoBananaConfig = handleNanoBananaModel(body);
+  console.log("🔧 setupChatRequest - Model config:", {
+    requestedModel: body.model,
+    resolvedModel: nanoBananaConfig.resolvedModel,
+    excludeTools: nanoBananaConfig.excludeTools,
+  });
 
-  // Use exclude tools from nano banana config if available
   const finalExcludeTools = nanoBananaConfig.excludeTools || excludeTools;
-  const tools = filterExcludedTools(getMcpTools(), finalExcludeTools);
+  const tools = setupToolsForRequest(finalExcludeTools);
 
-  const system = await getSystemPrompt({
+  // Build system prompt with image URLs if needed
+  const imageUrls = extractImageUrlsFromMessages(body.messages);
+  const baseSystemPrompt = await getSystemPrompt({
     roomId: body.roomId,
     artistId,
     accountId,
@@ -37,17 +44,28 @@ export async function setupChatRequest(body: ChatRequest): Promise<ChatConfig> {
     knowledgeBaseText,
     timezone,
   });
+  const system = buildSystemPromptWithImages(baseSystemPrompt, imageUrls);
+
+  const convertedMessages = convertToModelMessages(body.messages, {
+    tools,
+    ignoreIncompleteToolCalls: true,
+  }).slice(-MAX_MESSAGES);
 
   const config: ChatConfig = {
     model: nanoBananaConfig.resolvedModel || DEFAULT_MODEL,
     system,
-    messages: convertToModelMessages(body.messages, {
-      tools,
-      ignoreIncompleteToolCalls: true,
-    }).slice(-MAX_MESSAGES),
+    messages: convertedMessages,
     experimental_generateMessageId: generateUUID,
     tools,
     stopWhen: stepCountIs(111),
+    // Only override download behavior for nano banana image editing
+    // For all other models/use cases (PDFs, audio, etc.), default download behavior is used
+    ...(nanoBananaConfig.shouldPassImageUrlsThrough && {
+      experimental_download: async (files) => {
+        // Pass all file URLs through (nano banana only uses images anyway)
+        return files.map(() => null);
+      },
+    }),
     prepareStep: (options) => {
       const next = getPrepareStepResult(options);
       if (next) {

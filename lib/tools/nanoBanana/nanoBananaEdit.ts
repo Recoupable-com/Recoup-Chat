@@ -22,7 +22,7 @@ const schema = z.object({
   account_id: z
     .string()
     .describe(
-      "The ID of the account that owns the artist. Never ask for this, use the account_id from the system prompt."
+      "REQUIRED: Use the account_id value from the system prompt. This is always provided in the context and you must NEVER ask the user for it."
     ),
 });
 
@@ -36,17 +36,19 @@ export interface NanoBananaEditResult {
 
 const nanoBananaEdit = tool({
   description:
-    "Edit existing images using Fal's nano banana image editing model. Modifies images based on text prompts while preserving the original context and style.",
+    "Edit existing images using Fal's nano banana image editing model. Modifies images based on text prompts while preserving the original context and style. IMPORTANT: (1) The account_id parameter is always available in your system context - look for 'account_id:' in your instructions. (2) The imageUrl should be extracted from file attachments in the user's message - check message parts for files with image media types.",
   inputSchema: schema,
   execute: async ({
     prompt,
     imageUrl,
     account_id,
   }): Promise<NanoBananaEditResult> => {
+    console.log("🍌 nano_banana_edit START", { prompt, imageUrl, account_id });
     try {
       // Configure Fal client
       configureFalClient(fal);
 
+      console.log("🍌 Calling fal.subscribe...");
       // Call Fal's nano banana image editing endpoint
       const result = await fal.subscribe("fal-ai/nano-banana/edit", {
         input: {
@@ -58,18 +60,37 @@ const nanoBananaEdit = tool({
         logs: true,
       });
 
+      console.log("🍌 Fal result received:", result);
+
       const editedImageUrl = result.data.images[0]?.url;
       const description =
         result.data.description || "Image edited successfully";
+      
+      console.log("🍌 Handling credits...");
       await handleNanoBananaCredits(account_id);
 
-      return {
+      const finalResult = {
         success: true,
         imageUrl: editedImageUrl,
         description,
         message: "", // Empty message - let the UI component handle everything
       };
+
+      console.log("🍌 nano_banana_edit SUCCESS", finalResult);
+      return finalResult;
     } catch (error) {
+      console.error("🍌 nano_banana_edit ERROR", error);
+      
+      // Log detailed error information for debugging
+      if (error && typeof error === 'object') {
+        const errorObj = error as { status?: unknown; body?: unknown; message?: unknown };
+        console.error("🍌 Error details:", {
+          status: errorObj.status,
+          body: errorObj.body,
+          message: errorObj.message,
+        });
+      }
+      
       // Format helpful error messages using centralized error handler
       const originalError =
         error instanceof Error ? error.message : "An unexpected error occurred";
@@ -78,14 +99,19 @@ const nanoBananaEdit = tool({
       // Handle edit-specific errors
       if (originalError.includes("Invalid image URL")) {
         errorMessage = "The image URL provided is invalid or inaccessible.";
+      } else if (originalError.includes("Unprocessable Entity")) {
+        errorMessage = "The image format or content is not supported for editing. Please try a different image.";
       }
 
-      return {
+      const errorResult = {
         success: false,
         imageUrl: null,
         error: errorMessage,
         message: "Failed to edit image. " + errorMessage,
       };
+
+      console.log("🍌 nano_banana_edit ERROR RESULT", errorResult);
+      return errorResult;
     }
   },
 });

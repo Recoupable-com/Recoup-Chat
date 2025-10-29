@@ -13,15 +13,18 @@ export function handleNanoBananaModel(body: ChatRequest) {
     return {
       resolvedModel: model,
       forcedToolChoice: undefined,
-      excludeTools: undefined
+      excludeTools: undefined,
+      shouldPassImageUrlsThrough: false,
     };
   }
 
   // Configure nano banana model with appropriate tool filtering
+  // Using GPT-5 which has excellent vision + tool calling capabilities
   
   return {
-    resolvedModel: "google/gemini-2.5-flash-lite",
+    resolvedModel: "openai/gpt-5",
     forcedToolChoice: undefined, // Let LM decide, but only nano banana tools available
-    excludeTools: ["generate_image"] // Exclude the regular image generation tool
+    excludeTools: ["generate_image"], // Exclude the regular image generation tool
+    shouldPassImageUrlsThrough: true, // Enable URL passthrough for image editing
   };
 }
