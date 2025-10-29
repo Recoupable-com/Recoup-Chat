@@ -33,7 +33,7 @@ export interface NanoBananaGenerateResult {
 // Define the nanoBananaGenerate tool
 const nanoBananaGenerate = tool({
   description:
-    "Generate images using Fal's nano banana text-to-image model. Creates new images from text prompts using Google's state-of-the-art nano banana model. IMPORTANT: The account_id parameter is always available in your system context - look for 'The account_id is' in your instructions.",
+    "Generate images using Fal's nano banana text-to-image model. Creates new images from text prompts using Google's state-of-the-art nano banana model. IMPORTANT: The account_id parameter is always available in your system context - look for 'account_id:' in your instructions.",
   inputSchema: schema,
   execute: async ({
     prompt,
@@ -54,6 +54,17 @@ const nanoBananaGenerate = tool({
       });
 
       const imageUrl = result.data.images[0]?.url;
+      
+      // Validate that we actually got an image URL back
+      if (!imageUrl) {
+        return {
+          success: false,
+          imageUrl: null,
+          error: "No image URL returned from Fal API",
+          message: "Failed to generate image. No image URL returned from Fal API.",
+        };
+      }
+      
       const description =
         result.data.description || "Image generated successfully";
 

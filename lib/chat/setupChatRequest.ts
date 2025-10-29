@@ -62,8 +62,19 @@ export async function setupChatRequest(body: ChatRequest): Promise<ChatConfig> {
     // For all other models/use cases (PDFs, audio, etc.), default download behavior is used
     ...(nanoBananaConfig.shouldPassImageUrlsThrough && {
       experimental_download: async (files) => {
-        // Pass all file URLs through (nano banana only uses images anyway)
-        return files.map(() => null);
+        return Promise.all(
+          files.map(async (file) => {
+            // Only pass through URLs when model supports them
+            if (file.isUrlSupportedByModel) {
+              return null; // Pass URL through
+            }
+            // Download file when model doesn't support URL
+            const response = await fetch(file.url.href);
+            const data = new Uint8Array(await response.arrayBuffer());
+            const mediaType = response.headers.get('content-type') || undefined;
+            return { data, mediaType };
+          })
+        );
       },
     }),
     prepareStep: (options) => {

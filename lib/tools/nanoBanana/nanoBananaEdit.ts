@@ -43,12 +43,10 @@ const nanoBananaEdit = tool({
     imageUrl,
     account_id,
   }): Promise<NanoBananaEditResult> => {
-    console.log("🍌 nano_banana_edit START", { prompt, imageUrl, account_id });
     try {
       // Configure Fal client
       configureFalClient(fal);
 
-      console.log("🍌 Calling fal.subscribe...");
       // Call Fal's nano banana image editing endpoint
       const result = await fal.subscribe("fal-ai/nano-banana/edit", {
         input: {
@@ -60,36 +58,31 @@ const nanoBananaEdit = tool({
         logs: true,
       });
 
-      console.log("🍌 Fal result received:", result);
-
       const editedImageUrl = result.data.images[0]?.url;
+      
+      // Validate that we actually got an image URL back
+      if (!editedImageUrl) {
+        return {
+          success: false,
+          imageUrl: null,
+          error: "No image URL returned from Fal API",
+          message: "Failed to edit image. No image URL returned from Fal API.",
+        };
+      }
+      
       const description =
         result.data.description || "Image edited successfully";
       
-      console.log("🍌 Handling credits...");
       await handleNanoBananaCredits(account_id);
 
-      const finalResult = {
+      return {
         success: true,
         imageUrl: editedImageUrl,
         description,
         message: "", // Empty message - let the UI component handle everything
       };
-
-      console.log("🍌 nano_banana_edit SUCCESS", finalResult);
-      return finalResult;
     } catch (error) {
       console.error("🍌 nano_banana_edit ERROR", error);
-      
-      // Log detailed error information for debugging
-      if (error && typeof error === 'object') {
-        const errorObj = error as { status?: unknown; body?: unknown; message?: unknown };
-        console.error("🍌 Error details:", {
-          status: errorObj.status,
-          body: errorObj.body,
-          message: errorObj.message,
-        });
-      }
       
       // Format helpful error messages using centralized error handler
       const originalError =
@@ -103,15 +96,12 @@ const nanoBananaEdit = tool({
         errorMessage = "The image format or content is not supported for editing. Please try a different image.";
       }
 
-      const errorResult = {
+      return {
         success: false,
         imageUrl: null,
         error: errorMessage,
         message: "Failed to edit image. " + errorMessage,
       };
-
-      console.log("🍌 nano_banana_edit ERROR RESULT", errorResult);
-      return errorResult;
     }
   },
 });
