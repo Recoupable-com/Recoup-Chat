@@ -10,10 +10,10 @@ const useSearchIsrc = () => {
     enabled: !!activeIsrc,
   });
 
-  const handleSearch = (e: React.FormEvent) => {
-    e.preventDefault();
-    if (searchIsrc.trim()) {
-      setActiveIsrc(searchIsrc.trim());
+  const handleSearch = (value?: string) => {
+    const searchValue = value ?? searchIsrc;
+    if (searchValue.trim()) {
+      setActiveIsrc(searchValue.trim());
     }
   };
 

@@ -4,7 +4,7 @@ import { Search as SearchIcon, X } from "lucide-react";
 interface SearchProps {
   value: string;
   onChange: (value: string) => void;
-  onSearch: (e: React.FormEvent) => void;
+  onSearch: (value?: string) => void;
   onClear: () => void;
   placeholder?: string;
   showClearButton?: boolean;
@@ -22,14 +22,24 @@ const Search = ({
   disabled = false,
   searchButtonText = "Search",
 }: SearchProps) => {
+  const handleSearch = () => {
+    onSearch(value);
+  };
+
   const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key === "Enter") {
-      onSearch(e);
+      e.preventDefault();
+      handleSearch();
     }
   };
 
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    handleSearch();
+  };
+
   return (
-    <div className="mb-4">
+    <form onSubmit={handleSubmit} className="mb-4">
       <div className="flex gap-2">
         <div className="relative flex-1">
           <SearchIcon className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground h-4 w-4" />
@@ -44,6 +54,7 @@ const Search = ({
           />
           {showClearButton && (
             <button
+              type="button"
               onClick={onClear}
               className="absolute right-3 top-1/2 transform -translate-y-1/2 text-muted-foreground hover:text-foreground"
               aria-label="Clear search"
@@ -53,14 +64,14 @@ const Search = ({
           )}
         </div>
         <button
-          onClick={onSearch}
+          type="submit"
           disabled={!value.trim() || disabled}
           className="px-4 py-2 bg-primary text-primary-foreground rounded-md hover:bg-primary/90 disabled:opacity-50 disabled:cursor-not-allowed"
         >
           {searchButtonText}
         </button>
       </div>
-    </div>
+    </form>
   );
 };
 
