@@ -1,16 +1,10 @@
 import { useState } from "react";
 import { CatalogSongsResponse } from "@/lib/catalog/getCatalogSongs";
+import { formatArtists } from "@/lib/catalog/formatArtists";
 
 interface CatalogSongRowProps {
   song: CatalogSongsResponse["songs"][0];
 }
-
-const formatArtists = (
-  artists: CatalogSongsResponse["songs"][0]["artists"]
-) => {
-  if (!artists || artists.length === 0) return "—";
-  return artists.map((artist) => artist.name).join(", ");
-};
 
 const CatalogSongRow = ({ song }: CatalogSongRowProps) => {
   const [isExpanded, setIsExpanded] = useState(false);
