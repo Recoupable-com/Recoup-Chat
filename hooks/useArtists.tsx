@@ -68,25 +68,8 @@ const useArtists = () => {
     // Sort remaining artists with pinned first
     const sortedRemaining = sortArtistsWithPinnedFirst(artistsWithoutSelected);
 
-    // If selected artist is pinned, put it at the very top
-    if (selectedArtist.pinned) {
-      return [selectedArtist, ...sortedRemaining];
-    }
-
-    // If selected artist is not pinned, find where to insert it (after pinned artists)
-    const firstUnpinnedIndex = sortedRemaining.findIndex(artist => !artist.pinned);
-    
-    if (firstUnpinnedIndex === -1) {
-      // All remaining artists are pinned, add selected at the end
-      return [...sortedRemaining, selectedArtist];
-    } else {
-      // Insert selected artist before the first unpinned artist
-      return [
-        ...sortedRemaining.slice(0, firstUnpinnedIndex),
-        selectedArtist,
-        ...sortedRemaining.slice(firstUnpinnedIndex),
-      ];
-    }
+    // Selected artist always appears at the top of the list
+    return [selectedArtist, ...sortedRemaining];
   })();
 
   const getArtists = useCallback(
