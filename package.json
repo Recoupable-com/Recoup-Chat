@@ -75,6 +75,7 @@
     "next-themes": "^0.3.0",
     "node-telegram-bot-api": "^0.66.0",
     "openai": "^4.67.3",
+    "papaparse": "^5.5.3",
     "playwright": "^1.56.0",
     "react": "^18",
     "react-dom": "^18",
@@ -106,6 +107,7 @@
   },
   "devDependencies": {
     "@types/node": "^20",
+    "@types/papaparse": "^5.3.16",
     "@types/react": "^18",
     "@types/react-dom": "^18",
     "@types/react-mentions": "^4.4.1",

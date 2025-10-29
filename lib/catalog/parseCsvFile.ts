@@ -1,39 +1,68 @@
+import Papa from "papaparse";
 import { CatalogSongInput } from "./postCatalogSongs";
+import { Tables } from "@/types/database.types";
+
+type ParsedRow = Partial<Omit<Tables<"songs">, "updated_at">>;
 
 /**
- * Parses a CSV file containing catalog songs
- * Expected columns: isrc (case-insensitive)
- * catalog_id is provided as a parameter from the tool results
+ * Parses a CSV file containing catalog songs using papaparse for robust parsing
+ * Required columns: isrc (case-insensitive)
+ * Optional columns: name, album, notes (case-insensitive)
+ * catalog_id is provided as a parameter
+ *
+ * Handles quoted fields, escaped quotes, and multiline cells correctly
  */
 export function parseCsvFile(
   text: string,
   catalogId: string
 ): CatalogSongInput[] {
-  const lines = text.trim().split("\n");
-  if (lines.length < 2) {
-    throw new Error("CSV file must contain headers and at least one row");
+  // Parse CSV using papaparse with optimized configuration
+  const parseResult = Papa.parse<ParsedRow>(text, {
+    header: true, // Automatically parse as objects with field names as keys
+    skipEmptyLines: "greedy", // Skip lines with only whitespace
+    transformHeader: (header: string) => header.trim().toLowerCase(), // Normalize headers
+    transform: (value: string) => value.trim(), // Trim all values
+  });
+
+  // Check for critical parsing errors
+  const criticalErrors = parseResult.errors.filter(
+    (e) => e.type === "Delimiter" || e.type === "FieldMismatch"
+  );
+  if (criticalErrors.length > 0) {
+    throw new Error(
+      `CSV parsing errors: ${criticalErrors.map((e) => e.message).join(", ")}`
+    );
   }
 
-  // Parse header to find ISRC column (case-insensitive)
-  const headers = lines[0].split(",").map((h) => h.trim());
-  const isrcIndex = headers.findIndex(
-    (header) => header.toLowerCase() === "isrc"
-  );
+  const rows = parseResult.data;
+  if (rows.length === 0) {
+    throw new Error("CSV file must contain at least one data row");
+  }
 
-  if (isrcIndex === -1) {
+  // Validate ISRC column exists
+  if (!parseResult.meta.fields?.includes("isrc")) {
     throw new Error("CSV must contain an 'isrc' column (case-insensitive)");
   }
 
-  // Parse data rows
+  // Transform parsed rows into CatalogSongInput objects
   const songs: CatalogSongInput[] = [];
-  for (let i = 1; i < lines.length; i++) {
-    const row = lines[i].split(",").map((cell) => cell.trim());
-    if (row.length > isrcIndex && row[isrcIndex]) {
-      songs.push({
-        catalog_id: catalogId,
-        isrc: row[isrcIndex],
-      });
+  for (const row of rows) {
+    // Skip rows without ISRC
+    if (!row.isrc) {
+      continue;
     }
+
+    songs.push({
+      catalog_id: catalogId,
+      isrc: row.isrc,
+      name: row.name || undefined,
+      album: row.album || undefined,
+      notes: row.notes || undefined,
+    });
+  }
+
+  if (songs.length === 0) {
+    throw new Error("No valid songs found in CSV file");
   }
 
   return songs;
