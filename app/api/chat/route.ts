@@ -20,8 +20,6 @@ export async function OPTIONS() {
 
 export async function POST(request: NextRequest) {
   const body: ChatRequest = await request.json();
-  
-  console.log("💬 /api/chat POST - Model:", body.model, "Messages:", body.messages.length);
 
   try {
     const stream = createUIMessageStream({
@@ -38,14 +36,12 @@ export async function POST(request: NextRequest) {
         return JSON.stringify(serializeError(e));
       },
       onFinish: ({ messages }) => {
-        console.log("💬 /api/chat onFinish - Messages:", messages.length);
         void handleChatCompletion(body, messages).catch((e) => {
           console.error("Failed to handle chat completion:", e);
         });
       },
     });
 
-    console.log("💬 /api/chat - Returning stream response");
     return createUIMessageStreamResponse({ stream });
   } catch (e) {
     console.error("💬 /api/chat Global error:", e);
