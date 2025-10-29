@@ -3,10 +3,13 @@
 import { CatalogSongsResponse } from "@/lib/catalog/getCatalogSongs";
 import { useCatalogSongsFileSelect } from "@/hooks/useCatalogSongsFileSelect";
 import { Progress } from "@/components/ui/progress";
+import HideMissingItemsToggle from "./HideMissingItemsToggle";
 import CatalogCsvUploadButton from "./CatalogCsvUploadButton";
 import InsertCatalogSongsList from "./InsertCatalogSongsList";
 import InsertCatalogSongsSummary from "./InsertCatalogSongsSummary";
 import InsertCatalogSongsStatus from "./InsertCatalogSongsStatus";
+import { useMemo, useState } from "react";
+import { isCompleteSong } from "@/lib/catalog/isCompleteSong";
 
 export interface CatalogSongsResult {
   success: boolean;
@@ -41,6 +44,13 @@ export default function CatalogSongsResult({
       ? (uploadProgress.current / uploadProgress.total) * 100
       : 0;
 
+  const [hideIncomplete, setHideIncomplete] = useState(true);
+
+  const filteredSongs = useMemo(() => {
+    const songs = displayResult.songs || [];
+    return hideIncomplete ? songs.filter(isCompleteSong) : songs;
+  }, [displayResult.songs, hideIncomplete]);
+
   return (
     <div className="flex flex-col gap-3 py-2">
       <InsertCatalogSongsStatus
@@ -58,8 +68,15 @@ export default function CatalogSongsResult({
       )}
 
       {displayResult.success && displayResult.songs && (
+        <HideMissingItemsToggle
+          checked={hideIncomplete}
+          onCheckedChange={setHideIncomplete}
+        />
+      )}
+
+      {displayResult.success && displayResult.songs && (
         <div className="max-h-[60vh] overflow-y-auto">
-          <InsertCatalogSongsList songs={displayResult.songs} />
+          <InsertCatalogSongsList songs={filteredSongs} />
         </div>
       )}
 
