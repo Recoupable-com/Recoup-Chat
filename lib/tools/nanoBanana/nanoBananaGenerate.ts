@@ -54,6 +54,17 @@ const nanoBananaGenerate = tool({
       });
 
       const imageUrl = result.data.images[0]?.url;
+      
+      // Validate that we actually got an image URL back
+      if (!imageUrl) {
+        return {
+          success: false,
+          imageUrl: null,
+          error: "No image URL returned from Fal API",
+          message: "Failed to generate image. No image URL returned from Fal API.",
+        };
+      }
+      
       const description =
         result.data.description || "Image generated successfully";
 

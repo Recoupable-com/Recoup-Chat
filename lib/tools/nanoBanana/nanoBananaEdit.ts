@@ -59,6 +59,17 @@ const nanoBananaEdit = tool({
       });
 
       const editedImageUrl = result.data.images[0]?.url;
+      
+      // Validate that we actually got an image URL back
+      if (!editedImageUrl) {
+        return {
+          success: false,
+          imageUrl: null,
+          error: "No image URL returned from Fal API",
+          message: "Failed to edit image. No image URL returned from Fal API.",
+        };
+      }
+      
       const description =
         result.data.description || "Image edited successfully";
       
