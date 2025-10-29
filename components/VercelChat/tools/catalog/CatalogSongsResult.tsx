@@ -58,7 +58,9 @@ export default function CatalogSongsResult({
       )}
 
       {displayResult.success && displayResult.songs && (
-        <InsertCatalogSongsList songs={displayResult.songs} />
+        <div className="max-h-[60vh] overflow-y-auto">
+          <InsertCatalogSongsList songs={displayResult.songs} />
+        </div>
       )}
 
       {isUploading && uploadProgress.total > 0 ? (
