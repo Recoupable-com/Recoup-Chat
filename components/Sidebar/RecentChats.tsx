@@ -62,6 +62,30 @@ const RecentChats = ({ toggleModal }: { toggleModal: () => void }) => {
   // Selection state for bulk operations
   const [selectedChatIds, setSelectedChatIds] = useState<Set<string>>(new Set());
   const [lastClickedId, setLastClickedId] = useState<string | null>(null);
+  const [isShiftPressed, setIsShiftPressed] = useState(false);
+
+  // Track shift key globally for all chat items (single set of listeners)
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Shift') {
+        setIsShiftPressed(true);
+      }
+    };
+
+    const handleKeyUp = (e: KeyboardEvent) => {
+      if (e.key === 'Shift') {
+        setIsShiftPressed(false);
+      }
+    };
+
+    window.addEventListener('keydown', handleKeyDown);
+    window.addEventListener('keyup', handleKeyUp);
+
+    return () => {
+      window.removeEventListener('keydown', handleKeyDown);
+      window.removeEventListener('keyup', handleKeyUp);
+    };
+  }, []);
 
   // Refs for detecting outside clicks
   const menuRef = useRef<HTMLDivElement>(null);
@@ -216,6 +240,7 @@ const RecentChats = ({ toggleModal }: { toggleModal: () => void }) => {
                         isActive={roomId === activeChatId}
                         isSelected={selectedChatIds.has(roomId)}
                         isSelectionMode={isSelectionMode}
+                        isShiftPressed={isShiftPressed}
                         menuRef={openMenuId === roomId ? menuRef : null}
                         setButtonRef={(el: HTMLButtonElement | null) => {
                           buttonRefs.current[roomId] = el;

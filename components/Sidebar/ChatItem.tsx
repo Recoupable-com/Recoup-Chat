@@ -2,7 +2,7 @@ import { MoreHorizontal, Pencil, Trash2, Check } from "lucide-react";
 import type { Conversation } from "@/types/Chat";
 import type { ArtistAgent } from "@/lib/supabase/getArtistAgents";
 import capitalize from "@/lib/capitalize";
-import { useState, useEffect, type RefObject } from "react";
+import { useState, type RefObject } from "react";
 import { cn } from "@/lib/utils";
 import useCreateChat from "@/hooks/useCreateChat";
 
@@ -14,6 +14,7 @@ type ChatItemProps = {
   isActive?: boolean;
   isSelected?: boolean;
   isSelectionMode?: boolean;
+  isShiftPressed?: boolean;
   menuRef: RefObject<HTMLDivElement> | null;
   setButtonRef: (el: HTMLButtonElement | null) => void;
   onMouseEnter: () => void;
@@ -43,6 +44,7 @@ const ChatItem = ({
   isActive = false,
   isSelected = false,
   isSelectionMode = false,
+  isShiftPressed = false,
   menuRef,
   setButtonRef,
   onMouseEnter,
@@ -54,7 +56,6 @@ const ChatItem = ({
   onDeleteClick
 }: ChatItemProps) => {
   const [displayName, setDisplayName] = useState(getChatDisplayInfo(chatRoom).displayName);
-  const [isShiftPressed, setIsShiftPressed] = useState(false);
   
   const showOptions = isMobile || isHovered || isActive;
   const isOptimisticChatItem = (
@@ -75,29 +76,6 @@ const ChatItem = ({
     chatRoom,
     setDisplayName,
   });
-
-  // Track shift key state
-  useEffect(() => {
-    const handleKeyDown = (e: KeyboardEvent) => {
-      if (e.key === 'Shift') {
-        setIsShiftPressed(true);
-      }
-    };
-
-    const handleKeyUp = (e: KeyboardEvent) => {
-      if (e.key === 'Shift') {
-        setIsShiftPressed(false);
-      }
-    };
-
-    window.addEventListener('keydown', handleKeyDown);
-    window.addEventListener('keyup', handleKeyUp);
-
-    return () => {
-      window.removeEventListener('keydown', handleKeyDown);
-      window.removeEventListener('keyup', handleKeyUp);
-    };
-  }, []);
 
   // Show checkbox only when shift is held AND (hovering OR already in selection mode)
   const showCheckbox = isShiftPressed && (isHovered || isSelectionMode);
