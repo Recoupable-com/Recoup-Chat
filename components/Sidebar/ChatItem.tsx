@@ -1,8 +1,8 @@
-import { MoreHorizontal, Pencil, Trash2 } from "lucide-react";
+import { MoreHorizontal, Pencil, Trash2, Check } from "lucide-react";
 import type { Conversation } from "@/types/Chat";
 import type { ArtistAgent } from "@/lib/supabase/getArtistAgents";
 import capitalize from "@/lib/capitalize";
-import { useState, type RefObject } from "react";
+import { useState, useEffect, type RefObject } from "react";
 import { cn } from "@/lib/utils";
 import useCreateChat from "@/hooks/useCreateChat";
 
@@ -12,11 +12,14 @@ type ChatItemProps = {
   isHovered: boolean;
   isMenuOpen: boolean;
   isActive?: boolean;
+  isSelected?: boolean;
+  isSelectionMode?: boolean;
   menuRef: RefObject<HTMLDivElement> | null;
   setButtonRef: (el: HTMLButtonElement | null) => void;
   onMouseEnter: () => void;
   onMouseLeave: () => void;
   onChatClick: () => void;
+  onSelect: (isShiftKey: boolean) => void;
   onMenuToggle: () => void;
   onRenameClick: () => void;
   onDeleteClick: () => void;
@@ -38,16 +41,21 @@ const ChatItem = ({
   isHovered,
   isMenuOpen,
   isActive = false,
+  isSelected = false,
+  isSelectionMode = false,
   menuRef,
   setButtonRef,
   onMouseEnter,
   onMouseLeave,
   onChatClick,
+  onSelect,
   onMenuToggle,
   onRenameClick,
   onDeleteClick
 }: ChatItemProps) => {
   const [displayName, setDisplayName] = useState(getChatDisplayInfo(chatRoom).displayName);
+  const [isShiftPressed, setIsShiftPressed] = useState(false);
+  
   const showOptions = isMobile || isHovered || isActive;
   const isOptimisticChatItem = (
     'id' in chatRoom &&
@@ -68,40 +76,100 @@ const ChatItem = ({
     setDisplayName,
   });
 
+  // Track shift key state
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Shift') {
+        setIsShiftPressed(true);
+      }
+    };
+
+    const handleKeyUp = (e: KeyboardEvent) => {
+      if (e.key === 'Shift') {
+        setIsShiftPressed(false);
+      }
+    };
+
+    window.addEventListener('keydown', handleKeyDown);
+    window.addEventListener('keyup', handleKeyUp);
+
+    return () => {
+      window.removeEventListener('keydown', handleKeyDown);
+      window.removeEventListener('keyup', handleKeyUp);
+    };
+  }, []);
+
+  // Show checkbox only when shift is held AND (hovering OR already in selection mode)
+  const showCheckbox = isShiftPressed && (isHovered || isSelectionMode);
+
+  const handleClick = (e: React.MouseEvent) => {
+    if (e.shiftKey || isSelectionMode) {
+      onSelect(e.shiftKey);
+    } else {
+      onChatClick();
+    }
+  };
+
   return (
     <div 
-      className={`flex gap-2 items-center w-full py-1.5 px-2 rounded-xl transition-colors duration-150 relative ${
-        isActive ? 'bg-primary/10' : 'hover:bg-gray-100'
+      className={`flex gap-2 items-center w-full py-1.5 px-2 rounded-xl transition-all duration-150 relative ${
+        isSelected 
+          ? 'bg-primary/20 border border-primary/30' 
+          : isActive 
+            ? 'bg-primary/10' 
+            : 'hover:bg-gray-100'
       }`}
       onMouseEnter={onMouseEnter}
       onMouseLeave={onMouseLeave}
     >
+      {/* Selection checkbox */}
       <button
-        className="flex-grow text-left truncate max-w-[200px]"
         type="button"
-        onClick={onChatClick}
+        onClick={(e) => {
+          e.stopPropagation();
+          onSelect(e.shiftKey);
+        }}
+        className={`shrink-0 w-4 h-4 rounded border-2 transition-all duration-150 flex items-center justify-center ${
+          showCheckbox ? 'opacity-100' : 'opacity-0'
+        } ${
+          isSelected 
+            ? 'bg-primary border-primary' 
+            : 'border-gray-300 hover:border-primary/50'
+        }`}
+        aria-label="Select chat"
       >
-        <p className={`text-sm ${isActive ? 'font-medium' : ''}`}>
+        {isSelected && <Check size={12} className="text-white" strokeWidth={3} />}
+      </button>
+
+      <button
+        className="flex-grow text-left truncate min-w-0"
+        type="button"
+        onClick={handleClick}
+      >
+        <p className={`text-sm truncate ${isActive ? 'font-medium' : ''}`}>
           {displayName}
         </p>
       </button>
       
-      <button
-        ref={setButtonRef}
-        className={cn(`shrink-0 p-1 text-gray-500 hover:text-gray-700 transition-colors duration-150 ${
-          showOptions ? 'opacity-100' : 'opacity-0'
-        }`, {
-          'opacity-50 pointer-events-none': isOptimisticChatItem
-        })}
-        onClick={(e) => {
-          e.stopPropagation();
-          onMenuToggle();
-        }}
-        type="button"
-        aria-label="Chat options"
-      >
-        <MoreHorizontal size={16} />
-      </button>
+      {/* Three-dot menu - hide in selection mode */}
+      {!isSelectionMode && (
+        <button
+          ref={setButtonRef}
+          className={cn(`shrink-0 p-1 text-gray-500 hover:text-gray-700 transition-colors duration-150 ${
+            showOptions ? 'opacity-100' : 'opacity-0'
+          }`, {
+            'opacity-50 pointer-events-none': isOptimisticChatItem
+          })}
+          onClick={(e) => {
+            e.stopPropagation();
+            onMenuToggle();
+          }}
+          type="button"
+          aria-label="Chat options"
+        >
+          <MoreHorizontal size={16} />
+        </button>
+      )}
       
       {isMenuOpen && (
         <div 
