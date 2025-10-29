@@ -35,7 +35,6 @@ export async function POST(request: NextRequest) {
           error: serializeError(e),
           path: "/api/chat",
         });
-        console.error("Error in chat API:", e);
         return JSON.stringify(serializeError(e));
       },
       onFinish: ({ messages }) => {
@@ -55,7 +54,6 @@ export async function POST(request: NextRequest) {
       error: serializeError(e),
       path: "/api/chat",
     });
-    console.error("Global error in chat API:", e);
     return new Response(JSON.stringify(serializeError(e)), {
       status: 500,
       headers: {
