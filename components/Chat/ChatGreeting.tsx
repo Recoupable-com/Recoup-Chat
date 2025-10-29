@@ -1,5 +1,6 @@
 import { Plus_Jakarta_Sans } from "next/font/google";
 import { useArtistProvider } from "@/providers/ArtistProvider";
+import ImageWithFallback from "@/components/ImageWithFallback";
 
 const plusJakartaSans = Plus_Jakarta_Sans({
   subsets: ["latin"],
@@ -8,11 +9,12 @@ const plusJakartaSans = Plus_Jakarta_Sans({
 
 /**
  * Displays a simple greeting message asking about the selected artist
- * Shows "Ask me about [Selected Artist]" or fallback text
+ * Shows "Ask me about [Avatar] [Selected Artist]" or fallback text
  */
 export function ChatGreeting({ isVisible }: { isVisible: boolean }) {
   const { selectedArtist } = useArtistProvider();
   const artistName = selectedArtist?.name || "";
+  const artistImage = selectedArtist?.image || "";
   const isArtistSelected = !!selectedArtist;
 
   const textStyle = `
@@ -39,8 +41,14 @@ export function ChatGreeting({ isVisible }: { isVisible: boolean }) {
         text-center w-full
       `}
     >
-      <span className="text-black font-medium">
-        Ask me about {isArtistSelected ? artistName : "your artist"}
+      <span className="text-black font-medium inline-flex items-center gap-3 flex-wrap justify-center">
+        Ask me about
+        {isArtistSelected && artistImage && (
+          <span className="inline-block w-12 h-12 rounded-full overflow-hidden flex-shrink-0 ring-2 ring-white shadow-md">
+            <ImageWithFallback src={artistImage} />
+          </span>
+        )}
+        {isArtistSelected ? artistName : "your artist"}
       </span>
     </div>
   );
