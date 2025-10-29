@@ -11,7 +11,12 @@ export function extractImageUrlsFromMessages(messages: UIMessage[]): string[] {
   for (const message of messages) {
     if (message.parts) {
       for (const part of message.parts) {
-        if (part.type === 'file' && part.mediaType?.startsWith('image/')) {
+        if (
+          part.type === 'file' && 
+          part.mediaType?.startsWith('image/') &&
+          typeof part.url === 'string' && 
+          part.url.trim() !== ''
+        ) {
           imageUrls.push(part.url);
         }
       }
