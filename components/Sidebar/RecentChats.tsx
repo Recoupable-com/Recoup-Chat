@@ -56,7 +56,36 @@ const RecentChats = ({ toggleModal }: { toggleModal: () => void }) => {
   const [modalState, setModalState] = useState<{
     type: "rename" | "delete" | null;
     chatRoom: Conversation | ArtistAgent | null;
+    chatRooms?: Array<Conversation | ArtistAgent>;
   }>({ type: null, chatRoom: null });
+
+  // Selection state for bulk operations
+  const [selectedChatIds, setSelectedChatIds] = useState<Set<string>>(new Set());
+  const [lastClickedId, setLastClickedId] = useState<string | null>(null);
+  const [isShiftPressed, setIsShiftPressed] = useState(false);
+
+  // Track shift key globally for all chat items (single set of listeners)
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Shift') {
+        setIsShiftPressed(true);
+      }
+    };
+
+    const handleKeyUp = (e: KeyboardEvent) => {
+      if (e.key === 'Shift') {
+        setIsShiftPressed(false);
+      }
+    };
+
+    window.addEventListener('keydown', handleKeyDown);
+    window.addEventListener('keyup', handleKeyUp);
+
+    return () => {
+      window.removeEventListener('keydown', handleKeyDown);
+      window.removeEventListener('keyup', handleKeyUp);
+    };
+  }, []);
 
   // Refs for detecting outside clicks
   const menuRef = useRef<HTMLDivElement>(null);
@@ -79,12 +108,21 @@ const RecentChats = ({ toggleModal }: { toggleModal: () => void }) => {
     setOpenMenuId(null);
   };
 
-  const closeModal = () => setModalState({ type: null, chatRoom: null });
+  const closeModal = () => {
+    setModalState({ type: null, chatRoom: null });
+    setSelectedChatIds(new Set()); // Clear selection when closing modal
+  };
+
+  // Filter conversations first
+  const filteredConversations = conversations.filter(
+    (chat) => "memories" in chat && chat.memories.length !== 0
+  );
 
   // API action handlers
   const handleApiAction = async () => {
     try {
       await fetchConversations();
+      setSelectedChatIds(new Set()); // Clear selection after successful action
     } catch (error) {
       console.error(
         `Error refreshing conversations after ${modalState.type}:`,
@@ -93,18 +131,88 @@ const RecentChats = ({ toggleModal }: { toggleModal: () => void }) => {
     }
   };
 
+  // Selection handlers
+  const handleChatSelection = (chatId: string, isShiftKey: boolean) => {
+    setSelectedChatIds((prev) => {
+      const newSelection = new Set(prev);
+
+      if (isShiftKey && lastClickedId) {
+        // Shift+click: select range between last clicked and current
+        const chatIds = filteredConversations.map(getChatRoomId);
+        const lastIndex = chatIds.indexOf(lastClickedId);
+        const currentIndex = chatIds.indexOf(chatId);
+        
+        if (lastIndex !== -1 && currentIndex !== -1) {
+          const start = Math.min(lastIndex, currentIndex);
+          const end = Math.max(lastIndex, currentIndex);
+          
+          for (let i = start; i <= end; i++) {
+            newSelection.add(chatIds[i]);
+          }
+        }
+      } else {
+        // Regular click: toggle selection
+        if (newSelection.has(chatId)) {
+          newSelection.delete(chatId);
+        } else {
+          newSelection.add(chatId);
+        }
+      }
+
+      return newSelection;
+    });
+    
+    setLastClickedId(chatId);
+  };
+
+  const handleBulkDelete = () => {
+    const chatsToDelete = filteredConversations.filter((chat) =>
+      selectedChatIds.has(getChatRoomId(chat))
+    );
+    
+    setModalState({
+      type: "delete",
+      chatRoom: null,
+      chatRooms: chatsToDelete,
+    });
+    setOpenMenuId(null);
+  };
+
   const isRenameModalOpen = modalState.type === "rename";
   const isDeleteModalOpen = modalState.type === "delete";
-  const filteredConversations = conversations.filter(
-    (chat) => "memories" in chat && chat.memories.length !== 0
-  );
+
+  const isSelectionMode = selectedChatIds.size > 0;
 
   return (
     <div className="w-full flex-grow min-h-0 flex flex-col">
       <div className="h-[1px] bg-grey-light w-full mt-1 mb-2 md:mt-2 md:mb-3 shrink-0" />
-      <p className="text-sm mb-1 md:mb-2 font-inter text-grey-dark px-2 shrink-0">
-        Recent Chats
-      </p>
+      
+      {/* Header - changes based on selection mode */}
+      {isSelectionMode ? (
+        <div className="flex items-center justify-between px-2 mb-1 md:mb-2 shrink-0">
+          <p className="text-sm font-inter text-grey-dark">
+            {selectedChatIds.size} selected
+          </p>
+          <div className="flex gap-2">
+            <button
+              onClick={() => setSelectedChatIds(new Set())}
+              className="text-xs font-inter text-grey-dark hover:text-black transition-colors"
+            >
+              Cancel
+            </button>
+            <button
+              onClick={handleBulkDelete}
+              className="text-xs font-inter text-red-500 hover:text-red-700 transition-colors font-medium"
+            >
+              Delete
+            </button>
+          </div>
+        </div>
+      ) : (
+        <p className="text-sm mb-1 md:mb-2 font-inter text-grey-dark px-2 shrink-0">
+          Recent Chats
+        </p>
+      )}
       <div className="overflow-y-auto space-y-1 flex-grow">
         {isLoading ? (
           <RecentChatSkeleton />
@@ -130,6 +238,9 @@ const RecentChats = ({ toggleModal }: { toggleModal: () => void }) => {
                         isHovered={hoveredChatId === roomId}
                         isMenuOpen={openMenuId === roomId}
                         isActive={roomId === activeChatId}
+                        isSelected={selectedChatIds.has(roomId)}
+                        isSelectionMode={isSelectionMode}
+                        isShiftPressed={isShiftPressed}
                         menuRef={openMenuId === roomId ? menuRef : null}
                         setButtonRef={(el: HTMLButtonElement | null) => {
                           buttonRefs.current[roomId] = el;
@@ -137,6 +248,7 @@ const RecentChats = ({ toggleModal }: { toggleModal: () => void }) => {
                         onMouseEnter={() => setHoveredChatId(roomId)}
                         onMouseLeave={() => setHoveredChatId(null)}
                         onChatClick={() => handleClick(chatRoom, toggleModal)}
+                        onSelect={(isShiftKey) => handleChatSelection(roomId, isShiftKey)}
                         onMenuToggle={() => {
                           setOpenMenuId(openMenuId === roomId ? null : roomId);
                         }}
@@ -169,6 +281,7 @@ const RecentChats = ({ toggleModal }: { toggleModal: () => void }) => {
         isOpen={isDeleteModalOpen}
         onClose={closeModal}
         chatRoom={modalState.chatRoom}
+        chatRooms={modalState.chatRooms}
         onDelete={handleApiAction}
       />
     </div>
