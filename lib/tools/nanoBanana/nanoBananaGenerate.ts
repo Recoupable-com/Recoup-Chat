@@ -18,7 +18,7 @@ const schema = z.object({
   account_id: z
     .string()
     .describe(
-      "The ID of the account that owns the artist. Never ask for this, use the account_id from the system prompt."
+      "REQUIRED: Use the account_id value from the system prompt. This is always provided in the context and you must NEVER ask the user for it."
     ),
 });
 
@@ -33,7 +33,7 @@ export interface NanoBananaGenerateResult {
 // Define the nanoBananaGenerate tool
 const nanoBananaGenerate = tool({
   description:
-    "Generate images using Fal's nano banana text-to-image model. Creates new images from text prompts using Google's state-of-the-art nano banana model.",
+    "Generate images using Fal's nano banana text-to-image model. Creates new images from text prompts using Google's state-of-the-art nano banana model. IMPORTANT: The account_id parameter is always available in your system context - look for 'The account_id is' in your instructions.",
   inputSchema: schema,
   execute: async ({
     prompt,

@@ -23,12 +23,37 @@ export async function setupChatRequest(body: ChatRequest): Promise<ChatConfig> {
 
   // Handle Fal nano banana model selection
   const nanoBananaConfig = handleNanoBananaModel(body);
+  console.log("🔧 setupChatRequest - Model config:", {
+    requestedModel: body.model,
+    resolvedModel: nanoBananaConfig.resolvedModel,
+    excludeTools: nanoBananaConfig.excludeTools,
+  });
 
   // Use exclude tools from nano banana config if available
   const finalExcludeTools = nanoBananaConfig.excludeTools || excludeTools;
-  const tools = filterExcludedTools(getMcpTools(), finalExcludeTools);
+  const allTools = getMcpTools();
+  const tools = filterExcludedTools(allTools, finalExcludeTools);
+  
+  console.log("🔧 setupChatRequest - Tools:", {
+    totalTools: Object.keys(allTools).length,
+    filteredTools: Object.keys(tools).length,
+    hasNanoBananaEdit: "nano_banana_edit" in tools,
+    hasNanoBananaGenerate: "nano_banana_generate" in tools,
+  });
 
-  const system = await getSystemPrompt({
+  // Extract image URLs from messages to add to system prompt
+  const imageUrls: string[] = [];
+  for (const message of body.messages) {
+    if (message.parts) {
+      for (const part of message.parts) {
+        if (part.type === 'file' && part.mediaType?.startsWith('image/')) {
+          imageUrls.push(part.url);
+        }
+      }
+    }
+  }
+
+  let system = await getSystemPrompt({
     roomId: body.roomId,
     artistId,
     accountId,
@@ -38,16 +63,27 @@ export async function setupChatRequest(body: ChatRequest): Promise<ChatConfig> {
     timezone,
   });
 
+  // If there are image attachments, add their URLs to system prompt for tool extraction
+  if (imageUrls.length > 0) {
+    system += `\n\n**ATTACHED IMAGE URLS (for nano_banana_edit imageUrl parameter):**\n${imageUrls.map((url, i) => `- Image ${i}: ${url}`).join('\n')}`;
+  }
+
+  const convertedMessages = convertToModelMessages(body.messages, {
+    tools,
+    ignoreIncompleteToolCalls: true,
+  }).slice(-MAX_MESSAGES);
+
   const config: ChatConfig = {
     model: nanoBananaConfig.resolvedModel || DEFAULT_MODEL,
     system,
-    messages: convertToModelMessages(body.messages, {
-      tools,
-      ignoreIncompleteToolCalls: true,
-    }).slice(-MAX_MESSAGES),
+    messages: convertedMessages,
     experimental_generateMessageId: generateUUID,
     tools,
     stopWhen: stepCountIs(111),
+    // Pass image URLs through as-is so GPT can extract them for tool parameters
+    experimental_download: async (files) => {
+      return files.map(() => null); // null = pass URL through to model instead of downloading
+    },
     prepareStep: (options) => {
       const next = getPrepareStepResult(options);
       if (next) {

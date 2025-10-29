@@ -18,9 +18,10 @@ export function handleNanoBananaModel(body: ChatRequest) {
   }
 
   // Configure nano banana model with appropriate tool filtering
+  // Using GPT-5 which has excellent vision + tool calling capabilities
   
   return {
-    resolvedModel: "google/gemini-2.5-flash-lite",
+    resolvedModel: "openai/gpt-5",
     forcedToolChoice: undefined, // Let LM decide, but only nano banana tools available
     excludeTools: ["generate_image"] // Exclude the regular image generation tool
   };
