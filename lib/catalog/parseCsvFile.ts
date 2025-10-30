@@ -1,13 +1,16 @@
 import Papa from "papaparse";
 import { CatalogSongInput } from "./postCatalogSongs";
-import { Tables } from "@/types/database.types";
+import { TablesInsert } from "@/types/database.types";
+import { parseCommaSeparated } from "./parseCommaSeparated";
 
-type ParsedRow = Partial<Omit<Tables<"songs">, "updated_at">>;
+type ParsedRow = Partial<TablesInsert<"songs">> & {
+  artists?: string;
+};
 
 /**
  * Parses a CSV file containing catalog songs using papaparse for robust parsing
  * Required columns: isrc (case-insensitive)
- * Optional columns: name, album, notes (case-insensitive)
+ * Optional columns: name, album, notes, artists (case-insensitive)
  * catalog_id is provided as a parameter
  *
  * Handles quoted fields, escaped quotes, and multiline cells correctly
@@ -52,12 +55,15 @@ export function parseCsvFile(
       continue;
     }
 
+    const artistsArray = parseCommaSeparated(row.artists);
+
     songs.push({
       catalog_id: catalogId,
       isrc: row.isrc,
       name: row.name || undefined,
       album: row.album || undefined,
       notes: row.notes || undefined,
+      artists: artistsArray.length > 0 ? artistsArray : undefined,
     });
   }
 

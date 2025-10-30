@@ -7,6 +7,7 @@ export interface CatalogSongInput {
   name?: Tables<"songs">["name"];
   album?: Tables<"songs">["album"];
   notes?: Tables<"songs">["notes"];
+  artists?: string[];
 }
 
 /**
