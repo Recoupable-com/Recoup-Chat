@@ -1,6 +1,7 @@
 import Papa from "papaparse";
 import { CatalogSongInput } from "./postCatalogSongs";
 import { TablesInsert } from "@/types/database.types";
+import { parseCommaSeparated } from "./parseCommaSeparated";
 
 type ParsedRow = Partial<TablesInsert<"songs">> & {
   artists?: string;
@@ -54,10 +55,7 @@ export function parseCsvFile(
       continue;
     }
 
-    const artistsArray = (row.artists || "")
-      .split(",")
-      .map((name) => name.trim())
-      .filter((name) => name.length > 0);
+    const artistsArray = parseCommaSeparated(row.artists);
 
     songs.push({
       catalog_id: catalogId,
