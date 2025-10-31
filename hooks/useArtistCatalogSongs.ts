@@ -1,6 +1,7 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo } from "react";
 import { useArtistProvider } from "@/providers/ArtistProvider";
 import useCatalogSongs from "./useCatalogSongs";
+import { useArtistCatalogFilter } from "@/providers/ArtistCatalogFilterProvider";
 
 interface UseArtistCatalogSongsOptions {
   catalogId: string;
@@ -45,7 +46,31 @@ const useArtistCatalogSongs = ({
     setShouldUseArtistFilter(!!activeArtistName);
   }, [activeArtistName]);
 
-  return queryResult;
+  // Expose ability to programmatically adjust the effective artist filter
+  const setEffectiveArtistName = (name: string | undefined) => {
+    setShouldUseArtistFilter(!!name);
+  };
+
+  // Register clear handler with the provider (for non-prop-drilled clears)
+  const { setClearHandler, setSetHandler, setExternalCurrentName } =
+    useArtistCatalogFilter();
+  useEffect(() => {
+    setClearHandler(() => () => setEffectiveArtistName(undefined));
+    setSetHandler((name: string) => setEffectiveArtistName(name));
+  }, [setClearHandler, setSetHandler]);
+
+  // Keep provider's current name in sync (so UI can compare active vs clicked)
+  useEffect(() => {
+    setExternalCurrentName(effectiveArtistName);
+  }, [effectiveArtistName, setExternalCurrentName]);
+
+  return useMemo(
+    () => ({
+      ...queryResult,
+      setEffectiveArtistName,
+    }),
+    [queryResult]
+  );
 };
 
 export default useArtistCatalogSongs;

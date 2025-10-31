@@ -1,4 +1,4 @@
-import CatalogSongsResult from "@/components/VercelChat/tools/catalog/CatalogSongsResult";
+import CatalogSongsResultWithProvider from "@/components/VercelChat/tools/catalog/CatalogSongsResultWithProvider";
 import CatalogSongsSkeleton from "@/components/VercelChat/tools/catalog/CatalogSongsSkeleton";
 import CatalogSongsInfiniteScrollTrigger from "./CatalogSongsInfiniteScrollTrigger";
 import { SongsByIsrcResponse } from "@/lib/catalog/getSongsByIsrc";
@@ -41,7 +41,7 @@ const CatalogSongsDisplay = ({
   // Handle ISRC search results
   if (isSearchMode && searchData) {
     return (
-      <CatalogSongsResult
+      <CatalogSongsResultWithProvider
         result={createSearchResult(searchData, catalogId, activeIsrc)}
       />
     );
@@ -49,13 +49,19 @@ const CatalogSongsDisplay = ({
 
   // Handle errors
   if (currentError || !data || !data.pages || data.pages.length === 0) {
-    return <CatalogSongsResult result={createErrorResult(currentError)} />;
+    return (
+      <CatalogSongsResultWithProvider
+        result={createErrorResult(currentError)}
+      />
+    );
   }
 
   // Normal catalog view
   return (
     <>
-      <CatalogSongsResult result={createCatalogResult(data.pages)} />
+      <CatalogSongsResultWithProvider
+        result={createCatalogResult(data.pages)}
+      />
       <CatalogSongsInfiniteScrollTrigger
         observerTarget={observerTarget}
         isFetchingNextPage={isFetchingNextPage}

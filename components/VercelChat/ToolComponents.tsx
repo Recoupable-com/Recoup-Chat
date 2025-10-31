@@ -32,7 +32,10 @@ import { getDisplayToolName } from "@/lib/tools/get-tools-name";
 import GenericSuccess from "./tools/GenericSuccess";
 import getToolInfo from "@/lib/utils/getToolsInfo";
 import { BrowserToolSkeleton } from "./BrowserToolSkeleton";
-import { BrowserToolResult, type BrowserToolResultType } from "./tools/browser/BrowserToolResult";
+import {
+  BrowserToolResult,
+  type BrowserToolResultType,
+} from "./tools/browser/BrowserToolResult";
 import { isSearchProgressUpdate } from "@/lib/search/searchProgressUtils";
 import { GetSpotifyPlayButtonClickedResult } from "@/lib/supabase/getSpotifyPlayButtonClicked";
 import GetVideoGameCampaignPlaysResultComponent from "./tools/GetVideoGameCampaignPlaysResult";
@@ -92,10 +95,12 @@ import { Sora2VideoSkeleton } from "./tools/sora2/Sora2VideoSkeleton";
 import { Sora2VideoResult } from "./tools/sora2/Sora2VideoResult";
 import { RetrieveVideoContentResult } from "@/lib/tools/sora2/retrieveVideoContent";
 import CatalogSongsSkeleton from "./tools/catalog/CatalogSongsSkeleton";
-import CatalogSongsResult, {
-  CatalogSongsResult as CatalogSongsResultType,
-} from "./tools/catalog/CatalogSongsResult";
-import { UpdateFileResult, UpdateFileResultType } from "./tools/files/UpdateFileResult";
+import CatalogSongsResultWithProvider from "./tools/catalog/CatalogSongsResultWithProvider";
+import type { CatalogSongsResult as CatalogSongsResultType } from "./tools/catalog/CatalogSongsResult";
+import {
+  UpdateFileResult,
+  UpdateFileResultType,
+} from "./tools/files/UpdateFileResult";
 
 export function getToolCallComponent(part: ToolUIPart) {
   const { toolCallId } = part as ToolUIPart;
@@ -251,7 +256,7 @@ export function getToolCallComponent(part: ToolUIPart) {
       args?: { url?: string; startUrl?: string };
     };
     const url = toolPart.args?.url || toolPart.args?.startUrl;
-    
+
     return (
       <div key={toolCallId}>
         <BrowserToolSkeleton toolName={toolName} url={url} />
@@ -293,7 +298,7 @@ export function getToolResultComponent(part: ToolUIPart) {
       </div>
     );
   } else if (
-    toolName === "browser_extract" || 
+    toolName === "browser_extract" ||
     toolName === "browser_act" ||
     toolName === "browser_observe" ||
     toolName === "browser_agent"
@@ -518,7 +523,9 @@ export function getToolResultComponent(part: ToolUIPart) {
   ) {
     return (
       <div key={toolCallId}>
-        <CatalogSongsResult result={result as CatalogSongsResultType} />
+        <CatalogSongsResultWithProvider
+          result={result as CatalogSongsResultType}
+        />
       </div>
     );
   } else if (toolName === "update_file") {
