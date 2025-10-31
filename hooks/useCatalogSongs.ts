@@ -32,12 +32,23 @@ const useCatalogSongs = ({
   const queryResult = useInfiniteQuery({
     queryKey: ["catalogSongs", catalogId, pageSize, artistName],
     queryFn: async ({ pageParam = 1 }) => {
+      // Try with artistName filter first if provided
       const result = await getCatalogSongs(
         catalogId,
         pageSize,
         pageParam,
         artistName
       );
+
+      // Fallback: if artistName filter returns zero results on first page, retry without filter
+      if (
+        artistName &&
+        pageParam === 1 &&
+        result.pagination.total_count === 0
+      ) {
+        return await getCatalogSongs(catalogId, pageSize, pageParam);
+      }
+
       return result;
     },
     enabled: enabled && !!catalogId,
