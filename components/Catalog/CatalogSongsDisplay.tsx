@@ -2,11 +2,10 @@ import CatalogSongsResult from "@/components/VercelChat/tools/catalog/CatalogSon
 import CatalogSongsSkeleton from "@/components/VercelChat/tools/catalog/CatalogSongsSkeleton";
 import CatalogSongsInfiniteScrollTrigger from "./CatalogSongsInfiniteScrollTrigger";
 import { SongsByIsrcResponse } from "@/lib/catalog/getSongsByIsrc";
-import useCatalogSongs from "@/hooks/useCatalogSongs";
 import { createSearchResult } from "@/lib/catalog/createSearchResult";
 import { createErrorResult } from "@/lib/catalog/createErrorResult";
 import { createCatalogResult } from "@/lib/catalog/createCatalogResult";
-import { useArtistProvider } from "@/providers/ArtistProvider";
+import useArtistCatalogSongs from "@/hooks/useArtistCatalogSongs";
 
 interface CatalogSongsDisplayProps {
   catalogId: string;
@@ -25,13 +24,11 @@ const CatalogSongsDisplay = ({
   searchError,
   activeIsrc,
 }: CatalogSongsDisplayProps) => {
-  const { selectedArtist } = useArtistProvider();
   const { data, isLoading, error, isFetchingNextPage, observerTarget } =
-    useCatalogSongs({
+    useArtistCatalogSongs({
       catalogId,
       pageSize: 50,
       enabled: !isSearchMode,
-      artistName: selectedArtist?.name ?? undefined,
     });
 
   const currentLoading = isSearchMode ? searchLoading : isLoading;
