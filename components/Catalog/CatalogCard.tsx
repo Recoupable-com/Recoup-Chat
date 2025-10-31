@@ -4,6 +4,7 @@ import { useRouter } from "next/navigation";
 import { Tables } from "@/types/database.types";
 import useCatalogSongs from "@/hooks/useCatalogSongs";
 import { Skeleton } from "@/components/ui/skeleton";
+import { useArtistProvider } from "@/providers/ArtistProvider";
 
 type Catalog = Tables<"catalogs">;
 
@@ -13,9 +14,11 @@ interface CatalogCardProps {
 
 const CatalogCard = ({ catalog }: CatalogCardProps) => {
   const router = useRouter();
+  const { selectedArtist } = useArtistProvider();
   const { data, isLoading } = useCatalogSongs({
     catalogId: catalog.id,
     pageSize: 1,
+    artistName: selectedArtist?.name ?? undefined,
   });
 
   const songCount = data?.pages[0]?.pagination?.total_count ?? 0;

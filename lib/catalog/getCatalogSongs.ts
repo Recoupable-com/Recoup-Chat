@@ -27,7 +27,8 @@ export interface CatalogSongsResponse {
 export async function getCatalogSongs(
   catalogId: string,
   pageSize: number = 100,
-  page: number = 1
+  page: number = 1,
+  artistName?: string
 ): Promise<CatalogSongsResponse> {
   try {
     const params = new URLSearchParams({
@@ -35,6 +36,10 @@ export async function getCatalogSongs(
       page: page.toString(),
       limit: pageSize.toString(),
     });
+
+    if (artistName) {
+      params.append("artistName", artistName);
+    }
 
     const response = await fetch(
       `https://api.recoupable.com/api/catalogs/songs?${params}`,
