@@ -8,7 +8,7 @@ import {
   getCatalogSongs,
 } from "@/lib/catalog/getCatalogSongs";
 import useObserverTarget from "./useObserverTarget";
-import { RefObject } from "react";
+import { RefObject, useRef, useEffect, useState } from "react";
 
 interface UseCatalogSongsOptions {
   catalogId: string;
@@ -29,27 +29,53 @@ const useCatalogSongs = ({
   enabled = true,
   artistName,
 }: UseCatalogSongsOptions): UseCatalogSongsReturn => {
+  // Track effective filter after fallback check
+  const [effectiveFilter, setEffectiveFilter] = useState<string | undefined>(
+    artistName
+  );
+  const hasCheckedFallback = useRef(false);
+
+  // Reset when artistName changes
+  useEffect(() => {
+    setEffectiveFilter(artistName);
+    hasCheckedFallback.current = false;
+  }, [artistName]);
+
   const queryResult = useInfiniteQuery({
-    queryKey: ["catalogSongs", catalogId, pageSize, artistName],
+    queryKey: ["catalogSongs", catalogId, pageSize, effectiveFilter],
     queryFn: async ({ pageParam = 1 }) => {
-      // Try with artistName filter first if provided
-      const result = await getCatalogSongs(
+      // On first page, check if we need to fallback
+      if (
+        artistName &&
+        effectiveFilter === artistName &&
+        pageParam === 1 &&
+        !hasCheckedFallback.current
+      ) {
+        const result = await getCatalogSongs(
+          catalogId,
+          pageSize,
+          pageParam,
+          artistName
+        );
+
+        // If filter returns zero results, update effective filter and retry without filter
+        if (result.pagination.total_count === 0) {
+          hasCheckedFallback.current = true;
+          setEffectiveFilter(undefined);
+          return await getCatalogSongs(catalogId, pageSize, pageParam);
+        }
+
+        hasCheckedFallback.current = true;
+        return result;
+      }
+
+      // Use effective filter for all requests (including pagination)
+      return await getCatalogSongs(
         catalogId,
         pageSize,
         pageParam,
-        artistName
+        effectiveFilter
       );
-
-      // Fallback: if artistName filter returns zero results on first page, retry without filter
-      if (
-        artistName &&
-        pageParam === 1 &&
-        result.pagination.total_count === 0
-      ) {
-        return await getCatalogSongs(catalogId, pageSize, pageParam);
-      }
-
-      return result;
     },
     enabled: enabled && !!catalogId,
     getNextPageParam: (lastPage) => {
