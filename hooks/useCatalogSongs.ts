@@ -14,6 +14,7 @@ interface UseCatalogSongsOptions {
   catalogId: string;
   pageSize?: number;
   enabled?: boolean;
+  artistName?: string;
 }
 
 type UseCatalogSongsReturn = UseInfiniteQueryResult<
@@ -26,11 +27,17 @@ const useCatalogSongs = ({
   catalogId,
   pageSize = 50,
   enabled = true,
+  artistName,
 }: UseCatalogSongsOptions): UseCatalogSongsReturn => {
   const queryResult = useInfiniteQuery({
-    queryKey: ["catalogSongs", catalogId, pageSize],
+    queryKey: ["catalogSongs", catalogId, pageSize, artistName],
     queryFn: async ({ pageParam = 1 }) => {
-      const result = await getCatalogSongs(catalogId, pageSize, pageParam);
+      const result = await getCatalogSongs(
+        catalogId,
+        pageSize,
+        pageParam,
+        artistName
+      );
       return result;
     },
     enabled: enabled && !!catalogId,

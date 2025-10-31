@@ -6,6 +6,7 @@ import useCatalogSongs from "@/hooks/useCatalogSongs";
 import { createSearchResult } from "@/lib/catalog/createSearchResult";
 import { createErrorResult } from "@/lib/catalog/createErrorResult";
 import { createCatalogResult } from "@/lib/catalog/createCatalogResult";
+import { useArtistProvider } from "@/providers/ArtistProvider";
 
 interface CatalogSongsDisplayProps {
   catalogId: string;
@@ -24,11 +25,13 @@ const CatalogSongsDisplay = ({
   searchError,
   activeIsrc,
 }: CatalogSongsDisplayProps) => {
+  const { selectedArtist } = useArtistProvider();
   const { data, isLoading, error, isFetchingNextPage, observerTarget } =
     useCatalogSongs({
       catalogId,
       pageSize: 50,
       enabled: !isSearchMode,
+      artistName: selectedArtist?.name ?? undefined,
     });
 
   const currentLoading = isSearchMode ? searchLoading : isLoading;
