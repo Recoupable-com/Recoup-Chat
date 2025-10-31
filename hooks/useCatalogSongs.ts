@@ -32,13 +32,7 @@ const useCatalogSongs = ({
   const queryResult = useInfiniteQuery({
     queryKey: ["catalogSongs", catalogId, pageSize, artistName],
     queryFn: async ({ pageParam = 1 }) => {
-      const result = await getCatalogSongs(
-        catalogId,
-        pageSize,
-        pageParam,
-        artistName
-      );
-      return result;
+      return await getCatalogSongs(catalogId, pageSize, pageParam, artistName);
     },
     enabled: enabled && !!catalogId,
     getNextPageParam: (lastPage) => {
