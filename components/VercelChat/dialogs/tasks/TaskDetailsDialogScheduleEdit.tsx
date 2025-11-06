@@ -28,7 +28,11 @@ const TaskDetailsDialogScheduleEdit: React.FC<
     <div className="space-y-2">
       <label className="text-xs font-medium text-gray-700">When</label>
       <div className="flex gap-2">
-        <Select value={frequency} onValueChange={onFrequencyChange} disabled={disabled}>
+        <Select
+          value={frequency}
+          onValueChange={onFrequencyChange}
+          disabled={disabled}
+        >
           <SelectTrigger className="flex-1">
             <SelectValue />
           </SelectTrigger>
@@ -39,11 +43,14 @@ const TaskDetailsDialogScheduleEdit: React.FC<
             <SelectItem value="Once">Once</SelectItem>
           </SelectContent>
         </Select>
-        <TimeSelect value={time} onValueChange={onTimeChange} disabled={disabled} />
+        <TimeSelect
+          value={time}
+          onValueChange={onTimeChange}
+          disabled={disabled}
+        />
       </div>
     </div>
   );
 };
 
 export default TaskDetailsDialogScheduleEdit;
-
