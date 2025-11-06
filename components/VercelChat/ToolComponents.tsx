@@ -84,8 +84,8 @@ import { CreateTaskResult } from "@/lib/tools/tasks/createTask";
 import GetSpotifyAlbumWithTracksResult from "./tools/GetSpotifyAlbumWithTracksResult";
 import GetSpotifyAlbumWithTracksSkeleton from "./tools/GetSpotifyAlbumWithTracksSkeleton";
 import { SpotifyAlbum } from "@/lib/tools/getSpotifyAlbum";
-import DeleteTasksSuccess from "./tools/tasks/DeleteTasksSuccess";
-import DeleteTasksSkeleton from "./tools/tasks/DeleteTasksSkeleton";
+import DeleteTaskSuccess from "./tools/tasks/DeleteTaskSuccess";
+import DeleteTaskSkeleton from "./tools/tasks/DeleteTaskSkeleton";
 import { DeleteTaskResult } from "@/lib/tools/tasks/deleteTask";
 import UpdateTaskSuccess from "./tools/tasks/UpdateTaskSuccess";
 import { UpdateTaskResult } from "@/lib/tools/tasks/updateTask";
@@ -230,7 +230,7 @@ export function getToolCallComponent(part: ToolUIPart) {
   } else if (toolName === "delete_task") {
     return (
       <div key={toolCallId}>
-        <DeleteTasksSkeleton />
+        <DeleteTaskSkeleton />
       </div>
     );
   } else if (toolName === "update_task") {
@@ -493,7 +493,7 @@ export function getToolResultComponent(part: ToolUIPart) {
   } else if (toolName === "delete_task") {
     return (
       <div key={toolCallId}>
-        <DeleteTasksSuccess result={result as DeleteTaskResult} />
+        <DeleteTaskSuccess result={result as DeleteTaskResult} />
       </div>
     );
   } else if (toolName === "update_task") {

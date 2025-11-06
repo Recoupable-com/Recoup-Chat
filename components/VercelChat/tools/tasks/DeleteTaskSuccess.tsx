@@ -4,11 +4,11 @@ import { DeleteTaskResult } from "@/lib/tools/tasks/deleteTask";
 import TaskCard from "./TaskCard";
 import TaskDetailsDialog from "../../dialogs/tasks/TaskDetailsDialog";
 
-export interface DeleteTasksSuccessProps {
+export interface DeleteTaskSuccessProps {
   result: DeleteTaskResult;
 }
 
-const DeleteTasksSuccess: React.FC<DeleteTasksSuccessProps> = ({ result }) => {
+const DeleteTaskSuccess: React.FC<DeleteTaskSuccessProps> = ({ result }) => {
   const { task, message, error } = result;
 
   // Error state
@@ -62,4 +62,4 @@ const DeleteTasksSuccess: React.FC<DeleteTasksSuccessProps> = ({ result }) => {
   );
 };
 
-export default DeleteTasksSuccess;
+export default DeleteTaskSuccess;
