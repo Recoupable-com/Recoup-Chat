@@ -23,22 +23,22 @@ import {
 type ScheduledAction = Tables<"scheduled_actions">;
 
 export interface TaskCardProps {
-  action: ScheduledAction;
+  task: ScheduledAction;
   isDeleted?: boolean;
 }
 
-const TaskCard: React.FC<TaskCardProps> = ({ action, isDeleted }) => {
+const TaskCard: React.FC<TaskCardProps> = ({ task, isDeleted }) => {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const { updateAction, isLoading: isUpdating } = useUpdateScheduledAction();
   const { deleteAction, isLoading: isDeleting } = useDeleteScheduledAction();
-  const isActive = action.enabled && !isDeleted;
-  const isPaused = !action.enabled && !isDeleted;
+  const isActive = task.enabled && !isDeleted;
+  const isPaused = !task.enabled && !isDeleted;
 
   const handlePause = async (e: React.MouseEvent) => {
     e.stopPropagation(); // Prevent opening the edit dialog
     try {
       await updateAction({
-        actionId: action.id,
+        actionId: task.id,
         updates: { enabled: false },
         successMessage: "Task paused successfully",
       });
@@ -52,7 +52,7 @@ const TaskCard: React.FC<TaskCardProps> = ({ action, isDeleted }) => {
     e.stopPropagation(); // Prevent opening the edit dialog
     try {
       await deleteAction({
-        actionId: action.id,
+        actionId: task.id,
         successMessage: "Task deleted successfully",
       });
       setIsDropdownOpen(false);
@@ -72,16 +72,16 @@ const TaskCard: React.FC<TaskCardProps> = ({ action, isDeleted }) => {
     >
       <div className="flex items-center space-x-4">
         <Clock className="h-5 w-5 text-gray-400 flex-shrink-0" />
-        <h4 className="text-base font-medium text-gray-900">{action.title}</h4>
+        <h4 className="text-base font-medium text-gray-900">{task.title}</h4>
       </div>
 
       <div className="flex items-center space-x-4">
         <div className="flex items-center space-x-2">
-          {isRecurring(action.schedule) && (
+          {isRecurring(task.schedule) && (
             <Repeat className="h-4 w-4 text-gray-400 flex-shrink-0" />
           )}
           <span className="text-base text-gray-600">
-            {formatScheduleSimply(action.schedule)}
+            {formatScheduleSimply(task.schedule)}
           </span>
         </div>
         <div className="flex items-center space-x-2 w-20 justify-end relative">

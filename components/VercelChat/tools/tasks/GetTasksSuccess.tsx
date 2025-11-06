@@ -9,7 +9,7 @@ export interface GetTasksSuccessProps {
 }
 
 const GetTasksSuccess: React.FC<GetTasksSuccessProps> = ({ result }) => {
-  const { actions, message } = result;
+  const { tasks, message } = result;
 
   return (
     <div className="bg-white border border-gray-200 rounded-lg shadow-sm max-w-2xl">
@@ -22,18 +22,18 @@ const GetTasksSuccess: React.FC<GetTasksSuccessProps> = ({ result }) => {
         <p className="text-xs text-gray-600 mt-1">{message}</p>
       </div>
 
-      {/* Actions List */}
+      {/* Tasks List */}
       <div className="p-4">
-        {actions.length === 0 ? (
+        {tasks.length === 0 ? (
           <div className="text-center py-6">
             <ListTodo className="h-8 w-8 text-gray-300 mx-auto mb-2" />
             <p className="text-sm text-gray-500">No tasks found</p>
           </div>
         ) : (
           <div className="space-y-3 max-h-80 overflow-y-auto">
-            {actions.map((action) => (
-              <TaskDetailsDialog key={action.id} action={action}>
-                <TaskCard action={action} />
+            {tasks.map((task) => (
+              <TaskDetailsDialog key={task.id} task={task}>
+                <TaskCard task={task} />
               </TaskDetailsDialog>
             ))}
           </div>

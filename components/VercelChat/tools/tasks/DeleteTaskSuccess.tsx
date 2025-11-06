@@ -4,14 +4,12 @@ import { DeleteTaskResult } from "@/lib/tools/tasks/deleteTask";
 import TaskCard from "./TaskCard";
 import TaskDetailsDialog from "../../dialogs/tasks/TaskDetailsDialog";
 
-export interface DeleteTasksSuccessProps {
+export interface DeleteTaskSuccessProps {
   result: DeleteTaskResult;
 }
 
-const DeleteTasksSuccess: React.FC<DeleteTasksSuccessProps> = ({
-  result,
-}) => {
-  const { actions, message, error } = result;
+const DeleteTaskSuccess: React.FC<DeleteTaskSuccessProps> = ({ result }) => {
+  const { task, message, error } = result;
 
   // Error state
   if (error) {
@@ -21,7 +19,7 @@ const DeleteTasksSuccess: React.FC<DeleteTasksSuccessProps> = ({
           <Trash2 className="h-5 w-5 text-red-500 mt-0.5 flex-shrink-0" />
           <div className="flex-1">
             <h3 className="text-sm font-medium text-red-800">
-              Failed to Delete Tasks
+              Failed to Delete Task
             </h3>
             <p className="text-sm text-red-700 mt-1">{message}</p>
             <div className="text-xs text-red-600 mt-2 font-mono bg-red-100 p-2 rounded">
@@ -40,25 +38,23 @@ const DeleteTasksSuccess: React.FC<DeleteTasksSuccessProps> = ({
       <div className="px-4 py-3 border-b border-red-100 bg-red-100/50 rounded-t-lg">
         <div className="flex items-center space-x-2">
           <CheckCircle className="h-5 w-5 text-red-600" />
-          <h3 className="text-sm font-semibold text-red-800">Deleted Tasks</h3>
+          <h3 className="text-sm font-semibold text-red-800">Deleted Task</h3>
         </div>
         <p className="text-xs text-red-700 mt-1">{message}</p>
       </div>
 
-      {/* Deleted Actions List */}
+      {/* Deleted Task */}
       <div className="p-4">
-        {actions.length === 0 ? (
+        {!task ? (
           <div className="text-center py-6">
             <Trash2 className="h-8 w-8 text-red-300 mx-auto mb-2" />
             <p className="text-sm text-red-600">No tasks were deleted</p>
           </div>
         ) : (
-          <div className="space-y-3 max-h-80 overflow-y-auto">
-            {actions.map((action) => (
-              <TaskDetailsDialog key={action.id} action={action} isDeleted={true}>
-                <TaskCard action={action} isDeleted={true} />
-              </TaskDetailsDialog>
-            ))}
+          <div className="space-y-3">
+            <TaskDetailsDialog task={task} isDeleted={true}>
+              <TaskCard task={task} isDeleted={true} />
+            </TaskDetailsDialog>
           </div>
         )}
       </div>
@@ -66,5 +62,4 @@ const DeleteTasksSuccess: React.FC<DeleteTasksSuccessProps> = ({
   );
 };
 
-export default DeleteTasksSuccess;
-
+export default DeleteTaskSuccess;

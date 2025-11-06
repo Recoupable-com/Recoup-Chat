@@ -6,7 +6,7 @@ import { UpdateTaskResult } from "@/lib/tools/tasks/updateTask";
 import TaskError from "./TaskError";
 
 const UpdateTaskSuccess = ({ result }: { result: UpdateTaskResult }) => {
-  const { action, message, error } = result;
+  const { task, message, error } = result;
 
   // Error state
   if (error) {
@@ -33,17 +33,17 @@ const UpdateTaskSuccess = ({ result }: { result: UpdateTaskResult }) => {
         </div>
       </div>
 
-      {/* Action Card */}
-      {action && action.id && (
+      {/* Task Card */}
+      {task && task.id && (
         <div className="space-y-3">
-          <TaskDetailsDialog action={action}>
-            <TaskCard action={action} />
+          <TaskDetailsDialog task={task}>
+            <TaskCard task={task} />
           </TaskDetailsDialog>
         </div>
       )}
 
       {/* Empty state (shouldn't happen in success, but just in case) */}
-      {(!action || !action.id) && (
+      {(!task || !task.id) && (
         <div className="text-center py-4">
           <Calendar className="h-8 w-8 text-green-400 mx-auto mb-2" />
           <p className="text-sm text-green-600">No task to display</p>

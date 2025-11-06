@@ -6,7 +6,7 @@ import { Tables } from "@/types/database.types";
 type ScheduledAction = Tables<"scheduled_actions">;
 
 export interface UpdateTaskResult {
-  action: ScheduledAction;
+  task: ScheduledAction;
   message: string;
   error?: string;
 }
@@ -68,7 +68,7 @@ const updateTaskTool = tool({
       });
 
       return {
-        action: updatedTask,
+        task: updatedTask,
         message: `Successfully updated task`,
       };
     } catch (error) {
@@ -77,7 +77,7 @@ const updateTaskTool = tool({
           ? error.message
           : "Failed to update task for unknown reason";
       return {
-        action: {} as ScheduledAction,
+        task: {} as ScheduledAction,
         error: errorMessage,
         message: `Failed to update task: ${errorMessage}`,
       };

@@ -6,7 +6,7 @@ import { Tables } from "@/types/database.types";
 type ScheduledAction = Tables<"scheduled_actions">;
 
 export interface GetTasksResult {
-  actions: ScheduledAction[];
+  tasks: ScheduledAction[];
   message: string;
   error?: string;
 }
@@ -57,7 +57,7 @@ const getTasksTool = tool({
       }
 
       return {
-        actions: filteredTasks,
+        tasks: filteredTasks,
         message: `Successfully retrieved ${filteredTasks.length} task(s)`,
       };
     } catch (error) {
@@ -66,7 +66,7 @@ const getTasksTool = tool({
           ? error.message
           : "Failed to retrieve tasks for unknown reason";
       return {
-        actions: [],
+        tasks: [],
         error: errorMessage,
         message: `Failed to retrieve tasks: ${errorMessage}`,
       };

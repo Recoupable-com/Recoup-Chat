@@ -5,14 +5,14 @@ import { cn } from "@/lib/utils";
 import AccountIdDisplay from "@/components/ArtistSetting/AccountIdDisplay";
 
 interface TaskDetailsDialogHeaderProps {
-  action: Tables<"scheduled_actions">;
+  task: Tables<"scheduled_actions">;
   isActive?: boolean;
   isPaused?: boolean;
   isDeleted?: boolean;
 }
 
 const TaskDetailsDialogHeader = ({
-  action,
+  task,
   isActive = false,
   isPaused = false,
   isDeleted = false,
@@ -28,7 +28,7 @@ const TaskDetailsDialogHeader = ({
         {isPaused && <Pause className="h-4 w-4 text-gray-500 flex-shrink-0" />}
         {isDeleted && <Trash2 className="h-4 w-4 text-red-500 flex-shrink-0" />}
         <span className={cn("truncate", { "text-red-800": isDeleted })}>
-          {action.title}
+          {task.title}
         </span>
         <span
           className={cn(
@@ -44,7 +44,7 @@ const TaskDetailsDialogHeader = ({
         </span>
       </DialogTitle>
       <div className="mt-1">
-        <AccountIdDisplay accountId={action.id} label="Task ID" />
+        <AccountIdDisplay accountId={task.id} label="Task ID" />
       </div>
     </DialogHeader>
   );
