@@ -29,10 +29,7 @@ import getVideoGameCampaignPlays from "./getVideoGameCampaignPlays";
 import getSpotifyDeepResearch from "./getSpotifyDeepResearch";
 import createKnowledgeBase from "./createKnowledgeBase";
 import sendEmailTool from "./sendEmailTool";
-import createScheduledActions from "./scheduled_actions/createScheduledActions";
-import getScheduledActions from "./scheduled_actions/getScheduledActions";
-import updateScheduledAction from "./scheduled_actions/updateScheduledActions";
-import deleteScheduledAction from "./scheduled_actions/deleteScheduledActions";
+import tasksTools from "./tasks";
 import getSocialFans from "./getSocialFans";
 import createSegments from "./createSegments";
 import createReleaseReport from "./createReleaseReport";
@@ -74,13 +71,10 @@ export function getMcpTools(): ToolSet {
     create_knowledge_base: createKnowledgeBase,
     get_video_game_campaign_plays: getVideoGameCampaignPlays,
     send_email: sendEmailTool,
-    create_scheduled_actions: createScheduledActions,
-    get_scheduled_actions: getScheduledActions,
-    update_scheduled_action: updateScheduledAction,
-    delete_scheduled_actions: deleteScheduledAction,
     get_social_fans: getSocialFans,
     create_release_report: createReleaseReport,
     get_local_time: getLocalTime,
+    ...tasksTools,
     ...filesTools,
     ...nanoBananaTools,
     ...youtubeTools,
