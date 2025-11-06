@@ -5,43 +5,44 @@ import { Tables } from "@/types/database.types";
 
 type ScheduledAction = Tables<"scheduled_actions">;
 
-export interface DeleteScheduledActionsResult {
+export interface DeleteTaskResult {
   actions: ScheduledAction[];
   message: string;
   error?: string;
 }
 
-const deleteScheduledAction = tool({
+const deleteTask = tool({
   description: `
-  Delete one or more scheduled actions from the system. Requires an array of action IDs to delete.
+  Delete one or more tasks from the system. Requires an array of task IDs to delete.
   `,
   inputSchema: z.object({
     ids: z
       .array(z.string())
       .min(1)
-      .describe("Array of IDs of the scheduled actions to delete."),
+      .describe("Array of IDs of the tasks to delete."),
   }),
-  execute: async ({ ids }): Promise<DeleteScheduledActionsResult> => {
+  execute: async ({ ids }): Promise<DeleteTaskResult> => {
     try {
       const actions = await deleteScheduledActions(ids);
       const deletedCount = actions.length;
 
       return {
         actions,
-        message: `Successfully deleted ${deletedCount} scheduled action(s).`,
+        message: `Successfully deleted ${deletedCount} task(s).`,
       };
     } catch (error) {
       const errorMessage =
         error instanceof Error
           ? error.message
-          : "Failed to delete scheduled actions for unknown reason";
+          : "Failed to delete tasks for unknown reason";
       return {
         actions: [],
         error: errorMessage,
-        message: `Failed to delete scheduled actions: ${errorMessage}`,
+        message: `Failed to delete tasks: ${errorMessage}`,
       };
     }
   },
 });
 
-export default deleteScheduledAction;
+export default deleteTask;
+

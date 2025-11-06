@@ -1,15 +1,15 @@
 import React from "react";
-import { CreateScheduledActionsResult } from "@/lib/tools/scheduled_actions/createScheduledActions";
-import ScheduledActionCard from "./ScheduledActionCard";
-import CreateScheduledActionsError from "./CreateScheduledActionsError";
+import { CreateTasksResult } from "@/lib/tools/tasks/createTasks";
+import ScheduledActionCard from "../ScheduledActionCard";
+import CreateScheduledActionsError from "../CreateScheduledActionsError";
 import { CheckCircle, Calendar } from "lucide-react";
-import ScheduledActionDetailsDialog from "../dialogs/ScheduledActionDetailsDialog";
+import ScheduledActionDetailsDialog from "../../dialogs/ScheduledActionDetailsDialog";
 
-interface CreateScheduledActionsSuccessProps {
-  result: CreateScheduledActionsResult;
+interface CreateTasksSuccessProps {
+  result: CreateTasksResult;
 }
 
-const CreateScheduledActionsSuccess: React.FC<CreateScheduledActionsSuccessProps> = ({
+const CreateTasksSuccess: React.FC<CreateTasksSuccessProps> = ({
   result,
 }) => {
   const { actions, message, error } = result;
@@ -30,10 +30,10 @@ const CreateScheduledActionsSuccess: React.FC<CreateScheduledActionsSuccessProps
             <Calendar className="h-4 w-4" />
             <span>
               {actions.length === 0 
-                ? "Scheduled actions processed successfully"
+                ? "Tasks processed successfully"
                 : actions.length === 1 
-                  ? "1 action created successfully" 
-                  : `${actions.length} actions created successfully`
+                  ? "1 task created successfully" 
+                  : `${actions.length} tasks created successfully`
               }
             </span>
           </h3>
@@ -61,7 +61,7 @@ const CreateScheduledActionsSuccess: React.FC<CreateScheduledActionsSuccessProps
         <div className="text-center py-4">
           <Calendar className="h-8 w-8 text-green-400 mx-auto mb-2" />
           <p className="text-sm text-green-600">
-            No scheduled actions to display
+            No tasks to display
           </p>
         </div>
       )}
@@ -69,4 +69,5 @@ const CreateScheduledActionsSuccess: React.FC<CreateScheduledActionsSuccessProps
   );
 };
 
-export default CreateScheduledActionsSuccess;
+export default CreateTasksSuccess;
+

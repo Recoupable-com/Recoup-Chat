@@ -1,6 +1,6 @@
 import { Trash2, Clock } from "lucide-react";
 
-const DeleteScheduledActionsSkeleton = () => {
+const DeleteTasksSkeleton = () => {
   return (
     <div className="bg-red-50 border border-red-200 rounded-xl p-4 max-w-2xl animate-pulse">
       {/* Loading Header */}
@@ -62,4 +62,5 @@ const DeleteScheduledActionsSkeleton = () => {
   );
 };
 
-export default DeleteScheduledActionsSkeleton;
+export default DeleteTasksSkeleton;
+
