@@ -14,8 +14,19 @@ export const parseCronToFrequencyAndTime = (
       const dayOfWeek = parts[4];
 
       // Format time
-      const hourNum = parseInt(hour);
-      const minuteNum = parseInt(minute);
+      const hourNum = parseInt(hour, 10);
+      const minuteNum = parseInt(minute, 10);
+
+      if (
+        isNaN(hourNum) ||
+        isNaN(minuteNum) ||
+        hourNum < 0 ||
+        hourNum > 23 ||
+        minuteNum < 0 ||
+        minuteNum > 59
+      ) {
+        return { frequency: "Daily", time: "9:00 AM" };
+      }
       const period = hourNum >= 12 ? "PM" : "AM";
       const displayHour =
         hourNum === 0 ? 12 : hourNum > 12 ? hourNum - 12 : hourNum;
@@ -37,4 +48,3 @@ export const parseCronToFrequencyAndTime = (
     return { frequency: "Daily", time: "9:00 AM" };
   }
 };
-
