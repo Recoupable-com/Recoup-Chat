@@ -1,16 +1,14 @@
 import React from "react";
 import { ListTodo, CheckCircle2 } from "lucide-react";
 import { GetTasksResult } from "@/lib/tools/tasks/getTasks";
-import ScheduledActionCard from "../ScheduledActionCard";
-import ScheduledActionDetailsDialog from "../../dialogs/ScheduledActionDetailsDialog";
+import TaskCard from "./TaskCard";
+import TaskDetailsDialog from "../../dialogs/tasks/TaskDetailsDialog";
 
 export interface GetTasksSuccessProps {
   result: GetTasksResult;
 }
 
-const GetTasksSuccess: React.FC<GetTasksSuccessProps> = ({
-  result,
-}) => {
+const GetTasksSuccess: React.FC<GetTasksSuccessProps> = ({ result }) => {
   const { actions, message } = result;
 
   return (
@@ -31,19 +29,18 @@ const GetTasksSuccess: React.FC<GetTasksSuccessProps> = ({
             <ListTodo className="h-8 w-8 text-gray-300 mx-auto mb-2" />
             <p className="text-sm text-gray-500">No tasks found</p>
           </div>
-                 ) : (
-           <div className="space-y-3 max-h-80 overflow-y-auto">
-             {actions.map((action) => (
-              <ScheduledActionDetailsDialog key={action.id} action={action}>
-                <ScheduledActionCard action={action} />
-              </ScheduledActionDetailsDialog>
-             ))}
-           </div>
-         )}
+        ) : (
+          <div className="space-y-3 max-h-80 overflow-y-auto">
+            {actions.map((action) => (
+              <TaskDetailsDialog key={action.id} action={action}>
+                <TaskCard action={action} />
+              </TaskDetailsDialog>
+            ))}
+          </div>
+        )}
       </div>
     </div>
   );
 };
 
 export default GetTasksSuccess;
-

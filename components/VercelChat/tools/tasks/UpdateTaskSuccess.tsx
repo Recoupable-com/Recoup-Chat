@@ -1,16 +1,22 @@
 import React from "react";
-import ScheduledActionCard from "../ScheduledActionCard";
+import TaskCard from "./TaskCard";
 import { CheckCircle, Calendar } from "lucide-react";
-import ScheduledActionDetailsDialog from "../../dialogs/ScheduledActionDetailsDialog";
+import TaskDetailsDialog from "../../dialogs/tasks/TaskDetailsDialog";
 import { UpdateTaskResult } from "@/lib/tools/tasks/updateTask";
-import CreateScheduledActionsError from "../CreateScheduledActionsError";
+import TaskError from "./TaskError";
 
 const UpdateTaskSuccess = ({ result }: { result: UpdateTaskResult }) => {
   const { action, message, error } = result;
 
   // Error state
   if (error) {
-    return <CreateScheduledActionsError message={message} error={error} />;
+    return (
+      <TaskError
+        message={message}
+        error={error}
+        title="Failed to Update Task"
+      />
+    );
   }
 
   // Success state
@@ -30,9 +36,9 @@ const UpdateTaskSuccess = ({ result }: { result: UpdateTaskResult }) => {
       {/* Action Card */}
       {action && action.id && (
         <div className="space-y-3">
-          <ScheduledActionDetailsDialog action={action}>
-            <ScheduledActionCard action={action} />
-          </ScheduledActionDetailsDialog>
+          <TaskDetailsDialog action={action}>
+            <TaskCard action={action} />
+          </TaskDetailsDialog>
         </div>
       )}
 

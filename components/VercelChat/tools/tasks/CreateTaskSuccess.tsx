@@ -1,22 +1,26 @@
 import React from "react";
 import { CreateTaskResult } from "@/lib/tools/tasks/createTask";
-import ScheduledActionCard from "../ScheduledActionCard";
-import CreateScheduledActionsError from "../CreateScheduledActionsError";
+import TaskCard from "./TaskCard";
+import TaskError from "./TaskError";
 import { CheckCircle, Calendar } from "lucide-react";
-import ScheduledActionDetailsDialog from "../../dialogs/ScheduledActionDetailsDialog";
+import TaskDetailsDialog from "../../dialogs/tasks/TaskDetailsDialog";
 
 interface CreateTaskSuccessProps {
   result: CreateTaskResult;
 }
 
-const CreateTaskSuccess: React.FC<CreateTaskSuccessProps> = ({
-  result,
-}) => {
+const CreateTaskSuccess: React.FC<CreateTaskSuccessProps> = ({ result }) => {
   const { action, message, error } = result;
 
   // Error state
   if (error) {
-    return <CreateScheduledActionsError message={message} error={error} />;
+    return (
+      <TaskError
+        message={message}
+        error={error}
+        title="Failed to Create Task"
+      />
+    );
   }
 
   // Success state
@@ -36,9 +40,9 @@ const CreateTaskSuccess: React.FC<CreateTaskSuccessProps> = ({
       {/* Action Card */}
       {action && action.id && (
         <div className="space-y-3">
-          <ScheduledActionDetailsDialog action={action}>
-            <ScheduledActionCard action={action} />
-          </ScheduledActionDetailsDialog>
+          <TaskDetailsDialog action={action}>
+            <TaskCard action={action} />
+          </TaskDetailsDialog>
         </div>
       )}
 
@@ -46,9 +50,7 @@ const CreateTaskSuccess: React.FC<CreateTaskSuccessProps> = ({
       {(!action || !action.id) && (
         <div className="text-center py-4">
           <Calendar className="h-8 w-8 text-green-400 mx-auto mb-2" />
-          <p className="text-sm text-green-600">
-            No task to display
-          </p>
+          <p className="text-sm text-green-600">No task to display</p>
         </div>
       )}
     </div>
@@ -56,4 +58,3 @@ const CreateTaskSuccess: React.FC<CreateTaskSuccessProps> = ({
 };
 
 export default CreateTaskSuccess;
-
