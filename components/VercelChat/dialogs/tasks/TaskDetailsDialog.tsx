@@ -3,11 +3,10 @@
 import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog";
 import { Tables } from "@/types/database.types";
 import { cn } from "@/lib/utils";
-import { useState } from "react";
-import { parseCronToFrequencyAndTime } from "@/lib/tasks/parseCronToFrequencyAndTime";
 import TaskDetailsDialogHeader from "./TaskDetailsDialogHeader";
 import TaskDetailsDialogContent from "./TaskDetailsDialogContent";
 import TaskDetailsDialogActionButtons from "./TaskDetailsDialogActionButtons";
+import { useTaskDetailsDialog } from "./useTaskDetailsDialog";
 
 interface TaskDetailsDialogProps {
   children: React.ReactNode;
@@ -22,17 +21,21 @@ const TaskDetailsDialog: React.FC<TaskDetailsDialogProps> = ({
   isDeleted = false,
   onDelete,
 }) => {
-  const [isDialogOpen, setIsDialogOpen] = useState(false);
-  const [editTitle, setEditTitle] = useState(task.title);
-  const [editPrompt, setEditPrompt] = useState(task.prompt);
-  const { frequency: initialFrequency, time: initialTime } =
-    parseCronToFrequencyAndTime(task.schedule);
-  const [editFrequency, setEditFrequency] = useState(initialFrequency);
-  const [editTime, setEditTime] = useState(initialTime);
-
-  const isActive = Boolean(task.enabled && !isDeleted);
-  const isPaused = Boolean(!task.enabled && !isDeleted);
-  const canEdit = !isDeleted;
+  const {
+    isDialogOpen,
+    setIsDialogOpen,
+    editTitle,
+    setEditTitle,
+    editPrompt,
+    setEditPrompt,
+    editFrequency,
+    setEditFrequency,
+    editTime,
+    setEditTime,
+    isActive,
+    isPaused,
+    canEdit,
+  } = useTaskDetailsDialog({ task, isDeleted });
 
   return (
     <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
