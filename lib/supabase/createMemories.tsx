@@ -7,14 +7,29 @@ interface MemoryInput {
 }
 
 const createMemories = async (memory: MemoryInput) => {
-  try {
-    await supabase
-      .from("memories")
-      .upsert(memory, { onConflict: "id" })
-      .select("*");
-  } catch (error) {
-    console.error(error);
+  const { data, error } = await supabase
+    .from("memories")
+    .upsert(memory, { onConflict: "id" })
+    .select("*");
+
+  if (error) {
+    console.error("❌ Failed to save memory:", {
+      memoryId: memory.id,
+      roomId: memory.room_id,
+      error: error,
+      errorMessage: error.message,
+      errorCode: error.code,
+      errorDetails: error.details,
+    });
+    throw error;
   }
+
+  console.log("✅ Memory saved successfully:", {
+    memoryId: memory.id,
+    roomId: memory.room_id,
+  });
+
+  return data;
 };
 
 export default createMemories;
