@@ -77,11 +77,10 @@ import GetSpotifyArtistAlbumsSkeleton from "./tools/GetSpotifyArtistAlbumsSkelet
 import SpotifyArtistTopTracksResult from "./tools/SpotifyArtistTopTracksResult";
 import SpotifyArtistTopTracksSkeleton from "./tools/SpotifyArtistTopTracksSkeleton";
 import GetTasksSuccess from "./tools/tasks/GetTasksSuccess";
-import GetTasksSkeleton from "./tools/tasks/GetTasksSkeleton";
 import { GetTasksResult } from "@/lib/tools/tasks/getTasks";
-import CreateTasksSuccess from "./tools/tasks/CreateTasksSuccess";
-import CreateTasksSkeleton from "./tools/tasks/CreateTasksSkeleton";
-import { CreateTasksResult } from "@/lib/tools/tasks/createTasks";
+import CreateTaskSuccess from "./tools/tasks/CreateTaskSuccess";
+import TasksSkeleton from "@/components/shared/TasksSkeleton";
+import { CreateTaskResult } from "@/lib/tools/tasks/createTask";
 import GetSpotifyAlbumWithTracksResult from "./tools/GetSpotifyAlbumWithTracksResult";
 import GetSpotifyAlbumWithTracksSkeleton from "./tools/GetSpotifyAlbumWithTracksSkeleton";
 import { SpotifyAlbum } from "@/lib/tools/getSpotifyAlbum";
@@ -89,7 +88,6 @@ import DeleteTasksSuccess from "./tools/tasks/DeleteTasksSuccess";
 import DeleteTasksSkeleton from "./tools/tasks/DeleteTasksSkeleton";
 import { DeleteTaskResult } from "@/lib/tools/tasks/deleteTask";
 import UpdateTaskSuccess from "./tools/tasks/UpdateTaskSuccess";
-import UpdateTaskSkeleton from "./tools/tasks/UpdateTaskSkeleton";
 import { UpdateTaskResult } from "@/lib/tools/tasks/updateTask";
 import { Sora2VideoSkeleton } from "./tools/sora2/Sora2VideoSkeleton";
 import { Sora2VideoResult } from "./tools/sora2/Sora2VideoResult";
@@ -214,7 +212,7 @@ export function getToolCallComponent(part: ToolUIPart) {
   } else if (toolName === "get_tasks") {
     return (
       <div key={toolCallId}>
-        <GetTasksSkeleton />
+        <TasksSkeleton />
       </div>
     );
   } else if (toolName === "get_spotify_album") {
@@ -223,10 +221,10 @@ export function getToolCallComponent(part: ToolUIPart) {
         <GetSpotifyAlbumWithTracksSkeleton />
       </div>
     );
-  } else if (toolName === "create_tasks") {
+  } else if (toolName === "create_task") {
     return (
       <div key={toolCallId}>
-        <CreateTasksSkeleton />
+        <TasksSkeleton />
       </div>
     );
   } else if (toolName === "delete_tasks") {
@@ -238,7 +236,7 @@ export function getToolCallComponent(part: ToolUIPart) {
   } else if (toolName === "update_task") {
     return (
       <div key={toolCallId}>
-        <UpdateTaskSkeleton />
+        <TasksSkeleton numberOfTasks={1} />
       </div>
     );
   } else if (toolName === "retrieve_sora_2_video_content") {
@@ -480,10 +478,10 @@ export function getToolResultComponent(part: ToolUIPart) {
         <GetTasksSuccess result={result as GetTasksResult} />
       </div>
     );
-  } else if (toolName === "create_tasks") {
+  } else if (toolName === "create_task") {
     return (
       <div key={toolCallId}>
-        <CreateTasksSuccess result={result as CreateTasksResult} />
+        <CreateTaskSuccess result={result as CreateTaskResult} />
       </div>
     );
   } else if (toolName === "get_spotify_album") {

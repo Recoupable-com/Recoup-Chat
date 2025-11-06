@@ -1,18 +1,18 @@
 import React from "react";
-import { CreateTasksResult } from "@/lib/tools/tasks/createTasks";
+import { CreateTaskResult } from "@/lib/tools/tasks/createTask";
 import ScheduledActionCard from "../ScheduledActionCard";
 import CreateScheduledActionsError from "../CreateScheduledActionsError";
 import { CheckCircle, Calendar } from "lucide-react";
 import ScheduledActionDetailsDialog from "../../dialogs/ScheduledActionDetailsDialog";
 
-interface CreateTasksSuccessProps {
-  result: CreateTasksResult;
+interface CreateTaskSuccessProps {
+  result: CreateTaskResult;
 }
 
-const CreateTasksSuccess: React.FC<CreateTasksSuccessProps> = ({
+const CreateTaskSuccess: React.FC<CreateTaskSuccessProps> = ({
   result,
 }) => {
-  const { actions, message, error } = result;
+  const { action, message, error } = result;
 
   // Error state
   if (error) {
@@ -28,40 +28,26 @@ const CreateTasksSuccess: React.FC<CreateTasksSuccessProps> = ({
         <div className="flex-1">
           <h3 className="text-sm font-medium text-green-800 flex items-center space-x-2">
             <Calendar className="h-4 w-4" />
-            <span>
-              {actions.length === 0 
-                ? "Tasks processed successfully"
-                : actions.length === 1 
-                  ? "1 task created successfully" 
-                  : `${actions.length} tasks created successfully`
-              }
-            </span>
+            <span>Task created successfully</span>
           </h3>
         </div>
       </div>
 
-      {/* Actions List */}
-      {actions.length > 0 && (
+      {/* Action Card */}
+      {action && action.id && (
         <div className="space-y-3">
-          <div className="space-y-2">
-            {actions.map((action, index) => (
-              <ScheduledActionDetailsDialog 
-                key={action.id || index} 
-                action={action}
-               >
-                <ScheduledActionCard action={action} />
-              </ScheduledActionDetailsDialog>
-            ))}
-          </div>
+          <ScheduledActionDetailsDialog action={action}>
+            <ScheduledActionCard action={action} />
+          </ScheduledActionDetailsDialog>
         </div>
       )}
 
       {/* Empty state (shouldn't happen in success, but just in case) */}
-      {actions.length === 0 && (
+      {(!action || !action.id) && (
         <div className="text-center py-4">
           <Calendar className="h-8 w-8 text-green-400 mx-auto mb-2" />
           <p className="text-sm text-green-600">
-            No tasks to display
+            No task to display
           </p>
         </div>
       )}
@@ -69,5 +55,5 @@ const CreateTasksSuccess: React.FC<CreateTasksSuccessProps> = ({
   );
 };
 
-export default CreateTasksSuccess;
+export default CreateTaskSuccess;
 
