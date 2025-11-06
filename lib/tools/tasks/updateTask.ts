@@ -21,6 +21,7 @@ const updateTaskTool = tool({
   - schedule: A cron expression defining when the task should run
   - account_id: The account ID of the user who owns the task
   - artist_account_id: The account ID of the artist this task is for
+  - enabled: Whether the task is enabled. Can be true, false, or null.
   
   The schedule parameter must be a valid cron expression (e.g. "0 0 * * *" for daily at midnight).
   Only fields provided (beyond id) will be updated. Omitting a field leaves the existing value unchanged.
@@ -48,6 +49,11 @@ const updateTaskTool = tool({
       .describe(
         "New UUID of the associated artist account. If not provided, get this from the system prompt as the active artist id."
       ),
+    enabled: z
+      .boolean()
+      .nullable()
+      .optional()
+      .describe("Whether the task is enabled. Can be true, false, or null."),
   }),
   execute: async ({
     id,
@@ -56,6 +62,7 @@ const updateTaskTool = tool({
     schedule,
     account_id,
     artist_account_id,
+    enabled,
   }): Promise<UpdateTaskResult> => {
     try {
       const updatedTask = await updateTask({
@@ -65,6 +72,7 @@ const updateTaskTool = tool({
         ...(schedule !== undefined && { schedule }),
         ...(account_id !== undefined && { account_id }),
         ...(artist_account_id !== undefined && { artist_account_id }),
+        ...(enabled !== undefined && { enabled }),
       });
 
       return {
