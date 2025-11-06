@@ -1,15 +1,10 @@
 import React from "react";
 import ScheduledActionCard from "../ScheduledActionCard";
-import { Tables } from "@/types/database.types";
 import { CheckCircle2 } from "lucide-react";
 import ScheduledActionDetailsDialog from "../../dialogs/ScheduledActionDetailsDialog";
 import { UpdateTaskResult } from "@/lib/tools/tasks/updateTask";
 
-const UpdateTaskSuccess = ({
-  result,
-}: {
-  result: UpdateTaskResult;
-}) => {
+const UpdateTaskSuccess = ({ result }: { result: UpdateTaskResult }) => {
   const { actions, message } = result;
 
   return (
@@ -18,9 +13,7 @@ const UpdateTaskSuccess = ({
       <div className="px-4 py-3 border-b border-gray-100 bg-gray-50 rounded-t-lg">
         <div className="flex items-center space-x-2">
           <CheckCircle2 className="h-5 w-5 text-green-500" />
-          <h3 className="text-sm font-semibold text-gray-900">
-            Tasks
-          </h3>
+          <h3 className="text-sm font-semibold text-gray-900">Tasks</h3>
         </div>
         <p className="text-xs text-gray-600 mt-1">{message}</p>
       </div>
@@ -40,4 +33,3 @@ const UpdateTaskSuccess = ({
 };
 
 export default UpdateTaskSuccess;
-
