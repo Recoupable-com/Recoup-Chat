@@ -1,16 +1,15 @@
-
 import { FileText } from "lucide-react";
 import { cn } from "@/lib/utils";
 
-interface ScheduledActionPromptSectionProps {
+interface TaskPromptSectionProps {
   prompt: string;
   isDeleted?: boolean;
 }
 
-const ScheduledActionPromptSection = ({
+const TaskPromptSection = ({
   prompt,
   isDeleted,
-}: ScheduledActionPromptSectionProps) => {
+}: TaskPromptSectionProps) => {
   return (
     <div className="flex flex-col gap-1.5">
       <div className={cn("flex items-center gap-1.5 text-xs font-medium text-gray-700", {"text-red-700": isDeleted})}>
@@ -24,4 +23,5 @@ const ScheduledActionPromptSection = ({
   );
 };
 
-export default ScheduledActionPromptSection;
+export default TaskPromptSection;
+

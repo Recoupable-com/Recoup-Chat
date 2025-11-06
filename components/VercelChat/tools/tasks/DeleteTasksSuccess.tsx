@@ -1,8 +1,8 @@
 import React from "react";
 import { Trash2, CheckCircle } from "lucide-react";
 import { DeleteTaskResult } from "@/lib/tools/tasks/deleteTask";
-import ScheduledActionCard from "../ScheduledActionCard";
-import ScheduledActionDetailsDialog from "../../dialogs/ScheduledActionDetailsDialog";
+import TaskCard from "./TaskCard";
+import TaskDetailsDialog from "../../dialogs/tasks/TaskDetailsDialog";
 
 export interface DeleteTasksSuccessProps {
   result: DeleteTaskResult;
@@ -55,9 +55,9 @@ const DeleteTasksSuccess: React.FC<DeleteTasksSuccessProps> = ({
         ) : (
           <div className="space-y-3 max-h-80 overflow-y-auto">
             {actions.map((action) => (
-              <ScheduledActionDetailsDialog key={action.id} action={action} isDeleted={true}>
-                <ScheduledActionCard action={action} isDeleted={true} />
-              </ScheduledActionDetailsDialog>
+              <TaskDetailsDialog key={action.id} action={action} isDeleted={true}>
+                <TaskCard action={action} isDeleted={true} />
+              </TaskDetailsDialog>
             ))}
           </div>
         )}

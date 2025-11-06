@@ -1,5 +1,5 @@
 import { Tables } from "@/types/database.types";
-import ScheduledActionCard from "@/components/VercelChat/tools/ScheduledActionCard";
+import TaskCard from "@/components/VercelChat/tools/tasks/TaskCard";
 import ScheduledActionSkeleton from "./ScheduledActionSkeleton";
 import ScheduledActionDetailsDialog from "./ScheduledActionDetailsDialog";
 
@@ -17,7 +17,11 @@ const ScheduledActionsList: React.FC<ScheduledActionsListProps> = ({
   isError,
 }) => {
   if (isError) {
-    return <div className="text-sm text-red-600">Failed to load scheduled actions</div>;
+    return (
+      <div className="text-sm text-red-600">
+        Failed to load scheduled actions
+      </div>
+    );
   }
 
   if (isLoading) {
@@ -45,8 +49,12 @@ const ScheduledActionsList: React.FC<ScheduledActionsListProps> = ({
       </div>
       {actions.map((action, index) => (
         <ScheduledActionDetailsDialog key={action.id} action={action}>
-          <div className={index !== actions.length - 1 ? "border-b border-gray-100" : ""}>
-            <ScheduledActionCard action={action} />
+          <div
+            className={
+              index !== actions.length - 1 ? "border-b border-gray-100" : ""
+            }
+          >
+            <TaskCard action={action} />
           </div>
         </ScheduledActionDetailsDialog>
       ))}

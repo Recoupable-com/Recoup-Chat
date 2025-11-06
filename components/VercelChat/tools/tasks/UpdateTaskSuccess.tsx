@@ -1,31 +1,54 @@
 import React from "react";
-import ScheduledActionCard from "../ScheduledActionCard";
-import { CheckCircle2 } from "lucide-react";
-import ScheduledActionDetailsDialog from "../../dialogs/ScheduledActionDetailsDialog";
+import TaskCard from "./TaskCard";
+import { CheckCircle, Calendar } from "lucide-react";
+import TaskDetailsDialog from "../../dialogs/tasks/TaskDetailsDialog";
 import { UpdateTaskResult } from "@/lib/tools/tasks/updateTask";
+import TaskError from "./TaskError";
 
 const UpdateTaskSuccess = ({ result }: { result: UpdateTaskResult }) => {
-  const { actions, message } = result;
+  const { action, message, error } = result;
 
+  // Error state
+  if (error) {
+    return (
+      <TaskError
+        message={message}
+        error={error}
+        title="Failed to Update Task"
+      />
+    );
+  }
+
+  // Success state
   return (
-    <div className="bg-white border border-gray-200 rounded-lg shadow-sm max-w-2xl">
-      <div className="px-4 py-3 border-b border-gray-100 bg-gray-50 rounded-t-lg">
-        <div className="flex items-center space-x-2">
-          <CheckCircle2 className="h-5 w-5 text-green-500" />
-          <h3 className="text-sm font-semibold text-gray-900">Tasks</h3>
+    <div className="bg-green-50 border border-green-200 rounded-xl p-4 max-w-2xl">
+      {/* Success Header */}
+      <div className="flex items-start space-x-3 mb-4">
+        <CheckCircle className="h-5 w-5 text-green-500 mt-0.5 flex-shrink-0" />
+        <div className="flex-1">
+          <h3 className="text-sm font-medium text-green-800 flex items-center space-x-2">
+            <Calendar className="h-4 w-4" />
+            <span>Task updated successfully</span>
+          </h3>
         </div>
-        <p className="text-xs text-gray-600 mt-1">{message}</p>
       </div>
 
-      <div className="p-4">
-        <div className="space-y-3 max-h-80 overflow-y-auto">
-          {actions.map((action) => (
-            <ScheduledActionDetailsDialog key={action.id} action={action}>
-              <ScheduledActionCard action={action} />
-            </ScheduledActionDetailsDialog>
-          ))}
+      {/* Action Card */}
+      {action && action.id && (
+        <div className="space-y-3">
+          <TaskDetailsDialog action={action}>
+            <TaskCard action={action} />
+          </TaskDetailsDialog>
         </div>
-      </div>
+      )}
+
+      {/* Empty state (shouldn't happen in success, but just in case) */}
+      {(!action || !action.id) && (
+        <div className="text-center py-4">
+          <Calendar className="h-8 w-8 text-green-400 mx-auto mb-2" />
+          <p className="text-sm text-green-600">No task to display</p>
+        </div>
+      )}
     </div>
   );
 };

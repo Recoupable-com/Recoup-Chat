@@ -3,17 +3,17 @@ import { cn } from "@/lib/utils";
 import { formatScheduledActionDate } from "@/lib/utils/formatScheduledActionDate";
 import { parseCronToHuman } from "@/lib/utils/cronUtils";
 
-interface ScheduledActionScheduleSectionProps {
+interface TaskScheduleSectionProps {
   schedule: string;
   nextRun: string;
   isDeleted?: boolean;
 }
 
-const ScheduledActionScheduleSection = ({
+const TaskScheduleSection = ({
   schedule,
   nextRun,
   isDeleted,
-}: ScheduledActionScheduleSectionProps) => {
+}: TaskScheduleSectionProps) => {
   return (
     <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs">
       <div className={cn("flex flex-col gap-1 p-2 rounded-lg bg-gray-50", {
@@ -60,4 +60,5 @@ const ScheduledActionScheduleSection = ({
   );
 };
 
-export default ScheduledActionScheduleSection; 
+export default TaskScheduleSection;
+

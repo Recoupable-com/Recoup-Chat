@@ -2,15 +2,15 @@ import { RotateCw } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { formatScheduledActionDate } from "@/lib/utils/formatScheduledActionDate";
 
-interface ScheduledActionLastRunSectionProps {
+interface TaskLastRunSectionProps {
   lastRun: string | null;
   isDeleted?: boolean;
 }
 
-const ScheduledActionLastRunSection = ({
+const TaskLastRunSection = ({
   lastRun,
   isDeleted,
-}: ScheduledActionLastRunSectionProps) => {
+}: TaskLastRunSectionProps) => {
   if (!lastRun) return null;
   
   return (
@@ -26,4 +26,5 @@ const ScheduledActionLastRunSection = ({
   );
 };
 
-export default ScheduledActionLastRunSection;
+export default TaskLastRunSection;
+
