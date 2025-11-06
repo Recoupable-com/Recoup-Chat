@@ -54,7 +54,7 @@ const ScheduledActionsList: React.FC<ScheduledActionsListProps> = ({
               index !== actions.length - 1 ? "border-b border-gray-100" : ""
             }
           >
-            <TaskCard action={action} />
+            <TaskCard task={action} />
           </div>
         </ScheduledActionDetailsDialog>
       ))}
