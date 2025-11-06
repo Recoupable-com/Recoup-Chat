@@ -1,9 +1,12 @@
 import React from "react";
 import { Calendar, Clock } from "lucide-react";
+import { FC } from "react";
 
-const ScheduledActionsSkeleton: React.FC<{ numberOfActions?: number }> = ({
-  numberOfActions = 2,
-}) => {
+export interface TasksSkeletonProps {
+  numberOfTasks?: number;
+}
+
+const TasksSkeleton: FC<TasksSkeletonProps> = ({ numberOfTasks = 2 }) => {
   return (
     <div className="bg-slate-50 border border-slate-200 rounded-xl p-4 max-w-2xl animate-pulse">
       {/* Loading Header */}
@@ -17,16 +20,16 @@ const ScheduledActionsSkeleton: React.FC<{ numberOfActions?: number }> = ({
         </div>
       </div>
 
-      {/* Loading Actions List */}
+      {/* Loading Tasks List */}
       <div className="space-y-3">
         <div className="space-y-2">
-          {/* Skeleton Action Cards */}
-          {Array.from({ length: numberOfActions }, (_, index) => (
+          {/* Skeleton Task Cards */}
+          {Array.from({ length: numberOfTasks }, (_, index) => (
             <div
               key={index}
               className="bg-white border border-slate-200 rounded-lg p-3 space-y-2"
             >
-              {/* Action Header */}
+              {/* Task Header */}
               <div className="flex items-center justify-between">
                 <div className="flex items-center space-x-2">
                   <Clock className="h-4 w-4 text-slate-400" />
@@ -35,13 +38,13 @@ const ScheduledActionsSkeleton: React.FC<{ numberOfActions?: number }> = ({
                 <div className="h-5 bg-slate-300 rounded-full w-16" />
               </div>
 
-              {/* Action Details */}
+              {/* Task Details */}
               <div className="space-y-1">
                 <div className="h-3 bg-slate-300 rounded w-full" />
                 <div className="h-3 bg-slate-300 rounded w-3/4" />
               </div>
 
-              {/* Action Metadata */}
+              {/* Task Metadata */}
               <div className="flex items-center space-x-4 text-xs">
                 <div className="flex items-center space-x-1">
                   <div className="h-3 w-3 bg-slate-300 rounded" />
@@ -65,4 +68,4 @@ const ScheduledActionsSkeleton: React.FC<{ numberOfActions?: number }> = ({
   );
 };
 
-export default ScheduledActionsSkeleton;
+export default TasksSkeleton;
