@@ -33,10 +33,11 @@ export const convertFrequencyAndTimeToCron = (
       case "Monthly":
         // Default to 1st day of month for monthly
         return `${minute} ${hour} 1 * *`;
-      case "Once":
+      case "Once": {
         // For "Once", we'll use the current date
         const now = new Date();
         return `${minute} ${hour} ${now.getDate()} ${now.getMonth() + 1} *`;
+      }
       default:
         return `${minute} ${hour} * * *`; // Default to daily
     }
@@ -44,4 +45,3 @@ export const convertFrequencyAndTimeToCron = (
     return "0 9 * * *"; // Default fallback
   }
 };
-
