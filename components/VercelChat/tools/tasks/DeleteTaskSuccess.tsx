@@ -52,7 +52,7 @@ const DeleteTaskSuccess: React.FC<DeleteTaskSuccessProps> = ({ result }) => {
           </div>
         ) : (
           <div className="space-y-3">
-            <TaskDetailsDialog action={task} isDeleted={true}>
+            <TaskDetailsDialog task={task} isDeleted={true}>
               <TaskCard task={task} isDeleted={true} />
             </TaskDetailsDialog>
           </div>

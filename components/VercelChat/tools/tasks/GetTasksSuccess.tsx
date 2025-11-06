@@ -32,7 +32,7 @@ const GetTasksSuccess: React.FC<GetTasksSuccessProps> = ({ result }) => {
         ) : (
           <div className="space-y-3 max-h-80 overflow-y-auto">
             {tasks.map((task) => (
-              <TaskDetailsDialog key={task.id} action={task}>
+              <TaskDetailsDialog key={task.id} task={task}>
                 <TaskCard task={task} />
               </TaskDetailsDialog>
             ))}

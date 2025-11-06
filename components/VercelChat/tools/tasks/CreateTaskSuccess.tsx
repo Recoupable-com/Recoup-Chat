@@ -40,7 +40,7 @@ const CreateTaskSuccess: React.FC<CreateTaskSuccessProps> = ({ result }) => {
       {/* Task Card */}
       {task && task.id && (
         <div className="space-y-3">
-          <TaskDetailsDialog action={task}>
+          <TaskDetailsDialog task={task}>
             <TaskCard task={task} />
           </TaskDetailsDialog>
         </div>

@@ -8,17 +8,17 @@ import TaskScheduleSection from "./TaskScheduleSection";
 
 interface TaskDetailsDialogProps {
   children: React.ReactNode;
-  action: Tables<"scheduled_actions">;
+  task: Tables<"scheduled_actions">;
   isDeleted?: boolean;
 }
 
 const TaskDetailsDialog: React.FC<TaskDetailsDialogProps> = ({
   children,
-  action,
+  task,
   isDeleted,
 }) => {
-  const isActive = Boolean(action.enabled && !isDeleted);
-  const isPaused = Boolean(!action.enabled && !isDeleted);
+  const isActive = Boolean(task.enabled && !isDeleted);
+  const isPaused = Boolean(!task.enabled && !isDeleted);
 
   return (
     <Dialog>
@@ -31,7 +31,7 @@ const TaskDetailsDialog: React.FC<TaskDetailsDialogProps> = ({
         )}
       >
         <TaskDetailsDialogHeader
-          action={action}
+          task={task}
           isActive={isActive}
           isPaused={isPaused}
           isDeleted={isDeleted}
@@ -39,17 +39,17 @@ const TaskDetailsDialog: React.FC<TaskDetailsDialogProps> = ({
 
         <div className={cn("flex flex-col gap-3 mt-1 overflow-y-auto")}>
           {/* Prompt Section */}
-          <TaskPromptSection prompt={action.prompt} isDeleted={isDeleted} />
+          <TaskPromptSection prompt={task.prompt} isDeleted={isDeleted} />
 
           {/* Schedule Information */}
           <TaskScheduleSection
-            schedule={action.schedule}
-            nextRun={action.next_run || ""}
+            schedule={task.schedule}
+            nextRun={task.next_run || ""}
             isDeleted={isDeleted}
           />
 
           {/* Last Run Information */}
-          <TaskLastRunSection lastRun={action.last_run} isDeleted={isDeleted} />
+          <TaskLastRunSection lastRun={task.last_run} isDeleted={isDeleted} />
         </div>
       </DialogContent>
     </Dialog>
@@ -57,4 +57,3 @@ const TaskDetailsDialog: React.FC<TaskDetailsDialogProps> = ({
 };
 
 export default TaskDetailsDialog;
-
