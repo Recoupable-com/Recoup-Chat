@@ -1,4 +1,4 @@
-const ScheduledActionSkeleton = () => {
+const TaskSkeleton = () => {
   return (
     <div className="border rounded-lg p-4 bg-gray-50/30 border-gray-200">
       {/* Action Header Skeleton */}
@@ -49,4 +49,4 @@ const ScheduledActionSkeleton = () => {
   );
 };
 
-export default ScheduledActionSkeleton;
+export default TaskSkeleton;

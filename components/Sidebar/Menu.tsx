@@ -10,7 +10,7 @@ import { Button } from "../ui/button";
 import FanGroupNavItem from "./FanGroupNavItem";
 import AgentsNavItem from "./AgentsNavItem";
 import { RecentChatsSectionSkeleton } from "./RecentChatsSectionSkeleton";
-import ScheduledActionsNavItem from "./ScheduledActionsNavItem";
+import TasksNavItem from "./TasksNavItem";
 import FilesNavItem from "./FilesNavItem";
 import { useEffect } from "react";
 
@@ -20,7 +20,7 @@ const Menu = ({ toggleMenuExpanded }: { toggleMenuExpanded: () => void }) => {
   const { email, isPrepared } = useUserProvider();
   const isAgents = pathname.includes("/agents");
   const isSegments = pathname.includes("/segments");
-  const isScheduledActions = pathname.includes("/scheduled-actions");
+  const isTasks = pathname.includes("/tasks");
   const isFiles = pathname.includes("/files");
 
   const goToItem = (link?: string) => {
@@ -30,8 +30,8 @@ const Menu = ({ toggleMenuExpanded }: { toggleMenuExpanded: () => void }) => {
   };
 
   useEffect(() => {
-    prefetch('/files');
-    prefetch('/agents');
+    prefetch("/files");
+    prefetch("/agents");
   }, [prefetch]);
 
   return (
@@ -43,7 +43,7 @@ const Menu = ({ toggleMenuExpanded }: { toggleMenuExpanded: () => void }) => {
       >
         <Logo />
       </Link>
-      
+
       {/* Navigation Section */}
       <div className="flex flex-col gap-3 w-full mt-2">
         <Button
@@ -53,18 +53,28 @@ const Menu = ({ toggleMenuExpanded }: { toggleMenuExpanded: () => void }) => {
         >
           {email ? "New Chat" : "Sign In"}
         </Button>
-        
+
         <div className="flex flex-col gap-1">
-          <AgentsNavItem isActive={isAgents} onClick={() => goToItem("agents")} />
-          <ScheduledActionsNavItem isActive={isScheduledActions} onClick={() => goToItem("scheduled-actions")} />
-          <FanGroupNavItem isActive={isSegments} onClick={() => goToItem("segments")} />
+          <AgentsNavItem
+            isActive={isAgents}
+            onClick={() => goToItem("agents")}
+          />
+          <TasksNavItem isActive={isTasks} onClick={() => goToItem("tasks")} />
+          <FanGroupNavItem
+            isActive={isSegments}
+            onClick={() => goToItem("segments")}
+          />
           <FilesNavItem isActive={isFiles} onClick={() => goToItem("files")} />
         </div>
       </div>
 
       {/* Recent Chats Section */}
       <div className="flex flex-col flex-grow min-h-0">
-        {!email ? <RecentChatsSectionSkeleton /> : <RecentChats toggleModal={toggleMenuExpanded} />}
+        {!email ? (
+          <RecentChatsSectionSkeleton />
+        ) : (
+          <RecentChats toggleModal={toggleMenuExpanded} />
+        )}
 
         {/* Bottom Section */}
         <div className="shrink-0 border-t border-gray-100 mx-auto">

@@ -8,7 +8,7 @@ import StatusSwitch from "./StatusSwitch";
 
 interface EditableDialogTitleProps {
   title: string;
-  actionId: string;
+  taskId: string;
   isActive: boolean;
   onTitleChange?: (newTitle: string) => void;
   onStatusChange?: (newStatus: boolean) => void;
@@ -16,7 +16,7 @@ interface EditableDialogTitleProps {
 
 const EditableDialogTitle: React.FC<EditableDialogTitleProps> = ({
   title,
-  actionId,
+  taskId,
   isActive,
   onTitleChange,
   onStatusChange,
@@ -43,7 +43,7 @@ const EditableDialogTitle: React.FC<EditableDialogTitleProps> = ({
 
     try {
       await updateAction({
-        actionId,
+        actionId: taskId,
         updates: { title: editValue.trim() },
         onSuccess: (updatedData) => {
           setIsEditing(false);
@@ -112,7 +112,7 @@ const EditableDialogTitle: React.FC<EditableDialogTitleProps> = ({
       </div>
 
       <StatusSwitch
-        actionId={actionId}
+        taskId={taskId}
         isActive={isActive}
         onStatusChange={onStatusChange}
         disabled={isLoading}

@@ -4,16 +4,16 @@ import { useDeleteScheduledAction } from "@/hooks/useDeleteScheduledAction";
 import { useState } from "react";
 import { Trash2 } from "lucide-react";
 
-interface DeleteScheduledActionButtonProps {
-  actionId: string;
-  actionTitle: string;
+interface DeleteTaskButtonProps {
+  taskId: string;
+  taskTitle: string;
   onDelete?: () => void;
   className?: string;
 }
 
-const DeleteScheduledActionButton: React.FC<DeleteScheduledActionButtonProps> = ({
-  actionId,
-  actionTitle,
+const DeleteTaskButton: React.FC<DeleteTaskButtonProps> = ({
+  taskId,
+  taskTitle,
   onDelete,
   className = "",
 }) => {
@@ -23,7 +23,7 @@ const DeleteScheduledActionButton: React.FC<DeleteScheduledActionButtonProps> = 
   const handleDeleteConfirm = async () => {
     try {
       await deleteAction({
-        actionId,
+        actionId: taskId,
         onSuccess: () => {
           setShowDeleteConfirm(false);
           onDelete?.();
@@ -52,17 +52,17 @@ const DeleteScheduledActionButton: React.FC<DeleteScheduledActionButtonProps> = 
         disabled={isLoading}
       >
         <Trash2 className="h-4 w-4" />
-        Delete Scheduled Action
+        Delete Task
       </Button>
 
       <Dialog open={showDeleteConfirm} onOpenChange={setShowDeleteConfirm}>
         <DialogContent className="max-w-md">
           <DialogHeader>
-            <DialogTitle>Delete Scheduled Action</DialogTitle>
+            <DialogTitle>Delete Task</DialogTitle>
           </DialogHeader>
           <div className="py-4">
             <p className="text-sm text-muted-foreground">
-              Are you sure you want to delete &ldquo;{actionTitle}&rdquo;? This action cannot be undone.
+              Are you sure you want to delete &ldquo;{taskTitle}&rdquo;? This action cannot be undone.
             </p>
           </div>
           <DialogFooter className="gap-2">
@@ -87,4 +87,4 @@ const DeleteScheduledActionButton: React.FC<DeleteScheduledActionButtonProps> = 
   );
 };
 
-export default DeleteScheduledActionButton;
+export default DeleteTaskButton;

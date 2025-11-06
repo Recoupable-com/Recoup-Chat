@@ -1,25 +1,25 @@
 import { Tables } from "@/types/database.types";
 import TaskCard from "@/components/VercelChat/tools/tasks/TaskCard";
-import ScheduledActionSkeleton from "./ScheduledActionSkeleton";
-import ScheduledActionDetailsDialog from "./ScheduledActionDetailsDialog";
+import TaskSkeleton from "./TaskSkeleton";
+import TaskDetailsDialog from "./TaskDetailsDialog";
 
 type ScheduledAction = Tables<"scheduled_actions">;
 
-interface ScheduledActionsListProps {
-  actions: ScheduledAction[];
+interface TasksListProps {
+  tasks: ScheduledAction[];
   isLoading: boolean;
   isError: boolean;
 }
 
-const ScheduledActionsList: React.FC<ScheduledActionsListProps> = ({
-  actions,
+const TasksList: React.FC<TasksListProps> = ({
+  tasks,
   isLoading,
   isError,
 }) => {
   if (isError) {
     return (
       <div className="text-sm text-red-600">
-        Failed to load scheduled actions
+        Failed to load tasks
       </div>
     );
   }
@@ -27,14 +27,14 @@ const ScheduledActionsList: React.FC<ScheduledActionsListProps> = ({
   if (isLoading) {
     return (
       <div className="space-y-4">
-        <ScheduledActionSkeleton />
-        <ScheduledActionSkeleton />
-        <ScheduledActionSkeleton />
+        <TaskSkeleton />
+        <TaskSkeleton />
+        <TaskSkeleton />
       </div>
     );
   }
 
-  if (actions.length === 0) {
+  if (tasks.length === 0) {
     return (
       <div className="text-center py-8">
         <p className="text-gray-500">You have no scheduled tasks.</p>
@@ -47,19 +47,19 @@ const ScheduledActionsList: React.FC<ScheduledActionsListProps> = ({
       <div className="mb-8">
         <h3 className="text-lg font-semibold text-gray-900">Scheduled</h3>
       </div>
-      {actions.map((action, index) => (
-        <ScheduledActionDetailsDialog key={action.id} action={action}>
+      {tasks.map((task, index) => (
+        <TaskDetailsDialog key={task.id} task={task}>
           <div
             className={
-              index !== actions.length - 1 ? "border-b border-gray-100" : ""
+              index !== tasks.length - 1 ? "border-b border-gray-100" : ""
             }
           >
-            <TaskCard task={action} />
+            <TaskCard task={task} />
           </div>
-        </ScheduledActionDetailsDialog>
+        </TaskDetailsDialog>
       ))}
     </div>
   );
 };
 
-export default ScheduledActionsList;
+export default TasksList;

@@ -6,13 +6,13 @@ import { useUpdateScheduledAction } from "@/hooks/useUpdateScheduledAction";
 
 interface EditablePromptProps {
   prompt: string;
-  actionId: string;
+  taskId: string;
   onPromptChange?: (newPrompt: string) => void;
 }
 
 const EditablePrompt: React.FC<EditablePromptProps> = ({
   prompt,
-  actionId,
+  taskId,
   onPromptChange,
 }) => {
   const [isEditing, setIsEditing] = useState(false);
@@ -37,7 +37,7 @@ const EditablePrompt: React.FC<EditablePromptProps> = ({
 
     try {
       await updateAction({
-        actionId,
+        actionId: taskId,
         updates: { prompt: editValue.trim() },
         onSuccess: (updatedData) => {
           setIsEditing(false);
@@ -65,7 +65,7 @@ const EditablePrompt: React.FC<EditablePromptProps> = ({
           </Button>
         )}
       </div>
-      
+
       {isEditing ? (
         <div className="space-y-2 px-1">
           <Textarea

@@ -1,6 +1,6 @@
 import NavButton from "./NavButton";
 
-const ScheduledActionsNavItem = ({
+const TasksNavItem = ({
   isActive,
   onClick,
 }: {
@@ -13,9 +13,9 @@ const ScheduledActionsNavItem = ({
       label="Tasks"
       isActive={isActive}
       onClick={onClick}
-      aria-label="View scheduled actions"
+      aria-label="View tasks"
     />
   );
 };
 
-export default ScheduledActionsNavItem;
+export default TasksNavItem;

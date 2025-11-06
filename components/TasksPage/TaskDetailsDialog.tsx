@@ -87,21 +87,21 @@ const convertFrequencyAndTimeToCron = (frequency: string, time: string): string 
 
 type ScheduledAction = Tables<"scheduled_actions">;
 
-interface ScheduledActionDetailsDialogProps {
+interface TaskDetailsDialogProps {
   children: React.ReactNode;
-  action: ScheduledAction;
+  task: ScheduledAction;
   onDelete?: () => void;
 }
 
-const ScheduledActionDetailsDialog: React.FC<
-  ScheduledActionDetailsDialogProps
-> = ({ children, action, onDelete }) => {
+const TaskDetailsDialog: React.FC<
+  TaskDetailsDialogProps
+> = ({ children, task, onDelete }) => {
   const [isDialogOpen, setIsDialogOpen] = useState(false);
-  const [editTitle, setEditTitle] = useState(action.title);
-  const [editPrompt, setEditPrompt] = useState(action.prompt);
+  const [editTitle, setEditTitle] = useState(task.title);
+  const [editPrompt, setEditPrompt] = useState(task.prompt);
   
   // Parse the actual schedule from the task
-  const { frequency: initialFrequency, time: initialTime } = parseCronToFrequencyAndTime(action.schedule);
+  const { frequency: initialFrequency, time: initialTime } = parseCronToFrequencyAndTime(task.schedule);
   const [editFrequency, setEditFrequency] = useState(initialFrequency);
   const [editTime, setEditTime] = useState(initialTime);
   
@@ -113,7 +113,7 @@ const ScheduledActionDetailsDialog: React.FC<
       const newCronExpression = convertFrequencyAndTimeToCron(editFrequency, editTime);
       
       await updateAction({
-        actionId: action.id,
+        actionId: task.id,
         updates: {
           title: editTitle,
           prompt: editPrompt,
@@ -338,4 +338,4 @@ const ScheduledActionDetailsDialog: React.FC<
   );
 };
 
-export default ScheduledActionDetailsDialog;
+export default TaskDetailsDialog;

@@ -3,9 +3,9 @@
 import { useUserProvider } from "@/providers/UserProvder";
 import { useArtistProvider } from "@/providers/ArtistProvider";
 import { useScheduledActions } from "@/hooks/useScheduledActions";
-import ScheduledActionsList from "./ScheduledActionsList";
+import TasksList from "./TasksList";
 
-const ScheduledActionsPage = () => {
+const TasksPage = () => {
   const { userData } = useUserProvider();
   const { selectedArtist } = useArtistProvider();
 
@@ -17,7 +17,7 @@ const ScheduledActionsPage = () => {
     artistAccountId,
   });
 
-  const actions = data?.actions ?? [];
+  const tasks = data?.actions ?? [];
 
   return (
     <div className="max-w-full md:max-w-[calc(100vw-200px)] grow py-8 px-6 md:px-12">
@@ -29,8 +29,8 @@ const ScheduledActionsPage = () => {
         <span className="hidden sm:inline">View and manage all the tasks setup for your selected artist.</span>
       </p>
 
-      <ScheduledActionsList
-        actions={actions}
+      <TasksList
+        tasks={tasks}
         isLoading={isLoading}
         isError={isError}
       />
@@ -38,4 +38,4 @@ const ScheduledActionsPage = () => {
   );
 };
 
-export default ScheduledActionsPage;
+export default TasksPage;
