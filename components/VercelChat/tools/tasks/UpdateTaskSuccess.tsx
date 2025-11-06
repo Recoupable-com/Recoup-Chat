@@ -1,18 +1,14 @@
 import React from "react";
-import ScheduledActionCard from "./ScheduledActionCard";
+import ScheduledActionCard from "../ScheduledActionCard";
 import { Tables } from "@/types/database.types";
 import { CheckCircle2 } from "lucide-react";
-import ScheduledActionDetailsDialog from "../dialogs/ScheduledActionDetailsDialog";
+import ScheduledActionDetailsDialog from "../../dialogs/ScheduledActionDetailsDialog";
+import { UpdateTaskResult } from "@/lib/tools/tasks/updateTask";
 
-export interface UpdateScheduledActionResult {
-  actions: Tables<"scheduled_actions">[];
-  message: string;
-}
-
-const UpdateScheduledActionSuccess = ({
+const UpdateTaskSuccess = ({
   result,
 }: {
-  result: UpdateScheduledActionResult;
+  result: UpdateTaskResult;
 }) => {
   const { actions, message } = result;
 
@@ -23,7 +19,7 @@ const UpdateScheduledActionSuccess = ({
         <div className="flex items-center space-x-2">
           <CheckCircle2 className="h-5 w-5 text-green-500" />
           <h3 className="text-sm font-semibold text-gray-900">
-            Scheduled Actions
+            Tasks
           </h3>
         </div>
         <p className="text-xs text-gray-600 mt-1">{message}</p>
@@ -43,4 +39,5 @@ const UpdateScheduledActionSuccess = ({
   );
 };
 
-export default UpdateScheduledActionSuccess;
+export default UpdateTaskSuccess;
+

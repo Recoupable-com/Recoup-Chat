@@ -32,7 +32,10 @@ import { getDisplayToolName } from "@/lib/tools/get-tools-name";
 import GenericSuccess from "./tools/GenericSuccess";
 import getToolInfo from "@/lib/utils/getToolsInfo";
 import { BrowserToolSkeleton } from "./BrowserToolSkeleton";
-import { BrowserToolResult, type BrowserToolResultType } from "./tools/browser/BrowserToolResult";
+import {
+  BrowserToolResult,
+  type BrowserToolResultType,
+} from "./tools/browser/BrowserToolResult";
 import { isSearchProgressUpdate } from "@/lib/search/searchProgressUtils";
 import { GetSpotifyPlayButtonClickedResult } from "@/lib/supabase/getSpotifyPlayButtonClicked";
 import GetVideoGameCampaignPlaysResultComponent from "./tools/GetVideoGameCampaignPlaysResult";
@@ -73,21 +76,21 @@ import { SpotifyArtistAlbumsResultUIType } from "@/types/spotify";
 import GetSpotifyArtistAlbumsSkeleton from "./tools/GetSpotifyArtistAlbumsSkeleton";
 import SpotifyArtistTopTracksResult from "./tools/SpotifyArtistTopTracksResult";
 import SpotifyArtistTopTracksSkeleton from "./tools/SpotifyArtistTopTracksSkeleton";
-import GetScheduledActionsSuccess from "./tools/GetScheduledActionsSuccess";
-import GetScheduledActionsSkeleton from "./tools/GetScheduledActionsSkeleton";
-import { GetScheduledActionsResult } from "@/lib/tools/scheduled_actions/getScheduledActions";
-import CreateScheduledActionsSuccess from "./tools/CreateScheduledActionsSuccess";
-import CreateScheduledActionsSkeleton from "./tools/CreateScheduledActionsSkeleton";
-import { CreateScheduledActionsResult } from "@/lib/tools/scheduled_actions/createScheduledActions";
+import GetTasksSuccess from "./tools/tasks/GetTasksSuccess";
+import GetTasksSkeleton from "./tools/tasks/GetTasksSkeleton";
+import { GetTasksResult } from "@/lib/tools/tasks/getTasks";
+import CreateTasksSuccess from "./tools/tasks/CreateTasksSuccess";
+import CreateTasksSkeleton from "./tools/tasks/CreateTasksSkeleton";
+import { CreateTasksResult } from "@/lib/tools/tasks/createTasks";
 import GetSpotifyAlbumWithTracksResult from "./tools/GetSpotifyAlbumWithTracksResult";
 import GetSpotifyAlbumWithTracksSkeleton from "./tools/GetSpotifyAlbumWithTracksSkeleton";
 import { SpotifyAlbum } from "@/lib/tools/getSpotifyAlbum";
-import DeleteScheduledActionsSuccess from "./tools/DeleteScheduledActionsSuccess";
-import DeleteScheduledActionsSkeleton from "./tools/DeleteScheduledActionsSkeleton";
-import { DeleteScheduledActionsResult } from "@/lib/tools/scheduled_actions/deleteScheduledActions";
-import UpdateScheduledActionSuccess from "./tools/UpdateScheduledActionSuccess";
-import { UpdateScheduledActionResult } from "./tools/UpdateScheduledActionSuccess";
-import UpdateScheduledActionSkeleton from "./tools/UpdateScheduledActionSkeleton";
+import DeleteTasksSuccess from "./tools/tasks/DeleteTasksSuccess";
+import DeleteTasksSkeleton from "./tools/tasks/DeleteTasksSkeleton";
+import { DeleteTaskResult } from "@/lib/tools/tasks/deleteTask";
+import UpdateTaskSuccess from "./tools/tasks/UpdateTaskSuccess";
+import UpdateTaskSkeleton from "./tools/tasks/UpdateTaskSkeleton";
+import { UpdateTaskResult } from "@/lib/tools/tasks/updateTask";
 import { Sora2VideoSkeleton } from "./tools/sora2/Sora2VideoSkeleton";
 import { Sora2VideoResult } from "./tools/sora2/Sora2VideoResult";
 import { RetrieveVideoContentResult } from "@/lib/tools/sora2/retrieveVideoContent";
@@ -95,7 +98,10 @@ import CatalogSongsSkeleton from "./tools/catalog/CatalogSongsSkeleton";
 import CatalogSongsResult, {
   CatalogSongsResult as CatalogSongsResultType,
 } from "./tools/catalog/CatalogSongsResult";
-import { UpdateFileResult, UpdateFileResultType } from "./tools/files/UpdateFileResult";
+import {
+  UpdateFileResult,
+  UpdateFileResultType,
+} from "./tools/files/UpdateFileResult";
 
 export function getToolCallComponent(part: ToolUIPart) {
   const { toolCallId } = part as ToolUIPart;
@@ -205,10 +211,10 @@ export function getToolCallComponent(part: ToolUIPart) {
         <SpotifyArtistTopTracksSkeleton />
       </div>
     );
-  } else if (toolName === "get_scheduled_actions") {
+  } else if (toolName === "get_tasks") {
     return (
       <div key={toolCallId}>
-        <GetScheduledActionsSkeleton />
+        <GetTasksSkeleton />
       </div>
     );
   } else if (toolName === "get_spotify_album") {
@@ -217,22 +223,22 @@ export function getToolCallComponent(part: ToolUIPart) {
         <GetSpotifyAlbumWithTracksSkeleton />
       </div>
     );
-  } else if (toolName === "create_scheduled_actions") {
+  } else if (toolName === "create_tasks") {
     return (
       <div key={toolCallId}>
-        <CreateScheduledActionsSkeleton />
+        <CreateTasksSkeleton />
       </div>
     );
-  } else if (toolName === "delete_scheduled_actions") {
+  } else if (toolName === "delete_tasks") {
     return (
       <div key={toolCallId}>
-        <DeleteScheduledActionsSkeleton />
+        <DeleteTasksSkeleton />
       </div>
     );
-  } else if (toolName === "update_scheduled_action") {
+  } else if (toolName === "update_task") {
     return (
       <div key={toolCallId}>
-        <UpdateScheduledActionSkeleton />
+        <UpdateTaskSkeleton />
       </div>
     );
   } else if (toolName === "retrieve_sora_2_video_content") {
@@ -251,7 +257,7 @@ export function getToolCallComponent(part: ToolUIPart) {
       args?: { url?: string; startUrl?: string };
     };
     const url = toolPart.args?.url || toolPart.args?.startUrl;
-    
+
     return (
       <div key={toolCallId}>
         <BrowserToolSkeleton toolName={toolName} url={url} />
@@ -293,7 +299,7 @@ export function getToolResultComponent(part: ToolUIPart) {
       </div>
     );
   } else if (
-    toolName === "browser_extract" || 
+    toolName === "browser_extract" ||
     toolName === "browser_act" ||
     toolName === "browser_observe" ||
     toolName === "browser_agent"
@@ -468,20 +474,16 @@ export function getToolResultComponent(part: ToolUIPart) {
         />
       </div>
     );
-  } else if (toolName === "get_scheduled_actions") {
+  } else if (toolName === "get_tasks") {
     return (
       <div key={toolCallId}>
-        <GetScheduledActionsSuccess
-          result={result as GetScheduledActionsResult}
-        />
+        <GetTasksSuccess result={result as GetTasksResult} />
       </div>
     );
-  } else if (toolName === "create_scheduled_actions") {
+  } else if (toolName === "create_tasks") {
     return (
       <div key={toolCallId}>
-        <CreateScheduledActionsSuccess
-          result={result as CreateScheduledActionsResult}
-        />
+        <CreateTasksSuccess result={result as CreateTasksResult} />
       </div>
     );
   } else if (toolName === "get_spotify_album") {
@@ -490,20 +492,16 @@ export function getToolResultComponent(part: ToolUIPart) {
         <GetSpotifyAlbumWithTracksResult result={result as SpotifyAlbum} />
       </div>
     );
-  } else if (toolName === "delete_scheduled_actions") {
+  } else if (toolName === "delete_tasks") {
     return (
       <div key={toolCallId}>
-        <DeleteScheduledActionsSuccess
-          result={result as DeleteScheduledActionsResult}
-        />
+        <DeleteTasksSuccess result={result as DeleteTaskResult} />
       </div>
     );
-  } else if (toolName === "update_scheduled_action") {
+  } else if (toolName === "update_task") {
     return (
       <div key={toolCallId}>
-        <UpdateScheduledActionSuccess
-          result={result as UpdateScheduledActionResult}
-        />
+        <UpdateTaskSuccess result={result as UpdateTaskResult} />
       </div>
     );
   } else if (toolName === "retrieve_sora_2_video_content") {
