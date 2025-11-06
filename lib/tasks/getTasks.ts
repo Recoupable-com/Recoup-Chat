@@ -1,4 +1,5 @@
 import { Tables } from "@/types/database.types";
+import { TASKS_API_URL } from "@/lib/consts";
 
 type ScheduledAction = Tables<"scheduled_actions">;
 
@@ -22,7 +23,7 @@ export async function getTasks(
   params?: GetTasksParams
 ): Promise<ScheduledAction[]> {
   try {
-    const url = new URL("https://api.recoupable.com/api/tasks");
+    const url = new URL(TASKS_API_URL);
 
     if (params?.id) {
       url.searchParams.append("id", params.id);
