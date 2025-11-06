@@ -20,6 +20,7 @@ export const PAYMENT_CREDITS_POINT = 1;
 export const CHAT_POINT_SYSTEM_ID = 4172;
 export const SCORE_POINT_SYSTEM_ID = 4186;
 export const AGENT_API = "https://api.recoupable.com";
+export const TASKS_API_URL = `${AGENT_API}/api/tasks`;
 export const ONE_DAY_MILLISECONDS = 24 * 60 * 60 * 1000;
 export const SOCIAL_DEFAULT_PLATFORMS = [
   "Apple",

@@ -1,6 +1,6 @@
 import { z } from "zod";
 import { tool } from "ai";
-import { selectScheduledActions } from "@/lib/supabase/scheduled_actions/selectScheduledActions";
+import { getTasks } from "@/lib/tasks/getTasks";
 import { Tables } from "@/types/database.types";
 
 type ScheduledAction = Tables<"scheduled_actions">;
@@ -11,16 +11,15 @@ export interface GetTasksResult {
   error?: string;
 }
 
-const getTasks = tool({
+const getTasksTool = tool({
   description: `
-  Retrieve tasks from the system. Can filter by account_id, artist_account_ids, and enabled status.
+  Retrieve tasks from the system. Can filter by account_id, artist_account_id, and enabled status.
   All filter parameters are optional:
   - account_id: Filter tasks by the user who created them
-  - artist_account_ids: Filter tasks by an array of artist IDs they are for
+  - artist_account_id: Filter tasks by the artist account ID they are for
   - enabled: Filter tasks by their enabled status (true/false)
   
   If no filters are provided, returns all tasks the user has access to.
-  If artist_account_ids is provided, returns tasks for any of the specified artists.
   `,
   inputSchema: z.object({
     account_id: z
@@ -29,11 +28,11 @@ const getTasks = tool({
       .describe(
         "Optional: Filter tasks by the account ID of the user who created them. Get this from the system prompt. Do not ask for this."
       ),
-    artist_account_ids: z
-      .array(z.string())
+    artist_account_id: z
+      .string()
       .optional()
       .describe(
-        "Optional: Filter tasks by an array of artist account IDs. If not provided, get the active artist id from the system prompt."
+        "Optional: Filter tasks by the artist account ID. If not provided, get the active artist id from the system prompt."
       ),
     enabled: z
       .boolean()
@@ -42,23 +41,24 @@ const getTasks = tool({
   }),
   execute: async ({
     account_id,
-    artist_account_ids,
+    artist_account_id,
     enabled,
   }): Promise<GetTasksResult> => {
     try {
-      const actions = await selectScheduledActions({
+      const allTasks = await getTasks({
         account_id,
-        artist_account_ids,
-        enabled,
+        artist_account_id,
       });
 
-      const artistCount = artist_account_ids?.length ?? 0;
-      const artistMessage =
-        artistCount > 0 ? ` across ${artistCount} artist(s)` : "";
+      // Filter by enabled status if provided (client-side filter)
+      let filteredTasks = allTasks;
+      if (enabled !== undefined) {
+        filteredTasks = allTasks.filter((task) => task.enabled === enabled);
+      }
 
       return {
-        actions,
-        message: `Successfully retrieved ${actions.length} task(s)${artistMessage}`,
+        actions: filteredTasks,
+        message: `Successfully retrieved ${filteredTasks.length} task(s)`,
       };
     } catch (error) {
       const errorMessage =
@@ -74,5 +74,4 @@ const getTasks = tool({
   },
 });
 
-export default getTasks;
-
+export default getTasksTool;
