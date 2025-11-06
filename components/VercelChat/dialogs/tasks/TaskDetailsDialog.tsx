@@ -1,27 +1,41 @@
+"use client";
+
 import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog";
 import { Tables } from "@/types/database.types";
 import { cn } from "@/lib/utils";
+import { useState } from "react";
+import { parseCronToFrequencyAndTime } from "@/lib/tasks/parseCronToFrequencyAndTime";
 import TaskDetailsDialogHeader from "./TaskDetailsDialogHeader";
-import TaskPromptSection from "./TaskPromptSection";
-import TaskLastRunSection from "./TaskLastRunSection";
-import TaskScheduleSection from "./TaskScheduleSection";
+import TaskDetailsDialogContent from "./TaskDetailsDialogContent";
+import TaskDetailsDialogActionButtons from "./TaskDetailsDialogActionButtons";
 
 interface TaskDetailsDialogProps {
   children: React.ReactNode;
   task: Tables<"scheduled_actions">;
   isDeleted?: boolean;
+  onDelete?: () => void;
 }
 
 const TaskDetailsDialog: React.FC<TaskDetailsDialogProps> = ({
   children,
   task,
-  isDeleted,
+  isDeleted = false,
+  onDelete,
 }) => {
+  const [isDialogOpen, setIsDialogOpen] = useState(false);
+  const [editTitle, setEditTitle] = useState(task.title);
+  const [editPrompt, setEditPrompt] = useState(task.prompt);
+  const { frequency: initialFrequency, time: initialTime } =
+    parseCronToFrequencyAndTime(task.schedule);
+  const [editFrequency, setEditFrequency] = useState(initialFrequency);
+  const [editTime, setEditTime] = useState(initialTime);
+
   const isActive = Boolean(task.enabled && !isDeleted);
   const isPaused = Boolean(!task.enabled && !isDeleted);
+  const canEdit = !isDeleted;
 
   return (
-    <Dialog>
+    <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
       <DialogTrigger asChild>
         <div className="cursor-pointer">{children}</div>
       </DialogTrigger>
@@ -37,20 +51,37 @@ const TaskDetailsDialog: React.FC<TaskDetailsDialogProps> = ({
           isDeleted={isDeleted}
         />
 
-        <div className={cn("flex flex-col gap-3 mt-1 overflow-y-auto")}>
-          {/* Prompt Section */}
-          <TaskPromptSection prompt={task.prompt} isDeleted={isDeleted} />
+        <TaskDetailsDialogContent
+          task={task}
+          editTitle={editTitle}
+          editPrompt={editPrompt}
+          editFrequency={editFrequency}
+          editTime={editTime}
+          onTitleChange={setEditTitle}
+          onPromptChange={setEditPrompt}
+          onFrequencyChange={setEditFrequency}
+          onTimeChange={setEditTime}
+          canEdit={canEdit}
+          isDeleted={isDeleted}
+        />
 
-          {/* Schedule Information */}
-          <TaskScheduleSection
-            schedule={task.schedule}
-            nextRun={task.next_run || ""}
-            isDeleted={isDeleted}
+        {/* Action Buttons - Only show if editable */}
+        {canEdit && (
+          <TaskDetailsDialogActionButtons
+            taskId={task.id}
+            editTitle={editTitle}
+            editPrompt={editPrompt}
+            editFrequency={editFrequency}
+            editTime={editTime}
+            onSaveSuccess={() => setIsDialogOpen(false)}
+            onDeleteSuccess={() => {
+              setIsDialogOpen(false);
+              onDelete?.();
+            }}
+            isEnabled={!!task.enabled}
+            canEdit={canEdit}
           />
-
-          {/* Last Run Information */}
-          <TaskLastRunSection lastRun={task.last_run} isDeleted={isDeleted} />
-        </div>
+        )}
       </DialogContent>
     </Dialog>
   );
