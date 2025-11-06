@@ -227,7 +227,7 @@ export function getToolCallComponent(part: ToolUIPart) {
         <TasksSkeleton />
       </div>
     );
-  } else if (toolName === "delete_tasks") {
+  } else if (toolName === "delete_task") {
     return (
       <div key={toolCallId}>
         <DeleteTasksSkeleton />
@@ -490,7 +490,7 @@ export function getToolResultComponent(part: ToolUIPart) {
         <GetSpotifyAlbumWithTracksResult result={result as SpotifyAlbum} />
       </div>
     );
-  } else if (toolName === "delete_tasks") {
+  } else if (toolName === "delete_task") {
     return (
       <div key={toolCallId}>
         <DeleteTasksSuccess result={result as DeleteTaskResult} />

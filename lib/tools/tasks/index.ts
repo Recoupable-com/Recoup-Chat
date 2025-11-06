@@ -7,7 +7,7 @@ const tasksTools = {
   create_task: createTaskTool,
   get_tasks: getTasksTool,
   update_task: updateTaskTool,
-  delete_tasks: deleteTaskTool,
+  delete_task: deleteTaskTool,
 };
 
 export default tasksTools;
