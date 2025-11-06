@@ -6,7 +6,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { generateTimeOptions } from "@/lib/tasks/generateTimeOptions";
+import { TIME_OPTIONS } from "@/lib/tasks/generateTimeOptions";
 
 interface TimeSelectProps {
   value: string;
@@ -15,7 +15,6 @@ interface TimeSelectProps {
 }
 
 const TimeSelect = ({ value, onValueChange, disabled }: TimeSelectProps) => {
-  const options = generateTimeOptions();
   let previousPeriodLabel: string | null = null;
 
   return (
@@ -24,7 +23,7 @@ const TimeSelect = ({ value, onValueChange, disabled }: TimeSelectProps) => {
         <SelectValue />
       </SelectTrigger>
       <SelectContent className="max-h-[300px] p-1">
-        {options.map((option, index) => {
+        {TIME_OPTIONS.map((option, index) => {
           const showHeader = option.periodLabel !== previousPeriodLabel;
           previousPeriodLabel = option.periodLabel;
 

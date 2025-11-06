@@ -36,3 +36,5 @@ export const generateTimeOptions = (): TimeOption[] => {
 
   return options;
 };
+
+export const TIME_OPTIONS = generateTimeOptions();
