@@ -48,7 +48,7 @@ const DeleteTaskSuccess: React.FC<DeleteTaskSuccessProps> = ({ result }) => {
         {!task ? (
           <div className="text-center py-6">
             <Trash2 className="h-8 w-8 text-red-300 mx-auto mb-2" />
-            <p className="text-sm text-red-600">Task was deleted</p>
+            <p className="text-sm text-red-600">No tasks were deleted</p>
           </div>
         ) : (
           <div className="space-y-3">
