@@ -1,7 +1,7 @@
 import { CalendarDays, Clock } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { formatScheduledActionDate } from "@/lib/utils/formatScheduledActionDate";
-import { parseCronToHuman } from "@/lib/utils/cronUtils";
+import { parseCronToHuman } from "@/lib/tasks/parseCronToHuman";
 
 interface TaskScheduleSectionProps {
   schedule: string;

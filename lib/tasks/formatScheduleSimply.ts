@@ -1,4 +1,4 @@
-import { parseCronToHuman } from "@/lib/utils/cronUtils";
+import { parseCronToHuman } from "./parseCronToHuman";
 import { formatTime } from "./formatTime";
 import { getDayName } from "./getDayName";
 import { isToday } from "./isToday";
