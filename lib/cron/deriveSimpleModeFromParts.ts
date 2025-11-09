@@ -15,9 +15,23 @@ export interface SimpleModeSettings {
 }
 
 export const deriveSimpleModeFromParts = (
-  parts: string[],
+  parts: string[]
 ): SimpleModeSettings | null => {
   const [minute, hour, dayOfMonth, , dayOfWeek] = parts;
+
+  if (
+    minute === "0" &&
+    hour === "*" &&
+    dayOfMonth === "*" &&
+    dayOfWeek === "*"
+  ) {
+    return {
+      frequency: "hourly",
+      time: "00:00",
+      dayOfWeek: "1",
+      dayOfMonth: "1",
+    };
+  }
 
   const hourNum = Number.parseInt(hour, 10);
   const minuteNum = Number.parseInt(minute, 10);
@@ -34,20 +48,6 @@ export const deriveSimpleModeFromParts = (
   }
 
   const time = `${padTimePart(hourNum)}:${padTimePart(minuteNum)}`;
-
-  if (
-    minute === "0" &&
-    hour === "*" &&
-    dayOfMonth === "*" &&
-    dayOfWeek === "*"
-  ) {
-    return {
-      frequency: "hourly",
-      time,
-      dayOfWeek: "1",
-      dayOfMonth: "1",
-    };
-  }
 
   if (dayOfMonth === "*" && dayOfWeek === "*") {
     return {
@@ -89,4 +89,3 @@ export const deriveSimpleModeFromParts = (
 };
 
 export default deriveSimpleModeFromParts;
-
