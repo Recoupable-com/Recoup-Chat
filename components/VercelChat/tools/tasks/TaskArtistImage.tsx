@@ -10,22 +10,18 @@ const TaskArtistImage: React.FC<TaskArtistImageProps> = ({
 }) => {
   const { imageUrl, artistName } = useArtistImage(artistAccountId);
 
-  if (!imageUrl) {
-    return (
-      <div className="flex h-10 w-10 flex-shrink-0 items-center justify-center overflow-hidden rounded-full bg-gray-100">
-        <Clock className="h-5 w-5 text-gray-400" />
-      </div>
-    );
-  }
-
   return (
     <div className="flex h-10 w-10 flex-shrink-0 items-center justify-center overflow-hidden rounded-full bg-gray-100">
-      {/* eslint-disable-next-line @next/next/no-img-element */}
-      <img
-        src={imageUrl}
-        alt={artistName ?? "Artist avatar"}
-        className="h-full w-full object-cover"
-      />
+      {imageUrl ? (
+        // eslint-disable-next-line @next/next/no-img-element
+        <img
+          src={imageUrl}
+          alt={artistName ?? "Artist avatar"}
+          className="h-full w-full object-cover"
+        />
+      ) : (
+        <Clock className="h-5 w-5 text-gray-400" />
+      )}
     </div>
   );
 };
