@@ -2,6 +2,8 @@ import { Tables } from "@/types/database.types";
 import TaskCard from "@/components/VercelChat/tools/tasks/TaskCard";
 import TaskSkeleton from "./TaskSkeleton";
 import TaskDetailsDialog from "@/components/VercelChat/dialogs/tasks/TaskDetailsDialog";
+import { useArtistProvider } from "@/providers/ArtistProvider";
+import { useUserProvider } from "@/providers/UserProvder";
 
 type ScheduledAction = Tables<"scheduled_actions">;
 
@@ -12,11 +14,15 @@ interface TasksListProps {
 }
 
 const TasksList: React.FC<TasksListProps> = ({ tasks, isLoading, isError }) => {
+  const { userData } = useUserProvider();
+  const { selectedArtist } = useArtistProvider();
+  const isArtistSelected = !!selectedArtist;
+
   if (isError) {
     return <div className="text-sm text-red-600">Failed to load tasks</div>;
   }
 
-  if (isLoading) {
+  if (isLoading || !isArtistSelected || !userData) {
     return (
       <div className="space-y-4">
         <TaskSkeleton />
@@ -29,7 +35,9 @@ const TasksList: React.FC<TasksListProps> = ({ tasks, isLoading, isError }) => {
   if (tasks.length === 0) {
     return (
       <div className="text-center py-8">
-        <p className="text-gray-500">You have no scheduled tasks.</p>
+        <p className="text-gray-500">
+          You have no scheduled tasks for this artist.
+        </p>
       </div>
     );
   }
