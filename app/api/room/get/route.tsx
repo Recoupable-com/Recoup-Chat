@@ -7,9 +7,27 @@ export async function GET(req: NextRequest) {
   try {
     const { data: rooms, error } = await supabase
       .from("rooms")
-      .select("*, memories(*), room_reports(report_id)")
+      .select(
+        `
+          id,
+          topic,
+          account_id,
+          artist_id,
+          updated_at,
+          memories (
+            id,
+            room_id,
+            created_at
+          ),
+          room_reports (
+            report_id
+          )
+        `
+      )
       .eq("account_id", account_id)
-      .order('updated_at', { ascending: false });
+      .order("updated_at", { ascending: false })
+      .order("created_at", { foreignTable: "memories", ascending: false })
+      .limit(1, { foreignTable: "memories" });
 
     return Response.json({ rooms: rooms || [], error }, { status: 200 });
   } catch (error) {
