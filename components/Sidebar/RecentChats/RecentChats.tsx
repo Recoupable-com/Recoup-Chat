@@ -3,8 +3,12 @@ import RenameModal from "../Modals/RenameModal";
 import DeleteConfirmationModal from "../Modals/DeleteConfirmationModal";
 import { useRecentChats } from "./useRecentChats";
 import RecentChatList from "./RecentChatList";
+import { useUserProvider } from "@/providers/UserProvder";
+import { useArtistProvider } from "@/providers/ArtistProvider";
 
 const RecentChats = ({ toggleModal }: { toggleModal: () => void }) => {
+  const { userData } = useUserProvider();
+  const { selectedArtist } = useArtistProvider();
   const {
     conversations,
     isLoading,
@@ -30,6 +34,8 @@ const RecentChats = ({ toggleModal }: { toggleModal: () => void }) => {
     handleApiAction,
     isShiftPressed,
   } = useRecentChats({ toggleModal });
+
+  const showSkeleton = isLoading || !userData || !selectedArtist;
 
   return (
     <div className="w-full flex-grow min-h-0 flex flex-col">
@@ -61,7 +67,7 @@ const RecentChats = ({ toggleModal }: { toggleModal: () => void }) => {
         </p>
       )}
       <div className="overflow-y-auto space-y-1 flex-grow">
-        {isLoading ? (
+        {showSkeleton ? (
           <RecentChatSkeleton />
         ) : (
           <>
