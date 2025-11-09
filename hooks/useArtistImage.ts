@@ -9,7 +9,7 @@ interface UseArtistImageResult {
 export const useArtistImage = (
   artistAccountId?: string | null
 ): UseArtistImageResult => {
-  const { artists, selectedArtist } = useArtistProvider();
+  const { artists } = useArtistProvider();
 
   const artist = useMemo(() => {
     if (!artistAccountId) {
@@ -23,12 +23,8 @@ export const useArtistImage = (
       return match;
     }
 
-    if (selectedArtist?.account_id === artistAccountId) {
-      return selectedArtist;
-    }
-
     return null;
-  }, [artistAccountId, artists, selectedArtist]);
+  }, [artistAccountId, artists]);
 
   return {
     imageUrl: artist?.image ?? null,
