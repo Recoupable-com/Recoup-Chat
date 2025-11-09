@@ -22,7 +22,6 @@ export async function GET(req: NextRequest) {
       )
       .eq("account_id", account_id)
       .order("updated_at", { ascending: false })
-      .order("created_at", { foreignTable: "memories", ascending: false })
       .limit(1, { foreignTable: "memories" });
 
     return Response.json({ rooms: rooms || [], error }, { status: 200 });
