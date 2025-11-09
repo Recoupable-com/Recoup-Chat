@@ -6,9 +6,7 @@ import { useMobileDetection } from "@/hooks/useMobileDetection";
 import { useOutsideClick } from "@/hooks/useOutsideClick";
 import type { Conversation } from "@/types/Chat";
 import type { ArtistAgent } from "@/lib/supabase/getArtistAgents";
-
-export const getChatRoomId = (chatRoom: Conversation | ArtistAgent): string =>
-  "id" in chatRoom ? chatRoom.id : chatRoom.agentId;
+import { getChatRoomId } from "@/lib/chat/getChatRoomId";
 
 interface UseRecentChatsParams {
   toggleModal: () => void;
@@ -202,6 +200,5 @@ export const useRecentChats = ({ toggleModal }: UseRecentChatsParams) => {
     clearSelection,
     handleApiAction,
     isShiftPressed,
-    getChatRoomId,
   };
 };

@@ -3,7 +3,7 @@ import type { Conversation } from "@/types/Chat";
 import type { ArtistAgent } from "@/lib/supabase/getArtistAgents";
 import ChatItem from "./ChatItem";
 import type { MutableRefObject } from "react";
-import { getChatRoomId } from "./useRecentChats";
+import { getChatRoomId } from "@/lib/chat/getChatRoomId";
 
 interface RecentChatListProps {
   conversations: Array<Conversation | ArtistAgent>;
