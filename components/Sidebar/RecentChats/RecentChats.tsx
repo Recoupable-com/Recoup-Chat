@@ -3,6 +3,8 @@ import RenameModal from "../Modals/RenameModal";
 import DeleteConfirmationModal from "../Modals/DeleteConfirmationModal";
 import { useRecentChats } from "./useRecentChats";
 import RecentChatList from "./RecentChatList";
+import SelectionModeHeader from "./SelectionModeHeader";
+import NoRecentChats from "./NoRecentChats";
 import { useUserProvider } from "@/providers/UserProvder";
 import { useArtistProvider } from "@/providers/ArtistProvider";
 
@@ -42,25 +44,11 @@ const RecentChats = ({ toggleModal }: { toggleModal: () => void }) => {
       <div className="h-[1px] bg-grey-light w-full mt-1 mb-2 md:mt-2 md:mb-3 shrink-0" />
 
       {isSelectionMode ? (
-        <div className="flex items-center justify-between px-2 mb-1 md:mb-2 shrink-0">
-          <p className="text-sm font-inter text-grey-dark">
-            {selectedChatIds.size} selected
-          </p>
-          <div className="flex gap-2">
-            <button
-              onClick={clearSelection}
-              className="text-xs font-inter text-grey-dark hover:text-black transition-colors"
-            >
-              Cancel
-            </button>
-            <button
-              onClick={handleBulkDelete}
-              className="text-xs font-inter text-red-500 hover:text-red-700 transition-colors font-medium"
-            >
-              Delete
-            </button>
-          </div>
-        </div>
+        <SelectionModeHeader
+          selectedCount={selectedChatIds.size}
+          onCancel={clearSelection}
+          onDelete={handleBulkDelete}
+        />
       ) : (
         <p className="text-sm mb-1 md:mb-2 font-inter text-grey-dark px-2 shrink-0">
           Recent Chats
@@ -90,14 +78,7 @@ const RecentChats = ({ toggleModal }: { toggleModal: () => void }) => {
                 openModal={openModal}
               />
             ) : (
-              <div className="flex flex-col items-center justify-center py-8 px-4 text-center">
-                <p className="text-sm font-inter text-grey-dark mb-1">
-                  No recent chats
-                </p>
-                <p className="text-xs font-inter text-grey-dark-1">
-                  Start a conversation to see it here
-                </p>
-              </div>
+              <NoRecentChats />
             )}
           </>
         )}
