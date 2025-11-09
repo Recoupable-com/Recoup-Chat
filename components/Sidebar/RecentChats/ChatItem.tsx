@@ -1,8 +1,8 @@
+import { useState, type RefObject, type MouseEvent } from "react";
 import { MoreHorizontal, Pencil, Trash2, Check } from "lucide-react";
 import type { Conversation } from "@/types/Chat";
 import type { ArtistAgent } from "@/lib/supabase/getArtistAgents";
 import capitalize from "@/lib/capitalize";
-import { useState, type RefObject } from "react";
 import { cn } from "@/lib/utils";
 import useCreateChat from "@/hooks/useCreateChat";
 
@@ -26,13 +26,14 @@ type ChatItemProps = {
   onDeleteClick: () => void;
 };
 
-// Helper functions consolidated into one
 const getChatDisplayInfo = (item: Conversation | ArtistAgent) => {
-  const isChatRoom = 'id' in item;
+  const isChatRoom = "id" in item;
   const displayName = isChatRoom ? item.topic : capitalize(item.type);
-  return { 
-    displayName: displayName || `${capitalize(isChatRoom ? "Chat" : item.type)} Analysis`, 
-    isChatRoom 
+
+  return {
+    displayName:
+      displayName || `${capitalize(isChatRoom ? "Chat" : item.type)} Analysis`,
+    isChatRoom,
   };
 };
 
@@ -53,70 +54,79 @@ const ChatItem = ({
   onSelect,
   onMenuToggle,
   onRenameClick,
-  onDeleteClick
+  onDeleteClick,
 }: ChatItemProps) => {
-  const [displayName, setDisplayName] = useState(getChatDisplayInfo(chatRoom).displayName);
-  
+  const [displayName, setDisplayName] = useState(
+    getChatDisplayInfo(chatRoom).displayName
+  );
+
   const showOptions = isMobile || isHovered || isActive;
-  const isOptimisticChatItem = (
-    'id' in chatRoom &&
+  const isOptimisticChatItem =
+    "id" in chatRoom &&
     Array.isArray((chatRoom as Conversation).memories) &&
-    (chatRoom as Conversation).memories.some((m) => {
-      const content = m?.content as unknown;
+    (chatRoom as Conversation).memories.some((memory) => {
+      const content = memory?.content as unknown;
+      if (!content || typeof content !== "object") {
+        return false;
+      }
+
       return (
-        !!content &&
-        typeof content === 'object' &&
-        'optimistic' in (content as Record<string, unknown>) &&
+        "optimistic" in (content as Record<string, unknown>) &&
         (content as { optimistic?: unknown }).optimistic === true
       );
-    })
-  );
+    });
+
   useCreateChat({
     isOptimisticChatItem,
     chatRoom,
     setDisplayName,
   });
 
-  // Show checkbox only when shift is held AND (hovering OR already in selection mode)
   const showCheckbox = isShiftPressed && (isHovered || isSelectionMode);
 
-  const handleClick = (e: React.MouseEvent) => {
-    if (e.shiftKey || isSelectionMode) {
-      onSelect(e.shiftKey);
-    } else {
-      onChatClick();
+  const handleClick = (event: MouseEvent) => {
+    if (event.shiftKey || isSelectionMode) {
+      onSelect(event.shiftKey);
+      return;
     }
+    onChatClick();
   };
 
+  const displayText =
+    typeof displayName === "string" && displayName.trim().length > 0
+      ? displayName
+      : "Untitled Chat";
+
   return (
-    <div 
+    <div
       className={`flex gap-2 items-center w-full py-1.5 px-2 rounded-xl transition-all duration-150 relative ${
-        isSelected 
-          ? 'bg-primary/20 border border-primary/30' 
-          : isActive 
-            ? 'bg-primary/10' 
-            : 'hover:bg-gray-100'
+        isSelected
+          ? "bg-primary/20 border border-primary/30"
+          : isActive
+            ? "bg-primary/10"
+            : "hover:bg-gray-100"
       }`}
       onMouseEnter={onMouseEnter}
       onMouseLeave={onMouseLeave}
     >
-      {/* Selection checkbox */}
       <button
         type="button"
-        onClick={(e) => {
-          e.stopPropagation();
-          onSelect(e.shiftKey);
+        onClick={(event) => {
+          event.stopPropagation();
+          onSelect(event.shiftKey);
         }}
         className={`shrink-0 w-4 h-4 rounded border-2 transition-all duration-150 flex items-center justify-center ${
-          showCheckbox ? 'opacity-100' : 'opacity-0'
+          showCheckbox ? "opacity-100" : "opacity-0"
         } ${
-          isSelected 
-            ? 'bg-primary border-primary' 
-            : 'border-gray-300 hover:border-primary/50'
+          isSelected
+            ? "bg-primary border-primary"
+            : "border-gray-300 hover:border-primary/50"
         }`}
         aria-label="Select chat"
       >
-        {isSelected && <Check size={12} className="text-white" strokeWidth={3} />}
+        {isSelected && (
+          <Check size={12} className="text-white" strokeWidth={3} />
+        )}
       </button>
 
       <button
@@ -124,22 +134,24 @@ const ChatItem = ({
         type="button"
         onClick={handleClick}
       >
-        <p className={`text-sm truncate ${isActive ? 'font-medium' : ''}`}>
-          {displayName}
+        <p className={`text-sm truncate ${isActive ? "font-medium" : ""}`}>
+          {displayText}
         </p>
       </button>
-      
-      {/* Three-dot menu - hide in selection mode */}
+
       {!isSelectionMode && (
         <button
           ref={setButtonRef}
-          className={cn(`shrink-0 p-1 text-gray-500 hover:text-gray-700 transition-colors duration-150 ${
-            showOptions ? 'opacity-100' : 'opacity-0'
-          }`, {
-            'opacity-50 pointer-events-none': isOptimisticChatItem
-          })}
-          onClick={(e) => {
-            e.stopPropagation();
+          className={cn(
+            `shrink-0 p-1 text-gray-500 hover:text-gray-700 transition-colors duration-150 ${
+              showOptions ? "opacity-100" : "opacity-0"
+            }`,
+            {
+              "opacity-50 pointer-events-none": isOptimisticChatItem,
+            }
+          )}
+          onClick={(event) => {
+            event.stopPropagation();
             onMenuToggle();
           }}
           type="button"
@@ -148,13 +160,17 @@ const ChatItem = ({
           <MoreHorizontal size={16} />
         </button>
       )}
-      
+
       {isMenuOpen && (
-        <div 
+        <div
           ref={menuRef}
           className="absolute right-2 top-full mt-1 bg-white shadow-lg rounded-md py-1 z-10 w-32 border border-gray-100"
-          onClick={(e) => e.stopPropagation()}
-          onKeyDown={(e) => e.key === 'Escape' && onMenuToggle()}
+          onClick={(event) => event.stopPropagation()}
+          onKeyDown={(event) => {
+            if (event.key === "Escape") {
+              onMenuToggle();
+            }
+          }}
           tabIndex={-1}
           role="menu"
         >
