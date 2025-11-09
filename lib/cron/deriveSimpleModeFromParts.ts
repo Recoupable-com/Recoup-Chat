@@ -76,7 +76,7 @@ export const deriveSimpleModeFromParts = (
     };
   }
 
-  if (dayOfWeek === "*" && /^[1-9]|[12][0-9]|3[01]$/.test(dayOfMonth)) {
+  if (dayOfWeek === "*" && /^(?:[1-9]|[12][0-9]|3[01])$/.test(dayOfMonth)) {
     return {
       frequency: "monthly",
       time,
