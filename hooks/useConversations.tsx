@@ -1,4 +1,5 @@
-import { useCallback, useEffect, useMemo, useState } from "react";
+import { useMemo } from "react";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { useUserProvider } from "@/providers/UserProvder";
 import { useArtistProvider } from "@/providers/ArtistProvider";
 import getConversations from "@/lib/getConversations";
@@ -9,65 +10,50 @@ import { ArtistAgent } from "@/lib/supabase/getArtistAgents";
 const useConversations = () => {
   const { userData } = useUserProvider();
   const { selectedArtist } = useArtistProvider();
-  const [allConversations, setAllConversations] = useState<
-    Array<Conversation | ArtistAgent>
-  >([]);
-  const [quotaExceeded, setQuotaExceeded] = useState(false);
-  const [isLoading, setIsLoading] = useState(true);
-  const [previousConversations, setPreviousConversations] = useState<Array<Conversation | ArtistAgent>>([]);
   const { agents } = useArtistAgents();
+  const queryClient = useQueryClient();
 
-  const addConversation = (conversation: Conversation | ArtistAgent) => {
-    setAllConversations((prev) => [conversation, ...prev]);
-  };
+  const accountId = userData?.id;
+  const queryKey = useMemo(
+    () => ["conversations", accountId] as const,
+    [accountId]
+  );
+
+  const {
+    data: fetchedConversations = [],
+    isLoading,
+    refetch,
+  } = useQuery<Conversation[]>({
+    queryKey,
+    queryFn: () => getConversations(accountId as string),
+    enabled: Boolean(accountId),
+    initialData: [],
+  });
+
+  const combinedConversations = useMemo<
+    Array<Conversation | ArtistAgent>
+  >(() => {
+    return [...fetchedConversations, ...agents];
+  }, [fetchedConversations, agents]);
 
   const conversations = useMemo(() => {
-    const filtered = allConversations.filter(
+    return combinedConversations.filter(
       (item: Conversation | ArtistAgent) =>
-        'artist_id' in item && item.artist_id === selectedArtist?.account_id
+        "artist_id" in item && item.artist_id === selectedArtist?.account_id
     );
-    
-    // Prevent empty state during artist transitions - keep previous conversations visible
-    return filtered.length === 0 && previousConversations.length > 0 && selectedArtist
-      ? previousConversations 
-      : filtered;
-  }, [selectedArtist, allConversations, previousConversations]);
-
-  // Move the state update to a separate useEffect to break the circular dependency
-  useEffect(() => {
-    const filtered = allConversations.filter(
-      (item: Conversation | ArtistAgent) =>
-        'artist_id' in item && item.artist_id === selectedArtist?.account_id
-    );
-    
-    if (filtered.length > 0) {
-      setPreviousConversations(filtered);
-    }
-  }, [allConversations, selectedArtist]);
-
-  const fetchConversations = useCallback(async (accountIdParam?: string) => {
-    const accountId = accountIdParam ?? userData?.id;
-    if (!accountId) return;
-    const data = await getConversations(accountId);
-    setAllConversations([...data, ...agents]);
-    setIsLoading(false);
-  }, [userData?.id, agents]);
-
-  useEffect(() => {
-    const accountId = userData?.id;
-    if (accountId) {
-      fetchConversations(accountId);
-      return;
-    }
-    return () => setAllConversations([]);
-  }, [userData, agents, fetchConversations]);
+  }, [selectedArtist, combinedConversations]);
 
   // Optimistic update helpers for creating a new chat room
-  const addOptimisticConversation = (topic: string, chatId: string, message?: string) => {
+  const addOptimisticConversation = (
+    topic: string,
+    chatId: string,
+    message?: string
+  ) => {
     if (!userData || !selectedArtist?.account_id) return null;
     // Avoid adding an optimistic conversation when a chat id already exists in the URL
     const hasChatIdInUrl =
-      typeof window !== "undefined" && /\/chat\/[^\/]+/.test(window.location.pathname);
+      typeof window !== "undefined" &&
+      /\/chat\/[^\/]+/.test(window.location.pathname);
     if (hasChatIdInUrl) return null;
 
     const now = new Date().toISOString();
@@ -93,20 +79,18 @@ const useConversations = () => {
       updated_at: now,
     };
 
-    setAllConversations((prev) => [tempConversation, ...prev]);
+    queryClient.setQueryData<Conversation[]>(queryKey, (prev = []) => [
+      tempConversation,
+      ...prev,
+    ]);
     return chatId;
   };
 
   return {
-    addConversation,
     addOptimisticConversation,
-    fetchConversations,
+    refetchConversations: refetch,
     conversations,
-    setQuotaExceeded,
-    quotaExceeded,
-    allConversations,
     isLoading,
-    setAllConversations,
   };
 };
 

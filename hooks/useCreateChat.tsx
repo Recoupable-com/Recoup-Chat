@@ -1,5 +1,9 @@
 import { useEffect } from "react";
-import { Conversation, CreateChatRequest, CreateChatResponse } from "@/types/Chat";
+import {
+  Conversation,
+  CreateChatRequest,
+  CreateChatResponse,
+} from "@/types/Chat";
 import type { ArtistAgent } from "@/lib/supabase/getArtistAgents";
 import { useUserProvider } from "@/providers/UserProvder";
 import { useArtistProvider } from "@/providers/ArtistProvider";
@@ -16,7 +20,7 @@ const useCreateChat = ({
 }) => {
   const { userData, email } = useUserProvider();
   const { selectedArtist } = useArtistProvider();
-  const { setAllConversations } = useConversationsProvider();
+  const { refetchConversations } = useConversationsProvider();
 
   useEffect(() => {
     if (!isOptimisticChatItem) return;
@@ -24,28 +28,32 @@ const useCreateChat = ({
     const createChat = async () => {
       try {
         // Extract first message from optimistic memories
-        const firstMessage = (chatRoom as Conversation).memories?.find((memory) => {
-          const content = memory?.content as {
-            optimistic?: boolean;
-            parts?: { text: string }[];
-          };
-          return (
-            content &&
-            typeof content === 'object' &&
-            'optimistic' in content &&
-            content.optimistic === true &&
-            content.parts?.[0]?.text
-          );
-        });
+        const firstMessage = (chatRoom as Conversation).memories?.find(
+          (memory) => {
+            const content = memory?.content as {
+              optimistic?: boolean;
+              parts?: { text: string }[];
+            };
+            return (
+              content &&
+              typeof content === "object" &&
+              "optimistic" in content &&
+              content.optimistic === true &&
+              content.parts?.[0]?.text
+            );
+          }
+        );
 
         if (!firstMessage) {
           console.error("No first message found in optimistic chat");
           return;
         }
 
-        const messageText = (firstMessage.content as {
-          parts?: { text: string }[];
-        }).parts?.[0]?.text;
+        const messageText = (
+          firstMessage.content as {
+            parts?: { text: string }[];
+          }
+        ).parts?.[0]?.text;
         if (!messageText) {
           console.error("No message text found");
           return;
@@ -75,21 +83,7 @@ const useCreateChat = ({
 
           // Remove optimistic flag from memory and treat it as a normal memory.
           // It will re-enable 3 dots on the chat item.
-          setAllConversations((prev) => {
-            return prev.map((item: Conversation | ArtistAgent) => {
-              if ((item as Conversation).id === (chatRoom as Conversation).id) {
-                return {
-                  ...item,
-                  topic: data.room.topic,
-                  memories: (item as Conversation).memories?.map((memory) => ({
-                    ...memory,
-                    content: {},
-                  })),
-                };
-              }
-              return item;
-            });
-          });
+          await refetchConversations();
         } else {
           console.error("Failed to create chat:", data.error);
         }
@@ -99,7 +93,15 @@ const useCreateChat = ({
     };
 
     createChat();
-  }, [isOptimisticChatItem, chatRoom, userData?.account_id, selectedArtist?.account_id, setDisplayName, email, setAllConversations]);
+  }, [
+    isOptimisticChatItem,
+    chatRoom,
+    userData?.account_id,
+    selectedArtist?.account_id,
+    setDisplayName,
+    email,
+    refetchConversations,
+  ]);
 };
 
 export default useCreateChat;

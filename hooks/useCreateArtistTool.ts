@@ -10,7 +10,7 @@ import copyMessagesClient from "@/lib/copyMessagesClient";
  */
 export function useCreateArtistTool(result: CreateArtistResult) {
   const { status, id } = useVercelChatContext();
-  const { fetchConversations } = useConversationsProvider();
+  const { refetchConversations } = useConversationsProvider();
   const [isProcessing, setIsProcessing] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -44,7 +44,7 @@ export function useCreateArtistTool(result: CreateArtistResult) {
           );
 
           // Refresh conversations to show the new chat
-          await fetchConversations();
+          await refetchConversations();
 
           if (success) {
             // Update the URL to point to the new conversation
@@ -66,7 +66,7 @@ export function useCreateArtistTool(result: CreateArtistResult) {
     };
 
     processCreateArtistResult();
-  }, [status, result, id, isProcessing]);
+  }, [status, result, id, isProcessing, refetchConversations]);
 
   return {
     isProcessing,

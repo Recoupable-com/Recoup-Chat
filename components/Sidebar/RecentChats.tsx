@@ -18,7 +18,7 @@ const getChatRoomId = (chatRoom: Conversation | ArtistAgent): string => {
 };
 
 const RecentChats = ({ toggleModal }: { toggleModal: () => void }) => {
-  const { conversations, isLoading, fetchConversations } =
+  const { conversations, isLoading, refetchConversations } =
     useConversationsProvider();
   const { handleClick } = useClickChat();
   const [hoveredChatId, setHoveredChatId] = useState<string | null>(null);
@@ -28,22 +28,27 @@ const RecentChats = ({ toggleModal }: { toggleModal: () => void }) => {
 
   // Add internal state to track active chat ID
   const [activeChatId, setActiveChatId] = useState<string | null>(
-    typeof params?.roomId === 'string' ? params.roomId :
-      typeof params?.agentId === 'string' ? params.agentId : null
+    typeof params?.roomId === "string"
+      ? params.roomId
+      : typeof params?.agentId === "string"
+        ? params.agentId
+        : null
   );
 
   // Because history.replaceState doesn't trigger events, we need to manually update the active chat ID (ref. useVercelChat hook, line 121)
   // Update activeChatId when conversations update
   useEffect(() => {
     const updateActiveChatId = () => {
-      const urlChatId = window.location.pathname.match(/\/chat\/([^\/]+)/)
+      const urlChatId = window.location.pathname.match(/\/chat\/([^\/]+)/);
 
       if (urlChatId && urlChatId[1]) {
         setActiveChatId(urlChatId[1]);
       } else {
         // Handle params safely with type checking
-        const roomId = typeof params?.roomId === 'string' ? params.roomId : null;
-        const agentId = typeof params?.agentId === 'string' ? params.agentId : null;
+        const roomId =
+          typeof params?.roomId === "string" ? params.roomId : null;
+        const agentId =
+          typeof params?.agentId === "string" ? params.agentId : null;
         setActiveChatId(roomId || agentId || null);
       }
     };
@@ -60,30 +65,32 @@ const RecentChats = ({ toggleModal }: { toggleModal: () => void }) => {
   }>({ type: null, chatRoom: null });
 
   // Selection state for bulk operations
-  const [selectedChatIds, setSelectedChatIds] = useState<Set<string>>(new Set());
+  const [selectedChatIds, setSelectedChatIds] = useState<Set<string>>(
+    new Set()
+  );
   const [lastClickedId, setLastClickedId] = useState<string | null>(null);
   const [isShiftPressed, setIsShiftPressed] = useState(false);
 
   // Track shift key globally for all chat items (single set of listeners)
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
-      if (e.key === 'Shift') {
+      if (e.key === "Shift") {
         setIsShiftPressed(true);
       }
     };
 
     const handleKeyUp = (e: KeyboardEvent) => {
-      if (e.key === 'Shift') {
+      if (e.key === "Shift") {
         setIsShiftPressed(false);
       }
     };
 
-    window.addEventListener('keydown', handleKeyDown);
-    window.addEventListener('keyup', handleKeyUp);
+    window.addEventListener("keydown", handleKeyDown);
+    window.addEventListener("keyup", handleKeyUp);
 
     return () => {
-      window.removeEventListener('keydown', handleKeyDown);
-      window.removeEventListener('keyup', handleKeyUp);
+      window.removeEventListener("keydown", handleKeyDown);
+      window.removeEventListener("keyup", handleKeyUp);
     };
   }, []);
 
@@ -113,15 +120,10 @@ const RecentChats = ({ toggleModal }: { toggleModal: () => void }) => {
     setSelectedChatIds(new Set()); // Clear selection when closing modal
   };
 
-  // Filter conversations first
-  const filteredConversations = conversations.filter(
-    (chat) => "memories" in chat && chat.memories.length !== 0
-  );
-
   // API action handlers
   const handleApiAction = async () => {
     try {
-      await fetchConversations();
+      await refetchConversations();
       setSelectedChatIds(new Set()); // Clear selection after successful action
     } catch (error) {
       console.error(
@@ -138,14 +140,14 @@ const RecentChats = ({ toggleModal }: { toggleModal: () => void }) => {
 
       if (isShiftKey && lastClickedId) {
         // Shift+click: select range between last clicked and current
-        const chatIds = filteredConversations.map(getChatRoomId);
+        const chatIds = conversations.map(getChatRoomId);
         const lastIndex = chatIds.indexOf(lastClickedId);
         const currentIndex = chatIds.indexOf(chatId);
-        
+
         if (lastIndex !== -1 && currentIndex !== -1) {
           const start = Math.min(lastIndex, currentIndex);
           const end = Math.max(lastIndex, currentIndex);
-          
+
           for (let i = start; i <= end; i++) {
             newSelection.add(chatIds[i]);
           }
@@ -161,15 +163,15 @@ const RecentChats = ({ toggleModal }: { toggleModal: () => void }) => {
 
       return newSelection;
     });
-    
+
     setLastClickedId(chatId);
   };
 
   const handleBulkDelete = () => {
-    const chatsToDelete = filteredConversations.filter((chat) =>
+    const chatsToDelete = conversations.filter((chat) =>
       selectedChatIds.has(getChatRoomId(chat))
     );
-    
+
     setModalState({
       type: "delete",
       chatRoom: null,
@@ -186,7 +188,7 @@ const RecentChats = ({ toggleModal }: { toggleModal: () => void }) => {
   return (
     <div className="w-full flex-grow min-h-0 flex flex-col">
       <div className="h-[1px] bg-grey-light w-full mt-1 mb-2 md:mt-2 md:mb-3 shrink-0" />
-      
+
       {/* Header - changes based on selection mode */}
       {isSelectionMode ? (
         <div className="flex items-center justify-between px-2 mb-1 md:mb-2 shrink-0">
@@ -218,9 +220,9 @@ const RecentChats = ({ toggleModal }: { toggleModal: () => void }) => {
           <RecentChatSkeleton />
         ) : (
           <>
-            {filteredConversations.length > 0 ? (
+            {conversations.length > 0 ? (
               <AnimatePresence initial={false}>
-                {filteredConversations.map((chatRoom) => {
+                {conversations.map((chatRoom) => {
                   const roomId = getChatRoomId(chatRoom);
 
                   return (
@@ -230,7 +232,12 @@ const RecentChats = ({ toggleModal }: { toggleModal: () => void }) => {
                       initial={{ opacity: 0, y: -8 }}
                       animate={{ opacity: 1, y: 0 }}
                       exit={{ opacity: 0, y: -8 }}
-                      transition={{ type: "spring", stiffness: 500, damping: 30, mass: 0.5 }}
+                      transition={{
+                        type: "spring",
+                        stiffness: 500,
+                        damping: 30,
+                        mass: 0.5,
+                      }}
                     >
                       <ChatItem
                         chatRoom={chatRoom}
@@ -248,7 +255,9 @@ const RecentChats = ({ toggleModal }: { toggleModal: () => void }) => {
                         onMouseEnter={() => setHoveredChatId(roomId)}
                         onMouseLeave={() => setHoveredChatId(null)}
                         onChatClick={() => handleClick(chatRoom, toggleModal)}
-                        onSelect={(isShiftKey) => handleChatSelection(roomId, isShiftKey)}
+                        onSelect={(isShiftKey) =>
+                          handleChatSelection(roomId, isShiftKey)
+                        }
                         onMenuToggle={() => {
                           setOpenMenuId(openMenuId === roomId ? null : roomId);
                         }}
@@ -261,8 +270,12 @@ const RecentChats = ({ toggleModal }: { toggleModal: () => void }) => {
               </AnimatePresence>
             ) : (
               <div className="flex flex-col items-center justify-center py-8 px-4 text-center">
-                <p className="text-sm font-inter text-grey-dark mb-1">No recent chats</p>
-                <p className="text-xs font-inter text-grey-dark-1">Start a conversation to see it here</p>
+                <p className="text-sm font-inter text-grey-dark mb-1">
+                  No recent chats
+                </p>
+                <p className="text-xs font-inter text-grey-dark-1">
+                  Start a conversation to see it here
+                </p>
               </div>
             )}
           </>
