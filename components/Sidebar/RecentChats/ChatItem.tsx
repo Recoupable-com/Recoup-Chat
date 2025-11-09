@@ -2,9 +2,9 @@ import { useState, type RefObject, type MouseEvent } from "react";
 import { MoreHorizontal, Pencil, Trash2, Check } from "lucide-react";
 import type { Conversation } from "@/types/Chat";
 import type { ArtistAgent } from "@/lib/supabase/getArtistAgents";
-import capitalize from "@/lib/capitalize";
 import { cn } from "@/lib/utils";
 import useCreateChat from "@/hooks/useCreateChat";
+import { getChatDisplayInfo } from "@/lib/chat/getChatDisplayInfo";
 
 type ChatItemProps = {
   chatRoom: Conversation | ArtistAgent;
@@ -24,17 +24,6 @@ type ChatItemProps = {
   onMenuToggle: () => void;
   onRenameClick: () => void;
   onDeleteClick: () => void;
-};
-
-const getChatDisplayInfo = (item: Conversation | ArtistAgent) => {
-  const isChatRoom = "id" in item;
-  const displayName = isChatRoom ? item.topic : capitalize(item.type);
-
-  return {
-    displayName:
-      displayName || `${capitalize(isChatRoom ? "Chat" : item.type)} Analysis`,
-    isChatRoom,
-  };
 };
 
 const ChatItem = ({
