@@ -6,22 +6,30 @@ interface SimplePreset {
   icon: string;
 }
 
+const PRESET_SCHEDULES: SimplePreset[] = [
+  { label: "Every day at 9:00 AM", value: "0 9 * * *", icon: "☀️" },
+  { label: "Every weekday at 9:00 AM", value: "0 9 * * 1-5", icon: "💼" },
+  { label: "Every Monday at 9:00 AM", value: "0 9 * * 1", icon: "📅" },
+  { label: "Every hour", value: "0 * * * *", icon: "⏰" },
+  { label: "Every day at noon", value: "0 12 * * *", icon: "🌞" },
+  { label: "Every day at 6:00 PM", value: "0 18 * * *", icon: "🌆" },
+  { label: "First day of every month", value: "0 9 1 * *", icon: "📆" },
+];
+
 interface SimplePresetButtonsProps {
   cronExpression: string;
-  presets: SimplePreset[];
   disabled?: boolean;
   onPresetSelect: (cronValue: string) => void;
 }
 
 const SimplePresetButtons: React.FC<SimplePresetButtonsProps> = ({
   cronExpression,
-  presets,
   disabled = false,
   onPresetSelect,
 }) => {
   return (
     <div className="grid grid-cols-2 gap-2">
-      {presets.map((preset) => (
+      {PRESET_SCHEDULES.map((preset) => (
         <Button
           key={preset.value}
           variant={
