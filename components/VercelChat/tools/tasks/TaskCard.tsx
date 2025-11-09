@@ -1,12 +1,5 @@
 import React, { useState } from "react";
-import {
-  Clock,
-  Edit,
-  Repeat,
-  MoreHorizontal,
-  Pause,
-  Trash2,
-} from "lucide-react";
+import { Edit, Repeat, MoreHorizontal, Pause, Trash2 } from "lucide-react";
 import { Tables } from "@/types/database.types";
 import { cn } from "@/lib/utils";
 import { parseCronToHuman } from "@/lib/tasks/parseCronToHuman";
@@ -19,6 +12,7 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import TaskArtistImage from "./TaskArtistImage";
 
 type ScheduledAction = Tables<"scheduled_actions">;
 
@@ -70,7 +64,7 @@ const TaskCard: React.FC<TaskCardProps> = ({ task, isDeleted }) => {
       )}
     >
       <div className="flex items-center space-x-4">
-        <Clock className="h-5 w-5 text-gray-400 flex-shrink-0" />
+        <TaskArtistImage artistAccountId={task.artist_account_id} />
         <h4 className="text-base font-medium text-gray-900">{task.title}</h4>
       </div>
 
