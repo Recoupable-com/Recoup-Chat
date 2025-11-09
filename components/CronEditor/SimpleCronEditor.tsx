@@ -1,5 +1,3 @@
-import { useMemo } from "react";
-import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import {
@@ -11,6 +9,7 @@ import {
 } from "@/components/ui/select";
 import type { SimpleModeSettings } from "@/lib/cron/deriveSimpleModeFromParts";
 import { Calendar, Sparkles } from "lucide-react";
+import SimplePresetButtons from "./SimplePresetButtons";
 
 const PRESET_SCHEDULES = [
   { label: "Every day at 9:00 AM", value: "0 9 * * *", icon: "☀️" },
@@ -37,26 +36,6 @@ const SimpleCronEditor: React.FC<SimpleCronEditorProps> = ({
   onPresetSelect,
   onSimpleModeChange,
 }) => {
-  const presetButtons = useMemo(
-    () =>
-      PRESET_SCHEDULES.map((preset) => (
-        <Button
-          key={preset.value}
-          variant={
-            cronExpression.trim() === preset.value ? "default" : "outline"
-          }
-          size="sm"
-          onClick={() => onPresetSelect(preset.value)}
-          disabled={disabled}
-          className="h-auto justify-start px-3 py-2 text-xs"
-        >
-          <span className="mr-2">{preset.icon}</span>
-          <span className="text-balance">{preset.label}</span>
-        </Button>
-      )),
-    [cronExpression, disabled, onPresetSelect]
-  );
-
   return (
     <>
       <div className="space-y-2">
@@ -64,7 +43,12 @@ const SimpleCronEditor: React.FC<SimpleCronEditorProps> = ({
           <Sparkles className="h-3.5 w-3.5" />
           Quick Presets
         </Label>
-        <div className="grid grid-cols-2 gap-2">{presetButtons}</div>
+        <SimplePresetButtons
+          cronExpression={cronExpression}
+          presets={PRESET_SCHEDULES}
+          disabled={disabled}
+          onPresetSelect={onPresetSelect}
+        />
       </div>
 
       <div className="space-y-3 border-t pt-2">
