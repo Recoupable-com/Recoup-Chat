@@ -1,4 +1,5 @@
 import { Button } from "@/components/ui/button";
+import { FC } from "react";
 
 interface SimplePreset {
   label: string;
@@ -22,7 +23,7 @@ interface SimplePresetButtonsProps {
   onPresetSelect: (cronValue: string) => void;
 }
 
-const SimplePresetButtons: React.FC<SimplePresetButtonsProps> = ({
+const SimplePresetButtons: FC<SimplePresetButtonsProps> = ({
   cronExpression,
   disabled = false,
   onPresetSelect,
