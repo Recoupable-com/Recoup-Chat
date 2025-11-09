@@ -4,14 +4,12 @@ import { Button } from "@/components/ui/button";
 import { Pause, Trash2 } from "lucide-react";
 import { useUpdateScheduledAction } from "@/hooks/useUpdateScheduledAction";
 import { useDeleteScheduledAction } from "@/hooks/useDeleteScheduledAction";
-import { convertFrequencyAndTimeToCron } from "@/lib/tasks/convertFrequencyAndTimeToCron";
 
 interface TaskDetailsDialogActionButtonsProps {
   taskId: string;
   editTitle: string;
   editPrompt: string;
-  editFrequency: string;
-  editTime: string;
+  editCron: string;
   onSaveSuccess: () => void;
   onDeleteSuccess: () => void;
   isEnabled: boolean;
@@ -24,8 +22,7 @@ const TaskDetailsDialogActionButtons: React.FC<
   taskId,
   editTitle,
   editPrompt,
-  editFrequency,
-  editTime,
+  editCron,
   onSaveSuccess,
   onDeleteSuccess,
   isEnabled,
@@ -70,18 +67,13 @@ const TaskDetailsDialogActionButtons: React.FC<
     if (!canEdit) return;
 
     try {
-      // Convert frequency and time back to cron expression
-      const newCronExpression = convertFrequencyAndTimeToCron(
-        editFrequency,
-        editTime
-      );
-
+      const cronExpression = editCron.trim();
       await updateAction({
         updates: {
           id: taskId,
           title: editTitle,
           prompt: editPrompt,
-          schedule: newCronExpression,
+          schedule: cronExpression,
         },
         onSuccess: () => {
           onSaveSuccess();
