@@ -2,7 +2,7 @@ import { cn } from "@/lib/utils";
 import { Tables } from "@/types/database.types";
 import { Textarea } from "@/components/ui/textarea";
 import TaskDetailsDialogTitle from "./TaskDetailsDialogTitle";
-import TaskDetailsDialogScheduleEdit from "./TaskDetailsDialogScheduleEdit";
+import { CronEditor } from "@/components/CronEditor";
 import TaskPromptSection from "./TaskPromptSection";
 import TaskLastRunSection from "./TaskLastRunSection";
 import TaskScheduleSection from "./TaskScheduleSection";
@@ -59,7 +59,7 @@ const TaskDetailsDialogContent: React.FC<TaskDetailsDialogContentProps> = ({
 
       {/* Schedule Section */}
       {canEdit ? (
-        <TaskDetailsDialogScheduleEdit
+        <CronEditor
           cronExpression={editCron}
           onCronExpressionChange={onCronChange}
         />

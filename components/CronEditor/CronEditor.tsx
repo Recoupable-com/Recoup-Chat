@@ -12,7 +12,7 @@ import {
 import { parseCronToHuman } from "@/lib/tasks/parseCronToHuman";
 import { Calendar, Clock, Settings, Sparkles } from "lucide-react";
 
-interface TaskDetailsDialogScheduleEditProps {
+export interface CronEditorProps {
   cronExpression: string;
   onCronExpressionChange: (value: string) => void;
   disabled?: boolean;
@@ -164,9 +164,11 @@ const deriveSimpleModeFromParts = (
   return null;
 };
 
-const TaskDetailsDialogScheduleEdit: React.FC<
-  TaskDetailsDialogScheduleEditProps
-> = ({ cronExpression, onCronExpressionChange, disabled = false }) => {
+const CronEditor: React.FC<CronEditorProps> = ({
+  cronExpression,
+  onCronExpressionChange,
+  disabled = false,
+}) => {
   const parsedParts = useMemo(
     () => parseCronParts(cronExpression),
     [cronExpression]
@@ -199,6 +201,10 @@ const TaskDetailsDialogScheduleEdit: React.FC<
 
   const handlePresetClick = (cronValue: string) => {
     onCronExpressionChange(cronValue);
+    const derived = deriveSimpleModeFromParts(parseCronParts(cronValue));
+    if (derived) {
+      setSimpleMode(derived);
+    }
   };
 
   const handleSimpleModeChange = (
@@ -464,4 +470,4 @@ const TaskDetailsDialogScheduleEdit: React.FC<
   );
 };
 
-export default TaskDetailsDialogScheduleEdit;
+export default CronEditor;
