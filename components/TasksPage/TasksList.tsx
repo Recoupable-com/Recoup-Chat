@@ -2,6 +2,7 @@ import { Tables } from "@/types/database.types";
 import TaskCard from "@/components/VercelChat/tools/tasks/TaskCard";
 import TaskSkeleton from "./TaskSkeleton";
 import TaskDetailsDialog from "@/components/VercelChat/dialogs/tasks/TaskDetailsDialog";
+import { useUserProvider } from "@/providers/UserProvder";
 
 type ScheduledAction = Tables<"scheduled_actions">;
 
@@ -12,11 +13,13 @@ interface TasksListProps {
 }
 
 const TasksList: React.FC<TasksListProps> = ({ tasks, isLoading, isError }) => {
+  const { userData } = useUserProvider();
+
   if (isError) {
     return <div className="text-sm text-red-600">Failed to load tasks</div>;
   }
 
-  if (isLoading) {
+  if (isLoading || !userData) {
     return (
       <div className="space-y-4">
         <TaskSkeleton />
