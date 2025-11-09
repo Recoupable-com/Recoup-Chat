@@ -120,11 +120,6 @@ const RecentChats = ({ toggleModal }: { toggleModal: () => void }) => {
     setSelectedChatIds(new Set()); // Clear selection when closing modal
   };
 
-  // Filter conversations first
-  const filteredConversations = conversations.filter(
-    (chat) => "memories" in chat && chat.memories.length !== 0
-  );
-
   // API action handlers
   const handleApiAction = async () => {
     try {
@@ -145,7 +140,7 @@ const RecentChats = ({ toggleModal }: { toggleModal: () => void }) => {
 
       if (isShiftKey && lastClickedId) {
         // Shift+click: select range between last clicked and current
-        const chatIds = filteredConversations.map(getChatRoomId);
+        const chatIds = conversations.map(getChatRoomId);
         const lastIndex = chatIds.indexOf(lastClickedId);
         const currentIndex = chatIds.indexOf(chatId);
 
@@ -173,7 +168,7 @@ const RecentChats = ({ toggleModal }: { toggleModal: () => void }) => {
   };
 
   const handleBulkDelete = () => {
-    const chatsToDelete = filteredConversations.filter((chat) =>
+    const chatsToDelete = conversations.filter((chat) =>
       selectedChatIds.has(getChatRoomId(chat))
     );
 
@@ -225,9 +220,9 @@ const RecentChats = ({ toggleModal }: { toggleModal: () => void }) => {
           <RecentChatSkeleton />
         ) : (
           <>
-            {filteredConversations.length > 0 ? (
+            {conversations.length > 0 ? (
               <AnimatePresence initial={false}>
-                {filteredConversations.map((chatRoom) => {
+                {conversations.map((chatRoom) => {
                   const roomId = getChatRoomId(chatRoom);
 
                   return (
