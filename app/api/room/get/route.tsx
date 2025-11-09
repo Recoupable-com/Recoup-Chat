@@ -9,11 +9,7 @@ export async function GET(req: NextRequest) {
       .from("rooms")
       .select(
         `
-          id,
-          topic,
-          account_id,
-          artist_id,
-          updated_at,
+          *,
           memories (
             id,
             room_id,
