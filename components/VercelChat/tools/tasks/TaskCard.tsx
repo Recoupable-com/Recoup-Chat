@@ -9,7 +9,7 @@ import {
 } from "lucide-react";
 import { Tables } from "@/types/database.types";
 import { cn } from "@/lib/utils";
-import { formatScheduleSimply } from "@/lib/tasks/formatScheduleSimply";
+import { parseCronToHuman } from "@/lib/tasks/parseCronToHuman";
 import { isRecurring } from "@/lib/tasks/isRecurring";
 import { useUpdateScheduledAction } from "@/hooks/useUpdateScheduledAction";
 import { useDeleteScheduledAction } from "@/hooks/useDeleteScheduledAction";
@@ -81,7 +81,7 @@ const TaskCard: React.FC<TaskCardProps> = ({ task, isDeleted }) => {
             <Repeat className="h-4 w-4 text-gray-400 flex-shrink-0" />
           )}
           <span className="text-base text-gray-600">
-            {formatScheduleSimply(task.schedule)}
+            {parseCronToHuman(task.schedule.trim())}
           </span>
         </div>
         <div className="flex items-center space-x-2 w-20 justify-end relative">
