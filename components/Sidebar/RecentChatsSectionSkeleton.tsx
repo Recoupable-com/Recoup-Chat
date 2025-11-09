@@ -1,4 +1,4 @@
-import RecentChatSkeleton from "./RecentChatSkeleton";
+import { RecentChatSkeleton } from "./RecentChats";
 
 export function RecentChatsSectionSkeleton() {
   return (
