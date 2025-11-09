@@ -38,8 +38,7 @@ const TaskCard: React.FC<TaskCardProps> = ({ task, isDeleted }) => {
     e.stopPropagation(); // Prevent opening the edit dialog
     try {
       await updateAction({
-        actionId: task.id,
-        updates: { enabled: false },
+        updates: { id: task.id, enabled: false },
         successMessage: "Task paused successfully",
       });
       setIsDropdownOpen(false);

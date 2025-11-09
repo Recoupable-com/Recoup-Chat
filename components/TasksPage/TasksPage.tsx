@@ -1,23 +1,17 @@
 "use client";
 
-import { useUserProvider } from "@/providers/UserProvder";
 import { useArtistProvider } from "@/providers/ArtistProvider";
 import { useScheduledActions } from "@/hooks/useScheduledActions";
 import TasksList from "./TasksList";
 
 const TasksPage = () => {
-  const { userData } = useUserProvider();
   const { selectedArtist } = useArtistProvider();
-
-  const accountId = userData?.id as string | undefined;
   const artistAccountId = selectedArtist?.account_id as string | undefined;
-
   const { data, isLoading, isError } = useScheduledActions({
-    accountId,
     artistAccountId,
   });
 
-  const tasks = data?.actions ?? [];
+  const tasks = data ?? [];
 
   return (
     <div className="max-w-full md:max-w-[calc(100vw-200px)] grow py-8 px-6 md:px-12">
