@@ -13,7 +13,8 @@ export async function GET(req: NextRequest) {
           memories (
             id,
             room_id,
-            created_at
+            created_at,
+            content
           ),
           room_reports (
             report_id
