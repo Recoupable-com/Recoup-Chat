@@ -21,12 +21,7 @@ const TasksPage = () => {
         Tasks
       </p>
       <p className="text-base text-gray-500 text-center md:text-left mb-8 font-light font-inter max-w-2xl">
-        <span className="sm:hidden">
-          View and manage all the tasks setup for your selected artist.
-        </span>
-        <span className="hidden sm:inline">
-          View and manage all the tasks setup for your selected artist.
-        </span>
+        View and manage all the tasks for your selected artist.
       </p>
 
       <TasksList tasks={tasks} isLoading={isLoading} isError={isError} />
