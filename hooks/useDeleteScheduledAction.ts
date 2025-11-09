@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { toast } from "react-toastify";
 import { useQueryClient } from "@tanstack/react-query";
+import { deleteTask } from "@/lib/tasks/deleteTask";
 
 interface DeleteScheduledActionParams {
   actionId: string;
@@ -19,29 +20,11 @@ export const useDeleteScheduledAction = () => {
   }: DeleteScheduledActionParams) => {
     setIsLoading(true);
     try {
-      const response = await fetch("/api/scheduled-actions", {
-        method: "DELETE",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          id: actionId,
-        }),
-      });
+      await deleteTask({ id: actionId });
 
-      if (!response.ok) {
-        throw new Error("Failed to delete scheduled action");
-      }
-
-      const result = await response.json();
-      
-      // Call success callback
       onSuccess?.();
-      
-      // Show success message
       toast.success(successMessage);
-      
-      return result.data;
+      return;
     } catch (error) {
       console.error("Failed to delete scheduled action:", error);
       toast.error("Failed to delete. Please try again.");

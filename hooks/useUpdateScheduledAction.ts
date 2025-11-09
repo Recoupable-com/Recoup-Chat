@@ -2,9 +2,12 @@ import { useState } from "react";
 import { toast } from "react-toastify";
 import { Tables } from "@/types/database.types";
 import { useQueryClient } from "@tanstack/react-query";
+import { updateTask } from "@/lib/tasks/updateTask";
 
 type ScheduledAction = Tables<"scheduled_actions">;
-type ScheduledActionUpdate = Partial<Omit<ScheduledAction, "id" | "created_at">>;
+type ScheduledActionUpdate = Partial<
+  Omit<ScheduledAction, "id" | "created_at">
+>;
 
 interface UpdateScheduledActionParams {
   actionId: string;
@@ -25,30 +28,24 @@ export const useUpdateScheduledAction = () => {
   }: UpdateScheduledActionParams) => {
     setIsLoading(true);
     try {
-      const response = await fetch("/api/scheduled-actions", {
-        method: "PATCH",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          id: actionId,
-          ...updates,
+      const updatedTask = await updateTask({
+        id: actionId,
+        ...(updates.title !== undefined && { title: updates.title }),
+        ...(updates.prompt !== undefined && { prompt: updates.prompt }),
+        ...(updates.schedule !== undefined && { schedule: updates.schedule }),
+        ...(updates.account_id !== undefined && {
+          account_id: updates.account_id,
         }),
+        ...(updates.artist_account_id !== undefined && {
+          artist_account_id: updates.artist_account_id,
+        }),
+        ...(updates.enabled !== undefined && { enabled: updates.enabled }),
       });
 
-      if (!response.ok) {
-        throw new Error("Failed to update scheduled action");
-      }
-
-      const result = await response.json();
-      
-      // Call success callback with updated data
-      onSuccess?.(result.data);
-      
-      // Show success message
+      onSuccess?.(updatedTask);
       toast.success(successMessage);
-      
-      return result.data;
+
+      return updatedTask;
     } catch (error) {
       console.error("Failed to update scheduled action:", error);
       toast.error("Failed to update. Please try again.");
