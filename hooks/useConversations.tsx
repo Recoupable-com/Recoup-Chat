@@ -22,6 +22,7 @@ const useConversations = () => {
   const {
     data: fetchedConversations = [],
     isLoading,
+    isFetching,
     refetch,
   } = useQuery<Conversation[]>({
     queryKey,
@@ -91,6 +92,7 @@ const useConversations = () => {
     refetchConversations: refetch,
     conversations,
     isLoading,
+    isFetching,
   };
 };
 

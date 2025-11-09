@@ -13,7 +13,7 @@ interface UseRecentChatsParams {
 }
 
 export const useRecentChats = ({ toggleModal }: UseRecentChatsParams) => {
-  const { conversations, isLoading, refetchConversations } =
+  const { conversations, isLoading, isFetching, refetchConversations } =
     useConversationsProvider();
   const { handleClick } = useClickChat();
   const isMobile = useMobileDetection();
@@ -200,5 +200,6 @@ export const useRecentChats = ({ toggleModal }: UseRecentChatsParams) => {
     clearSelection,
     handleApiAction,
     isShiftPressed,
+    isFetching,
   };
 };

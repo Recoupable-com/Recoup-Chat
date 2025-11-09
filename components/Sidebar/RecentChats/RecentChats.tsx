@@ -14,6 +14,7 @@ const RecentChats = ({ toggleModal }: { toggleModal: () => void }) => {
   const {
     conversations,
     isLoading,
+    isFetching,
     hoveredChatId,
     setHoveredChatId,
     openMenuId,
@@ -37,7 +38,7 @@ const RecentChats = ({ toggleModal }: { toggleModal: () => void }) => {
     isShiftPressed,
   } = useRecentChats({ toggleModal });
 
-  const showSkeleton = isLoading || !userData || !selectedArtist;
+  const showSkeleton = isLoading || isFetching || !userData || !selectedArtist;
 
   return (
     <div className="w-full flex-grow min-h-0 flex flex-col">
