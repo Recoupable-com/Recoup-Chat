@@ -1,5 +1,4 @@
-import { useCallback, useMemo } from "react";
-import type { SetStateAction } from "react";
+import { useMemo } from "react";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { useUserProvider } from "@/providers/UserProvder";
 import { useArtistProvider } from "@/providers/ArtistProvider";
@@ -30,25 +29,6 @@ const useConversations = () => {
     enabled: Boolean(accountId),
     initialData: [],
   });
-
-  const setAllConversations = useCallback(
-    (updater: SetStateAction<Array<Conversation | ArtistAgent>>) => {
-      if (!accountId) return;
-      queryClient.setQueryData<Conversation[]>(queryKey, (prev = []) => {
-        const previousCombined: Array<Conversation | ArtistAgent> = [
-          ...prev,
-          ...agents,
-        ];
-        const nextCombined =
-          typeof updater === "function" ? updater(previousCombined) : updater;
-
-        return nextCombined.filter(
-          (item): item is Conversation => "artist_id" in item
-        );
-      });
-    },
-    [accountId, agents, queryClient, queryKey]
-  );
 
   const combinedConversations = useMemo<
     Array<Conversation | ArtistAgent>
@@ -111,7 +91,6 @@ const useConversations = () => {
     refetchConversations: refetch,
     conversations,
     isLoading,
-    setAllConversations,
   };
 };
 
