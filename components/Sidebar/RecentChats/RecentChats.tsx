@@ -1,173 +1,35 @@
-import { useState, useRef, useEffect } from "react";
-import { useParams } from "next/navigation";
-import { AnimatePresence, motion } from "framer-motion";
-import useClickChat from "@/hooks/useClickChat";
-import { useConversationsProvider } from "@/providers/ConversationsProvider";
-import { useMobileDetection } from "@/hooks/useMobileDetection";
-import { useOutsideClick } from "@/hooks/useOutsideClick";
-import type { Conversation } from "@/types/Chat";
-import type { ArtistAgent } from "@/lib/supabase/getArtistAgents";
 import RecentChatSkeleton from "./RecentChatSkeleton";
-import ChatItem from "./ChatItem";
 import RenameModal from "../Modals/RenameModal";
 import DeleteConfirmationModal from "../Modals/DeleteConfirmationModal";
-
-const getChatRoomId = (chatRoom: Conversation | ArtistAgent): string => {
-  return "id" in chatRoom ? chatRoom.id : chatRoom.agentId;
-};
+import { useRecentChats } from "./useRecentChats";
+import RecentChatList from "./RecentChatList";
 
 const RecentChats = ({ toggleModal }: { toggleModal: () => void }) => {
-  const { conversations, isLoading, refetchConversations } =
-    useConversationsProvider();
-  const { handleClick } = useClickChat();
-  const [hoveredChatId, setHoveredChatId] = useState<string | null>(null);
-  const [openMenuId, setOpenMenuId] = useState<string | null>(null);
-  const isMobile = useMobileDetection();
-  const params = useParams();
-
-  const [activeChatId, setActiveChatId] = useState<string | null>(
-    typeof params?.roomId === "string"
-      ? params.roomId
-      : typeof params?.agentId === "string"
-        ? params.agentId
-        : null
-  );
-
-  useEffect(() => {
-    const updateActiveChatId = () => {
-      const urlChatId = window.location.pathname.match(/\/chat\/([^\/]+)/);
-
-      if (urlChatId && urlChatId[1]) {
-        setActiveChatId(urlChatId[1]);
-      } else {
-        const roomId =
-          typeof params?.roomId === "string" ? params.roomId : null;
-        const agentId =
-          typeof params?.agentId === "string" ? params.agentId : null;
-        setActiveChatId(roomId || agentId || null);
-      }
-    };
-
-    updateActiveChatId();
-  }, [params, conversations]);
-
-  const [modalState, setModalState] = useState<{
-    type: "rename" | "delete" | null;
-    chatRoom: Conversation | ArtistAgent | null;
-    chatRooms?: Array<Conversation | ArtistAgent>;
-  }>({ type: null, chatRoom: null });
-
-  const [selectedChatIds, setSelectedChatIds] = useState<Set<string>>(
-    new Set()
-  );
-  const [lastClickedId, setLastClickedId] = useState<string | null>(null);
-  const [isShiftPressed, setIsShiftPressed] = useState(false);
-
-  useEffect(() => {
-    const handleKeyDown = (e: KeyboardEvent) => {
-      if (e.key === "Shift") {
-        setIsShiftPressed(true);
-      }
-    };
-
-    const handleKeyUp = (e: KeyboardEvent) => {
-      if (e.key === "Shift") {
-        setIsShiftPressed(false);
-      }
-    };
-
-    window.addEventListener("keydown", handleKeyDown);
-    window.addEventListener("keyup", handleKeyUp);
-
-    return () => {
-      window.removeEventListener("keydown", handleKeyDown);
-      window.removeEventListener("keyup", handleKeyUp);
-    };
-  }, []);
-
-  const menuRef = useRef<HTMLDivElement>(null);
-  const buttonRefs = useRef<Record<string, HTMLButtonElement | null>>({});
-
-  useOutsideClick({
+  const {
+    conversations,
+    isLoading,
+    hoveredChatId,
+    setHoveredChatId,
+    openMenuId,
+    toggleMenu,
+    isMobile,
+    activeChatId,
+    selectedChatIds,
+    isSelectionMode,
     menuRef,
     buttonRefs,
-    isOpen: !!openMenuId,
-    onClose: () => setOpenMenuId(null),
-  });
-
-  const openModal = (
-    type: "rename" | "delete",
-    chatRoom: Conversation | ArtistAgent
-  ) => {
-    setModalState({ type, chatRoom });
-    setOpenMenuId(null);
-  };
-
-  const closeModal = () => {
-    setModalState({ type: null, chatRoom: null });
-    setSelectedChatIds(new Set());
-  };
-
-  const handleApiAction = async () => {
-    try {
-      await refetchConversations();
-      setSelectedChatIds(new Set());
-    } catch (error) {
-      console.error(
-        `Error refreshing conversations after ${modalState.type}:`,
-        error
-      );
-    }
-  };
-
-  const handleChatSelection = (chatId: string, isShiftKey: boolean) => {
-    setSelectedChatIds((prev) => {
-      const newSelection = new Set(prev);
-
-      if (isShiftKey && lastClickedId) {
-        const chatIds = conversations.map(getChatRoomId);
-        const lastIndex = chatIds.indexOf(lastClickedId);
-        const currentIndex = chatIds.indexOf(chatId);
-
-        if (lastIndex !== -1 && currentIndex !== -1) {
-          const start = Math.min(lastIndex, currentIndex);
-          const end = Math.max(lastIndex, currentIndex);
-
-          for (let i = start; i <= end; i++) {
-            newSelection.add(chatIds[i]);
-          }
-        }
-      } else {
-        if (newSelection.has(chatId)) {
-          newSelection.delete(chatId);
-        } else {
-          newSelection.add(chatId);
-        }
-      }
-
-      return newSelection;
-    });
-
-    setLastClickedId(chatId);
-  };
-
-  const handleBulkDelete = () => {
-    const chatsToDelete = conversations.filter((chat) =>
-      selectedChatIds.has(getChatRoomId(chat))
-    );
-
-    setModalState({
-      type: "delete",
-      chatRoom: null,
-      chatRooms: chatsToDelete,
-    });
-    setOpenMenuId(null);
-  };
-
-  const isRenameModalOpen = modalState.type === "rename";
-  const isDeleteModalOpen = modalState.type === "delete";
-
-  const isSelectionMode = selectedChatIds.size > 0;
+    isRenameModalOpen,
+    isDeleteModalOpen,
+    modalState,
+    handleChatSelection,
+    handleBulkDelete,
+    handleChatClick,
+    openModal,
+    closeModal,
+    clearSelection,
+    handleApiAction,
+    isShiftPressed,
+  } = useRecentChats({ toggleModal });
 
   return (
     <div className="w-full flex-grow min-h-0 flex flex-col">
@@ -180,7 +42,7 @@ const RecentChats = ({ toggleModal }: { toggleModal: () => void }) => {
           </p>
           <div className="flex gap-2">
             <button
-              onClick={() => setSelectedChatIds(new Set())}
+              onClick={clearSelection}
               className="text-xs font-inter text-grey-dark hover:text-black transition-colors"
             >
               Cancel
@@ -204,53 +66,23 @@ const RecentChats = ({ toggleModal }: { toggleModal: () => void }) => {
         ) : (
           <>
             {conversations.length > 0 ? (
-              <AnimatePresence initial={false}>
-                {conversations.map((chatRoom) => {
-                  const roomId = getChatRoomId(chatRoom);
-
-                  return (
-                    <motion.div
-                      key={roomId}
-                      layout="position"
-                      initial={{ opacity: 0, y: -8 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      exit={{ opacity: 0, y: -8 }}
-                      transition={{
-                        type: "spring",
-                        stiffness: 500,
-                        damping: 30,
-                        mass: 0.5,
-                      }}
-                    >
-                      <ChatItem
-                        chatRoom={chatRoom}
-                        isMobile={isMobile}
-                        isHovered={hoveredChatId === roomId}
-                        isMenuOpen={openMenuId === roomId}
-                        isActive={roomId === activeChatId}
-                        isSelected={selectedChatIds.has(roomId)}
-                        isSelectionMode={isSelectionMode}
-                        isShiftPressed={isShiftPressed}
-                        menuRef={openMenuId === roomId ? menuRef : null}
-                        setButtonRef={(el: HTMLButtonElement | null) => {
-                          buttonRefs.current[roomId] = el;
-                        }}
-                        onMouseEnter={() => setHoveredChatId(roomId)}
-                        onMouseLeave={() => setHoveredChatId(null)}
-                        onChatClick={() => handleClick(chatRoom, toggleModal)}
-                        onSelect={(isShiftKey) =>
-                          handleChatSelection(roomId, isShiftKey)
-                        }
-                        onMenuToggle={() => {
-                          setOpenMenuId(openMenuId === roomId ? null : roomId);
-                        }}
-                        onRenameClick={() => openModal("rename", chatRoom)}
-                        onDeleteClick={() => openModal("delete", chatRoom)}
-                      />
-                    </motion.div>
-                  );
-                })}
-              </AnimatePresence>
+              <RecentChatList
+                conversations={conversations}
+                isMobile={isMobile}
+                hoveredChatId={hoveredChatId}
+                openMenuId={openMenuId}
+                activeChatId={activeChatId}
+                selectedChatIds={selectedChatIds}
+                isSelectionMode={isSelectionMode}
+                isShiftPressed={isShiftPressed}
+                menuRef={menuRef}
+                buttonRefs={buttonRefs}
+                setHoveredChatId={setHoveredChatId}
+                handleChatClick={handleChatClick}
+                handleChatSelection={handleChatSelection}
+                toggleMenu={toggleMenu}
+                openModal={openModal}
+              />
             ) : (
               <div className="flex flex-col items-center justify-center py-8 px-4 text-center">
                 <p className="text-sm font-inter text-grey-dark mb-1">
