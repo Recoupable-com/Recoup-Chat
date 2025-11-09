@@ -2,16 +2,12 @@ import { useState } from "react";
 import { toast } from "react-toastify";
 import { Tables } from "@/types/database.types";
 import { useQueryClient } from "@tanstack/react-query";
-import { updateTask } from "@/lib/tasks/updateTask";
+import { updateTask, UpdateTaskParams } from "@/lib/tasks/updateTask";
 
 type ScheduledAction = Tables<"scheduled_actions">;
-type ScheduledActionUpdate = Partial<
-  Omit<ScheduledAction, "id" | "created_at">
->;
 
 interface UpdateScheduledActionParams {
-  actionId: string;
-  updates: ScheduledActionUpdate;
+  updates: UpdateTaskParams;
   onSuccess?: (updatedData: ScheduledAction) => void;
   successMessage?: string;
 }
@@ -21,26 +17,13 @@ export const useUpdateScheduledAction = () => {
   const queryClient = useQueryClient();
 
   const updateAction = async ({
-    actionId,
     updates,
     onSuccess,
     successMessage = "Updated successfully",
   }: UpdateScheduledActionParams) => {
     setIsLoading(true);
     try {
-      const updatedTask = await updateTask({
-        id: actionId,
-        ...(updates.title !== undefined && { title: updates.title }),
-        ...(updates.prompt !== undefined && { prompt: updates.prompt }),
-        ...(updates.schedule !== undefined && { schedule: updates.schedule }),
-        ...(updates.account_id !== undefined && {
-          account_id: updates.account_id,
-        }),
-        ...(updates.artist_account_id !== undefined && {
-          artist_account_id: updates.artist_account_id,
-        }),
-        ...(updates.enabled !== undefined && { enabled: updates.enabled }),
-      });
+      const updatedTask = await updateTask(updates);
 
       onSuccess?.(updatedTask);
       toast.success(successMessage);

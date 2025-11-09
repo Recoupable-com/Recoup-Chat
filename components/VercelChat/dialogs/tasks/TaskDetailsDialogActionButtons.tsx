@@ -40,8 +40,8 @@ const TaskDetailsDialogActionButtons: React.FC<
 
     try {
       await updateAction({
-        actionId: taskId,
         updates: {
+          id: taskId,
           enabled: !isEnabled,
         },
         successMessage: isEnabled ? "Task paused" : "Task activated",
@@ -77,8 +77,8 @@ const TaskDetailsDialogActionButtons: React.FC<
       );
 
       await updateAction({
-        actionId: taskId,
         updates: {
+          id: taskId,
           title: editTitle,
           prompt: editPrompt,
           schedule: newCronExpression,
