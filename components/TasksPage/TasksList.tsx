@@ -33,7 +33,9 @@ const TasksList: React.FC<TasksListProps> = ({ tasks, isLoading, isError }) => {
   if (tasks.length === 0) {
     return (
       <div className="text-center py-8">
-        <p className="text-gray-500">You have no scheduled tasks.</p>
+        <p className="text-gray-500">
+          You have no scheduled tasks for this artist.
+        </p>
       </div>
     );
   }
