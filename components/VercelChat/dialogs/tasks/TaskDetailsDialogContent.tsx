@@ -48,7 +48,7 @@ const TaskDetailsDialogContent: React.FC<TaskDetailsDialogContentProps> = ({
           <Textarea
             value={editPrompt}
             onChange={(e) => onPromptChange(e.target.value)}
-            className="w-full text-xs min-h-[80px] resize-none"
+            className="w-full text-xs min-h-[80px] resize-y"
             placeholder="Enter instructions..."
             disabled={false}
           />
