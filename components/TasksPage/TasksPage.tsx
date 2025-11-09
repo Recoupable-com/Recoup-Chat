@@ -3,8 +3,10 @@
 import { useArtistProvider } from "@/providers/ArtistProvider";
 import { useScheduledActions } from "@/hooks/useScheduledActions";
 import TasksList from "./TasksList";
+import useAutoLogin from "@/hooks/useAutoLogin";
 
 const TasksPage = () => {
+  useAutoLogin();
   const { selectedArtist } = useArtistProvider();
   const artistAccountId = selectedArtist?.account_id as string | undefined;
   const { data, isLoading, isError } = useScheduledActions({
