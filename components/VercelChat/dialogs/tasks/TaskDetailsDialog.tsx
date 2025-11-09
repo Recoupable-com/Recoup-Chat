@@ -28,10 +28,8 @@ const TaskDetailsDialog: React.FC<TaskDetailsDialogProps> = ({
     setEditTitle,
     editPrompt,
     setEditPrompt,
-    editFrequency,
-    setEditFrequency,
-    editTime,
-    setEditTime,
+    editCron,
+    setEditCron,
     isActive,
     isPaused,
     canEdit,
@@ -58,12 +56,10 @@ const TaskDetailsDialog: React.FC<TaskDetailsDialogProps> = ({
           task={task}
           editTitle={editTitle}
           editPrompt={editPrompt}
-          editFrequency={editFrequency}
-          editTime={editTime}
+          editCron={editCron}
           onTitleChange={setEditTitle}
           onPromptChange={setEditPrompt}
-          onFrequencyChange={setEditFrequency}
-          onTimeChange={setEditTime}
+          onCronChange={setEditCron}
           canEdit={canEdit}
           isDeleted={isDeleted}
         />
@@ -74,8 +70,7 @@ const TaskDetailsDialog: React.FC<TaskDetailsDialogProps> = ({
             taskId={task.id}
             editTitle={editTitle}
             editPrompt={editPrompt}
-            editFrequency={editFrequency}
-            editTime={editTime}
+            editCron={editCron}
             onSaveSuccess={() => setIsDialogOpen(false)}
             onDeleteSuccess={() => {
               setIsDialogOpen(false);

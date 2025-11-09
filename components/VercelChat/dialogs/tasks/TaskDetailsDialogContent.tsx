@@ -11,12 +11,10 @@ interface TaskDetailsDialogContentProps {
   task: Tables<"scheduled_actions">;
   editTitle: string;
   editPrompt: string;
-  editFrequency: string;
-  editTime: string;
+  editCron: string;
   onTitleChange: (value: string) => void;
   onPromptChange: (value: string) => void;
-  onFrequencyChange: (value: string) => void;
-  onTimeChange: (value: string) => void;
+  onCronChange: (value: string) => void;
   canEdit: boolean;
   isDeleted?: boolean;
 }
@@ -25,12 +23,10 @@ const TaskDetailsDialogContent: React.FC<TaskDetailsDialogContentProps> = ({
   task,
   editTitle,
   editPrompt,
-  editFrequency,
-  editTime,
+  editCron,
   onTitleChange,
   onPromptChange,
-  onFrequencyChange,
-  onTimeChange,
+  onCronChange,
   canEdit,
   isDeleted = false,
 }) => {
@@ -64,10 +60,8 @@ const TaskDetailsDialogContent: React.FC<TaskDetailsDialogContentProps> = ({
       {/* Schedule Section */}
       {canEdit ? (
         <TaskDetailsDialogScheduleEdit
-          frequency={editFrequency}
-          time={editTime}
-          onFrequencyChange={onFrequencyChange}
-          onTimeChange={onTimeChange}
+          cronExpression={editCron}
+          onCronExpressionChange={onCronChange}
         />
       ) : (
         <TaskScheduleSection
@@ -84,4 +78,3 @@ const TaskDetailsDialogContent: React.FC<TaskDetailsDialogContentProps> = ({
 };
 
 export default TaskDetailsDialogContent;
-

@@ -1,6 +1,5 @@
 import { useState, useEffect } from "react";
 import { Tables } from "@/types/database.types";
-import { parseCronToFrequencyAndTime } from "@/lib/tasks/parseCronToFrequencyAndTime";
 
 interface UseTaskDetailsDialogParams {
   task: Tables<"scheduled_actions">;
@@ -14,18 +13,15 @@ export const useTaskDetailsDialog = ({
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [editTitle, setEditTitle] = useState(task.title);
   const [editPrompt, setEditPrompt] = useState(task.prompt);
-  const { frequency: initialFrequency, time: initialTime } =
-    parseCronToFrequencyAndTime(task.schedule);
-  const [editFrequency, setEditFrequency] = useState(initialFrequency);
-  const [editTime, setEditTime] = useState(initialTime);
+  const [editCron, setEditCron] = useState(
+    task.schedule?.trim() || "0 9 * * *"
+  );
 
   // Sync edit state when task prop changes
   useEffect(() => {
     setEditTitle(task.title);
     setEditPrompt(task.prompt);
-    const { frequency, time } = parseCronToFrequencyAndTime(task.schedule);
-    setEditFrequency(frequency);
-    setEditTime(time);
+    setEditCron(task.schedule?.trim() || "0 9 * * *");
   }, [task]);
 
   const isActive = Boolean(task.enabled && !isDeleted);
@@ -39,10 +35,8 @@ export const useTaskDetailsDialog = ({
     setEditTitle,
     editPrompt,
     setEditPrompt,
-    editFrequency,
-    setEditFrequency,
-    editTime,
-    setEditTime,
+    editCron,
+    setEditCron,
     isActive,
     isPaused,
     canEdit,
