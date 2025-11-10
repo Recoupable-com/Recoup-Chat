@@ -1,7 +1,4 @@
-import {
-  ArweaveUploadResult,
-  uploadBase64ToArweave,
-} from "@/lib/arweave/uploadBase64ToArweave";
+import uploadToArweave from "./uploadToArweave";
 
 /**
  * Uploads an image from a remote URL to Arweave and returns the Arweave URL.
@@ -12,7 +9,7 @@ import {
  */
 export default async function uploadLinkToArweave(
   imageUrl: string
-): Promise<ArweaveUploadResult | null> {
+): Promise<string | null> {
   try {
     const imgRes = await fetch(imageUrl);
     const imgBuffer = Buffer.from(await imgRes.arrayBuffer());
@@ -41,11 +38,10 @@ export default async function uploadLinkToArweave(
       filename = filename.replace(/\.[^.]+$/, `.${extFromMime}`);
     }
 
-    const arweaveResult = await uploadBase64ToArweave(
-      imgBase64,
+    const arweaveResult = await uploadToArweave({
+      base64Data: imgBase64,
       mimeType,
-      filename
-    );
+    });
     return arweaveResult;
   } catch (err) {
     console.error("Failed to upload image to Arweave, using original:", err);

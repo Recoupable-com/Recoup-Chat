@@ -1,6 +1,6 @@
 import { useArtistProvider } from "@/providers/ArtistProvider";
 import getMimeFromPath from "@/utils/getMimeFromPath";
-import { uploadFile } from "@/lib/arweave/uploadToArweave";
+import { uploadFile } from "@/lib/arweave/uploadFile";
 import { useQueryClient } from "@tanstack/react-query";
 import { toast } from "react-toastify";
 
@@ -10,7 +10,11 @@ type UseSaveKnowledgeEditArgs = {
   editedText: string;
 };
 
-export const useSaveKnowledgeEdit = ({ name, url, editedText }: UseSaveKnowledgeEditArgs) => {
+export const useSaveKnowledgeEdit = ({
+  name,
+  url,
+  editedText,
+}: UseSaveKnowledgeEditArgs) => {
   const {
     knowledgeUploading,
     setKnowledgeUploading,
@@ -48,8 +52,12 @@ export const useSaveKnowledgeEdit = ({ name, url, editedText }: UseSaveKnowledge
         await saveSetting(next);
         const artistId = selectedArtist?.account_id;
         if (artistId) {
-          await queryClient.invalidateQueries({ queryKey: ["artist-knowledge", artistId] });
-          await queryClient.invalidateQueries({ queryKey: ["artist-knowledge-text"] });
+          await queryClient.invalidateQueries({
+            queryKey: ["artist-knowledge", artistId],
+          });
+          await queryClient.invalidateQueries({
+            queryKey: ["artist-knowledge-text"],
+          });
         }
         toast.success("Saved");
         return true;

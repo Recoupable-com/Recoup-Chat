@@ -1,4 +1,4 @@
-import { uploadBase64ToArweave } from "./uploadBase64ToArweave";
+import uploadToArweave from "./uploadToArweave";
 
 interface CreateMetadataArgs {
   name: string;
@@ -15,16 +15,15 @@ interface CreateMetadataArgs {
 /**
  * Uploads a metadata JSON object to Arweave as a base64-encoded file.
  * @param args The metadata creation arguments
- * @returns The result from uploadBase64ToArweave
+ * @returns The result from uploadToArweave
  */
 export async function uploadMetadataJson(metadata: CreateMetadataArgs) {
   const metadataBase64 = Buffer.from(JSON.stringify(metadata)).toString(
     "base64"
   );
-  const metadataResult = await uploadBase64ToArweave(
-    metadataBase64,
-    "application/json",
-    `metadata-${Date.now()}.json`
-  );
+  const metadataResult = await uploadToArweave({
+    base64Data: metadataBase64,
+    mimeType: "application/json",
+  });
   return metadataResult;
 }

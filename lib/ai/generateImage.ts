@@ -1,13 +1,8 @@
 import { experimental_generateImage as generate } from "ai";
 import { openai } from "@ai-sdk/openai";
-import {
-  ArweaveUploadResult,
-  uploadBase64ToArweave,
-} from "../arweave/uploadBase64ToArweave";
+import uploadToArweave from "../arweave/uploadToArweave";
 
-const generateImage = async (
-  prompt: string
-): Promise<ArweaveUploadResult | null> => {
+const generateImage = async (prompt: string): Promise<string | null> => {
   const response = await generate({
     model: openai.image("gpt-image-1"),
     prompt,
@@ -28,11 +23,7 @@ const generateImage = async (
   // Upload the generated image to Arweave
   let arweaveData = null;
   try {
-    arweaveData = await uploadBase64ToArweave(
-      imageData.base64Data,
-      imageData.mimeType,
-      `generated-image-${Date.now()}.png`
-    );
+    arweaveData = await uploadToArweave(imageData, console.log);
   } catch (arweaveError) {
     console.error("Error uploading to Arweave:", arweaveError);
     // We'll continue and return the image even if Arweave upload fails
