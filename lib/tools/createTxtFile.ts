@@ -3,6 +3,7 @@ import { tool } from "ai";
 import { generateAndStoreTxtFile } from "@/lib/txtGeneration";
 import { IS_PROD } from "../consts";
 import generateTxtFileEmail from "../email/generateTxtFileEmail";
+import { getFetchableUrl } from "../arweave/gateway";
 
 // Define the schema for input validation
 const schema = z.object({
@@ -46,7 +47,7 @@ const createTxtFile = tool({
       const result = await generateAndStoreTxtFile(contents);
       await generateTxtFileEmail({
         rawTextFile: contents,
-        arweaveFile: result.arweave || "",
+        arweaveFile: getFetchableUrl(result.arweave) || "",
         emails: [active_account_email],
         conversationId: active_conversation_id,
       });
@@ -54,7 +55,7 @@ const createTxtFile = tool({
       // Create a response in a format useful for the chat interface
       return {
         success: true,
-        arweaveUrl: result.arweave || "",
+        arweaveUrl: getFetchableUrl(result.arweave) || "",
         smartAccountAddress: result.smartAccount.address,
         transactionHash: result.transactionHash,
         blockExplorerUrl: result.transactionHash
