@@ -23,7 +23,7 @@ const generateImage = async (prompt: string): Promise<string | null> => {
   // Upload the generated image to Arweave
   let arweaveData = null;
   try {
-    arweaveData = await uploadToArweave(imageData, console.log);
+    arweaveData = await uploadToArweave(imageData);
   } catch (arweaveError) {
     console.error("Error uploading to Arweave:", arweaveError);
     // We'll continue and return the image even if Arweave upload fails
