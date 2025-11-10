@@ -2,10 +2,6 @@ import { NextResponse } from "next/server";
 import uploadToArweave from "@/lib/arweave/uploadToArweave";
 import { getFetchableUrl } from "@/lib/arweave/gateway";
 
-if (!process.env.ARWEAVE_KEY) {
-  throw new Error("ARWEAVE_KEY environment variable is not set");
-}
-
 export async function POST(request: Request) {
   try {
     const formData = await request.formData();
