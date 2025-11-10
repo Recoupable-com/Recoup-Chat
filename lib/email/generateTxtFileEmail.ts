@@ -1,7 +1,7 @@
 import generateText from "@/lib/ai/generateText";
 import sendEmail from "@/lib/email/sendEmail";
-import { ArweaveUploadResult } from "../arweave/uploadBase64ToArweave";
 import { RECOUP_FROM_EMAIL } from "../consts";
+import { getFetchableUrl } from "../arweave/gateway";
 
 /**
  * Sends a Recoup Apify webhook email to a list of emails, summarizing the dataset and using a strong CTA.
@@ -16,7 +16,7 @@ export default async function generateTxtFileEmail({
   conversationId,
 }: {
   rawTextFile: string;
-  arweaveFile: ArweaveUploadResult;
+  arweaveFile: string;
   emails: string[];
   conversationId: string;
 }) {
@@ -26,7 +26,7 @@ export default async function generateTxtFileEmail({
 
 Key Data
 Raw Text File: ${rawTextFile}
-Link to view the full TXT File: ${arweaveFile.url}
+Link to view the full TXT File: ${getFetchableUrl(arweaveFile)}
 CTA URL: ${ctaUrl}
 `;
 

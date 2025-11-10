@@ -1,5 +1,5 @@
 import { type NextRequest, NextResponse } from "next/server";
-import { generateAndProcessImage } from "@/lib/imageGeneration";
+import { generateAndProcessImage } from "@/lib/generateAndProcessImage";
 
 export async function POST(req: NextRequest) {
   try {

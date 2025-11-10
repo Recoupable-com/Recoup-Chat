@@ -16,6 +16,7 @@ import normalizeProfileUrl from "@/lib/utils/normalizeProfileUrl";
 import uploadLinkToArweave from "@/lib/arweave/uploadLinkToArweave";
 import handleInstagramProfileFollowUpRuns from "@/lib/apify/posts/handleInstagramProfileFollowUpRuns";
 import apifyPayloadSchema from "@/lib/apify/apifyPayloadSchema";
+import { getFetchableUrl } from "@/lib/arweave/gateway";
 
 /**
  * Handles Instagram profile scraper results: fetches dataset, saves posts, saves socials, and returns results.
@@ -46,18 +47,20 @@ export default async function handleInstagramProfileScraperResults(
       const arweaveResult = await uploadLinkToArweave(
         firstResult.profilePicUrlHD || firstResult.profilePicUrl
       );
-      if (arweaveResult && arweaveResult.url) {
-        firstResult.profilePicUrl = arweaveResult.url;
+      if (arweaveResult) {
+        firstResult.profilePicUrl = getFetchableUrl(arweaveResult);
       }
 
-      await insertSocials([{
-        username: firstResult.username,
-        avatar: firstResult.profilePicUrl,
-        profile_url: firstResult.url,
-        bio: firstResult.biography,
-        followerCount: firstResult.followersCount,
-        followingCount: firstResult.followsCount,
-      }]);
+      await insertSocials([
+        {
+          username: firstResult.username,
+          avatar: firstResult.profilePicUrl,
+          profile_url: firstResult.url,
+          bio: firstResult.biography,
+          followerCount: firstResult.followersCount,
+          followingCount: firstResult.followsCount,
+        },
+      ]);
       const normalizedUrl = normalizeProfileUrl(firstResult.url);
       social = await getSocialByProfileUrl(normalizedUrl);
       console.log("social", social);

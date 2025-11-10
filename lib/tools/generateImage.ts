@@ -1,7 +1,8 @@
 import { z } from "zod";
 import { tool } from "ai";
-import { generateAndProcessImage } from "@/lib/imageGeneration";
+import { generateAndProcessImage } from "@/lib/generateAndProcessImage";
 import { IS_PROD } from "../consts";
+import { getFetchableUrl } from "../arweave/gateway";
 
 // Define the schema for input validation
 const schema = z.object({
@@ -37,7 +38,7 @@ const generateImage = tool({
       // Create a response in a format useful for the chat interface
       return {
         success: true,
-        arweaveUrl: result.arweave?.url || null,
+        arweaveUrl: getFetchableUrl(result.arweave) || null,
         smartAccountAddress: result.smartAccount.address,
         transactionHash: result.transactionHash,
         blockExplorerUrl: result.transactionHash

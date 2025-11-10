@@ -1,16 +1,13 @@
-import {
-  ArweaveUploadResult,
-  uploadBase64ToArweave,
-} from "@/lib/arweave/uploadBase64ToArweave";
 import createCollection from "@/app/api/in_process/createCollection";
 import { uploadMetadataJson } from "./arweave/uploadMetadataJson";
+import uploadToArweave from "./arweave/uploadToArweave";
 
 export interface GeneratedTxtResponse {
   txt: {
     base64Data: string;
     mimeType: string;
   };
-  arweave?: ArweaveUploadResult | null;
+  arweave?: string | null;
   smartAccount: {
     address: string;
     [key: string]: unknown;
@@ -28,12 +25,14 @@ export async function generateAndStoreTxtFile(
   // Encode contents to base64
   const base64Data = Buffer.from(contents, "utf-8").toString("base64");
   const mimeType = "text/plain";
-  const filename = `generated-text-${Date.now()}.txt`;
 
   // Upload the TXT file to Arweave
   let txtFile = null;
   try {
-    txtFile = await uploadBase64ToArweave(base64Data, mimeType, filename);
+    txtFile = await uploadToArweave({
+      base64Data,
+      mimeType,
+    });
   } catch (arweaveError) {
     console.error("Error uploading TXT to Arweave:", arweaveError);
     // Continue and return the TXT even if Arweave upload fails
@@ -46,10 +45,10 @@ export async function generateAndStoreTxtFile(
   try {
     metadataArweave = await uploadMetadataJson({
       image,
-      animation_url: txtFile?.url,
+      animation_url: txtFile || undefined,
       content: {
         mime: mimeType,
-        uri: txtFile?.url || "",
+        uri: txtFile || "",
       },
       description: contents,
       name: contents,
@@ -61,7 +60,7 @@ export async function generateAndStoreTxtFile(
   // Create a collection on the blockchain using the metadata id
   const result = await createCollection({
     collectionName: contents,
-    uri: metadataArweave ? `ar://${metadataArweave.id}` : "",
+    uri: metadataArweave || "",
   });
   const transactionHash = result.transactionHash || null;
 
