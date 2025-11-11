@@ -10,12 +10,12 @@ const MessageMediaDownloadButton = ({ onClick, overrideButtonClassName, override
                 <Button
                     variant="ghost"
                     size="icon"
-                    className={cn("absolute top-2 right-2 z-20 md:rounded-xl opacity-0 group-hover:opacity-100 transition-opacity duration-300 hover:bg-gray-200/50", overrideButtonClassName)}
+                    className={cn("absolute top-2 right-2 z-20 md:rounded-xl opacity-0 group-hover:opacity-100 transition-opacity duration-300 hover:bg-accent/50", overrideButtonClassName)}
                     onClick={onClick}
                     disabled={isDownloading}
                     aria-label="Download image"
                 >
-                    <Download className={cn("h-4 w-4 text-gray-700", isDownloading ? "animate-pulse" : "", overrideIconClassName)} />
+                    <Download className={cn("h-4 w-4 text-foreground", isDownloading ? "animate-pulse" : "", overrideIconClassName)} />
                 </Button>
             </TooltipTrigger>
             <TooltipContent>

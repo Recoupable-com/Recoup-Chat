@@ -37,17 +37,17 @@ export function BrowserToolSkeleton({ toolName, url }: BrowserToolSkeletonProps)
 
   return (
     <div className="max-w-4xl my-2">
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4 border border-gray-200 dark:border-gray-700 rounded-xl p-4 bg-white dark:bg-gray-900 shadow-sm">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4 border border-border rounded-xl p-4 bg-card shadow-sm">
         {/* LEFT: Progress Steps */}
         <div className="flex flex-col gap-3">
           <div className="flex items-center gap-2">
             <span className="text-xl">{platform.emoji}</span>
-            <span className="text-sm font-medium text-gray-900 dark:text-gray-100 capitalize">
+            <span className="text-sm font-medium text-foreground capitalize">
               {platform.name}
             </span>
           </div>
           
-          <div className="text-xs text-gray-600 dark:text-gray-400">
+          <div className="text-xs text-muted-foreground">
             {getTaskDescription(toolName, platform.name, url)}
           </div>
           
@@ -73,18 +73,18 @@ export function BrowserToolSkeleton({ toolName, url }: BrowserToolSkeletonProps)
             {steps.map((step, index) => (
               <div key={index} className="flex items-center gap-2">
                 {step.completed ? (
-                  <Check className="h-3 w-3 text-gray-900 dark:text-gray-100 flex-shrink-0" />
+                  <Check className="h-3 w-3 text-foreground flex-shrink-0" />
                 ) : step.active ? (
-                  <Loader className="h-3 w-3 animate-spin text-gray-900 dark:text-gray-100 flex-shrink-0" />
+                  <Loader className="h-3 w-3 animate-spin text-foreground flex-shrink-0" />
                 ) : (
-                  <div className="h-3 w-3 rounded-full border-2 border-gray-300 dark:border-gray-600 flex-shrink-0" />
+                  <div className="h-3 w-3 rounded-full border-2 border-border flex-shrink-0" />
                 )}
                 <span className={`text-xs ${
                   step.completed 
-                    ? 'text-gray-900 dark:text-gray-100' 
+                    ? 'text-foreground' 
                     : step.active 
-                    ? 'text-gray-900 dark:text-gray-100 font-medium' 
-                    : 'text-gray-400 dark:text-gray-500'
+                    ? 'text-foreground font-medium' 
+                    : 'text-muted-foreground'
                 }`}>
                   {step.label}
                 </span>
@@ -95,11 +95,11 @@ export function BrowserToolSkeleton({ toolName, url }: BrowserToolSkeletonProps)
 
         {/* RIGHT: Browser Preview */}
         <div className="flex flex-col gap-2">
-          <span className="text-xs font-medium text-gray-600 dark:text-gray-400">
+          <span className="text-xs font-medium text-muted-foreground">
             Browser View
           </span>
-          <div className="border border-gray-200 dark:border-gray-700 rounded-lg bg-gray-50 dark:bg-gray-800 aspect-[4/3] flex items-center justify-center">
-            <div className="flex flex-col items-center gap-3 text-gray-400">
+          <div className="border border-border rounded-lg bg-muted aspect-[4/3] flex items-center justify-center">
+            <div className="flex flex-col items-center gap-3 text-muted-foreground">
               <Globe className="h-12 w-12 animate-pulse" />
               <span className="text-xs">Loading {platform.name}...</span>
             </div>

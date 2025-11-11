@@ -41,22 +41,22 @@ const UpdateArtistSocialsSuccess: React.FC<UpdateArtistSocialsSuccessProps> = ({
               rel="noopener noreferrer"
               passHref
             >
-              <div className="flex items-center gap-3 px-3 py-3 rounded-xl hover:bg-white/10 transition-colors group cursor-pointer">
-                <div className="w-8 h-8 bg-gray-700 rounded flex items-center justify-center">
-                  <Globe className="w-4 h-4 text-gray-300" />
+              <div className="flex items-center gap-3 px-3 py-3 rounded-xl hover:bg-accent transition-colors group cursor-pointer">
+                <div className="w-8 h-8 bg-muted rounded flex items-center justify-center">
+                  <Globe className="w-4 h-4 text-muted-foreground" />
                 </div>
                 
                 <div className="flex-1 min-w-0">
                   <div className="text-white text-sm font-medium truncate">
                     {social.social.profile_url}
                   </div>
-                  <div className="text-xs text-gray-400">
+                  <div className="text-xs text-muted-foreground">
                     {getSocialPlatformByLink(social.social.profile_url).toLowerCase() || 'Social Link'}
                   </div>
                 </div>
                 
                 <div className="opacity-0 group-hover:opacity-100 transition-opacity">
-                  <ExternalLink className="w-4 h-4 text-gray-400 hover:text-white" />
+                  <ExternalLink className="w-4 h-4 text-muted-foreground hover:text-foreground" />
                 </div>
               </div>
             </Link>

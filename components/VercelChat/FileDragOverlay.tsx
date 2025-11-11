@@ -2,7 +2,7 @@ import { FileImage, MessageSquareText, ImageIcon } from "lucide-react";
 
 const FileDragOverlay = () => {
   return (
-    <div className="absolute inset-0 bg-white/90 dark:bg-gray-900/90 backdrop-blur-sm flex flex-col items-center justify-center z-50 rounded-lg">
+    <div className="absolute inset-0 bg-background/90 backdrop-blur-sm flex flex-col items-center justify-center z-50 rounded-lg">
       <div className="relative w-24 h-24 mb-6">
         {/* Code icon (top left) */}
         <div className="absolute left-0 top-2 bg-blue-200 dark:bg-blue-900/30 p-3 rounded-2xl transform -rotate-12 shadow-sm opacity-50 scale-75">
@@ -19,13 +19,13 @@ const FileDragOverlay = () => {
           <ImageIcon className="h-7 w-7 text-white" />
         </div>
       </div>
-      <h2 className="text-2xl font-medium text-gray-800 dark:text-gray-100 mb-2">
+      <h2 className="text-2xl font-medium text-foreground mb-2">
         Add anything
       </h2>
-      <p className="text-gray-600 dark:text-gray-300">
+      <p className="text-muted-foreground">
         Drop any file here to add it to the conversation
       </p>
-      <div className="mt-4 text-xs text-gray-500 dark:text-gray-400">
+      <div className="mt-4 text-xs text-muted-foreground">
         Supported formats: JPG, PNG, GIF, WEBP, PDF
       </div>
     </div>
