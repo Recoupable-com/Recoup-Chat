@@ -32,7 +32,7 @@ const config: Config = {
   				DEFAULT: '#000000',
   				light: '#444444'
   			},
-  			while: {
+  			white: {
   				DEFAULT: '#ffffff'
   			},
   			grey: {
