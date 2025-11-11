@@ -2,7 +2,7 @@ import Image from "next/image";
 
 const OfflinePage = () => {
   return (
-    <div className="fixed inset-0 flex items-center justify-center bg-white text-center px-4 z-50">
+    <div className="fixed inset-0 flex items-center justify-center bg-background text-center px-4 z-50">
       <div className="w-full max-w-lg flex flex-col items-center">
         <div className="mb-6">
           <Image

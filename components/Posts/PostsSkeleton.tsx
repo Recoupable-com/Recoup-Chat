@@ -7,7 +7,7 @@ const PostsSkeleton = () => {
       {skeletonItems.map((item) => (
         <div
           key={item}
-          className="border rounded-lg overflow-hidden shadow-sm bg-white h-[300px] flex flex-col animate-pulse"
+          className="border rounded-lg overflow-hidden shadow-sm bg-card h-[300px] flex flex-col animate-pulse"
         >
           <div className="p-3 border-b bg-muted >
             <div className="flex justify-between items-center">

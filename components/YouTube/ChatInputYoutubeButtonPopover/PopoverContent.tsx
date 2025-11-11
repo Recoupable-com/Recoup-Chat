@@ -4,9 +4,9 @@ import { Youtube, Eye, Video } from "lucide-react";
 import StatCard from "./StatCard";
 
 export const PopoverContent = ({ channel }: { channel: YouTubeChannelData }) => (
-  <div className="w-56 md:w-80 p-0 rounded-lg md:rounded-xl overflow-hidden bg-white border border-border shadow-lg">
+  <div className="w-56 md:w-80 p-0 rounded-lg md:rounded-xl overflow-hidden bg-card border border-border shadow-lg">
     {channel ? (
-      <div className="bg-white">
+      <div className="bg-card">
         <div className="flex items-center gap-2 px-3 md:px-4 py-2 md:py-3 border-b border-border">
           <img
             src="/brand-logos/youtube.png"

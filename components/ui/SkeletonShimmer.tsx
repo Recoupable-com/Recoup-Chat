@@ -10,7 +10,7 @@ const SkeletonShimmer = ({ className, children }: SkeletonShimmerProps) => {
   return (
     <motion.div
       className={cn(
-        "relative overflow-hidden bg-muted dark:bg-white/5 rounded",
+        "relative overflow-hidden bg-muted rounded",
         className
       )}
       initial={{ opacity: 0 }}

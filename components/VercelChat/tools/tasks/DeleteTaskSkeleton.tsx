@@ -16,7 +16,7 @@ const DeleteTaskSkeleton = () => {
 
       {/* Loading Task */}
       <div className="space-y-3">
-        <div className="bg-white  border border-red-200 dark:border-red-900 rounded-lg p-3 space-y-2">
+        <div className="bg-card border border-red-200 dark:border-red-900 rounded-lg p-3 space-y-2">
           {/* Task Header */}
           <div className="flex items-center justify-between">
             <div className="flex items-center space-x-2">

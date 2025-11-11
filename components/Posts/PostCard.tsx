@@ -68,7 +68,7 @@ const PostCard = memo(({ post }: PostCardProps) => {
   return (
     <div
       ref={ref}
-      className="border rounded-lg overflow-hidden shadow-sm hover:shadow-md transition-shadow bg-white h-full flex flex-col"
+      className="border rounded-lg overflow-hidden shadow-sm hover:shadow-md transition-shadow bg-card h-full flex flex-col"
     >
       <div className="p-3 border-b bg-muted >
         <div className="flex justify-between items-center">

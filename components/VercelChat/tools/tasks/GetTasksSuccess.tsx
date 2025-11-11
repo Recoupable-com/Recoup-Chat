@@ -12,7 +12,7 @@ const GetTasksSuccess: React.FC<GetTasksSuccessProps> = ({ result }) => {
   const { tasks, message } = result;
 
   return (
-    <div className="bg-white  border border-border rounded-lg shadow-sm max-w-2xl">
+    <div className="bg-card border border-border rounded-lg shadow-sm max-w-2xl">
       {/* Header */}
       <div className="px-4 py-3 border-b border-border  bg-muted rounded-t-lg">
         <div className="flex items-center space-x-2">

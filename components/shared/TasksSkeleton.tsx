@@ -27,7 +27,7 @@ const TasksSkeleton: FC<TasksSkeletonProps> = ({ numberOfTasks = 2 }) => {
           {Array.from({ length: numberOfTasks }, (_, index) => (
             <div
               key={index}
-              className="bg-white  border border-slate-200  rounded-lg p-3 space-y-2"
+              className="bg-card border border-border  rounded-lg p-3 space-y-2"
             >
               {/* Task Header */}
               <div className="flex items-center justify-between">

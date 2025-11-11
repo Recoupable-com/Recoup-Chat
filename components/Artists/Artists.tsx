@@ -6,7 +6,7 @@ const Artists = () => {
 
   return (
     <div className="grow h-[calc(100vh-64px)] md:h-screen overflow-hidden md:bg-grey-light-3 md:p-4">
-      <div className="size-full bg-white rounded-xl flex flex-col items-center md:items-start gap-3 pt-6 md:pt-10 md:pb-4 px-4 md:px-20">
+      <div className="size-full bg-card rounded-xl flex flex-col items-center md:items-start gap-3 pt-6 md:pt-10 md:pb-4 px-4 md:px-20">
         <p className="font-plus_jakarta_sans_bold text-[50px]">Artists</p>
         <p className="text-[19px] md:text-[25px] text-grey-dark text-center md:text-left">
           Choose an artist to dive into their insights and data.

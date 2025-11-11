@@ -23,7 +23,7 @@ const YouTubeSetThumbnailResult = ({
     thumbObj?.default?.url;
 
   return (
-    <div className="rounded-xl overflow-hidden bg-white shadow-sm border border-border max-w-xs mr-auto">
+    <div className="rounded-xl overflow-hidden bg-card shadow-sm border border-border max-w-xs mr-auto">
       {thumb && (
         <div className="w-full aspect-video bg-muted >
           {/* eslint-disable-next-line @next/next/no-img-element */}

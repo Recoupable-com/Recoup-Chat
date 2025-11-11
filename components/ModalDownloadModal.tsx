@@ -15,7 +15,7 @@ const MobileDownloadModal = () => {
             className="absolute inset-0 bg-black opacity-60"
             id="tap-close-download"
           />
-          <div className="relative bg-white p-4 rounded-md shadow-lg w-4/5 z-10 flex flex-col items-center">
+          <div className="relative bg-card p-4 rounded-md shadow-lg w-4/5 z-10 flex flex-col items-center">
             <Image
               src="/savePhoneIcon.png"
               alt="save phone icon"

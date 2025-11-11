@@ -51,7 +51,7 @@ export const WebDeepResearchProgress: React.FC<WebDeepResearchProgressProps> = (
           Reviewing sources · {searchResults.length}
         </p>
         
-        <div className="border border-border dark:border-zinc-800 rounded-lg overflow-hidden bg-white dark:bg-zinc-950">
+        <div className="border border-border dark:border-zinc-800 rounded-lg overflow-hidden bg-card">
           {searchResults.map((item, index) => (
             <SearchResultItem 
               key={index} 
@@ -68,7 +68,7 @@ export const WebDeepResearchProgress: React.FC<WebDeepResearchProgressProps> = (
     return (
       <div className="space-y-3">
         <p className="text-sm text-muted-foreground">Analyzing sources</p>
-        <div className="border border-border dark:border-zinc-800 rounded-lg p-4 bg-white dark:bg-zinc-950">
+        <div className="border border-border dark:border-zinc-800 rounded-lg p-4 bg-card">
           <Response className="w-full">{progress.accumulatedContent}</Response>
         </div>
       </div>
@@ -80,7 +80,7 @@ export const WebDeepResearchProgress: React.FC<WebDeepResearchProgressProps> = (
     return (
       <div className="space-y-3">
         <p className="text-sm text-muted-foreground">Research complete</p>
-        <div className="border border-border dark:border-zinc-800 rounded-lg p-4 bg-white dark:bg-zinc-950">
+        <div className="border border-border dark:border-zinc-800 rounded-lg p-4 bg-card">
           <Response className="w-full">{progress.accumulatedContent}</Response>
         </div>
       </div>

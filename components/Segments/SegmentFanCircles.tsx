@@ -59,7 +59,7 @@ const SegmentFanCircles = ({
             )}
             </Link>
             {fan.profile_url.includes("tiktok.com") && (
-              <div className="absolute -bottom-0.5 -right-0.5 w-2.5 h-2.5 rounded-full bg-white border border-border flex items-center justify-center">
+              <div className="absolute -bottom-0.5 -right-0.5 w-2.5 h-2.5 rounded-full bg-background border border-border flex items-center justify-center">
                 <Image
                   src="/brand-logos/tiktok.png"
                   alt="TikTok"
@@ -70,7 +70,7 @@ const SegmentFanCircles = ({
               </div>
             )}
             {fan.profile_url.includes("instagram.com") && (
-              <div className="absolute -bottom-0.5 -right-0.5 w-2.5 h-2.5 rounded-full bg-white border border-border flex items-center justify-center">
+              <div className="absolute -bottom-0.5 -right-0.5 w-2.5 h-2.5 rounded-full bg-background border border-border flex items-center justify-center">
                 <Image
                   src="/brand-logos/instagram.png"
                   alt="Instagram"

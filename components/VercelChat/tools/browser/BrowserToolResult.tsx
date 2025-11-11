@@ -11,7 +11,7 @@ import { SectionHeader } from "./SectionHeader";
 const STYLES = {
   text: { primary: "text-foreground dark:text-foreground" },
   bg: {
-    card: "bg-white dark:bg-background",
+    card: "bg-card",
     error: "bg-muted dark:bg-card",
   },
   border: "border-border dark:border-border",

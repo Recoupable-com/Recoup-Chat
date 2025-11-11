@@ -56,7 +56,7 @@ const SideModal = ({
         aria-modal="true"
       >
         <motion.div
-          className={`ml-auto flex h-full w-full flex-col bg-white max-w-[300px] px-4 py-4 md:py-8 ${className}`}
+          className={`ml-auto flex h-full w-full flex-col bg-card max-w-[300px] px-4 py-4 md:py-8 ${className}`}
           animate={animate}
           initial={initial}
           transition={{ duration: 0.2 }}
