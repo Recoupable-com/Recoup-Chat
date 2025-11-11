@@ -30,12 +30,6 @@ const UserProfileDropdown = () => {
     return <Monitor className="h-4 w-4" />;
   };
 
-  const getThemeLabel = () => {
-    if (theme === "dark") return "Dark";
-    if (theme === "light") return "Light";
-    return "System";
-  };
-
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>

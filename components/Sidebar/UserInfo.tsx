@@ -1,10 +1,6 @@
 import UserProfileButton from "./UserProfileButton";
 
-const UserInfo = ({
-  toggleMenuExpanded,
-}: {
-  toggleMenuExpanded: () => void;
-}) => {
+const UserInfo = () => {
   return (
     <div className="w-full">
       <UserProfileButton />
