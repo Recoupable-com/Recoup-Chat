@@ -31,9 +31,9 @@ const Agents = () => {
   return (
     <div className="max-w-full md:max-w-[calc(100vw-200px)] grow py-8 pb-0 px-6 md:px-12 flex flex-col h-full min-h-0">
       <div className="flex justify-between items-center mb-4">
-        <p className="text-left font-heading text-3xl font-bold dark:text-white">
+        <h1 className="text-left font-heading text-3xl font-bold dark:text-white">
           Agents
-        </p>
+        </h1>
         <div className="flex items-center gap-4">
           <div className="flex items-center gap-2">
             <span className="text-sm text-muted-foreground dark:text-muted-foreground">

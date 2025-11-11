@@ -17,9 +17,9 @@ const TasksPage = () => {
 
   return (
     <div className="max-w-full md:max-w-[calc(100vw-200px)] grow py-8 px-6 md:px-12">
-      <p className="text-left font-heading text-3xl font-bold dark:text-white mb-4">
+      <h1 className="text-left font-heading text-3xl font-bold dark:text-white mb-4">
         Tasks
-      </p>
+      </h1>
       <p className="text-lg text-muted-foreground text-left mb-4 font-light font-sans max-w-2xl">
         View and manage all the tasks for your selected artist.
       </p>

@@ -3,9 +3,6 @@
 /* Add KaTeX CSS for math rendering */
 @import 'katex/dist/katex.min.css';
 
-/* custom variant for setting dark mode programmatically */
-@custom-variant dark (&:is(.dark, .dark *));
-
 /* include plugins */
 @plugin "tailwindcss-animate";
 @plugin "@tailwindcss/typography";
@@ -120,7 +117,7 @@
    ============================================================================ */
 
 @theme {
-  --font-sans: var(--font-geist-sans);
+  --font-sans: var(--font-geist);
   --font-mono: var(--font-geist-mono);
   --font-heading: "PlusJakartaSans", system-ui, -apple-system, sans-serif;
   
@@ -185,7 +182,7 @@
   body {
     width: 100vw;
     height: 100vh;
-    overflow: hidden;
+    overflow-x: hidden;
   }
   
   html {
@@ -332,7 +329,7 @@
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: --alpha(var(--muted-foreground) / 0.5);
+  background: hsl(var(--muted-foreground) / 0.5);
 }
 
 ::-webkit-scrollbar-corner {
