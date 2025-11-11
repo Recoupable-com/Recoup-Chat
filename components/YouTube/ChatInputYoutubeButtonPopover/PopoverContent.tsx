@@ -7,7 +7,7 @@ export const PopoverContent = ({ channel }: { channel: YouTubeChannelData }) => 
   <div className="w-56 md:w-80 p-0 rounded-lg md:rounded-xl overflow-hidden bg-white border border-gray-200 shadow-lg">
     {channel ? (
       <div className="bg-white">
-        <div className="flex items-center gap-2 px-3 md:px-4 py-2 md:py-3 border-b border-gray-100">
+        <div className="flex items-center gap-2 px-3 md:px-4 py-2 md:py-3 border-b border-border">
           <img
             src="/brand-logos/youtube.png"
             alt="YouTube"
@@ -40,7 +40,7 @@ export const PopoverContent = ({ channel }: { channel: YouTubeChannelData }) => 
                 </p>
               )}
               {channel.description && (
-                <p className="text-gray-600 text-xs mt-1 line-clamp-2">
+                <p className="text-muted-foreground text-xs mt-1 line-clamp-2">
                   {channel.description.length > 100
                     ? channel.description.slice(0, 100) + "..."
                     : channel.description}
@@ -76,7 +76,7 @@ export const PopoverContent = ({ channel }: { channel: YouTubeChannelData }) => 
         </div>
       </div>
     ) : (
-      <div className="p-3 md:p-4 text-sm text-gray-600 flex items-center gap-2">
+      <div className="p-3 md:p-4 text-sm text-muted-foreground flex items-center gap-2">
         <img src="/brand-logos/youtube.png" alt="YouTube" className="h-4 w-4" />
         Loading{window.innerWidth >= 768 ? " channel info..." : "..."}
       </div>

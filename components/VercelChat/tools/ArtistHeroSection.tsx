@@ -49,14 +49,14 @@ const ArtistHeroSection = ({
             </div>
 
             {artistProfile.label && (
-              <div className="text-sm text-gray-300 mb-2">
-                <span className="text-gray-400">Label:</span>{" "}
+              <div className="text-sm text-muted-foreground mb-2">
+                <span className="text-muted-foreground">Label:</span>{" "}
                 {artistProfile.label}
               </div>
             )}
 
             {artistProfile.updated_at && (
-              <div className="flex items-center gap-2 text-xs text-gray-400">
+              <div className="flex items-center gap-2 text-xs text-muted-foreground">
                 <Calendar className="w-3 h-3" />
                 <span>
                   Updated{" "}

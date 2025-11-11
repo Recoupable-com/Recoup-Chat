@@ -15,7 +15,7 @@ const MinimalCommentCard: React.FC<MinimalCommentCardProps> = ({ comment, onClic
 
   return (
     <div 
-      className="flex items-center space-x-2 p-2 bg-muted rounded-xl border border-gray-100  hover:bg-gray-100 dark:hover:bg-dark-bg-tertiary hover:border-gray-200 dark:hover:border-dark-border-light transition-all cursor-pointer group"
+      className="flex items-center space-x-2 p-2 bg-muted rounded-xl border border-border  hover:bg-muted dark:hover:bg-dark-bg-tertiary hover:border-gray-200 dark:hover:border-dark-border-light transition-all cursor-pointer group"
       onClick={onClick}
       role="button"
       tabIndex={0}
@@ -49,7 +49,7 @@ const MinimalCommentCard: React.FC<MinimalCommentCardProps> = ({ comment, onClic
       <div className="flex-grow min-w-0">
         <div className="flex items-start space-x-1">
           <span className="font-medium text-xs md:text-[11px] lg:text-xs text-foreground flex-shrink-0">@{comment.username}</span>
-          <span className="text-xs md:text-[11px] lg:text-xs text-gray-600 dark:text-gray-400 truncate leading-tight">
+          <span className="text-xs md:text-[11px] lg:text-xs text-muted-foreground dark:text-muted-foreground truncate leading-tight">
             {previewText}
           </span>
         </div>
@@ -57,7 +57,7 @@ const MinimalCommentCard: React.FC<MinimalCommentCardProps> = ({ comment, onClic
       
       {/* Click indicator */}
       <div className="flex-shrink-0 opacity-0 group-hover:opacity-100 transition-opacity">
-        <ChevronRight className="h-3 w-3 text-gray-400 dark:text-gray-500" />
+        <ChevronRight className="h-3 w-3 text-muted-foreground dark:text-muted-foreground" />
       </div>
     </div>
   );

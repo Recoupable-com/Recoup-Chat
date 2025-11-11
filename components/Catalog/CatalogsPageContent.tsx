@@ -35,7 +35,7 @@ const CatalogsPageContent = () => {
   const catalogs = data?.catalogs || [];
 
   if (!catalogs.length) {
-    return <p className="text-sm text-gray-600">No catalogs found.</p>;
+    return <p className="text-sm text-muted-foreground">No catalogs found.</p>;
   }
 
   return (

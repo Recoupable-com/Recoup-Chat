@@ -17,7 +17,7 @@ const CommentDetailsActions: React.FC<CommentDetailsActionsProps> = ({
         href={comment.profile_url}
         target="_blank"
         rel="noopener noreferrer"
-        className="text-xs bg-gray-50 hover:bg-gray-100 text-gray-700 px-2 py-1 rounded-xl inline-flex items-center gap-1 transition-colors border border-gray-200"
+        className="text-xs bg-muted hover:bg-muted text-foreground px-2 py-1 rounded-xl inline-flex items-center gap-1 transition-colors border border-gray-200"
       >
         <User className="h-3 w-3" />
         Profile
@@ -26,7 +26,7 @@ const CommentDetailsActions: React.FC<CommentDetailsActionsProps> = ({
         href={comment.post_url}
         target="_blank"
         rel="noopener noreferrer"
-        className="text-xs bg-gray-50 hover:bg-gray-100 text-gray-700 px-2 py-1 rounded-xl inline-flex items-center gap-1 transition-colors border border-gray-200"
+        className="text-xs bg-muted hover:bg-muted text-foreground px-2 py-1 rounded-xl inline-flex items-center gap-1 transition-colors border border-gray-200"
       >
         <BarChart className="h-3 w-3" />
         Post
@@ -36,7 +36,7 @@ const CommentDetailsActions: React.FC<CommentDetailsActionsProps> = ({
           toast.success("Copied to clipboard");
           navigator.clipboard.writeText(comment.comment);
         }}
-        className="text-xs bg-gray-50 hover:bg-gray-100 text-gray-700 px-2 py-1 rounded-xl inline-flex items-center gap-1 transition-colors border border-gray-200"
+        className="text-xs bg-muted hover:bg-muted text-foreground px-2 py-1 rounded-xl inline-flex items-center gap-1 transition-colors border border-gray-200"
       >
         <Copy className="h-3 w-3" />
         Copy

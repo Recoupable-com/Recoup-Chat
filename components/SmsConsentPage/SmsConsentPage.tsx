@@ -8,7 +8,7 @@ import {
 
 export function SmsConsentPage() {
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-muted >
       <SmsPageHeader />
       
       <div className="max-w-md mx-auto p-4 space-y-6">

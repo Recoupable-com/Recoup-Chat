@@ -5,7 +5,7 @@ const YoutubeVideoCard = ({ video }: { video: YouTubeVideo }) => {
   return (
     <div
       key={video.id}
-      className="group rounded-xl overflow-hidden border border-gray-100 hover:border-gray-200 transition-colors cursor-pointer"
+      className="group rounded-xl overflow-hidden border border-border hover:border-gray-200 transition-colors cursor-pointer"
     >
       {/* Thumbnail */}
       <div className="relative aspect-video">
@@ -25,7 +25,7 @@ const YoutubeVideoCard = ({ video }: { video: YouTubeVideo }) => {
         <h3 className="font-medium text-xs sm:text-sm line-clamp-2 group-hover:text-blue-600 transition-colors text-left">
           {video.snippet.title}
         </h3>
-        <div className="flex items-center gap-1 sm:gap-2 mt-1 sm:mt-2 text-[9px] sm:text-xs text-gray-500 text-left">
+        <div className="flex items-center gap-1 sm:gap-2 mt-1 sm:mt-2 text-[9px] sm:text-xs text-muted-foreground text-left">
           <span>
             {parseInt(video.statistics.viewCount).toLocaleString()} views
           </span>

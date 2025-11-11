@@ -23,18 +23,18 @@ const FansList = ({ fans }: FansListProps) => {
                 {fan.username || "Anonymous"}
               </div>
 
-              <div className="text-sm text-gray-600 dark:text-gray-300 mt-1">
+              <div className="text-sm text-muted-foreground dark:text-muted-foreground mt-1">
                 {fan.followerCount.toLocaleString()} followers
               </div>
 
               {fan.region && (
-                <div className="text-sm text-gray-600 dark:text-gray-300 mt-1">
+                <div className="text-sm text-muted-foreground dark:text-muted-foreground mt-1">
                   Region: {fan.region}
                 </div>
               )}
 
               {fan.bio && (
-                <div className="text-sm text-gray-600 dark:text-gray-400 mt-2 line-clamp-2">
+                <div className="text-sm text-muted-foreground dark:text-muted-foreground mt-2 line-clamp-2">
                   {fan.bio}
                 </div>
               )}

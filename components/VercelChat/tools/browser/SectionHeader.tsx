@@ -2,7 +2,7 @@ import { cn } from "@/lib/utils";
 
 const STYLES = {
   text: { primary: "text-gray-900 dark:text-gray-100" },
-  border: "border-gray-200 dark:border-gray-700",
+  border: "border-gray-200 dark:border-border",
 } as const;
 
 export function SectionHeader({ title, className }: { title: string; className?: string }) {

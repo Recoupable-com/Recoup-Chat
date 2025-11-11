@@ -42,7 +42,7 @@ const YoutubeVideoDialog = ({
           </h2>
           
           {/* Channel and publish date */}
-          <div className="flex flex-wrap items-center text-xs text-gray-500 mb-4 gap-y-2">
+          <div className="flex flex-wrap items-center text-xs text-muted-foreground mb-4 gap-y-2">
             <div className="flex items-center gap-2 flex-wrap">
               <span className="truncate max-w-[150px]">{video.snippet?.channelTitle}</span>
               <span>•</span>
@@ -61,8 +61,8 @@ const YoutubeVideoDialog = ({
             <summary className="text-xs font-medium cursor-pointer hover:text-blue-500">
               Description
             </summary>
-            <div className="mt-2 max-h-[30vh] overflow-y-auto bg-gray-50 dark:bg-gray-900 p-3 rounded">
-              <p className="text-xs whitespace-pre-line text-gray-700 break-words">
+            <div className="mt-2 max-h-[30vh] overflow-y-auto bg-muted dark:bg-background p-3 rounded">
+              <p className="text-xs whitespace-pre-line text-foreground break-words">
                 {video.snippet?.description}
               </p>
             </div>

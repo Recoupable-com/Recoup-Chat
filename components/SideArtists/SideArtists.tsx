@@ -37,7 +37,7 @@ const SideArtists = ({
         ))}
       </div>
       <button
-        className="flex px-2 py-1 gap-2 text-sm items-center text-grey-dark-1 w-full hover:bg-gray-50"
+        className="flex px-2 py-1 gap-2 text-sm items-center text-grey-dark-1 w-full hover:bg-muted 
         onClick={handleCreate}
         type="button"
       >

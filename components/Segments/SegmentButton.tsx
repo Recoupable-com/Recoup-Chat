@@ -37,13 +37,13 @@ const SegmentButton = ({ segment, onGenerateReport }: SegmentButtonProps) => {
               </div>
             </div>
           )}
-          <span className="text-sm text-gray-600 dark:text-gray-300">{segment.size} Fans</span>
+          <span className="text-sm text-muted-foreground dark:text-muted-foreground">{segment.size} Fans</span>
         </div>
       </div>
 
       {/* Arrow Icon */}
       <div className="absolute bottom-4 right-4">
-        <ArrowUpRight className="w-4 h-4 text-gray-400 dark:text-gray-500 group-hover:text-gray-600 dark:group-hover:text-gray-400 transition-colors" />
+        <ArrowUpRight className="w-4 h-4 text-muted-foreground dark:text-muted-foreground group-hover:text-muted-foreground dark:group-hover:text-muted-foreground transition-colors" />
       </div>
     </Card>
   );

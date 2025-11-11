@@ -5,7 +5,7 @@ export function Sora2VideoSkeleton() {
     <div className="flex flex-col gap-2 py-2">
       <div className="flex items-center gap-2">
         <Loader className="h-4 w-4 animate-spin text-primary dark:text-white" />
-        <span className="text-sm text-muted-foreground dark:text-gray-400">
+        <span className="text-sm text-muted-foreground dark:text-muted-foreground">
           Generating video...
         </span>
       </div>

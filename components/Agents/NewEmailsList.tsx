@@ -11,7 +11,7 @@ const NewEmailsList = ({ emails, onRemoveEmail }: NewEmailsListProps) => {
 
   return (
     <div>
-      <div className="text-sm text-gray-600 mb-2">
+      <div className="text-sm text-muted-foreground mb-2">
         New shares to add:
       </div>
       <div className="flex flex-wrap gap-2">

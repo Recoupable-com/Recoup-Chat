@@ -54,7 +54,7 @@ const SegmentFanCircles = ({
               />
             ) : (
               <div className="h-6 w-6 rounded-full border-2 border-white bg-gray-200 flex items-center justify-center hover:z-10 hover:scale-110 transition-all duration-200 hover:shadow-md">
-                <User className="w-3 h-3 text-gray-500" />
+                <User className="w-3 h-3 text-muted-foreground" />
               </div>
             )}
             </Link>
@@ -84,7 +84,7 @@ const SegmentFanCircles = ({
         </FanProfileHover>
       ))}
       {showCounter && (
-        <div className="flex h-6 w-6 items-center justify-center rounded-full border-2 border-white bg-gray-700 text-center text-xs font-medium text-white">
+        <div className="flex h-6 w-6 items-center justify-center rounded-full border-2 border-white bg-card text-center text-xs font-medium text-white">
           +{remainingCount > 99 ? '99' : remainingCount}
         </div>
       )}

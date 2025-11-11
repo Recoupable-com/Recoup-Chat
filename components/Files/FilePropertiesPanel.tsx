@@ -62,7 +62,7 @@ export default function FilePropertiesPanel({
         </div>
 
         {file ? (
-          <div className="space-y-3 text-sm dark:text-gray-200">
+          <div className="space-y-3 text-sm dark:text-muted-foreground">
             <div>
               <div className="text-xs text-muted-foreground">Name</div>
               <div className="font-medium break-words flex items-center gap-2 dark:text-white">
@@ -73,7 +73,7 @@ export default function FilePropertiesPanel({
               <div className="col-span-1 text-xs text-muted-foreground">
                 Type
               </div>
-              <div className="col-span-2 dark:text-gray-200">
+              <div className="col-span-2 dark:text-muted-foreground">
                 {isDirectory ? "Folder" : file.mime_type || "File"}
               </div>
               {!isDirectory && (
@@ -81,13 +81,13 @@ export default function FilePropertiesPanel({
                   <div className="col-span-1 text-xs text-muted-foreground">
                     Extension
                   </div>
-                  <div className="col-span-2 dark:text-gray-200">{extension || "—"}</div>
+                  <div className="col-span-2 dark:text-muted-foreground">{extension || "—"}</div>
                 </>
               )}
               <div className="col-span-1 text-xs text-muted-foreground">
                 Path
               </div>
-              <div className="col-span-2 break-all dark:text-gray-200">{friendlyPath}</div>
+              <div className="col-span-2 break-all dark:text-muted-foreground">{friendlyPath}</div>
             </div>
           </div>
         ) : (

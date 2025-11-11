@@ -93,7 +93,7 @@ const ChatItem = ({
           ? "bg-primary/20 dark:bg-primary/30 border border-primary/30 dark:border-primary/40"
           : isActive
             ? "bg-primary/10 "
-            : "hover:bg-gray-100 dark:hover:bg-dark-bg-tertiary"
+            : "hover:bg-muted dark:hover:bg-dark-bg-tertiary"
       }`}
       onMouseEnter={onMouseEnter}
       onMouseLeave={onMouseLeave}
@@ -109,7 +109,7 @@ const ChatItem = ({
         } ${
           isSelected
             ? "bg-primary border-primary"
-            : "border-gray-300 -light hover:border-primary/50"
+            : "border-border -light hover:border-primary/50"
         }`}
         aria-label="Select chat"
       >
@@ -123,7 +123,7 @@ const ChatItem = ({
         type="button"
         onClick={handleClick}
       >
-        <p className={`text-sm truncate dark:text-gray-200 ${isActive ? "font-medium" : ""}`}>
+        <p className={`text-sm truncate dark:text-muted-foreground ${isActive ? "font-medium" : ""}`}>
           {displayText}
         </p>
       </button>
@@ -132,7 +132,7 @@ const ChatItem = ({
         <button
           ref={setButtonRef}
           className={cn(
-            `shrink-0 p-1 text-muted-foreground hover:text-gray-700 dark:hover:text-gray-200 transition-colors duration-150 ${
+            `shrink-0 p-1 text-muted-foreground hover:text-foreground dark:hover:text-muted-foreground transition-colors duration-150 ${
               showOptions ? "opacity-100" : "opacity-0"
             }`,
             {
@@ -153,7 +153,7 @@ const ChatItem = ({
       {isMenuOpen && (
         <div
           ref={menuRef}
-          className="absolute right-2 top-full mt-1 bg-card shadow-lg rounded-md py-1 z-10 w-32 border border-gray-100 "
+          className="absolute right-2 top-full mt-1 bg-card shadow-lg rounded-md py-1 z-10 w-32 border border-border "
           onClick={(event) => event.stopPropagation()}
           onKeyDown={(event) => {
             if (event.key === "Escape") {
@@ -165,7 +165,7 @@ const ChatItem = ({
         >
           <button
             type="button"
-            className="w-full text-left px-3 py-2 hover:bg-gray-50 dark:hover:bg-dark-bg-tertiary text-sm dark:text-gray-200 flex items-center gap-2 transition-colors"
+            className="w-full text-left px-3 py-2 hover:bg-muted dark:hover:bg-dark-bg-tertiary text-sm dark:text-muted-foreground flex items-center gap-2 transition-colors"
             onClick={onRenameClick}
             role="menuitem"
           >

@@ -280,9 +280,9 @@ export const Icons = {
       />
     </svg>
   ),
-  CheckIcon: () => <span className="text-sm font-medium text-gray-600">✓</span>,
+  CheckIcon: () => <span className="text-sm font-medium text-muted-foreground">✓</span>,
   UncheckedIcon: () => (
-    <span className="h-6 w-6 rounded-full bg-gray-200 flex items-center justify-center shrink-0 border border-gray-300"></span>
+    <span className="h-6 w-6 rounded-full bg-gray-200 flex items-center justify-center shrink-0 border border-border"></span>
   ),
   clock: () => (
     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="lucide lucide-clock-icon lucide-clock"><path d="M12 6v6l4 2"/><circle cx="12" cy="12" r="10"/></svg>

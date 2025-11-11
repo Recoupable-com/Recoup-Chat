@@ -23,9 +23,9 @@ const YouTubeSetThumbnailResult = ({
     thumbObj?.default?.url;
 
   return (
-    <div className="rounded-xl overflow-hidden bg-white shadow-sm border border-gray-100 max-w-xs mr-auto">
+    <div className="rounded-xl overflow-hidden bg-white shadow-sm border border-border max-w-xs mr-auto">
       {thumb && (
-        <div className="w-full aspect-video bg-gray-50">
+        <div className="w-full aspect-video bg-muted >
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img
             src={thumb}
@@ -39,7 +39,7 @@ const YouTubeSetThumbnailResult = ({
           <div className="w-2 h-2 rounded-full bg-green-500"></div>
           <div className="font-medium text-sm">Thumbnail updated</div>
         </div>
-        <div className="text-xs text-gray-500 pl-4">
+        <div className="text-xs text-muted-foreground pl-4">
           {result.message || "Successfully set new thumbnail."}
         </div>
       </div>

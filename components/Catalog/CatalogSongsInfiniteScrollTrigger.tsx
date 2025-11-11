@@ -10,7 +10,7 @@ const CatalogSongsInfiniteScrollTrigger = ({
   return (
     <div ref={observerTarget} className="h-20 flex items-center justify-center">
       {isFetchingNextPage && (
-        <p className="text-sm text-gray-500">Loading more songs...</p>
+        <p className="text-sm text-muted-foreground">Loading more songs...</p>
       )}
     </div>
   );

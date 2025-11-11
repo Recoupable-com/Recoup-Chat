@@ -128,7 +128,7 @@ const DeleteConfirmationModal = ({ isOpen, onClose, chatRoom, chatRooms, onDelet
         <div className="flex justify-end gap-3 mt-6">
           <button
             type="button"
-            className="px-5 py-2.5 text-base border border-gray-300 rounded-lg transition-colors duration-200 hover:bg-gray-100 min-w-[100px] flex items-center justify-center"
+            className="px-5 py-2.5 text-base border border-border rounded-lg transition-colors duration-200 hover:bg-muted min-w-[100px] flex items-center justify-center"
             onClick={onClose}
             disabled={isDeleting}
           >

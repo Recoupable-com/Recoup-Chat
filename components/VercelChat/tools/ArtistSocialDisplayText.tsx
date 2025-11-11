@@ -10,19 +10,19 @@ const ArtistSocialDisplayText = ({ social }: { social: SocialType }) => {
 
   if (hasUsername) {
     return (
-      <span className="text-xs text-gray-600 dark:text-gray-400 truncate max-w-full">
+      <span className="text-xs text-muted-foreground dark:text-muted-foreground truncate max-w-full">
         {username}
       </span>
     );
   } else if (isYoutube && youtubeChannelName) {
     return (
-      <span className="text-xs text-gray-600 dark:text-gray-400 truncate max-w-full">
+      <span className="text-xs text-muted-foreground dark:text-muted-foreground truncate max-w-full">
         {youtubeChannelName}
       </span>
     );
   } else {
     return (
-      <span className="text-xs text-gray-500 truncate max-w-full">
+      <span className="text-xs text-muted-foreground truncate max-w-full">
         {social.profile_url}
       </span>
     );

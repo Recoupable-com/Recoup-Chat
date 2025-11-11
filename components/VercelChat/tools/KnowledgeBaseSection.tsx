@@ -19,19 +19,19 @@ const KnowledgeBaseSection = ({ knowledges }: { knowledges: Knowledge[] }) => {
             rel="noopener noreferrer"
           >
             <div className="flex items-center gap-3 px-3 py-3 rounded-lg hover:bg-white/10 transition-colors group cursor-pointer">
-              <div className="w-8 h-8 bg-gray-700 rounded flex items-center justify-center">
-                <FileText className="w-4 h-4 text-gray-300" />
+              <div className="w-8 h-8 bg-card rounded flex items-center justify-center">
+                <FileText className="w-4 h-4 text-muted-foreground" />
               </div>
 
               <div className="flex-1 min-w-0">
                 <div className="text-white text-sm font-medium truncate">
                   {knowledge.name}
                 </div>
-                <div className="text-xs text-gray-400">{knowledge.type}</div>
+                <div className="text-xs text-muted-foreground">{knowledge.type}</div>
               </div>
 
               <div className="opacity-0 group-hover:opacity-100 transition-opacity">
-                <ExternalLink className="w-4 h-4 text-gray-400 hover:text-white" />
+                <ExternalLink className="w-4 h-4 text-muted-foreground hover:text-white" />
               </div>
             </div>
           </Link>

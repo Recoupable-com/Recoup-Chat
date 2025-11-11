@@ -20,7 +20,7 @@ const TasksPage = () => {
       <p className="text-center md:text-left font-plus_jakarta_sans_bold text-3xl mb-4">
         Tasks
       </p>
-      <p className="text-base text-gray-500 text-center md:text-left mb-8 font-light font-inter max-w-2xl">
+      <p className="text-base text-muted-foreground text-center md:text-left mb-8 font-light font-inter max-w-2xl">
         View and manage all the tasks for your selected artist.
       </p>
 

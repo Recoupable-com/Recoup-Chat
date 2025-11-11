@@ -19,19 +19,19 @@ export default function InsertCatalogSongsList({
       <table className="w-full text-xs border-collapse">
         <thead>
           <tr className="border-b border-gray-200">
-            <th className="text-left py-2 px-3 font-semibold text-gray-700">
+            <th className="text-left py-2 px-3 font-semibold text-foreground">
               Title
             </th>
-            <th className="text-left py-2 px-3 font-semibold text-gray-700">
+            <th className="text-left py-2 px-3 font-semibold text-foreground">
               Artist
             </th>
-            <th className="text-left py-2 px-3 font-semibold text-gray-700">
+            <th className="text-left py-2 px-3 font-semibold text-foreground">
               Album
             </th>
-            <th className="text-left py-2 px-3 font-semibold text-gray-700">
+            <th className="text-left py-2 px-3 font-semibold text-foreground">
               ISRC
             </th>
-            <th className="text-left py-2 px-3 font-semibold text-gray-700">
+            <th className="text-left py-2 px-3 font-semibold text-foreground">
               Notes
             </th>
           </tr>

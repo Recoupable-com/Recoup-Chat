@@ -57,7 +57,7 @@ const TaskCard: React.FC<TaskCardProps> = ({ task, isDeleted }) => {
   return (
     <div
       className={cn(
-        `group flex items-center justify-between py-4 px-4 hover:bg-gray-50 dark:hover:bg-[#1a1a1a] transition-colors -mx-4`,
+        `group flex items-center justify-between py-4 px-4 hover:bg-muted dark:hover:bg-[#1a1a1a] transition-colors -mx-4`,
         {
           "opacity-70": isDeleted,
         }
@@ -71,15 +71,15 @@ const TaskCard: React.FC<TaskCardProps> = ({ task, isDeleted }) => {
       <div className="flex items-center space-x-4">
         <div className="flex items-center space-x-2">
           {isRecurring(task.schedule) && (
-            <Repeat className="h-4 w-4 text-gray-400 dark:text-gray-500 flex-shrink-0" />
+            <Repeat className="h-4 w-4 text-muted-foreground dark:text-muted-foreground flex-shrink-0" />
           )}
-          <span className="text-base text-gray-600 dark:text-gray-400">
+          <span className="text-base text-muted-foreground dark:text-muted-foreground">
             {parseCronToHuman(task.schedule.trim())}
           </span>
         </div>
         <div className="flex items-center space-x-2 w-20 justify-end relative">
           <div className="opacity-0 group-hover:opacity-100 transition-opacity">
-            <Edit className="h-5 w-5 text-gray-400 dark:text-gray-500 hover:text-gray-600 dark:hover:text-gray-300 cursor-pointer" />
+            <Edit className="h-5 w-5 text-muted-foreground dark:text-muted-foreground hover:text-muted-foreground dark:hover:text-muted-foreground cursor-pointer" />
           </div>
           <DropdownMenu open={isDropdownOpen} onOpenChange={setIsDropdownOpen}>
             <DropdownMenuTrigger asChild>
@@ -87,7 +87,7 @@ const TaskCard: React.FC<TaskCardProps> = ({ task, isDeleted }) => {
                 className="opacity-0 group-hover:opacity-100 transition-opacity"
                 onClick={(e) => e.stopPropagation()} // Prevent opening the edit dialog
               >
-                <MoreHorizontal className="h-5 w-5 text-gray-400 dark:text-gray-500 hover:text-gray-600 dark:hover:text-gray-300 cursor-pointer" />
+                <MoreHorizontal className="h-5 w-5 text-muted-foreground dark:text-muted-foreground hover:text-muted-foreground dark:hover:text-muted-foreground cursor-pointer" />
               </div>
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end" className="w-32">
@@ -110,17 +110,17 @@ const TaskCard: React.FC<TaskCardProps> = ({ task, isDeleted }) => {
             </DropdownMenuContent>
           </DropdownMenu>
           {isActive && (
-            <span className="px-2 py-1 text-xs font-medium bg-gray-100  text-gray-600 dark:text-gray-400 rounded-full group-hover:hidden absolute">
+            <span className="px-2 py-1 text-xs font-medium bg-muted  text-muted-foreground dark:text-muted-foreground rounded-full group-hover:hidden absolute">
               Active
             </span>
           )}
           {isPaused && (
-            <span className="px-2 py-1 text-xs font-medium bg-gray-100  text-gray-600 dark:text-gray-400 rounded-full group-hover:hidden absolute">
+            <span className="px-2 py-1 text-xs font-medium bg-muted  text-muted-foreground dark:text-muted-foreground rounded-full group-hover:hidden absolute">
               Paused
             </span>
           )}
           {isDeleted && (
-            <span className="px-2 py-1 text-xs font-medium bg-gray-100  text-gray-600 dark:text-gray-400 rounded-full group-hover:hidden absolute">
+            <span className="px-2 py-1 text-xs font-medium bg-muted  text-muted-foreground dark:text-muted-foreground rounded-full group-hover:hidden absolute">
               Deleted
             </span>
           )}

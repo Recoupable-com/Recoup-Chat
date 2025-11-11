@@ -18,11 +18,11 @@ const CommentDetailsDialogHeader: React.FC<CommentDetailsDialogHeaderProps> = ({
     <DialogHeader>
       <DialogTitle className="flex items-center space-x-2">
         <span>Comment Details</span>
-        <span className="text-xs text-gray-500 font-normal">
+        <span className="text-xs text-muted-foreground font-normal">
           {currentIndex + 1} of {totalComments}
         </span>
       </DialogTitle>
-      <DialogDescription className="text-xs text-gray-400">
+      <DialogDescription className="text-xs text-muted-foreground">
         Full details of the selected comment
       </DialogDescription>
     </DialogHeader>

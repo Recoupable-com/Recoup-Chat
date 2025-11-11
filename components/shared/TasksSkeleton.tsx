@@ -14,7 +14,7 @@ const TasksSkeleton: FC<TasksSkeletonProps> = ({ numberOfTasks = 2 }) => {
         <div className="h-5 w-5 bg-slate-300  rounded-full mt-0.5 flex-shrink-0" />
         <div className="flex-1">
           <div className="flex items-center space-x-2">
-            <Calendar className="h-4 w-4 text-slate-400 dark:text-gray-500" />
+            <Calendar className="h-4 w-4 text-slate-400 dark:text-muted-foreground" />
             <div className="h-4 bg-slate-300  rounded w-48" />
           </div>
         </div>
@@ -32,7 +32,7 @@ const TasksSkeleton: FC<TasksSkeletonProps> = ({ numberOfTasks = 2 }) => {
               {/* Task Header */}
               <div className="flex items-center justify-between">
                 <div className="flex items-center space-x-2">
-                  <Clock className="h-4 w-4 text-slate-400 dark:text-gray-500" />
+                  <Clock className="h-4 w-4 text-slate-400 dark:text-muted-foreground" />
                   <div className="h-4 bg-slate-300  rounded w-32" />
                 </div>
                 <div className="h-5 bg-slate-300  rounded-full w-16" />

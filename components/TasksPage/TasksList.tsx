@@ -51,7 +51,7 @@ const TasksList: React.FC<TasksListProps> = ({ tasks, isLoading, isError }) => {
         <TaskDetailsDialog key={task.id} task={task}>
           <div
             className={
-              index !== tasks.length - 1 ? "border-b border-gray-100 " : ""
+              index !== tasks.length - 1 ? "border-b border-border " : ""
             }
           >
             <TaskCard task={task} />

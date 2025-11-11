@@ -19,16 +19,16 @@ const ModelSelectItem = ({ model }: { model: GatewayLanguageModelEntry }) => {
     <div className="w-full">
       <div className="flex items-center gap-2.5">
         <span className="font-semibold text-sm text-foreground dark:text-white">{model.name}</span>
-        {isLocked && <Lock className="h-3 w-3 text-muted-foreground dark:text-gray-400" />}
-        {isUnlockedPro && <Crown className="h-3 w-3 text-muted-foreground dark:text-gray-400" />}
+        {isLocked && <Lock className="h-3 w-3 text-muted-foreground dark:text-muted-foreground" />}
+        {isUnlockedPro && <Crown className="h-3 w-3 text-muted-foreground dark:text-muted-foreground" />}
         {featuredConfig?.pill && (
-          <span className="px-2.5 py-0.5 text-xs font-medium bg-transparent text-gray-700 dark:text-gray-300 rounded-full border border-border-light">
+          <span className="px-2.5 py-0.5 text-xs font-medium bg-transparent text-foreground dark:text-muted-foreground rounded-full border border-border-light">
             {featuredConfig.pill}
           </span>
         )}
       </div>
       {featuredConfig?.description && (
-        <div className="text-xs text-muted-foreground/80 dark:text-gray-400 mt-1.5 font-normal">
+        <div className="text-xs text-muted-foreground/80 dark:text-muted-foreground mt-1.5 font-normal">
           {featuredConfig.description}
         </div>
       )}

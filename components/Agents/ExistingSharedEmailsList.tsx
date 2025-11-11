@@ -11,7 +11,7 @@ const ExistingSharedEmailsList = ({ emails, onRemoveEmail }: ExistingSharedEmail
 
   return (
     <div>
-      <div className="flex items-center gap-2 text-sm text-gray-600 mb-2">
+      <div className="flex items-center gap-2 text-sm text-muted-foreground mb-2">
         <Users className="h-4 w-4" />
         <span>Already shared with:</span>
       </div>

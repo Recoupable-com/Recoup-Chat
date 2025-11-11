@@ -128,7 +128,7 @@ const RenameModal = ({ isOpen, onClose, chatRoom, onRename }: RenameModalProps) 
               type="text"
               id="chatName"
               className={`w-full px-4 py-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 transition-colors duration-200 text-base ${
-                error ? 'border-red-500' : 'border-gray-300'
+                error ? 'border-red-500' : 'border-border'
               }`}
               value={name}
               onChange={handleChange}
@@ -142,7 +142,7 @@ const RenameModal = ({ isOpen, onClose, chatRoom, onRename }: RenameModalProps) 
           <div className="flex justify-end mt-6">
             <button
               type="submit"
-              className="px-5 py-2.5 text-base bg-black text-white rounded-lg hover:bg-gray-800 disabled:bg-gray-400 disabled:cursor-not-allowed transition-all duration-200 min-w-[100px] flex items-center justify-center font-medium"
+              className="px-5 py-2.5 text-base bg-black text-white rounded-lg hover:bg-card disabled:bg-gray-400 disabled:cursor-not-allowed transition-all duration-200 min-w-[100px] flex items-center justify-center font-medium"
               disabled={!isValid || isSubmitting}
             >
               {isSubmitting && (

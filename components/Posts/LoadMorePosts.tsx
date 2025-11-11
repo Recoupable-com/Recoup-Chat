@@ -14,7 +14,7 @@ const LoadMorePosts = ({
   return (
     <div ref={loadMoreRef} className="flex justify-center py-4">
       {isFetchingNextPage ? (
-        <div className="animate-pulse text-gray-500">Loading more posts...</div>
+        <div className="animate-pulse text-muted-foreground">Loading more posts...</div>
       ) : (
         <div className="h-10" />
       )}

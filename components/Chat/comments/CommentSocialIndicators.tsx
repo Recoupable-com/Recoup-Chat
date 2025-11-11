@@ -14,17 +14,17 @@ const CommentSocialIndicators: React.FC<CommentSocialIndicatorsProps> = ({
 }) => {
   return (
     <div className="flex items-center gap-2 pt-2">
-      <div className="flex items-center gap-1 text-gray-500">
+      <div className="flex items-center gap-1 text-muted-foreground">
         <Heart className="h-3 w-3" />
       </div>
-      <div className="flex items-center gap-1 text-gray-500">
+      <div className="flex items-center gap-1 text-muted-foreground">
         <MessageCircle className="h-3 w-3" />
       </div>
-      <div className="flex items-center gap-1 text-gray-500">
+      <div className="flex items-center gap-1 text-muted-foreground">
         <Send className="h-3 w-3" />
       </div>
-      <div className="flex items-center gap-1 text-gray-500">
-        <span className="text-gray-300">•</span>
+      <div className="flex items-center gap-1 text-muted-foreground">
+        <span className="text-muted-foreground">•</span>
         <span className="text-xs">
           {formatTimestamp(timestamp, true)}
         </span>

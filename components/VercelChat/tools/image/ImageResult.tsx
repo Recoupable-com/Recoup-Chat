@@ -69,8 +69,8 @@ export function ImageResult({ result }: ImageResultProps) {
           </div>
         </div>
       ) : (
-        <div className="p-4 border border-gray-200 rounded-md bg-gray-50 max-w-md">
-          <p className="text-sm text-gray-500">
+        <div className="p-4 border border-gray-200 rounded-md bg-muted max-w-md">
+          <p className="text-sm text-muted-foreground">
             {result.message || "Image generated but storage URL not available."}
           </p>
         </div>

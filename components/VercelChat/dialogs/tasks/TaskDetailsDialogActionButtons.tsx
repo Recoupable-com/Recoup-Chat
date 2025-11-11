@@ -85,7 +85,7 @@ const TaskDetailsDialogActionButtons: React.FC<
     }
   };
   return (
-    <div className="flex gap-2 mt-4 pt-4 border-t border-gray-100 justify-between shrink-0">
+    <div className="flex gap-2 mt-4 pt-4 border-t border-border justify-between shrink-0">
       <div className="flex gap-2">
         <Button
           variant="outline"
@@ -110,7 +110,7 @@ const TaskDetailsDialogActionButtons: React.FC<
       <Button
         onClick={handleSave}
         disabled={isLoading}
-        className="bg-gray-900 hover:bg-gray-800"
+        className="bg-background hover:bg-card"
         size="sm"
       >
         {isLoading ? "Saving..." : "Save"}

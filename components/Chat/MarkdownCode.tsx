@@ -36,7 +36,7 @@ const MarkdownCode: Components['code'] = (props: CodeBlockProps) => {
   }
   
   return (
-    <code className="px-1.5 py-0.5 rounded-sm bg-gray-100 font-mono text-sm">
+    <code className="px-1.5 py-0.5 rounded-sm bg-muted font-mono text-sm">
       {children}
     </code>
   );

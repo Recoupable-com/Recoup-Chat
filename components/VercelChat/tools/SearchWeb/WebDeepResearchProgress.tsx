@@ -21,7 +21,7 @@ export const WebDeepResearchProgress: React.FC<WebDeepResearchProgressProps> = (
     const progressPercent = calculateProgressPercent(elapsedSeconds, TOTAL_SECONDS);
 
     return (
-      <div className="border border-gray-200 dark:border-zinc-800 rounded-xl p-4 bg-gray-50 dark:bg-zinc-900/50">
+      <div className="border border-gray-200 dark:border-zinc-800 rounded-xl p-4 bg-muted dark:bg-zinc-900/50">
         <div className="flex items-baseline justify-between gap-4 mb-4">
           <span className="text-sm text-muted-foreground capitalize transition-opacity duration-300">
             {activityMessages[messageIndex]}

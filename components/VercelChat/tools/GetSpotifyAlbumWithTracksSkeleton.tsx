@@ -4,7 +4,7 @@ const GetSpotifyAlbumWithTracksSkeleton = () => {
       {/* Hero Section Skeleton */}
       <div className="relative rounded-2xl">
         {/* Background placeholder */}
-        <div className="absolute inset-0 bg-gray-800 rounded-t-2xl opacity-[0.999]">
+        <div className="absolute inset-0 bg-card rounded-t-2xl opacity-[0.999]">
           <div className="absolute inset-0 bg-black/60 backdrop-blur-sm" />
         </div>
 
@@ -13,7 +13,7 @@ const GetSpotifyAlbumWithTracksSkeleton = () => {
           <div className="flex flex-col sm:flex-row sm:items-end gap-4 sm:gap-6">
             {/* Album Cover Skeleton - Hidden on mobile */}
             <div className="flex-shrink-0 hidden sm:block">
-              <div className="w-48 h-48 bg-gray-700 rounded-lg" />
+              <div className="w-48 h-48 bg-card rounded-lg" />
             </div>
 
             {/* Album Info Skeleton */}
@@ -65,7 +65,7 @@ const GetSpotifyAlbumWithTracksSkeleton = () => {
                 {/* Track Info */}
                 <div className="flex-1 min-w-0 space-y-1">
                   <div className="h-4 bg-gray-600 rounded w-3/4" />
-                  <div className="h-3 bg-gray-700 rounded w-1/2" />
+                  <div className="h-3 bg-card rounded w-1/2" />
                 </div>
 
                 {/* Duration */}

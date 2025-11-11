@@ -36,7 +36,7 @@ export const ProfilePictureCircles = ({ fans }: ProfilePictureCirclesProps) => {
         </div>
       ))}
       {remainingCount > 0 && (
-        <span className="text-sm text-gray-500">and {remainingCount} more</span>
+        <span className="text-sm text-muted-foreground">and {remainingCount} more</span>
       )}
     </div>
   );

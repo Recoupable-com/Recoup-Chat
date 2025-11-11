@@ -40,7 +40,7 @@ const GetSpotifyArtistAlbumsResult: React.FC<{
         })}
       </div>
       {result.total > result.items.length && (
-        <div className="mt-4 text-center text-sm text-gray-500">
+        <div className="mt-4 text-center text-sm text-muted-foreground">
           Showing {result.items.length} of {result.total} albums
         </div>
       )}

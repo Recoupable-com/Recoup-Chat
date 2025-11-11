@@ -22,13 +22,13 @@ const CommentUserInfo: React.FC<CommentUserInfoProps> = ({
           @{username}
         </h3>
         {region && (
-          <span className="text-xs bg-gray-100 px-1.5 py-0.5 rounded-full text-gray-600">
+          <span className="text-xs bg-muted px-1.5 py-0.5 rounded-full text-muted-foreground">
             {region}
           </span>
         )}
       </div>
 
-      <div className="flex items-center gap-2 text-xs text-gray-500">
+      <div className="flex items-center gap-2 text-xs text-muted-foreground">
         {followerCount !== null && followerCount !== undefined && (
           <span>
             {formatFollowerCount(followerCount)} followers

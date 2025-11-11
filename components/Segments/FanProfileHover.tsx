@@ -44,7 +44,7 @@ const FanProfileHover = ({ fan, children }: FanProfileHoverProps) => {
                     />
                   ) : (
                     <div className="w-14 h-14 rounded-full bg-gray-200 border-2 border-gray-200 flex items-center justify-center">
-                      <User className="w-7 h-7 text-gray-500" />
+                      <User className="w-7 h-7 text-muted-foreground" />
                     </div>
                   )}
                 </div>

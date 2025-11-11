@@ -1,6 +1,6 @@
 const TaskSkeleton = () => {
   return (
-    <div className="border rounded-lg p-4 bg-gray-50/30 border-gray-200">
+    <div className="border rounded-lg p-4 bg-muted 30 border-gray-200">
       {/* Action Header Skeleton */}
       <div className="flex items-start justify-between mb-3">
         <div className="flex-1 min-w-0">
@@ -39,7 +39,7 @@ const TaskSkeleton = () => {
       </div>
 
       {/* Last Run Skeleton */}
-      <div className="mt-2 pt-2 border-t border-gray-100">
+      <div className="mt-2 pt-2 border-t border-border">
         <div className="flex items-center space-x-2">
           <div className="h-3 bg-gray-200 rounded w-16 animate-pulse"></div>
           <div className="h-3 bg-gray-200 rounded w-20 animate-pulse"></div>

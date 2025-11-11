@@ -17,9 +17,9 @@ export function ResponseTable({ properties }: ResponseTableProps) {
           {/* Mobile view - Card style */}
           <div className="block md:hidden space-y-4">
             {properties.map((prop) => (
-              <div key={prop.name} className="bg-gray-100 p-4 rounded mx-4">
+              <div key={prop.name} className="bg-muted p-4 rounded mx-4">
                 <div className="font-semibold mb-1">{prop.name}</div>
-                <div className="text-sm text-gray-600 mb-2">
+                <div className="text-sm text-muted-foreground mb-2">
                   Type: {prop.type}
                 </div>
                 <div className="text-sm">{prop.description}</div>
@@ -30,7 +30,7 @@ export function ResponseTable({ properties }: ResponseTableProps) {
           <div className="hidden md:block">
             <table className="w-full border-collapse">
               <thead>
-                <tr className="bg-gray-100">
+                <tr className="bg-muted >
                   <th className="text-left p-4 border">Property</th>
                   <th className="text-left p-4 border">Type</th>
                   <th className="text-left p-4 border">Description</th>

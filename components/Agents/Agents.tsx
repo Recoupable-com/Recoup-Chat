@@ -36,7 +36,7 @@ const Agents = () => {
         </p>
         <div className="flex items-center gap-4">
           <div className="flex items-center gap-2">
-            <span className="text-sm text-gray-600 dark:text-gray-400">
+            <span className="text-sm text-muted-foreground dark:text-muted-foreground">
               {isPrivate ? "Private" : "Public"}
             </span>
             <Switch checked={isPrivate} onCheckedChange={() => togglePrivate()} />
@@ -44,7 +44,7 @@ const Agents = () => {
           <CreateAgentButton />
         </div>
       </div>
-      <p className="text-lg text-gray-500 text-left mb-4 font-light font-inter max-w-2xl">
+      <p className="text-lg text-muted-foreground text-left mb-4 font-light font-inter max-w-2xl">
         <span className="sm:hidden">
           Smarter label teams, powered by agents.
         </span>
@@ -68,7 +68,7 @@ const Agents = () => {
           {loading ? (
             <AgentsSkeleton />
           ) : gridAgents.length === 0 ? (
-            <div className="text-center text-gray-400 py-12">
+            <div className="text-center text-muted-foreground py-12">
               No agents found for this tag.
             </div>
           ) : (

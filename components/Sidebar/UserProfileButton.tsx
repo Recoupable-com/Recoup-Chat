@@ -20,7 +20,7 @@ const UserProfileButton = () => {
         <p className="text-sm md:text-base font-semibold truncate dark:text-white">
           {displayName}
         </p>
-        <p className="text-xs text-muted-foreground dark:text-gray-400 truncate">{organization}</p>
+        <p className="text-xs text-muted-foreground dark:text-muted-foreground truncate">{organization}</p>
       </div>
       <UserProfileDropdown />
     </div>

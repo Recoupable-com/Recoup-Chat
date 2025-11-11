@@ -11,10 +11,10 @@ import { SectionHeader } from "./SectionHeader";
 const STYLES = {
   text: { primary: "text-gray-900 dark:text-gray-100" },
   bg: {
-    card: "bg-white dark:bg-gray-900",
-    error: "bg-gray-100 dark:bg-gray-800",
+    card: "bg-white dark:bg-background",
+    error: "bg-muted dark:bg-card",
   },
-  border: "border-gray-200 dark:border-gray-700",
+  border: "border-gray-200 dark:border-border",
 } as const;
 
 export interface BrowserToolResultType {

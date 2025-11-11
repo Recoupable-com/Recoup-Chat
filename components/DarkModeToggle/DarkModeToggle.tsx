@@ -34,14 +34,14 @@ const DarkModeToggle = () => {
     <button
       type="button"
       onClick={toggleTheme}
-      className="w-10 h-10 rounded-full bg-grey-secondary dark:bg-gray-700 flex items-center justify-center hover:bg-grey-light dark:hover:bg-gray-600 transition-colors"
+      className="w-10 h-10 rounded-full bg-grey-secondary dark:bg-card flex items-center justify-center hover:bg-grey-light dark:hover:bg-gray-600 transition-colors"
       aria-label={isDark ? "Switch to light mode" : "Switch to dark mode"}
       title={isDark ? "Switch to light mode" : "Switch to dark mode"}
     >
       {isDark ? (
         <Sun className="h-5 w-5 text-yellow-400" />
       ) : (
-        <Moon className="h-5 w-5 text-gray-700" />
+        <Moon className="h-5 w-5 text-foreground" />
       )}
     </button>
   );

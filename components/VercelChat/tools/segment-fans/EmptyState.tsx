@@ -8,7 +8,7 @@ import { fadeInVariants } from "./animations";
 const EmptyState: React.FC = () => {
   return (
     <motion.div 
-      className="text-xs text-gray-500 p-1.5"
+      className="text-xs text-muted-foreground p-1.5"
       {...fadeInVariants}
     >
       No fans found in this segment.

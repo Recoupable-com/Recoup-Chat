@@ -8,8 +8,8 @@ export function MermaidDiagramSkeleton() {
 
       {/* Centered content */}
       <div className="relative z-10 flex flex-col items-center">
-        <Loader2 className="h-8 w-8 animate-spin text-muted-foreground dark:text-gray-400 mb-2" />
-        <p className="text-sm text-muted-foreground dark:text-gray-400">
+        <Loader2 className="h-8 w-8 animate-spin text-muted-foreground dark:text-muted-foreground mb-2" />
+        <p className="text-sm text-muted-foreground dark:text-muted-foreground">
           Please wait, diagram is generating...
         </p>
       </div>

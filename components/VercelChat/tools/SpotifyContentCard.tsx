@@ -27,7 +27,7 @@ const SpotifyContentCard = ({ content }: SpotifyContentCardProps) => {
           />
         ) : (
           <div className="h-full w-full bg-gray-200 flex items-center justify-center">
-            <span className="text-gray-400">No Image</span>
+            <span className="text-muted-foreground">No Image</span>
           </div>
         )}
         {hasValidUrl && (
@@ -41,7 +41,7 @@ const SpotifyContentCard = ({ content }: SpotifyContentCardProps) => {
       <CardContent className="p-3">
         <h4 className="font-medium text-sm line-clamp-1">{content.name}</h4>
         {subtitle && (
-          <p className="text-xs text-gray-500 line-clamp-1 mt-1">
+          <p className="text-xs text-muted-foreground line-clamp-1 mt-1">
             {subtitle}
           </p>
         )}

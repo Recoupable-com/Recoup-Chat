@@ -24,15 +24,15 @@ export function CodeBlock({ code }: CodeBlockProps) {
     <div className="relative">
       <button
         onClick={handleCopy}
-        className="absolute right-2 top-2 p-2 rounded bg-gray-800 hover:bg-gray-700"
+        className="absolute right-2 top-2 p-2 rounded bg-card hover:bg-card"
       >
         {copied ? (
           <Check className="w-4 h-4 text-green-400" />
         ) : (
-          <Copy className="w-4 h-4 text-gray-400" />
+          <Copy className="w-4 h-4 text-muted-foreground" />
         )}
       </button>
-      <pre className="bg-gray-900 text-gray-100 p-6 rounded-lg overflow-x-auto">
+      <pre className="bg-background text-gray-100 p-6 rounded-lg overflow-x-auto">
         <code>{code}</code>
       </pre>
     </div>

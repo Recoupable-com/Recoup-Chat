@@ -16,7 +16,7 @@ const OfflinePage = () => {
         <h1 className="text-2xl md:text-4xl font-bold mb-4">
           Recoup is Offline
         </h1>
-        <p className="text-gray-500 max-w-md mx-auto text-base md:text-lg">
+        <p className="text-muted-foreground max-w-md mx-auto text-base md:text-lg">
           The internet is having an outage, affecting Recoup and thousands of
           other applications.
           <br />

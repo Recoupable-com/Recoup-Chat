@@ -31,11 +31,11 @@ export default function ErrorPageLayout({
           </div>
         )}
         
-        <h1 className="text-2xl md:text-3xl font-semibold mb-4 text-gray-800">
+        <h1 className="text-2xl md:text-3xl font-semibold mb-4 text-foreground">
           {title}
         </h1>
         
-        <p className="text-gray-600 max-w-md mx-auto text-base md:text-lg mb-8">
+        <p className="text-muted-foreground max-w-md mx-auto text-base md:text-lg mb-8">
           {description}
         </p>
         

@@ -35,7 +35,7 @@ export function SmsFeatures() {
             <div className="w-2 h-2 bg-green-500 rounded-full mt-2 flex-shrink-0"></div>
             <div>
               <h3 className="font-medium">{feature.title}</h3>
-              <p className="text-sm text-gray-600">{feature.description}</p>
+              <p className="text-sm text-muted-foreground">{feature.description}</p>
             </div>
           </div>
         ))}

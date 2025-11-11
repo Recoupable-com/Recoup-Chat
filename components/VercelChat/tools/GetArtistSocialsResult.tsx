@@ -37,10 +37,10 @@ export default function GetArtistSocialsResult({
       {hasSocials && (
         <div className="flex flex-col gap-4">
           <div className="flex items-center justify-between">
-            <h4 className="text-sm font-medium text-gray-700 dark:text-gray-300">
+            <h4 className="text-sm font-medium text-foreground dark:text-muted-foreground">
               Artist Socials
             </h4>
-            <span className="text-xs text-gray-500">
+            <span className="text-xs text-muted-foreground">
               {socials.length} {socials.length === 1 ? "platform" : "platforms"}
             </span>
           </div>
