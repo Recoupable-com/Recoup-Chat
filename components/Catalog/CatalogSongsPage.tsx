@@ -29,7 +29,7 @@ const CatalogSongsPage = ({ catalogId }: CatalogSongsPageProps) => {
           Back to Catalogs
         </button>
       </div>
-      <h1 className="text-lg md:text-xl font-bold pb-4">Catalog Songs</h1>
+      <h1 className="text-lg md:text-xl font-medium pb-4">Catalog Songs</h1>
       <CatalogSongsPageContent catalogId={catalogId} />
     </div>
   );

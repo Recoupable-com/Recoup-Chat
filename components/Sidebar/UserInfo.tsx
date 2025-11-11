@@ -1,4 +1,3 @@
-import Icon from "../Icon";
 import UserProfileButton from "./UserProfileButton";
 
 const UserInfo = ({
@@ -7,11 +6,8 @@ const UserInfo = ({
   toggleMenuExpanded: () => void;
 }) => {
   return (
-    <div className="flex gap-3 items-center">
+    <div className="w-full">
       <UserProfileButton />
-      <button type="button" onClick={toggleMenuExpanded}>
-        <Icon name="exit" />
-      </button>
     </div>
   );
 };

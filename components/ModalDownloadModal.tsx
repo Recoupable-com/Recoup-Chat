@@ -22,7 +22,7 @@ const MobileDownloadModal = () => {
               width={100}
               height={100}
             />
-            <h2 className="text-lg font-bold mb-2 text-center">
+            <h2 className="text-lg font-medium mb-2 text-center">
               Add to Home Screen
             </h2>
             <button

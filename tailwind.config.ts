@@ -9,6 +9,9 @@ const config: Config = {
   ],
   theme: {
   	extend: {
+      fontFamily: {
+        heading: ['var(--font-heading)'],
+      },
       keyframes: {
         "success-pulse": {
           "0%, 100%": { opacity: "0" },

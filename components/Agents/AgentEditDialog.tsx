@@ -93,7 +93,7 @@ const AgentEditDialog: React.FC<AgentEditDialogProps> = ({ agent }) => {
       </DialogTrigger>
       <DialogContent className="sm:max-w-[500px] rounded-xl">
         <DialogHeader>
-          <DialogTitle className="font-plus_jakarta_sans_bold">Edit Agent</DialogTitle>
+          <DialogTitle className="font-sans font-medium">Edit Agent</DialogTitle>
           <DialogDescription>Update the agent template details.</DialogDescription>
         </DialogHeader>
         <CreateAgentForm

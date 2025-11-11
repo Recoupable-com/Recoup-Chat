@@ -6,7 +6,12 @@ import FansWrapper from "@/components/Fans/FansWrapper";
 const FansPage: NextPage = () => {
   return (
     <div className="max-w-screen min-h-screen p-4">
-      <h1 className="text-lg md:text-xl font-bold pb-4">Artist Fans</h1>
+      <div className="mb-4">
+        <p className="text-left font-heading text-3xl font-bold dark:text-white mb-4">Fans</p>
+        <p className="text-lg text-muted-foreground text-left mb-4 font-light font-sans max-w-2xl">
+          View your fan groups and get automated insights.
+        </p>
+      </div>
       <FansWrapper />
     </div>
   );

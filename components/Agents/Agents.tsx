@@ -31,7 +31,7 @@ const Agents = () => {
   return (
     <div className="max-w-full md:max-w-[calc(100vw-200px)] grow py-8 pb-0 px-6 md:px-12 flex flex-col h-full min-h-0">
       <div className="flex justify-between items-center mb-4">
-        <p className="text-left font-plus_jakarta_sans_bold text-3xl">
+        <p className="text-left font-heading text-3xl font-bold dark:text-white">
           Agents
         </p>
         <div className="flex items-center gap-4">
@@ -44,7 +44,7 @@ const Agents = () => {
           <CreateAgentButton />
         </div>
       </div>
-      <p className="text-lg text-muted-foreground text-left mb-4 font-light font-inter max-w-2xl">
+      <p className="text-lg text-muted-foreground text-left mb-4 font-light font-sans max-w-2xl">
         <span className="sm:hidden">
           Smarter label teams, powered by agents.
         </span>
@@ -72,7 +72,7 @@ const Agents = () => {
               No agents found for this tag.
             </div>
           ) : (
-            <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-4 md:gap-6 xl:gap-8 pr-1 md:pr-2">
+            <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-4 md:gap-6 xl:gap-8 px-1 md:px-2">
               {gridAgents.map((agent) => (
                 <div key={agent.title} className="relative">
                   <AgentCard

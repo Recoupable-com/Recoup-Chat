@@ -49,7 +49,7 @@ const CreateAgentDialog = ({ children }: CreateAgentDialogProps) => {
       <DialogTrigger asChild>{children}</DialogTrigger>
       <DialogContent className="sm:max-w-[500px] rounded-xl">
         <DialogHeader>
-          <DialogTitle className="font-plus_jakarta_sans_bold">
+          <DialogTitle className="font-sans font-medium">
             Create New Agent
           </DialogTitle>
           <DialogDescription>

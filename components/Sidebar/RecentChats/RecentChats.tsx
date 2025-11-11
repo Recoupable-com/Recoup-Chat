@@ -51,7 +51,7 @@ const RecentChats = ({ toggleModal }: { toggleModal: () => void }) => {
           onDelete={handleBulkDelete}
         />
       ) : (
-        <p className="text-sm mb-1 md:mb-2 font-inter text-grey-dark dark:text-muted-foreground px-2 shrink-0">
+        <p className="text-sm mb-1 md:mb-2 font-sans text-grey-dark dark:text-muted-foreground px-2 shrink-0">
           Recent Chats
         </p>
       )}

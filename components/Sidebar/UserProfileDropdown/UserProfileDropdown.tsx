@@ -66,7 +66,7 @@ const UserProfileDropdown = () => {
           <DropdownMenuSub>
             <DropdownMenuSubTrigger className="cursor-pointer">
               {getThemeIcon()}
-              <span>Theme: {getThemeLabel()}</span>
+              <span>Theme</span>
             </DropdownMenuSubTrigger>
             <DropdownMenuSubContent>
               <DropdownMenuItem 

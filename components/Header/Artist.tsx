@@ -66,9 +66,9 @@ const Artist = ({
               isSelectedArtist && "w-fit rounded-full",
             ]
           : [
-              "flex gap-3 items-center px-2 text-sm rounded-md text-grey-dark ",
-              isAnyArtistSelected && "hover:bg-grey-light-1 ",
-              isSelectedArtist && "!bg-primary/10 ",
+              "flex gap-3 items-center px-2 text-sm rounded-md text-foreground",
+              isAnyArtistSelected && "hover:bg-accent",
+              isSelectedArtist && "!bg-primary/10",
             ],
         shouldHighlight && "z-50 relative"
       )}
@@ -102,7 +102,7 @@ const Artist = ({
           <div
             key={artist?.account_id}
             className={cn(
-              "text-left grow text-grey-dark ",
+              "text-left grow text-foreground",
               shouldHighlight && "font-medium"
             )}
             title={artist?.name || ""}
@@ -118,9 +118,9 @@ const Artist = ({
               ariaLabel={artist?.pinned ? "Unpin artist" : "Pin artist"}
             >
               {artist?.pinned ? (
-                <Pin className="size-4 text-primary " />
+                <Pin className="size-4 text-primary" />
               ) : (
-                <PinOff className="size-4 text-grey-dark " />
+                <PinOff className="size-4 text-muted-foreground" />
               )}
             </ArtistActionButton>
             
@@ -134,7 +134,7 @@ const Artist = ({
               title="Edit artist settings"
               ariaLabel="Edit artist settings"
             >
-              <EllipsisVertical className="size-5 rotate-90 text-grey-dark " />
+              <EllipsisVertical className="size-5 rotate-90 text-muted-foreground" />
             </ArtistActionButton>
           </div>
         </>

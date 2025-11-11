@@ -84,9 +84,9 @@ export default function RootLayout({
               <Sidebar />
               <Header />
               <ArtistSettingModal />
-              <div className="grow flex h-[100dvh] pt-16 md:pt-0 md:h-screen overflow-hidden md:bg-muted/30">
+              <div className="grow flex h-[100dvh] pt-16 md:pt-0 md:h-screen overflow-hidden bg-sidebar">
                 <div className="size-full md:py-4 md:pl-4">
-                  <div className="size-full bg-background overflow-y-auto md:rounded-xl flex flex-col md:shadow-md">
+                  <div className="size-full bg-card overflow-y-auto md:rounded-xl flex flex-col md:shadow-md md:border md:border-border">
                     {children}
                   </div>
                 </div>

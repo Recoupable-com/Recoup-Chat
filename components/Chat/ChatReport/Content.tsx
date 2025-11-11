@@ -17,9 +17,9 @@ export const ChatReportContent = ({ report }: ChatReportContentProps) => {
         {/* eslint-disable-next-line  @next/next/no-img-element */}
         <img src={bannerImage} alt="Artist banner" className="w-full" />
         <div className="absolute left-0 top-0 size-full flex items-center justify-end pr-3 gap-2">
-          <p className="text-white font-bold text-[40px]">{artistName}</p>
+          <p className="text-white font-medium text-[40px]">{artistName}</p>
           <Icon name="logo-xl" />
-          <p className="text-white font-bold text-[40px]">Recoup</p>
+          <p className="text-white font-medium text-[40px]">Recoup</p>
         </div>
       </div>
       <div

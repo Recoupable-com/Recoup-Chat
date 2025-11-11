@@ -50,7 +50,7 @@ const FanProfileHover = ({ fan, children }: FanProfileHoverProps) => {
                 </div>
                 <div className="flex-1 min-w-0">
                   <div className="flex items-center justify-between">
-                    <h4 className="font-plus_jakarta_sans_bold text-sm text-foreground truncate">
+                    <h4 className="font-sans font-medium text-sm text-foreground truncate">
                       {fan.username || "Unknown User"}
                     </h4>
                   </div>

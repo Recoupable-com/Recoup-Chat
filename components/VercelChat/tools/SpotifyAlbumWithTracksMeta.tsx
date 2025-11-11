@@ -27,7 +27,7 @@ const SpotifyAlbumWithTracksMeta: React.FC<SpotifyAlbumWithTracksMetaProps> = ({
         </Badge>
       </div>
 
-      <h1 className="text-4xl font-bold mb-2 drop-shadow-lg">
+      <h1 className="text-4xl font-medium mb-2 drop-shadow-lg">
         {result.name}
       </h1>
 

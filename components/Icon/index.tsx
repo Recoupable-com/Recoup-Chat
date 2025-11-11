@@ -12,7 +12,7 @@ const Icon = ({ name, className }: IIcon) => {
   const IconSVG = Icons[name];
 
   return (
-    <div className={cn("text-black dark:text-white flex items-center justify-center", className)}>
+    <div className={cn("text-foreground flex items-center justify-center", className)}>
       <IconSVG />
     </div>
   );

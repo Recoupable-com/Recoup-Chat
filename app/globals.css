@@ -14,8 +14,23 @@
    FONT FACES
    ============================================================================ */
 
-/* Fonts are loaded via Next.js font optimization in app/layout.tsx */
-/* No @font-face declarations needed - using Geist and Geist Mono from next/font */
+/* Primary fonts loaded via Next.js font optimization in app/layout.tsx */
+/* Geist and Geist Mono from next/font/google */
+
+/* Plus Jakarta Sans for headers */
+@font-face {
+  font-family: "PlusJakartaSans";
+  src: url("/fonts/PlusJakartaSans-Regular.ttf") format("truetype");
+  font-weight: 400;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: "PlusJakartaSans";
+  src: url("/fonts/PlusJakartaSans-Bold.ttf") format("truetype");
+  font-weight: 700;
+  font-style: normal;
+}
 
 /* ============================================================================
    DESIGN TOKENS (light mode)
@@ -65,11 +80,11 @@
    ============================================================================ */
 
 .dark {
-  --background: hsl(240 10% 3.9%);
+  --background: hsl(0 0% 3.9%);
   --foreground: hsl(0 0% 98%);
-  --card: hsl(240 10% 3.9%);
+  --card: hsl(0 0% 3.9%);
   --card-foreground: hsl(0 0% 98%);
-  --popover: hsl(240 10% 3.9%);
+  --popover: hsl(0 0% 3.9%);
   --popover-foreground: hsl(0 0% 98%);
   --primary: hsl(0 0% 98%);
   --primary-foreground: hsl(240 5.9% 10%);
@@ -89,7 +104,7 @@
   --chart-3: hsl(30 80% 55%);
   --chart-4: hsl(280 65% 60%);
   --chart-5: hsl(340 75% 55%);
-  --sidebar-background: hsl(240 5.9% 10%);
+  --sidebar-background: hsl(0 0% 10%);
   --sidebar-foreground: hsl(240 4.8% 95.9%);
   --sidebar-primary: hsl(224.3 76.3% 48%);
   --sidebar-primary-foreground: hsl(0 0% 100%);
@@ -107,6 +122,7 @@
 @theme {
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
+  --font-heading: "PlusJakartaSans", system-ui, -apple-system, sans-serif;
   
   --breakpoint-toast-mobile: 600px;
   
@@ -174,13 +190,13 @@
   
   html {
     color: black;
-    background: white;
+    background: hsl(0 0% 100%);
     overflow-x: hidden;
   }
   
   html.dark {
     color: white;
-    background: #0d0d0d;
+    background: hsl(0 0% 3.9%);
   }
   
   body {

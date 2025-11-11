@@ -13,7 +13,7 @@ const OfflinePage = () => {
             priority
           />
         </div>
-        <h1 className="text-2xl md:text-4xl font-bold mb-4">
+        <h1 className="text-2xl md:text-4xl font-medium mb-4">
           Recoup is Offline
         </h1>
         <p className="text-muted-foreground max-w-md mx-auto text-base md:text-lg">

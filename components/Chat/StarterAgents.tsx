@@ -35,7 +35,7 @@ export function StarterAgents({ isVisible }: StarterAgentsProps) {
           </span>
           <Tooltip>
             <TooltipTrigger asChild>
-              <h3 className="text-lg leading-[1.3] tracking-[-0.25px] font-semibold text-black font-plus_jakarta_sans cursor-help">
+              <h3 className="text-lg leading-[1.3] tracking-[-0.25px] font-semibold text-black font-sans cursor-help">
                 Quick Start
               </h3>
             </TooltipTrigger>
