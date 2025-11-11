@@ -98,25 +98,26 @@ const ChatItem = ({
       onMouseEnter={onMouseEnter}
       onMouseLeave={onMouseLeave}
     >
-      <button
-        type="button"
-        onClick={(event) => {
-          event.stopPropagation();
-          onSelect(event.shiftKey);
-        }}
-        className={`shrink-0 w-4 h-4 rounded border-2 transition-all duration-150 flex items-center justify-center ${
-          (isShiftPressed || isSelectionMode) ? "opacity-100" : "opacity-0"
-        } ${
-          isSelected
-            ? "bg-primary border-primary"
-            : "border-border -light hover:border-primary/50"
-        }`}
-        aria-label="Select chat"
-      >
-        {isSelected && (
-          <Check size={12} className="text-white" strokeWidth={3} />
-        )}
-      </button>
+      {(isShiftPressed || isSelectionMode) && (
+        <button
+          type="button"
+          onClick={(event) => {
+            event.stopPropagation();
+            onSelect(event.shiftKey);
+          }}
+          className={cn(
+            "shrink-0 w-4 h-4 rounded border-2 transition-all duration-150 flex items-center justify-center",
+            isSelected
+              ? "bg-primary border-primary"
+              : "border-border hover:border-primary/50"
+          )}
+          aria-label="Select chat"
+        >
+          {isSelected && (
+            <Check size={12} className="text-white" strokeWidth={3} />
+          )}
+        </button>
+      )}
 
       <button
         className="flex-grow text-left truncate min-w-0"
