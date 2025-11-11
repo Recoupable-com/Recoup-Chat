@@ -17,7 +17,12 @@ const queryClient = new QueryClient();
 
 const Providers = ({ children }: { children: React.ReactNode }) => (
   <QueryClientProvider client={queryClient}>
-    <ThemeProvider attribute="class" defaultTheme="light" enableSystem={false}>
+    <ThemeProvider 
+      attribute="class" 
+      defaultTheme="system" 
+      enableSystem={true}
+      disableTransitionOnChange
+    >
       <WagmiProvider>
         <PrivyProvider>
           <MiniKitProvider>
