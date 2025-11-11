@@ -153,7 +153,7 @@ const ChatItem = ({
       {isMenuOpen && (
         <div
           ref={menuRef}
-          className="absolute right-2 top-full mt-1 bg-white dark:bg-dark-bg-secondary shadow-lg rounded-md py-1 z-10 w-32 border border-gray-100 dark:border-dark-border"
+          className="absolute right-2 top-full mt-1 bg-card shadow-lg rounded-md py-1 z-10 w-32 border border-gray-100 dark:border-dark-border"
           onClick={(event) => event.stopPropagation()}
           onKeyDown={(event) => {
             if (event.key === "Escape") {

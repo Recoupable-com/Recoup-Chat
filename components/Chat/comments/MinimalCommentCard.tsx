@@ -48,7 +48,7 @@ const MinimalCommentCard: React.FC<MinimalCommentCardProps> = ({ comment, onClic
       {/* Content - responsive text sizing */}
       <div className="flex-grow min-w-0">
         <div className="flex items-start space-x-1">
-          <span className="font-medium text-xs md:text-[11px] lg:text-xs text-gray-900 dark:text-white flex-shrink-0">@{comment.username}</span>
+          <span className="font-medium text-xs md:text-[11px] lg:text-xs text-foreground flex-shrink-0">@{comment.username}</span>
           <span className="text-xs md:text-[11px] lg:text-xs text-gray-600 dark:text-gray-400 truncate leading-tight">
             {previewText}
           </span>

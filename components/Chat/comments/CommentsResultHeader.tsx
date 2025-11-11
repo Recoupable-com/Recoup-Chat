@@ -19,7 +19,7 @@ const CommentsResultHeader: React.FC<CommentsResultHeaderProps> = ({
         <div className="h-5 w-5 rounded-full bg-blue-100 dark:bg-blue-900/30 flex items-center justify-center">
           <MessageCircle className="h-3 w-3 text-blue-600 dark:text-blue-400" />
         </div>
-        <span className="font-medium text-sm text-gray-900 dark:text-white">Comments</span>
+        <span className="font-medium text-sm text-foreground">Comments</span>
         <span className="text-xs text-muted-foreground">
           {commentCount} of {totalCount}
         </span>

@@ -18,7 +18,7 @@ const SegmentButton = ({ segment, onGenerateReport }: SegmentButtonProps) => {
     >
       <div className="space-y-4">
         {/* Title */}
-        <h3 className="text-base font-bold text-gray-900 dark:text-white">
+        <h3 className="text-base font-bold text-foreground">
           {segment.name}
         </h3>
 

@@ -65,7 +65,7 @@ const TaskCard: React.FC<TaskCardProps> = ({ task, isDeleted }) => {
     >
       <div className="flex items-center space-x-4">
         <TaskArtistImage artistAccountId={task.artist_account_id} />
-        <h4 className="text-base font-medium text-gray-900 dark:text-white">{task.title}</h4>
+        <h4 className="text-base font-medium text-foreground">{task.title}</h4>
       </div>
 
       <div className="flex items-center space-x-4">
