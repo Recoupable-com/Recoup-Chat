@@ -51,7 +51,7 @@ export function ChatInput({
   };
 
   return (
-    <div className="relative">
+    <div className="relative px-4">
       <div
         className={cn("w-full mx-auto", {
           "absolute bottom-[100%]": messages.length > 0,
