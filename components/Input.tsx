@@ -41,17 +41,17 @@ function Input({
 
   return (
     <div className="relative w-full">
-      <label className="text-sm">
+      <label className="text-sm text-gray-700 dark:text-dark-text-secondary">
         {label}
-        {required && <span className="text-red-700"> *</span>}
+        {required && <span className="text-red-700 dark:text-red-400"> *</span>}
       </label>
       <input
         {...(id && { id })}
         value={value}
-        className={`w-full !outline-none border-grey border-[1px] px-2 py-1 md:p-2 rounded-md text-sm
+        className={`w-full !outline-none border border-grey dark:border-dark-border bg-white dark:bg-dark-bg-input text-gray-900 dark:text-dark-text-primary placeholder:text-gray-500 dark:placeholder:text-dark-text-placeholder px-2 py-1 md:p-2 rounded-md text-sm focus:ring-1 focus:ring-gray-400 dark:focus:ring-dark-border-focus
           ${className || ""} ${
             hookToForm && fieldError && fieldError?.message
-              ? `${classNameError} !border-red-700`
+              ? `${classNameError} !border-red-700 dark:!border-red-400`
               : ""
           }`}
         {...(!hookToForm && {
@@ -69,7 +69,7 @@ function Input({
       />
 
       {isFullyHooked && fieldError && fieldError?.message && (
-        <p className="!text-red-700 text-sm pt-2">
+        <p className="!text-red-700 dark:!text-red-400 text-sm pt-2">
           {fieldError?.message as string}
         </p>
       )}

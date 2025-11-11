@@ -39,11 +39,11 @@ const Settings = () => {
       validationSchema={validation}
       onSubmit={handleSave}
     >
-      <div className="col-span-12 flex justify-between items-center border-b-grey border-b-[1px] pb-3">
+      <div className="col-span-12 flex justify-between items-center border-b border-grey dark:border-dark-border pb-3">
         <div className="flex gap-2 items-center">
-          <MicVocal />
+          <MicVocal className="text-gray-700 dark:text-dark-text-primary" />
           <div className="flex flex-col">
-            <p>
+            <p className="text-gray-900 dark:text-dark-text-primary font-medium">
               {settingMode === SETTING_MODE.CREATE
                 ? "Add Artist"
                 : "Artist Settings"}
@@ -55,29 +55,29 @@ const Settings = () => {
         </div>
       </div>
       <div className="col-span-4 space-y-1 md:space-y-2">
-        <p className="text-sm">Artist Image</p>
+        <p className="text-sm text-gray-700 dark:text-dark-text-secondary">Artist Image</p>
         <ImageSelect />
       </div>
       <Inputs />
       <div className="col-span-7 md:col-span-5 space-y-1 md:space-y-2">
-        <p className="text-sm">Knowledge Base</p>
+        <p className="text-sm text-gray-700 dark:text-dark-text-secondary">Knowledge Base</p>
         <KnowledgeSelect />
       </div>
       <div className="col-span-7 space-y-1 md:space-y-2 flex flex-col justify-end items-start">
         {knowledgeUploading ? (
-          <p className="text-sm">Uploading...</p>
+          <p className="text-sm text-gray-600 dark:text-dark-text-muted">Uploading...</p>
         ) : (
           <Knowledges />
         )}
       </div>
       <button
-        className="col-span-12 border-grey border-[1px] rounded-md py-1"
+        className="col-span-12 border border-grey dark:border-dark-border rounded-md py-1 bg-gray-50 dark:bg-dark-bg-hover hover:bg-gray-100 dark:hover:bg-dark-bg-active text-gray-900 dark:text-dark-text-primary transition-colors"
         type="submit"
       >
         {updating ? "Saving..." : "Save"}
       </button>
       <button
-        className="col-span-12 border-grey border-[1px] rounded-md py-1 mb-4 text-red-700"
+        className="col-span-12 border border-grey dark:border-dark-border rounded-md py-1 mb-4 text-red-700 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-900/20 transition-colors"
         onClick={() => setIsVisibleDeleteModal(true)}
         type="button"
       >

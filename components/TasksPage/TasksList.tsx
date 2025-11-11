@@ -19,7 +19,7 @@ const TasksList: React.FC<TasksListProps> = ({ tasks, isLoading, isError }) => {
   const isArtistSelected = !!selectedArtist;
 
   if (isError) {
-    return <div className="text-sm text-red-600">Failed to load tasks</div>;
+    return <div className="text-sm text-red-600 dark:text-red-400">Failed to load tasks</div>;
   }
 
   if (isLoading || !isArtistSelected || !userData) {
@@ -35,7 +35,7 @@ const TasksList: React.FC<TasksListProps> = ({ tasks, isLoading, isError }) => {
   if (tasks.length === 0) {
     return (
       <div className="text-center py-8">
-        <p className="text-gray-500">
+        <p className="text-gray-500 dark:text-gray-400">
           You have no scheduled tasks for this artist.
         </p>
       </div>
@@ -45,13 +45,13 @@ const TasksList: React.FC<TasksListProps> = ({ tasks, isLoading, isError }) => {
   return (
     <div className="max-w-2xl mx-auto mt-16">
       <div className="mb-8">
-        <h3 className="text-lg font-semibold text-gray-900">Scheduled</h3>
+        <h3 className="text-lg font-semibold text-gray-900 dark:text-white">Scheduled</h3>
       </div>
       {tasks.map((task, index) => (
         <TaskDetailsDialog key={task.id} task={task}>
           <div
             className={
-              index !== tasks.length - 1 ? "border-b border-gray-100" : ""
+              index !== tasks.length - 1 ? "border-b border-gray-100 dark:border-dark-border" : ""
             }
           >
             <TaskCard task={task} />

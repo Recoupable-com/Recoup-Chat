@@ -74,8 +74,8 @@ const ArtistsSidebar = () => {
       </div>
       <button
         className={cn(
-          "flex transition-colors hover:bg-accent border border-transparent hover:border-grey-dark-1 rounded-md",
-          menuExpanded ? "px-2 py-1 gap-2 text-sm items-center text-grey-dark-1" : "justify-center",
+          "flex transition-colors hover:bg-accent dark:hover:bg-[#2a2a2a] border border-transparent hover:border-grey-dark-1 dark:hover:border-[#444] rounded-md",
+          menuExpanded ? "px-2 py-1 gap-2 text-sm items-center text-grey-dark-1 dark:text-gray-300" : "justify-center",
           !isArtistSelected && "relative z-50 brightness-125"
         )}
         onClick={handleCreate}
@@ -86,9 +86,9 @@ const ArtistsSidebar = () => {
           className={`w-8 flex justify-center ${!menuExpanded && "mx-auto"}`}
         >
           {isCreatingArtist ? (
-            <Loader className="size-5 text-grey-dark-1 animate-spin" />
+            <Loader className="size-5 text-grey-dark-1 dark:text-gray-400 animate-spin" />
           ) : (
-            <Plus className="size-5 text-grey-dark-1" />
+            <Plus className="size-5 text-grey-dark-1 dark:text-gray-400" />
           )}
         </div>
         {menuExpanded && "New Artist"}

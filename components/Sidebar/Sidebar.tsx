@@ -14,7 +14,7 @@ const Sidebar = () => {
 
   return (
     <motion.div
-      className="bg-grey-light-3"
+      className="bg-grey-light-3 dark:bg-dark-bg-secondary"
       animate={animate}
       initial={initial}
       transition={{ duration: 0.2 }}

@@ -25,21 +25,21 @@ export default function FileTile({ file, onDelete, onProperties, isSelected, onC
 
   // macOS Finder-style container styling using shadcn theme colors
   const containerClasses = cn(
-    "group relative rounded-xl bg-card hover:bg-accent transition-all duration-200 cursor-pointer",
+    "group relative rounded-xl bg-card hover:bg-accent dark:bg-dark-bg-tertiary dark:hover:bg-dark-bg-hover transition-all duration-200 cursor-pointer",
     "w-32 h-32 flex flex-col items-center justify-start p-4 gap-3",
-    "hover:shadow-sm border border-border",
-    isSelected && "bg-accent border-accent-foreground/20"
+    "hover:shadow-sm border border-border dark:border-dark-border-light",
+    isSelected && "bg-accent dark:bg-dark-bg-hover border-accent-foreground/20 dark:border-dark-border-light"
   );
 
   // macOS Finder-style icon container - minimal by default
   const iconClasses = cn(
     "h-16 w-16 flex items-center justify-center rounded-lg",
-    file.is_directory ? "text-black" : `${visual.color}`,
+    file.is_directory ? "text-black dark:text-white" : `${visual.color}`,
     "group-hover:scale-105 group-hover:drop-shadow-sm transition-all duration-200 [&_svg]:h-10 [&_svg]:w-10"
   );
 
   // macOS Finder-style file name styling
-  const fileNameClasses = "w-full truncate whitespace-nowrap text-center text-sm leading-relaxed font-medium text-gray-700 group-hover:text-gray-900 px-1";
+  const fileNameClasses = "w-full truncate whitespace-nowrap text-center text-sm leading-relaxed font-medium text-gray-700 dark:text-gray-200 group-hover:text-gray-900 dark:group-hover:text-white px-1";
 
   const content = (
     <>

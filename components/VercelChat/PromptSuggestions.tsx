@@ -16,7 +16,7 @@ const PromptSuggestions = () => {
           Array.from({ length: 4 }).map((_, index) => (
             <SkeletonShimmer
               key={`skeleton-${index}`}
-              className="h-8 px-3 flex-shrink-0 rounded-full bg-gray-200/80 border border-gray-300/70 w-[120px] md:w-[200px] animate-pulse overflow-hidden"
+              className="h-8 px-3 flex-shrink-0 rounded-full bg-gray-200/80 dark:bg-white/5 border border-gray-300/70 dark:border-white/10 w-[120px] md:w-[200px] animate-pulse overflow-hidden"
             />
           ))
         ) : (

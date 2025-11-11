@@ -20,8 +20,8 @@ const AgentTags: React.FC<AgentTagsProps> = ({
         type="button"
         className={`px-3 py-1 rounded-full border text-sm transition-colors ${
           selectedTag === tag
-            ? "bg-black text-white border-black"
-            : "bg-white text-black border-gray-200 hover:bg-gray-100"
+            ? "bg-black dark:bg-white text-white dark:text-black border-black dark:border-white"
+            : "bg-white dark:bg-dark-bg-secondary text-black dark:text-white border-gray-200 dark:border-dark-border-light hover:bg-gray-100 dark:hover:bg-dark-bg-tertiary"
         }`}
         onClick={() => setSelectedTag(tag)}
       >

@@ -90,10 +90,10 @@ const ChatItem = ({
     <div
       className={`flex gap-2 items-center w-full py-1.5 px-2 rounded-xl transition-all duration-150 relative ${
         isSelected
-          ? "bg-primary/20 border border-primary/30"
+          ? "bg-primary/20 dark:bg-primary/30 border border-primary/30 dark:border-primary/40"
           : isActive
-            ? "bg-primary/10"
-            : "hover:bg-gray-100"
+            ? "bg-primary/10 dark:bg-dark-bg-tertiary"
+            : "hover:bg-gray-100 dark:hover:bg-dark-bg-tertiary"
       }`}
       onMouseEnter={onMouseEnter}
       onMouseLeave={onMouseLeave}
@@ -109,7 +109,7 @@ const ChatItem = ({
         } ${
           isSelected
             ? "bg-primary border-primary"
-            : "border-gray-300 hover:border-primary/50"
+            : "border-gray-300 dark:border-dark-border-light hover:border-primary/50"
         }`}
         aria-label="Select chat"
       >
@@ -123,7 +123,7 @@ const ChatItem = ({
         type="button"
         onClick={handleClick}
       >
-        <p className={`text-sm truncate ${isActive ? "font-medium" : ""}`}>
+        <p className={`text-sm truncate dark:text-gray-200 ${isActive ? "font-medium" : ""}`}>
           {displayText}
         </p>
       </button>
@@ -132,7 +132,7 @@ const ChatItem = ({
         <button
           ref={setButtonRef}
           className={cn(
-            `shrink-0 p-1 text-gray-500 hover:text-gray-700 transition-colors duration-150 ${
+            `shrink-0 p-1 text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-200 transition-colors duration-150 ${
               showOptions ? "opacity-100" : "opacity-0"
             }`,
             {
@@ -153,7 +153,7 @@ const ChatItem = ({
       {isMenuOpen && (
         <div
           ref={menuRef}
-          className="absolute right-2 top-full mt-1 bg-white shadow-lg rounded-md py-1 z-10 w-32 border border-gray-100"
+          className="absolute right-2 top-full mt-1 bg-white dark:bg-dark-bg-secondary shadow-lg rounded-md py-1 z-10 w-32 border border-gray-100 dark:border-dark-border"
           onClick={(event) => event.stopPropagation()}
           onKeyDown={(event) => {
             if (event.key === "Escape") {
@@ -165,20 +165,20 @@ const ChatItem = ({
         >
           <button
             type="button"
-            className="w-full text-left px-3 py-2 hover:bg-gray-50 text-sm flex items-center gap-2 transition-colors"
+            className="w-full text-left px-3 py-2 hover:bg-gray-50 dark:hover:bg-dark-bg-tertiary text-sm dark:text-gray-200 flex items-center gap-2 transition-colors"
             onClick={onRenameClick}
             role="menuitem"
           >
-            <Pencil size={14} className="text-gray-500" />
+            <Pencil size={14} className="text-gray-500 dark:text-gray-400" />
             <span>Rename</span>
           </button>
           <button
             type="button"
-            className="w-full text-left px-3 py-2 hover:bg-red-50 text-sm text-red-500 flex items-center gap-2 transition-colors"
+            className="w-full text-left px-3 py-2 hover:bg-red-50 dark:hover:bg-red-900/30 text-sm text-red-500 dark:text-red-400 flex items-center gap-2 transition-colors"
             onClick={onDeleteClick}
             role="menuitem"
           >
-            <Trash2 size={14} className="text-red-500" />
+            <Trash2 size={14} className="text-red-500 dark:text-red-400" />
             <span>Delete</span>
           </button>
         </div>

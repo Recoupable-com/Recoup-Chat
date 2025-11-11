@@ -15,6 +15,30 @@
   src: url("/fonts/Inter-Bold.ttf") format("truetype");
 }
 @font-face {
+  font-family: "Inter Tight";
+  src: url("/fonts/InterTight-Regular.ttf") format("truetype");
+  font-weight: 400;
+  font-style: normal;
+}
+@font-face {
+  font-family: "Inter Tight";
+  src: url("/fonts/InterTight-Medium.ttf") format("truetype");
+  font-weight: 500;
+  font-style: normal;
+}
+@font-face {
+  font-family: "Inter Tight";
+  src: url("/fonts/InterTight-SemiBold.ttf") format("truetype");
+  font-weight: 600;
+  font-style: normal;
+}
+@font-face {
+  font-family: "Inter Tight";
+  src: url("/fonts/InterTight-Bold.ttf") format("truetype");
+  font-weight: 700;
+  font-style: normal;
+}
+@font-face {
   font-family: "PlusJakartaSans Bold";
   src: url("/fonts/PlusJakartaSans-Bold.ttf") format("truetype");
 }
@@ -24,18 +48,33 @@
 }
 @font-face {
   font-family: "Instrument Serif";
+  src: url("/fonts/InstrumentSerif-Regular.ttf") format("truetype");
+  font-style: normal;
+  font-weight: 400;
+}
+@font-face {
+  font-family: "Instrument Serif";
   src: url("/fonts/InstrumentSerif-Italic.ttf") format("truetype");
   font-style: italic;
+  font-weight: 400;
 }
 
 html,
 body {
-  font-family: "Inter Regular";
+  font-family: var(--font-primary);
   width: 100vw;
   height: 100vh;
   overflow: hidden;
+}
+
+html {
   color: black;
   background: white;
+}
+
+html.dark {
+  color: white;
+  background: #0d0d0d;
 }
 
 @layer utilities {
@@ -109,6 +148,21 @@ body {
     --chart-4: 43 74% 66%;
     --chart-5: 27 87% 67%;
     --radius: 0.5rem;
+    --color-background: white;
+    --color-muted-foreground: hsl(0 0% 45.1%);
+    
+    /* Theme Fonts - Centralized font management - Using Geist for better readability */
+    /* Base font stack - reused for all sans-serif fonts */
+    --font-sans-base: var(--font-geist-sans), -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
+    --font-serif-base: 'Georgia', 'Times New Roman', 'Times', serif;
+    
+    /* Font assignments - all use base stacks, weight handled by font-weight CSS property */
+    --font-primary: var(--font-sans-base);           /* Main body text - Geist Sans */
+    --font-primary-medium: var(--font-sans-base);     /* Medium weight text */
+    --font-primary-bold: var(--font-sans-base);         /* Bold headings */
+    --font-secondary: var(--font-sans-base); /* Secondary text */
+    --font-secondary-bold: var(--font-sans-base); /* Secondary bold */
+    --font-serif: var(--font-serif-base);              /* Serif accent font - optimized for reading */
   }
   .dark {
     --background: 0 0% 3.9%;
@@ -135,6 +189,41 @@ body {
     --chart-3: 30 80% 55%;
     --chart-4: 280 65% 60%;
     --chart-5: 340 75% 55%;
+    --color-background: #0d0d0d;
+    --color-muted-foreground: hsl(0 0% 63.9%);
+    
+    /* Dark Mode Theme Colors - Premium refined dark theme */
+    /* Modern Dark Theme (Enhanced) */
+    --dark-bg-primary: #0d0d0d;     /* Main background - deep black with subtle warmth */
+    --dark-bg-secondary: #181818;   /* Sidebar background - refined contrast */
+    --dark-bg-tertiary: #242424;    /* Component backgrounds - optimal visibility */
+    --dark-bg-input: #1f1f1f;       /* Input fields - better focus and contrast */
+    --dark-bg-message-user: #262626; /* User message bubbles - distinct and readable */
+    --dark-bg-hover: #2a2a2a;       /* Hover states - smooth, noticeable */
+    --dark-bg-active: #323232;     /* Active/pressed states */
+    --dark-border: #2f2f2f;         /* Borders - subtle, refined */
+    --dark-border-light: #404040;  /* Light borders - clear definition */
+    --dark-border-focus: #525252;   /* Focus borders - visible but not harsh */
+    --dark-text-primary: #ffffff;   /* Primary text - pure white */
+    --dark-text-secondary: #ededed; /* Secondary text - high contrast */
+    --dark-text-muted: #a3a3a3;     /* Muted text - optimal readability */
+    --dark-text-placeholder: #6b6b6b; /* Placeholder text - subtle but visible */
+    
+    /* Try this Blue-Tinted Theme: */
+    /* --dark-bg-primary: #0f1419;
+    --dark-bg-secondary: #1a1f2e;
+    --dark-bg-tertiary: #252d3d;
+    --dark-bg-hover: #2d3748;
+    --dark-border: #374151;
+    --dark-border-light: #4b5563; */
+    
+    /* Or try this Warm Dark Theme: */
+    /* --dark-bg-primary: #1a1412;
+    --dark-bg-secondary: #2a211e;
+    --dark-bg-tertiary: #3a2e2a;
+    --dark-bg-hover: #4a3b36;
+    --dark-border: #3a2e2a;
+    --dark-border-light: #4a3b36; */
   }
 }
 

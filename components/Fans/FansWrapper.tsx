@@ -74,7 +74,7 @@ const FansWrapper = () => {
 
   if (error) {
     return (
-      <div className="text-lg text-center text-red-500 py-8">
+      <div className="text-lg text-center text-red-500 dark:text-red-400 py-8">
         Failed to load fans: {error.message}
       </div>
     );
@@ -82,7 +82,7 @@ const FansWrapper = () => {
 
   if (!fansWithAvatars.length && !fansWithoutAvatars.length) {
     return (
-      <div className="text-lg text-center py-8">
+      <div className="text-lg text-center py-8 dark:text-white">
         No fans found for this artist.
       </div>
     );

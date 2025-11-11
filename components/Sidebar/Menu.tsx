@@ -48,7 +48,7 @@ const Menu = ({ toggleMenuExpanded }: { toggleMenuExpanded: () => void }) => {
       <div className="flex flex-col gap-3 w-full mt-2">
         <Button
           variant="outline"
-          className="rounded-xl w-full"
+          className="rounded-xl w-full dark:bg-dark-bg-secondary dark:text-white dark:border-dark-border-light dark:hover:bg-dark-bg-tertiary"
           onClick={() => goToItem("chat")}
         >
           {email ? "New Chat" : "Sign In"}
@@ -77,9 +77,11 @@ const Menu = ({ toggleMenuExpanded }: { toggleMenuExpanded: () => void }) => {
         )}
 
         {/* Bottom Section */}
-        <div className="shrink-0 border-t border-gray-100 mx-auto">
+        <div className="shrink-0 border-t border-gray-100 dark:border-dark-border mx-auto">
           <UnlockPro />
-          <UserInfo toggleMenuExpanded={toggleMenuExpanded} />
+          <div className="w-full px-2 py-3">
+            <UserInfo toggleMenuExpanded={toggleMenuExpanded} />
+          </div>
         </div>
       </div>
     </div>

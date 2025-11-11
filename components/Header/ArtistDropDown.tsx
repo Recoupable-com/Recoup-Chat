@@ -25,7 +25,7 @@ const ArtistDropDown = ({
         onMouseOver={() => setIsVisibleDropDown(true)}
         onMouseOut={() => setIsVisibleDropDown(false)}
       >
-        <div className="border mt-2 bg-white p-2 rounded-md space-y-1 shadow-[0px_0px_7px_0px_#80808063] max-h-[200px] overflow-y-auto">
+        <div className="border dark:border-dark-border mt-2 bg-white dark:bg-dark-bg-tertiary p-2 rounded-md space-y-1 shadow-[0px_0px_7px_0px_#80808063] dark:shadow-lg max-h-[200px] overflow-y-auto">
           {sorted.map((artist: ArtistRecord | null) => (
             <Artist
               artist={artist}
@@ -34,11 +34,11 @@ const ArtistDropDown = ({
             />
           ))}
           <button
-            className="flex px-2 py-1 gap-2 text-sm items-center text-grey-light-1 hover:text-grey-dark-1"
+            className="flex px-2 py-1 gap-2 text-sm items-center text-grey-light-1 dark:text-dark-text-secondary hover:text-grey-dark-1 dark:hover:text-dark-text-primary"
             onClick={handleCreate}
           >
             <div className="w-8 flex justify-center">
-              <Plus className="size-5 text-grey-dark-1" />
+              <Plus className="size-5 text-grey-dark-1 dark:text-dark-text-secondary" />
             </div>
             New Artist
           </button>

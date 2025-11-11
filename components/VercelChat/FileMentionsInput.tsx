@@ -35,11 +35,11 @@ export default function FileMentionsInput({ value, onChange, disabled, model }: 
 			value={typeof value === "string" ? value : ""}
 			onChange={handleMentionsChange}
 			disabled={disabled}
-			className="w-full text-[14px] leading-[1.6] pb-2 md:pb-0"
+			className="w-full text-[14px] leading-[1.6] pb-2 md:pb-0 text-black dark:text-dark-text-primary [&_textarea]:placeholder:text-muted-foreground [&_textarea]:dark:placeholder:text-dark-text-placeholder"
 			suggestionsPortalHost={portalHost}
 			allowSuggestionsAboveCursor
 			customSuggestionsContainer={(children) => (
-				<Card className="z-[70] shadow-lg border rounded-xl overflow-hidden p-1 max-w-32" style={{ background: "hsl(var(--background))", minWidth: 320, maxHeight: 360, overflow: "auto" }}>{children}</Card>
+				<Card className="z-[70] shadow-lg border rounded-xl overflow-hidden p-1 max-w-32 dark:bg-dark-bg-secondary dark:border-dark-border" style={{ background: "hsl(var(--background))", minWidth: 320, maxHeight: 360, overflow: "auto" }}>{children}</Card>
 			)}
 			placeholder={
 				model === "fal-ai/nano-banana/edit"
@@ -75,7 +75,7 @@ export default function FileMentionsInput({ value, onChange, disabled, model }: 
 					return (
 						<div>
 							{showHeader && current && (
-								<div className="px-3 pt-2 pb-1 text-[11px] uppercase tracking-wide text-muted-foreground">
+								<div className="px-3 pt-2 pb-1 text-[11px] uppercase tracking-wide text-muted-foreground dark:text-gray-500">
 									{current.group}
 								</div>
 							)}
@@ -83,7 +83,7 @@ export default function FileMentionsInput({ value, onChange, disabled, model }: 
 								className={cn(
 									"px-3 py-2 text-[13px] cursor-pointer select-none",
 									"flex items-center gap-2 rounded-md",
-									focused ? "bg-muted text-foreground" : "text-muted-foreground hover:bg-muted"
+									focused ? "bg-muted dark:bg-dark-bg-tertiary text-foreground dark:text-white" : "text-muted-foreground dark:text-gray-400 hover:bg-muted dark:hover:bg-[#2a2a2a]"
 								)}
 							>
 								<div className="size-2 rounded-full bg-primary/60" />

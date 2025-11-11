@@ -10,7 +10,7 @@ const SkeletonShimmer = ({ className, children }: SkeletonShimmerProps) => {
   return (
     <motion.div
       className={cn(
-        "relative overflow-hidden bg-gray-200 rounded",
+        "relative overflow-hidden bg-gray-200 dark:bg-white/5 rounded",
         className
       )}
       initial={{ opacity: 0 }}
@@ -19,7 +19,7 @@ const SkeletonShimmer = ({ className, children }: SkeletonShimmerProps) => {
     >
       {children}
       <motion.div
-        className="absolute inset-0 -translate-x-full bg-gradient-to-r from-transparent via-white/40 to-transparent"
+        className="absolute inset-0 -translate-x-full bg-gradient-to-r from-transparent via-white/40 dark:via-white/10 to-transparent"
         animate={{
           translateX: ["-100%", "200%"],
         }}

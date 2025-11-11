@@ -276,9 +276,9 @@ export function getToolCallComponent(part: ToolUIPart) {
   return (
     <div
       key={toolCallId}
-      className="flex items-center gap-1 py-1 px-2 bg-primary/5 rounded-sm border w-fit text-xs"
+      className="flex items-center gap-1 py-1 px-2 bg-primary/5 dark:bg-white/5 rounded-sm border dark:border-dark-border w-fit text-xs dark:text-gray-300"
     >
-      <Loader className="h-3 w-3 animate-spin text-primary" />
+      <Loader className="h-3 w-3 animate-spin text-primary dark:text-white" />
       <span>Using {getDisplayToolName(toolName)}</span>
     </div>
   );

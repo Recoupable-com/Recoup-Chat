@@ -89,7 +89,7 @@ function ChatContentMemoized({
   if (hasError) {
     return (
       <div className="flex items-center justify-center h-dvh">
-        <div className="text-red-500">
+        <div className="text-red-500 dark:text-red-400">
           Failed to load messages. Please try again later.
         </div>
       </div>
@@ -107,7 +107,7 @@ function ChatContentMemoized({
       {...getRootProps()}
     >
       {isDragActive && <FileDragOverlay />}
-      <div className="absolute w-full h-6 bg-gradient-to-t from-transparent via-white/80 to-white z-10 top-0"></div>
+      <div className="absolute w-full h-6 bg-gradient-to-t from-transparent via-white/80 to-white dark:via-[#0a0a0a]/80 dark:to-[#0a0a0a] z-10 top-0"></div>
       {isVisible ? (
         <>
           {/* Spacer to push content to center */}

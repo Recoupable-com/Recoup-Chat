@@ -24,6 +24,14 @@ const config: Config = {
         "ping-slow": "ping-slow 1.5s cubic-bezier(0, 0, 0.2, 1) infinite",
       },
   		fontFamily: {
+  			// Theme-based fonts (use CSS variables for centralized management)
+  			primary: ['var(--font-primary)'],
+  			'primary-medium': ['var(--font-primary-medium)'],
+  			'primary-bold': ['var(--font-primary-bold)'],
+  			secondary: ['var(--font-secondary)'],
+  			'secondary-bold': ['var(--font-secondary-bold)'],
+  			serif: ['var(--font-serif)'],
+  			// Legacy font names (kept for backward compatibility)
   			inter_medium: [
   				'Inter Medium',
   				'sans-serif'
@@ -65,6 +73,28 @@ const config: Config = {
 				"light-2": "#EBEBEB",
 				"light-3": "#FAFAFA"
   			},
+        dark: {
+          bg: {
+            primary: 'var(--dark-bg-primary)',
+            secondary: 'var(--dark-bg-secondary)',
+            tertiary: 'var(--dark-bg-tertiary)',
+            input: 'var(--dark-bg-input)',
+            'message-user': 'var(--dark-bg-message-user)',
+            hover: 'var(--dark-bg-hover)',
+            active: 'var(--dark-bg-active)',
+          },
+          border: {
+            DEFAULT: 'var(--dark-border)',
+            light: 'var(--dark-border-light)',
+            focus: 'var(--dark-border-focus)',
+          },
+          text: {
+            primary: 'var(--dark-text-primary)',
+            secondary: 'var(--dark-text-secondary)',
+            muted: 'var(--dark-text-muted)',
+            placeholder: 'var(--dark-text-placeholder)',
+          },
+        },
   			green: {
   				DEFAULT: '#345A5D'
   			},

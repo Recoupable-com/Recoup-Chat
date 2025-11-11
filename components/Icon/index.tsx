@@ -9,7 +9,11 @@ interface IIcon {
 const Icon = ({ name }: IIcon) => {
   const IconSVG = Icons[name];
 
-  return <IconSVG />;
+  return (
+    <div className="text-black dark:text-white flex items-center justify-center">
+      <IconSVG />
+    </div>
+  );
 };
 
 export default Icon;

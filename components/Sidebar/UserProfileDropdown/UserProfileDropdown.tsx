@@ -1,5 +1,5 @@
 import { Button } from "@/components/ui/button";
-import { ChevronDown } from "lucide-react";
+import { ChevronDown, Moon, Sun } from "lucide-react";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -14,9 +14,15 @@ import { useUserProvider } from "@/providers/UserProvder";
 import CreditsUsage from "./CreditsUsage";
 import AccountIdDisplay from "@/components/ArtistSetting/AccountIdDisplay";
 import ManageSubscriptionButton from "./ManageSubscriptionButton";
+import { useTheme } from "next-themes";
 
 const UserProfileDropdown = () => {
   const { toggleModal, signOut, userData } = useUserProvider();
+  const { theme, setTheme } = useTheme();
+
+  const toggleTheme = () => {
+    setTheme(theme === "dark" ? "light" : "dark");
+  };
 
   return (
     <DropdownMenu>
@@ -45,6 +51,10 @@ const UserProfileDropdown = () => {
             Profile
           </DropdownMenuItem>
           <ManageSubscriptionButton />
+          <DropdownMenuItem onClick={toggleTheme} className="cursor-pointer">
+            {theme === "dark" ? <Sun className="h-4 w-4" /> : <Moon className="h-4 w-4" />}
+            {theme === "dark" ? "Light mode" : "Dark mode"}
+          </DropdownMenuItem>
         </DropdownMenuGroup>
         <DropdownMenuSeparator />
         <DropdownMenuItem className="cursor-pointer" onClick={signOut}>

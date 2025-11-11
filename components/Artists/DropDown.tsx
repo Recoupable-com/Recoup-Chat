@@ -17,9 +17,9 @@ const DropDown = ({ artist }: { artist: ArtistRecord }) => {
   };
 
   return (
-    <div className="rounded-md absolute left-1/2 top-1/2 z-[2] bg-white p-1">
+    <div className="rounded-md absolute left-1/2 top-1/2 z-[2] bg-white dark:bg-dark-bg-tertiary p-1 border dark:border-dark-border">
       <button
-        className="text-red-700 flex items-center gap-1 border-red-700 text-sm"
+        className="text-red-700 dark:text-red-400 flex items-center gap-1 border-red-700 dark:border-red-400 text-sm"
         onClick={handleDelete}
       >
         <Trash2 className="size-4" /> Remove
