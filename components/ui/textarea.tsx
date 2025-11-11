@@ -11,7 +11,7 @@ const Textarea = React.forwardRef<
       <textarea
         className={cn(
           formPatterns.textarea,
-          "px-3 py-2 text-base shadow-sm disabled:cursor-not-allowed disabled:opacity-50 md:text-sm",
+          "text-base shadow-sm md:text-sm",
           className
         )}
       ref={ref}

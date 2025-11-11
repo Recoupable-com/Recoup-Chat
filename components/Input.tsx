@@ -52,11 +52,11 @@ function Input({
         value={value}
         className={cn(
           formPatterns.input,
-          "px-2 py-1 md:p-2 text-sm",
+          "text-sm",
           className,
           hookToForm && fieldError && fieldError?.message && cn(
             classNameError,
-            "!border-red-700 dark:!border-red-400"
+            "border-destructive focus-visible:ring-destructive"
           )
         )}
         {...(!hookToForm && {

@@ -4,7 +4,7 @@ import { useArtistProvider } from "@/providers/ArtistProvider";
 import { Plus } from "lucide-react";
 import { Dispatch, SetStateAction } from "react";
 import { useUserProvider } from "@/providers/UserProvder";
-import { containerPatterns, textPatterns, iconPatterns } from "@/lib/styles/patterns";
+import { containerPatterns } from "@/lib/styles/patterns";
 import { cn } from "@/lib/utils";
 
 const ArtistDropDown = ({
@@ -36,15 +36,11 @@ const ArtistDropDown = ({
             />
           ))}
           <button
-            className={cn(
-              "flex px-2 py-1 gap-2 text-sm items-center",
-              textPatterns.secondary,
-              "hover:text-grey-dark-1 dark:hover:text-dark-text-primary"
-            )}
+            className="flex px-2 py-1 gap-2 text-sm items-center text-muted-foreground hover:text-foreground hover:bg-accent rounded-md transition-colors"
             onClick={handleCreate}
           >
             <div className="w-8 flex justify-center">
-              <Plus className={cn("size-5", iconPatterns.secondary)} />
+              <Plus className="size-5" />
             </div>
             New Artist
           </button>

@@ -162,22 +162,6 @@
   --sidebar-border: hsl(240 3.7% 15.9%);
   --sidebar-ring: hsl(217.2 91.2% 59.8%);
   --sidebar: hsl(240 5.9% 10%);
-  
-  /* Dark Mode Theme Colors - Premium refined dark theme */
-  --dark-bg-primary: #0d0d0d;
-  --dark-bg-secondary: #181818;
-  --dark-bg-tertiary: #242424;
-  --dark-bg-input: #1f1f1f;
-  --dark-bg-message-user: #262626;
-  --dark-bg-hover: #2a2a2a;
-  --dark-bg-active: #323232;
-  --dark-border: #2f2f2f;
-  --dark-border-light: #404040;
-  --dark-border-focus: #525252;
-  --dark-text-primary: #ffffff;
-  --dark-text-secondary: #ededed;
-  --dark-text-muted: #a3a3a3;
-  --dark-text-placeholder: #6b6b6b;
 }
 
 /* ============================================================================

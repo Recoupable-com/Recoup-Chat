@@ -45,7 +45,7 @@ const Settings = () => {
         <div className="flex gap-2 items-center">
           <MicVocal className={iconPatterns.primary} />
           <div className="flex flex-col">
-            <p className={cn(textPatterns.heading)}>
+            <p className={textPatterns.heading}>
               {settingMode === SETTING_MODE.CREATE
                 ? "Add Artist"
                 : "Artist Settings"}
@@ -57,29 +57,29 @@ const Settings = () => {
         </div>
       </div>
       <div className="col-span-4 space-y-1 md:space-y-2">
-        <p className={cn("text-sm", textPatterns.secondary)}>Artist Image</p>
+        <p className="text-sm text-muted-foreground">Artist Image</p>
         <ImageSelect />
       </div>
       <Inputs />
       <div className="col-span-7 md:col-span-5 space-y-1 md:space-y-2">
-        <p className={cn("text-sm", textPatterns.secondary)}>Knowledge Base</p>
+        <p className="text-sm text-muted-foreground">Knowledge Base</p>
         <KnowledgeSelect />
       </div>
       <div className="col-span-7 space-y-1 md:space-y-2 flex flex-col justify-end items-start">
         {knowledgeUploading ? (
-          <p className={cn("text-sm", textPatterns.muted)}>Uploading...</p>
+          <p className="text-sm text-muted-foreground">Uploading...</p>
         ) : (
           <Knowledges />
         )}
       </div>
       <button
-        className={cn(buttonPatterns.primary, borderPatterns.default, "col-span-12 rounded-md py-1")}
+        className={cn(buttonPatterns.primary, "col-span-12 py-2")}
         type="submit"
       >
         {updating ? "Saving..." : "Save"}
       </button>
       <button
-        className={cn(buttonPatterns.danger, borderPatterns.default, "col-span-12 rounded-md py-1 mb-4")}
+        className={cn(buttonPatterns.danger, "col-span-12 py-2 mb-4")}
         onClick={() => setIsVisibleDeleteModal(true)}
         type="button"
       >

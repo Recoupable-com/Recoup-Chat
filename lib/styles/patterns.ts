@@ -1,9 +1,11 @@
 /**
- * Centralized UI patterns for consistent styling across the application.
- * These patterns combine Tailwind classes for common component styles.
+ * Centralized UI patterns using semantic tokens from the styling system.
+ * All patterns use semantic tokens that automatically adapt to light/dark mode.
+ * 
+ * Reference: documentation/styling-system.md
  * 
  * Usage:
- * import { buttonPatterns, cardPatterns } from '@/lib/styles/patterns';
+ * import { buttonPatterns, cardPatterns, textPatterns } from '@/lib/styles/patterns';
  * <button className={buttonPatterns.primary}>Save</button>
  */
 
@@ -12,13 +14,17 @@
 // ============================================================================
 
 export const buttonPatterns = {
-  primary: "bg-gray-50 dark:bg-dark-bg-hover hover:bg-gray-100 dark:hover:bg-dark-bg-active text-gray-900 dark:text-dark-text-primary transition-colors",
+  primary: "bg-primary text-primary-foreground hover:bg-primary/90 transition-colors",
   
-  danger: "text-red-700 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-900/20 transition-colors",
+  secondary: "bg-secondary text-secondary-foreground hover:bg-secondary/80 transition-colors",
   
-  ghost: "hover:bg-gray-100 dark:hover:bg-dark-bg-hover transition-colors",
+  danger: "bg-destructive text-destructive-foreground hover:bg-destructive/90 transition-colors",
   
-  icon: "p-2 cursor-pointer hover:bg-gray-100 dark:hover:bg-dark-bg-hover rounded-full transition-colors",
+  ghost: "hover:bg-accent hover:text-accent-foreground transition-colors",
+  
+  outline: "border border-input bg-background hover:bg-accent hover:text-accent-foreground transition-colors",
+  
+  icon: "p-2 cursor-pointer hover:bg-accent rounded-full transition-colors",
 } as const;
 
 // ============================================================================
@@ -26,13 +32,15 @@ export const buttonPatterns = {
 // ============================================================================
 
 export const formPatterns = {
-  input: "w-full !outline-none border border-grey dark:border-dark-border bg-white dark:bg-dark-bg-input text-gray-900 dark:text-dark-text-primary placeholder:text-gray-500 dark:placeholder:text-dark-text-placeholder rounded-md focus:ring-1 focus:ring-gray-400 dark:focus:ring-dark-border-focus",
+  input: "w-full rounded-md border border-input bg-background px-3 py-2 text-foreground placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50",
   
-  label: "text-sm text-gray-700 dark:text-dark-text-secondary",
+  label: "text-sm font-medium text-foreground",
   
-  error: "!text-red-700 dark:!text-red-400 text-sm",
+  error: "text-sm text-destructive",
   
-  textarea: "flex min-h-[60px] w-full rounded-md border border-input dark:border-dark-border bg-transparent dark:bg-dark-bg-input text-gray-900 dark:text-dark-text-primary placeholder:text-muted-foreground dark:placeholder:text-dark-text-placeholder focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring dark:focus-visible:ring-dark-border-focus",
+  textarea: "flex min-h-[60px] w-full rounded-md border border-input bg-background px-3 py-2 text-foreground placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50",
+  
+  helper: "text-sm text-muted-foreground",
 } as const;
 
 // ============================================================================
@@ -40,17 +48,19 @@ export const formPatterns = {
 // ============================================================================
 
 export const containerPatterns = {
-  card: "bg-white dark:bg-dark-bg-tertiary border border-grey dark:border-dark-border rounded-md",
+  card: "bg-card text-card-foreground border border-border rounded-lg shadow-sm",
   
-  cardHover: "bg-white dark:bg-dark-bg-tertiary border border-grey dark:border-dark-border rounded-md hover:bg-gray-50 dark:hover:bg-dark-bg-hover transition-colors",
+  cardHover: "bg-card text-card-foreground border border-border rounded-lg shadow-sm hover:shadow-md transition-shadow",
   
-  modal: "bg-white dark:bg-dark-bg-tertiary border border-grey dark:border-dark-border rounded-2xl md:rounded-md",
+  modal: "bg-card text-card-foreground border border-border rounded-lg shadow-lg",
   
-  modalOverlay: "fixed left-0 top-0 w-screen h-screen z-[1000] flex items-center justify-center bg-black/50 dark:bg-black/70 backdrop-blur-sm",
+  modalOverlay: "fixed left-0 top-0 w-screen h-screen z-[1000] flex items-center justify-center bg-black/50 backdrop-blur-sm",
   
-  sidebar: "bg-white dark:bg-dark-bg-secondary border-r border-grey dark:border-dark-border",
+  sidebar: "bg-sidebar border-r border-sidebar-border",
   
-  dropdown: "border dark:border-dark-border bg-white dark:bg-dark-bg-tertiary rounded-md shadow-lg dark:shadow-lg",
+  dropdown: "bg-popover text-popover-foreground border border-border rounded-md shadow-md",
+  
+  popover: "bg-popover text-popover-foreground border border-border rounded-md shadow-md",
 } as const;
 
 // ============================================================================
@@ -58,19 +68,21 @@ export const containerPatterns = {
 // ============================================================================
 
 export const textPatterns = {
-  primary: "text-gray-900 dark:text-dark-text-primary",
+  primary: "text-foreground",
   
-  secondary: "text-gray-700 dark:text-dark-text-secondary",
+  secondary: "text-muted-foreground",
   
-  muted: "text-gray-600 dark:text-dark-text-muted",
+  muted: "text-muted-foreground",
   
-  placeholder: "text-gray-500 dark:text-dark-text-placeholder",
+  placeholder: "text-muted-foreground",
   
-  heading: "text-gray-900 dark:text-dark-text-primary font-medium",
+  heading: "text-foreground font-semibold",
   
-  error: "text-red-700 dark:text-red-400",
+  error: "text-destructive",
   
   success: "text-green-600 dark:text-green-400",
+  
+  link: "text-primary hover:underline",
 } as const;
 
 // ============================================================================
@@ -78,13 +90,13 @@ export const textPatterns = {
 // ============================================================================
 
 export const iconPatterns = {
-  primary: "text-gray-700 dark:text-dark-text-primary",
+  primary: "text-foreground",
   
-  secondary: "text-gray-600 dark:text-dark-text-secondary",
+  secondary: "text-muted-foreground",
   
-  muted: "text-grey-dark dark:text-dark-text-muted",
+  muted: "text-muted-foreground",
   
-  error: "text-red-700 dark:text-red-400",
+  error: "text-destructive",
   
   success: "text-green-600 dark:text-green-400",
 } as const;
@@ -94,13 +106,13 @@ export const iconPatterns = {
 // ============================================================================
 
 export const borderPatterns = {
-  default: "border border-grey dark:border-dark-border",
+  default: "border border-border",
   
-  light: "border border-grey dark:border-dark-border-light",
+  light: "border border-border/50",
   
-  focus: "border border-grey dark:border-dark-border focus:border-gray-400 dark:focus:border-dark-border-focus",
+  focus: "border border-input focus:border-ring focus:ring-2 focus:ring-ring focus:ring-offset-2",
   
-  divider: "border-b border-grey dark:border-dark-border",
+  divider: "border-b border-border",
 } as const;
 
 // ============================================================================
@@ -108,15 +120,15 @@ export const borderPatterns = {
 // ============================================================================
 
 export const statePatterns = {
-  hover: "hover:bg-grey-light-1 dark:hover:bg-dark-bg-hover",
+  hover: "hover:bg-accent",
   
-  active: "bg-grey-light-1 dark:bg-dark-bg-active",
+  active: "bg-accent",
   
-  selected: "bg-primary/10 dark:bg-dark-bg-hover",
+  selected: "bg-accent text-accent-foreground",
   
-  disabled: "opacity-50 cursor-not-allowed",
+  disabled: "opacity-50 cursor-not-allowed pointer-events-none",
   
-  focus: "focus:ring-1 focus:ring-gray-400 dark:focus:ring-dark-border-focus focus:outline-none",
+  focus: "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2",
 } as const;
 
 // ============================================================================
@@ -124,11 +136,11 @@ export const statePatterns = {
 // ============================================================================
 
 export const loadingPatterns = {
-  skeleton: "animate-pulse bg-gray-200 dark:bg-dark-bg-tertiary rounded-md",
+  skeleton: "animate-pulse bg-muted rounded-md",
   
-  shimmer: "animate-shimmer bg-gradient-to-r from-gray-200 via-gray-300 to-gray-200 dark:from-dark-bg-tertiary dark:via-dark-bg-hover dark:to-dark-bg-tertiary",
+  shimmer: "animate-shimmer bg-gradient-to-r from-muted via-accent to-muted",
   
-  spinner: "animate-spin text-gray-600 dark:text-dark-text-muted",
+  spinner: "animate-spin text-muted-foreground",
 } as const;
 
 // ============================================================================
@@ -143,4 +155,3 @@ export const loadingPatterns = {
 export const combinePatterns = (...patterns: string[]): string => {
   return patterns.filter(Boolean).join(" ");
 };
-

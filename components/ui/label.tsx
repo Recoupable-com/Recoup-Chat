@@ -8,7 +8,7 @@ import { cn } from "@/lib/utils"
 import { formPatterns } from "@/lib/styles/patterns"
 
 const labelVariants = cva(
-  cn(formPatterns.label, "font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70")
+  cn(formPatterns.label, "leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70")
 )
 
 const Label = React.forwardRef<

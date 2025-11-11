@@ -19,9 +19,9 @@ const DropDown = ({ artist }: { artist: ArtistRecord }) => {
   };
 
   return (
-    <div className={cn(containerPatterns.dropdown, "rounded-md absolute left-1/2 top-1/2 z-[2] p-1")}>
+    <div className={cn(containerPatterns.dropdown, "absolute left-1/2 top-1/2 z-[2] p-1")}>
       <button
-        className={cn(textPatterns.error, "flex items-center gap-1 text-sm")}
+        className={cn(textPatterns.error, "flex items-center gap-1 text-sm hover:bg-destructive/10 px-2 py-1 rounded-md transition-colors")}
         onClick={handleDelete}
       >
         <Trash2 className="size-4" /> Remove
