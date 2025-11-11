@@ -67,6 +67,7 @@
     "googleapis": "^149.0.0",
     "html2pdf.js": "^0.10.2",
     "joi": "^17.13.3",
+    "katex": "^0.16.25",
     "loops": "^3.4.0",
     "lucide-react": "^0.471.0",
     "motion": "^12.23.6",
