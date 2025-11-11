@@ -22,7 +22,7 @@ const ModelSelectItem = ({ model }: { model: GatewayLanguageModelEntry }) => {
         {isLocked && <Lock className="h-3 w-3 text-muted-foreground dark:text-gray-400" />}
         {isUnlockedPro && <Crown className="h-3 w-3 text-muted-foreground dark:text-gray-400" />}
         {featuredConfig?.pill && (
-          <span className="px-2.5 py-0.5 text-xs font-medium bg-transparent text-gray-700 dark:text-gray-300 rounded-full border border-gray-200 dark:border-dark-border-light">
+          <span className="px-2.5 py-0.5 text-xs font-medium bg-transparent text-gray-700 dark:text-gray-300 rounded-full border border-border-light">
             {featuredConfig.pill}
           </span>
         )}

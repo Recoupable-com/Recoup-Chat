@@ -3,7 +3,7 @@ import { Youtube } from "lucide-react";
 
 export function YouTubeAccessSkeleton() {
   return (
-    <div className="flex flex-col space-y-3 p-4 rounded-lg bg-gray-50 dark:bg-dark-bg-secondary border border-gray-200 dark:border-dark-border my-2 max-w-md animate-pulse">
+    <div className="flex flex-col space-y-3 p-4 rounded-lg bg-muted border border-border my-2 max-w-md animate-pulse">
       {/* Header */}
       <div className="flex items-center space-x-2">
         <Youtube className="h-5 w-5 text-gray-400 dark:text-gray-500" />
@@ -23,7 +23,7 @@ export function YouTubeAccessSkeleton() {
       </div>
 
       {/* Statistics Skeleton */}
-      <div className="grid grid-cols-3 gap-3 pt-2 border-t border-gray-200 dark:border-dark-border">
+      <div className="grid grid-cols-3 gap-3 pt-2 border-t border-border">
         <div className="text-center space-y-1">
           <div className="h-4 bg-gray-300 dark:bg-dark-bg-tertiary rounded w-8 mx-auto"></div>
           <div className="h-3 bg-gray-300 dark:bg-dark-bg-tertiary rounded w-12 mx-auto"></div>

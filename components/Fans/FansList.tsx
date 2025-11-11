@@ -10,7 +10,7 @@ const FansList = ({ fans }: FansListProps) => {
       {fans.map((fan) => (
         <li
           key={fan.id}
-          className="p-4 border border-gray-200 dark:border-dark-border-light dark:bg-dark-bg-tertiary rounded-lg hover:border-blue-500 dark:hover:border-blue-600 transition-colors duration-300"
+          className="p-4 border border-border-light dark:bg-dark-bg-tertiary rounded-lg hover:border-blue-500 dark:hover:border-blue-600 transition-colors duration-300"
         >
           <a
             href={fan.profile_url}

@@ -12,9 +12,9 @@ const GetTasksSuccess: React.FC<GetTasksSuccessProps> = ({ result }) => {
   const { tasks, message } = result;
 
   return (
-    <div className="bg-white dark:bg-dark-bg-primary border border-gray-200 dark:border-dark-border rounded-lg shadow-sm max-w-2xl">
+    <div className="bg-white dark:bg-dark-bg-primary border border-border rounded-lg shadow-sm max-w-2xl">
       {/* Header */}
-      <div className="px-4 py-3 border-b border-gray-100 dark:border-dark-border bg-gray-50 dark:bg-dark-bg-secondary rounded-t-lg">
+      <div className="px-4 py-3 border-b border-gray-100 dark:border-dark-border bg-muted rounded-t-lg">
         <div className="flex items-center space-x-2">
           <CheckCircle2 className="h-5 w-5 text-green-500 dark:text-green-400" />
           <h3 className="text-sm font-semibold text-gray-900 dark:text-white">Tasks</h3>
@@ -27,7 +27,7 @@ const GetTasksSuccess: React.FC<GetTasksSuccessProps> = ({ result }) => {
         {tasks.length === 0 ? (
           <div className="text-center py-6">
             <ListTodo className="h-8 w-8 text-gray-300 dark:text-gray-600 mx-auto mb-2" />
-            <p className="text-sm text-gray-500 dark:text-gray-400">No tasks found</p>
+            <p className="text-sm text-muted-foreground">No tasks found</p>
           </div>
         ) : (
           <div className="space-y-3 max-h-80 overflow-y-auto">

@@ -14,7 +14,7 @@ export const SearchWebProgress: React.FC<SearchWebProgressProps> = ({ progress }
   if (progress.status === 'searching') {
     return (
       <div className="space-y-2">
-        <p className="text-sm text-gray-500 dark:text-gray-400">Searching</p>
+        <p className="text-sm text-muted-foreground">Searching</p>
         <div className="space-y-1">
           <SearchQueryPill query={progress.query || ''} />
         </div>
@@ -28,12 +28,12 @@ export const SearchWebProgress: React.FC<SearchWebProgressProps> = ({ progress }
 
     return (
       <div className="space-y-2">
-        <p className="text-sm text-gray-500 dark:text-gray-400">Searching</p>
+        <p className="text-sm text-muted-foreground">Searching</p>
         <div className="space-y-1">
           <SearchQueryPill query={progress.query || ''} />
         </div>
         
-        <p className="text-sm text-gray-500 dark:text-gray-400">
+        <p className="text-sm text-muted-foreground">
           Reviewing sources · {searchResults.length}
         </p>
         

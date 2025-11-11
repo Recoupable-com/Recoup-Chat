@@ -16,7 +16,7 @@ const MAX_DISPLAYED_FIELDS = 8;
 export function ExtractResultView({ data }: { data: unknown }) {
   if (data === null || data === undefined) {
     return (
-      <div className="text-sm text-gray-500 dark:text-gray-400">
+      <div className="text-sm text-muted-foreground">
         No data extracted
       </div>
     );
@@ -36,7 +36,7 @@ export function ExtractResultView({ data }: { data: unknown }) {
   
   if (entries.length === 0) {
     return (
-      <div className="text-sm text-gray-500 dark:text-gray-400">
+      <div className="text-sm text-muted-foreground">
         No data found
       </div>
     );

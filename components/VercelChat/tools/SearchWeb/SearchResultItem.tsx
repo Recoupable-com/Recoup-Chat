@@ -30,7 +30,7 @@ const SearchResultItem: React.FC<SearchResultItemProps> = ({ result }) => {
           {result.title}
         </span>
       </div>
-      <span className="text-xs text-gray-500 dark:text-gray-400 flex-shrink-0">
+      <span className="text-xs text-muted-foreground flex-shrink-0">
         {domain}
       </span>
     </a>

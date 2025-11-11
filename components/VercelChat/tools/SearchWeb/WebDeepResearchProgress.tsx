@@ -23,7 +23,7 @@ export const WebDeepResearchProgress: React.FC<WebDeepResearchProgressProps> = (
     return (
       <div className="border border-gray-200 dark:border-zinc-800 rounded-xl p-4 bg-gray-50 dark:bg-zinc-900/50">
         <div className="flex items-baseline justify-between gap-4 mb-4">
-          <span className="text-sm text-gray-500 dark:text-gray-400 capitalize transition-opacity duration-300">
+          <span className="text-sm text-muted-foreground capitalize transition-opacity duration-300">
             {activityMessages[messageIndex]}
           </span>
           <span className="text-base font-semibold text-gray-900 dark:text-gray-100 whitespace-nowrap">
@@ -47,7 +47,7 @@ export const WebDeepResearchProgress: React.FC<WebDeepResearchProgressProps> = (
 
     return (
       <div className="space-y-2">
-        <p className="text-sm text-gray-500 dark:text-gray-400">
+        <p className="text-sm text-muted-foreground">
           Reviewing sources · {searchResults.length}
         </p>
         
@@ -67,7 +67,7 @@ export const WebDeepResearchProgress: React.FC<WebDeepResearchProgressProps> = (
   if (progress.status === 'streaming') {
     return (
       <div className="space-y-3">
-        <p className="text-sm text-gray-500 dark:text-gray-400">Analyzing sources</p>
+        <p className="text-sm text-muted-foreground">Analyzing sources</p>
         <div className="border border-gray-200 dark:border-zinc-800 rounded-lg p-4 bg-white dark:bg-zinc-950">
           <Response className="w-full">{progress.accumulatedContent}</Response>
         </div>
@@ -79,7 +79,7 @@ export const WebDeepResearchProgress: React.FC<WebDeepResearchProgressProps> = (
   if (progress.status === 'complete') {
     return (
       <div className="space-y-3">
-        <p className="text-sm text-gray-500 dark:text-gray-400">Research complete</p>
+        <p className="text-sm text-muted-foreground">Research complete</p>
         <div className="border border-gray-200 dark:border-zinc-800 rounded-lg p-4 bg-white dark:bg-zinc-950">
           <Response className="w-full">{progress.accumulatedContent}</Response>
         </div>

@@ -132,7 +132,7 @@ const ChatItem = ({
         <button
           ref={setButtonRef}
           className={cn(
-            `shrink-0 p-1 text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-200 transition-colors duration-150 ${
+            `shrink-0 p-1 text-muted-foreground hover:text-gray-700 dark:hover:text-gray-200 transition-colors duration-150 ${
               showOptions ? "opacity-100" : "opacity-0"
             }`,
             {
@@ -169,7 +169,7 @@ const ChatItem = ({
             onClick={onRenameClick}
             role="menuitem"
           >
-            <Pencil size={14} className="text-gray-500 dark:text-gray-400" />
+            <Pencil size={14} className="text-muted-foreground" />
             <span>Rename</span>
           </button>
           <button

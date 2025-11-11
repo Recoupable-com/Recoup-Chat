@@ -20,7 +20,7 @@ export default function FilesToolbar({ base, relative, onCreateFolder, onFileSel
         <p className="text-center md:text-left font-plus_jakarta_sans_bold text-3xl mb-4 dark:text-white">
           Files
         </p>
-        <p className="text-lg text-gray-500 dark:text-gray-400 text-center md:text-left mb-4 font-light font-inter max-w-2xl">
+        <p className="text-lg text-muted-foreground text-center md:text-left mb-4 font-light font-inter max-w-2xl">
           Store and manage files per artist.
         </p>
         <div className="mt-2">

@@ -37,7 +37,7 @@ const Fans = ({
 
       {isFetchingNextPage && (
         <div className="flex justify-center py-4">
-          <div className="animate-pulse text-gray-500 dark:text-gray-400">
+          <div className="animate-pulse text-muted-foreground">
             Loading more fans...
           </div>
         </div>

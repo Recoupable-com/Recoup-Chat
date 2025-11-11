@@ -15,7 +15,7 @@ const MinimalCommentCard: React.FC<MinimalCommentCardProps> = ({ comment, onClic
 
   return (
     <div 
-      className="flex items-center space-x-2 p-2 bg-gray-50 dark:bg-dark-bg-secondary rounded-xl border border-gray-100 dark:border-dark-border hover:bg-gray-100 dark:hover:bg-dark-bg-tertiary hover:border-gray-200 dark:hover:border-dark-border-light transition-all cursor-pointer group"
+      className="flex items-center space-x-2 p-2 bg-muted rounded-xl border border-gray-100 dark:border-dark-border hover:bg-gray-100 dark:hover:bg-dark-bg-tertiary hover:border-gray-200 dark:hover:border-dark-border-light transition-all cursor-pointer group"
       onClick={onClick}
       role="button"
       tabIndex={0}
