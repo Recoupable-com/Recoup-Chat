@@ -32,7 +32,7 @@ const SegmentButton = ({ segment, onGenerateReport }: SegmentButtonProps) => {
             />
           ) : (
             <div className="flex items-center space-x-2">
-              <div className="w-6 h-6 rounded-full bg-gray-100 dark:bg-dark-border-light flex items-center justify-center">
+              <div className="w-6 h-6 rounded-full bg-muted flex items-center justify-center">
                 <Users className="w-3 h-3 text-muted-foreground" />
               </div>
             </div>

@@ -42,7 +42,7 @@ const RecentChats = ({ toggleModal }: { toggleModal: () => void }) => {
 
   return (
     <div className="w-full flex-grow min-h-0 flex flex-col">
-      <div className="h-[1px] bg-grey-light dark:bg-dark-border w-full mt-1 mb-2 md:mt-2 md:mb-3 shrink-0" />
+      <div className="h-[1px] bg-border w-full mt-1 mb-2 md:mt-2 md:mb-3 shrink-0" />
 
       {isSelectionMode ? (
         <SelectionModeHeader
