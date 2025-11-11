@@ -13,7 +13,7 @@ const SegmentButton = ({ segment, onGenerateReport }: SegmentButtonProps) => {
 
   return (
     <Card 
-      className="p-6 border border-border-light dark:bg-dark-bg-tertiary hover:shadow-lg dark:hover:bg-dark-bg-hover transition-all duration-200 cursor-pointer relative"
+      className="p-6 border border-border-light  hover:shadow-lg dark:hover:bg-dark-bg-hover transition-all duration-200 cursor-pointer relative"
       onClick={() => onGenerateReport(segment.id, segment.name)}
     >
       <div className="space-y-4">

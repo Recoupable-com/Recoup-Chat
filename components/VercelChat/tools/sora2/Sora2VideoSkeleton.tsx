@@ -9,7 +9,7 @@ export function Sora2VideoSkeleton() {
           Generating video...
         </span>
       </div>
-      <div className="w-full max-w-2xl aspect-video bg-muted dark:bg-dark-bg-secondary animate-pulse rounded-lg" />
+      <div className="w-full max-w-2xl aspect-video bg-muted  animate-pulse rounded-lg" />
     </div>
   );
 }

@@ -110,17 +110,17 @@ const TaskCard: React.FC<TaskCardProps> = ({ task, isDeleted }) => {
             </DropdownMenuContent>
           </DropdownMenu>
           {isActive && (
-            <span className="px-2 py-1 text-xs font-medium bg-gray-100 dark:bg-dark-bg-tertiary text-gray-600 dark:text-gray-400 rounded-full group-hover:hidden absolute">
+            <span className="px-2 py-1 text-xs font-medium bg-gray-100  text-gray-600 dark:text-gray-400 rounded-full group-hover:hidden absolute">
               Active
             </span>
           )}
           {isPaused && (
-            <span className="px-2 py-1 text-xs font-medium bg-gray-100 dark:bg-dark-bg-tertiary text-gray-600 dark:text-gray-400 rounded-full group-hover:hidden absolute">
+            <span className="px-2 py-1 text-xs font-medium bg-gray-100  text-gray-600 dark:text-gray-400 rounded-full group-hover:hidden absolute">
               Paused
             </span>
           )}
           {isDeleted && (
-            <span className="px-2 py-1 text-xs font-medium bg-gray-100 dark:bg-dark-bg-tertiary text-gray-600 dark:text-gray-400 rounded-full group-hover:hidden absolute">
+            <span className="px-2 py-1 text-xs font-medium bg-gray-100  text-gray-600 dark:text-gray-400 rounded-full group-hover:hidden absolute">
               Deleted
             </span>
           )}

@@ -92,7 +92,7 @@ const ChatItem = ({
         isSelected
           ? "bg-primary/20 dark:bg-primary/30 border border-primary/30 dark:border-primary/40"
           : isActive
-            ? "bg-primary/10 dark:bg-dark-bg-tertiary"
+            ? "bg-primary/10 "
             : "hover:bg-gray-100 dark:hover:bg-dark-bg-tertiary"
       }`}
       onMouseEnter={onMouseEnter}
@@ -109,7 +109,7 @@ const ChatItem = ({
         } ${
           isSelected
             ? "bg-primary border-primary"
-            : "border-gray-300 dark:border-dark-border-light hover:border-primary/50"
+            : "border-gray-300 -light hover:border-primary/50"
         }`}
         aria-label="Select chat"
       >
@@ -153,7 +153,7 @@ const ChatItem = ({
       {isMenuOpen && (
         <div
           ref={menuRef}
-          className="absolute right-2 top-full mt-1 bg-card shadow-lg rounded-md py-1 z-10 w-32 border border-gray-100 dark:border-dark-border"
+          className="absolute right-2 top-full mt-1 bg-card shadow-lg rounded-md py-1 z-10 w-32 border border-gray-100 "
           onClick={(event) => event.stopPropagation()}
           onKeyDown={(event) => {
             if (event.key === "Escape") {

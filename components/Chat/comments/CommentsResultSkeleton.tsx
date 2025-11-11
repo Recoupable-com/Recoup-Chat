@@ -9,7 +9,7 @@ const MinimalCommentCardSkeleton = ({ variant = 1 }: { variant?: number }) => {
   const secondLineWidth = variant === 1 ? "max-w-[100px]" : variant === 2 ? "max-w-[80px]" : "max-w-[120px]";
   
   return (
-    <div className="flex items-center space-x-2 p-2 bg-muted rounded-xl border border-gray-100 dark:border-dark-border animate-pulse">
+    <div className="flex items-center space-x-2 p-2 bg-muted rounded-xl border border-gray-100  animate-pulse">
       {/* Avatar skeleton */}
       <div className="h-5 w-5 rounded-full overflow-hidden flex-shrink-0 bg-muted/50" />
       
@@ -29,7 +29,7 @@ const MinimalCommentCardSkeleton = ({ variant = 1 }: { variant?: number }) => {
 
 const CommentsResultSkeleton = () => {
   return (
-    <div className="w-full border border-border rounded-xl shadow-sm dark:bg-dark-bg-primary">
+    <div className="w-full border border-border rounded-xl shadow-sm ">
       <div className="p-3">
         {/* Header skeleton with loading indicator */}
         <div className="flex items-center justify-between mb-3 flex-wrap gap-2">

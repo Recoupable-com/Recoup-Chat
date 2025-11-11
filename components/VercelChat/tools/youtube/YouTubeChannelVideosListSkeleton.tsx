@@ -6,7 +6,7 @@ const YouTubeChannelVideosListSkeleton = () => {
       {[...Array(6)].map((_, index) => (
         <div
           key={index}
-          className="rounded-xl overflow-hidden border border-gray-100 dark:border-dark-border"
+          className="rounded-xl overflow-hidden border border-gray-100 "
         >
           {/* Thumbnail Skeleton */}
           <div className="relative aspect-video bg-muted/50 animate-pulse" />

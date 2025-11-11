@@ -25,7 +25,7 @@ const NoSegmentsFound = ({ refetch }: NoSegmentsFoundProps) => {
         Create Fan Groups
       </Button>
       <ul className="mb-4 text-left w-full max-w-xs">
-        <li className="flex items-center space-x-3 p-2 rounded bg-gray-50 dark:bg-dark-bg-tertiary border border-border-light my-1 text-gray-800 dark:text-gray-200">
+        <li className="flex items-center space-x-3 p-2 rounded bg-gray-50  border border-border-light my-1 text-gray-800 dark:text-gray-200">
           {hasInstagram ? <Icons.CheckIcon /> : <Icons.UncheckedIcon />}
           <span className="font-medium text-sm">
             {hasInstagram ? "Instagram Connected" : "Missing Instagram"}
@@ -39,7 +39,7 @@ const NoSegmentsFound = ({ refetch }: NoSegmentsFoundProps) => {
         ].map((item) => (
           <li
             key={item}
-            className="flex items-center space-x-3 p-2 rounded bg-gray-50 dark:bg-dark-bg-tertiary border border-border-light my-1 text-gray-800 dark:text-gray-200"
+            className="flex items-center space-x-3 p-2 rounded bg-gray-50  border border-border-light my-1 text-gray-800 dark:text-gray-200"
           >
             <Icons.UncheckedIcon />
             <span className="font-medium text-sm">{item}</span>

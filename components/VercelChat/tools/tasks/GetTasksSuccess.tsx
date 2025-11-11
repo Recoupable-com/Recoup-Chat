@@ -12,9 +12,9 @@ const GetTasksSuccess: React.FC<GetTasksSuccessProps> = ({ result }) => {
   const { tasks, message } = result;
 
   return (
-    <div className="bg-white dark:bg-dark-bg-primary border border-border rounded-lg shadow-sm max-w-2xl">
+    <div className="bg-white  border border-border rounded-lg shadow-sm max-w-2xl">
       {/* Header */}
-      <div className="px-4 py-3 border-b border-gray-100 dark:border-dark-border bg-muted rounded-t-lg">
+      <div className="px-4 py-3 border-b border-gray-100  bg-muted rounded-t-lg">
         <div className="flex items-center space-x-2">
           <CheckCircle2 className="h-5 w-5 text-green-500 dark:text-green-400" />
           <h3 className="text-sm font-semibold text-foreground">Tasks</h3>

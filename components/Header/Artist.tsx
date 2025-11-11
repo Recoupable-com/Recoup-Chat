@@ -66,7 +66,7 @@ const Artist = ({
               isSelectedArtist && "w-fit rounded-full",
             ]
           : [
-              "flex gap-3 items-center px-2 text-sm rounded-md text-grey-dark dark:text-dark-text-primary",
+              "flex gap-3 items-center px-2 text-sm rounded-md text-grey-dark ",
               isAnyArtistSelected && "hover:bg-grey-light-1 dark:hover:bg-dark-bg-hover",
               isSelectedArtist && "!bg-primary/10 dark:!bg-dark-bg-hover",
             ],
@@ -87,7 +87,7 @@ const Artist = ({
           className={cn(
             "w-8 h-8 aspect-1/1 rounded-full overflow-hidden flex items-center justify-center p-0.5 border-2 border-transparent transition-colors min-w-8 min-h-8 box-content",
             isSelectedArtist &&
-              "shadow-[1px_1px_1px_1px_#E6E6E6] dark:shadow-none border-primary dark:border-dark-border-light",
+              "shadow-[1px_1px_1px_1px_#E6E6E6] dark:shadow-none border-primary ",
             shouldHighlight && "brightness-110 shadow-md ring-1 ring-white/30"
           )}
         >
@@ -102,7 +102,7 @@ const Artist = ({
           <div
             key={artist?.account_id}
             className={cn(
-              "text-left grow text-grey-dark dark:text-dark-text-primary",
+              "text-left grow text-grey-dark ",
               shouldHighlight && "font-medium"
             )}
             title={artist?.name || ""}
@@ -118,7 +118,7 @@ const Artist = ({
               ariaLabel={artist?.pinned ? "Unpin artist" : "Pin artist"}
             >
               {artist?.pinned ? (
-                <Pin className="size-4 text-primary dark:text-dark-text-primary" />
+                <Pin className="size-4 text-primary " />
               ) : (
                 <PinOff className="size-4 text-grey-dark dark:text-dark-text-muted" />
               )}
