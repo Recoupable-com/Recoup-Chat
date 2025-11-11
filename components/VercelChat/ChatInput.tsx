@@ -70,8 +70,8 @@ export function ChatInput({
           onSubmit={handleSend}
           className={cn(
             "overflow-visible md:overflow-hidden",
-            "rounded-2xl border border-gray-200 dark:border-dark-border-light bg-background/70 dark:bg-dark-bg-input/90 backdrop-blur",
-            "shadow-sm dark:shadow-lg"
+            "rounded-2xl border border-border bg-background/70 backdrop-blur",
+            "shadow-sm"
           )}
         >
           <FileMentionsInput

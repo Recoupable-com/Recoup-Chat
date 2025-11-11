@@ -79,7 +79,7 @@ export type PromptInputProps = HTMLAttributes<HTMLFormElement>;
 export const PromptInput = ({ className, ...props }: PromptInputProps) => (
   <form
     className={cn(
-      "w-full overflow-hidden rounded-2xl border border-border/50 bg-background/95 backdrop-blur-sm shadow-lg",
+      "w-full overflow-hidden rounded-2xl border border-border bg-card backdrop-blur-sm shadow-lg",
       className
     )}
     {...props}
@@ -124,9 +124,9 @@ export const PromptInputTextarea = ({
     <Textarea
       className={cn(
         "w-full resize-none rounded-none border-none px-6 py-4 shadow-none outline-none ring-0",
-        "bg-transparent dark:bg-transparent dark:text-dark-text-primary",
+        "bg-transparent text-foreground",
         "focus-visible:ring-0 text-base leading-relaxed",
-        "placeholder:text-muted-foreground dark:placeholder:text-dark-text-placeholder",
+        "placeholder:text-muted-foreground",
         className
       )}
       name="message"
@@ -265,7 +265,7 @@ export const PromptInputModelSelectContent = ({
   className,
   ...props
 }: PromptInputModelSelectContentProps) => (
-  <SelectContent className={cn("rounded-2xl min-w-[280px] px-2 py-2 dark:bg-dark-bg-secondary dark:border-dark-border", className)} {...props} />
+  <SelectContent className={cn("rounded-2xl min-w-[280px] px-2 py-2 bg-popover border-border", className)} {...props} />
 );
 
 export type PromptInputModelSelectItemProps = ComponentProps<typeof SelectItem>;
