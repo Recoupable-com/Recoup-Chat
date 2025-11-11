@@ -67,8 +67,8 @@ const Artist = ({
             ]
           : [
               "flex gap-3 items-center px-2 text-sm rounded-md text-grey-dark ",
-              isAnyArtistSelected && "hover:bg-grey-light-1 dark:hover:bg-dark-bg-hover",
-              isSelectedArtist && "!bg-primary/10 dark:!bg-dark-bg-hover",
+              isAnyArtistSelected && "hover:bg-grey-light-1 ",
+              isSelectedArtist && "!bg-primary/10 ",
             ],
         shouldHighlight && "z-50 relative"
       )}
@@ -120,7 +120,7 @@ const Artist = ({
               {artist?.pinned ? (
                 <Pin className="size-4 text-primary " />
               ) : (
-                <PinOff className="size-4 text-grey-dark dark:text-dark-text-muted" />
+                <PinOff className="size-4 text-grey-dark " />
               )}
             </ArtistActionButton>
             
@@ -134,7 +134,7 @@ const Artist = ({
               title="Edit artist settings"
               ariaLabel="Edit artist settings"
             >
-              <EllipsisVertical className="size-5 rotate-90 text-grey-dark dark:text-dark-text-muted" />
+              <EllipsisVertical className="size-5 rotate-90 text-grey-dark " />
             </ArtistActionButton>
           </div>
         </>

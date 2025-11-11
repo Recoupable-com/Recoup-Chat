@@ -28,7 +28,7 @@ export default function FileTile({ file, onDelete, onProperties, isSelected, onC
     "group relative rounded-xl bg-card hover:bg-accent  dark:hover:bg-dark-bg-hover transition-all duration-200 cursor-pointer",
     "w-32 h-32 flex flex-col items-center justify-start p-4 gap-3",
     "hover:shadow-sm border border-border -light",
-    isSelected && "bg-accent dark:bg-dark-bg-hover border-accent-foreground/20 -light"
+    isSelected && "bg-accent  border-accent-foreground/20 -light"
   );
 
   // macOS Finder-style icon container - minimal by default
