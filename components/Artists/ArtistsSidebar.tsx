@@ -60,7 +60,7 @@ const ArtistsSidebar = () => {
 
   return (
     <motion.div
-      className={`px-3 py-7 hidden md:flex flex-col gap-2 z-50 ${menuExpanded ? "items-stretch" : "items-center"} ${!isArtistSelected ? "relative" : ""}`}
+      className={`bg-sidebar px-3 py-7 hidden md:flex flex-col gap-2 z-50 ${menuExpanded ? "items-stretch" : "items-center"} ${!isArtistSelected ? "relative" : ""}`}
       animate={animate}
       initial={initial}
       transition={{ duration: 0.2 }}
