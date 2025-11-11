@@ -17,7 +17,7 @@ const GetVideoGameCampaignPlaysResult: React.FC<{
       <div className="mb-2 font-semibold text-lg">
         Total Plays: <span className="text-primary">{result.total}</span>
       </div>
-      <div className="overflow-x-auto overflow-y-auto rounded border border-gray-200 bg-white max-h-64 w-full">
+      <div className="overflow-x-auto overflow-y-auto rounded border border-border bg-white max-h-64 w-full">
         <table className="min-w-full w-full text-xs text-left">
           <thead className="bg-muted border-b">
             <tr>

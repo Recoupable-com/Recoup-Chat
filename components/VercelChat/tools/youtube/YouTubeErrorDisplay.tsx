@@ -17,7 +17,7 @@ export function YouTubeErrorDisplay({
   useYouTubeLoginSuccess();
 
   return (
-    <div className="flex flex-col space-y-3 p-4 rounded-lg bg-muted border border-gray-200 my-2 max-w-md">
+    <div className="flex flex-col space-y-3 p-4 rounded-lg bg-muted border border-border my-2 max-w-md">
       {/* Header */}
       <div className="flex items-center space-x-2">
         <Youtube className="h-5 w-5 text-muted-foreground" />

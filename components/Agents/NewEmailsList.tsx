@@ -25,7 +25,7 @@ const NewEmailsList = ({ emails, onRemoveEmail }: NewEmailsListProps) => {
             <button
               type="button"
               onClick={() => onRemoveEmail(email)}
-              className="ml-1 hover:bg-gray-200 rounded-full p-0.5"
+              className="ml-1 hover:bg-muted rounded-full p-0.5"
               aria-label={`Remove ${email}`}
             >
               <X className="h-3 w-3" />

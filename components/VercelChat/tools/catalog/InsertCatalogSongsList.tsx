@@ -18,7 +18,7 @@ export default function InsertCatalogSongsList({
     <div className="mt-2 overflow-x-auto">
       <table className="w-full text-xs border-collapse">
         <thead>
-          <tr className="border-b border-gray-200">
+          <tr className="border-b border-border">
             <th className="text-left py-2 px-3 font-semibold text-foreground">
               Title
             </th>

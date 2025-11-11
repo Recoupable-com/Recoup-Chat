@@ -39,7 +39,7 @@ export default function FileTile({ file, onDelete, onProperties, isSelected, onC
   );
 
   // macOS Finder-style file name styling
-  const fileNameClasses = "w-full truncate whitespace-nowrap text-center text-sm leading-relaxed font-medium text-foreground dark:text-muted-foreground group-hover:text-gray-900 dark:group-hover:text-white px-1";
+  const fileNameClasses = "w-full truncate whitespace-nowrap text-center text-sm leading-relaxed font-medium text-foreground dark:text-muted-foreground group-hover:text-foreground dark:group-hover:text-white px-1";
 
   const content = (
     <>

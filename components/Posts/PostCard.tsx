@@ -47,7 +47,7 @@ const PostCard = memo(({ post }: PostCardProps) => {
     if (!inView) {
       return (
         <div className="flex items-center justify-center p-4 bg-muted h-full">
-          <div className="animate-pulse bg-gray-200 h-8 w-32 rounded"></div>
+          <div className="animate-pulse bg-muted h-8 w-32 rounded"></div>
         </div>
       );
     }

@@ -37,7 +37,7 @@ export const SearchWebProgress: React.FC<SearchWebProgressProps> = ({ progress }
           Reviewing sources · {searchResults.length}
         </p>
         
-        <div className="border border-gray-200 dark:border-zinc-800 rounded-lg overflow-hidden bg-white dark:bg-zinc-950">
+        <div className="border border-border dark:border-zinc-800 rounded-lg overflow-hidden bg-white dark:bg-zinc-950">
           {searchResults.map((item, index) => (
             <SearchResultItem 
               key={index} 

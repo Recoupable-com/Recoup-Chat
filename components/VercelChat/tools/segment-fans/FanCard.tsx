@@ -26,11 +26,11 @@ const FanCard: React.FC<FanCardProps> = ({ fan, index }) => {
   return (
     <motion.div 
       key={fan.id} 
-      className="flex items-center space-x-2 p-1.5 rounded-xl bg-muted border border-gray-200 text-foreground"
+      className="flex items-center space-x-2 p-1.5 rounded-xl bg-muted border border-border text-foreground"
       variants={itemVariants}
       custom={index}
     >
-      <div className="h-6 w-6 rounded-full bg-gray-200 flex items-center justify-center overflow-hidden shrink-0">
+      <div className="h-6 w-6 rounded-full bg-muted flex items-center justify-center overflow-hidden shrink-0">
         <img
           src={fan.avatar}
           alt={fan.username}

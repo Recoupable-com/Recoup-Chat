@@ -7,7 +7,7 @@ const STYLES = {
   bg: {
     code: "bg-muted dark:bg-card",
   },
-  border: "border-gray-200 dark:border-border",
+  border: "border-border dark:border-border",
 } as const;
 
 export function MessageResultView({ message }: { message: string }) {

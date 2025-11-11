@@ -22,7 +22,7 @@ const ImageWithFallback = ({
   if (!src || imgError) {
     return (
       <div className="w-full h-full min-w-8 min-h-8">
-        <div className={`bg-muted w-full h-full flex items-center justify-center rounded-full border border-gray-200 ${className}`}>
+        <div className={`bg-muted w-full h-full flex items-center justify-center rounded-full border border-border ${className}`}>
           <User className="w-8 h-8 text-muted-foreground" />
         </div>
       </div>

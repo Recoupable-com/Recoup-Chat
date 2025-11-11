@@ -26,7 +26,7 @@ const SearchResultItem: React.FC<SearchResultItemProps> = ({ result }) => {
             e.currentTarget.src = getFallbackFaviconUrl();
           }}
         />
-        <span className="text-sm font-medium text-gray-900 dark:text-gray-100 truncate group-hover:text-primary transition-colors">
+        <span className="text-sm font-medium text-foreground dark:text-foreground truncate group-hover:text-primary transition-colors">
           {result.title}
         </span>
       </div>

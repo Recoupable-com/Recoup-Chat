@@ -11,12 +11,12 @@ const PostsSkeleton = () => {
         >
           <div className="p-3 border-b bg-muted >
             <div className="flex justify-between items-center">
-              <div className="h-4 bg-gray-200 rounded w-20"></div>
-              <div className="h-3 bg-gray-200 rounded w-24"></div>
+              <div className="h-4 bg-muted rounded w-20"></div>
+              <div className="h-3 bg-muted rounded w-24"></div>
             </div>
           </div>
           <div className="flex-grow bg-muted flex items-center justify-center">
-            <div className="h-8 bg-gray-200 rounded w-32"></div>
+            <div className="h-8 bg-muted rounded w-32"></div>
           </div>
         </div>
       ))}

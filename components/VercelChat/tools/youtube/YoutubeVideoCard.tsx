@@ -5,7 +5,7 @@ const YoutubeVideoCard = ({ video }: { video: YouTubeVideo }) => {
   return (
     <div
       key={video.id}
-      className="group rounded-xl overflow-hidden border border-border hover:border-gray-200 transition-colors cursor-pointer"
+      className="group rounded-xl overflow-hidden border border-border hover:border-border transition-colors cursor-pointer"
     >
       {/* Thumbnail */}
       <div className="relative aspect-video">

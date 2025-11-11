@@ -6,8 +6,8 @@ import { MessageCircle } from 'lucide-react';
  */
 const CommentsResultEmpty: React.FC = () => {
   return (
-    <div className="flex items-center space-x-3 p-2 rounded bg-muted border border-gray-200 my-1 text-foreground w-fit md:rounded-xl">
-      <div className="h-8 w-8 rounded-full bg-gray-200 flex items-center justify-center overflow-hidden shrink-0">
+    <div className="flex items-center space-x-3 p-2 rounded bg-muted border border-border my-1 text-foreground w-fit md:rounded-xl">
+      <div className="h-8 w-8 rounded-full bg-muted flex items-center justify-center overflow-hidden shrink-0">
         <MessageCircle className="h-4 w-4 text-muted-foreground" />
       </div>
       <div className="flex-grow min-w-0">

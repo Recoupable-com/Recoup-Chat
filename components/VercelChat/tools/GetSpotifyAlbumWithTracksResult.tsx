@@ -55,7 +55,7 @@ const GetSpotifyAlbumWithTracksResult: React.FC<
                       {track.explicit && (
                         <Badge
                           variant="secondary"
-                          className="bg-gray-600 text-white text-xs px-1 py-0 hidden sm:inline-flex"
+                          className="bg-muted text-white text-xs px-1 py-0 hidden sm:inline-flex"
                         >
                           E
                         </Badge>

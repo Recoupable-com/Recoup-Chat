@@ -6,7 +6,7 @@ import { isPlainObject } from "@/lib/browser/isPlainObject";
 
 const STYLES = {
   text: {
-    primary: "text-gray-900 dark:text-gray-100",
+    primary: "text-foreground dark:text-foreground",
     muted: "text-muted-foreground dark:text-muted-foreground",
   },
 } as const;
@@ -68,7 +68,7 @@ export function ExtractResultView({ data }: { data: unknown }) {
       {validItems.map(({ key, label, displayValue, isMetric }) => (
         <div 
           key={key} 
-          className="flex items-baseline justify-between gap-3 py-2 border-b border-border dark:border-gray-800 last:border-0"
+          className="flex items-baseline justify-between gap-3 py-2 border-b border-border dark:border-border last:border-0"
         >
           <span className={cn("text-sm font-medium flex-shrink-0", STYLES.text.muted)}>
             {label}

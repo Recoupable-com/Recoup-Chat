@@ -26,7 +26,7 @@ const SpotifyContentCard = ({ content }: SpotifyContentCardProps) => {
             className={`h-full w-full object-cover transition-transform duration-300 ${hasValidUrl ? 'group-hover:scale-105' : ''}`}
           />
         ) : (
-          <div className="h-full w-full bg-gray-200 flex items-center justify-center">
+          <div className="h-full w-full bg-muted flex items-center justify-center">
             <span className="text-muted-foreground">No Image</span>
           </div>
         )}

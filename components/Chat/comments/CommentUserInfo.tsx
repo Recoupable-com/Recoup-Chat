@@ -18,7 +18,7 @@ const CommentUserInfo: React.FC<CommentUserInfoProps> = ({
   return (
     <div className="flex-1 min-w-0">
       <div className="flex items-center flex-wrap gap-1">
-        <h3 className="font-medium text-sm text-gray-900">
+        <h3 className="font-medium text-sm text-foreground">
           @{username}
         </h3>
         {region && (

@@ -37,7 +37,7 @@ export function YouTubeChannelDisplay({
 
       {/* Channel Info */}
       <div className="flex items-start space-x-3">
-        <div className="h-12 w-12 rounded-full bg-gray-200 flex items-center justify-center overflow-hidden shrink-0">
+        <div className="h-12 w-12 rounded-full bg-muted flex items-center justify-center overflow-hidden shrink-0">
           {thumbnailUrl ? (
             // eslint-disable-next-line @next/next/no-img-element
             <img
@@ -53,7 +53,7 @@ export function YouTubeChannelDisplay({
         </div>
 
         <div className="flex-grow min-w-0">
-          <h3 className="font-semibold text-gray-900 truncate">
+          <h3 className="font-semibold text-foreground truncate">
             {channel.title}
           </h3>
           {channel.customUrl && (
@@ -70,7 +70,7 @@ export function YouTubeChannelDisplay({
         <div className="text-center">
           <div className="flex items-center justify-center space-x-1">
             <Users className="h-3 w-3 text-muted-foreground" />
-            <span className="text-sm font-medium text-gray-900">
+            <span className="text-sm font-medium text-foreground">
               {formatFollowerCount(
                 parseInt(channel.statistics.subscriberCount, 10)
               )}
@@ -82,7 +82,7 @@ export function YouTubeChannelDisplay({
         <div className="text-center">
           <div className="flex items-center justify-center space-x-1">
             <Video className="h-3 w-3 text-muted-foreground" />
-            <span className="text-sm font-medium text-gray-900">
+            <span className="text-sm font-medium text-foreground">
               {formatFollowerCount(parseInt(channel.statistics.videoCount, 10))}
             </span>
           </div>
@@ -92,7 +92,7 @@ export function YouTubeChannelDisplay({
         <div className="text-center">
           <div className="flex items-center justify-center space-x-1">
             <Eye className="h-3 w-3 text-muted-foreground" />
-            <span className="text-sm font-medium text-gray-900">
+            <span className="text-sm font-medium text-foreground">
               {formatFollowerCount(parseInt(channel.statistics.viewCount, 10))}
             </span>
           </div>

@@ -7,7 +7,7 @@ const StatCard = ({ icon: Icon, label, value }: { icon: LucideIcon; label: strin
     </div>
     <div className="min-w-0 flex-1">
       <p className="text-xs text-muted-foreground truncate">{label}</p>
-      <p className="font-semibold text-xs md:text-sm text-gray-900 truncate">{value}</p>
+      <p className="font-semibold text-xs md:text-sm text-foreground truncate">{value}</p>
     </div>
   </div>
 );

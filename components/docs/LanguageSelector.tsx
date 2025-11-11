@@ -23,7 +23,7 @@ export function LanguageSelector({
           className={`px-4 py-2 rounded ${
             selectedLanguage.value === lang.value
               ? "bg-card text-white"
-              : "bg-muted hover:bg-gray-200"
+              : "bg-muted hover:bg-muted"
           }`}
         >
           {lang.name}

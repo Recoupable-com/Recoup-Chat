@@ -32,7 +32,7 @@ export function CodeBlock({ code }: CodeBlockProps) {
           <Copy className="w-4 h-4 text-muted-foreground" />
         )}
       </button>
-      <pre className="bg-background text-gray-100 p-6 rounded-lg overflow-x-auto">
+      <pre className="bg-background text-foreground p-6 rounded-lg overflow-x-auto">
         <code>{code}</code>
       </pre>
     </div>

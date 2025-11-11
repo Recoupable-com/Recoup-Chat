@@ -26,7 +26,7 @@ export const ProfilePictureCircles = ({ fans }: ProfilePictureCirclesProps) => {
         <div key={fan.id} className="relative group" title={fan.username}>
           <ImageWithFallback
             src={fan.avatar}
-            className="w-8 h-8 rounded-full object-cover border border-gray-200 hover:border-blue-400 transition-colors"
+            className="w-8 h-8 rounded-full object-cover border border-border hover:border-blue-400 transition-colors"
           />
           {fan.bio && (
             <div className="absolute bottom-full left-1/2 transform -translate-x-1/2 mb-2 w-48 p-2 bg-black/80 text-white text-xs rounded-md opacity-0 group-hover:opacity-100 transition-opacity duration-200 pointer-events-none z-10">

@@ -45,7 +45,7 @@ const TasksList: React.FC<TasksListProps> = ({ tasks, isLoading, isError }) => {
   return (
     <div className="max-w-2xl mx-auto mt-16">
       <div className="mb-8">
-        <h3 className="text-lg font-semibold text-gray-900 dark:text-white">Scheduled</h3>
+        <h3 className="text-lg font-semibold text-foreground dark:text-white">Scheduled</h3>
       </div>
       {tasks.map((task, index) => (
         <TaskDetailsDialog key={task.id} task={task}>

@@ -13,7 +13,7 @@ interface SegmentHeaderProps {
 const SegmentHeader: React.FC<SegmentHeaderProps> = ({ segmentName, totalCount }) => {
   return (
     <motion.div 
-      className="flex items-center space-x-2 p-1.5 rounded-xl bg-muted border border-gray-200 text-foreground"
+      className="flex items-center space-x-2 p-1.5 rounded-xl bg-muted border border-border text-foreground"
       variants={headerVariants}
     >
       <div className="flex-shrink-0">
