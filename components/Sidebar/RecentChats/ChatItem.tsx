@@ -105,7 +105,7 @@ const ChatItem = ({
           onSelect(event.shiftKey);
         }}
         className={`shrink-0 w-4 h-4 rounded border-2 transition-all duration-150 flex items-center justify-center ${
-          showCheckbox ? "opacity-100" : "opacity-0"
+          (isShiftPressed || isSelectionMode) ? "opacity-100" : "opacity-0"
         } ${
           isSelected
             ? "bg-primary border-primary"

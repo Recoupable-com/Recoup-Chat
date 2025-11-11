@@ -69,7 +69,7 @@ export function ChatInput({
         <PromptInput
           onSubmit={handleSend}
           className={cn(
-            "overflow-visible md:overflow-hidden",
+            "overflow-visible",
             "rounded-2xl border border-border bg-background/70 backdrop-blur",
             "shadow-sm"
           )}

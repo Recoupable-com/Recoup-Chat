@@ -56,13 +56,13 @@ export function ArtistSelectionOverlay() {
     <>
       {/* Semi-transparent overlay */}
       <div
-        className="fixed inset-0 z-30 bg-black/80 backdrop-blur-[1px] transition-opacity duration-300 pointer-events-none"
+        className="fixed inset-0 z-[55] bg-black/50 backdrop-blur-sm transition-opacity duration-300 pointer-events-none"
         style={{ opacity: 1 }}
       />
 
       {/* Tooltip Container - only shown on desktop */}
       {showTooltip && !isMobile && (
-        <div className="fixed inset-0 z-[60] pointer-events-none">
+        <div className="fixed inset-0 z-[70] pointer-events-none">
           <motion.div
             className={`absolute ${hasArtists ? "top-8" : "bottom-4"}`}
             initial={{ right: "8rem" }}

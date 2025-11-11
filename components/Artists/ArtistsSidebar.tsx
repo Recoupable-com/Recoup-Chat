@@ -60,7 +60,7 @@ const ArtistsSidebar = () => {
 
   return (
     <motion.div
-      className={`bg-sidebar px-3 py-7 hidden md:flex flex-col gap-2 z-50 ${menuExpanded ? "items-stretch" : "items-center"} ${!isArtistSelected ? "relative" : ""}`}
+      className={`bg-sidebar px-3 py-7 hidden md:flex flex-col gap-2 z-[65] ${menuExpanded ? "items-stretch" : "items-center"} ${!isArtistSelected ? "relative" : ""}`}
       animate={animate}
       initial={initial}
       transition={{ duration: 0.2 }}
@@ -76,7 +76,7 @@ const ArtistsSidebar = () => {
         className={cn(
           "flex transition-colors hover:bg-accent dark:hover:bg-[#2a2a2a] border border-transparent hover:border-grey-dark-1 dark:hover:border-[#444] rounded-md",
           menuExpanded ? "px-2 py-1 gap-2 text-sm items-center text-grey-dark-1 dark:text-muted-foreground" : "justify-center",
-          !isArtistSelected && "relative z-50 brightness-125"
+          !isArtistSelected && "relative z-[70] brightness-125"
         )}
         onClick={handleCreate}
         type="button"

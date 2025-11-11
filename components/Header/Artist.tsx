@@ -70,7 +70,7 @@ const Artist = ({
               isAnyArtistSelected && "hover:bg-accent",
               isSelectedArtist && "!bg-primary/10",
             ],
-        shouldHighlight && "z-50 relative"
+        shouldHighlight && "z-[70] relative"
       )}
       onClick={handleClick}
       onKeyDown={(e) => {

@@ -79,7 +79,7 @@ export type PromptInputProps = HTMLAttributes<HTMLFormElement>;
 export const PromptInput = ({ className, ...props }: PromptInputProps) => (
   <form
     className={cn(
-      "w-full overflow-hidden rounded-2xl border border-border bg-card backdrop-blur-sm shadow-lg",
+      "w-full overflow-visible rounded-2xl border border-border bg-card backdrop-blur-sm shadow-lg",
       className
     )}
     {...props}
@@ -265,7 +265,13 @@ export const PromptInputModelSelectContent = ({
   className,
   ...props
 }: PromptInputModelSelectContentProps) => (
-  <SelectContent className={cn("rounded-2xl min-w-[280px] px-2 py-2 bg-popover border-border", className)} {...props} />
+  <SelectContent 
+    className={cn("rounded-2xl w-[min(280px,calc(100vw-2rem))] px-2 py-2 bg-popover border-border z-[100]", className)} 
+    position="popper"
+    sideOffset={8}
+    collisionPadding={{ top: 100, bottom: 100, left: 16, right: 16 }}
+    {...props} 
+  />
 );
 
 export type PromptInputModelSelectItemProps = ComponentProps<typeof SelectItem>;
