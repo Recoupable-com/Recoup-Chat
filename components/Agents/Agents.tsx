@@ -62,7 +62,7 @@ const Agents = () => {
           setShowAllTags={setShowAllTags}
         />
         <div className="relative w-full">
-          <div className="absolute top-0 w-full h-8 z-30 pointer-events-none bg-gradient-to-b from-white/95 to-transparent dark:from-neutral-950/95"></div>
+          <div className="absolute top-0 w-full h-8 z-30 pointer-events-none bg-gradient-to-b from-background/95 to-transparent"></div>
         </div>
         <div className="flex flex-col flex-1 overflow-y-auto pt-4 md:pt-8 pb-8 relative bg-background w-full">
           {loading ? (
@@ -85,7 +85,7 @@ const Agents = () => {
             </div>
           )}
         </div>
-        <div className="absolute bottom-0 w-full h-8 z-30 pointer-events-none bg-gradient-to-b to-white/95 from-transparent dark:from-neutral-950/95"></div>
+        <div className="absolute bottom-0 w-full h-8 z-30 pointer-events-none bg-gradient-to-t from-background/95 to-transparent"></div>
       </div>
     </div>
   );
