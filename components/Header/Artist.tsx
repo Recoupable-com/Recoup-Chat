@@ -82,13 +82,13 @@ const Artist = ({
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
     >
-      <div className="relative">
+      <div className="relative p-0.5">
         <div
           className={cn(
-            "w-8 h-8 aspect-1/1 rounded-full overflow-hidden flex items-center justify-center p-0.5 border-2 border-transparent transition-colors min-w-8 min-h-8 box-content",
+            "w-8 h-8 aspect-1/1 rounded-full overflow-hidden flex items-center justify-center transition-colors",
             isSelectedArtist &&
-              "shadow-[1px_1px_1px_1px_#E6E6E6] dark:shadow-none border-primary ",
-            shouldHighlight && "brightness-110 shadow-md ring-1 ring-white/30"
+              "ring-1 ring-foreground",
+            shouldHighlight && "brightness-110 shadow-md ring-2 ring-primary/50"
           )}
         >
           <ImageWithFallback

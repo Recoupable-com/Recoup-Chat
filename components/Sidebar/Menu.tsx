@@ -48,7 +48,7 @@ const Menu = ({ toggleMenuExpanded }: { toggleMenuExpanded: () => void }) => {
       <div className="flex flex-col gap-3 w-full mt-2">
         <Button
           variant="outline"
-          className="rounded-xl w-full  dark:text-white -light dark:hover:bg-dark-bg-tertiary"
+          className="rounded-xl w-full"
           onClick={() => goToItem("chat")}
         >
           {email ? "New Chat" : "Sign In"}
