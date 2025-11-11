@@ -12,6 +12,8 @@ import Inputs from "./Inputs";
 import DeleteModal from "./DeleteModal";
 import { useState } from "react";
 import AccountIdDisplay from "./AccountIdDisplay";
+import { borderPatterns, buttonPatterns, iconPatterns, textPatterns } from "@/lib/styles/patterns";
+import { cn } from "@/lib/utils";
 
 const Settings = () => {
   const {
@@ -39,11 +41,11 @@ const Settings = () => {
       validationSchema={validation}
       onSubmit={handleSave}
     >
-      <div className="col-span-12 flex justify-between items-center border-b border-grey dark:border-dark-border pb-3">
+      <div className={cn("col-span-12 flex justify-between items-center pb-3", borderPatterns.divider)}>
         <div className="flex gap-2 items-center">
-          <MicVocal className="text-gray-700 dark:text-dark-text-primary" />
+          <MicVocal className={iconPatterns.primary} />
           <div className="flex flex-col">
-            <p className="text-gray-900 dark:text-dark-text-primary font-medium">
+            <p className={cn(textPatterns.heading)}>
               {settingMode === SETTING_MODE.CREATE
                 ? "Add Artist"
                 : "Artist Settings"}
@@ -55,29 +57,29 @@ const Settings = () => {
         </div>
       </div>
       <div className="col-span-4 space-y-1 md:space-y-2">
-        <p className="text-sm text-gray-700 dark:text-dark-text-secondary">Artist Image</p>
+        <p className={cn("text-sm", textPatterns.secondary)}>Artist Image</p>
         <ImageSelect />
       </div>
       <Inputs />
       <div className="col-span-7 md:col-span-5 space-y-1 md:space-y-2">
-        <p className="text-sm text-gray-700 dark:text-dark-text-secondary">Knowledge Base</p>
+        <p className={cn("text-sm", textPatterns.secondary)}>Knowledge Base</p>
         <KnowledgeSelect />
       </div>
       <div className="col-span-7 space-y-1 md:space-y-2 flex flex-col justify-end items-start">
         {knowledgeUploading ? (
-          <p className="text-sm text-gray-600 dark:text-dark-text-muted">Uploading...</p>
+          <p className={cn("text-sm", textPatterns.muted)}>Uploading...</p>
         ) : (
           <Knowledges />
         )}
       </div>
       <button
-        className="col-span-12 border border-grey dark:border-dark-border rounded-md py-1 bg-gray-50 dark:bg-dark-bg-hover hover:bg-gray-100 dark:hover:bg-dark-bg-active text-gray-900 dark:text-dark-text-primary transition-colors"
+        className={cn(buttonPatterns.primary, borderPatterns.default, "col-span-12 rounded-md py-1")}
         type="submit"
       >
         {updating ? "Saving..." : "Save"}
       </button>
       <button
-        className="col-span-12 border border-grey dark:border-dark-border rounded-md py-1 mb-4 text-red-700 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-900/20 transition-colors"
+        className={cn(buttonPatterns.danger, borderPatterns.default, "col-span-12 rounded-md py-1 mb-4")}
         onClick={() => setIsVisibleDeleteModal(true)}
         type="button"
       >

@@ -4,6 +4,8 @@ import { useArtistProvider } from "@/providers/ArtistProvider";
 import { Plus } from "lucide-react";
 import { Dispatch, SetStateAction } from "react";
 import { useUserProvider } from "@/providers/UserProvder";
+import { containerPatterns, textPatterns, iconPatterns } from "@/lib/styles/patterns";
+import { cn } from "@/lib/utils";
 
 const ArtistDropDown = ({
   setIsVisibleDropDown,
@@ -25,7 +27,7 @@ const ArtistDropDown = ({
         onMouseOver={() => setIsVisibleDropDown(true)}
         onMouseOut={() => setIsVisibleDropDown(false)}
       >
-        <div className="border dark:border-dark-border mt-2 bg-white dark:bg-dark-bg-tertiary p-2 rounded-md space-y-1 shadow-[0px_0px_7px_0px_#80808063] dark:shadow-lg max-h-[200px] overflow-y-auto">
+        <div className={cn(containerPatterns.dropdown, "mt-2 p-2 space-y-1 max-h-[200px] overflow-y-auto")}>
           {sorted.map((artist: ArtistRecord | null) => (
             <Artist
               artist={artist}
@@ -34,11 +36,15 @@ const ArtistDropDown = ({
             />
           ))}
           <button
-            className="flex px-2 py-1 gap-2 text-sm items-center text-grey-light-1 dark:text-dark-text-secondary hover:text-grey-dark-1 dark:hover:text-dark-text-primary"
+            className={cn(
+              "flex px-2 py-1 gap-2 text-sm items-center",
+              textPatterns.secondary,
+              "hover:text-grey-dark-1 dark:hover:text-dark-text-primary"
+            )}
             onClick={handleCreate}
           >
             <div className="w-8 flex justify-center">
-              <Plus className="size-5 text-grey-dark-1 dark:text-dark-text-secondary" />
+              <Plus className={cn("size-5", iconPatterns.secondary)} />
             </div>
             New Artist
           </button>

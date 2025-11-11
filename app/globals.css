@@ -2,80 +2,125 @@
 @tailwind components;
 @tailwind utilities;
 
-@font-face {
-  font-family: "Inter Medium";
-  src: url("/fonts/Inter-Medium.ttf") format("truetype");
-}
-@font-face {
-  font-family: "Inter Regular";
-  src: url("/fonts/Inter-Regular.ttf") format("truetype");
-}
-@font-face {
-  font-family: "Inter Bold";
-  src: url("/fonts/Inter-Bold.ttf") format("truetype");
-}
-@font-face {
-  font-family: "Inter Tight";
-  src: url("/fonts/InterTight-Regular.ttf") format("truetype");
-  font-weight: 400;
-  font-style: normal;
-}
-@font-face {
-  font-family: "Inter Tight";
-  src: url("/fonts/InterTight-Medium.ttf") format("truetype");
-  font-weight: 500;
-  font-style: normal;
-}
-@font-face {
-  font-family: "Inter Tight";
-  src: url("/fonts/InterTight-SemiBold.ttf") format("truetype");
-  font-weight: 600;
-  font-style: normal;
-}
-@font-face {
-  font-family: "Inter Tight";
-  src: url("/fonts/InterTight-Bold.ttf") format("truetype");
-  font-weight: 700;
-  font-style: normal;
-}
-@font-face {
-  font-family: "PlusJakartaSans Bold";
-  src: url("/fonts/PlusJakartaSans-Bold.ttf") format("truetype");
-}
-@font-face {
-  font-family: "PlusJakartaSans Regular";
-  src: url("/fonts/PlusJakartaSans-Regular.ttf") format("truetype");
-}
-@font-face {
-  font-family: "Instrument Serif";
-  src: url("/fonts/InstrumentSerif-Regular.ttf") format("truetype");
-  font-style: normal;
-  font-weight: 400;
-}
-@font-face {
-  font-family: "Instrument Serif";
-  src: url("/fonts/InstrumentSerif-Italic.ttf") format("truetype");
-  font-style: italic;
-  font-weight: 400;
+/* ============================================================================
+   LAYER: BASE - Fonts, Variables, Global Resets
+   ============================================================================ */
+
+@layer base {
+  /* Font Face Declarations */
+  @font-face {
+    font-family: "Inter Medium";
+    src: url("/fonts/Inter-Medium.ttf") format("truetype");
+  }
+  @font-face {
+    font-family: "Inter Regular";
+    src: url("/fonts/Inter-Regular.ttf") format("truetype");
+  }
+  @font-face {
+    font-family: "Inter Bold";
+    src: url("/fonts/Inter-Bold.ttf") format("truetype");
+  }
+  @font-face {
+    font-family: "Inter Tight";
+    src: url("/fonts/InterTight-Regular.ttf") format("truetype");
+    font-weight: 400;
+    font-style: normal;
+  }
+  @font-face {
+    font-family: "Inter Tight";
+    src: url("/fonts/InterTight-Medium.ttf") format("truetype");
+    font-weight: 500;
+    font-style: normal;
+  }
+  @font-face {
+    font-family: "Inter Tight";
+    src: url("/fonts/InterTight-SemiBold.ttf") format("truetype");
+    font-weight: 600;
+    font-style: normal;
+  }
+  @font-face {
+    font-family: "Inter Tight";
+    src: url("/fonts/InterTight-Bold.ttf") format("truetype");
+    font-weight: 700;
+    font-style: normal;
+  }
+  @font-face {
+    font-family: "PlusJakartaSans Bold";
+    src: url("/fonts/PlusJakartaSans-Bold.ttf") format("truetype");
+  }
+  @font-face {
+    font-family: "PlusJakartaSans Regular";
+    src: url("/fonts/PlusJakartaSans-Regular.ttf") format("truetype");
+  }
+  @font-face {
+    font-family: "Instrument Serif";
+    src: url("/fonts/InstrumentSerif-Regular.ttf") format("truetype");
+    font-style: normal;
+    font-weight: 400;
+  }
+  @font-face {
+    font-family: "Instrument Serif";
+    src: url("/fonts/InstrumentSerif-Italic.ttf") format("truetype");
+    font-style: italic;
+    font-weight: 400;
+  }
+
+  /* Global HTML/Body Styles */
+  html,
+  body {
+    font-family: var(--font-primary);
+    width: 100vw;
+    height: 100vh;
+    overflow: hidden;
+  }
+
+  html {
+    color: black;
+    background: white;
+  }
+
+  html.dark {
+    color: white;
+    background: #0d0d0d;
+  }
+
+  * {
+    @apply border-border;
+  }
+  
+  body {
+    @apply bg-background text-foreground;
+  }
 }
 
-html,
-body {
-  font-family: var(--font-primary);
-  width: 100vw;
-  height: 100vh;
-  overflow: hidden;
+/* ============================================================================
+   LAYER: COMPONENTS - Component-Specific Styles
+   ============================================================================ */
+
+@layer components {
+  /* Typewriter Component */
+  .no_typecursor .Typewriter__cursor {
+    display: none;
+  }
+
+  /* Segment Report Styles */
+  .segment-report {
+    font-size: 14px !important;
+  }
+
+  .segment-report div {
+    padding: 2px !important;
+  }
+
+  .segment-report ul {
+    list-style: inside !important;
+    padding-left: 12px !important;
+  }
 }
 
-html {
-  color: black;
-  background: white;
-}
-
-html.dark {
-  color: white;
-  background: #0d0d0d;
-}
+/* ============================================================================
+   LAYER: UTILITIES - Utility Classes
+   ============================================================================ */
 
 @layer utilities {
   .text-balance {
@@ -92,6 +137,10 @@ html.dark {
   }
 }
 
+/* ============================================================================
+   ANIMATIONS - Keyframe Definitions
+   ============================================================================ */
+
 @keyframes shimmer {
   0% {
     background-position: 200% 0;
@@ -102,23 +151,6 @@ html.dark {
   100% {
     background-position: -200% 0;
   }
-}
-
-.no_typecursor .Typewriter__cursor {
-  display: none;
-}
-
-.segment-report {
-  font-size: 14px !important;
-}
-
-.segment-report div {
-  padding: 2px !important;
-}
-
-.segment-report ul {
-  list-style: inside !important;
-  padding-left: 12px !important;
 }
 
 @layer base {
