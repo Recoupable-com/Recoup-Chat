@@ -30,7 +30,7 @@ export function ResponseTable({ properties }: ResponseTableProps) {
           <div className="hidden md:block">
             <table className="w-full border-collapse">
               <thead>
-                <tr className="bg-muted >
+                <tr className="bg-muted">
                   <th className="text-left p-4 border">Property</th>
                   <th className="text-left p-4 border">Type</th>
                   <th className="text-left p-4 border">Description</th>

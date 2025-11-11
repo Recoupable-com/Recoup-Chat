@@ -9,7 +9,7 @@ const PostsSkeleton = () => {
           key={item}
           className="border rounded-lg overflow-hidden shadow-sm bg-card h-[300px] flex flex-col animate-pulse"
         >
-          <div className="p-3 border-b bg-muted >
+          <div className="p-3 border-b bg-muted">
             <div className="flex justify-between items-center">
               <div className="h-4 bg-muted rounded w-20"></div>
               <div className="h-3 bg-muted rounded w-24"></div>

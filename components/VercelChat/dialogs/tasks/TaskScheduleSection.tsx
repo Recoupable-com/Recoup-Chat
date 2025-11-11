@@ -16,7 +16,7 @@ const TaskScheduleSection = ({
 }: TaskScheduleSectionProps) => {
   return (
     <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs">
-      <div className={cn("flex flex-col gap-1 p-2 rounded-lg bg-muted , {
+      <div className={cn("flex flex-col gap-1 p-2 rounded-lg bg-muted", {
         "bg-red-50 border-red-100": isDeleted
       })}>
         <div className={cn("flex items-center gap-1.5 font-medium text-foreground", {
@@ -39,7 +39,7 @@ const TaskScheduleSection = ({
         </div>
       </div>
 
-      <div className={cn("flex flex-col gap-1 p-2 rounded-lg bg-muted , {
+      <div className={cn("flex flex-col gap-1 p-2 rounded-lg bg-muted", {
         "bg-red-50 border-red-100": isDeleted
       })}>
         <div className={cn("flex items-center gap-1.5 font-medium text-foreground", {

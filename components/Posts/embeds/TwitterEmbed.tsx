@@ -133,7 +133,7 @@ export const TwitterEmbed = ({ url }: TwitterEmbedProps) => {
   return (
     <div className="twitter-embed relative overflow-hidden h-full min-h-[300px]">
       {isLoading && (
-        <div className="absolute inset-0 flex items-center justify-center bg-muted >
+        <div className="absolute inset-0 flex items-center justify-center bg-muted">
           Loading...
         </div>
       )}

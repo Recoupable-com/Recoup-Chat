@@ -21,11 +21,11 @@ const GetVideoGameCampaignPlaysResult: React.FC<{
         <table className="min-w-full w-full text-xs text-left">
           <thead className="bg-muted border-b">
             <tr>
-              <th className="px-3 py-2 sticky top-0 z-10 bg-muted >
+              <th className="px-3 py-2 sticky top-0 z-10 bg-muted">
                 Timestamp
               </th>
-              <th className="px-3 py-2 sticky top-0 z-10 bg-muted >Fan ID</th>
-              <th className="px-3 py-2 sticky top-0 z-10 bg-muted >
+              <th className="px-3 py-2 sticky top-0 z-10 bg-muted">Fan ID</th>
+              <th className="px-3 py-2 sticky top-0 z-10 bg-muted">
                 Premium?
               </th>
             </tr>
@@ -34,7 +34,7 @@ const GetVideoGameCampaignPlaysResult: React.FC<{
             {result.rows.map((row) => (
               <tr
                 key={row.id}
-                className="border-b last:border-0 hover:bg-muted 
+                className="border-b last:border-0 hover:bg-muted"
               >
                 <td className="px-3 py-2 whitespace-nowrap">
                   {row.timestamp

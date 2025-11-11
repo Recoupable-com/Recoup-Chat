@@ -70,7 +70,7 @@ const PostCard = memo(({ post }: PostCardProps) => {
       ref={ref}
       className="border rounded-lg overflow-hidden shadow-sm hover:shadow-md transition-shadow bg-card h-full flex flex-col"
     >
-      <div className="p-3 border-b bg-muted >
+      <div className="p-3 border-b bg-muted">
         <div className="flex justify-between items-center">
           <span className="text-sm font-medium capitalize">{platform}</span>
           <span className="text-xs text-muted-foreground">{formattedDate}</span>

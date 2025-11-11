@@ -11,7 +11,7 @@ const TaskArtistImage: React.FC<TaskArtistImageProps> = ({
   const { imageUrl, artistName } = useArtistImage(artistAccountId);
 
   return (
-    <div className="flex h-10 w-10 flex-shrink-0 items-center justify-center overflow-hidden rounded-full bg-muted >
+    <div className="flex h-10 w-10 flex-shrink-0 items-center justify-center overflow-hidden rounded-full bg-muted">
       {imageUrl ? (
         // eslint-disable-next-line @next/next/no-img-element
         <img
