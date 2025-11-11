@@ -71,8 +71,6 @@ const ChatItem = ({
     setDisplayName,
   });
 
-  const showCheckbox = isShiftPressed && (isHovered || isSelectionMode);
-
   const handleClick = (event: MouseEvent) => {
     if (event.shiftKey || isSelectionMode) {
       onSelect(event.shiftKey);
