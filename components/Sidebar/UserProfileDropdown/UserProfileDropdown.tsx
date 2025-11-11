@@ -1,5 +1,5 @@
 import { Button } from "@/components/ui/button";
-import { ChevronDown, Moon, Sun } from "lucide-react";
+import { ChevronDown, Moon, Sun, Monitor } from "lucide-react";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -8,6 +8,9 @@ import {
   DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
+  DropdownMenuSub,
+  DropdownMenuSubContent,
+  DropdownMenuSubTrigger,
 } from "@/components/ui/dropdown-menu";
 import { IconLogout, IconUser } from "@tabler/icons-react";
 import { useUserProvider } from "@/providers/UserProvder";
@@ -15,13 +18,22 @@ import CreditsUsage from "./CreditsUsage";
 import AccountIdDisplay from "@/components/ArtistSetting/AccountIdDisplay";
 import ManageSubscriptionButton from "./ManageSubscriptionButton";
 import { useTheme } from "next-themes";
+import { Check } from "lucide-react";
 
 const UserProfileDropdown = () => {
   const { toggleModal, signOut, userData } = useUserProvider();
   const { theme, setTheme } = useTheme();
 
-  const toggleTheme = () => {
-    setTheme(theme === "dark" ? "light" : "dark");
+  const getThemeIcon = () => {
+    if (theme === "dark") return <Moon className="h-4 w-4" />;
+    if (theme === "light") return <Sun className="h-4 w-4" />;
+    return <Monitor className="h-4 w-4" />;
+  };
+
+  const getThemeLabel = () => {
+    if (theme === "dark") return "Dark";
+    if (theme === "light") return "Light";
+    return "System";
   };
 
   return (
@@ -51,10 +63,38 @@ const UserProfileDropdown = () => {
             Profile
           </DropdownMenuItem>
           <ManageSubscriptionButton />
-          <DropdownMenuItem onClick={toggleTheme} className="cursor-pointer">
-            {theme === "dark" ? <Sun className="h-4 w-4" /> : <Moon className="h-4 w-4" />}
-            {theme === "dark" ? "Light mode" : "Dark mode"}
-          </DropdownMenuItem>
+          <DropdownMenuSub>
+            <DropdownMenuSubTrigger className="cursor-pointer">
+              {getThemeIcon()}
+              <span>Theme: {getThemeLabel()}</span>
+            </DropdownMenuSubTrigger>
+            <DropdownMenuSubContent>
+              <DropdownMenuItem 
+                onClick={() => setTheme("light")} 
+                className="cursor-pointer"
+              >
+                <Sun className="h-4 w-4" />
+                <span>Light</span>
+                {theme === "light" && <Check className="h-4 w-4 ml-auto" />}
+              </DropdownMenuItem>
+              <DropdownMenuItem 
+                onClick={() => setTheme("dark")} 
+                className="cursor-pointer"
+              >
+                <Moon className="h-4 w-4" />
+                <span>Dark</span>
+                {theme === "dark" && <Check className="h-4 w-4 ml-auto" />}
+              </DropdownMenuItem>
+              <DropdownMenuItem 
+                onClick={() => setTheme("system")} 
+                className="cursor-pointer"
+              >
+                <Monitor className="h-4 w-4" />
+                <span>System</span>
+                {theme === "system" && <Check className="h-4 w-4 ml-auto" />}
+              </DropdownMenuItem>
+            </DropdownMenuSubContent>
+          </DropdownMenuSub>
         </DropdownMenuGroup>
         <DropdownMenuSeparator />
         <DropdownMenuItem className="cursor-pointer" onClick={signOut}>
