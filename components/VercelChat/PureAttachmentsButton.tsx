@@ -18,7 +18,7 @@ function PureAttachmentsButton() {
             />
             <Button
                 data-testid="attachments-button"
-                className="rounded-md rounded-bl-lg p-[7px] h-fit dark:border-dark-border dark:hover:bg-dark-bg-tertiary hover:bg-zinc-200 dark:text-white"
+                className="rounded-md rounded-bl-lg p-[7px] h-fit border-border hover:bg-accent text-foreground"
                 onClick={(event) => {
                     event.preventDefault();
                     fileInputRef.current?.click();
