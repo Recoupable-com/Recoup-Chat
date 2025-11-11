@@ -23,36 +23,6 @@ const config: Config = {
         "success-pulse": "success-pulse 1.5s ease-in-out",
         "ping-slow": "ping-slow 1.5s cubic-bezier(0, 0, 0.2, 1) infinite",
       },
-  		fontFamily: {
-  			// Theme-based fonts (use CSS variables for centralized management)
-  			primary: ['var(--font-primary)'],
-  			'primary-medium': ['var(--font-primary-medium)'],
-  			'primary-bold': ['var(--font-primary-bold)'],
-  			secondary: ['var(--font-secondary)'],
-  			'secondary-bold': ['var(--font-secondary-bold)'],
-  			serif: ['var(--font-serif)'],
-  			// Legacy font names (kept for backward compatibility)
-  			inter_medium: [
-  				'Inter Medium',
-  				'sans-serif'
-  			],
-  			inter_bold: [
-  				'Inter Bold',
-  				'sans-serif'
-  			],
-  			inter: [
-  				'Inter Regular',
-  				'sans-serif'
-  			],
-  			plus_jakarta_sans_bold: [
-  				'PlusJakartaSans Bold',
-  				'sans-serif'
-  			],
-  			plus_jakarta_sans: [
-  				'PlusJakartaSans Regular',
-  				'sans-serif'
-  			]
-  		},
   		colors: {
   			background: 'hsl(var(--background))',
   			black: {
@@ -73,28 +43,6 @@ const config: Config = {
 				"light-2": "#EBEBEB",
 				"light-3": "#FAFAFA"
   			},
-        dark: {
-          bg: {
-            primary: 'var(--dark-bg-primary)',
-            secondary: 'var(--dark-bg-secondary)',
-            tertiary: 'var(--dark-bg-tertiary)',
-            input: 'var(--dark-bg-input)',
-            'message-user': 'var(--dark-bg-message-user)',
-            hover: 'var(--dark-bg-hover)',
-            active: 'var(--dark-bg-active)',
-          },
-          border: {
-            DEFAULT: 'var(--dark-border)',
-            light: 'var(--dark-border-light)',
-            focus: 'var(--dark-border-focus)',
-          },
-          text: {
-            primary: 'var(--dark-text-primary)',
-            secondary: 'var(--dark-text-secondary)',
-            muted: 'var(--dark-text-muted)',
-            placeholder: 'var(--dark-text-placeholder)',
-          },
-        },
   			green: {
   				DEFAULT: '#345A5D'
   			},
@@ -140,7 +88,17 @@ const config: Config = {
   				'3': 'hsl(var(--chart-3))',
   				'4': 'hsl(var(--chart-4))',
   				'5': 'hsl(var(--chart-5))'
-  			}
+  			},
+        sidebar: {
+          DEFAULT: 'hsl(var(--sidebar))',
+          foreground: 'hsl(var(--sidebar-foreground))',
+          primary: 'hsl(var(--sidebar-primary))',
+          'primary-foreground': 'hsl(var(--sidebar-primary-foreground))',
+          accent: 'hsl(var(--sidebar-accent))',
+          'accent-foreground': 'hsl(var(--sidebar-accent-foreground))',
+          border: 'hsl(var(--sidebar-border))',
+          ring: 'hsl(var(--sidebar-ring))',
+        },
   		},
   		boxShadow: {
   			grey: '1px 1px 1px 1px #E6E6E6',
