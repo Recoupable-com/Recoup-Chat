@@ -15,8 +15,11 @@ export async function findFileByName(
   path?: string
 ): Promise<FileRecord | null> {
   // Build storage key pattern with exact filename
-  const pathPattern = path
-    ? `files/${ownerAccountId}/${artistAccountId}/${path}/${fileName}`
+  // Normalize path: remove leading/trailing slashes
+  const normalizedPath = path?.replace(/^\/+|\/+$/g, '');
+  
+  const pathPattern = normalizedPath
+    ? `files/${ownerAccountId}/${artistAccountId}/${normalizedPath}/${fileName}`
     : `files/${ownerAccountId}/${artistAccountId}/${fileName}`;
 
   // Try to find by file_name first (exact match)
@@ -26,7 +29,7 @@ export async function findFileByName(
     .eq("owner_account_id", ownerAccountId)
     .eq("artist_account_id", artistAccountId)
     .eq("file_name", fileName)
-    .ilike("storage_key", pathPattern)
+    .eq("storage_key", pathPattern)
     .order("created_at", { ascending: false })
     .limit(1)
     .single();
@@ -36,12 +39,12 @@ export async function findFileByName(
     const fileNameWithSpaces = fileName.replace(/_/g, ' ');
     const fileNameWithUnderscores = fileName.replace(/ /g, '_');
     
-    const storageKeyPatternSpaces = path
-      ? `files/${ownerAccountId}/${artistAccountId}/${path}/${fileNameWithSpaces}`
+    const storageKeyPatternSpaces = normalizedPath
+      ? `files/${ownerAccountId}/${artistAccountId}/${normalizedPath}/${fileNameWithSpaces}`
       : `files/${ownerAccountId}/${artistAccountId}/${fileNameWithSpaces}`;
     
-    const storageKeyPatternUnderscores = path
-      ? `files/${ownerAccountId}/${artistAccountId}/${path}/${fileNameWithUnderscores}`
+    const storageKeyPatternUnderscores = normalizedPath
+      ? `files/${ownerAccountId}/${artistAccountId}/${normalizedPath}/${fileNameWithUnderscores}`
       : `files/${ownerAccountId}/${artistAccountId}/${fileNameWithUnderscores}`;
 
     // Escape values for PostgREST (handles filenames with commas, periods, etc.)
@@ -55,7 +58,7 @@ export async function findFileByName(
       .select()
       .eq("owner_account_id", ownerAccountId)
       .eq("artist_account_id", artistAccountId)
-      .or(`file_name.eq.${escapedSpaces},file_name.eq.${escapedUnderscores},storage_key.ilike.${escapedPatternSpaces},storage_key.ilike.${escapedPatternUnderscores}`)
+      .or(`storage_key.eq.${escapedPatternSpaces},storage_key.eq.${escapedPatternUnderscores}`)
       .order("created_at", { ascending: false })
       .limit(1)
       .single();

@@ -1,0 +1,136 @@
+import { z } from "zod";
+import { tool } from "ai";
+import { findFileByName } from "@/lib/supabase/files/findFileByName";
+import { deleteFileByKey } from "@/lib/supabase/storage/deleteFileByKey";
+import { deleteFileRecord } from "@/lib/supabase/files/deleteFileRecord";
+import { deleteFilesInDirectory } from "@/lib/supabase/files/deleteFilesInDirectory";
+import { listFilesByArtist } from "@/lib/supabase/files/listFilesByArtist";
+
+const deleteFile = tool({
+  description: `
+Delete a file or directory from storage. Use this to remove files the user no longer needs.
+
+When to use:
+- User wants to remove outdated research or reports
+- Clean up temporary or incorrect files
+- Delete empty directories
+- Remove files before recreating them
+
+Important:
+- For directories, use recursive=true to delete contents
+- Directory deletion without recursive flag will fail if not empty
+- Deletion is permanent and cannot be undone
+- Verify with user before deleting important files
+`,
+  inputSchema: z.object({
+    fileName: z
+      .string()
+      .describe("Name of the file or directory to delete (e.g., 'research.md', 'old-reports')"),
+    path: z
+      .string()
+      .optional()
+      .describe("Optional subdirectory path where file is located (e.g., 'research', 'reports')"),
+    recursive: z
+      .boolean()
+      .optional()
+      .default(false)
+      .describe("If true, delete directory and all its contents. Required for non-empty directories."),
+    active_account_id: z
+      .string()
+      .describe("Pull active_account_id from the system prompt"),
+    active_artist_id: z
+      .string()
+      .describe("Pull active_artist_id from the system prompt"),
+  }),
+  execute: async ({
+    fileName,
+    path,
+    recursive,
+    active_account_id,
+    active_artist_id,
+  }) => {
+    try {
+      // 1. Find the file/directory
+      const fileRecord = await findFileByName(
+        fileName,
+        active_account_id,
+        active_artist_id,
+        path
+      );
+
+      if (!fileRecord) {
+        return {
+          success: false,
+          error: `File or directory '${fileName}' not found${path ? ` in '${path}'` : ""}.`,
+          message: `Cannot delete - '${fileName}' does not exist. Use list_files to see available files.`,
+        };
+      }
+
+      const storageKeysToDelete: string[] = [];
+
+      // 2. Handle directory deletion
+      if (fileRecord.is_directory) {
+        if (!recursive) {
+          // Check if directory is empty
+          const childFiles = await listFilesByArtist(
+            active_account_id,
+            active_artist_id,
+            path ? `${path}/${fileName}` : fileName
+          );
+
+          if (childFiles.length > 0) {
+            return {
+              success: false,
+              error: `Directory '${fileName}' is not empty.`,
+              message: `Cannot delete non-empty directory without recursive flag. Directory contains ${childFiles.length} file(s). Use recursive=true to delete directory and all contents.`,
+            };
+          }
+        } else {
+          // Recursive deletion: delete all children first
+          const childStorageKeys = await deleteFilesInDirectory(
+            fileRecord.storage_key,
+            fileRecord.id
+          );
+
+          storageKeysToDelete.push(...childStorageKeys);
+        }
+      } else {
+        // Regular file - add to deletion list
+        storageKeysToDelete.push(fileRecord.storage_key);
+      }
+
+      // 3. Delete files from storage
+      if (storageKeysToDelete.length > 0) {
+        await deleteFileByKey(storageKeysToDelete);
+      }
+
+      // 4. Delete the main file/directory record from database
+      await deleteFileRecord(fileRecord.id);
+
+      return {
+        success: true,
+        fileName,
+        path: path || "root",
+        isDirectory: fileRecord.is_directory,
+        filesDeleted: storageKeysToDelete.length,
+        message: fileRecord.is_directory
+          ? `Successfully deleted directory '${fileName}' and ${storageKeysToDelete.length} file(s) inside it.`
+          : `Successfully deleted file '${fileName}'.`,
+      };
+    } catch (error) {
+      console.error("Error in deleteFile tool:", error);
+
+      const errorMessage =
+        error instanceof Error ? error.message : "An unexpected error occurred";
+
+      return {
+        success: false,
+        error: errorMessage,
+        message: `Failed to delete '${fileName}': ${errorMessage}`,
+      };
+    }
+  },
+});
+
+export default deleteFile;
+
