@@ -5,6 +5,7 @@ import { copyFileByKey } from "@/lib/supabase/storage/copyFileByKey";
 import { deleteFileByKey } from "@/lib/supabase/storage/deleteFileByKey";
 import { updateFileName } from "@/lib/supabase/files/updateFileName";
 import { isValidFileName } from "@/utils/isValidFileName";
+import { isValidPath } from "@/utils/isValidPath";
 
 const renameFile = tool({
   description: `
@@ -48,7 +49,16 @@ Important:
     active_artist_id,
   }) => {
     try {
-      // 1. Find the file
+      // 1. Validate path to prevent directory traversal
+      if (path && !isValidPath(path)) {
+        return {
+          success: false,
+          error: "Invalid path provided.",
+          message: `Path '${path}' is invalid. Paths cannot contain directory traversal sequences (.., ./), backslashes, or control characters.`,
+        };
+      }
+
+      // 2. Find the file
       const fileRecord = await findFileByName(
         fileName,
         active_account_id,
@@ -64,7 +74,7 @@ Important:
         };
       }
 
-      // 2. Check if it's a directory (not supported in V1)
+      // 3. Check if it's a directory (not supported in V1)
       if (fileRecord.is_directory) {
         return {
           success: false,
@@ -73,7 +83,7 @@ Important:
         };
       }
 
-      // 3. Validate new filename
+      // 4. Validate new filename
       if (!isValidFileName(newFileName)) {
         return {
           success: false,
@@ -82,7 +92,7 @@ Important:
         };
       }
 
-      // 4. Check if new name is the same as current name
+      // 5. Check if new name is the same as current name
       if (fileName === newFileName) {
         return {
           success: false,
@@ -91,7 +101,7 @@ Important:
         };
       }
 
-      // 5. Check if new name already exists in same directory
+      // 6. Check if new name already exists in same directory
       const existingFile = await findFileByName(
         newFileName,
         active_account_id,
@@ -107,7 +117,7 @@ Important:
         };
       }
 
-      // 6. Generate new storage key (same path, new filename)
+      // 7. Generate new storage key (same path, new filename)
       const baseStoragePath = `files/${active_account_id}/${active_artist_id}`;
       
       // Normalize path: remove leading and trailing slashes
@@ -120,17 +130,17 @@ Important:
       
       const newStorageKey = `${fullPath}${newFileName}`;
 
-      // 7. Copy file to new storage key
+      // 8. Copy file to new storage key
       await copyFileByKey(
         fileRecord.storage_key,
         newStorageKey,
         fileRecord.mime_type || undefined
       );
 
-      // 8. Update database record with new name and storage key
+      // 9. Update database record with new name and storage key
       await updateFileName(fileRecord.id, newFileName, newStorageKey);
 
-      // 9. Delete old storage file
+      // 10. Delete old storage file
       await deleteFileByKey(fileRecord.storage_key);
 
       return {

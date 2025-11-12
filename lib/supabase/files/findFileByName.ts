@@ -1,6 +1,7 @@
 import supabase from "@/lib/supabase/serverClient";
 import { Tables } from "@/types/database.types";
 import { escapePostgrestValue } from "./escapePostgrestValue";
+import { isValidPath } from "@/utils/isValidPath";
 
 type FileRecord = Tables<"files">;
 
@@ -14,7 +15,14 @@ export async function findFileByName(
   artistAccountId: string,
   path?: string
 ): Promise<FileRecord | null> {
-  // Build storage key pattern with exact filename
+  // Validate path to prevent directory traversal attacks
+  if (path && !isValidPath(path)) {
+    throw new Error(
+      'Invalid path: paths cannot contain directory traversal sequences (.., ./), ' +
+      'backslashes, control characters, or be absolute paths'
+    );
+  }
+
   // Normalize path: remove leading/trailing slashes
   const normalizedPath = path?.replace(/^\/+|\/+$/g, '');
   
