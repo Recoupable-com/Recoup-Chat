@@ -48,8 +48,6 @@ export async function findFileByName(
       : `files/${ownerAccountId}/${artistAccountId}/${fileNameWithUnderscores}`;
 
     // Escape values for PostgREST (handles filenames with commas, periods, etc.)
-    const escapedSpaces = escapePostgrestValue(fileNameWithSpaces);
-    const escapedUnderscores = escapePostgrestValue(fileNameWithUnderscores);
     const escapedPatternSpaces = escapePostgrestValue(storageKeyPatternSpaces);
     const escapedPatternUnderscores = escapePostgrestValue(storageKeyPatternUnderscores);
 
