@@ -108,10 +108,16 @@ Important:
       }
 
       // 6. Generate new storage key (same path, new filename)
-      const baseStoragePath = `files/${active_account_id}/${active_artist_id}/`;
-      const fullPath = path
-        ? `${baseStoragePath}${path.endsWith("/") ? path : path + "/"}`
-        : baseStoragePath;
+      const baseStoragePath = `files/${active_account_id}/${active_artist_id}`;
+      
+      // Normalize path: remove leading and trailing slashes
+      const normalizedPath = path?.replace(/^\/+|\/+$/g, '');
+      
+      // Build full path with exactly one trailing slash
+      const fullPath = normalizedPath
+        ? `${baseStoragePath}/${normalizedPath}/`
+        : `${baseStoragePath}/`;
+      
       const newStorageKey = `${fullPath}${newFileName}`;
 
       // 7. Copy file to new storage key

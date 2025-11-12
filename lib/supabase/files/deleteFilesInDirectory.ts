@@ -6,6 +6,40 @@ type FileRecord = {
 };
 
 /**
+ * Escape special LIKE wildcard characters to prevent injection
+ * @param input String to escape
+ * @returns Escaped string safe for LIKE pattern matching
+ */
+function escapeLikePattern(input: string): string {
+  // Must escape backslash first since it's the escape character
+  return input
+    .replace(/\\/g, '\\\\')  // Escape backslashes
+    .replace(/%/g, '\\%')    // Escape percent signs
+    .replace(/_/g, '\\_');   // Escape underscores
+}
+
+/**
+ * Apply common filters to a query (LIKE pattern and optional exclude)
+ * @param query Base Supabase query to apply filters to
+ * @param escapedPattern Escaped LIKE pattern
+ * @param excludeId Optional ID to exclude from results
+ * @returns Query with filters applied
+ */
+function applyDirectoryFilters<T>(
+  query: T,
+  escapedPattern: string,
+  excludeId?: string
+): T {
+  let filteredQuery = (query as any).like("storage_key", escapedPattern);
+  
+  if (excludeId) {
+    filteredQuery = filteredQuery.neq("id", excludeId);
+  }
+  
+  return filteredQuery;
+}
+
+/**
  * Delete all file records in a directory (recursive)
  * Returns array of storage keys that need to be deleted from storage
  * @param directoryStorageKey Storage key of the directory (used as prefix match)
@@ -17,17 +51,18 @@ export async function deleteFilesInDirectory(
   directoryStorageKey: string,
   excludeId?: string
 ): Promise<string[]> {
-  // Find all files whose storage_key starts with the directory path
-  let query = supabase
-    .from("files")
-    .select("id, storage_key")
-    .like("storage_key", `${directoryStorageKey}%`);
+  // Sanitize input by escaping special LIKE wildcard characters
+  const escapedKey = escapeLikePattern(directoryStorageKey);
+  const escapedPattern = `${escapedKey}%`;
 
-  if (excludeId) {
-    query = query.neq("id", excludeId);
-  }
+  // Build select query with common filters
+  const selectQuery = applyDirectoryFilters(
+    supabase.from("files").select("id, storage_key"),
+    escapedPattern,
+    excludeId
+  );
 
-  const { data: childFiles, error: selectError } = await query;
+  const { data: childFiles, error: selectError } = await selectQuery;
 
   if (selectError) {
     throw new Error(`Failed to find files in directory: ${selectError.message}`);
@@ -39,15 +74,12 @@ export async function deleteFilesInDirectory(
 
   const storageKeys = childFiles.map((f: FileRecord) => f.storage_key);
 
-  // Delete all child file records
-  let deleteQuery = supabase
-    .from("files")
-    .delete()
-    .like("storage_key", `${directoryStorageKey}%`);
-
-  if (excludeId) {
-    deleteQuery = deleteQuery.neq("id", excludeId);
-  }
+  // Build delete query with the same common filters
+  const deleteQuery = applyDirectoryFilters(
+    supabase.from("files").delete(),
+    escapedPattern,
+    excludeId
+  );
 
   const { error: deleteError } = await deleteQuery;
 
