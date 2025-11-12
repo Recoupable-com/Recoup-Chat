@@ -1,7 +1,7 @@
 import React from "react";
 import { type Components } from "react-markdown";
 import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
-import { oneLight } from "react-syntax-highlighter/dist/cjs/styles/prism";
+import { oneLight, oneDark } from "react-syntax-highlighter/dist/cjs/styles/prism";
 
 interface CodeBlockProps extends React.HTMLAttributes<HTMLElement> {
   inline?: boolean;
@@ -17,21 +17,52 @@ const MarkdownCode: Components['code'] = (props: CodeBlockProps) => {
   const language = match ? match[1] : "";
 
   if (!inline) {
+    const codeString = String(children).replace(/\n$/, "");
+    
     return (
+      <>
+        {/* Light mode */}
         <SyntaxHighlighter
+          className="dark:hidden"
           language={language}
           style={oneLight}
           customStyle={{ 
             margin: 0,
-            borderRadius: "0.75rem",
-            fontSize: "0.9em",
+            padding: 0,
+            borderRadius: 0,
+            fontSize: "0.875rem",
             lineHeight: 1.6,
+            background: "transparent",
+            color: "hsl(var(--foreground))",
+            overflowX: "auto",
           }}
           wrapLines
           wrapLongLines
         >
-          {String(children).replace(/\n$/, "")}
+          {codeString}
         </SyntaxHighlighter>
+        
+        {/* Dark mode */}
+        <SyntaxHighlighter
+          className="hidden dark:block"
+          language={language}
+          style={oneDark}
+          customStyle={{ 
+            margin: 0,
+            padding: 0,
+            borderRadius: 0,
+            fontSize: "0.875rem",
+            lineHeight: 1.6,
+            background: "transparent",
+            color: "hsl(var(--foreground))",
+            overflowX: "auto",
+          }}
+          wrapLines
+          wrapLongLines
+        >
+          {codeString}
+        </SyntaxHighlighter>
+      </>
     );
   }
   
