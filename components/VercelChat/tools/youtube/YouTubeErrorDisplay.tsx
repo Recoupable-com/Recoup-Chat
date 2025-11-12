@@ -17,11 +17,11 @@ export function YouTubeErrorDisplay({
   useYouTubeLoginSuccess();
 
   return (
-    <div className="flex flex-col space-y-3 p-4 rounded-lg bg-gray-50 border border-gray-200 my-2 max-w-md">
+    <div className="flex flex-col space-y-3 p-4 rounded-lg bg-muted border border-border my-2 max-w-md">
       {/* Header */}
       <div className="flex items-center space-x-2">
-        <Youtube className="h-5 w-5 text-gray-600" />
-        <span className="font-medium text-gray-800">
+        <Youtube className="h-5 w-5 text-muted-foreground" />
+        <span className="font-medium text-foreground">
           YouTube Access Required
         </span>
 
@@ -31,12 +31,12 @@ export function YouTubeErrorDisplay({
       </div>
 
       {/* Artist Context */}
-      <div className="text-xs text-gray-600">
+      <div className="text-xs text-muted-foreground">
         Artist: <span className="font-medium">{selectedArtist?.account_id}</span>
       </div>
 
       {/* Message */}
-      <p className="text-sm text-gray-600">{errorMessage}</p>
+      <p className="text-sm text-muted-foreground">{errorMessage}</p>
 
       {/* Login Button */}
       <ConnectYouTubeButton
@@ -46,7 +46,7 @@ export function YouTubeErrorDisplay({
         disabled={!selectedArtist?.account_id}
       />
 
-      <p className="text-xs text-gray-500 text-center">
+      <p className="text-xs text-muted-foreground text-center">
         You&apos;ll be redirected to Google to authorize access to your YouTube
         channel for this artist.
       </p>

@@ -32,8 +32,8 @@ const NavButton = ({
       onClick={onClick}
       onMouseEnter={onHover}
       className={cn("rounded-xl w-full flex justify-start", {
-        "bg-muted text-black ring-1 ring-border hover:bg-muted": isActive,
-        "text-black hover:bg-muted hover:text-black hover:ring-1 hover:ring-border": !isActive,
+        "bg-muted text-foreground ring-1 ring-border hover:bg-muted": isActive,
+        "text-foreground hover:bg-muted hover:ring-1 hover:ring-border": !isActive,
       })}
       aria-label={ariaLabel}
     >

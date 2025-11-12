@@ -39,8 +39,8 @@ const SpotifyAlbumWithTracksHero: React.FC<SpotifyAlbumWithTracksHeroProps> = ({
                 className="w-48 h-48 rounded-lg shadow-2xl"
               />
             ) : (
-              <div className="w-48 h-48 bg-gray-700 rounded-lg flex items-center justify-center">
-                <Music className="w-16 h-16 text-gray-400" />
+              <div className="w-48 h-48 bg-card rounded-lg flex items-center justify-center">
+                <Music className="w-16 h-16 text-muted-foreground" />
               </div>
             )}
           </div>

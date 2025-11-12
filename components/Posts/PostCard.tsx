@@ -46,8 +46,8 @@ const PostCard = memo(({ post }: PostCardProps) => {
     // Only render the embed if the card is in view
     if (!inView) {
       return (
-        <div className="flex items-center justify-center p-4 bg-gray-100 h-full">
-          <div className="animate-pulse bg-gray-200 h-8 w-32 rounded"></div>
+        <div className="flex items-center justify-center p-4 bg-muted h-full">
+          <div className="animate-pulse bg-muted h-8 w-32 rounded"></div>
         </div>
       );
     }
@@ -68,12 +68,12 @@ const PostCard = memo(({ post }: PostCardProps) => {
   return (
     <div
       ref={ref}
-      className="border rounded-lg overflow-hidden shadow-sm hover:shadow-md transition-shadow bg-white h-full flex flex-col"
+      className="border rounded-lg overflow-hidden shadow-sm hover:shadow-md transition-shadow bg-card h-full flex flex-col"
     >
-      <div className="p-3 border-b bg-gray-50">
+      <div className="p-3 border-b bg-muted">
         <div className="flex justify-between items-center">
           <span className="text-sm font-medium capitalize">{platform}</span>
-          <span className="text-xs text-gray-500">{formattedDate}</span>
+          <span className="text-xs text-muted-foreground">{formattedDate}</span>
         </div>
       </div>
       <div className="flex-grow">{renderEmbed()}</div>

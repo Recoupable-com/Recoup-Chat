@@ -39,18 +39,18 @@ const FanProfileHover = ({ fan, children }: FanProfileHoverProps) => {
                     <img
                       src={fan.avatar}
                       alt={fan.username || "Fan"}
-                      className="w-14 h-14 rounded-full object-cover border-2 border-gray-200"
+                      className="w-14 h-14 rounded-full object-cover border-2 border-border"
                       onError={handleImageError}
                     />
                   ) : (
-                    <div className="w-14 h-14 rounded-full bg-gray-200 border-2 border-gray-200 flex items-center justify-center">
-                      <User className="w-7 h-7 text-gray-500" />
+                    <div className="w-14 h-14 rounded-full bg-muted border-2 border-border flex items-center justify-center">
+                      <User className="w-7 h-7 text-muted-foreground" />
                     </div>
                   )}
                 </div>
                 <div className="flex-1 min-w-0">
                   <div className="flex items-center justify-between">
-                    <h4 className="font-plus_jakarta_sans_bold text-sm text-foreground truncate">
+                    <h4 className="font-sans font-medium text-sm text-foreground truncate">
                       {fan.username || "Unknown User"}
                     </h4>
                   </div>

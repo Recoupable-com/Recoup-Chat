@@ -27,7 +27,7 @@ const Tooltip = ({
       <ReactTooltip
         id={id}
         events={["hover"]}
-        className={`!rounded-xl border !bg-white !text-left !text-black ${tipClasses}`}
+        className={`!rounded-xl border !bg-popover !text-left !text-popover-foreground ${tipClasses}`}
         place="right"
       />
     </div>

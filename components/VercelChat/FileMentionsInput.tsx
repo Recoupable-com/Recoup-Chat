@@ -35,11 +35,11 @@ export default function FileMentionsInput({ value, onChange, disabled, model }: 
 			value={typeof value === "string" ? value : ""}
 			onChange={handleMentionsChange}
 			disabled={disabled}
-			className="w-full text-[14px] leading-[1.6] pb-2 md:pb-0"
+			className="w-full text-[14px] leading-[1.6] pb-2 md:pb-0 text-foreground [&_textarea]:placeholder:text-muted-foreground"
 			suggestionsPortalHost={portalHost}
 			allowSuggestionsAboveCursor
 			customSuggestionsContainer={(children) => (
-				<Card className="z-[70] shadow-lg border rounded-xl overflow-hidden p-1 max-w-32" style={{ background: "hsl(var(--background))", minWidth: 320, maxHeight: 360, overflow: "auto" }}>{children}</Card>
+				<Card className="z-[70] shadow-lg border border-border rounded-xl overflow-hidden p-1 max-w-32 bg-popover" style={{ minWidth: 320, maxHeight: 360, overflow: "auto" }}>{children}</Card>
 			)}
 			placeholder={
 				model === "fal-ai/nano-banana/edit"
@@ -83,7 +83,7 @@ export default function FileMentionsInput({ value, onChange, disabled, model }: 
 								className={cn(
 									"px-3 py-2 text-[13px] cursor-pointer select-none",
 									"flex items-center gap-2 rounded-md",
-									focused ? "bg-muted text-foreground" : "text-muted-foreground hover:bg-muted"
+									focused ? "bg-accent text-foreground" : "text-muted-foreground hover:bg-accent/50"
 								)}
 							>
 								<div className="size-2 rounded-full bg-primary/60" />

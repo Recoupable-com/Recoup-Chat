@@ -31,13 +31,13 @@ export function YouTubeChannelDisplay({
       </div>
 
       {/* Artist Context */}
-      <div className="text-xs text-gray-600">
+      <div className="text-xs text-muted-foreground">
         Account: <span className="font-medium">{userData?.account_id}</span>
       </div>
 
       {/* Channel Info */}
       <div className="flex items-start space-x-3">
-        <div className="h-12 w-12 rounded-full bg-gray-200 flex items-center justify-center overflow-hidden shrink-0">
+        <div className="h-12 w-12 rounded-full bg-muted flex items-center justify-center overflow-hidden shrink-0">
           {thumbnailUrl ? (
             // eslint-disable-next-line @next/next/no-img-element
             <img
@@ -48,19 +48,19 @@ export function YouTubeChannelDisplay({
               className="h-full w-full object-cover"
             />
           ) : (
-            <Youtube className="h-6 w-6 text-gray-600" />
+            <Youtube className="h-6 w-6 text-muted-foreground" />
           )}
         </div>
 
         <div className="flex-grow min-w-0">
-          <h3 className="font-semibold text-gray-900 truncate">
+          <h3 className="font-semibold text-foreground truncate">
             {channel.title}
           </h3>
           {channel.customUrl && (
-            <p className="text-sm text-gray-600">{channel.customUrl}</p>
+            <p className="text-sm text-muted-foreground">{channel.customUrl}</p>
           )}
           {channel.country && (
-            <p className="text-xs text-gray-500">{channel.country}</p>
+            <p className="text-xs text-muted-foreground">{channel.country}</p>
           )}
         </div>
       </div>
@@ -69,40 +69,40 @@ export function YouTubeChannelDisplay({
       <div className="grid grid-cols-3 gap-3 pt-2 border-t border-red-200">
         <div className="text-center">
           <div className="flex items-center justify-center space-x-1">
-            <Users className="h-3 w-3 text-gray-600" />
-            <span className="text-sm font-medium text-gray-900">
+            <Users className="h-3 w-3 text-muted-foreground" />
+            <span className="text-sm font-medium text-foreground">
               {formatFollowerCount(
                 parseInt(channel.statistics.subscriberCount, 10)
               )}
             </span>
           </div>
-          <p className="text-xs text-gray-500">Subscribers</p>
+          <p className="text-xs text-muted-foreground">Subscribers</p>
         </div>
 
         <div className="text-center">
           <div className="flex items-center justify-center space-x-1">
-            <Video className="h-3 w-3 text-gray-600" />
-            <span className="text-sm font-medium text-gray-900">
+            <Video className="h-3 w-3 text-muted-foreground" />
+            <span className="text-sm font-medium text-foreground">
               {formatFollowerCount(parseInt(channel.statistics.videoCount, 10))}
             </span>
           </div>
-          <p className="text-xs text-gray-500">Videos</p>
+          <p className="text-xs text-muted-foreground">Videos</p>
         </div>
 
         <div className="text-center">
           <div className="flex items-center justify-center space-x-1">
-            <Eye className="h-3 w-3 text-gray-600" />
-            <span className="text-sm font-medium text-gray-900">
+            <Eye className="h-3 w-3 text-muted-foreground" />
+            <span className="text-sm font-medium text-foreground">
               {formatFollowerCount(parseInt(channel.statistics.viewCount, 10))}
             </span>
           </div>
-          <p className="text-xs text-gray-500">Views</p>
+          <p className="text-xs text-muted-foreground">Views</p>
         </div>
       </div>
 
       {/* Channel Created Date */}
       {channel.publishedAt && (
-        <div className="flex items-center space-x-1 text-xs text-gray-500 pt-1">
+        <div className="flex items-center space-x-1 text-xs text-muted-foreground pt-1">
           <Calendar className="h-3 w-3" />
           <span>Created {formatTimestamp(channel.publishedAt)}</span>
         </div>

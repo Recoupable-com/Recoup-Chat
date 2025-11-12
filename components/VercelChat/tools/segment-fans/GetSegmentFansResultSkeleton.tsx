@@ -54,16 +54,16 @@ const GetSegmentFansResultSkeleton = ({ count = 9 }: { count?: number }) => {
       {/* Header skeleton */}
       <motion.div 
         variants={itemVariants}
-        className="flex items-center space-x-2 p-1.5 rounded-xl bg-gray-50 border border-gray-200"
+        className="flex items-center space-x-2 p-1.5 rounded-xl bg-muted border border-border"
       >
         <motion.div 
-          className="h-4 w-24 bg-gray-200 rounded"
+          className="h-4 w-24 bg-muted/50 rounded"
           variants={pulseVariants}
           initial="initial"
           animate="animate"
         />
         <motion.div 
-          className="h-3 w-10 bg-gray-200 rounded ml-1"
+          className="h-3 w-10 bg-muted/50 rounded ml-1"
           variants={pulseVariants}
           initial="initial"
           animate="animate"
@@ -76,12 +76,12 @@ const GetSegmentFansResultSkeleton = ({ count = 9 }: { count?: number }) => {
         {Array.from({ length: count }).map((_, index) => (
           <motion.div 
             key={index} 
-            className="flex items-center space-x-2 p-1.5 rounded-xl bg-gray-50 border border-gray-200"
+            className="flex items-center space-x-2 p-1.5 rounded-xl bg-muted border border-border"
             variants={itemVariants}
           >
             {/* Avatar skeleton */}
             <motion.div 
-              className="h-6 w-6 rounded-full bg-gray-200 flex-shrink-0"
+              className="h-6 w-6 rounded-full bg-muted/50 flex-shrink-0"
               variants={pulseVariants}
               initial="initial"
               animate="animate"
@@ -91,13 +91,13 @@ const GetSegmentFansResultSkeleton = ({ count = 9 }: { count?: number }) => {
               {/* Username and region skeleton */}
               <div className="flex items-center justify-between">
                 <motion.div 
-                  className="h-3 w-16 bg-gray-200 rounded"
+                  className="h-3 w-16 bg-muted/50 rounded"
                   variants={pulseVariants}
                   initial="initial"
                   animate="animate"
                 />
                 <motion.div 
-                  className="h-3 w-10 bg-gray-200 rounded-full"
+                  className="h-3 w-10 bg-muted/50 rounded-full"
                   variants={pulseVariants}
                   initial="initial"
                   animate="animate"
@@ -106,7 +106,7 @@ const GetSegmentFansResultSkeleton = ({ count = 9 }: { count?: number }) => {
               
               {/* Bio skeleton */}
               <motion.div 
-                className="h-2 w-full bg-gray-200 rounded"
+                className="h-2 w-full bg-muted/50 rounded"
                 variants={pulseVariants}
                 initial="initial"
                 animate="animate"
@@ -115,13 +115,13 @@ const GetSegmentFansResultSkeleton = ({ count = 9 }: { count?: number }) => {
               {/* Stats skeleton */}
               <div className="flex gap-2">
                 <motion.div 
-                  className="h-2 w-8 bg-gray-200 rounded"
+                  className="h-2 w-8 bg-muted/50 rounded"
                   variants={pulseVariants}
                   initial="initial"
                   animate="animate"
                 />
                 <motion.div 
-                  className="h-2 w-8 bg-gray-200 rounded"
+                  className="h-2 w-8 bg-muted/50 rounded"
                   variants={pulseVariants}
                   initial="initial"
                   animate="animate"

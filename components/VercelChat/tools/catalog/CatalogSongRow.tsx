@@ -10,7 +10,7 @@ const CatalogSongRow = ({ song }: CatalogSongRowProps) => {
   const [isExpanded, setIsExpanded] = useState(false);
 
   return (
-    <tr className="border-b border-gray-100 hover:bg-gray-50">
+    <tr className="border-b border-border hover:bg-muted">
       <td className="py-2 px-3 max-w-[200px] truncate">{song.name || "—"}</td>
       <td className="py-2 px-3 max-w-[150px] truncate">
         {formatArtists(song.artists)}
@@ -18,7 +18,7 @@ const CatalogSongRow = ({ song }: CatalogSongRowProps) => {
       <td className="py-2 px-3 max-w-[150px] truncate">{song.album || "—"}</td>
       <td className="py-2 px-3 font-mono text-[10px]">{song.isrc}</td>
       <td
-        className={`py-2 px-3 max-w-[200px] text-gray-600 cursor-pointer ${
+        className={`py-2 px-3 max-w-[200px] text-muted-foreground cursor-pointer ${
           isExpanded ? "" : "truncate"
         }`}
         onClick={() => setIsExpanded(!isExpanded)}

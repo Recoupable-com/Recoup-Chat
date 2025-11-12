@@ -2,7 +2,7 @@ import Image from "next/image";
 
 const OfflinePage = () => {
   return (
-    <div className="fixed inset-0 flex items-center justify-center bg-white text-center px-4 z-50">
+    <div className="fixed inset-0 flex items-center justify-center bg-background text-center px-4 z-50">
       <div className="w-full max-w-lg flex flex-col items-center">
         <div className="mb-6">
           <Image
@@ -13,10 +13,10 @@ const OfflinePage = () => {
             priority
           />
         </div>
-        <h1 className="text-2xl md:text-4xl font-bold mb-4">
+        <h1 className="text-2xl md:text-4xl font-medium mb-4">
           Recoup is Offline
         </h1>
-        <p className="text-gray-500 max-w-md mx-auto text-base md:text-lg">
+        <p className="text-muted-foreground max-w-md mx-auto text-base md:text-lg">
           The internet is having an outage, affecting Recoup and thousands of
           other applications.
           <br />

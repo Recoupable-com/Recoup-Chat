@@ -27,7 +27,7 @@ const SpotifyAlbumWithTracksMeta: React.FC<SpotifyAlbumWithTracksMetaProps> = ({
         </Badge>
       </div>
 
-      <h1 className="text-4xl font-bold mb-2 drop-shadow-lg">
+      <h1 className="text-4xl font-medium mb-2 drop-shadow-lg">
         {result.name}
       </h1>
 
@@ -38,7 +38,7 @@ const SpotifyAlbumWithTracksMeta: React.FC<SpotifyAlbumWithTracksMetaProps> = ({
       </div>
 
       {/* Album Meta */}
-      <div className="flex flex-wrap items-center gap-2 sm:gap-3 text-xs text-gray-300">
+      <div className="flex flex-wrap items-center gap-2 sm:gap-3 text-xs text-muted-foreground">
         <div className="flex items-center gap-1">
           <Calendar className="w-3 h-3" />
           {new Date(result.release_date).getFullYear()}

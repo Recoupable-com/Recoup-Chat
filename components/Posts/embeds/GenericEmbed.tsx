@@ -17,7 +17,7 @@ export const GenericEmbed = ({ url, platform }: GenericEmbedProps) => {
         href={url}
         target="_blank"
         rel="noopener noreferrer"
-        className="flex items-center justify-center p-4 bg-gray-100 rounded-md hover:bg-gray-200 transition-colors h-full"
+        className="flex items-center justify-center p-4 bg-muted rounded-md hover:bg-muted transition-colors h-full"
       >
         <span className="mr-2">View {platformName}</span>
         <ExternalLink size={16} />

@@ -33,7 +33,7 @@ const StandaloneYoutubeComponent = ({
           {label()}
           <div
             className={cn(
-              "flex items-center p-2 rounded-lg bg-gray-50 border border-gray-200",
+              "flex items-center p-2 rounded-lg bg-muted border border-border",
               {
                 "rounded-full": dense,
               }

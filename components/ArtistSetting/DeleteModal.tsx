@@ -22,7 +22,7 @@ const DeleteModal = ({ toggleModal }: DeleteModalProps) => {
 
   return (
     <div className="fixed left-0 top-0 w-screen h-screen flex items-center justify-center backdrop-blur-[4px] bg-[#8080806b]">
-      <div className="border border-[2px] px-6 py-2 rounded-lg bg-white">
+      <div className="border border-[2px] px-6 py-2 rounded-lg bg-card">
         <p className="text-center mb-3">Are You Sure?</p>
         <div className="flex gap-3 items-center">
           <button

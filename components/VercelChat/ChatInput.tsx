@@ -51,7 +51,7 @@ export function ChatInput({
   };
 
   return (
-    <div className="relative">
+    <div className="relative px-4">
       <div
         className={cn("w-full mx-auto", {
           "absolute bottom-[100%]": messages.length > 0,
@@ -69,8 +69,8 @@ export function ChatInput({
         <PromptInput
           onSubmit={handleSend}
           className={cn(
-            "overflow-visible md:overflow-hidden",
-            "rounded-2xl border border-gray-200 bg-background/70 backdrop-blur",
+            "overflow-visible",
+            "rounded-2xl border border-border bg-background/70 backdrop-blur",
             "shadow-sm"
           )}
         >

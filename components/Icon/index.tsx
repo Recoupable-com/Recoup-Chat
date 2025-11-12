@@ -1,15 +1,21 @@
+import { cn } from "@/lib/utils";
 import { Icons } from "./resolver";
 
 export type IconsType = keyof typeof Icons;
 
 interface IIcon {
   name: IconsType;
+  className?: string;
 }
 
-const Icon = ({ name }: IIcon) => {
+const Icon = ({ name, className }: IIcon) => {
   const IconSVG = Icons[name];
 
-  return <IconSVG />;
+  return (
+    <div className={cn("text-foreground flex items-center justify-center", className)}>
+      <IconSVG />
+    </div>
+  );
 };
 
 export default Icon;

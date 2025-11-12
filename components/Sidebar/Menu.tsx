@@ -77,9 +77,11 @@ const Menu = ({ toggleMenuExpanded }: { toggleMenuExpanded: () => void }) => {
         )}
 
         {/* Bottom Section */}
-        <div className="shrink-0 border-t border-gray-100 mx-auto">
+        <div className="shrink-0 border-t border-border  mx-auto">
           <UnlockPro />
-          <UserInfo toggleMenuExpanded={toggleMenuExpanded} />
+          <div className="w-full px-2 py-3">
+            <UserInfo />
+          </div>
         </div>
       </div>
     </div>

@@ -7,16 +7,16 @@ const PostsSkeleton = () => {
       {skeletonItems.map((item) => (
         <div
           key={item}
-          className="border rounded-lg overflow-hidden shadow-sm bg-white h-[300px] flex flex-col animate-pulse"
+          className="border rounded-lg overflow-hidden shadow-sm bg-card h-[300px] flex flex-col animate-pulse"
         >
-          <div className="p-3 border-b bg-gray-50">
+          <div className="p-3 border-b bg-muted">
             <div className="flex justify-between items-center">
-              <div className="h-4 bg-gray-200 rounded w-20"></div>
-              <div className="h-3 bg-gray-200 rounded w-24"></div>
+              <div className="h-4 bg-muted rounded w-20"></div>
+              <div className="h-3 bg-muted rounded w-24"></div>
             </div>
           </div>
-          <div className="flex-grow bg-gray-100 flex items-center justify-center">
-            <div className="h-8 bg-gray-200 rounded w-32"></div>
+          <div className="flex-grow bg-muted flex items-center justify-center">
+            <div className="h-8 bg-muted rounded w-32"></div>
           </div>
         </div>
       ))}

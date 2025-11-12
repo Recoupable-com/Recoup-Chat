@@ -13,6 +13,7 @@ export const mentionsStyles = {
       lineHeight: 1.6,
       maxHeight: 180,
       overflow: "hidden",
+      color: "inherit",
     },
     input: {
       padding: "12px 20px",
@@ -24,6 +25,7 @@ export const mentionsStyles = {
       overflowY: "auto",
       resize: "none",
       boxSizing: "border-box",
+      color: "inherit",
     },
   },
   "&singleLine": {
@@ -31,12 +33,14 @@ export const mentionsStyles = {
       padding: "12px 20px",
       fontSize: 14,
       lineHeight: 1.6,
+      color: "inherit",
     },
     input: {
       padding: "12px 20px",
       outline: "none",
       fontSize: 14,
       lineHeight: 1.6,
+      color: "inherit",
     },
   },
 } as const;

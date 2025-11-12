@@ -12,19 +12,19 @@
 'use client';
 
 import { memo } from 'react';
-import { 
+import {
   ChainOfThought,
   ChainOfThoughtContent,
   ChainOfThoughtHeader,
   ChainOfThoughtStep,
 } from '@/components/ai-elements/chain-of-thought';
 import { parseReasoningSteps } from '@/lib/reasoning/parseReasoningSteps';
-import { StreamingShimmer } from './StreamingShimmer';
+import { Shimmer } from '@/components/ai-elements/shimmer';
 import { extractReasoningTitle } from '@/lib/reasoning/extractReasoningTitle';
 import { useDurationTracking } from '@/hooks/useDurationTracking';
+import { useAutoCollapse } from '@/hooks/useAutoCollapse';
 import StepContent from './StepContent';
 import { cn } from '@/lib/utils';
-import { useState } from 'react';
 
 export interface EnhancedReasoningProps {
   content?: string;
@@ -41,12 +41,22 @@ export const EnhancedReasoning = memo(({
   onOpenChange,
   className
 }: EnhancedReasoningProps) => {
-  const [isOpen, setIsOpen] = useState(defaultOpen);
-  
-  // Use our advanced features from backup
+  // Extract title and track duration
   const title = extractReasoningTitle(content);
   const { duration } = useDurationTracking(isStreaming);
   
+  // Handle auto-collapse behavior (separated concern)
+  const { isOpen, setIsOpen } = useAutoCollapse({
+    isStreaming,
+    defaultOpen,
+    hasContent: !!content,
+  });
+  
+  // Sync with parent component's onOpenChange callback
+  const handleOpenChange = (open: boolean) => {
+    setIsOpen(open);
+    onOpenChange?.(open);
+  };
   
   // Parse content into structured steps for better visualization
   const steps = parseReasoningSteps(content || '', isStreaming);
@@ -57,16 +67,13 @@ export const EnhancedReasoning = memo(({
       <ChainOfThought 
         defaultOpen={defaultOpen} 
         open={isOpen}
-        onOpenChange={(open) => {
-          setIsOpen(open);
-          onOpenChange?.(open);
-        }}
+        onOpenChange={handleOpenChange}
         className={cn('not-prose mb-4', className)}
       >
       <ChainOfThoughtHeader>
-        <StreamingShimmer>
+        <Shimmer as="span" duration={1.2}>
           Thinking...
-        </StreamingShimmer>
+        </Shimmer>
       </ChainOfThoughtHeader>
         <ChainOfThoughtContent>
           {/* Empty content while thinking */}
@@ -84,17 +91,14 @@ export const EnhancedReasoning = memo(({
     <ChainOfThought 
       defaultOpen={defaultOpen}
       open={isOpen}
-      onOpenChange={(open) => {
-        setIsOpen(open);
-        onOpenChange?.(open);
-      }}
+      onOpenChange={handleOpenChange}
       className={cn('not-prose mb-4', className)}
     >
       <ChainOfThoughtHeader>
         {isStreaming ? (
-          <StreamingShimmer>
+          <Shimmer as="span" duration={1.2}>
             {title}
-          </StreamingShimmer>
+          </Shimmer>
         ) : (
           <div className="flex items-center gap-2">
             <span>{title}</span>

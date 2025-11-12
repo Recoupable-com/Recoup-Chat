@@ -1,5 +1,7 @@
 import { ChangeEventHandler, useEffect } from "react";
 import { useFormContext } from "react-hook-form";
+import { formPatterns, textPatterns } from "@/lib/styles/patterns";
+import { cn } from "@/lib/utils";
 
 interface IInput {
   id?: string;
@@ -41,19 +43,22 @@ function Input({
 
   return (
     <div className="relative w-full">
-      <label className="text-sm">
+      <label className={formPatterns.label}>
         {label}
-        {required && <span className="text-red-700"> *</span>}
+        {required && <span className={textPatterns.error}> *</span>}
       </label>
       <input
         {...(id && { id })}
         value={value}
-        className={`w-full !outline-none border-grey border-[1px] px-2 py-1 md:p-2 rounded-md text-sm
-          ${className || ""} ${
-            hookToForm && fieldError && fieldError?.message
-              ? `${classNameError} !border-red-700`
-              : ""
-          }`}
+        className={cn(
+          formPatterns.input,
+          "text-sm",
+          className,
+          hookToForm && fieldError && fieldError?.message && cn(
+            classNameError,
+            "border-destructive focus-visible:ring-destructive"
+          )
+        )}
         {...(!hookToForm && {
           value,
           onChange,
@@ -69,7 +74,7 @@ function Input({
       />
 
       {isFullyHooked && fieldError && fieldError?.message && (
-        <p className="!text-red-700 text-sm pt-2">
+        <p className={cn(formPatterns.error, "pt-2")}>
           {fieldError?.message as string}
         </p>
       )}

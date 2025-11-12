@@ -11,30 +11,38 @@ import { SidebarExpansionProvider } from "./SidebarExpansionContext";
 import { MiniKitProvider } from "./MiniKitProvider";
 import WagmiProvider from "./WagmiProvider";
 import { MiniAppProvider } from "./MiniAppProvider";
+import { ThemeProvider } from "./ThemeProvider";
 
 const queryClient = new QueryClient();
 
 const Providers = ({ children }: { children: React.ReactNode }) => (
   <QueryClientProvider client={queryClient}>
-    <WagmiProvider>
-      <PrivyProvider>
-        <MiniKitProvider>
-          <MiniAppProvider>
-            <UserProvider>
-              <FunnelReportProvider>
-                <ArtistProvider>
-                  <SidebarExpansionProvider>
-                    <ConversationsProvider>
-                      <PaymentProvider>{children}</PaymentProvider>
-                    </ConversationsProvider>
-                  </SidebarExpansionProvider>
-                </ArtistProvider>
-              </FunnelReportProvider>
-            </UserProvider>
-          </MiniAppProvider>
-        </MiniKitProvider>
-      </PrivyProvider>
-    </WagmiProvider>
+    <ThemeProvider 
+      attribute="class" 
+      defaultTheme="system" 
+      enableSystem={true}
+      disableTransitionOnChange
+    >
+      <WagmiProvider>
+        <PrivyProvider>
+          <MiniKitProvider>
+            <MiniAppProvider>
+              <UserProvider>
+                <FunnelReportProvider>
+                  <ArtistProvider>
+                    <SidebarExpansionProvider>
+                      <ConversationsProvider>
+                        <PaymentProvider>{children}</PaymentProvider>
+                      </ConversationsProvider>
+                    </SidebarExpansionProvider>
+                  </ArtistProvider>
+                </FunnelReportProvider>
+              </UserProvider>
+            </MiniAppProvider>
+          </MiniKitProvider>
+        </PrivyProvider>
+      </WagmiProvider>
+    </ThemeProvider>
   </QueryClientProvider>
 );
 

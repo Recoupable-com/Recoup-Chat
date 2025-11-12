@@ -14,7 +14,7 @@ const TaskDetailsDialogTitle: React.FC<TaskDetailsDialogTitleProps> = ({
   if (canEdit) {
     return (
       <div className="space-y-2">
-        <label className="text-xs font-medium text-gray-700">Name</label>
+        <label className="text-xs font-medium text-foreground">Name</label>
         <Input
           value={value}
           onChange={(e) => onChange(e.target.value)}
@@ -28,10 +28,10 @@ const TaskDetailsDialogTitle: React.FC<TaskDetailsDialogTitleProps> = ({
 
   return (
     <div className="flex flex-col gap-1.5">
-      <div className="flex items-center gap-1.5 text-xs font-medium text-gray-700">
+      <div className="flex items-center gap-1.5 text-xs font-medium text-foreground">
         Name
       </div>
-      <div className="text-xs p-2 rounded-lg bg-gray-50 border border-gray-100">
+      <div className="text-xs p-2 rounded-lg bg-muted border border-border">
         <p className="break-words">{value}</p>
       </div>
     </div>

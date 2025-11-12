@@ -1,7 +1,7 @@
 import type { Config } from "tailwindcss";
 
 const config: Config = {
-    darkMode: ["class"],
+    darkMode: "class",
     content: [
     "./pages/**/*.{js,ts,jsx,tsx,mdx}",
     "./components/**/*.{js,ts,jsx,tsx,mdx}",
@@ -9,6 +9,9 @@ const config: Config = {
   ],
   theme: {
   	extend: {
+      fontFamily: {
+        heading: ['var(--font-heading)'],
+      },
       keyframes: {
         "success-pulse": {
           "0%, 100%": { opacity: "0" },
@@ -23,28 +26,6 @@ const config: Config = {
         "success-pulse": "success-pulse 1.5s ease-in-out",
         "ping-slow": "ping-slow 1.5s cubic-bezier(0, 0, 0.2, 1) infinite",
       },
-  		fontFamily: {
-  			inter_medium: [
-  				'Inter Medium',
-  				'sans-serif'
-  			],
-  			inter_bold: [
-  				'Inter Bold',
-  				'sans-serif'
-  			],
-  			inter: [
-  				'Inter Regular',
-  				'sans-serif'
-  			],
-  			plus_jakarta_sans_bold: [
-  				'PlusJakartaSans Bold',
-  				'sans-serif'
-  			],
-  			plus_jakarta_sans: [
-  				'PlusJakartaSans Regular',
-  				'sans-serif'
-  			]
-  		},
   		colors: {
   			background: 'hsl(var(--background))',
   			black: {
@@ -110,7 +91,17 @@ const config: Config = {
   				'3': 'hsl(var(--chart-3))',
   				'4': 'hsl(var(--chart-4))',
   				'5': 'hsl(var(--chart-5))'
-  			}
+  			},
+        sidebar: {
+          DEFAULT: 'hsl(var(--sidebar))',
+          foreground: 'hsl(var(--sidebar-foreground))',
+          primary: 'hsl(var(--sidebar-primary))',
+          'primary-foreground': 'hsl(var(--sidebar-primary-foreground))',
+          accent: 'hsl(var(--sidebar-accent))',
+          'accent-foreground': 'hsl(var(--sidebar-accent-foreground))',
+          border: 'hsl(var(--sidebar-border))',
+          ring: 'hsl(var(--sidebar-ring))',
+        },
   		},
   		boxShadow: {
   			grey: '1px 1px 1px 1px #E6E6E6',

@@ -32,17 +32,17 @@ const AccountIdDisplay = ({
 
   return (
     <div className="flex items-center gap-2">
-      <span className="text-xs text-grey-dark">{label}</span>
+      <span className="text-xs text-muted-foreground">{label}</span>
       <button
         type="button"
         onClick={handleCopy}
-        className="flex items-center gap-1 px-2 py-0.5 rounded-md hover:bg-grey-light transition-colors"
+        className="flex items-center gap-1 px-2 py-0.5 rounded-md hover:bg-accent transition-colors"
       >
-        <span className="text-xs text-grey-dark font-mono">{truncatedId}</span>
+        <span className="text-xs text-muted-foreground font-mono">{truncatedId}</span>
         {copied ? (
-          <Check className="w-3 h-3 text-green-600" />
+          <Check className="w-3 h-3 text-green-600 dark:text-green-400" />
         ) : (
-          <Copy className="w-3 h-3 text-grey-dark" />
+          <Copy className="w-3 h-3 text-muted-foreground" />
         )}
       </button>
     </div>

@@ -31,12 +31,12 @@ const Agents = () => {
   return (
     <div className="max-w-full md:max-w-[calc(100vw-200px)] grow py-8 pb-0 px-6 md:px-12 flex flex-col h-full min-h-0">
       <div className="flex justify-between items-center mb-4">
-        <p className="text-left font-plus_jakarta_sans_bold text-3xl">
+        <h1 className="text-left font-heading text-3xl font-bold dark:text-white">
           Agents
-        </p>
+        </h1>
         <div className="flex items-center gap-4">
           <div className="flex items-center gap-2">
-            <span className="text-sm text-gray-600 dark:text-gray-400">
+            <span className="text-sm text-muted-foreground dark:text-muted-foreground">
               {isPrivate ? "Private" : "Public"}
             </span>
             <Switch checked={isPrivate} onCheckedChange={() => togglePrivate()} />
@@ -44,7 +44,7 @@ const Agents = () => {
           <CreateAgentButton />
         </div>
       </div>
-      <p className="text-lg text-gray-500 text-left mb-4 font-light font-inter max-w-2xl">
+      <p className="text-lg text-muted-foreground text-left mb-4 font-light font-sans max-w-2xl">
         <span className="sm:hidden">
           Smarter label teams, powered by agents.
         </span>
@@ -62,17 +62,17 @@ const Agents = () => {
           setShowAllTags={setShowAllTags}
         />
         <div className="relative w-full">
-          <div className="absolute top-0 w-full h-8 z-30 pointer-events-none bg-gradient-to-b from-white/95 to-transparent dark:from-neutral-950/95"></div>
+          <div className="absolute top-0 w-full h-8 z-30 pointer-events-none bg-gradient-to-b from-background/95 to-transparent"></div>
         </div>
-        <div className="flex flex-col flex-1 overflow-y-auto pt-4 md:pt-8 pb-8 relative bg-white dark:bg-neutral-950 w-full">
+        <div className="flex flex-col flex-1 overflow-y-auto pt-4 md:pt-8 pb-8 relative bg-background w-full">
           {loading ? (
             <AgentsSkeleton />
           ) : gridAgents.length === 0 ? (
-            <div className="text-center text-gray-400 py-12">
+            <div className="text-center text-muted-foreground py-12">
               No agents found for this tag.
             </div>
           ) : (
-            <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-4 md:gap-6 xl:gap-8 pr-1 md:pr-2">
+            <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-4 md:gap-6 xl:gap-8 px-1 md:px-2">
               {gridAgents.map((agent) => (
                 <div key={agent.title} className="relative">
                   <AgentCard
@@ -85,7 +85,7 @@ const Agents = () => {
             </div>
           )}
         </div>
-        <div className="absolute bottom-0 w-full h-8 z-30 pointer-events-none bg-gradient-to-b to-white/95 from-transparent dark:from-neutral-950/95"></div>
+        <div className="absolute bottom-0 w-full h-8 z-30 pointer-events-none bg-gradient-to-t from-background/95 to-transparent"></div>
       </div>
     </div>
   );

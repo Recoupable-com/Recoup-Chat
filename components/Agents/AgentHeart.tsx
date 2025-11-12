@@ -33,7 +33,7 @@ const AgentHeart: React.FC<AgentHeartProps> = ({
           "h-4 w-4 transition-colors",
           isFavorited
             ? "fill-red-500 text-red-500"
-            : "text-gray-400 hover:text-red-400"
+            : "text-muted-foreground hover:text-red-400"
         )}
       />
     </Button>

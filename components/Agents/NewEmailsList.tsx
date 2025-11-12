@@ -11,7 +11,7 @@ const NewEmailsList = ({ emails, onRemoveEmail }: NewEmailsListProps) => {
 
   return (
     <div>
-      <div className="text-sm text-gray-600 mb-2">
+      <div className="text-sm text-muted-foreground mb-2">
         New shares to add:
       </div>
       <div className="flex flex-wrap gap-2">
@@ -25,7 +25,7 @@ const NewEmailsList = ({ emails, onRemoveEmail }: NewEmailsListProps) => {
             <button
               type="button"
               onClick={() => onRemoveEmail(email)}
-              className="ml-1 hover:bg-gray-200 rounded-full p-0.5"
+              className="ml-1 hover:bg-muted rounded-full p-0.5"
               aria-label={`Remove ${email}`}
             >
               <X className="h-3 w-3" />

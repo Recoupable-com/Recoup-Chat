@@ -17,10 +17,10 @@ export default function FilesToolbar({ base, relative, onCreateFolder, onFileSel
   return (
     <div className="flex items-start gap-3 md:items-center">
       <div className="min-w-0">
-        <p className="text-center md:text-left font-plus_jakarta_sans_bold text-3xl mb-4">
+        <h1 className="text-center md:text-left font-heading text-3xl font-bold mb-4 dark:text-white">
           Files
-        </p>
-        <p className="text-lg text-gray-500 text-center md:text-left mb-4 font-light font-inter max-w-2xl">
+        </h1>
+        <p className="text-lg text-muted-foreground text-center md:text-left mb-4 font-light font-sans max-w-2xl">
           Store and manage files per artist.
         </p>
         <div className="mt-2">

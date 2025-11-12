@@ -28,10 +28,10 @@ const CatalogCard = ({ catalog }: CatalogCardProps) => {
     <button
       type="button"
       onClick={handleCatalogClick}
-      className="w-full text-left p-4 border rounded-lg hover:bg-gray-50 transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
+      className="w-full text-left p-4 border rounded-lg hover:bg-muted transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
     >
       <h2 className="font-semibold text-base">{catalog.name}</h2>
-      <p className="text-sm text-gray-600 mt-1">
+      <p className="text-sm text-muted-foreground mt-1">
         {isLoading ? (
           <Skeleton className="h-5 w-20" />
         ) : (
@@ -40,7 +40,7 @@ const CatalogCard = ({ catalog }: CatalogCardProps) => {
           </>
         )}
       </p>
-      <p className="text-xs text-gray-500 mt-2">
+      <p className="text-xs text-muted-foreground mt-2">
         Created: {new Date(catalog.created_at).toLocaleDateString()}
       </p>
     </button>

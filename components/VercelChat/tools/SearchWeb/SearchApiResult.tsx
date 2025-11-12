@@ -34,7 +34,7 @@ const SearchApiResult = ({ result }: { result: SearchApiResultType }) => {
 
   return (
     <div className="space-y-2">
-      <p className="text-sm text-gray-500 dark:text-gray-400">
+      <p className="text-sm text-muted-foreground">
         Reviewing sources · {searchResults.length}
       </p>
       

@@ -6,7 +6,7 @@ const GetVideoGameCampaignPlaysResult: React.FC<{
 }> = ({ result }) => {
   if (!result || !Array.isArray(result.rows) || result.rows.length === 0) {
     return (
-      <div className="p-4 text-gray-500 text-sm">
+      <div className="p-4 text-muted-foreground text-sm">
         No play events found for this campaign.
       </div>
     );
@@ -17,15 +17,15 @@ const GetVideoGameCampaignPlaysResult: React.FC<{
       <div className="mb-2 font-semibold text-lg">
         Total Plays: <span className="text-primary">{result.total}</span>
       </div>
-      <div className="overflow-x-auto overflow-y-auto rounded border border-gray-200 bg-white max-h-64 w-full">
+      <div className="overflow-x-auto overflow-y-auto rounded border border-border bg-card max-h-64 w-full">
         <table className="min-w-full w-full text-xs text-left">
-          <thead className="bg-gray-50 border-b">
+          <thead className="bg-muted border-b">
             <tr>
-              <th className="px-3 py-2 sticky top-0 z-10 bg-gray-50">
+              <th className="px-3 py-2 sticky top-0 z-10 bg-muted">
                 Timestamp
               </th>
-              <th className="px-3 py-2 sticky top-0 z-10 bg-gray-50">Fan ID</th>
-              <th className="px-3 py-2 sticky top-0 z-10 bg-gray-50">
+              <th className="px-3 py-2 sticky top-0 z-10 bg-muted">Fan ID</th>
+              <th className="px-3 py-2 sticky top-0 z-10 bg-muted">
                 Premium?
               </th>
             </tr>
@@ -34,7 +34,7 @@ const GetVideoGameCampaignPlaysResult: React.FC<{
             {result.rows.map((row) => (
               <tr
                 key={row.id}
-                className="border-b last:border-0 hover:bg-gray-50"
+                className="border-b last:border-0 hover:bg-muted"
               >
                 <td className="px-3 py-2 whitespace-nowrap">
                   {row.timestamp

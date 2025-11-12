@@ -27,7 +27,7 @@ const ArtistActionButton = ({
     className={cn(
       "h-6 w-6 p-0 flex-shrink-0 opacity-0 pointer-events-none transition-opacity",
       {
-        "opacity-1 pointer-events-auto": isVisible,
+        "opacity-100 pointer-events-auto": isVisible,
       }
     )}
     title={title}

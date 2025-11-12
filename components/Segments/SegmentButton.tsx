@@ -13,12 +13,12 @@ const SegmentButton = ({ segment, onGenerateReport }: SegmentButtonProps) => {
 
   return (
     <Card 
-      className="p-6 border border-gray-200 hover:shadow-lg transition-all duration-200 cursor-pointer relative"
+      className="p-6 border border-border-light  hover:shadow-lg dark:hover:bg-dark-bg-hover transition-all duration-200 cursor-pointer relative"
       onClick={() => onGenerateReport(segment.id, segment.name)}
     >
       <div className="space-y-4">
         {/* Title */}
-        <h3 className="text-base font-bold text-gray-900">
+        <h3 className="text-base font-medium text-foreground">
           {segment.name}
         </h3>
 
@@ -32,18 +32,18 @@ const SegmentButton = ({ segment, onGenerateReport }: SegmentButtonProps) => {
             />
           ) : (
             <div className="flex items-center space-x-2">
-              <div className="w-6 h-6 rounded-full bg-gray-100 flex items-center justify-center">
-                <Users className="w-3 h-3 text-gray-500" />
+              <div className="w-6 h-6 rounded-full bg-muted flex items-center justify-center">
+                <Users className="w-3 h-3 text-muted-foreground" />
               </div>
             </div>
           )}
-          <span className="text-sm text-gray-600">{segment.size} Fans</span>
+          <span className="text-sm text-muted-foreground dark:text-muted-foreground">{segment.size} Fans</span>
         </div>
       </div>
 
       {/* Arrow Icon */}
       <div className="absolute bottom-4 right-4">
-        <ArrowUpRight className="w-4 h-4 text-gray-400 group-hover:text-gray-600 transition-colors" />
+        <ArrowUpRight className="w-4 h-4 text-muted-foreground dark:text-muted-foreground group-hover:text-muted-foreground dark:group-hover:text-muted-foreground transition-colors" />
       </div>
     </Card>
   );

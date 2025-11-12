@@ -67,6 +67,7 @@
     "googleapis": "^149.0.0",
     "html2pdf.js": "^0.10.2",
     "joi": "^17.13.3",
+    "katex": "^0.16.25",
     "loops": "^3.4.0",
     "lucide-react": "^0.471.0",
     "motion": "^12.23.6",
@@ -107,6 +108,8 @@
     "zod": "^3.25.0"
   },
   "devDependencies": {
+    "@tailwindcss/postcss": "^4.1.17",
+    "@tailwindcss/typography": "0.5.0-alpha.3",
     "@types/node": "^20",
     "@types/papaparse": "^5.3.16",
     "@types/react": "^18",
@@ -117,7 +120,7 @@
     "eslint-config-next": "14.2.13",
     "postcss": "^8",
     "prettier": "3.3.3",
-    "tailwindcss": "^3.4.1",
+    "tailwindcss": "^4.1.17",
     "typescript": "^5"
   }
 }

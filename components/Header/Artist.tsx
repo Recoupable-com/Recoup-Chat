@@ -66,11 +66,11 @@ const Artist = ({
               isSelectedArtist && "w-fit rounded-full",
             ]
           : [
-              "flex gap-3 items-center px-2 text-sm rounded-md text-grey-dark",
-              isAnyArtistSelected && "hover:bg-grey-light-1",
+              "flex gap-3 items-center px-2 text-sm rounded-md text-foreground",
+              isAnyArtistSelected && "hover:bg-accent",
               isSelectedArtist && "!bg-primary/10",
             ],
-        shouldHighlight && "z-50 relative"
+        shouldHighlight && "z-[70] relative"
       )}
       onClick={handleClick}
       onKeyDown={(e) => {
@@ -82,13 +82,13 @@ const Artist = ({
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
     >
-      <div className="relative">
+      <div className="relative p-0.5">
         <div
           className={cn(
-            "w-8 h-8 aspect-1/1 rounded-full overflow-hidden flex items-center justify-center p-0.5 border-2 border-transparent transition-colors min-w-8 min-h-8 box-content",
+            "w-8 h-8 aspect-1/1 rounded-full overflow-hidden flex items-center justify-center transition-colors",
             isSelectedArtist &&
-              "shadow-[1px_1px_1px_1px_#E6E6E6] border-primary",
-            shouldHighlight && "brightness-110 shadow-md ring-1 ring-white/30"
+              "ring-1 ring-foreground",
+            shouldHighlight && "brightness-110 shadow-md ring-2 ring-primary/50"
           )}
         >
           <ImageWithFallback
@@ -102,7 +102,7 @@ const Artist = ({
           <div
             key={artist?.account_id}
             className={cn(
-              "text-left grow text-grey-dark",
+              "text-left grow text-foreground",
               shouldHighlight && "font-medium"
             )}
             title={artist?.name || ""}
@@ -120,7 +120,7 @@ const Artist = ({
               {artist?.pinned ? (
                 <Pin className="size-4 text-primary" />
               ) : (
-                <PinOff className="size-4 text-grey-dark" />
+                <PinOff className="size-4 text-muted-foreground" />
               )}
             </ArtistActionButton>
             
@@ -134,7 +134,7 @@ const Artist = ({
               title="Edit artist settings"
               ariaLabel="Edit artist settings"
             >
-              <EllipsisVertical className="size-5 rotate-90" />
+              <EllipsisVertical className="size-5 rotate-90 text-muted-foreground" />
             </ArtistActionButton>
           </div>
         </>

@@ -51,7 +51,7 @@ const FanAvatar = ({ fan }: FanAvatarProps) => {
           <div className="text-xs font-medium truncate w-full">
             {fan.username || "Anonymous"}
           </div>
-          <div className="text-[10px] text-gray-300">
+          <div className="text-[10px] text-muted-foreground">
             {formattedFollowerCount}
           </div>
         </div>

@@ -33,7 +33,7 @@ export const CommentsResult: React.FC<CommentsResultProps> = ({ result }) => {
   }
 
   return (
-    <div className="w-full border border-gray-200 rounded-xl shadow-sm">
+    <div className="w-full border border-border rounded-xl shadow-sm ">
       <div className="p-3">
         {/* Compact header */}
         <CommentsResultHeader 

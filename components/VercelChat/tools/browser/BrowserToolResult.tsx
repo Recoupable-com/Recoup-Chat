@@ -9,12 +9,12 @@ import { SectionHeader } from "./SectionHeader";
 
 // Style constants
 const STYLES = {
-  text: { primary: "text-gray-900 dark:text-gray-100" },
+  text: { primary: "text-foreground dark:text-foreground" },
   bg: {
-    card: "bg-white dark:bg-gray-900",
-    error: "bg-gray-100 dark:bg-gray-800",
+    card: "bg-card",
+    error: "bg-muted dark:bg-card",
   },
-  border: "border-gray-200 dark:border-gray-700",
+  border: "border-border dark:border-border",
 } as const;
 
 export interface BrowserToolResultType {

@@ -40,8 +40,8 @@ export function StartButton() {
         {isLoading ? "Running..." : "Start"}
       </Button>
       {walletAddress && (
-        <div className="mt-4 p-4 bg-gray-50 rounded-lg border">
-          <p className="text-sm text-gray-600 mb-1">
+        <div className="mt-4 p-4 bg-muted rounded-lg border">
+          <p className="text-sm text-muted-foreground mb-1">
             Your Agent&apos;s Wallet Address:
           </p>
           <p className="font-mono text-sm break-all">{walletAddress}</p>

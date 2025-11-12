@@ -21,7 +21,7 @@ const CommentAvatar: React.FC<CommentAvatarProps> = ({
     : "text-[8px] from-gray-300 to-gray-400";
 
   return (
-    <div className={`${sizeClasses} rounded-full overflow-hidden flex-shrink-0 ${size === "md" ? "border border-gray-100" : ""}`}>
+    <div className={`${sizeClasses} rounded-full overflow-hidden flex-shrink-0 ${size === "md" ? "border border-border" : ""}`}>
       {avatar ? (
         // eslint-disable-next-line @next/next/no-img-element
         <img

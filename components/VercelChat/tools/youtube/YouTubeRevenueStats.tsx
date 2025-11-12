@@ -28,7 +28,7 @@ export default function YouTubeRevenueStats({ revenueData }: YouTubeRevenueStats
           <DollarSign className="h-4 w-4 text-green-600" />
           <span className="text-sm font-medium text-green-600">Total Revenue</span>
         </div>
-        <p className="text-2xl font-bold text-green-700 dark:text-green-500">
+        <p className="text-2xl font-medium text-green-700 dark:text-green-500">
           {formatCurrency(revenueData.totalRevenue)}
         </p>
         <p className="text-xs text-green-600/80">Past 30 days</p>
@@ -39,7 +39,7 @@ export default function YouTubeRevenueStats({ revenueData }: YouTubeRevenueStats
           <TrendingUp className="h-4 w-4 text-blue-600" />
           <span className="text-sm font-medium text-blue-600">Best Day</span>
         </div>
-        <p className="text-xl font-bold text-blue-700 dark:text-blue-500">
+        <p className="text-xl font-medium text-blue-700 dark:text-blue-500">
           {formatCurrency(highestRevenueDay.revenue)}
         </p>
         <p className="text-xs text-blue-600/80">
@@ -52,7 +52,7 @@ export default function YouTubeRevenueStats({ revenueData }: YouTubeRevenueStats
           <Calendar className="h-4 w-4 text-purple-600" />
           <span className="text-sm font-medium text-purple-600">Daily Average</span>
         </div>
-        <p className="text-xl font-bold text-purple-700 dark:text-purple-500">
+        <p className="text-xl font-medium text-purple-700 dark:text-purple-500">
           {formatCurrency(revenueData.totalRevenue / revenueData.dailyRevenue.length)}
         </p>
         <p className="text-xs text-purple-600/80">

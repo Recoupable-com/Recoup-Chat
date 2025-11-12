@@ -79,7 +79,7 @@ export type PromptInputProps = HTMLAttributes<HTMLFormElement>;
 export const PromptInput = ({ className, ...props }: PromptInputProps) => (
   <form
     className={cn(
-      "w-full overflow-hidden rounded-2xl border border-border/50 bg-background/95 backdrop-blur-sm shadow-lg",
+      "w-full overflow-visible rounded-2xl border border-border bg-card backdrop-blur-sm shadow-lg",
       className
     )}
     {...props}
@@ -124,8 +124,9 @@ export const PromptInputTextarea = ({
     <Textarea
       className={cn(
         "w-full resize-none rounded-none border-none px-6 py-4 shadow-none outline-none ring-0",
-        "bg-transparent dark:bg-transparent",
+        "bg-transparent text-foreground",
         "focus-visible:ring-0 text-base leading-relaxed",
+        "placeholder:text-muted-foreground",
         className
       )}
       name="message"
@@ -247,9 +248,9 @@ export const PromptInputModelSelectTrigger = ({
 }: PromptInputModelSelectTriggerProps) => (
   <SelectTrigger
     className={cn(
-      "border-none bg-transparent font-medium text-muted-foreground shadow-none transition-all duration-200",
-      'hover:bg-accent/50 hover:text-foreground rounded-lg px-3 py-1.5',
-      '[&[aria-expanded="true"]]:bg-accent/50 [&[aria-expanded="true"]]:text-foreground focus:ring-0',
+      "border-none bg-transparent font-medium text-muted-foreground dark:text-muted-foreground shadow-none transition-all duration-200",
+      'hover:bg-accent/50 dark:hover:bg-[#2a2a2a] hover:text-foreground dark:hover:text-white rounded-lg px-3 py-1.5',
+      '[&[aria-expanded="true"]]:bg-accent/50 dark:[&[aria-expanded="true"]]:bg-[#2a2a2a] [&[aria-expanded="true"]]:text-foreground dark:[&[aria-expanded="true"]]:text-white focus:ring-0',
       className
     )}
     {...props}
@@ -264,7 +265,13 @@ export const PromptInputModelSelectContent = ({
   className,
   ...props
 }: PromptInputModelSelectContentProps) => (
-  <SelectContent className={cn("rounded-2xl min-w-[280px] px-2 py-2", className)} {...props} />
+  <SelectContent 
+    className={cn("rounded-2xl w-[min(280px,calc(100vw-2rem))] px-2 py-2 bg-popover border-border z-[100]", className)} 
+    position="popper"
+    sideOffset={8}
+    collisionPadding={{ top: 100, bottom: 100, left: 16, right: 16 }}
+    {...props} 
+  />
 );
 
 export type PromptInputModelSelectItemProps = ComponentProps<typeof SelectItem>;

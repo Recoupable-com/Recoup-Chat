@@ -1,3 +1,5 @@
+@reference "../../app/globals.css";
+
 .markdown {
   /* Base styling */
   line-height: 1.6;
@@ -9,6 +11,10 @@
   word-break: break-word;
   overflow-wrap: break-word;
   hyphens: none;
+}
+
+:global(.dark) .markdown {
+  color: rgba(255, 255, 255, 0.9);
 }
 
 /* Improved paragraph spacing */
@@ -555,4 +561,80 @@
   background-color: white !important; /* Use !important to ensure override */
   border: none !important;
   @apply !py-10;
+}
+
+/* Dark Mode Support */
+:global(.dark) .markdown h1,
+:global(.dark) .markdown h2,
+:global(.dark) .markdown h3 {
+  color: rgba(255, 255, 255, 0.95);
+  border-bottom-color: rgba(255, 255, 255, 0.1);
+}
+
+:global(.dark) .markdown p + p {
+  border-left-color: rgba(255, 255, 255, 0.1);
+}
+
+:global(.dark) .markdown strong {
+  color: rgba(255, 255, 255, 0.95);
+}
+
+:global(.dark) .markdown code:not(pre code) {
+  background-color: rgba(255, 255, 255, 0.1);
+  color: rgba(96, 165, 250, 0.95);
+}
+
+:global(.dark) .markdown pre {
+  background-color: rgba(0, 0, 0, 0.3);
+  border-color: rgba(255, 255, 255, 0.1);
+}
+
+:global(.dark) .markdown table {
+  border-color: rgba(255, 255, 255, 0.1);
+}
+
+:global(.dark) .markdown th {
+  background-color: rgba(255, 255, 255, 0.05);
+  color: rgba(255, 255, 255, 0.95);
+  border-color: rgba(255, 255, 255, 0.1);
+}
+
+:global(.dark) .markdown td {
+  border-color: rgba(255, 255, 255, 0.1);
+  color: rgba(255, 255, 255, 0.85);
+}
+
+:global(.dark) .markdown tr:nth-child(even) {
+  background-color: rgba(255, 255, 255, 0.02);
+}
+
+:global(.dark) .markdown blockquote {
+  border-left-color: rgba(255, 255, 255, 0.2);
+  background-color: rgba(255, 255, 255, 0.05);
+  color: rgba(255, 255, 255, 0.8);
+}
+
+:global(.dark) .markdown blockquote strong {
+  color: rgba(255, 255, 255, 0.9);
+}
+
+:global(.dark) .markdown a {
+  color: #60a5fa;
+}
+
+:global(.dark) .markdown a:hover {
+  border-bottom-color: #60a5fa;
+}
+
+:global(.dark) .markdown hr {
+  background: linear-gradient(to right, transparent, rgba(255, 255, 255, 0.2), transparent);
+}
+
+:global(.dark) .markdown del {
+  color: rgba(255, 255, 255, 0.5);
+}
+
+:global(.dark) .mermaidParentOverride,
+:global(.dark) .mermaidGrandparentOverride {
+  background-color: #1a1a1a !important;
 } 

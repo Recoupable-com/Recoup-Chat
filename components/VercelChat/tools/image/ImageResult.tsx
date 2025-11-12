@@ -29,7 +29,7 @@ export function ImageResult({ result }: ImageResultProps) {
   return (
     <div className="flex justify-start my-3">
       {result.arweaveUrl ? (
-        <div className="border border-gray-200 rounded-2xl group cursor-pointer relative overflow-hidden max-w-md max-h-md">
+        <div className="border border-border rounded-2xl group cursor-pointer relative overflow-hidden max-w-md max-h-md">
           <div className="relative w-full h-full max-h-[28rem]">
             {/* Top gradient overlay */}
             <div className="absolute z-10 transition-opacity duration-300 opacity-0 group-hover:opacity-100 group-focus:opacity-100 focus-within:opacity-100 end-0 top-0 w-full">
@@ -44,7 +44,7 @@ export function ImageResult({ result }: ImageResultProps) {
             {/* Download Image Button */}
             <MessageMediaDownloadButton
               onClick={handleDownload}
-              overrideButtonClassName="hover:bg-gray-200/10"
+              overrideButtonClassName="hover:bg-muted/10"
               overrideIconClassName="text-white"
               isReady={isReady}
               isDownloading={isDownloading}
@@ -69,8 +69,8 @@ export function ImageResult({ result }: ImageResultProps) {
           </div>
         </div>
       ) : (
-        <div className="p-4 border border-gray-200 rounded-md bg-gray-50 max-w-md">
-          <p className="text-sm text-gray-500">
+        <div className="p-4 border border-border rounded-md bg-muted max-w-md">
+          <p className="text-sm text-muted-foreground">
             {result.message || "Image generated but storage URL not available."}
           </p>
         </div>

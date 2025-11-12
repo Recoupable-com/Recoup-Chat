@@ -49,7 +49,7 @@ export default function FilePropertiesPanel({
     >
       <div className="p-4 h-full flex flex-col gap-4 w-80 shrink-0">
         <div className="flex items-center justify-between">
-          <h2 className="text-lg font-medium">Properties</h2>
+          <h2 className="text-lg font-medium dark:text-white">Properties</h2>
           <Button
             variant="ghost"
             size="icon"
@@ -62,10 +62,10 @@ export default function FilePropertiesPanel({
         </div>
 
         {file ? (
-          <div className="space-y-3 text-sm">
+          <div className="space-y-3 text-sm dark:text-muted-foreground">
             <div>
               <div className="text-xs text-muted-foreground">Name</div>
-              <div className="font-medium break-words flex items-center gap-2">
+              <div className="font-medium break-words flex items-center gap-2 dark:text-white">
                 {file.file_name}
               </div>
             </div>
@@ -73,7 +73,7 @@ export default function FilePropertiesPanel({
               <div className="col-span-1 text-xs text-muted-foreground">
                 Type
               </div>
-              <div className="col-span-2">
+              <div className="col-span-2 dark:text-muted-foreground">
                 {isDirectory ? "Folder" : file.mime_type || "File"}
               </div>
               {!isDirectory && (
@@ -81,13 +81,13 @@ export default function FilePropertiesPanel({
                   <div className="col-span-1 text-xs text-muted-foreground">
                     Extension
                   </div>
-                  <div className="col-span-2">{extension || "—"}</div>
+                  <div className="col-span-2 dark:text-muted-foreground">{extension || "—"}</div>
                 </>
               )}
               <div className="col-span-1 text-xs text-muted-foreground">
                 Path
               </div>
-              <div className="col-span-2 break-all">{friendlyPath}</div>
+              <div className="col-span-2 break-all dark:text-muted-foreground">{friendlyPath}</div>
             </div>
           </div>
         ) : (

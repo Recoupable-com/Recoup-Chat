@@ -47,8 +47,8 @@ const UpdateArtistInfoSuccess: React.FC<UpdateArtistInfoSuccessProps> = ({
           {artistProfile.instruction && (
             <div className="mb-6">
               <h3 className="text-white text-sm font-medium mb-3 flex items-center gap-2"><FileText className="w-4 h-4" /> Custom Instructions</h3>
-              <div className="bg-gray-800/50 rounded-lg p-4">
-                <p className="text-gray-300 text-sm leading-relaxed">{artistProfile.instruction}</p>
+              <div className="bg-card/50 rounded-lg p-4">
+                <p className="text-muted-foreground text-sm leading-relaxed">{artistProfile.instruction}</p>
               </div>
             </div>
           )}
@@ -60,9 +60,9 @@ const UpdateArtistInfoSuccess: React.FC<UpdateArtistInfoSuccessProps> = ({
 
           {/* Organization */}
           {artistProfile.organization && (
-            <div className="mt-4 pt-4 border-t border-gray-700">
-              <div className="text-sm text-gray-400">
-                <span className="text-gray-300">Organization:</span>{" "}
+            <div className="mt-4 pt-4 border-t border-border">
+              <div className="text-sm text-muted-foreground">
+                <span className="text-muted-foreground">Organization:</span>{" "}
                 {artistProfile.organization}
               </div>
             </div>

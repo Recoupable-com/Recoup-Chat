@@ -105,7 +105,7 @@ const SideMenu = ({
       {address && <RecentChats toggleModal={toggleModal} />}
       <div className="grow flex flex-col gap-1 md:gap-3 justify-end">
         <UnlockPro />
-        <UserInfo toggleMenuExpanded={toggleModal} />
+        <UserInfo />
       </div>
     </SideModal>
   );

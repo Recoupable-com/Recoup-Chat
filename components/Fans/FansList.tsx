@@ -10,7 +10,7 @@ const FansList = ({ fans }: FansListProps) => {
       {fans.map((fan) => (
         <li
           key={fan.id}
-          className="p-4 border border-gray-200 rounded-lg hover:border-blue-500 transition-colors duration-300"
+          className="p-4 border border-border-light  rounded-lg hover:border-blue-500 dark:hover:border-blue-600 transition-colors duration-300"
         >
           <a
             href={fan.profile_url}
@@ -19,22 +19,22 @@ const FansList = ({ fans }: FansListProps) => {
             className="block"
           >
             <div className="flex flex-col">
-              <div className="font-medium text-blue-600 hover:text-blue-800 truncate">
+              <div className="font-medium text-blue-600 dark:text-blue-400 hover:text-blue-800 dark:hover:text-blue-300 truncate">
                 {fan.username || "Anonymous"}
               </div>
 
-              <div className="text-sm text-gray-600 mt-1">
+              <div className="text-sm text-muted-foreground dark:text-muted-foreground mt-1">
                 {fan.followerCount.toLocaleString()} followers
               </div>
 
               {fan.region && (
-                <div className="text-sm text-gray-600 mt-1">
+                <div className="text-sm text-muted-foreground dark:text-muted-foreground mt-1">
                   Region: {fan.region}
                 </div>
               )}
 
               {fan.bio && (
-                <div className="text-sm text-gray-600 mt-2 line-clamp-2">
+                <div className="text-sm text-muted-foreground dark:text-muted-foreground mt-2 line-clamp-2">
                   {fan.bio}
                 </div>
               )}

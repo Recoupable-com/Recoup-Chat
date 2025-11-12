@@ -6,21 +6,21 @@ const YouTubeChannelVideosListSkeleton = () => {
       {[...Array(6)].map((_, index) => (
         <div
           key={index}
-          className="rounded-xl overflow-hidden border border-gray-100"
+          className="rounded-xl overflow-hidden border border-border "
         >
           {/* Thumbnail Skeleton */}
-          <div className="relative aspect-video bg-gray-200 animate-pulse" />
+          <div className="relative aspect-video bg-muted/50 animate-pulse" />
 
           {/* Video Info Skeleton */}
           <div className="p-2 sm:p-3">
             {/* Title Skeleton */}
-            <div className="h-4 bg-gray-200 rounded animate-pulse mb-2" />
-            <div className="h-4 bg-gray-200 rounded animate-pulse w-3/4" />
+            <div className="h-4 bg-muted/50 rounded animate-pulse mb-2" />
+            <div className="h-4 bg-muted/50 rounded animate-pulse w-3/4" />
 
             {/* Metadata Skeleton */}
             <div className="flex items-center gap-2 mt-2">
-              <div className="h-3 bg-gray-200 rounded animate-pulse w-16" />
-              <div className="h-3 bg-gray-200 rounded animate-pulse w-12" />
+              <div className="h-3 bg-muted/50 rounded animate-pulse w-16" />
+              <div className="h-3 bg-muted/50 rounded animate-pulse w-12" />
             </div>
           </div>
         </div>

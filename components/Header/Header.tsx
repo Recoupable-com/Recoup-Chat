@@ -38,14 +38,14 @@ const Header = () => {
 
   return (
     <>
-      <div className="z-[50] fixed bg-white left-0 right-0 top-0 md:hidden flex p-4 items-center justify-between w-auto">
+      <div className="z-[50] fixed bg-card  left-0 right-0 top-0 md:hidden flex p-4 items-center justify-between w-auto">
         <button
           type="button"
           className="md:hidden flex items-center gap-2 z-[50]"
           onClick={() => setIsOpenMobileMenu(!isOpenMobileMenu)}
           aria-label="Open menu"
         >
-          <MenuIcon />
+          <MenuIcon className="dark:text-white" />
         </button>
 
         {/* Show Add/Select Artist button when on mobile, logged in, and no artist selected */}
@@ -57,7 +57,7 @@ const Header = () => {
                 ? () => setIsOpenSideArtists(true)
                 : handleAddArtist
             }
-            className="flex items-center gap-2 bg-white text-black font-medium py-2 px-4 rounded-md shadow-md z-[50]"
+            className="flex items-center gap-2 bg-card text-black font-medium py-2 px-4 rounded-md shadow-md z-[50]"
             aria-label={
               sorted.length > 0 ? "Select your artist" : "Add a new artist"
             }

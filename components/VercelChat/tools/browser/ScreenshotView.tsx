@@ -2,7 +2,7 @@ import Image from "next/image";
 import { cn } from "@/lib/utils";
 
 const STYLES = {
-  border: "border-gray-200 dark:border-gray-700",
+  border: "border-border dark:border-border",
 } as const;
 
 interface ScreenshotViewProps {

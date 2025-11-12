@@ -2,12 +2,12 @@ import { cn } from "@/lib/utils";
 
 const STYLES = {
   text: {
-    secondary: "text-gray-700 dark:text-gray-300",
+    secondary: "text-foreground dark:text-muted-foreground",
   },
   bg: {
-    code: "bg-gray-50 dark:bg-gray-800",
+    code: "bg-muted dark:bg-card",
   },
-  border: "border-gray-200 dark:border-gray-700",
+  border: "border-border dark:border-border",
 } as const;
 
 export function MessageResultView({ message }: { message: string }) {

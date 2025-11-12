@@ -6,8 +6,8 @@ import { isPlainObject } from "@/lib/browser/isPlainObject";
 
 const STYLES = {
   text: {
-    primary: "text-gray-900 dark:text-gray-100",
-    muted: "text-gray-600 dark:text-gray-400",
+    primary: "text-foreground dark:text-foreground",
+    muted: "text-muted-foreground dark:text-muted-foreground",
   },
 } as const;
 
@@ -16,7 +16,7 @@ const MAX_DISPLAYED_FIELDS = 8;
 export function ExtractResultView({ data }: { data: unknown }) {
   if (data === null || data === undefined) {
     return (
-      <div className="text-sm text-gray-500 dark:text-gray-400">
+      <div className="text-sm text-muted-foreground">
         No data extracted
       </div>
     );
@@ -25,7 +25,7 @@ export function ExtractResultView({ data }: { data: unknown }) {
   // If it's not a plain object, display as simple value
   if (!isPlainObject(data)) {
     return (
-      <div className="text-sm text-gray-700 dark:text-gray-300">
+      <div className="text-sm text-foreground dark:text-muted-foreground">
         {String(data)}
       </div>
     );
@@ -36,7 +36,7 @@ export function ExtractResultView({ data }: { data: unknown }) {
   
   if (entries.length === 0) {
     return (
-      <div className="text-sm text-gray-500 dark:text-gray-400">
+      <div className="text-sm text-muted-foreground">
         No data found
       </div>
     );
@@ -68,7 +68,7 @@ export function ExtractResultView({ data }: { data: unknown }) {
       {validItems.map(({ key, label, displayValue, isMetric }) => (
         <div 
           key={key} 
-          className="flex items-baseline justify-between gap-3 py-2 border-b border-gray-100 dark:border-gray-800 last:border-0"
+          className="flex items-baseline justify-between gap-3 py-2 border-b border-border dark:border-border last:border-0"
         >
           <span className={cn("text-sm font-medium flex-shrink-0", STYLES.text.muted)}>
             {label}

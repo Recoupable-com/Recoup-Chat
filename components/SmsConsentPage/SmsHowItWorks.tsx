@@ -38,7 +38,7 @@ export function SmsHowItWorks() {
             </div>
             <div>
               <h3 className="font-medium">{step.title}</h3>
-              <p className="text-sm text-gray-600">{step.description}</p>
+              <p className="text-sm text-muted-foreground">{step.description}</p>
             </div>
           </div>
         ))}

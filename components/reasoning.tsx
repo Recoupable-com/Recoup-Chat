@@ -10,6 +10,7 @@ import { cn } from '@/lib/utils';
 import { BrainIcon, ChevronDownIcon } from 'lucide-react';
 import type { ComponentProps } from 'react';
 import { createContext, memo, useContext, useEffect, useState } from 'react';
+import { Shimmer } from '@/components/ai-elements/shimmer';
 // Response import removed since we now use custom HTML rendering
 
 type ReasoningContextValue = {
@@ -158,23 +159,19 @@ export const ReasoningTrigger = memo(
           <>
             <BrainIcon className="size-4" />
             {isStreaming && !content ? (
-              <p className="relative overflow-hidden">
-                <span className="relative inline-block">
-                  Thinking...
-                  <span className="absolute inset-0 bg-gradient-to-l from-transparent via-white/70 to-transparent bg-[length:200%_100%] animate-[shimmer_4s_ease-in-out_infinite]"></span>
-                </span>
-              </p>
+              <Shimmer as="span" duration={1.2}>
+                Thinking...
+              </Shimmer>
             ) : (
-              <p className={isStreaming ? "relative overflow-hidden" : ""}>
+              <>
                 {isStreaming ? (
-                  <span className="relative inline-block">
+                  <Shimmer as="span" duration={1.2}>
                     {getReasoningTitle()}
-                    <span className="absolute inset-0 bg-gradient-to-l from-transparent via-white/70 to-transparent bg-[length:200%_100%] animate-[shimmer_4s_ease-in-out_infinite]"></span>
-                  </span>
+                  </Shimmer>
                 ) : (
                   getReasoningTitle()
                 )}
-              </p>
+              </>
             )}
             <ChevronDownIcon
               className={cn(

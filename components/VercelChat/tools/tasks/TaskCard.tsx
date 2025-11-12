@@ -57,7 +57,7 @@ const TaskCard: React.FC<TaskCardProps> = ({ task, isDeleted }) => {
   return (
     <div
       className={cn(
-        `group flex items-center justify-between py-4 px-4 hover:bg-gray-50 transition-colors -mx-4`,
+        `group flex items-center justify-between py-4 px-4 hover:bg-muted dark:hover:bg-[#1a1a1a] transition-colors -mx-4`,
         {
           "opacity-70": isDeleted,
         }
@@ -65,21 +65,21 @@ const TaskCard: React.FC<TaskCardProps> = ({ task, isDeleted }) => {
     >
       <div className="flex items-center space-x-4">
         <TaskArtistImage artistAccountId={task.artist_account_id} />
-        <h4 className="text-base font-medium text-gray-900">{task.title}</h4>
+        <h4 className="text-base font-medium text-foreground">{task.title}</h4>
       </div>
 
       <div className="flex items-center space-x-4">
         <div className="flex items-center space-x-2">
           {isRecurring(task.schedule) && (
-            <Repeat className="h-4 w-4 text-gray-400 flex-shrink-0" />
+            <Repeat className="h-4 w-4 text-muted-foreground dark:text-muted-foreground flex-shrink-0" />
           )}
-          <span className="text-base text-gray-600">
+          <span className="text-base text-muted-foreground dark:text-muted-foreground">
             {parseCronToHuman(task.schedule.trim())}
           </span>
         </div>
         <div className="flex items-center space-x-2 w-20 justify-end relative">
           <div className="opacity-0 group-hover:opacity-100 transition-opacity">
-            <Edit className="h-5 w-5 text-gray-400 hover:text-gray-600 cursor-pointer" />
+            <Edit className="h-5 w-5 text-muted-foreground dark:text-muted-foreground hover:text-muted-foreground dark:hover:text-muted-foreground cursor-pointer" />
           </div>
           <DropdownMenu open={isDropdownOpen} onOpenChange={setIsDropdownOpen}>
             <DropdownMenuTrigger asChild>
@@ -87,7 +87,7 @@ const TaskCard: React.FC<TaskCardProps> = ({ task, isDeleted }) => {
                 className="opacity-0 group-hover:opacity-100 transition-opacity"
                 onClick={(e) => e.stopPropagation()} // Prevent opening the edit dialog
               >
-                <MoreHorizontal className="h-5 w-5 text-gray-400 hover:text-gray-600 cursor-pointer" />
+                <MoreHorizontal className="h-5 w-5 text-muted-foreground dark:text-muted-foreground hover:text-muted-foreground dark:hover:text-muted-foreground cursor-pointer" />
               </div>
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end" className="w-32">
@@ -100,7 +100,7 @@ const TaskCard: React.FC<TaskCardProps> = ({ task, isDeleted }) => {
                 <span>{isUpdating ? "Pausing..." : "Pause"}</span>
               </DropdownMenuItem>
               <DropdownMenuItem
-                className="flex items-center gap-2 text-red-600 hover:text-red-700"
+                className="flex items-center gap-2 text-red-600 dark:text-red-400 hover:text-red-700 dark:hover:text-red-300"
                 onClick={handleDelete}
                 disabled={isUpdating || isDeleting}
               >
@@ -110,17 +110,17 @@ const TaskCard: React.FC<TaskCardProps> = ({ task, isDeleted }) => {
             </DropdownMenuContent>
           </DropdownMenu>
           {isActive && (
-            <span className="px-2 py-1 text-xs font-medium bg-gray-100 text-gray-600 rounded-full group-hover:hidden absolute">
+            <span className="px-2 py-1 text-xs font-medium bg-muted  text-muted-foreground dark:text-muted-foreground rounded-full group-hover:hidden absolute">
               Active
             </span>
           )}
           {isPaused && (
-            <span className="px-2 py-1 text-xs font-medium bg-gray-100 text-gray-600 rounded-full group-hover:hidden absolute">
+            <span className="px-2 py-1 text-xs font-medium bg-muted  text-muted-foreground dark:text-muted-foreground rounded-full group-hover:hidden absolute">
               Paused
             </span>
           )}
           {isDeleted && (
-            <span className="px-2 py-1 text-xs font-medium bg-gray-100 text-gray-600 rounded-full group-hover:hidden absolute">
+            <span className="px-2 py-1 text-xs font-medium bg-muted  text-muted-foreground dark:text-muted-foreground rounded-full group-hover:hidden absolute">
               Deleted
             </span>
           )}

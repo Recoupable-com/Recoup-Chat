@@ -1,11 +1,5 @@
-import { Plus_Jakarta_Sans } from "next/font/google";
 import { useArtistProvider } from "@/providers/ArtistProvider";
 import ImageWithFallback from "@/components/ImageWithFallback";
-
-const plusJakartaSans = Plus_Jakarta_Sans({
-  subsets: ["latin"],
-  weight: ["500"],
-});
 
 /**
  * Displays a simple greeting message asking about the selected artist
@@ -18,7 +12,7 @@ export function ChatGreeting({ isVisible }: { isVisible: boolean }) {
   const isArtistSelected = !!selectedArtist;
 
   const textStyle = `
-    ${plusJakartaSans.className} 
+    font-heading
     text-[20px]
     sm:text-[24px]
     lg:text-[28px] 
@@ -26,7 +20,7 @@ export function ChatGreeting({ isVisible }: { isVisible: boolean }) {
     sm:leading-[1.3]
     lg:leading-[1.3] 
     tracking-[-0.02em]
-    font-normal
+    font-medium
   `;
 
   const fadeBase = "transition-opacity duration-700 ease-out";
@@ -41,10 +35,10 @@ export function ChatGreeting({ isVisible }: { isVisible: boolean }) {
         text-center w-full
       `}
     >
-      <span className="text-black font-medium inline-flex items-center gap-3 flex-wrap justify-center">
+      <span className="text-foreground font-medium inline-flex items-center gap-3 flex-wrap justify-center">
         Ask me about
         {isArtistSelected && artistImage && (
-          <span className="inline-block w-12 h-12 rounded-full overflow-hidden flex-shrink-0 ring-2 ring-white shadow-md">
+          <span className="inline-block w-12 h-12 rounded-full overflow-hidden flex-shrink-0 ring-1 ring-foreground shadow-md">
             <ImageWithFallback src={artistImage} />
           </span>
         )}

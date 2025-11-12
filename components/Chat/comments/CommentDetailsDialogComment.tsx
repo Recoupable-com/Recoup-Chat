@@ -32,7 +32,7 @@ const CommentDetailsDialogComment: React.FC<
 
       {/* User bio if available */}
       {comment.bio && (
-        <p className="text-xs text-gray-500 italic">{comment.bio}</p>
+        <p className="text-xs text-muted-foreground italic">{comment.bio}</p>
       )}
 
       {/* Comment content with social indicators */}

@@ -39,7 +39,7 @@ const UnlockProCard = () => {
           <div className="absolute right-1 top-1">
             <Icon name="star" />
           </div>
-          <div className="font-inter_bold text-white text-2xl leading-tight">
+          <div className="font-sans font-medium text-white text-2xl leading-tight">
             Unlock
             <br />
             Artist
@@ -48,15 +48,15 @@ const UnlockProCard = () => {
           </div>
         </div>
 
-        <p className="text-xs font-inter text-white/90 leading-tight mb-1 mt-1">
+        <p className="text-xs font-sans text-white/90 leading-tight mb-1 mt-1">
           Get better results with
           <br />
-          <span className="font-inter_bold">premium AI models</span>
+          <span className="font-sans font-medium">premium AI models</span>
         </p>
 
         <button
           type="button"
-          className="font-inter_bold text-xs bg-white/15 backdrop-blur-md text-white rounded-lg px-3 py-1.5 flex items-center gap-2 border border-white/20 hover:bg-white/25 transition-all duration-200 shadow-xl mt-3"
+          className="font-sans font-medium text-xs bg-white/15 backdrop-blur-md text-white rounded-lg px-3 py-1.5 flex items-center gap-2 border border-white/20 hover:bg-white/25 transition-all duration-200 shadow-xl mt-3"
           onClick={handleClick}
         >
           Start Free Trial

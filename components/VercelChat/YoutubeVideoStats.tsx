@@ -9,7 +9,7 @@ interface YoutubeVideoStatsProps {
 
 const YoutubeVideoStats = ({ statistics, duration }: YoutubeVideoStatsProps) => {
   return (
-    <div className="flex flex-wrap items-center gap-4 mb-4 text-xs text-gray-600 dark:text-gray-400">
+    <div className="flex flex-wrap items-center gap-4 mb-4 text-xs text-muted-foreground dark:text-muted-foreground">
       <div className="flex items-center gap-1">
         <Eye className="w-4 h-4" />
         <span>{parseInt(statistics?.viewCount || "0").toLocaleString()} views</span>

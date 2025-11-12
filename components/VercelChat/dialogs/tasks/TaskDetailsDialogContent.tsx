@@ -42,7 +42,7 @@ const TaskDetailsDialogContent: React.FC<TaskDetailsDialogContentProps> = ({
       {/* Prompt Section */}
       {canEdit ? (
         <div className="space-y-2">
-          <label className="text-xs font-medium text-gray-700">
+          <label className="text-xs font-medium text-foreground">
             Instructions
           </label>
           <Textarea

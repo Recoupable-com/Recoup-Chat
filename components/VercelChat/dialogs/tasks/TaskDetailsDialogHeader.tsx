@@ -25,7 +25,7 @@ const TaskDetailsDialogHeader = ({
     >
       <DialogTitle className="flex items-center gap-1.5 text-base text-left">
         {isActive && <Play className="h-4 w-4 text-green-500 flex-shrink-0" />}
-        {isPaused && <Pause className="h-4 w-4 text-gray-500 flex-shrink-0" />}
+        {isPaused && <Pause className="h-4 w-4 text-muted-foreground flex-shrink-0" />}
         {isDeleted && <Trash2 className="h-4 w-4 text-red-500 flex-shrink-0" />}
         <span className={cn("truncate", { "text-red-800": isDeleted })}>
           {task.title}
@@ -36,7 +36,7 @@ const TaskDetailsDialogHeader = ({
             isActive
               ? "bg-green-100 text-green-800"
               : isPaused
-                ? "bg-gray-100 text-gray-600"
+                ? "bg-muted text-muted-foreground"
                 : "bg-red-200 text-red-800"
           )}
         >

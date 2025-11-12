@@ -1,6 +1,8 @@
 import { useArtistProvider } from "@/providers/ArtistProvider";
 import { ArtistRecord } from "@/types/Artist";
 import { Trash2 } from "lucide-react";
+import { containerPatterns, textPatterns } from "@/lib/styles/patterns";
+import { cn } from "@/lib/utils";
 
 const DropDown = ({ artist }: { artist: ArtistRecord }) => {
   const { setArtists, artists, setMenuVisibleArtistId, getArtists } =
@@ -17,9 +19,9 @@ const DropDown = ({ artist }: { artist: ArtistRecord }) => {
   };
 
   return (
-    <div className="rounded-md absolute left-1/2 top-1/2 z-[2] bg-white p-1">
+    <div className={cn(containerPatterns.dropdown, "absolute left-1/2 top-1/2 z-[2] p-1")}>
       <button
-        className="text-red-700 flex items-center gap-1 border-red-700 text-sm"
+        className={cn(textPatterns.error, "flex items-center gap-1 text-sm hover:bg-destructive/10 px-2 py-1 rounded-md transition-colors")}
         onClick={handleDelete}
       >
         <Trash2 className="size-4" /> Remove

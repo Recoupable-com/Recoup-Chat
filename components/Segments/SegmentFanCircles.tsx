@@ -53,13 +53,13 @@ const SegmentFanCircles = ({
                 onError={() => handleImageError(fan.id)}
               />
             ) : (
-              <div className="h-6 w-6 rounded-full border-2 border-white bg-gray-200 flex items-center justify-center hover:z-10 hover:scale-110 transition-all duration-200 hover:shadow-md">
-                <User className="w-3 h-3 text-gray-500" />
+              <div className="h-6 w-6 rounded-full border-2 border-white bg-muted flex items-center justify-center hover:z-10 hover:scale-110 transition-all duration-200 hover:shadow-md">
+                <User className="w-3 h-3 text-muted-foreground" />
               </div>
             )}
             </Link>
             {fan.profile_url.includes("tiktok.com") && (
-              <div className="absolute -bottom-0.5 -right-0.5 w-2.5 h-2.5 rounded-full bg-white border border-gray-200 flex items-center justify-center">
+              <div className="absolute -bottom-0.5 -right-0.5 w-2.5 h-2.5 rounded-full bg-background border border-border flex items-center justify-center">
                 <Image
                   src="/brand-logos/tiktok.png"
                   alt="TikTok"
@@ -70,7 +70,7 @@ const SegmentFanCircles = ({
               </div>
             )}
             {fan.profile_url.includes("instagram.com") && (
-              <div className="absolute -bottom-0.5 -right-0.5 w-2.5 h-2.5 rounded-full bg-white border border-gray-200 flex items-center justify-center">
+              <div className="absolute -bottom-0.5 -right-0.5 w-2.5 h-2.5 rounded-full bg-background border border-border flex items-center justify-center">
                 <Image
                   src="/brand-logos/instagram.png"
                   alt="Instagram"
@@ -84,7 +84,7 @@ const SegmentFanCircles = ({
         </FanProfileHover>
       ))}
       {showCounter && (
-        <div className="flex h-6 w-6 items-center justify-center rounded-full border-2 border-white bg-gray-700 text-center text-xs font-medium text-white">
+        <div className="flex h-6 w-6 items-center justify-center rounded-full border-2 border-white bg-card text-center text-xs font-medium text-white">
           +{remainingCount > 99 ? '99' : remainingCount}
         </div>
       )}
