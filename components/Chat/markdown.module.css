@@ -279,8 +279,8 @@
 }
 
 .markdown pre {
-  @apply bg-gray-100;
-  color: #abb2bf;
+  @apply bg-muted;
+  color: hsl(var(--foreground));
   @apply rounded-xl;
   overflow-x: auto;
   margin: 1.2em 0;
@@ -585,8 +585,9 @@
 }
 
 :global(.dark) .markdown pre {
-  background-color: rgba(0, 0, 0, 0.3);
-  border-color: rgba(255, 255, 255, 0.1);
+  @apply bg-muted;
+  @apply border-border;
+  color: hsl(var(--foreground));
 }
 
 :global(.dark) .markdown table {
