@@ -20,17 +20,20 @@ function escapeLikePattern(input: string): string {
 
 /**
  * Apply common filters to a query (LIKE pattern and optional exclude)
+ * Note: Uses 'any' type to work with Supabase's dynamic query builder API
  * @param query Base Supabase query to apply filters to
  * @param escapedPattern Escaped LIKE pattern
  * @param excludeId Optional ID to exclude from results
  * @returns Query with filters applied
  */
-function applyDirectoryFilters<T>(
-  query: T,
+function applyDirectoryFilters(
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  query: any,
   escapedPattern: string,
   excludeId?: string
-): T {
-  let filteredQuery = (query as any).like("storage_key", escapedPattern);
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+): any {
+  let filteredQuery = query.like("storage_key", escapedPattern);
   
   if (excludeId) {
     filteredQuery = filteredQuery.neq("id", excludeId);
