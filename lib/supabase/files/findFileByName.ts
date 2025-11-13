@@ -30,14 +30,21 @@ export async function findFileByName(
     ? `files/${ownerAccountId}/${artistAccountId}/${normalizedPath}/${fileName}`
     : `files/${ownerAccountId}/${artistAccountId}/${fileName}`;
 
-  // Try to find by file_name first (exact match)
+  // Also create a folder pattern (with trailing slash for directories)
+  const folderPattern = pathPattern + '/';
+
+  // Escape both patterns for PostgREST
+  const escapedFilePattern = escapePostgrestValue(pathPattern);
+  const escapedFolderPattern = escapePostgrestValue(folderPattern);
+
+  // Try to find by file_name AND storage_key (check both file and folder patterns)
   const { data, error} = await supabase
     .from("files")
     .select()
     .eq("owner_account_id", ownerAccountId)
     .eq("artist_account_id", artistAccountId)
     .eq("file_name", fileName)
-    .eq("storage_key", pathPattern)
+    .or(`storage_key.eq.${escapedFilePattern},storage_key.eq.${escapedFolderPattern}`)
     .order("created_at", { ascending: false })
     .limit(1)
     .single();
