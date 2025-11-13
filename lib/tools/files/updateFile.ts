@@ -115,8 +115,9 @@ Important:
       
       console.log(`[UPDATE_FILE] Upload complete, waiting for cache to update...`);
       
-      // Wait 150ms for Supabase Storage cache to update before verifying
-      await new Promise(resolve => setTimeout(resolve, 150));
+      // Wait 300ms for Supabase Storage cache to update before verifying
+      // Testing showed 150ms was insufficient - cache still returns stale data
+      await new Promise(resolve => setTimeout(resolve, 300));
       
       console.log(`[UPDATE_FILE] Cache wait complete, now verifying...`);
 
