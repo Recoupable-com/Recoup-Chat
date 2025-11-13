@@ -74,10 +74,20 @@ Important:
 
       // 2. Read current content to check if it's actually changing
       const currentContent = await fetchFileContentServer(fileRecord.storage_key);
+      console.log(`[UPDATE_FILE] Reading current content for '${fileName}'`);
+      console.log(`[UPDATE_FILE] Current content length: ${currentContent.length} bytes`);
+      console.log(`[UPDATE_FILE] Current content preview: ${currentContent.substring(0, 100)}...`);
 
       // Check if content is identical (no actual change)
       // Normalize both to avoid false changes due to whitespace/encoding differences
-      if (normalizeContent(currentContent) === normalizeContent(newContent)) {
+      const normalizedCurrent = normalizeContent(currentContent);
+      const normalizedNewPreUpload = normalizeContent(newContent);
+      
+      console.log(`[UPDATE_FILE] Normalized current length: ${normalizedCurrent.length}`);
+      console.log(`[UPDATE_FILE] Normalized new length: ${normalizedNewPreUpload.length}`);
+      
+      if (normalizedCurrent === normalizedNewPreUpload) {
+        console.log(`[UPDATE_FILE] Content is identical, skipping update`);
         return {
           success: false,
           noChange: true,
@@ -87,6 +97,10 @@ Important:
       }
 
       // 3. Update file content in storage
+      console.log(`[UPDATE_FILE] Uploading new content for '${fileName}'`);
+      console.log(`[UPDATE_FILE] New content length: ${newContent.length} bytes`);
+      console.log(`[UPDATE_FILE] New content preview: ${newContent.substring(0, 100)}...`);
+      
       const blob = new Blob([newContent], {
         type: fileRecord.mime_type || "text/plain",
       });
@@ -98,16 +112,27 @@ Important:
         contentType: fileRecord.mime_type || "text/plain",
         upsert: true,
       });
+      
+      console.log(`[UPDATE_FILE] Upload complete, now verifying...`);
 
       // 4. Verify content actually changed by reading it back
       const updatedContent = await fetchFileContentServer(fileRecord.storage_key);
+      console.log(`[UPDATE_FILE] Verification: Read back content length: ${updatedContent.length} bytes`);
+      console.log(`[UPDATE_FILE] Verification: Content preview: ${updatedContent.substring(0, 100)}...`);
 
       // Normalize content for comparison (ignore minor formatting differences)
       const normalizedUpdated = normalizeContent(updatedContent);
       const normalizedNew = normalizeContent(newContent);
+      
+      console.log(`[UPDATE_FILE] Verification: Normalized updated length: ${normalizedUpdated.length}`);
+      console.log(`[UPDATE_FILE] Verification: Normalized new length: ${normalizedNew.length}`);
+      console.log(`[UPDATE_FILE] Verification: Contents match? ${normalizedUpdated === normalizedNew}`);
 
       // Verify the new content matches what we intended to write (ignore minor whitespace differences)
       if (normalizedUpdated !== normalizedNew) {
+        console.error(`[UPDATE_FILE] ⚠️ VERIFICATION FAILED`);
+        console.error(`[UPDATE_FILE] Expected content: ${normalizedNew.substring(0, 200)}`);
+        console.error(`[UPDATE_FILE] Actual content: ${normalizedUpdated.substring(0, 200)}`);
         return {
           success: false,
           verified: false,
@@ -116,6 +141,8 @@ Important:
           suggestion: "Read the current file content to see what it contains, then retry the update.",
         };
       }
+      
+      console.log(`[UPDATE_FILE] ✅ Verification successful!`);
 
       // 5. Update file size in metadata
       const newSizeBytes = new TextEncoder().encode(updatedContent).length;
