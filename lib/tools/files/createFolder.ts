@@ -2,6 +2,7 @@ import { z } from "zod";
 import { tool } from "ai";
 import { ensureDirectoryExists } from "@/lib/supabase/files/ensureDirectoryExists";
 import { handleToolError } from "@/lib/files/handleToolError";
+import { isValidFileName } from "@/utils/isValidFileName";
 
 const createFolder = tool({
   description: `
@@ -34,7 +35,25 @@ Note:
   }),
   execute: async ({ folderName, path, active_account_id, active_artist_id }) => {
     try {
-      const fullPath = path ? `${path}/${folderName}` : folderName;
+      const trimmedFolderName = folderName.trim();
+
+      if (!trimmedFolderName) {
+        return {
+          success: false,
+          error: "Folder name cannot be empty.",
+          message: "Please provide a valid folder name.",
+        };
+      }
+
+      if (!isValidFileName(trimmedFolderName)) {
+        return {
+          success: false,
+          error: "Invalid folder name.",
+          message: `Folder name '${trimmedFolderName}' contains invalid characters. Folder names cannot contain path separators or special characters.`,
+        };
+      }
+
+      const fullPath = path ? `${path}/${trimmedFolderName}` : trimmedFolderName;
 
       await ensureDirectoryExists(
         active_account_id,
@@ -44,9 +63,9 @@ Note:
 
       return {
         success: true,
-        folderName,
+        folderName: trimmedFolderName,
         fullPath,
-        message: `Successfully created folder '${folderName}'${path ? ` in '${path}'` : ""}.`,
+        message: `Successfully created folder '${trimmedFolderName}'${path ? ` in '${path}'` : ""}.`,
       };
     } catch (error) {
       return handleToolError(error, "create folder", folderName);

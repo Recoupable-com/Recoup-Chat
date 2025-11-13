@@ -6,6 +6,7 @@ import { deleteFileRecord } from "@/lib/supabase/files/deleteFileRecord";
 import { deleteFilesInDirectory } from "@/lib/supabase/files/deleteFilesInDirectory";
 import { listFilesByArtist } from "@/lib/supabase/files/listFilesByArtist";
 import { handleToolError } from "@/lib/files/handleToolError";
+import { normalizeFileName } from "@/lib/files/normalizeFileName";
 
 const deleteFile = tool({
   description: `
@@ -50,14 +51,26 @@ Important:
     active_account_id,
     active_artist_id,
   }) => {
+    const normalizedFileName = normalizeFileName(fileName);
+    
     try {
-      // 1. Find the file/directory
-      const fileRecord = await findFileByName(
-        fileName,
+      
+      let fileRecord = await findFileByName(
+        normalizedFileName,
         active_account_id,
         active_artist_id,
         path
       );
+
+      // If not found with normalized name, try original (for directories)
+      if (!fileRecord && normalizedFileName !== fileName) {
+        fileRecord = await findFileByName(
+          fileName,
+          active_account_id,
+          active_artist_id,
+          path
+        );
+      }
 
       if (!fileRecord) {
         return {

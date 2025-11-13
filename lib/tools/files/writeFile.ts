@@ -6,6 +6,7 @@ import { createFileRecord } from "@/lib/supabase/files/createFileRecord";
 import { ensureDirectoryExists } from "@/lib/supabase/files/ensureDirectoryExists";
 import { generateStorageKey } from "@/lib/files/generateStoragePath";
 import { handleToolError } from "@/lib/files/handleToolError";
+import { normalizeFileName } from "@/lib/files/normalizeFileName";
 
 const writeFile = tool({
   description: `
@@ -68,15 +69,12 @@ Important:
     active_account_id,
     active_artist_id,
   }) => {
+    const normalizedFileName = normalizeFileName(fileName);
+    
     try {
-      let finalFileName = fileName;
-      const hasExtension = fileName.includes('.') && fileName.lastIndexOf('.') > 0;
-      if (!hasExtension) {
-        finalFileName = `${fileName}.md`;
-      }
 
       const existingFile = await findFileByName(
-        finalFileName,
+        normalizedFileName,
         active_account_id,
         active_artist_id,
         path
@@ -85,8 +83,8 @@ Important:
       if (existingFile) {
         return {
           success: false,
-          error: `File '${finalFileName}' already exists${path ? ` in '${path}'` : ""}.`,
-          message: `Cannot create file - '${finalFileName}' already exists. Use update_file to modify existing files, or choose a different name.`,
+          error: `File '${normalizedFileName}' already exists${path ? ` in '${path}'` : ""}.`,
+          message: `Cannot create file - '${normalizedFileName}' already exists. Use update_file to modify existing files, or choose a different name.`,
         };
       }
 
@@ -97,13 +95,13 @@ Important:
       const storageKey = generateStorageKey(
         active_account_id,
         active_artist_id,
-        finalFileName,
+        normalizedFileName,
         path
       );
 
       let detectedMimeType = mimeType;
       if (!detectedMimeType) {
-        const ext = finalFileName.toLowerCase().split(".").pop();
+        const ext = normalizedFileName.toLowerCase().split(".").pop();
         const mimeTypeMap: Record<string, string> = {
           txt: "text/plain",
           md: "text/markdown",
@@ -119,7 +117,7 @@ Important:
       }
 
       const blob = new Blob([content], { type: detectedMimeType });
-      const file = new File([blob], finalFileName, { type: detectedMimeType });
+      const file = new File([blob], normalizedFileName, { type: detectedMimeType });
 
       await uploadFileByKey(storageKey, file, {
         contentType: detectedMimeType,
@@ -132,7 +130,7 @@ Important:
         ownerAccountId: active_account_id,
         artistAccountId: active_artist_id,
         storageKey,
-        fileName: finalFileName,
+        fileName: normalizedFileName,
         mimeType: detectedMimeType,
         sizeBytes,
         description,
@@ -141,12 +139,12 @@ Important:
       return {
         success: true,
         storageKey,
-        fileName: finalFileName,
+        fileName: normalizedFileName,
         sizeBytes,
         mimeType: detectedMimeType,
         path: path || "root",
         fileId: fileRecord.id,
-        message: `Successfully created file '${finalFileName}' (${sizeBytes} bytes)${path ? ` in '${path}'` : ""}.`,
+        message: `Successfully created file '${normalizedFileName}' (${sizeBytes} bytes)${path ? ` in '${path}'` : ""}.`,
       };
     } catch (error) {
       return handleToolError(error, "create file");

@@ -6,6 +6,7 @@ import { updateFileSizeBytes } from "@/lib/supabase/files/updateFileSizeBytes";
 import { fetchFileContentServer } from "@/lib/supabase/storage/fetchFileContent";
 import { normalizeContent } from "@/lib/utils/normalizeContent";
 import { handleToolError } from "@/lib/files/handleToolError";
+import { normalizeFileName } from "@/lib/files/normalizeFileName";
 
 const updateFile = tool({
   description: `
@@ -47,9 +48,12 @@ Important:
     active_account_id,
     active_artist_id,
   }) => {
+    const normalizedFileName = normalizeFileName(fileName);
+    
     try {
+      
       const fileRecord = await findFileByName(
-        fileName,
+        normalizedFileName,
         active_account_id,
         active_artist_id,
         path
@@ -58,15 +62,15 @@ Important:
       if (!fileRecord) {
         return {
           success: false,
-          error: `File '${fileName}' not found${path ? ` in '${path}'` : ""}.`,
-          message: `Cannot update file - '${fileName}' does not exist. Use write_file to create new files.`,
+          error: `File '${normalizedFileName}' not found${path ? ` in '${path}'` : ""}.`,
+          message: `Cannot update file - '${normalizedFileName}' does not exist. Use write_file to create new files.`,
         };
       }
 
       if (fileRecord.is_directory) {
         return {
           success: false,
-          error: `'${fileName}' is a directory, not a file.`,
+          error: `'${normalizedFileName}' is a directory, not a file.`,
           message: "Cannot update directory. Only files can be updated.",
         };
       }
@@ -81,14 +85,14 @@ Important:
           success: false,
           noChange: true,
           error: "Content is identical to existing file.",
-          message: `No update needed - '${fileName}' already contains this exact content.`,
+          message: `No update needed - '${normalizedFileName}' already contains this exact content.`,
         };
       }
       
       const blob = new Blob([newContent], {
         type: fileRecord.mime_type || "text/plain",
       });
-      const file = new File([blob], fileName, {
+      const file = new File([blob], normalizedFileName, {
         type: fileRecord.mime_type || "text/plain",
       });
 
@@ -110,7 +114,7 @@ Important:
           success: false,
           verified: false,
           error: "File content does not match what was uploaded.",
-          message: `Update verification failed - '${fileName}' was modified but doesn't contain the expected content. Found ${updatedContent.length} bytes instead of expected ${newContent.length} bytes.`,
+          message: `Update verification failed - '${normalizedFileName}' was modified but doesn't contain the expected content. Found ${updatedContent.length} bytes instead of expected ${newContent.length} bytes.`,
           suggestion: "Read the current file content to see what it contains, then retry the update.",
         };
       }
@@ -122,13 +126,13 @@ Important:
         success: true,
         verified: true,
         storageKey: fileRecord.storage_key,
-        fileName,
+        fileName: normalizedFileName,
         sizeBytes: newSizeBytes,
         path: path || "root",
-        message: `Successfully updated and verified '${fileName}' (${newSizeBytes} bytes).`,
+        message: `Successfully updated and verified '${normalizedFileName}' (${newSizeBytes} bytes).`,
       };
     } catch (error) {
-      return handleToolError(error, "update file", fileName);
+      return handleToolError(error, "update file", normalizedFileName);
     }
   },
 });

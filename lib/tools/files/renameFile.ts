@@ -9,6 +9,7 @@ import { isValidPath } from "@/utils/isValidPath";
 import { getFileExtension } from "@/lib/files/getFileExtension";
 import { generateStorageKey } from "@/lib/files/generateStoragePath";
 import { handleToolError } from "@/lib/files/handleToolError";
+import { normalizeFileName } from "@/lib/files/normalizeFileName";
 
 const renameFile = tool({
   description: `
@@ -50,6 +51,8 @@ Important:
     active_account_id,
     active_artist_id,
   }) => {
+    const normalizedFileName = normalizeFileName(fileName);
+    
     try {
       if (path && !isValidPath(path)) {
         return {
@@ -58,9 +61,9 @@ Important:
           message: `Path '${path}' is invalid.`,
         };
       }
-
+      
       const fileRecord = await findFileByName(
-        fileName,
+        normalizedFileName,
         active_account_id,
         active_artist_id,
         path
@@ -69,20 +72,20 @@ Important:
       if (!fileRecord) {
         return {
           success: false,
-          error: `File '${fileName}' not found.`,
-          message: `Cannot rename - '${fileName}' does not exist.`,
+          error: `File '${normalizedFileName}' not found.`,
+          message: `Cannot rename - '${normalizedFileName}' does not exist.`,
         };
       }
 
       if (fileRecord.is_directory) {
         return {
           success: false,
-          error: `'${fileName}' is a folder, not a file.`,
+          error: `'${normalizedFileName}' is a folder, not a file.`,
           message: "Use rename_folder to rename folders.",
         };
       }
 
-      const extension = getFileExtension(fileName);
+      const extension = getFileExtension(normalizedFileName);
       const finalNewFileName = extension && !newFileName.endsWith(extension)
         ? newFileName + extension
         : newFileName;
@@ -128,14 +131,14 @@ Important:
 
       return {
         success: true,
-        oldName: fileName,
+        oldName: normalizedFileName,
         newName: finalNewFileName,
         path: path || "root",
         storageKey: newStorageKey,
-        message: `Successfully renamed file '${fileName}' to '${finalNewFileName}'.`,
+        message: `Successfully renamed file '${normalizedFileName}' to '${finalNewFileName}'.`,
       };
     } catch (error) {
-      return handleToolError(error, "rename", fileName);
+      return handleToolError(error, "rename", normalizedFileName);
     }
   },
 });

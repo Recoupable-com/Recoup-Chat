@@ -8,6 +8,7 @@ import { updateFileStorageKey } from "@/lib/supabase/files/updateFileStorageKey"
 import isValidStorageKey from "@/utils/isValidStorageKey";
 import { generateStoragePath, generateStorageKey } from "@/lib/files/generateStoragePath";
 import { handleToolError } from "@/lib/files/handleToolError";
+import { normalizeFileName } from "@/lib/files/normalizeFileName";
 
 const moveFile = tool({
   description: `
@@ -50,9 +51,12 @@ Important:
     active_account_id,
     active_artist_id,
   }) => {
+    const normalizedFileName = normalizeFileName(fileName);
+    
     try {
+      
       const fileRecord = await findFileByName(
-        fileName,
+        normalizedFileName,
         active_account_id,
         active_artist_id,
         sourcePath
@@ -61,15 +65,15 @@ Important:
       if (!fileRecord) {
         return {
           success: false,
-          error: `File '${fileName}' not found${sourcePath ? ` in '${sourcePath}'` : " in root directory"}.`,
-          message: `Cannot move - '${fileName}' does not exist. Use list_files to see available files.`,
+          error: `File '${normalizedFileName}' not found${sourcePath ? ` in '${sourcePath}'` : " in root directory"}.`,
+          message: `Cannot move - '${normalizedFileName}' does not exist. Use list_files to see available files.`,
         };
       }
 
       if (fileRecord.is_directory) {
         return {
           success: false,
-          error: `'${fileName}' is a directory.`,
+          error: `'${normalizedFileName}' is a directory.`,
           message: "Directory moving is not supported in V1. Only files can be moved.",
         };
       }
@@ -103,14 +107,14 @@ Important:
         return {
           success: false,
           error: "Source and target paths are the same.",
-          message: `File '${fileName}' is already in '${targetPath}'. No move needed.`,
+          message: `File '${normalizedFileName}' is already in '${targetPath}'. No move needed.`,
         };
       }
 
       await ensureDirectoryExists(active_account_id, active_artist_id, targetPath);
 
       const existingFile = await findFileByName(
-        fileName,
+        normalizedFileName,
         active_account_id,
         active_artist_id,
         targetPath
@@ -119,15 +123,15 @@ Important:
       if (existingFile) {
         return {
           success: false,
-          error: `File '${fileName}' already exists in target directory.`,
-          message: `Cannot move - a file named '${fileName}' already exists in '${targetPath}'. Rename the file first or choose a different target directory.`,
+          error: `File '${normalizedFileName}' already exists in target directory.`,
+          message: `Cannot move - a file named '${normalizedFileName}' already exists in '${targetPath}'. Rename the file first or choose a different target directory.`,
         };
       }
 
       const newStorageKey = generateStorageKey(
         active_account_id,
         active_artist_id,
-        fileName,
+        normalizedFileName,
         targetPath
       );
 
@@ -142,14 +146,14 @@ Important:
 
       return {
         success: true,
-        fileName,
+        fileName: normalizedFileName,
         sourcePath: sourcePath || "root",
         targetPath,
         storageKey: newStorageKey,
-        message: `Successfully moved '${fileName}' from '${sourcePath || "root"}' to '${targetPath}'.`,
+        message: `Successfully moved '${normalizedFileName}' from '${sourcePath || "root"}' to '${targetPath}'.`,
       };
     } catch (error) {
-      return handleToolError(error, "move", fileName);
+      return handleToolError(error, "move", normalizedFileName);
     }
   },
 });
