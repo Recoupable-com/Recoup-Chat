@@ -3,7 +3,7 @@ import readFile from "./readFile";
 import writeFile from "./writeFile";
 import updateFile from "./updateFile";
 import deleteFile from "./deleteFile";
-import renameFile from "./renameFile";
+import renameFileOrFolder from "./renameFileOrFolder";
 import moveFile from "./moveFile";
 
 const filesTools = {
@@ -12,7 +12,7 @@ const filesTools = {
   write_file: writeFile,
   update_file: updateFile,
   delete_file: deleteFile,
-  rename_file: renameFile,
+  rename_file_or_folder: renameFileOrFolder,
   move_file: moveFile,
 };
 

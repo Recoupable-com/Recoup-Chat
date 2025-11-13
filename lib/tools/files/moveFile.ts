@@ -20,7 +20,7 @@ When to use:
 Important:
 - V1 supports files only (not directories)
 - Target directory must be specified (cannot move to root if already there)
-- File keeps the same name (use rename_file to change name)
+- File keeps the same name (use rename_file_or_folder to change name)
 - Target file cannot already exist
 `,
   inputSchema: z.object({
@@ -79,7 +79,7 @@ Important:
         return {
           success: false,
           error: "Target path cannot be empty.",
-          message: "Please specify a destination directory. Use rename_file if you want to keep the file in the same location.",
+          message: "Please specify a destination directory. Use rename_file_or_folder if you want to keep the file in the same location.",
         };
       }
 
