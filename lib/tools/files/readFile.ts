@@ -2,6 +2,7 @@ import { z } from "zod";
 import { tool } from "ai";
 import { findFileByName } from "@/lib/supabase/files/findFileByName";
 import { fetchFileContentServer } from "@/lib/supabase/storage/fetchFileContent";
+import { handleToolError } from "@/lib/files/handleToolError";
 
 const readFile = tool({
   description: `
@@ -69,16 +70,7 @@ When to use:
         message: `Successfully read file '${fileName}' (${fileRecord.size_bytes || 0} bytes).`,
       };
     } catch (error) {
-      console.error("Error in readFile tool:", error);
-
-      const errorMessage =
-        error instanceof Error ? error.message : "An unexpected error occurred";
-
-      return {
-        success: false,
-        error: errorMessage,
-        message: `Failed to read file '${fileName}': ${errorMessage}`,
-      };
+      return handleToolError(error, "read file", fileName);
     }
   },
 });

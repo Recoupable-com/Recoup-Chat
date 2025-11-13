@@ -6,6 +6,8 @@ import { copyFileByKey } from "@/lib/supabase/storage/copyFileByKey";
 import { deleteFileByKey } from "@/lib/supabase/storage/deleteFileByKey";
 import { updateFileStorageKey } from "@/lib/supabase/files/updateFileStorageKey";
 import isValidStorageKey from "@/utils/isValidStorageKey";
+import { generateStoragePath, generateStorageKey } from "@/lib/files/generateStoragePath";
+import { handleToolError } from "@/lib/files/handleToolError";
 
 const moveFile = tool({
   description: `
@@ -49,7 +51,6 @@ Important:
     active_artist_id,
   }) => {
     try {
-      // 1. Find the file
       const fileRecord = await findFileByName(
         fileName,
         active_account_id,
@@ -65,7 +66,6 @@ Important:
         };
       }
 
-      // 2. Check if it's a directory (not supported in V1)
       if (fileRecord.is_directory) {
         return {
           success: false,
@@ -74,7 +74,6 @@ Important:
         };
       }
 
-      // 3. Validate target path
       if (!targetPath || targetPath.trim() === "") {
         return {
           success: false,
@@ -83,9 +82,11 @@ Important:
         };
       }
 
-      // Generate full target path for validation
-      const baseStoragePath = `files/${active_account_id}/${active_artist_id}/`;
-      const fullTargetPath = `${baseStoragePath}${targetPath.endsWith("/") ? targetPath : targetPath + "/"}`;
+      const fullTargetPath = generateStoragePath(
+        active_account_id,
+        active_artist_id,
+        targetPath
+      );
 
       if (!isValidStorageKey(fullTargetPath)) {
         return {
@@ -95,7 +96,6 @@ Important:
         };
       }
 
-      // 4. Check if moving to same location
       const normalizedSourcePath = sourcePath?.trim() || "";
       const normalizedTargetPath = targetPath.trim();
 
@@ -107,10 +107,8 @@ Important:
         };
       }
 
-      // 5. Ensure target directory exists
       await ensureDirectoryExists(active_account_id, active_artist_id, targetPath);
 
-      // 6. Check if file with same name exists in target directory
       const existingFile = await findFileByName(
         fileName,
         active_account_id,
@@ -119,17 +117,6 @@ Important:
       );
 
       if (existingFile) {
-        // DEBUG: Log what file was found to understand the bug
-        console.log('[moveFile] Conflict detected:', {
-          fileName,
-          targetPath,
-          existingFile: {
-            id: existingFile.id,
-            storage_key: existingFile.storage_key,
-            file_name: existingFile.file_name,
-          },
-        });
-        
         return {
           success: false,
           error: `File '${fileName}' already exists in target directory.`,
@@ -137,20 +124,20 @@ Important:
         };
       }
 
-      // 7. Generate new storage key with target path
-      const newStorageKey = `${fullTargetPath}${fileName}`;
+      const newStorageKey = generateStorageKey(
+        active_account_id,
+        active_artist_id,
+        fileName,
+        targetPath
+      );
 
-      // 8. Copy file to new location
       await copyFileByKey(
         fileRecord.storage_key,
         newStorageKey,
         fileRecord.mime_type || undefined
       );
 
-      // 9. Update database record with new storage key
       await updateFileStorageKey(fileRecord.id, newStorageKey);
-
-      // 10. Delete old storage file
       await deleteFileByKey(fileRecord.storage_key);
 
       return {
@@ -162,16 +149,7 @@ Important:
         message: `Successfully moved '${fileName}' from '${sourcePath || "root"}' to '${targetPath}'.`,
       };
     } catch (error) {
-      console.error("Error in moveFile tool:", error);
-
-      const errorMessage =
-        error instanceof Error ? error.message : "An unexpected error occurred";
-
-      return {
-        success: false,
-        error: errorMessage,
-        message: `Failed to move '${fileName}': ${errorMessage}`,
-      };
+      return handleToolError(error, "move", fileName);
     }
   },
 });

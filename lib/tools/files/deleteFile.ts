@@ -5,6 +5,7 @@ import { deleteFileByKey } from "@/lib/supabase/storage/deleteFileByKey";
 import { deleteFileRecord } from "@/lib/supabase/files/deleteFileRecord";
 import { deleteFilesInDirectory } from "@/lib/supabase/files/deleteFilesInDirectory";
 import { listFilesByArtist } from "@/lib/supabase/files/listFilesByArtist";
+import { handleToolError } from "@/lib/files/handleToolError";
 
 const deleteFile = tool({
   description: `
@@ -118,16 +119,7 @@ Important:
           : `Successfully deleted file '${fileName}'.`,
       };
     } catch (error) {
-      console.error("Error in deleteFile tool:", error);
-
-      const errorMessage =
-        error instanceof Error ? error.message : "An unexpected error occurred";
-
-      return {
-        success: false,
-        error: errorMessage,
-        message: `Failed to delete '${fileName}': ${errorMessage}`,
-      };
+      return handleToolError(error, "delete", fileName);
     }
   },
 });

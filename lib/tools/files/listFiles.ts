@@ -2,6 +2,7 @@ import { z } from "zod";
 import { tool } from "ai";
 import { TEXT_EXTENSIONS } from "@/lib/consts/fileExtensions";
 import { listFilesByArtist } from "@/lib/supabase/files/listFilesByArtist";
+import { handleToolError } from "@/lib/files/handleToolError";
 
 const listFiles = tool({
   description: `
@@ -57,17 +58,11 @@ When to use:
         message: `Found ${files.length} ${textFilesOnly ? "text " : ""}file(s)${path ? ` in '${path}'` : ""}.`,
       };
     } catch (error) {
-      console.error("Error in listFiles tool:", error);
-
-      const errorMessage =
-        error instanceof Error ? error.message : "An unexpected error occurred";
-
+      const result = handleToolError(error, "list files");
       return {
-        success: false,
+        ...result,
         files: [],
         count: 0,
-        error: errorMessage,
-        message: `Failed to list files: ${errorMessage}`,
       };
     }
   },

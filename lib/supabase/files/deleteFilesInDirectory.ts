@@ -1,22 +1,10 @@
 import supabase from "@/lib/supabase/serverClient";
+import { escapeLikePattern } from "@/lib/files/escapeLikePattern";
 
 type FileRecord = {
   id: string;
   storage_key: string;
 };
-
-/**
- * Escape special LIKE wildcard characters to prevent injection
- * @param input String to escape
- * @returns Escaped string safe for LIKE pattern matching
- */
-function escapeLikePattern(input: string): string {
-  // Must escape backslash first since it's the escape character
-  return input
-    .replace(/\\/g, '\\\\')  // Escape backslashes
-    .replace(/%/g, '\\%')    // Escape percent signs
-    .replace(/_/g, '\\_');   // Escape underscores
-}
 
 /**
  * Apply common filters to a query (LIKE pattern and optional exclude)
