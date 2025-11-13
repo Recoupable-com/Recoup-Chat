@@ -113,7 +113,12 @@ Important:
         upsert: true,
       });
       
-      console.log(`[UPDATE_FILE] Upload complete, now verifying...`);
+      console.log(`[UPDATE_FILE] Upload complete, waiting for cache to update...`);
+      
+      // Wait 150ms for Supabase Storage cache to update before verifying
+      await new Promise(resolve => setTimeout(resolve, 150));
+      
+      console.log(`[UPDATE_FILE] Cache wait complete, now verifying...`);
 
       // 4. Verify content actually changed by reading it back
       const updatedContent = await fetchFileContentServer(fileRecord.storage_key);
