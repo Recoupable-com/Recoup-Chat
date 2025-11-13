@@ -7,15 +7,29 @@ export default function PrivyProvider({
 }: {
   children: React.ReactNode;
 }) {
-  // Use preview app ID for Vercel preview deployments, otherwise use production app ID
-  // This allows preview deployments to work without needing to whitelist specific URLs
-  const appId = process.env.NEXT_PUBLIC_VERCEL_ENV === 'preview'
+  // Determine which Privy app ID to use based on environment
+  // NEXT_PUBLIC_VERCEL_ENV is set by Vercel: 'production', 'preview', or 'development'
+  const isPreview = process.env.NEXT_PUBLIC_VERCEL_ENV === 'preview';
+  
+  // Use preview app ID for preview deployments, fallback to production app ID
+  const appId = isPreview
     ? (process.env.NEXT_PUBLIC_PRIVY_APP_ID_PREVIEW || process.env.NEXT_PUBLIC_PRIVY_APP_ID)
     : process.env.NEXT_PUBLIC_PRIVY_APP_ID;
 
+  // Validate app ID is present
+  if (!appId) {
+    console.error('❌ Missing Privy app ID. Check environment variables:', {
+      isPreview,
+      hasPreviewId: !!process.env.NEXT_PUBLIC_PRIVY_APP_ID_PREVIEW,
+      hasProductionId: !!process.env.NEXT_PUBLIC_PRIVY_APP_ID,
+      vercelEnv: process.env.NEXT_PUBLIC_VERCEL_ENV
+    });
+    throw new Error('Missing required NEXT_PUBLIC_PRIVY_APP_ID environment variable');
+  }
+
   return (
     <Privy
-      appId={appId as string}
+      appId={appId}
       config={{
         appearance: {
           theme: "light",
