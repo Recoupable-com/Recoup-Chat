@@ -26,10 +26,10 @@ export default function GetArtistSocialsResult({
   const socials = hasSocials ? result.socials : [];
 
   return (
-    <div className="flex flex-col gap-4 p-5 border rounded-xl bg-gradient-to-b from-white to-gray-50 dark:from-gray-900 dark:to-gray-950 shadow-sm">
+    <div className="flex flex-col gap-4 p-5 border rounded-xl bg-background shadow-sm">
       <div className="flex items-center gap-2 text-primary border-b pb-3">
         {icon ?? <Music />}
-        <h3 className="font-semibold">
+        <h3 className="font-semibold text-foreground">
           {title ?? "Artist Socials Found"}
         </h3>
       </div>

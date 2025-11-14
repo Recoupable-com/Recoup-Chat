@@ -10,9 +10,9 @@ export const ArtistSocial = ({ social }: { social: SocialType }) => {
       href={`https://${social.profile_url}`}
       target="_blank"
       rel="noopener noreferrer"
-      className={`flex flex-col items-start p-4 border rounded-xl transition-all hover:shadow-md hover:scale-[1.02]`}
+      className="flex flex-col items-start p-4 border rounded-xl transition-all hover:shadow-md hover:scale-[1.02] bg-card hover:bg-accent"
     >
-      <span className="text-sm font-medium capitalize mb-1">{platform}</span>
+      <span className="text-sm font-medium capitalize mb-1 text-card-foreground">{platform}</span>
       <ArtistSocialDisplayText social={social} />
     </Link>
   );
