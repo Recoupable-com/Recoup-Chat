@@ -3,6 +3,7 @@ import { tool } from "ai";
 import { ensureDirectoryExists } from "@/lib/supabase/files/ensureDirectoryExists";
 import { handleToolError } from "@/lib/files/handleToolError";
 import { isValidFileName } from "@/utils/isValidFileName";
+import { isValidPath } from "@/utils/isValidPath";
 
 const createFolder = tool({
   description: `
@@ -53,7 +54,21 @@ Note:
         };
       }
 
-      const fullPath = path ? `${path}/${trimmedFolderName}` : trimmedFolderName;
+      // Validate and sanitize optional parent path
+      let sanitizedPath: string | undefined;
+      if (path) {
+        sanitizedPath = path.trim();
+        
+        if (!isValidPath(sanitizedPath)) {
+          return {
+            success: false,
+            error: "Invalid parent path.",
+            message: `Parent path '${sanitizedPath}' contains invalid characters or path traversal patterns. Paths cannot contain "..", control characters, or absolute paths.`,
+          };
+        }
+      }
+
+      const fullPath = sanitizedPath ? `${sanitizedPath}/${trimmedFolderName}` : trimmedFolderName;
 
       await ensureDirectoryExists(
         active_account_id,
@@ -65,7 +80,7 @@ Note:
         success: true,
         folderName: trimmedFolderName,
         fullPath,
-        message: `Successfully created folder '${trimmedFolderName}'${path ? ` in '${path}'` : ""}.`,
+        message: `Successfully created folder '${trimmedFolderName}'${sanitizedPath ? ` in '${sanitizedPath}'` : ""}.`,
       };
     } catch (error) {
       return handleToolError(error, "create folder", folderName);

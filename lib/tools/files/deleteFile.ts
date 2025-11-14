@@ -3,7 +3,8 @@ import { tool } from "ai";
 import { findFileByName } from "@/lib/supabase/files/findFileByName";
 import { deleteFileByKey } from "@/lib/supabase/storage/deleteFileByKey";
 import { deleteFileRecord } from "@/lib/supabase/files/deleteFileRecord";
-import { deleteFilesInDirectory } from "@/lib/supabase/files/deleteFilesInDirectory";
+import { getFilesInDirectory } from "@/lib/supabase/files/getFilesInDirectory";
+import { deleteFileRecords } from "@/lib/supabase/files/deleteFileRecords";
 import { listFilesByArtist } from "@/lib/supabase/files/listFilesByArtist";
 import { handleToolError } from "@/lib/files/handleToolError";
 import { normalizeFileName } from "@/lib/files/normalizeFileName";
@@ -81,6 +82,7 @@ Important:
       }
 
       const storageKeysToDelete: string[] = [];
+      const fileIdsToDelete: string[] = [];
 
       // 2. Handle directory deletion
       if (fileRecord.is_directory) {
@@ -100,25 +102,36 @@ Important:
             };
           }
         } else {
-          // Recursive deletion: delete all children first
-          const childStorageKeys = await deleteFilesInDirectory(
+          // Recursive deletion: get all children WITHOUT deleting DB records yet
+          const childFiles = await getFilesInDirectory(
             fileRecord.storage_key,
             fileRecord.id
           );
 
-          storageKeysToDelete.push(...childStorageKeys);
+          // Collect storage keys and file IDs for later deletion
+          childFiles.forEach(child => {
+            storageKeysToDelete.push(child.storage_key);
+            fileIdsToDelete.push(child.id);
+          });
         }
       } else {
         // Regular file - add to deletion list
         storageKeysToDelete.push(fileRecord.storage_key);
       }
 
-      // 3. Delete files from storage
+      // 3. Delete storage blobs first (before DB records)
+      // This way, if storage deletion fails, DB records remain intact
       if (storageKeysToDelete.length > 0) {
         await deleteFileByKey(storageKeysToDelete);
       }
 
-      // 4. Delete the main file/directory record from database
+      // 4. Only after storage deletion succeeds, delete DB records
+      // Delete child file records (if any)
+      if (fileIdsToDelete.length > 0) {
+        await deleteFileRecords(fileIdsToDelete);
+      }
+      
+      // Delete the main file/directory record
       await deleteFileRecord(fileRecord.id);
 
       return {
