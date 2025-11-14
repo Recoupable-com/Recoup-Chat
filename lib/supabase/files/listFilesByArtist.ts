@@ -5,40 +5,42 @@ type FileRecord = Tables<"files">;
 
 /**
  * List files for an artist, optionally filtered by path
+ * 
+ * Note: With file sharing enabled, this returns files from ALL team members
+ * who have access to the artist, not just the specified owner.
  */
 export async function listFilesByArtist(
   ownerAccountId: string,
   artistAccountId: string,
   path?: string
 ): Promise<FileRecord[]> {
-  // Construct the full storage path
-  // If path is provided (e.g., "Albums"), construct: files/{owner}/{artist}/Albums/
-  // If no path, use: files/{owner}/{artist}/
-  const baseStoragePath = `files/${ownerAccountId}/${artistAccountId}/`;
-  const fullPath = path
-    ? `${baseStoragePath}${path.endsWith("/") ? path : path + "/"}`
-    : baseStoragePath;
-
-  // Query files owned by the artist with the full storage path
-  const { data: ownedFiles, error: ownedError } = await supabase
+  const { data: allFiles, error: filesError } = await supabase
     .from("files")
     .select()
-    .eq("owner_account_id", ownerAccountId)
     .eq("artist_account_id", artistAccountId)
-    .ilike("storage_key", `${fullPath}%`)
     .order("created_at", { ascending: false });
 
-  if (ownedError) {
-    throw new Error(ownedError.message);
+  if (filesError) {
+    throw new Error(filesError.message);
   }
 
-  // Filter to immediate children only (single level directory listing)
-  const files = (ownedFiles || []).filter((row) => {
-    // Get relative path from the full path
-    const rel = row.storage_key.replace(fullPath, "");
-    const trimmed = rel.endsWith("/") ? rel.slice(0, -1) : rel;
-
-    // Only include immediate children (no slashes in relative path)
+  const files = (allFiles || []).filter((row) => {
+    const match = row.storage_key.match(/^files\/[^\/]+\/[^\/]+\/(.+)$/);
+    if (!match) return false;
+    
+    const relativePath = match[1];
+    
+    if (path) {
+      const pathPrefix = path.endsWith('/') ? path : path + '/';
+      if (!relativePath.startsWith(pathPrefix)) return false;
+      
+      const relativeToFilter = relativePath.slice(pathPrefix.length);
+      const trimmed = relativeToFilter.endsWith("/") ? relativeToFilter.slice(0, -1) : relativeToFilter;
+      
+      return trimmed.length > 0 && !trimmed.includes("/");
+    }
+    
+    const trimmed = relativePath.endsWith("/") ? relativePath.slice(0, -1) : relativePath;
     return trimmed.length > 0 && !trimmed.includes("/");
   });
 

@@ -27,7 +27,19 @@ export default function useFilesManager(activePath?: string) {
   const { data, isLoading } = useQuery<{ files: Array<ListedFileRow> }>({
     queryKey: ["files", ownerAccountId, artistAccountId, activePath],
     queryFn: async () => {
-      const p = activePath ? `&path=${encodeURIComponent(activePath)}` : "";
+      // Transform full storage path to relative path for API
+      // From: files/{owner_id}/{artist_id}/relative/path/
+      // To: relative/path/
+      let relativePath: string | undefined = undefined;
+      if (activePath) {
+        const parts = activePath.replace(/\/$/, "").split("/");
+        if (parts.length > 3) {
+          relativePath = parts.slice(3).join("/");
+          if (relativePath) relativePath += "/";
+        }
+      }
+      
+      const p = relativePath ? `&path=${encodeURIComponent(relativePath)}` : "";
       const url = `/api/files/list?ownerAccountId=${ownerAccountId}&artistAccountId=${artistAccountId}${p}`;
       const res = await fetch(url, { cache: "no-store" });
       if (!res.ok) throw new Error("Failed to load files");
