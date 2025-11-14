@@ -1,4 +1,4 @@
-import { createClient } from "@/lib/supabase/serverClient";
+import supabase from "@/lib/supabase/serverClient";
 
 /**
  * Check if a user has access to a file
@@ -19,7 +19,6 @@ export async function checkFileAccess(
     return true;
   }
 
-  const supabase = createClient();
   const { data: artistAccess } = await supabase
     .from("account_artist_ids")
     .select("artist_id")
@@ -39,7 +38,6 @@ export async function checkFileAccess(
 export async function getFileByStorageKey(
   storageKey: string
 ): Promise<{ owner_account_id: string; artist_account_id: string } | null> {
-  const supabase = createClient();
   const { data: file } = await supabase
     .from("files")
     .select("owner_account_id, artist_account_id")
