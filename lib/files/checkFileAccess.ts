@@ -1,4 +1,4 @@
-import supabase from "@/lib/supabase/serverClient";
+import { checkAccountArtistAccess } from "@/lib/supabase/accountArtistIds/checkAccountArtistAccess";
 
 /**
  * Check if a user has access to a file
@@ -15,35 +15,11 @@ export async function checkFileAccess(
   userId: string,
   file: { owner_account_id: string; artist_account_id: string }
 ): Promise<boolean> {
+  // User owns the file directly
   if (file.owner_account_id === userId) {
     return true;
   }
 
-  const { data: artistAccess } = await supabase
-    .from("account_artist_ids")
-    .select("artist_id")
-    .eq("account_id", userId)
-    .eq("artist_id", file.artist_account_id)
-    .maybeSingle();
-
-  return !!artistAccess;
+  // Check if user has access to the artist that owns the file
+  return await checkAccountArtistAccess(userId, file.artist_account_id);
 }
-
-/**
- * Get file record by storage key with owner and artist info
- * 
- * @param storageKey - The file's storage key
- * @returns File record or null if not found
- */
-export async function getFileByStorageKey(
-  storageKey: string
-): Promise<{ owner_account_id: string; artist_account_id: string } | null> {
-  const { data: file } = await supabase
-    .from("files")
-    .select("owner_account_id, artist_account_id")
-    .eq("storage_key", storageKey)
-    .maybeSingle();
-
-  return file;
-}
-

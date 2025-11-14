@@ -25,12 +25,12 @@ const CreateTaskSuccess: React.FC<CreateTaskSuccessProps> = ({ result }) => {
 
   // Success state
   return (
-    <div className="bg-green-50 border border-green-200 rounded-xl p-4 max-w-2xl">
+    <div className="bg-card border border-border rounded-xl p-4 max-w-2xl shadow-sm">
       {/* Success Header */}
       <div className="flex items-start space-x-3 mb-4">
-        <CheckCircle className="h-5 w-5 text-green-500 mt-0.5 flex-shrink-0" />
+        <CheckCircle className="h-5 w-5 text-green-500 flex-shrink-0" />
         <div className="flex-1">
-          <h3 className="text-sm font-medium text-green-800 flex items-center space-x-2">
+          <h3 className="text-sm font-medium text-foreground flex items-center space-x-2">
             <Calendar className="h-4 w-4" />
             <span>Task created successfully</span>
           </h3>

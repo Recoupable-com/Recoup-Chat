@@ -1,7 +1,10 @@
 import { NextResponse } from "next/server";
-import supabase from "@/lib/supabase/serverClient";
-import { SUPABASE_STORAGE_BUCKET } from "@/lib/consts";
 import { checkFileAccess } from "@/lib/files/checkFileAccess";
+import { getFileById } from "@/lib/supabase/files/getFileById";
+import { getFilesInDirectory } from "@/lib/supabase/files/getFilesInDirectory";
+import { deleteFilesInDirectory } from "@/lib/supabase/files/deleteFilesInDirectory";
+import { deleteFileRecord } from "@/lib/supabase/files/deleteFileRecord";
+import { deleteFileByKey } from "@/lib/supabase/storage/deleteFileByKey";
 
 export async function POST(req: Request) {
   try {
@@ -10,65 +13,49 @@ export async function POST(req: Request) {
     const storageKey = String(body.storageKey || "");
     const ownerAccountId = String(body.ownerAccountId || "");
 
+    // Validate required fields
     if (!id || !storageKey || !ownerAccountId) {
-      return NextResponse.json({ error: "Missing id, storageKey or ownerAccountId" }, { status: 400 });
+      return NextResponse.json(
+        { error: "Missing id, storageKey or ownerAccountId" },
+        { status: 400 }
+      );
     }
 
-    const { data: row, error: rowError } = await supabase
-      .from("files")
-      .select("id, owner_account_id, artist_account_id, is_directory, storage_key")
-      .eq("id", id)
-      .single();
-    if (rowError || !row) {
-      return NextResponse.json({ error: rowError?.message || "File not found" }, { status: 404 });
+    // Fetch file metadata for permission check
+    const file = await getFileById(id);
+    if (!file) {
+      return NextResponse.json({ error: "File not found" }, { status: 404 });
     }
 
-    const hasAccess = await checkFileAccess(ownerAccountId, row);
+    // Verify user has access to this file
+    const hasAccess = await checkFileAccess(ownerAccountId, file);
     if (!hasAccess) {
-      return NextResponse.json({ error: "You don't have access to this file" }, { status: 403 });
+      return NextResponse.json(
+        { error: "You don't have access to this file" },
+        { status: 403 }
+      );
     }
 
-    if (row.is_directory) {
-      const { data: childFiles, error: childError } = await supabase
-        .from("files")
-        .select("storage_key")
-        .like("storage_key", `${storageKey}%`)
-        .neq("id", id);
-      
-      if (childError) {
-        return NextResponse.json({ error: childError.message }, { status: 500 });
+    // Handle directory deletion (recursive)
+    if (file.is_directory) {
+      // Get all child files in the directory
+      const childFiles = await getFilesInDirectory(storageKey, id);
+
+      // Delete child files from storage bucket
+      if (childFiles.length > 0) {
+        const childStorageKeys = childFiles.map((f) => f.storage_key);
+        await deleteFileByKey(childStorageKeys);
       }
 
-      if (childFiles && childFiles.length > 0) {
-        const childStorageKeys = childFiles.map(f => f.storage_key);
-        const { error: removeChildError } = await supabase.storage
-          .from(SUPABASE_STORAGE_BUCKET)
-          .remove(childStorageKeys);
-        if (removeChildError) {
-          return NextResponse.json({ error: removeChildError.message }, { status: 500 });
-        }
-      }
-
-      const { error: deleteChildError } = await supabase
-        .from("files")
-        .delete()
-        .like("storage_key", `${storageKey}%`)
-        .neq("id", id);
-      
-      if (deleteChildError) {
-        return NextResponse.json({ error: deleteChildError.message }, { status: 500 });
-      }
+      // Delete child file records from database
+      await deleteFilesInDirectory(storageKey, id);
     } else {
-      const { error: removeError } = await supabase.storage.from(SUPABASE_STORAGE_BUCKET).remove([storageKey]);
-      if (removeError) {
-        return NextResponse.json({ error: removeError.message }, { status: 500 });
-      }
+      // Delete single file from storage bucket
+      await deleteFileByKey(storageKey);
     }
 
-    const { error: dbError } = await supabase.from("files").delete().eq("id", id);
-    if (dbError) {
-      return NextResponse.json({ error: dbError.message }, { status: 500 });
-    }
+    // Delete the file/directory record from database
+    await deleteFileRecord(id);
 
     return NextResponse.json({ success: true }, { status: 200 });
   } catch (err) {

@@ -1,48 +1,31 @@
-import supabase from "@/lib/supabase/serverClient";
 import { Tables } from "@/types/database.types";
+import { getFilesByArtistId } from "./getFilesByArtistId";
+import { filterFilesByPath } from "@/lib/files/filterFilesByPath";
 
 type FileRecord = Tables<"files">;
 
 /**
  * List files for an artist, optionally filtered by path
  * 
+ * This is a convenience function that combines:
+ * 1. Database query (getFilesByArtistId)
+ * 2. Path filtering logic (filterFilesByPath)
+ * 
  * Note: With file sharing enabled, this returns files from ALL team members
  * who have access to the artist, not just the specified owner.
+ * 
+ * @param ownerAccountId - Currently unused, kept for backward compatibility
+ * @param artistAccountId - The artist account to get files for
+ * @param path - Optional path filter for immediate children only
  */
 export async function listFilesByArtist(
   ownerAccountId: string,
   artistAccountId: string,
   path?: string
 ): Promise<FileRecord[]> {
-  const { data: allFiles, error: filesError } = await supabase
-    .from("files")
-    .select()
-    .eq("artist_account_id", artistAccountId)
-    .order("created_at", { ascending: false });
+  // Get all files for the artist from database
+  const allFiles = await getFilesByArtistId(artistAccountId);
 
-  if (filesError) {
-    throw new Error(filesError.message);
-  }
-
-  const files = (allFiles || []).filter((row) => {
-    const match = row.storage_key.match(/^files\/[^\/]+\/[^\/]+\/(.+)$/);
-    if (!match) return false;
-    
-    const relativePath = match[1];
-    
-    if (path) {
-      const pathPrefix = path.endsWith('/') ? path : path + '/';
-      if (!relativePath.startsWith(pathPrefix)) return false;
-      
-      const relativeToFilter = relativePath.slice(pathPrefix.length);
-      const trimmed = relativeToFilter.endsWith("/") ? relativeToFilter.slice(0, -1) : relativeToFilter;
-      
-      return trimmed.length > 0 && !trimmed.includes("/");
-    }
-    
-    const trimmed = relativePath.endsWith("/") ? relativePath.slice(0, -1) : relativePath;
-    return trimmed.length > 0 && !trimmed.includes("/");
-  });
-
-  return files;
+  // Apply path filtering logic
+  return filterFilesByPath(allFiles, path);
 }
