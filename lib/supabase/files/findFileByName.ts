@@ -1,6 +1,7 @@
 import supabase from "@/lib/supabase/serverClient";
 import { Tables } from "@/types/database.types";
 import { escapePostgrestValue } from "./escapePostgrestValue";
+import { isValidPath } from "@/utils/isValidPath";
 
 type FileRecord = Tables<"files">;
 
@@ -14,19 +15,36 @@ export async function findFileByName(
   artistAccountId: string,
   path?: string
 ): Promise<FileRecord | null> {
-  // Build storage key pattern with exact filename
-  const pathPattern = path
-    ? `files/${ownerAccountId}/${artistAccountId}/${path}/${fileName}`
+  // Validate path to prevent directory traversal attacks
+  if (path && !isValidPath(path)) {
+    throw new Error(
+      'Invalid path: paths cannot contain directory traversal sequences (.., ./), ' +
+      'backslashes, control characters, or be absolute paths'
+    );
+  }
+
+  // Normalize path: remove leading/trailing slashes
+  const normalizedPath = path?.replace(/^\/+|\/+$/g, '');
+  
+  const pathPattern = normalizedPath
+    ? `files/${ownerAccountId}/${artistAccountId}/${normalizedPath}/${fileName}`
     : `files/${ownerAccountId}/${artistAccountId}/${fileName}`;
 
-  // Try to find by file_name first (exact match)
+  // Also create a folder pattern (with trailing slash for directories)
+  const folderPattern = pathPattern + '/';
+
+  // Escape both patterns for PostgREST
+  const escapedFilePattern = escapePostgrestValue(pathPattern);
+  const escapedFolderPattern = escapePostgrestValue(folderPattern);
+
+  // Try to find by file_name AND storage_key (check both file and folder patterns)
   const { data, error} = await supabase
     .from("files")
     .select()
     .eq("owner_account_id", ownerAccountId)
     .eq("artist_account_id", artistAccountId)
     .eq("file_name", fileName)
-    .ilike("storage_key", pathPattern)
+    .or(`storage_key.eq.${escapedFilePattern},storage_key.eq.${escapedFolderPattern}`)
     .order("created_at", { ascending: false })
     .limit(1)
     .single();
@@ -36,17 +54,15 @@ export async function findFileByName(
     const fileNameWithSpaces = fileName.replace(/_/g, ' ');
     const fileNameWithUnderscores = fileName.replace(/ /g, '_');
     
-    const storageKeyPatternSpaces = path
-      ? `files/${ownerAccountId}/${artistAccountId}/${path}/${fileNameWithSpaces}`
+    const storageKeyPatternSpaces = normalizedPath
+      ? `files/${ownerAccountId}/${artistAccountId}/${normalizedPath}/${fileNameWithSpaces}`
       : `files/${ownerAccountId}/${artistAccountId}/${fileNameWithSpaces}`;
     
-    const storageKeyPatternUnderscores = path
-      ? `files/${ownerAccountId}/${artistAccountId}/${path}/${fileNameWithUnderscores}`
+    const storageKeyPatternUnderscores = normalizedPath
+      ? `files/${ownerAccountId}/${artistAccountId}/${normalizedPath}/${fileNameWithUnderscores}`
       : `files/${ownerAccountId}/${artistAccountId}/${fileNameWithUnderscores}`;
 
     // Escape values for PostgREST (handles filenames with commas, periods, etc.)
-    const escapedSpaces = escapePostgrestValue(fileNameWithSpaces);
-    const escapedUnderscores = escapePostgrestValue(fileNameWithUnderscores);
     const escapedPatternSpaces = escapePostgrestValue(storageKeyPatternSpaces);
     const escapedPatternUnderscores = escapePostgrestValue(storageKeyPatternUnderscores);
 
@@ -55,7 +71,7 @@ export async function findFileByName(
       .select()
       .eq("owner_account_id", ownerAccountId)
       .eq("artist_account_id", artistAccountId)
-      .or(`file_name.eq.${escapedSpaces},file_name.eq.${escapedUnderscores},storage_key.ilike.${escapedPatternSpaces},storage_key.ilike.${escapedPatternUnderscores}`)
+      .or(`storage_key.eq.${escapedPatternSpaces},storage_key.eq.${escapedPatternUnderscores}`)
       .order("created_at", { ascending: false })
       .limit(1)
       .single();

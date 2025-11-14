@@ -2,6 +2,8 @@ import { z } from "zod";
 import { tool } from "ai";
 import { findFileByName } from "@/lib/supabase/files/findFileByName";
 import { fetchFileContentServer } from "@/lib/supabase/storage/fetchFileContent";
+import { handleToolError } from "@/lib/files/handleToolError";
+import { normalizeFileName } from "@/lib/files/normalizeFileName";
 
 const readFile = tool({
   description: `
@@ -29,10 +31,12 @@ When to use:
       .describe("Pull active_artist_id from the system prompt"),
   }),
   execute: async ({ fileName, path, active_account_id, active_artist_id }) => {
+    const normalizedFileName = normalizeFileName(fileName);
+    
     try {
-      // Find the file in the database
+      
       const fileRecord = await findFileByName(
-        fileName,
+        normalizedFileName,
         active_account_id,
         active_artist_id,
         path
@@ -41,8 +45,8 @@ When to use:
       if (!fileRecord) {
         return {
           success: false,
-          error: `File '${fileName}' not found${path ? ` in path '${path}'` : ""}.`,
-          message: `Could not find file '${fileName}'. Use list_files to see available files.`,
+          error: `File '${normalizedFileName}' not found${path ? ` in path '${path}'` : ""}.`,
+          message: `Could not find file '${normalizedFileName}'. Use list_files to see available files.`,
         };
       }
 
@@ -69,16 +73,7 @@ When to use:
         message: `Successfully read file '${fileName}' (${fileRecord.size_bytes || 0} bytes).`,
       };
     } catch (error) {
-      console.error("Error in readFile tool:", error);
-
-      const errorMessage =
-        error instanceof Error ? error.message : "An unexpected error occurred";
-
-      return {
-        success: false,
-        error: errorMessage,
-        message: `Failed to read file '${fileName}': ${errorMessage}`,
-      };
+      return handleToolError(error, "read file", fileName);
     }
   },
 });

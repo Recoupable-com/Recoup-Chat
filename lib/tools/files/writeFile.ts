@@ -4,6 +4,9 @@ import { findFileByName } from "@/lib/supabase/files/findFileByName";
 import { uploadFileByKey } from "@/lib/supabase/storage/uploadFileByKey";
 import { createFileRecord } from "@/lib/supabase/files/createFileRecord";
 import { ensureDirectoryExists } from "@/lib/supabase/files/ensureDirectoryExists";
+import { generateStorageKey } from "@/lib/files/generateStoragePath";
+import { handleToolError } from "@/lib/files/handleToolError";
+import { normalizeFileName } from "@/lib/files/normalizeFileName";
 
 const writeFile = tool({
   description: `
@@ -15,15 +18,26 @@ When to use:
 - Saving generated content (e.g., analysis results, recommendations)
 - Storing structured data (JSON, CSV, etc.)
 
+File Extension Guidelines:
+- **JSON data** (objects, arrays, structured data) → Use .json extension (e.g., 'data.json', 'config.json')
+- **CSV data** (tabular data, spreadsheets) → Use .csv extension (e.g., 'results.csv')
+- **Text content** (notes, reports, documentation, markdown) → Use .md extension (e.g., 'notes.md', 'report.md')
+- **Plain text** (logs, simple text) → Use .txt extension only for basic text files
+- **Other formats** → Specify appropriate extension (.html, .xml, .yaml, etc.)
+
+Default Behavior:
+- Files WITHOUT an extension automatically get .md extension (e.g., 'notes' becomes 'notes.md')
+- Prefer .md over .txt for general text content
+- Choose the extension that best matches the content type
+
 Important:
 - Check if file already exists first using list_files or read_file
 - Default path is root directory unless specified
-- Supported formats: text files (.txt, .md, .json, .csv, etc.)
 `,
   inputSchema: z.object({
     fileName: z
       .string()
-      .describe("Name of the file to create (e.g., 'research.md', 'report.txt', 'data.json')"),
+      .describe("Name of the file to create. Choose extension based on content: .json for JSON data, .csv for tabular data, .md for text/documentation (preferred over .txt), or omit extension to default to .md. Examples: 'research', 'data.json', 'results.csv'"),
     content: z
       .string()
       .describe("The text content to write to the file"),
@@ -55,10 +69,12 @@ Important:
     active_account_id,
     active_artist_id,
   }) => {
+    const normalizedFileName = normalizeFileName(fileName);
+    
     try {
-      // 1. Check if file already exists
+
       const existingFile = await findFileByName(
-        fileName,
+        normalizedFileName,
         active_account_id,
         active_artist_id,
         path
@@ -67,27 +83,25 @@ Important:
       if (existingFile) {
         return {
           success: false,
-          error: `File '${fileName}' already exists${path ? ` in '${path}'` : ""}.`,
-          message: `Cannot create file - '${fileName}' already exists. Use update_file to modify existing files, or choose a different name.`,
+          error: `File '${normalizedFileName}' already exists${path ? ` in '${path}'` : ""}.`,
+          message: `Cannot create file - '${normalizedFileName}' already exists. Use update_file to modify existing files, or choose a different name.`,
         };
       }
 
-      // 2. Ensure parent directory exists (if path is provided)
       if (path) {
         await ensureDirectoryExists(active_account_id, active_artist_id, path);
       }
 
-      // 3. Generate storage key
-      const baseStoragePath = `files/${active_account_id}/${active_artist_id}/`;
-      const fullPath = path
-        ? `${baseStoragePath}${path.endsWith("/") ? path : path + "/"}`
-        : baseStoragePath;
-      const storageKey = `${fullPath}${fileName}`;
+      const storageKey = generateStorageKey(
+        active_account_id,
+        active_artist_id,
+        normalizedFileName,
+        path
+      );
 
-      // 4. Auto-detect MIME type if not provided
       let detectedMimeType = mimeType;
       if (!detectedMimeType) {
-        const ext = fileName.toLowerCase().split(".").pop();
+        const ext = normalizedFileName.toLowerCase().split(".").pop();
         const mimeTypeMap: Record<string, string> = {
           txt: "text/plain",
           md: "text/markdown",
@@ -102,23 +116,21 @@ Important:
         detectedMimeType = mimeTypeMap[ext || ""] || "text/plain";
       }
 
-      // 5. Convert content to Blob and upload
       const blob = new Blob([content], { type: detectedMimeType });
-      const file = new File([blob], fileName, { type: detectedMimeType });
+      const file = new File([blob], normalizedFileName, { type: detectedMimeType });
 
       await uploadFileByKey(storageKey, file, {
         contentType: detectedMimeType,
         upsert: false,
       });
 
-      // 6. Calculate size and record metadata
       const sizeBytes = new TextEncoder().encode(content).length;
 
       const fileRecord = await createFileRecord({
         ownerAccountId: active_account_id,
         artistAccountId: active_artist_id,
         storageKey,
-        fileName,
+        fileName: normalizedFileName,
         mimeType: detectedMimeType,
         sizeBytes,
         description,
@@ -127,24 +139,15 @@ Important:
       return {
         success: true,
         storageKey,
-        fileName,
+        fileName: normalizedFileName,
         sizeBytes,
         mimeType: detectedMimeType,
         path: path || "root",
         fileId: fileRecord.id,
-        message: `Successfully created file '${fileName}' (${sizeBytes} bytes)${path ? ` in '${path}'` : ""}.`,
+        message: `Successfully created file '${normalizedFileName}' (${sizeBytes} bytes)${path ? ` in '${path}'` : ""}.`,
       };
     } catch (error) {
-      console.error("Error in writeFile tool:", error);
-
-      const errorMessage =
-        error instanceof Error ? error.message : "An unexpected error occurred";
-
-      return {
-        success: false,
-        error: errorMessage,
-        message: `Failed to create file '${fileName}': ${errorMessage}`,
-      };
+      return handleToolError(error, "create file");
     }
   },
 });
