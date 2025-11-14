@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import supabase from "@/lib/supabase/serverClient";
 import { SUPABASE_STORAGE_BUCKET } from "@/lib/consts";
+import { checkFileAccess } from "@/lib/files/checkFileAccess";
 
 export async function POST(req: Request) {
   try {
@@ -13,34 +14,31 @@ export async function POST(req: Request) {
       return NextResponse.json({ error: "Missing id, storageKey or ownerAccountId" }, { status: 400 });
     }
 
-    // Load file row to check ownership and type
     const { data: row, error: rowError } = await supabase
       .from("files")
-      .select("id, owner_account_id, is_directory, storage_key")
+      .select("id, owner_account_id, artist_account_id, is_directory, storage_key")
       .eq("id", id)
       .single();
     if (rowError || !row) {
       return NextResponse.json({ error: rowError?.message || "File not found" }, { status: 404 });
     }
 
-    if (row.owner_account_id !== ownerAccountId) {
-      return NextResponse.json({ error: "Not allowed" }, { status: 403 });
+    const hasAccess = await checkFileAccess(ownerAccountId, row);
+    if (!hasAccess) {
+      return NextResponse.json({ error: "You don't have access to this file" }, { status: 403 });
     }
 
     if (row.is_directory) {
-      // For directories, we need to delete all files inside first, then the directory
-      // Get all files in this directory
       const { data: childFiles, error: childError } = await supabase
         .from("files")
         .select("storage_key")
         .like("storage_key", `${storageKey}%`)
-        .neq("id", id); // Exclude the directory itself
+        .neq("id", id);
       
       if (childError) {
         return NextResponse.json({ error: childError.message }, { status: 500 });
       }
 
-      // Delete all files in the directory from storage
       if (childFiles && childFiles.length > 0) {
         const childStorageKeys = childFiles.map(f => f.storage_key);
         const { error: removeChildError } = await supabase.storage
@@ -51,7 +49,6 @@ export async function POST(req: Request) {
         }
       }
 
-      // Delete all child file records from database
       const { error: deleteChildError } = await supabase
         .from("files")
         .delete()
@@ -62,14 +59,12 @@ export async function POST(req: Request) {
         return NextResponse.json({ error: deleteChildError.message }, { status: 500 });
       }
     } else {
-      // For regular files, delete from storage first
       const { error: removeError } = await supabase.storage.from(SUPABASE_STORAGE_BUCKET).remove([storageKey]);
       if (removeError) {
         return NextResponse.json({ error: removeError.message }, { status: 500 });
       }
     }
 
-    // Delete the main DB row (file or directory)
     const { error: dbError } = await supabase.from("files").delete().eq("id", id);
     if (dbError) {
       return NextResponse.json({ error: dbError.message }, { status: 500 });

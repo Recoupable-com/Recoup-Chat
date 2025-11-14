@@ -1,39 +1,19 @@
 import { NextResponse } from "next/server";
-import supabase from "@/lib/supabase/serverClient";
+import { listFilesByArtist } from "@/lib/supabase/files/listFilesByArtist";
 
 export async function GET(req: Request) {
   try {
     const { searchParams } = new URL(req.url);
     const ownerAccountId = searchParams.get("ownerAccountId");
     const artistAccountId = searchParams.get("artistAccountId");
-    const path = searchParams.get("path") || "";
+    const path = searchParams.get("path") || undefined;
 
     if (!ownerAccountId || !artistAccountId) {
       return NextResponse.json({ error: "Missing ownerAccountId or artistAccountId" }, { status: 400 });
     }
 
-    // Query 1: Files directly owned by the artist
-    const { data: ownedFiles, error: ownedError } = await supabase
-      .from("files")
-      .select("id,file_name,storage_key,mime_type,is_directory,size_bytes,created_at")
-      .eq("owner_account_id", ownerAccountId)
-      .eq("artist_account_id", artistAccountId)
-      .ilike("storage_key", path ? `${path}%` : "%")
-      .order("created_at", { ascending: false });
-
-    if (ownedError) {
-      return NextResponse.json({ error: ownedError.message }, { status: 500 });
-    }
-
-    // Filter to immediate children client-side (single level)
-    const base = path && path.endsWith("/") ? path : path ? path + "/" : "";
-    const files = (ownedFiles || []).filter((row) => {
-      // Use normal path filtering
-      if (!base) return true;
-      const rel = row.storage_key.replace(base, "");
-      const trimmed = rel.endsWith("/") ? rel.slice(0, -1) : rel;
-      return trimmed.length > 0 && !trimmed.includes("/");
-    });
+    // Use shared helper function (properly filters team files and immediate children)
+    const files = await listFilesByArtist(ownerAccountId, artistAccountId, path);
 
     return NextResponse.json({ files }, { status: 200 });
   } catch (err) {

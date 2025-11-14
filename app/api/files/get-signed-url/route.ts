@@ -1,6 +1,8 @@
 import { NextResponse } from "next/server";
 import isValidStorageKey from "@/utils/isValidStorageKey";
 import { createSignedUrlForKey } from "@/lib/supabase/storage/createSignedUrl";
+import { createClient } from "@/lib/supabase/client";
+import { checkFileAccess, getFileByStorageKey } from "@/lib/files/checkFileAccess";
 
 export const runtime = "edge";
 
@@ -19,6 +21,25 @@ export async function GET(req: Request) {
       expires = parsed;
     }
     if (!isValidStorageKey(key)) return NextResponse.json({ error: "Invalid key" }, { status: 400 });
+
+    const supabase = createClient();
+    const { data: { user } } = await supabase.auth.getUser();
+    
+    if (!user) {
+      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+    }
+
+    const file = await getFileByStorageKey(key);
+
+    if (!file) {
+      return NextResponse.json({ error: "File not found" }, { status: 404 });
+    }
+
+    const hasAccess = await checkFileAccess(user.id, file);
+
+    if (!hasAccess) {
+      return NextResponse.json({ error: "Forbidden" }, { status: 403 });
+    }
 
     const signedUrl = await createSignedUrlForKey(key, expires);
     return NextResponse.json({ signedUrl }, { status: 200 });
