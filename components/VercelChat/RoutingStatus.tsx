@@ -1,14 +1,17 @@
 import { motion, AnimatePresence } from "framer-motion";
 import { Loader } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { useAgentRouting } from "@/providers/AgentRoutingProvider";
 
-interface RoutingStatusProps {
-  status: "analyzing" | "complete";
-  message: string;
-  agent?: string;
-}
+export function RoutingStatus() {
+  const { routingStatus } = useAgentRouting();
 
-export function RoutingStatus({ status, message, agent }: RoutingStatusProps) {
+  if (!routingStatus) {
+    return null;
+  }
+
+  const { status, message, agent } = routingStatus;
+
   return (
     <AnimatePresence>
       <motion.div

@@ -33,14 +33,8 @@ export function ChatInput({
   input,
 }: ChatInputProps) {
   const { selectedArtist, sorted } = useArtistProvider();
-  const {
-    hasPendingUploads,
-    messages,
-    status,
-    model,
-    isLoadingSignedUrls,
-    routingStatus,
-  } = useVercelChatContext();
+  const { hasPendingUploads, messages, status, model, isLoadingSignedUrls } =
+    useVercelChatContext();
   const isDisabled = !selectedArtist && sorted.length > 0;
 
   const handleSend = (event: React.FormEvent<HTMLFormElement>) => {
@@ -68,15 +62,9 @@ export function ChatInput({
       >
         <PromptSuggestions />
         <AttachmentsPreview />
-        {routingStatus && (
-          <div className="flex justify-center mb-2">
-            <RoutingStatus
-              status={routingStatus.status}
-              message={routingStatus.message}
-              agent={routingStatus.agent}
-            />
-          </div>
-        )}
+        <div className="flex justify-center mb-2">
+          <RoutingStatus />
+        </div>
       </div>
       <motion.div
         className="w-full relative"
