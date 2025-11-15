@@ -36,7 +36,6 @@ export function MessageParts({
         const { type } = part;
         const key = `message-${message.id}-part-${partIndex}`;
 
-        // Render routing status data parts
         if (type === ROUTING_STATUS_DATA_TYPE) {
           const routingData = part.data as RoutingStatusData;
           return (
