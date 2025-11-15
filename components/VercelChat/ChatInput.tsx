@@ -15,6 +15,7 @@ import {
 } from "../ai-elements/prompt-input";
 import ModelSelect from "@/components/ModelSelect";
 import FileMentionsInput from "./FileMentionsInput";
+import { RoutingStatus } from "./RoutingStatus";
 
 interface ChatInputProps {
   onSendMessage: (event: React.FormEvent<HTMLFormElement>) => void;
@@ -32,7 +33,14 @@ export function ChatInput({
   input,
 }: ChatInputProps) {
   const { selectedArtist, sorted } = useArtistProvider();
-  const { hasPendingUploads, messages, status, model, isLoadingSignedUrls } = useVercelChatContext();
+  const {
+    hasPendingUploads,
+    messages,
+    status,
+    model,
+    isLoadingSignedUrls,
+    routingStatus,
+  } = useVercelChatContext();
   const isDisabled = !selectedArtist && sorted.length > 0;
 
   const handleSend = (event: React.FormEvent<HTMLFormElement>) => {
@@ -45,7 +53,8 @@ export function ChatInput({
     }
 
     // Only check input requirements for sending new messages
-    if (input === "" || isDisabled || hasPendingUploads || isLoadingSignedUrls) return;
+    if (input === "" || isDisabled || hasPendingUploads || isLoadingSignedUrls)
+      return;
 
     onSendMessage(event);
   };
@@ -59,6 +68,15 @@ export function ChatInput({
       >
         <PromptSuggestions />
         <AttachmentsPreview />
+        {routingStatus && (
+          <div className="flex justify-center mb-2">
+            <RoutingStatus
+              status={routingStatus.status}
+              message={routingStatus.message}
+              model={routingStatus.model}
+            />
+          </div>
+        )}
       </div>
       <motion.div
         className="w-full relative"
@@ -85,7 +103,6 @@ export function ChatInput({
               <PureAttachmentsButton />
               {/* YouTube connect button removed from ChatInput UI intentionally; preserved for future reuse */}
               <ModelSelect />
-              
             </PromptInputTools>
             <PromptInputSubmit
               disabled={isDisabled || hasPendingUploads || isLoadingSignedUrls}

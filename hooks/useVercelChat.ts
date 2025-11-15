@@ -194,11 +194,35 @@ export function useVercelChat({
     ]
   );
 
+  // State for routing status (transient data from server)
+  const [routingStatus, setRoutingStatus] = useState<{
+    status: "analyzing" | "complete";
+    message: string;
+    model?: string;
+    reason?: string;
+  } | null>(null);
+
   const { messages, status, stop, sendMessage, setMessages, regenerate } =
     useChat({
       id,
       experimental_throttle: 100,
       generateId: generateUUID,
+      onData: (dataPart) => {
+        // Handle transient routing status data
+        if (dataPart.type === "data-routing-status" && dataPart.data) {
+          const routingData = dataPart.data as {
+            status: "analyzing" | "complete";
+            message: string;
+            model?: string;
+            reason?: string;
+          };
+          setRoutingStatus(routingData);
+          // Clear status after a delay when complete
+          if (routingData.status === "complete") {
+            setTimeout(() => setRoutingStatus(null), 2000);
+          }
+        }
+      },
       onError: (e) => {
         console.error("An error occurred, please try again!", e);
         toast.error("An error occurred, please try again!");
@@ -207,6 +231,8 @@ export function useVercelChat({
       onFinish: async () => {
         // Update credits after AI response completes
         await refetchCredits();
+        // Clear routing status when response finishes
+        setRoutingStatus(null);
       },
     });
 
@@ -337,6 +363,7 @@ export function useVercelChat({
     isGeneratingResponse,
     model,
     isLoadingSignedUrls,
+    routingStatus,
 
     // Actions
     handleSendMessage,
