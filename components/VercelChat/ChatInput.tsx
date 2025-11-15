@@ -32,8 +32,7 @@ export function ChatInput({
   input,
 }: ChatInputProps) {
   const { selectedArtist, sorted } = useArtistProvider();
-  const { hasPendingUploads, messages, status, model, isLoadingSignedUrls } =
-    useVercelChatContext();
+  const { hasPendingUploads, messages, status, model, isLoadingSignedUrls } = useVercelChatContext();
   const isDisabled = !selectedArtist && sorted.length > 0;
 
   const handleSend = (event: React.FormEvent<HTMLFormElement>) => {
@@ -46,8 +45,7 @@ export function ChatInput({
     }
 
     // Only check input requirements for sending new messages
-    if (input === "" || isDisabled || hasPendingUploads || isLoadingSignedUrls)
-      return;
+    if (input === "" || isDisabled || hasPendingUploads || isLoadingSignedUrls) return;
 
     onSendMessage(event);
   };
@@ -87,6 +85,7 @@ export function ChatInput({
               <PureAttachmentsButton />
               {/* YouTube connect button removed from ChatInput UI intentionally; preserved for future reuse */}
               <ModelSelect />
+              
             </PromptInputTools>
             <PromptInputSubmit
               disabled={isDisabled || hasPendingUploads || isLoadingSignedUrls}
