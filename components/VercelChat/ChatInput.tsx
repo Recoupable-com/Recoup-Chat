@@ -15,7 +15,6 @@ import {
 } from "../ai-elements/prompt-input";
 import ModelSelect from "@/components/ModelSelect";
 import FileMentionsInput from "./FileMentionsInput";
-import { RoutingStatus } from "./RoutingStatus";
 
 interface ChatInputProps {
   onSendMessage: (event: React.FormEvent<HTMLFormElement>) => void;
@@ -62,9 +61,6 @@ export function ChatInput({
       >
         <PromptSuggestions />
         <AttachmentsPreview />
-        <div className="flex justify-center mb-2">
-          <RoutingStatus />
-        </div>
       </div>
       <motion.div
         className="w-full relative"
