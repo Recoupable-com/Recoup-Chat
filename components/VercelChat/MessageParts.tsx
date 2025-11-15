@@ -1,4 +1,5 @@
 import { ChatStatus, ToolUIPart, UIMessage, isToolUIPart } from "ai";
+import { Dispatch, SetStateAction } from "react";
 import { UseChatHelpers } from "@ai-sdk/react";
 import { cn } from "@/lib/utils";
 import ViewingMessage from "./ViewingMessage";
@@ -17,7 +18,7 @@ interface MessagePartsProps {
   message: UIMessage;
   status: ChatStatus;
   mode: "view" | "edit";
-  setMode: (mode: "view" | "edit") => void;
+  setMode: Dispatch<SetStateAction<"view" | "edit">>;
   setMessages: UseChatHelpers<UIMessage>["setMessages"];
   reload: () => void;
 }
