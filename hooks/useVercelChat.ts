@@ -217,10 +217,6 @@ export function useVercelChat({
             reason?: string;
           };
           setRoutingStatus(routingData);
-          // Clear status after a delay when complete
-          if (routingData.status === "complete") {
-            setTimeout(() => setRoutingStatus(null), 2000);
-          }
         }
       },
       onError: (e) => {
