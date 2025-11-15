@@ -1,6 +1,6 @@
 import { ChatStatus, ToolUIPart, UIMessage, isToolUIPart } from "ai";
 import { useState } from "react";
-import { UseChatHelpers } from "@ai-sdk-tools/store";
+import { UseChatHelpers } from "@ai-sdk/react";
 import { motion } from "framer-motion";
 import { AnimatePresence } from "framer-motion";
 import { cn } from "@/lib/utils";

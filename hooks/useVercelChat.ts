@@ -1,4 +1,4 @@
-import { useChat } from "@ai-sdk-tools/store";
+import { useChat } from "@ai-sdk/react";
 import { useMessageLoader } from "./useMessageLoader";
 import { useUserProvider } from "@/providers/UserProvder";
 import { useArtistProvider } from "@/providers/ArtistProvider";
