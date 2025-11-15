@@ -4,14 +4,18 @@ import { MAX_MESSAGES } from "./const";
 import { type ChatRequest, type ChatConfig } from "./types";
 import { AnthropicProviderOptions } from "@ai-sdk/anthropic";
 import { DEFAULT_MODEL } from "../consts";
-import { convertToModelMessages, stepCountIs } from "ai";
+import { convertToModelMessages, stepCountIs, UIMessageStreamWriter } from "ai";
 import getPrepareStepResult from "./toolChains/getPrepareStepResult";
 import { handleNanoBananaModel } from "./handleNanoBananaModel";
 import { extractImageUrlsFromMessages } from "./extractImageUrlsFromMessages";
 import { buildSystemPromptWithImages } from "./buildSystemPromptWithImages";
 import { setupToolsForRequest } from "./setupToolsForRequest";
+import { getRoutingDecision } from "./getRoutingDecision";
 
-export async function setupChatRequest(body: ChatRequest): Promise<ChatConfig> {
+export async function setupChatRequest(
+  body: ChatRequest,
+  writer?: UIMessageStreamWriter
+): Promise<ChatConfig> {
   const {
     accountId,
     artistId,
@@ -21,6 +25,11 @@ export async function setupChatRequest(body: ChatRequest): Promise<ChatConfig> {
     knowledgeBaseText,
     timezone,
   } = body;
+
+  // Get routing decision if writer is provided (for UI updates)
+  if (writer) {
+    await getRoutingDecision(body, { writer });
+  }
 
   // Configure model and tools based on nano banana selection
   const nanoBananaConfig = handleNanoBananaModel(body);
@@ -71,7 +80,7 @@ export async function setupChatRequest(body: ChatRequest): Promise<ChatConfig> {
             // Download file when model doesn't support URL
             const response = await fetch(file.url.href);
             const data = new Uint8Array(await response.arrayBuffer());
-            const mediaType = response.headers.get('content-type') || undefined;
+            const mediaType = response.headers.get("content-type") || undefined;
             return { data, mediaType };
           })
         );

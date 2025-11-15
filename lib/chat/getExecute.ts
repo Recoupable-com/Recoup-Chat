@@ -2,7 +2,6 @@ import { streamText, UIMessageStreamWriter } from "ai";
 import { ChatRequest } from "./types";
 import { setupChatRequest } from "./setupChatRequest";
 import { handleChatCredits } from "@/lib/credits/handleChatCredits";
-import { getRoutingDecision } from "./getRoutingDecision";
 
 type ExecuteOptions = {
   writer: UIMessageStreamWriter;
@@ -12,9 +11,7 @@ const getExecute = async (options: ExecuteOptions, body: ChatRequest) => {
   const { writer } = options;
   console.log("🚀 getExecute START - Model:", body.model);
 
-  await getRoutingDecision(body, options);
-
-  const chatConfig = await setupChatRequest(body);
+  const chatConfig = await setupChatRequest(body, writer);
   console.log("🚀 getExecute - Chat config ready, model:", chatConfig.model);
 
   try {
