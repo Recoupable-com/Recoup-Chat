@@ -18,6 +18,7 @@ import { DEFAULT_MODEL } from "@/lib/consts";
 import { usePaymentProvider } from "@/providers/PaymentProvider";
 import useArtistFilesForMentions from "@/hooks/useArtistFilesForMentions";
 import type { KnowledgeBaseEntry } from "@/lib/supabase/getArtistKnowledge";
+import { useRoutingStatus } from "./useRoutingStatus";
 
 // 30 days in seconds for Supabase signed URL expiry
 const SIGNED_URL_EXPIRES_SECONDS = 60 * 60 * 24 * 30;
@@ -194,13 +195,8 @@ export function useVercelChat({
     ]
   );
 
-  // State for routing status (transient data from server)
-  const [routingStatus, setRoutingStatus] = useState<{
-    status: "analyzing" | "complete";
-    message: string;
-    agent?: string;
-    reason?: string;
-  } | null>(null);
+  const { routingStatus, handleRoutingData, clearRoutingStatus } =
+    useRoutingStatus();
 
   const { messages, status, stop, sendMessage, setMessages, regenerate } =
     useChat({
@@ -210,13 +206,7 @@ export function useVercelChat({
       onData: (dataPart) => {
         // Handle transient routing status data
         if (dataPart.type === "data-routing-status" && dataPart.data) {
-          const routingData = dataPart.data as {
-            status: "analyzing" | "complete";
-            message: string;
-            agent?: string;
-            reason?: string;
-          };
-          setRoutingStatus(routingData);
+          handleRoutingData(dataPart.data);
         }
       },
       onError: (e) => {
@@ -228,7 +218,7 @@ export function useVercelChat({
         // Update credits after AI response completes
         await refetchCredits();
         // Clear routing status when response finishes
-        setRoutingStatus(null);
+        clearRoutingStatus();
       },
     });
 
