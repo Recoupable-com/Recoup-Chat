@@ -3,14 +3,23 @@ import { Loader } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useAgentRouting } from "@/providers/AgentRoutingProvider";
 
-export function RoutingStatus() {
-  const { routingStatus } = useAgentRouting();
+interface RoutingStatusProps {
+  status?: "analyzing" | "complete";
+  message?: string;
+  agent?: string;
+}
 
-  if (!routingStatus) {
+export function RoutingStatus(props: RoutingStatusProps = {}) {
+  const { status: propStatus, message: propMessage, agent: propAgent } = props;
+  // Support both props (from message.parts) and hook (for transient state)
+  const { routingStatus } = useAgentRouting();
+  const status = propStatus ?? routingStatus?.status;
+  const message = propMessage ?? routingStatus?.message;
+  const agent = propAgent ?? routingStatus?.agent;
+
+  if (!status || !message) {
     return null;
   }
-
-  const { status, message, agent } = routingStatus;
 
   return (
     <AnimatePresence>

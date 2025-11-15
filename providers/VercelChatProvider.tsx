@@ -22,12 +22,6 @@ interface VercelChatContextType {
   hasError: boolean;
   isGeneratingResponse: boolean;
   isLoadingSignedUrls: boolean;
-  routingStatus: {
-    status: "analyzing" | "complete";
-    message: string;
-    agent?: string;
-    reason?: string;
-  } | null;
   handleSendMessage: (event: React.FormEvent<HTMLFormElement>) => Promise<void>;
   stop: UseChatHelpers<UIMessage>["stop"];
   setInput: (input: string) => void;
@@ -85,7 +79,6 @@ export function VercelChatProvider({
     hasError,
     isGeneratingResponse,
     isLoadingSignedUrls,
-    routingStatus,
     handleSendMessage,
     stop,
     setInput,
@@ -127,7 +120,6 @@ export function VercelChatProvider({
     hasError,
     isGeneratingResponse,
     isLoadingSignedUrls,
-    routingStatus,
     handleSendMessage: handleSendMessageWithClear,
     stop,
     setInput,

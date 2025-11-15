@@ -12,6 +12,8 @@ import { EnhancedReasoning } from "@/components/reasoning/EnhancedReasoning";
 import { Actions, Action } from "@/components/actions";
 import { RefreshCcwIcon, Pencil } from "lucide-react";
 import CopyAction from "./CopyAction";
+import { RoutingStatus } from "./RoutingStatus";
+import { ROUTING_STATUS_DATA_TYPE } from "@/providers/AgentRoutingProvider";
 
 const Message = ({
   message,
@@ -49,6 +51,26 @@ const Message = ({
             {message.parts?.map((part, partIndex) => {
               const { type } = part;
               const key = `message-${message.id}-part-${partIndex}`;
+
+              // Render routing status data parts
+              if (type === ROUTING_STATUS_DATA_TYPE) {
+                const routingData = (
+                  part as {
+                    data?: { status: string; message: string; agent?: string };
+                  }
+                ).data;
+                if (routingData) {
+                  return (
+                    <RoutingStatus
+                      key={key}
+                      status={routingData.status as "analyzing" | "complete"}
+                      message={routingData.message}
+                      agent={routingData.agent}
+                    />
+                  );
+                }
+                return null;
+              }
 
               if (type === "reasoning") {
                 return (

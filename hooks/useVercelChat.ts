@@ -18,7 +18,10 @@ import { DEFAULT_MODEL } from "@/lib/consts";
 import { usePaymentProvider } from "@/providers/PaymentProvider";
 import useArtistFilesForMentions from "@/hooks/useArtistFilesForMentions";
 import type { KnowledgeBaseEntry } from "@/lib/supabase/getArtistKnowledge";
-import { useRoutingStatus } from "./useRoutingStatus";
+import {
+  useAgentRouting,
+  ROUTING_STATUS_DATA_TYPE,
+} from "@/providers/AgentRoutingProvider";
 
 // 30 days in seconds for Supabase signed URL expiry
 const SIGNED_URL_EXPIRES_SECONDS = 60 * 60 * 24 * 30;
@@ -195,8 +198,7 @@ export function useVercelChat({
     ]
   );
 
-  const { routingStatus, handleRoutingData, clearRoutingStatus } =
-    useRoutingStatus();
+  const { handleRoutingData, clearRoutingStatus } = useAgentRouting();
 
   const { messages, status, stop, sendMessage, setMessages, regenerate } =
     useChat({
@@ -204,8 +206,7 @@ export function useVercelChat({
       experimental_throttle: 100,
       generateId: generateUUID,
       onData: (dataPart) => {
-        // Handle transient routing status data
-        if (dataPart.type === "data-routing-status" && dataPart.data) {
+        if (dataPart.type === ROUTING_STATUS_DATA_TYPE && dataPart.data) {
           handleRoutingData(dataPart.data);
         }
       },
@@ -349,7 +350,6 @@ export function useVercelChat({
     isGeneratingResponse,
     model,
     isLoadingSignedUrls,
-    routingStatus,
 
     // Actions
     handleSendMessage,

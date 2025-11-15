@@ -3,6 +3,7 @@ import { ChatRequest } from "./types";
 import { setupChatRequest } from "./setupChatRequest";
 import { handleChatCredits } from "@/lib/credits/handleChatCredits";
 import { getRoutingDecision } from "./getRoutingDecision";
+import { ROUTING_STATUS_DATA_TYPE } from "@/providers/AgentRoutingProvider";
 
 type ExecuteOptions = {
   writer: UIMessageStreamWriter;
@@ -12,23 +13,25 @@ const getExecute = async (options: ExecuteOptions, body: ChatRequest) => {
   const { writer } = options;
   console.log("🚀 getExecute START - Model:", body.model);
 
-  // Send routing status to UI immediately (transient - won't be in message history)
+  // Send routing status to UI immediately (persistent - will appear in message history)
   writer.write({
-    type: "data-routing-status",
+    type: ROUTING_STATUS_DATA_TYPE,
+    id: "routing-status", // Use ID for reconciliation
     data: {
       status: "analyzing",
       message: "Determining optimal agent...",
     },
-    transient: true,
+    // Removed transient: true so it appears in message.parts
   });
 
   // Fast routing decision (non-blocking, uses lightweight model)
   const routingDecision = await getRoutingDecision(body);
   console.log("🚀 getExecute - Routing decision:", routingDecision);
 
-  // Update UI with routing result (transient)
+  // Update UI with routing result (persistent - will appear in message history)
   writer.write({
-    type: "data-routing-status",
+    type: ROUTING_STATUS_DATA_TYPE,
+    id: "routing-status", // Use ID for reconciliation
     data: {
       status: "complete",
       message: routingDecision.agent
@@ -37,7 +40,7 @@ const getExecute = async (options: ExecuteOptions, body: ChatRequest) => {
       agent: routingDecision.agent,
       reason: routingDecision.reason,
     },
-    transient: true,
+    // Removed transient: true so it appears in message.parts
   });
 
   // Apply routing decision to request
