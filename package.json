@@ -8,7 +8,8 @@
     "start": "next start",
     "lint": "next lint",
     "format": "prettier --write app components providers types hooks lib && pnpm lint",
-    "update-types": "npx supabase gen types typescript --project-id godremdqwajrwazhbrue --schema public > types/database.types.ts"
+    "update-types": "npx supabase gen types typescript --project-id godremdqwajrwazhbrue --schema public > types/database.types.ts",
+    "eval": "braintrust eval --external-packages playwright playwright-core chromium-bidi @browserbasehq/stagehand"
   },
   "dependencies": {
     "@ai-sdk/anthropic": "3.0.0-beta.53",
@@ -53,7 +54,7 @@
     "apify-client": "^2.9.7",
     "arweave": "^1.15.7",
     "autoevals": "^0.0.129",
-    "braintrust": "^0.3.8",
+    "braintrust": "^0.4.9",
     "class-variance-authority": "^0.7.1",
     "classnames": "^2.5.1",
     "clsx": "^2.1.1",
