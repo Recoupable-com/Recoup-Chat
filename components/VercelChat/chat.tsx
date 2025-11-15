@@ -14,7 +14,6 @@ import {
   VercelChatProvider,
   useVercelChatContext,
 } from "@/providers/VercelChatProvider";
-import { AgentRoutingProvider } from "@/providers/AgentRoutingProvider";
 import { UIMessage } from "ai";
 import { useDropzone } from "@/hooks/useDropzone";
 import FileDragOverlay from "./FileDragOverlay";
@@ -29,11 +28,9 @@ interface ChatProps {
 
 export function Chat({ id, reportId, initialMessages }: ChatProps) {
   return (
-    <AgentRoutingProvider>
-      <VercelChatProvider chatId={id} initialMessages={initialMessages}>
-        <ChatContent reportId={reportId} id={id} />
-      </VercelChatProvider>
-    </AgentRoutingProvider>
+    <VercelChatProvider chatId={id} initialMessages={initialMessages}>
+      <ChatContent reportId={reportId} id={id} />
+    </VercelChatProvider>
   );
 }
 

@@ -1,26 +1,14 @@
 import { motion, AnimatePresence } from "framer-motion";
 import { Loader } from "lucide-react";
 import { cn } from "@/lib/utils";
-import { useAgentRouting } from "@/providers/AgentRoutingProvider";
 
 interface RoutingStatusProps {
-  status?: "analyzing" | "complete";
-  message?: string;
+  status: "analyzing" | "complete";
+  message: string;
   agent?: string;
 }
 
-export function RoutingStatus(props: RoutingStatusProps = {}) {
-  const { status: propStatus, message: propMessage, agent: propAgent } = props;
-  // Support both props (from message.parts) and hook (for transient state)
-  const { routingStatus } = useAgentRouting();
-  const status = propStatus ?? routingStatus?.status;
-  const message = propMessage ?? routingStatus?.message;
-  const agent = propAgent ?? routingStatus?.agent;
-
-  if (!status || !message) {
-    return null;
-  }
-
+export function RoutingStatus({ status, message, agent }: RoutingStatusProps) {
   return (
     <AnimatePresence>
       <motion.div

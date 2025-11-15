@@ -18,8 +18,6 @@ import { DEFAULT_MODEL } from "@/lib/consts";
 import { usePaymentProvider } from "@/providers/PaymentProvider";
 import useArtistFilesForMentions from "@/hooks/useArtistFilesForMentions";
 import type { KnowledgeBaseEntry } from "@/lib/supabase/getArtistKnowledge";
-import { useAgentRouting } from "@/providers/AgentRoutingProvider";
-import { ROUTING_STATUS_DATA_TYPE } from "@/lib/consts";
 
 // 30 days in seconds for Supabase signed URL expiry
 const SIGNED_URL_EXPIRES_SECONDS = 60 * 60 * 24 * 30;
@@ -196,18 +194,11 @@ export function useVercelChat({
     ]
   );
 
-  const { handleRoutingData, clearRoutingStatus } = useAgentRouting();
-
   const { messages, status, stop, sendMessage, setMessages, regenerate } =
     useChat({
       id,
       experimental_throttle: 100,
       generateId: generateUUID,
-      onData: (dataPart) => {
-        if (dataPart.type === ROUTING_STATUS_DATA_TYPE && dataPart.data) {
-          handleRoutingData(dataPart.data);
-        }
-      },
       onError: (e) => {
         console.error("An error occurred, please try again!", e);
         toast.error("An error occurred, please try again!");
@@ -216,8 +207,6 @@ export function useVercelChat({
       onFinish: async () => {
         // Update credits after AI response completes
         await refetchCredits();
-        // Clear routing status when response finishes
-        clearRoutingStatus();
       },
     });
 
