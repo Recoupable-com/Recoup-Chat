@@ -2,6 +2,7 @@ import { UIMessageStreamWriter } from "ai";
 import { ChatRequest } from "@/lib/chat/types";
 import { routingAgent, type RoutingDecision } from "./routingAgent";
 import { writeRoutingStatus } from "./writeRoutingStatus";
+import { getLastMessageText } from "@/lib/messages/getLastMessage";
 
 /**
  * Routing agent that determines which specialized agent should handle the request.
@@ -17,14 +18,7 @@ export async function getRoutingDecision(
   // Send routing status to UI immediately (persistent - will appear in message history)
   writeRoutingStatus(writer, "analyzing", "Determining optimal agent...");
 
-  // Extract last user message for routing
-  const lastMessage = messages[messages.length - 1];
-  const messageText = (
-    lastMessage?.parts
-      .filter((part) => part.type === "text")
-      .map((part) => part.text)
-      .join(" ") || ""
-  ).toLowerCase();
+  const messageText = getLastMessageText(messages);
 
   try {
     const result = await routingAgent.generate({
