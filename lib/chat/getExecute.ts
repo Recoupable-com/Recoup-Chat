@@ -12,19 +12,9 @@ const getExecute = async (options: ExecuteOptions, body: ChatRequest) => {
   const { writer } = options;
   console.log("🚀 getExecute START - Model:", body.model);
 
-  // Fast routing decision (non-blocking, uses lightweight model)
-  // Routing status updates are handled inside getRoutingDecision
-  const routingDecision = await getRoutingDecision(body, options);
-  console.log("🚀 getExecute - Routing decision:", routingDecision);
+  await getRoutingDecision(body, options);
 
-  // Apply routing decision to request
-  // Note: Agent selection will be handled by the selected agent implementation
-  const routedBody: ChatRequest = {
-    ...body,
-    // Agent routing is handled separately - body remains unchanged for now
-  };
-
-  const chatConfig = await setupChatRequest(routedBody);
+  const chatConfig = await setupChatRequest(body);
   console.log("🚀 getExecute - Chat config ready, model:", chatConfig.model);
 
   try {
