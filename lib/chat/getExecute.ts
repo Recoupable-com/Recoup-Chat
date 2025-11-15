@@ -2,6 +2,7 @@ import { streamText, UIMessageStreamWriter } from "ai";
 import { ChatRequest } from "./types";
 import { setupChatRequest } from "./setupChatRequest";
 import { handleChatCredits } from "@/lib/credits/handleChatCredits";
+import { getRoutingDecision } from "./getRoutingDecision";
 
 type ExecuteOptions = {
   writer: UIMessageStreamWriter;
@@ -10,8 +11,48 @@ type ExecuteOptions = {
 const getExecute = async (options: ExecuteOptions, body: ChatRequest) => {
   const { writer } = options;
   console.log("🚀 getExecute START - Model:", body.model);
-  
-  const chatConfig = await setupChatRequest(body);
+
+  // Send routing status to UI immediately (transient - won't be in message history)
+  writer.write({
+    type: "data-routing-status",
+    data: {
+      status: "analyzing",
+      message: "Determining optimal model...",
+    },
+    transient: true,
+  });
+
+  // Fast routing decision (non-blocking, uses lightweight model)
+  const routingDecision = await getRoutingDecision(body);
+  console.log("🚀 getExecute - Routing decision:", routingDecision);
+
+  // Update UI with routing result (transient)
+  writer.write({
+    type: "data-routing-status",
+    data: {
+      status: "complete",
+      message:
+        routingDecision.reason === "user-selected"
+          ? "Using selected model"
+          : routingDecision.model
+            ? `Routing to ${routingDecision.model}`
+            : "Using default model",
+      model: routingDecision.model,
+      reason: routingDecision.reason,
+    },
+    transient: true,
+  });
+
+  // Apply routing decision to request
+  const routedBody: ChatRequest = {
+    ...body,
+    model: routingDecision.model || body.model,
+    excludeTools: routingDecision.excludeTools
+      ? [...(body.excludeTools || []), ...routingDecision.excludeTools]
+      : body.excludeTools,
+  };
+
+  const chatConfig = await setupChatRequest(routedBody);
   console.log("🚀 getExecute - Chat config ready, model:", chatConfig.model);
 
   try {
