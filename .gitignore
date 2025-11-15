@@ -56,3 +56,6 @@ evals/**/*$py.class
 
 # supabase
 supabase/.temp.cursor/
+
+*storybook.log
+storybook-static
