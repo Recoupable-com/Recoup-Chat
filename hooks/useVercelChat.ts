@@ -18,10 +18,8 @@ import { DEFAULT_MODEL } from "@/lib/consts";
 import { usePaymentProvider } from "@/providers/PaymentProvider";
 import useArtistFilesForMentions from "@/hooks/useArtistFilesForMentions";
 import type { KnowledgeBaseEntry } from "@/lib/supabase/getArtistKnowledge";
-import {
-  useAgentRouting,
-  ROUTING_STATUS_DATA_TYPE,
-} from "@/providers/AgentRoutingProvider";
+import { useAgentRouting } from "@/providers/AgentRoutingProvider";
+import { ROUTING_STATUS_DATA_TYPE } from "@/lib/consts";
 
 // 30 days in seconds for Supabase signed URL expiry
 const SIGNED_URL_EXPIRES_SECONDS = 60 * 60 * 24 * 30;

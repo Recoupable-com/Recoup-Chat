@@ -1,8 +1,6 @@
 import React, { createContext, useContext, ReactNode } from "react";
 import { useRoutingStatus, type AgentRouting } from "@/hooks/useRoutingStatus";
 
-export const ROUTING_STATUS_DATA_TYPE = "data-agent-routing-status" as const;
-
 const AgentRoutingContext = createContext<AgentRouting | undefined>(undefined);
 
 interface AgentRoutingProviderProps {

@@ -3,7 +3,7 @@ import { ChatRequest } from "./types";
 import { setupChatRequest } from "./setupChatRequest";
 import { handleChatCredits } from "@/lib/credits/handleChatCredits";
 import { getRoutingDecision } from "./getRoutingDecision";
-import { ROUTING_STATUS_DATA_TYPE } from "@/providers/AgentRoutingProvider";
+import { ROUTING_STATUS_DATA_TYPE } from "@/lib/consts";
 
 type ExecuteOptions = {
   writer: UIMessageStreamWriter;

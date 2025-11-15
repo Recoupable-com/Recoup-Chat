@@ -13,7 +13,7 @@ import { Actions, Action } from "@/components/actions";
 import { RefreshCcwIcon, Pencil } from "lucide-react";
 import CopyAction from "./CopyAction";
 import { RoutingStatus } from "./RoutingStatus";
-import { ROUTING_STATUS_DATA_TYPE } from "@/providers/AgentRoutingProvider";
+import { ROUTING_STATUS_DATA_TYPE } from "@/lib/consts";
 
 const Message = ({
   message,
