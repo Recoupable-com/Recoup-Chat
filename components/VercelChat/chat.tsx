@@ -19,7 +19,6 @@ import { useDropzone } from "@/hooks/useDropzone";
 import FileDragOverlay from "./FileDragOverlay";
 import { Loader } from "lucide-react";
 import { memo, useCallback } from "react";
-import { Provider as ChatStoreProvider } from "@ai-sdk-tools/store";
 
 interface ChatProps {
   id: string;
@@ -29,11 +28,9 @@ interface ChatProps {
 
 export function Chat({ id, reportId, initialMessages }: ChatProps) {
   return (
-    <ChatStoreProvider initialMessages={initialMessages || []}>
-      <VercelChatProvider chatId={id} initialMessages={initialMessages}>
-        <ChatContent reportId={reportId} id={id} />
-      </VercelChatProvider>
-    </ChatStoreProvider>
+    <VercelChatProvider chatId={id} initialMessages={initialMessages}>
+      <ChatContent reportId={reportId} id={id} />
+    </VercelChatProvider>
   );
 }
 
