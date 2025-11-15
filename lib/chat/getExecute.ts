@@ -17,7 +17,7 @@ const getExecute = async (options: ExecuteOptions, body: ChatRequest) => {
     type: "data-routing-status",
     data: {
       status: "analyzing",
-      message: "Determining optimal model...",
+      message: "Determining optimal agent...",
     },
     transient: true,
   });
@@ -31,25 +31,20 @@ const getExecute = async (options: ExecuteOptions, body: ChatRequest) => {
     type: "data-routing-status",
     data: {
       status: "complete",
-      message:
-        routingDecision.reason === "user-selected"
-          ? "Using selected model"
-          : routingDecision.model
-            ? `Routing to ${routingDecision.model}`
-            : "Using default model",
-      model: routingDecision.model,
+      message: routingDecision.agent
+        ? `Routing to ${routingDecision.agent}`
+        : "Using default agent",
+      agent: routingDecision.agent,
       reason: routingDecision.reason,
     },
     transient: true,
   });
 
   // Apply routing decision to request
+  // Note: Agent selection will be handled by the selected agent implementation
   const routedBody: ChatRequest = {
     ...body,
-    model: routingDecision.model || body.model,
-    excludeTools: routingDecision.excludeTools
-      ? [...(body.excludeTools || []), ...routingDecision.excludeTools]
-      : body.excludeTools,
+    // Agent routing is handled separately - body remains unchanged for now
   };
 
   const chatConfig = await setupChatRequest(routedBody);

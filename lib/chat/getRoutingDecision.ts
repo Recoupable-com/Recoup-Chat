@@ -1,35 +1,15 @@
-import { generateObject } from "ai";
-import { gateway } from "@ai-sdk/gateway";
-import { z } from "zod";
-import { LIGHTWEIGHT_MODEL, DEFAULT_MODEL } from "@/lib/consts";
 import { ChatRequest } from "./types";
-
-const RoutingDecisionSchema = z.object({
-  model: z.string().optional(),
-  excludeTools: z.array(z.string()).optional(),
-  reason: z.string().optional(),
-});
-
-type RoutingDecision = z.infer<typeof RoutingDecisionSchema>;
+import { routingAgent, type RoutingDecision } from "@/lib/agents/routingAgent";
 
 /**
- * Fast routing agent that determines optimal model and tool configuration.
+ * Fast routing agent that determines which specialized agent should handle the request.
  * Uses pattern matching for common cases, falls back to ToolLoopAgent for complex routing.
  * Designed to be fast and non-blocking.
  */
 export async function getRoutingDecision(
   body: ChatRequest
 ): Promise<RoutingDecision> {
-  const { messages, model: requestedModel } = body;
-
-  // If user explicitly selected a model, respect it (no routing needed)
-  if (requestedModel) {
-    return {
-      model: requestedModel,
-      excludeTools: undefined,
-      reason: "user-selected",
-    };
-  }
+  const { messages } = body;
 
   // Extract last user message for routing
   const lastMessage = messages[messages.length - 1];
@@ -41,50 +21,49 @@ export async function getRoutingDecision(
   ).toLowerCase();
 
   // Fast pattern-based routing for common cases (avoids LLM call)
-  const imageEditPatterns = [
-    "edit image",
-    "modify image",
-    "change image",
-    "adjust image",
+  const googleSheetsPatterns = [
+    "google sheets",
+    "googlesheet",
+    "spreadsheet",
+    "csv",
+    "excel",
+    "tabular data",
+    "data table",
+    "sheet",
+    "row",
+    "column",
+    "cell",
   ];
-  const hasImageEdit = imageEditPatterns.some((pattern) =>
+  const hasGoogleSheets = googleSheetsPatterns.some((pattern) =>
     messageText.includes(pattern)
   );
 
-  if (hasImageEdit) {
+  if (hasGoogleSheets) {
     return {
-      model: "openai/gpt-5", // Vision-capable model
-      excludeTools: ["generate_image"],
-      reason: "image-editing-detected",
+      agent: "googleSheetsAgent",
+      reason: "google-sheets-detected",
     };
   }
 
-  // For other cases, use generateObject (agent-like, fast, single step)
+  // For other cases, use ToolLoopAgent (fast, single step)
   try {
-    const { object } = await generateObject({
-      model: gateway(LIGHTWEIGHT_MODEL),
-      schema: RoutingDecisionSchema,
-      prompt: `You are a fast routing agent. Determine the optimal model for this message.
+    const result = await routingAgent.generate({
+      prompt: `Message: "${messageText.substring(0, 200)}"
 
-Message: "${messageText.substring(0, 200)}"
-
-Rules:
-- Image editing → "openai/gpt-5"
-- Complex reasoning → "openai/gpt-5"
-- Simple queries → "${DEFAULT_MODEL}"
-- Default → "${DEFAULT_MODEL}"
-
-Return routing decision. Only route if needed, otherwise leave model empty.`,
-      temperature: 0, // Deterministic for speed
+Quickly determine which agent should handle this. Return routing decision.`,
     });
 
-    return object as RoutingDecision;
+    return (
+      (result.output as RoutingDecision) || {
+        agent: "generalAgent",
+        reason: "agent-default",
+      }
+    );
   } catch (error) {
     console.error("Routing agent error:", error);
     // Fallback to default
     return {
-      model: DEFAULT_MODEL,
-      excludeTools: undefined,
+      agent: "generalAgent",
       reason: "routing-error-fallback",
     };
   }

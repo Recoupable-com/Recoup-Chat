@@ -73,7 +73,7 @@ export function ChatInput({
             <RoutingStatus
               status={routingStatus.status}
               message={routingStatus.message}
-              model={routingStatus.model}
+              agent={routingStatus.agent}
             />
           </div>
         )}

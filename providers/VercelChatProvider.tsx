@@ -25,7 +25,7 @@ interface VercelChatContextType {
   routingStatus: {
     status: "analyzing" | "complete";
     message: string;
-    model?: string;
+    agent?: string;
     reason?: string;
   } | null;
   handleSendMessage: (event: React.FormEvent<HTMLFormElement>) => Promise<void>;

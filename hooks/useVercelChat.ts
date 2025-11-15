@@ -198,7 +198,7 @@ export function useVercelChat({
   const [routingStatus, setRoutingStatus] = useState<{
     status: "analyzing" | "complete";
     message: string;
-    model?: string;
+    agent?: string;
     reason?: string;
   } | null>(null);
 
@@ -213,7 +213,7 @@ export function useVercelChat({
           const routingData = dataPart.data as {
             status: "analyzing" | "complete";
             message: string;
-            model?: string;
+            agent?: string;
             reason?: string;
           };
           setRoutingStatus(routingData);

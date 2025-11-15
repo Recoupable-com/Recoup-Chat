@@ -5,10 +5,10 @@ import { cn } from "@/lib/utils";
 interface RoutingStatusProps {
   status: "analyzing" | "complete";
   message: string;
-  model?: string;
+  agent?: string;
 }
 
-export function RoutingStatus({ status, message, model }: RoutingStatusProps) {
+export function RoutingStatus({ status, message, agent }: RoutingStatusProps) {
   return (
     <AnimatePresence>
       <motion.div
@@ -28,8 +28,8 @@ export function RoutingStatus({ status, message, model }: RoutingStatusProps) {
           <Loader className="h-3 w-3 animate-spin text-muted-foreground" />
         )}
         <span>{message}</span>
-        {model && status === "complete" && (
-          <span className="text-muted-foreground/60">• {model}</span>
+        {agent && status === "complete" && (
+          <span className="text-muted-foreground/60">• {agent}</span>
         )}
       </motion.div>
     </AnimatePresence>
