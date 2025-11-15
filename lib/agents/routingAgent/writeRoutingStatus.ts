@@ -1,6 +1,13 @@
 import { UIMessageStreamWriter } from "ai";
 import { ROUTING_STATUS_DATA_TYPE } from "@/lib/consts";
 
+export type RoutingStatusData = {
+  status: "analyzing" | "complete";
+  message: string;
+  agent?: string;
+  reason?: string;
+};
+
 /**
  * Writes routing status to the UI stream if writer is provided.
  */
