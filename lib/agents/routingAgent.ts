@@ -15,7 +15,7 @@ export type RoutingDecision = z.infer<typeof RoutingDecisionSchema>;
  */
 export const routingAgent = new ToolLoopAgent({
   model: LIGHTWEIGHT_MODEL,
-  instructions: `You are a fast routing agent that determines which specialized agent should handle user messages.`,
+  instructions: `You are a fast routing agent that determines which specialized agent should handle customer messages.`,
   output: Output.object({
     schema: RoutingDecisionSchema,
   }),
