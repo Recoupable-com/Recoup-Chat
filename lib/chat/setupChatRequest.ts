@@ -26,10 +26,7 @@ export async function setupChatRequest(
     timezone,
   } = body;
 
-  // Get routing decision if writer is provided (for UI updates)
-  if (writer) {
-    await getRoutingDecision(body, { writer });
-  }
+  await getRoutingDecision(body, writer);
 
   // Configure model and tools based on nano banana selection
   const nanoBananaConfig = handleNanoBananaModel(body);
