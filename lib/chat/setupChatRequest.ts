@@ -10,7 +10,7 @@ import { handleNanoBananaModel } from "./handleNanoBananaModel";
 import { extractImageUrlsFromMessages } from "./extractImageUrlsFromMessages";
 import { buildSystemPromptWithImages } from "./buildSystemPromptWithImages";
 import { setupToolsForRequest } from "./setupToolsForRequest";
-import { getRoutingDecision } from "./getRoutingDecision";
+import { getRoutingDecision } from "@/lib/agents/routingAgent";
 
 export async function setupChatRequest(
   body: ChatRequest,

@@ -1,7 +1,7 @@
 import { UIMessageStreamWriter } from "ai";
-import { ChatRequest } from "./types";
-import { routingAgent, type RoutingDecision } from "@/lib/agents/routingAgent";
-import { ROUTING_STATUS_DATA_TYPE } from "@/lib/consts";
+import { ChatRequest } from "@/lib/chat/types";
+import { routingAgent, type RoutingDecision } from "./routingAgent";
+import { writeRoutingStatus } from "./writeRoutingStatus";
 
 /**
  * Routing agent that determines which specialized agent should handle the request.
@@ -15,16 +15,7 @@ export async function getRoutingDecision(
   const { messages } = body;
 
   // Send routing status to UI immediately (persistent - will appear in message history)
-  if (writer) {
-    writer.write({
-      type: ROUTING_STATUS_DATA_TYPE,
-      id: "routing-status", // Use ID for reconciliation
-      data: {
-        status: "analyzing",
-        message: "Determining optimal agent...",
-      },
-    });
-  }
+  writeRoutingStatus(writer, "analyzing", "Determining optimal agent...");
 
   // Extract last user message for routing
   const lastMessage = messages[messages.length - 1];
@@ -48,20 +39,15 @@ Quickly determine which agent should handle this. Return routing decision.`,
     };
 
     // Update UI with routing result (persistent - will appear in message history)
-    if (writer) {
-      writer.write({
-        type: ROUTING_STATUS_DATA_TYPE,
-        id: "routing-status", // Use ID for reconciliation
-        data: {
-          status: "complete",
-          message: routingDecision.agent
-            ? `Routing to ${routingDecision.agent}`
-            : "Using default agent",
-          agent: routingDecision.agent,
-          reason: routingDecision.reason,
-        },
-      });
-    }
+    writeRoutingStatus(
+      writer,
+      "complete",
+      routingDecision.agent
+        ? `Routing to ${routingDecision.agent}`
+        : "Using default agent",
+      routingDecision.agent,
+      routingDecision.reason
+    );
 
     return routingDecision;
   } catch (error) {
@@ -73,18 +59,13 @@ Quickly determine which agent should handle this. Return routing decision.`,
     };
 
     // Update UI with fallback routing result
-    if (writer) {
-      writer.write({
-        type: ROUTING_STATUS_DATA_TYPE,
-        id: "routing-status", // Use ID for reconciliation
-        data: {
-          status: "complete",
-          message: "Using default agent",
-          agent: fallbackDecision.agent,
-          reason: fallbackDecision.reason,
-        },
-      });
-    }
+    writeRoutingStatus(
+      writer,
+      "complete",
+      "Using default agent",
+      fallbackDecision.agent,
+      fallbackDecision.reason
+    );
 
     return fallbackDecision;
   }
