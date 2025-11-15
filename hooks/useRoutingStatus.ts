@@ -7,6 +7,12 @@ export type RoutingStatus = {
   reason?: string;
 } | null;
 
+export interface AgentRouting {
+  routingStatus: RoutingStatus;
+  handleRoutingData: (data: unknown) => void;
+  clearRoutingStatus: () => void;
+}
+
 /**
  * Hook for managing routing status state.
  * Handles transient routing status data from the server.
