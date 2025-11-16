@@ -1,13 +1,15 @@
 import { stepCountIs, ToolLoopAgent } from "ai";
 import { DEFAULT_MODEL } from "@/lib/consts";
-import { ChatRequest } from "@/lib/chat/types";
+import { ChatRequest, RoutingDecision } from "@/lib/chat/types";
 import { extractImageUrlsFromMessages } from "@/lib/chat/extractImageUrlsFromMessages";
 import { buildSystemPromptWithImages } from "@/lib/chat/buildSystemPromptWithImages";
 import { getSystemPrompt } from "@/lib/prompts/getSystemPrompt";
 import { setupToolsForRequest } from "@/lib/chat/setupToolsForRequest";
 import { handleNanoBananaModel } from "@/lib/chat/handleNanoBananaModel";
 
-export default async function getGeneralAgent(body: ChatRequest) {
+export default async function getGeneralAgent(
+  body: ChatRequest
+): Promise<RoutingDecision> {
   const {
     accountId,
     messages,
@@ -37,12 +39,20 @@ export default async function getGeneralAgent(body: ChatRequest) {
 
   // Build General Agent
   const tools = setupToolsForRequest(finalExcludeTools);
+  const model = nanoBananaConfig.resolvedModel || DEFAULT_MODEL;
+  const stopWhen = stepCountIs(111);
 
   const agent = new ToolLoopAgent({
-    model: nanoBananaConfig.resolvedModel || DEFAULT_MODEL,
+    model,
     instructions,
     tools,
-    stopWhen: stepCountIs(111),
+    stopWhen,
   });
-  return agent;
+
+  return {
+    agent,
+    model,
+    instructions,
+    stopWhen,
+  };
 }

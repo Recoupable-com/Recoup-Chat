@@ -7,14 +7,13 @@ import getPrepareStepResult from "./toolChains/getPrepareStepResult";
 import { getRoutingDecision } from "@/lib/agents/routingAgent";
 
 export async function setupChatRequest(body: ChatRequest): Promise<ChatConfig> {
-  const agent = await getRoutingDecision(body);
+  const decision = await getRoutingDecision(body);
 
-  const model = agent.model;
-  const system = agent.instructions;
-  const tools = agent.tools;
-  const stopWhen = agent.stopWhen;
+  const system = decision.instructions;
+  const tools = decision.agent.tools;
 
-  const shouldPassImageUrlsThrough = agent.model === "fal-ai/nano-banana/edit";
+  const shouldPassImageUrlsThrough =
+    decision.model === "fal-ai/nano-banana/edit";
 
   const convertedMessages = convertToModelMessages(body.messages, {
     tools,
@@ -22,13 +21,11 @@ export async function setupChatRequest(body: ChatRequest): Promise<ChatConfig> {
   }).slice(-MAX_MESSAGES);
 
   const config: ChatConfig = {
-    agent,
-    model,
+    ...decision,
     system,
     messages: convertedMessages,
     experimental_generateMessageId: generateUUID,
     tools,
-    stopWhen,
     // Only override download behavior for nano banana image editing
     // For all other models/use cases (PDFs, audio, etc.), default download behavior is used
     ...(shouldPassImageUrlsThrough && {

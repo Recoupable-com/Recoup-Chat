@@ -1,8 +1,7 @@
-import { ChatRequest } from "@/lib/chat/types";
-import { routingAgent, type RoutingDecision } from "./routingAgent";
+import { ChatRequest, RoutingDecision } from "@/lib/chat/types";
+import { routingAgent } from "./routingAgent";
 import { getGoogleSheetsAgent } from "@/lib/agents/googleSheetsAgent";
 import { getGeneralAgent } from "@/lib/agents/generalAgent";
-import type { ToolLoopAgent } from "ai";
 import { convertToModelMessages } from "ai";
 
 /**
@@ -12,29 +11,29 @@ import { convertToModelMessages } from "ai";
  */
 export async function getRoutingDecision(
   body: ChatRequest
-): Promise<ToolLoopAgent> {
+): Promise<RoutingDecision> {
   const { messages } = body;
 
-  const generalAgent = await getGeneralAgent(body);
+  const generalAgentDecision = await getGeneralAgent(body);
 
   try {
     const result = await routingAgent.generate({
       messages: convertToModelMessages(messages),
     });
 
-    const routingDecision = (result.output as RoutingDecision) || {
+    const routingDecision = result.output || {
       agent: "generalAgent",
       reason: "agent-default",
     };
 
     if (routingDecision.agent === "googleSheetsAgent") {
-      const googleSheetsAgent = await getGoogleSheetsAgent(body);
-      return googleSheetsAgent;
+      const googleSheetsDecision = await getGoogleSheetsAgent(body);
+      return googleSheetsDecision;
     }
 
-    return generalAgent;
+    return generalAgentDecision;
   } catch (error) {
     console.error("Routing agent error:", error);
-    return generalAgent;
+    return generalAgentDecision;
   }
 }
