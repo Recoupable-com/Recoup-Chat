@@ -24,9 +24,9 @@ export interface ChatRequest {
 }
 
 export interface ChatConfig {
+  agent: ToolLoopAgent;
   model: string;
   system: string;
-  agent?: ToolLoopAgent;
   messages: ModelMessage[];
   experimental_generateMessageId: () => string;
   experimental_download?: (
