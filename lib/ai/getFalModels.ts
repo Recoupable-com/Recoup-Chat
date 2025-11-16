@@ -17,7 +17,7 @@ export const getFalModels = (): GatewayLanguageModelEntry[] => {
         output: "0.0000",
       },
       specification: {
-        specificationVersion: "v3",
+        specificationVersion: "v2",
         provider: "fal",
         modelId: "fal-ai/nano-banana/edit",
       },
@@ -31,7 +31,7 @@ export const getFalModels = (): GatewayLanguageModelEntry[] => {
         output: "0.001",
       },
       specification: {
-        specificationVersion: "v3",
+        specificationVersion: "v2",
         provider: "fal",
         modelId: "fal-ai/flux/dev",
       },
@@ -46,7 +46,7 @@ export const getFalModels = (): GatewayLanguageModelEntry[] => {
         output: "0.002",
       },
       specification: {
-        specificationVersion: "v3",
+        specificationVersion: "v2",
         provider: "fal",
         modelId: "fal-ai/flux-pro/kontext",
       },
@@ -61,7 +61,7 @@ export const getFalModels = (): GatewayLanguageModelEntry[] => {
         output: "0.001",
       },
       specification: {
-        specificationVersion: "v3",
+        specificationVersion: "v2",
         provider: "fal",
         modelId: "fal-ai/ideogram/character",
       },

@@ -13,8 +13,11 @@ This directory contains our **Braintrust-based evaluation framework** for testin
 
 ```bash
 # Run all evaluation scripts
-npx braintrust eval
+pnpm eval
 
 # Run specific evaluation
-npx braintrust eval evals/first-week-album-sales.eval.ts
+pnpm eval evals/first-week-album-sales.eval.ts
+
+# Or use npx directly with external packages flag
+npx braintrust eval --external-packages playwright playwright-core chromium-bidi @browserbasehq/stagehand
 ```
