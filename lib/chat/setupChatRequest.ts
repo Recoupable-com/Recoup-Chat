@@ -51,6 +51,8 @@ export async function setupChatRequest(body: ChatRequest): Promise<ChatConfig> {
     ignoreIncompleteToolCalls: true,
   }).slice(-MAX_MESSAGES);
 
+  const isGoogleSheetsAgent = routingDecision.agent === "googleSheetsAgent";
+
   const config: ChatConfig = {
     model: nanoBananaConfig.resolvedModel || DEFAULT_MODEL,
     system,
@@ -101,8 +103,11 @@ export async function setupChatRequest(body: ChatRequest): Promise<ChatConfig> {
     },
   };
 
-  if (routingDecision.agent === "googleSheetsAgent") {
-    config.agent = await getGoogleSheetsAgent(accountId);
+  if (isGoogleSheetsAgent) {
+    const googleSheetsAgent = await getGoogleSheetsAgent(accountId);
+    config.tools = googleSheetsAgent.tools;
+    config.agent = googleSheetsAgent;
   }
+
   return config;
 }
