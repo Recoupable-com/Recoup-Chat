@@ -41,7 +41,7 @@ export function MessageParts({
           const routingData = part.data as RoutingStatusData;
           return (
             <RoutingStatus
-              key={key}
+              key={ROUTING_STATUS_DATA_TYPE}
               status={routingData.status}
               message={routingData.message}
               agent={routingData.agent}
