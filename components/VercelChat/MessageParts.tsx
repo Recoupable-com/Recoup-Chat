@@ -10,10 +10,6 @@ import { EnhancedReasoning } from "@/components/reasoning/EnhancedReasoning";
 import { Actions, Action } from "@/components/actions";
 import { RefreshCcwIcon, Pencil } from "lucide-react";
 import CopyAction from "./CopyAction";
-import { RoutingStatus } from "./RoutingStatus";
-import { ROUTING_STATUS_DATA_TYPE } from "@/lib/consts";
-import { type RoutingStatusData } from "@/lib/agents/routingAgent";
-import { useVercelChatContext } from "@/providers/VercelChatProvider";
 
 interface MessagePartsProps {
   message: UIMessage;
@@ -32,30 +28,11 @@ export function MessageParts({
   setMessages,
   reload,
 }: MessagePartsProps) {
-  const { messages } = useVercelChatContext();
-  console.log("🚀 messages:", messages);
   return (
     <div className={cn("flex flex-col gap-4 w-full group")}>
       {message.parts?.map((part, partIndex) => {
         const { type } = part;
         const key = `message-${message.id}-part-${partIndex}`;
-
-        if (type === ROUTING_STATUS_DATA_TYPE) {
-          const routingData = part.data as RoutingStatusData;
-          const shouldHide =
-            routingData.status === "complete" &&
-            message.parts?.length === 1 &&
-            messages[2]?.parts?.[0]?.data?.status === "complete";
-          if (shouldHide) return null;
-          return (
-            <RoutingStatus
-              key={ROUTING_STATUS_DATA_TYPE}
-              status={routingData.status}
-              message={routingData.message}
-              agent={routingData.agent}
-            />
-          );
-        }
 
         if (type === "reasoning") {
           return (
