@@ -16,23 +16,20 @@ import {
 import ModelSelect from "@/components/ModelSelect";
 import FileMentionsInput from "./FileMentionsInput";
 
-interface ChatInputProps {
-  onSendMessage: (event: React.FormEvent<HTMLFormElement>) => void;
-  isGeneratingResponse: boolean;
-  onStop: () => void;
-  setInput: (input: string) => void;
-  input: string;
-}
-
-export function ChatInput({
-  onSendMessage,
-  isGeneratingResponse,
-  onStop,
-  setInput,
-  input,
-}: ChatInputProps) {
+export function ChatInput() {
   const { selectedArtist, sorted } = useArtistProvider();
-  const { hasPendingUploads, messages, status, model, isLoadingSignedUrls } = useVercelChatContext();
+  const {
+    hasPendingUploads,
+    messages,
+    status,
+    model,
+    isLoadingSignedUrls,
+    handleSendMessage,
+    isGeneratingResponse,
+    stop,
+    setInput,
+    input,
+  } = useVercelChatContext();
   const isDisabled = !selectedArtist && sorted.length > 0;
 
   const handleSend = (event: React.FormEvent<HTMLFormElement>) => {
@@ -40,14 +37,15 @@ export function ChatInput({
 
     // Allow stop action regardless of input state
     if (isGeneratingResponse) {
-      onStop();
+      stop();
       return;
     }
 
     // Only check input requirements for sending new messages
-    if (input === "" || isDisabled || hasPendingUploads || isLoadingSignedUrls) return;
+    if (input === "" || isDisabled || hasPendingUploads || isLoadingSignedUrls)
+      return;
 
-    onSendMessage(event);
+    handleSendMessage(event);
   };
 
   return (
@@ -85,7 +83,6 @@ export function ChatInput({
               <PureAttachmentsButton />
               {/* YouTube connect button removed from ChatInput UI intentionally; preserved for future reuse */}
               <ModelSelect />
-              
             </PromptInputTools>
             <PromptInputSubmit
               disabled={isDisabled || hasPendingUploads || isLoadingSignedUrls}

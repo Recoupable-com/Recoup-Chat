@@ -1,22 +1,11 @@
-import { ChatStatus, UIMessage } from "ai";
+import { UIMessage } from "ai";
 import { useState } from "react";
-import { UseChatHelpers } from "@ai-sdk/react";
 import { motion } from "framer-motion";
 import { AnimatePresence } from "framer-motion";
 import { cn } from "@/lib/utils";
 import { MessageParts } from "./MessageParts";
 
-const Message = ({
-  message,
-  setMessages,
-  reload,
-  status,
-}: {
-  message: UIMessage;
-  setMessages: UseChatHelpers<UIMessage>["setMessages"];
-  reload: () => void;
-  status: ChatStatus;
-}) => {
+const Message = ({ message }: { message: UIMessage }) => {
   const [mode, setMode] = useState<"view" | "edit">("view");
 
   return (
@@ -38,14 +27,7 @@ const Message = ({
             }
           )}
         >
-          <MessageParts
-            message={message}
-            status={status}
-            mode={mode}
-            setMode={setMode}
-            setMessages={setMessages}
-            reload={reload}
-          />
+          <MessageParts message={message} mode={mode} setMode={setMode} />
         </div>
       </motion.div>
     </AnimatePresence>

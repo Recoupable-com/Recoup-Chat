@@ -2,8 +2,6 @@
 
 import { memo } from "react";
 import { SpinnerIcon } from "./icons";
-import { ChatStatus, UIMessage } from "ai";
-import { UseChatHelpers } from "@ai-sdk/react";
 import { Response } from "@/components/ai-elements/response";
 import {
   Conversation,
@@ -12,6 +10,7 @@ import {
 } from "@/components/ai-elements/conversation";
 import Message from "./message";
 import { cleanFileMentions } from "@/lib/chat/cleanFileMentions";
+import { useVercelChatContext } from "@/providers/VercelChatProvider";
 
 interface TextMessagePartProps {
   text: string;
@@ -29,20 +28,11 @@ export function TextMessagePart({ text }: TextMessagePartProps) {
 }
 
 interface MessagesProps {
-  messages: Array<UIMessage>;
-  status: ChatStatus;
-  setMessages: UseChatHelpers<UIMessage>["setMessages"];
-  reload: () => void;
   children?: React.ReactNode;
 }
 
-const MessagesComponent = ({
-  messages,
-  status,
-  setMessages,
-  reload,
-  children,
-}: MessagesProps) => {
+const MessagesComponent = ({ children }: MessagesProps) => {
+  const { messages, status } = useVercelChatContext();
   // Conversation component handles scrolling automatically
   // No need for manual scroll logic
 
@@ -51,13 +41,7 @@ const MessagesComponent = ({
       <ConversationContent className="flex flex-col gap-8 items-center w-full pt-6 pb-16 md:pt-8 md:pb-20">
         {children || null}
         {messages.map((message) => (
-          <Message
-            status={status}
-            key={message.id}
-            message={message}
-            setMessages={setMessages}
-            reload={reload}
-          />
+          <Message key={message.id} message={message} />
         ))}
 
         {(status === "submitted" || status === "streaming") && (
@@ -75,11 +59,6 @@ const MessagesComponent = ({
 
 export const Messages = memo(
   MessagesComponent,
-  (prevProps: MessagesProps, nextProps: MessagesProps) => {
-    return (
-      prevProps.status === nextProps.status &&
-      prevProps.messages === nextProps.messages &&
-      prevProps.children === nextProps.children
-    );
-  }
+  (prevProps: MessagesProps, nextProps: MessagesProps) =>
+    prevProps.children === nextProps.children
 );
