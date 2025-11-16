@@ -2,8 +2,6 @@
 
 import { memo } from "react";
 import { SpinnerIcon } from "./icons";
-import { ChatStatus, UIMessage } from "ai";
-import { UseChatHelpers } from "@ai-sdk/react";
 import { Response } from "@/components/ai-elements/response";
 import {
   Conversation,
@@ -28,21 +26,13 @@ export function TextMessagePart({ text }: TextMessagePartProps) {
   );
 }
 
+import { useVercelChatContext } from "@/providers/VercelChatProvider";
 interface MessagesProps {
-  messages: Array<UIMessage>;
-  status: ChatStatus;
-  setMessages: UseChatHelpers<UIMessage>["setMessages"];
-  reload: () => void;
   children?: React.ReactNode;
 }
 
-const MessagesComponent = ({
-  messages,
-  status,
-  setMessages,
-  reload,
-  children,
-}: MessagesProps) => {
+const MessagesComponent = ({ children }: MessagesProps) => {
+  const { messages, status, setMessages, reload } = useVercelChatContext();
   // Conversation component handles scrolling automatically
   // No need for manual scroll logic
 
@@ -75,11 +65,6 @@ const MessagesComponent = ({
 
 export const Messages = memo(
   MessagesComponent,
-  (prevProps: MessagesProps, nextProps: MessagesProps) => {
-    return (
-      prevProps.status === nextProps.status &&
-      prevProps.messages === nextProps.messages &&
-      prevProps.children === nextProps.children
-    );
-  }
+  (prevProps: MessagesProps, nextProps: MessagesProps) =>
+    prevProps.children === nextProps.children
 );

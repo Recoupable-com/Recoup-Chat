@@ -52,8 +52,6 @@ function ChatContentMemoized({
     stop,
     setInput,
     input,
-    setMessages,
-    reload,
   } = useVercelChatContext();
   const { roomId } = useParams();
   useAutoLogin();
@@ -131,12 +129,7 @@ function ChatContentMemoized({
         </>
       ) : (
         <>
-          <Messages
-            messages={messages}
-            status={status}
-            setMessages={setMessages}
-            reload={reload}
-          >
+          <Messages>
             {reportId && (
               <div className="w-full max-w-3xl mx-auto">
                 <ChatReport reportId={reportId} />
