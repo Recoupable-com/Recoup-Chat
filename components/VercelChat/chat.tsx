@@ -18,7 +18,7 @@ import { UIMessage } from "ai";
 import { useDropzone } from "@/hooks/useDropzone";
 import FileDragOverlay from "./FileDragOverlay";
 import { Loader } from "lucide-react";
-import { memo, useCallback } from "react";
+import { memo } from "react";
 
 interface ChatProps {
   id: string;
@@ -42,17 +42,7 @@ function ChatContentMemoized({
   reportId?: string;
   id: string;
 }) {
-  const {
-    messages,
-    status,
-    isLoading,
-    hasError,
-    isGeneratingResponse,
-    handleSendMessage,
-    stop,
-    setInput,
-    input,
-  } = useVercelChatContext();
+  const { messages, status, isLoading, hasError } = useVercelChatContext();
   const { roomId } = useParams();
   useAutoLogin();
   useArtistFromRoom(id);
@@ -62,14 +52,6 @@ function ChatContentMemoized({
     shouldBeVisible: messages.length === 0 && !reportId && status === "ready",
     deps: [messages.length, reportId, status],
   });
-
-  // Memoize the handler to prevent re-renders
-  const handleSendMessageMemoized = useCallback(
-    (event: React.FormEvent<HTMLFormElement>) => {
-      handleSendMessage(event);
-    },
-    [handleSendMessage]
-  );
 
   if (isLoading) {
     return roomId ? (
@@ -112,13 +94,7 @@ function ChatContentMemoized({
           <div className="w-full max-w-3xl mx-auto">
             <ChatGreeting isVisible={isVisible} />
             <div className="mt-1 md:mt-6">
-              <ChatInput
-                input={input}
-                setInput={setInput}
-                onSendMessage={handleSendMessageMemoized}
-                isGeneratingResponse={isGeneratingResponse}
-                onStop={stop}
-              />
+              <ChatInput />
             </div>
           </div>
 
@@ -137,13 +113,7 @@ function ChatContentMemoized({
             )}
           </Messages>
           <div className="w-full max-w-3xl mx-auto">
-            <ChatInput
-              input={input}
-              setInput={setInput}
-              onSendMessage={handleSendMessageMemoized}
-              isGeneratingResponse={isGeneratingResponse}
-              onStop={stop}
-            />
+            <ChatInput />
           </div>
         </>
       )}
