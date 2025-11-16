@@ -97,6 +97,8 @@ function ChatContentMemoized({
               <ChatInput />
             </div>
           </div>
+          {/* Spacer to balance and bottom section */}
+          <div className="flex-1" />
         </>
       ) : (
         <>
