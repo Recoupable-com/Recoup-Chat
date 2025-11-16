@@ -1,7 +1,5 @@
-import { UIMessageStreamWriter } from "ai";
 import { ChatRequest } from "@/lib/chat/types";
 import { routingAgent, type RoutingDecision } from "./routingAgent";
-import { writeRoutingStatus } from "./writeRoutingStatus";
 import { getLastMessageText } from "@/lib/messages/getLastMessage";
 
 /**
@@ -10,13 +8,9 @@ import { getLastMessageText } from "@/lib/messages/getLastMessage";
  * Updates UI with routing status during the process if writer is provided.
  */
 export async function getRoutingDecision(
-  body: ChatRequest,
-  writer?: UIMessageStreamWriter
+  body: ChatRequest
 ): Promise<RoutingDecision> {
   const { messages } = body;
-
-  // Send routing status to UI immediately (persistent - will appear in message history)
-  writeRoutingStatus(writer, "analyzing", "Determining optimal agent...");
 
   const messageText = getLastMessageText(messages);
 
@@ -32,17 +26,6 @@ Quickly determine which agent should handle this. Return routing decision.`,
       reason: "agent-default",
     };
 
-    // Update UI with routing result (persistent - will appear in message history)
-    writeRoutingStatus(
-      writer,
-      "complete",
-      routingDecision.agent
-        ? `Routing to ${routingDecision.agent}`
-        : "Using default agent",
-      routingDecision.agent,
-      routingDecision.reason
-    );
-
     return routingDecision;
   } catch (error) {
     console.error("Routing agent error:", error);
@@ -51,15 +34,6 @@ Quickly determine which agent should handle this. Return routing decision.`,
       agent: "generalAgent",
       reason: "routing-error-fallback",
     };
-
-    // Update UI with fallback routing result
-    writeRoutingStatus(
-      writer,
-      "complete",
-      "Using default agent",
-      fallbackDecision.agent,
-      fallbackDecision.reason
-    );
 
     return fallbackDecision;
   }
