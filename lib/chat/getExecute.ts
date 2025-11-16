@@ -1,4 +1,4 @@
-import { streamText, UIMessageStreamWriter } from "ai";
+import { UIMessageStreamWriter } from "ai";
 import { ChatRequest } from "./types";
 import { setupChatRequest } from "./setupChatRequest";
 import { handleChatCredits } from "@/lib/credits/handleChatCredits";
@@ -9,14 +9,12 @@ type ExecuteOptions = {
 
 const getExecute = async (options: ExecuteOptions, body: ChatRequest) => {
   const { writer } = options;
-  console.log("🚀 getExecute START - Model:", body.model);
-  
-  const chatConfig = await setupChatRequest(body);
-  console.log("🚀 getExecute - Chat config ready, model:", chatConfig.model);
 
+  const chatConfig = await setupChatRequest(body);
+  const { agent } = chatConfig;
   try {
-    const result = streamText(chatConfig);
-    console.log("🚀 getExecute - Starting stream...");
+    const result = await agent.stream(chatConfig);
+
     writer.merge(result.toUIMessageStream());
     const usage = await result.usage;
     console.log("🚀 getExecute - Stream complete, usage:", usage);

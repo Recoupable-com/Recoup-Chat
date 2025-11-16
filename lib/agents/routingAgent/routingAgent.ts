@@ -7,8 +7,6 @@ const RoutingDecisionSchema = z.object({
   reason: z.string().optional(),
 });
 
-export type RoutingDecision = z.infer<typeof RoutingDecisionSchema>;
-
 /**
  * Fast routing agent that determines which specialized agent should handle the request.
  * Configured for single-step execution to minimize latency.
