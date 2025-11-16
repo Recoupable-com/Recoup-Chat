@@ -1,6 +1,8 @@
 import { ChatRequest } from "@/lib/chat/types";
 import { routingAgent, type RoutingDecision } from "./routingAgent";
-import { getLastMessageText } from "@/lib/messages/getLastMessage";
+import { getGoogleSheetsAgent } from "../googleSheetsAgent/googleSheetsAgent";
+import { getGeneralAgent } from "../generalAgent";
+import type { ToolLoopAgent } from "ai";
 
 /**
  * Routing agent that determines which specialized agent should handle the request.
@@ -9,16 +11,15 @@ import { getLastMessageText } from "@/lib/messages/getLastMessage";
  */
 export async function getRoutingDecision(
   body: ChatRequest
-): Promise<RoutingDecision> {
+): Promise<ToolLoopAgent> {
   const { messages } = body;
 
-  const messageText = getLastMessageText(messages);
+  const generalAgent = await getGeneralAgent(body);
 
   try {
     const result = await routingAgent.generate({
-      prompt: `Message: "${messageText.substring(0, 200)}"
-
-Quickly determine which agent should handle this. Return routing decision.`,
+      messages,
+      prompt: `Quickly determine which agent should handle this request. Return routing decision.`,
     });
 
     const routingDecision = (result.output as RoutingDecision) || {
@@ -26,15 +27,14 @@ Quickly determine which agent should handle this. Return routing decision.`,
       reason: "agent-default",
     };
 
-    return routingDecision;
+    if (routingDecision.agent === "googleSheetsAgent") {
+      const googleSheetsAgent = await getGoogleSheetsAgent(body);
+      return googleSheetsAgent;
+    }
+
+    return generalAgent;
   } catch (error) {
     console.error("Routing agent error:", error);
-    // Fallback to default
-    const fallbackDecision: RoutingDecision = {
-      agent: "generalAgent",
-      reason: "routing-error-fallback",
-    };
-
-    return fallbackDecision;
+    return generalAgent;
   }
 }
