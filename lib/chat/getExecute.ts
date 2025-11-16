@@ -2,6 +2,7 @@ import { streamText, UIMessageStreamWriter } from "ai";
 import { ChatRequest } from "./types";
 import { setupChatRequest } from "./setupChatRequest";
 import { handleChatCredits } from "@/lib/credits/handleChatCredits";
+import { getGoogleSheetsAgent } from "@/lib/agents/googleSheetsAgent/googleSheetsAgent";
 
 type ExecuteOptions = {
   writer: UIMessageStreamWriter;
@@ -9,13 +10,19 @@ type ExecuteOptions = {
 
 const getExecute = async (options: ExecuteOptions, body: ChatRequest) => {
   const { writer } = options;
-  console.log("🚀 getExecute START - Model:", body.model);
-  
+
   const chatConfig = await setupChatRequest(body);
-  console.log("🚀 getExecute - Chat config ready, model:", chatConfig.model);
+  console.log("chatConfig agent", chatConfig.agent);
 
   try {
-    const result = streamText(chatConfig);
+    let result;
+    if (chatConfig.agent) {
+      const googleSheetsAgent = await getGoogleSheetsAgent(body.accountId);
+      result = await googleSheetsAgent.stream(chatConfig);
+    } else {
+      result = streamText(chatConfig);
+    }
+
     console.log("🚀 getExecute - Starting stream...");
     writer.merge(result.toUIMessageStream());
     const usage = await result.usage;

@@ -11,6 +11,7 @@ import { extractImageUrlsFromMessages } from "./extractImageUrlsFromMessages";
 import { buildSystemPromptWithImages } from "./buildSystemPromptWithImages";
 import { setupToolsForRequest } from "./setupToolsForRequest";
 import { getRoutingDecision } from "@/lib/agents/routingAgent";
+import { getGoogleSheetsAgent } from "../agents/googleSheetsAgent/googleSheetsAgent";
 
 export async function setupChatRequest(body: ChatRequest): Promise<ChatConfig> {
   const {
@@ -23,7 +24,8 @@ export async function setupChatRequest(body: ChatRequest): Promise<ChatConfig> {
     timezone,
   } = body;
 
-  await getRoutingDecision(body);
+  const routingDecision = await getRoutingDecision(body);
+  console.log("routingDecision", routingDecision);
 
   // Configure model and tools based on nano banana selection
   const nanoBananaConfig = handleNanoBananaModel(body);
@@ -99,5 +101,8 @@ export async function setupChatRequest(body: ChatRequest): Promise<ChatConfig> {
     },
   };
 
+  if (routingDecision.agent === "googleSheetsAgent") {
+    config.agent = await getGoogleSheetsAgent(accountId);
+  }
   return config;
 }

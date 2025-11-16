@@ -7,6 +7,7 @@ import {
   type ToolSet,
   type StopCondition,
   type PrepareStepFunction,
+  type ToolLoopAgent,
 } from "ai";
 
 export interface ChatRequest {
@@ -25,9 +26,14 @@ export interface ChatRequest {
 export interface ChatConfig {
   model: string;
   system: string;
+  agent?: ToolLoopAgent;
   messages: ModelMessage[];
   experimental_generateMessageId: () => string;
-  experimental_download?: (files: Array<{url: URL; isUrlSupportedByModel: boolean}>) => Promise<Array<{data: Uint8Array; mediaType: string | undefined} | null>>;
+  experimental_download?: (
+    files: Array<{ url: URL; isUrlSupportedByModel: boolean }>
+  ) => Promise<
+    Array<{ data: Uint8Array; mediaType: string | undefined } | null>
+  >;
   tools: ToolSet;
   prepareStep?: PrepareStepFunction;
   providerOptions?: {
