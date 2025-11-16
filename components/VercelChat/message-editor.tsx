@@ -5,14 +5,11 @@ import { useEffect, useRef, useState, useCallback } from "react";
 import { Textarea } from "@/components/ui/textarea";
 import { clientDeleteTrailingMessages } from "@/lib/messages/clientDeleteTrailingMessages";
 import { EditingMessageProps } from "./EditingMessage";
+import { useVercelChatContext } from "@/providers/VercelChatProvider";
 import { TextUIPart } from "ai";
 
-export function MessageEditor({
-  message,
-  setMode,
-  setMessages,
-  reload,
-}: EditingMessageProps) {
+export function MessageEditor({ message, setMode }: EditingMessageProps) {
+  const { setMessages, reload } = useVercelChatContext();
   const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
   const text = (message.parts[0] as TextUIPart)?.text || "";
   const [draftContent, setDraftContent] = useState<string>(text);

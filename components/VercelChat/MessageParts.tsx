@@ -1,6 +1,5 @@
-import { ChatStatus, ToolUIPart, UIMessage, isToolUIPart } from "ai";
+import { ToolUIPart, UIMessage, isToolUIPart } from "ai";
 import { Dispatch, SetStateAction } from "react";
-import { UseChatHelpers } from "@ai-sdk/react";
 import { cn } from "@/lib/utils";
 import ViewingMessage from "./ViewingMessage";
 import EditingMessage from "./EditingMessage";
@@ -10,24 +9,16 @@ import { EnhancedReasoning } from "@/components/reasoning/EnhancedReasoning";
 import { Actions, Action } from "@/components/actions";
 import { RefreshCcwIcon, Pencil } from "lucide-react";
 import CopyAction from "./CopyAction";
+import { useVercelChatContext } from "@/providers/VercelChatProvider";
 
 interface MessagePartsProps {
   message: UIMessage;
-  status: ChatStatus;
   mode: "view" | "edit";
   setMode: Dispatch<SetStateAction<"view" | "edit">>;
-  setMessages: UseChatHelpers<UIMessage>["setMessages"];
-  reload: () => void;
 }
 
-export function MessageParts({
-  message,
-  status,
-  mode,
-  setMode,
-  setMessages,
-  reload,
-}: MessagePartsProps) {
+export function MessageParts({ message, mode, setMode }: MessagePartsProps) {
+  const { status, reload } = useVercelChatContext();
   return (
     <div className={cn("flex flex-col gap-4 w-full group")}>
       {message.parts?.map((part, partIndex) => {
@@ -97,13 +88,7 @@ export function MessageParts({
 
           if (mode === "edit") {
             return (
-              <EditingMessage
-                key={key}
-                message={message}
-                setMode={setMode}
-                setMessages={setMessages}
-                reload={reload}
-              />
+              <EditingMessage key={key} message={message} setMode={setMode} />
             );
           }
         }
