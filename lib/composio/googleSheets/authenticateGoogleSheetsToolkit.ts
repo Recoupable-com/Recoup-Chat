@@ -1,3 +1,4 @@
+import { CreateConnectedAccountOptions } from "@composio/core";
 import { getComposioClient } from "../client";
 
 const googleSheetsAuthConfigId = process.env
@@ -8,14 +9,17 @@ if (!googleSheetsAuthConfigId) {
   );
 }
 
-async function authenticateGoogleSheetsToolkit(userId: string) {
+async function authenticateGoogleSheetsToolkit(
+  userId: string,
+  options?: CreateConnectedAccountOptions
+) {
   const composio = await getComposioClient();
   const connectionRequest = await composio.connectedAccounts.initiate(
     userId,
-    googleSheetsAuthConfigId
+    googleSheetsAuthConfigId,
+    options
   );
   return connectionRequest;
 }
 
 export default authenticateGoogleSheetsToolkit;
-

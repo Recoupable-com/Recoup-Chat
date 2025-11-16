@@ -8,7 +8,7 @@ export default async function getGoogleSheetsAgent(
 ): Promise<RoutingDecision> {
   const { accountId, model: bodyModel } = body;
 
-  const tools = await getGoogleSheetsTools(accountId);
+  const tools = await getGoogleSheetsTools(body);
   const model = bodyModel || DEFAULT_MODEL;
   const stopWhen = stepCountIs(111);
   const instructions = `You are a Google Sheets agent.
