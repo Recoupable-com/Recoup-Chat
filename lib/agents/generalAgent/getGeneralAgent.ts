@@ -7,7 +7,7 @@ import { getSystemPrompt } from "@/lib/prompts/getSystemPrompt";
 import { setupToolsForRequest } from "@/lib/chat/setupToolsForRequest";
 import { handleNanoBananaModel } from "@/lib/chat/handleNanoBananaModel";
 
-export const getGeneralAgent = async (body: ChatRequest) => {
+export default async function getGeneralAgent(body: ChatRequest) {
   const {
     accountId,
     messages,
@@ -45,4 +45,4 @@ export const getGeneralAgent = async (body: ChatRequest) => {
     stopWhen: stepCountIs(111),
   });
   return agent;
-};
+}

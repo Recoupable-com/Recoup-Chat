@@ -1,7 +1,7 @@
 import { ChatRequest } from "@/lib/chat/types";
 import { routingAgent, type RoutingDecision } from "./routingAgent";
-import { getGoogleSheetsAgent } from "../googleSheetsAgent/googleSheetsAgent";
-import { getGeneralAgent } from "../generalAgent";
+import { getGoogleSheetsAgent } from "@/lib/agents/googleSheetsAgent";
+import { getGeneralAgent } from "@/lib/agents/generalAgent";
 import type { ToolLoopAgent } from "ai";
 
 /**

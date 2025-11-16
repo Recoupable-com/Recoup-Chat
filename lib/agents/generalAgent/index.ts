@@ -1,1 +1,3 @@
-export { getGeneralAgent } from "./generalAgent";
+import getGeneralAgent from "./getGeneralAgent";
+
+export { getGeneralAgent };

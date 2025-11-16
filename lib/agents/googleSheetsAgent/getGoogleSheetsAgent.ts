@@ -7,7 +7,7 @@ import { ChatRequest } from "@/lib/chat/types";
  * Google Sheets agent configured for quick, single-step decisions about sheets operations.
  * It outputs a structured task that downstream tools can execute.
  */
-export const getGoogleSheetsAgent = async (body: ChatRequest) => {
+export default async function getGoogleSheetsAgent(body: ChatRequest) {
   const { accountId, model } = body;
 
   // Get tools for Google Sheets
@@ -23,4 +23,4 @@ export const getGoogleSheetsAgent = async (body: ChatRequest) => {
     stopWhen: stepCountIs(111),
   });
   return agent;
-};
+}
