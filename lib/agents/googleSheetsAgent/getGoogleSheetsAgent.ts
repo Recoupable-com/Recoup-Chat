@@ -9,9 +9,8 @@ export default async function getGoogleSheetsAgent(
   const { accountId, model: bodyModel } = body;
 
   const tools = await getGoogleSheetsTools(accountId);
-  const isAuthenticated = !tools.googleSheetsLoginTool;
   const model = bodyModel || DEFAULT_MODEL;
-  const stopWhen = stepCountIs(isAuthenticated ? 111 : 2);
+  const stopWhen = stepCountIs(111);
   const instructions = `You are a Google Sheets agent.
   account_id: ${accountId}`;
 
@@ -19,7 +18,7 @@ export default async function getGoogleSheetsAgent(
     model,
     instructions,
     tools,
-    toolChoice: isAuthenticated ? "auto" : "required",
+    toolChoice: stepCountIs(1) ? "required" : "auto",
     stopWhen,
   });
 
