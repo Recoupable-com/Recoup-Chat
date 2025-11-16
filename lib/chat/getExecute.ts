@@ -1,8 +1,7 @@
-import { streamText, UIMessageStreamWriter } from "ai";
+import { UIMessageStreamWriter } from "ai";
 import { ChatRequest } from "./types";
 import { setupChatRequest } from "./setupChatRequest";
 import { handleChatCredits } from "@/lib/credits/handleChatCredits";
-import { getGoogleSheetsAgent } from "@/lib/agents/googleSheetsAgent/googleSheetsAgent";
 
 type ExecuteOptions = {
   writer: UIMessageStreamWriter;
@@ -12,18 +11,10 @@ const getExecute = async (options: ExecuteOptions, body: ChatRequest) => {
   const { writer } = options;
 
   const chatConfig = await setupChatRequest(body);
-  console.log("chatConfig agent", chatConfig.agent);
-
+  const { agent } = chatConfig;
   try {
-    let result;
-    if (chatConfig.agent) {
-      const googleSheetsAgent = await getGoogleSheetsAgent(body.accountId);
-      result = await googleSheetsAgent.stream(chatConfig);
-    } else {
-      result = streamText(chatConfig);
-    }
+    const result = await agent.stream(chatConfig);
 
-    console.log("🚀 getExecute - Starting stream...");
     writer.merge(result.toUIMessageStream());
     const usage = await result.usage;
     console.log("🚀 getExecute - Stream complete, usage:", usage);
