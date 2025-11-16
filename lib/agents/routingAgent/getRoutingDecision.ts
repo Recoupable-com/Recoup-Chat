@@ -20,7 +20,6 @@ export async function getRoutingDecision(
   try {
     const result = await routingAgent.generate({
       messages: convertToModelMessages(messages),
-      prompt: `Quickly determine which agent should handle this request. Return routing decision.`,
     });
 
     const routingDecision = (result.output as RoutingDecision) || {
