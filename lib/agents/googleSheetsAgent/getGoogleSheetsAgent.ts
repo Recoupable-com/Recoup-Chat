@@ -18,8 +18,14 @@ export default async function getGoogleSheetsAgent(
     model,
     instructions,
     tools,
-    toolChoice: stepCountIs(1) ? "required" : "auto",
     stopWhen,
+    prepareStep: (options) => {
+      return stepCountIs(1)
+        ? {
+            toolChoice: "required",
+          }
+        : options;
+    },
   });
 
   return {
