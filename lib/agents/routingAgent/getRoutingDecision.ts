@@ -3,6 +3,7 @@ import { routingAgent, type RoutingDecision } from "./routingAgent";
 import { getGoogleSheetsAgent } from "@/lib/agents/googleSheetsAgent";
 import { getGeneralAgent } from "@/lib/agents/generalAgent";
 import type { ToolLoopAgent } from "ai";
+import { convertToModelMessages } from "ai";
 
 /**
  * Routing agent that determines which specialized agent should handle the request.
@@ -18,7 +19,7 @@ export async function getRoutingDecision(
 
   try {
     const result = await routingAgent.generate({
-      messages,
+      messages: convertToModelMessages(messages),
       prompt: `Quickly determine which agent should handle this request. Return routing decision.`,
     });
 
