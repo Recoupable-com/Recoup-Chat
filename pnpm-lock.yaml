@@ -33,11 +33,11 @@ importers:
         specifier: ^0.38.8
         version: 0.38.17(@tanstack/query-core@5.83.0)(@types/react@18.3.23)(bufferutil@4.0.9)(encoding@0.1.13)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(typescript@5.8.3)(use-sync-external-store@1.4.0(react@18.3.1))(utf-8-validate@5.0.10)(zod@3.25.76)
       '@composio/core':
-        specifier: ^0.1.55
-        version: 0.1.55(ws@8.18.0(bufferutil@4.0.9)(utf-8-validate@5.0.10))(zod@3.25.76)
+        specifier: ^0.2.4
+        version: 0.2.4(ws@8.18.0(bufferutil@4.0.9)(utf-8-validate@5.0.10))(zod@3.25.76)
       '@composio/vercel':
-        specifier: ^0.2.11
-        version: 0.2.11(@composio/core@0.1.55(ws@8.18.0(bufferutil@4.0.9)(utf-8-validate@5.0.10))(zod@3.25.76))(ai@6.0.0-beta.99(zod@3.25.76))
+        specifier: ^0.2.16
+        version: 0.2.16(@composio/core@0.2.4(ws@8.18.0(bufferutil@4.0.9)(utf-8-validate@5.0.10))(zod@3.25.76))(ai@6.0.0-beta.99(zod@3.25.76))
       '@fal-ai/client':
         specifier: ^1.6.2
         version: 1.6.2
@@ -1128,23 +1128,23 @@ packages:
   '@coinbase/wallet-sdk@4.3.6':
     resolution: {integrity: sha512-4q8BNG1ViL4mSAAvPAtpwlOs1gpC+67eQtgIwNvT3xyeyFFd+guwkc8bcX5rTmQhXpqnhzC4f0obACbP9CqMSA==}
 
-  '@composio/client@0.1.0-alpha.37':
-    resolution: {integrity: sha512-2YzXiRXlxqOgEz7nEh1aKdJ9vwQRb69+RX6UH+LTDmuTwW+pOjI2qbhIBxTbP2z9e2SyHVG0/AtMxc9tR5jU0w==}
+  '@composio/client@0.1.0-alpha.40':
+    resolution: {integrity: sha512-xkd+LseCiuFLxiXXtjFgON0bO4M/1AsBQD4omhf2nl5tXJI0sXj72wCf1EXhT2jIu5pgJqJ4H64ZzwoM0fHDvg==}
 
-  '@composio/core@0.1.55':
-    resolution: {integrity: sha512-GLSWTS/gZeycQ7W2wSZQ21DKV+LC6WTAilhSj+JG9Apslx3re9luF1Lyblm4UMSf4DzYWKOrtipwQOaeg7bmTg==}
+  '@composio/core@0.2.4':
+    resolution: {integrity: sha512-fwTco88X7nsoG7cs5iea0dxTBaygdqdajfIsJYVxJWugdhbGM9IQcR6m9sU1G5toiRogwX1bIdxeH4kWxl4RBg==}
     peerDependencies:
       zod: '>=3.25.76 <5'
 
-  '@composio/json-schema-to-zod@0.1.16':
-    resolution: {integrity: sha512-vu6RUQTWDW/0wLDWsQHtWJ97JsnMjA1olTQwVD88BAtKZTdDLuzjnGRxSllxp5JG/GntnovUphraZWcWfe80eQ==}
+  '@composio/json-schema-to-zod@0.1.18':
+    resolution: {integrity: sha512-y/1AXznIZE92KTKmDCFa2S4/+WulfdrO1RH65fy8CG7sXJVxOExktUiQUrvatnZZ5LzXUJqke9W+fMxLBvm5jw==}
     peerDependencies:
-      zod: '>=3.25.76 <5'
+      zod: '>=3.25.76 <4 || >=4.1 <5'
 
-  '@composio/vercel@0.2.11':
-    resolution: {integrity: sha512-grU+e0C9W6hNaUp8k/WfG8F7P+YQYe3hQ9GC5Tk0Ilc7D1raDK5ZGCPmNes91a9eJZmvzmNhvGii+GdT3H7sTg==}
+  '@composio/vercel@0.2.16':
+    resolution: {integrity: sha512-BbATAQlcey8CKWsnpA4xZupBX/rXLrYUtNQ9xe9OapFKVWEXZtNfg6+/YhUrL+92oPxK2bG13c4IpBUteAE7vA==}
     peerDependencies:
-      '@composio/core': 0.1.55
+      '@composio/core': 0.2.4
       ai: ^5.0.44
 
   '@crawlee/types@3.13.10':
@@ -10581,12 +10581,12 @@ snapshots:
       - utf-8-validate
       - zod
 
-  '@composio/client@0.1.0-alpha.37': {}
+  '@composio/client@0.1.0-alpha.40': {}
 
-  '@composio/core@0.1.55(ws@8.18.0(bufferutil@4.0.9)(utf-8-validate@5.0.10))(zod@3.25.76)':
+  '@composio/core@0.2.4(ws@8.18.0(bufferutil@4.0.9)(utf-8-validate@5.0.10))(zod@3.25.76)':
     dependencies:
-      '@composio/client': 0.1.0-alpha.37
-      '@composio/json-schema-to-zod': 0.1.16(zod@3.25.76)
+      '@composio/client': 0.1.0-alpha.40
+      '@composio/json-schema-to-zod': 0.1.18(zod@3.25.76)
       '@types/json-schema': 7.0.15
       chalk: 4.1.2
       openai: 5.23.2(ws@8.18.0(bufferutil@4.0.9)(utf-8-validate@5.0.10))(zod@3.25.76)
@@ -10598,13 +10598,13 @@ snapshots:
     transitivePeerDependencies:
       - ws
 
-  '@composio/json-schema-to-zod@0.1.16(zod@3.25.76)':
+  '@composio/json-schema-to-zod@0.1.18(zod@3.25.76)':
     dependencies:
       zod: 3.25.76
 
-  '@composio/vercel@0.2.11(@composio/core@0.1.55(ws@8.18.0(bufferutil@4.0.9)(utf-8-validate@5.0.10))(zod@3.25.76))(ai@6.0.0-beta.99(zod@3.25.76))':
+  '@composio/vercel@0.2.16(@composio/core@0.2.4(ws@8.18.0(bufferutil@4.0.9)(utf-8-validate@5.0.10))(zod@3.25.76))(ai@6.0.0-beta.99(zod@3.25.76))':
     dependencies:
-      '@composio/core': 0.1.55(ws@8.18.0(bufferutil@4.0.9)(utf-8-validate@5.0.10))(zod@3.25.76)
+      '@composio/core': 0.2.4(ws@8.18.0(bufferutil@4.0.9)(utf-8-validate@5.0.10))(zod@3.25.76)
       ai: 6.0.0-beta.99(zod@3.25.76)
 
   '@crawlee/types@3.13.10':
