@@ -20,7 +20,7 @@ export default async function getGoogleSheetsAgent(
     tools,
     stopWhen,
     prepareStep: (options) => {
-      return stepCountIs(1)
+      return options.stepNumber === 1
         ? {
             toolChoice: "required",
           }
