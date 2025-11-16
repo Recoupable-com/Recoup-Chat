@@ -10,6 +10,7 @@ import {
 } from "@/components/ai-elements/conversation";
 import Message from "./message";
 import { cleanFileMentions } from "@/lib/chat/cleanFileMentions";
+import { useVercelChatContext } from "@/providers/VercelChatProvider";
 
 interface TextMessagePartProps {
   text: string;
@@ -26,7 +27,6 @@ export function TextMessagePart({ text }: TextMessagePartProps) {
   );
 }
 
-import { useVercelChatContext } from "@/providers/VercelChatProvider";
 interface MessagesProps {
   children?: React.ReactNode;
 }
