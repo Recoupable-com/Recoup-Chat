@@ -15,12 +15,9 @@ import {
 } from "../ai-elements/prompt-input";
 import ModelSelect from "@/components/ModelSelect";
 import FileMentionsInput from "./FileMentionsInput";
-import authenticateGoogleSheetsToolkit from "@/lib/composio/googleSheets/authenticateGoogleSheetsToolkit";
-import useUser from "@/hooks/useUser";
+
 export function ChatInput() {
   const { selectedArtist, sorted } = useArtistProvider();
-  const { userData } = useUser();
-  const accountId = userData?.account_id;
   const {
     hasPendingUploads,
     messages,
@@ -86,16 +83,6 @@ export function ChatInput() {
               <PureAttachmentsButton />
               {/* YouTube connect button removed from ChatInput UI intentionally; preserved for future reuse */}
               <ModelSelect />
-              <button
-                type="button"
-                onClick={async () =>
-                  await authenticateGoogleSheetsToolkit(accountId)
-                }
-                className="rounded-md px-2 py-1 text-xs border border-border hover:bg-accent transition-colors"
-                title="Authenticate Google Sheets"
-              >
-                Connect Sheets
-              </button>
             </PromptInputTools>
             <PromptInputSubmit
               disabled={isDisabled || hasPendingUploads || isLoadingSignedUrls}
