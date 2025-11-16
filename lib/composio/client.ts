@@ -1,25 +1,40 @@
+"use server";
+
 import { Composio } from "@composio/core";
 import { VercelProvider } from "@composio/vercel";
 
-let cachedClient: Composio<VercelProvider> | null = null;
-
 /**
  * getComposioClient()
- *
- * Server-only async accessor for a singleton Composio client.
- * Required for "use server" modules: only async functions can be exported.
+ * 
+ * Server-side Composio client initialization for Vercel AI SDK.
+ * Creates and configures Composio client with API key from environment.
+ * 
+ * This function should ONLY be called from server components or API routes
+ * to prevent exposing the COMPOSIO_API_KEY to the client bundle.
+ * 
+ * The "use server" directive ensures this module cannot be imported by client code,
+ * protecting the API key from being exposed in the browser bundle.
+ * 
+ * @returns Composio client instance or null if API key is missing
+ * 
+ * @example
+ * // In a server component or API route
+ * const composio = getComposioClient();
+ * if (composio) {
+ *   const tools = await composio.tools.get(userId, { toolkits: ['GMAIL'] });
+ * }
  */
-export async function getComposioClient(): Promise<Composio<VercelProvider>> {
-  if (cachedClient) return cachedClient;
-  const apiKey = process.env.NEXT_PUBLIC_COMPOSIO_API_KEY;
+export const getComposioClient = (): Composio<VercelProvider> | null => {
+  const apiKey = process.env.COMPOSIO_API_KEY;
+  
   if (!apiKey) {
-    throw new Error(
-      "NEXT_PUBLIC_COMPOSIO_API_KEY not found in environment variables"
-    );
+    console.warn('COMPOSIO_API_KEY not found in environment variables');
+    return null;
   }
-  cachedClient = new Composio<VercelProvider>({
+
+  return new Composio<VercelProvider>({
     apiKey,
     provider: new VercelProvider(),
   });
-  return cachedClient;
-}
+};
+

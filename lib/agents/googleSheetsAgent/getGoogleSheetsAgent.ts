@@ -14,7 +14,7 @@ export default async function getGoogleSheetsAgent(
 
   // Get tools for Google Sheets
   const composio = await getComposioClient();
-  const tools = await composio.tools.get(accountId, {
+  const tools = await composio?.tools.get(accountId, {
     toolkits: ["GOOGLESHEETS"],
   });
 
