@@ -12,9 +12,8 @@ const schema = z.object({
     ),
   initialPrompt: z
     .string()
-    .optional()
     .describe(
-      "Initial chat prompt to be passed in the callback URL to retry the prompt after successful authentication."
+      "The first message in this conversation from the customer. It will be used to retry the prompt after successful authentication."
     ),
 });
 
@@ -23,11 +22,9 @@ const googleSheetsLoginTool = tool({
     "Initiate the authentication flow for the Google Sheets account.",
   inputSchema: schema,
   execute: async ({ account_id, initialPrompt }) => {
-    const options: CreateConnectedAccountOptions | undefined = initialPrompt
-      ? {
-          callbackUrl: `https://chat.recoupable.com?q=${encodeURIComponent(initialPrompt)}`,
-        }
-      : undefined;
+    const options: CreateConnectedAccountOptions = {
+      callbackUrl: `https://chat.recoupable.com?q=${encodeURIComponent(initialPrompt)}`,
+    };
 
     return await getConnectedAccount(account_id, options);
   },
