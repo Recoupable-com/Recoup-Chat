@@ -25,6 +25,7 @@ const googleSheetsLoginTool = tool({
     const options: CreateConnectedAccountOptions = {
       callbackUrl: `https://chat.recoupable.com?q=${encodeURIComponent(initialPrompt)}`,
     };
+    console.log("SWEETS options", options);
 
     return await getConnectedAccount(account_id, options);
   },
