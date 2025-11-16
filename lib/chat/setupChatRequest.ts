@@ -30,11 +30,6 @@ export async function setupChatRequest(
 
   // Configure model and tools based on nano banana selection
   const nanoBananaConfig = handleNanoBananaModel(body);
-  console.log("🔧 setupChatRequest - Model config:", {
-    requestedModel: body.model,
-    resolvedModel: nanoBananaConfig.resolvedModel,
-    excludeTools: nanoBananaConfig.excludeTools,
-  });
 
   const finalExcludeTools = nanoBananaConfig.excludeTools || excludeTools;
   const tools = setupToolsForRequest(finalExcludeTools);
