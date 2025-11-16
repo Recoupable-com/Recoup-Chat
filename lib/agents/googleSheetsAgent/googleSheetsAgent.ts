@@ -15,8 +15,7 @@ export const getGoogleSheetsAgent = async (userId: string) => {
 
   const agent = new ToolLoopAgent({
     model: DEFAULT_MODEL,
-    instructions:
-      "You are a fast Google Sheets agent. Given the user's request, decide the minimal sheets operation to perform and output a structured task. Prefer a single operation. Be precise with ranges and sheet names when possible.",
+    instructions: "You are a Google Sheets agent.",
     tools,
     stopWhen: stepCountIs(111),
   });
