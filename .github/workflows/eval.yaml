@@ -55,6 +55,9 @@ jobs:
       - name: Install Dependencies
         run: pnpm install
 
+      - name: Install Playwright Browsers
+        run: pnpm exec playwright install --with-deps chromium
+
       - name: Run Braintrust Evaluations
         env:
           BRAINTRUST_API_KEY: ${{ secrets.BRAINTRUST_API_KEY }}
