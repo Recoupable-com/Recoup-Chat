@@ -12,7 +12,6 @@ export const getGoogleSheetsAgent = async (userId: string) => {
   const tools = await composio.tools.get(userId, {
     toolkits: ["GOOGLESHEETS"],
   });
-  console.log("SWEETS tools", tools);
 
   const agent = new ToolLoopAgent({
     model: DEFAULT_MODEL,
