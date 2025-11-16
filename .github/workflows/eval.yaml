@@ -20,6 +20,7 @@ jobs:
   eval:
     name: Run evaluations
     runs-on: ubuntu-latest
+    timeout-minutes: 11
     env:
       ARWEAVE_KEY: ${{ secrets.ARWEAVE_KEY }}
       NEXT_PUBLIC_SUPABASE_URL: ${{ secrets.NEXT_PUBLIC_SUPABASE_URL }}
