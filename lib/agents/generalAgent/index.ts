@@ -1,0 +1,1 @@
+export { getGeneralAgent } from "./generalAgent";
