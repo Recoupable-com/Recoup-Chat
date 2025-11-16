@@ -32,7 +32,7 @@ interface MessagesProps {
 }
 
 const MessagesComponent = ({ children }: MessagesProps) => {
-  const { messages, status, setMessages, reload } = useVercelChatContext();
+  const { messages, status } = useVercelChatContext();
   // Conversation component handles scrolling automatically
   // No need for manual scroll logic
 
@@ -41,13 +41,7 @@ const MessagesComponent = ({ children }: MessagesProps) => {
       <ConversationContent className="flex flex-col gap-8 items-center w-full pt-6 pb-16 md:pt-8 md:pb-20">
         {children || null}
         {messages.map((message) => (
-          <Message
-            status={status}
-            key={message.id}
-            message={message}
-            setMessages={setMessages}
-            reload={reload}
-          />
+          <Message key={message.id} message={message} />
         ))}
 
         {(status === "submitted" || status === "streaming") && (
