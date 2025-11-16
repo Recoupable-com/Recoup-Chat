@@ -11,7 +11,7 @@ const getExecute = async (options: ExecuteOptions, body: ChatRequest) => {
   const { writer } = options;
   console.log("🚀 getExecute START - Model:", body.model);
 
-  const chatConfig = await setupChatRequest(body, writer);
+  const chatConfig = await setupChatRequest(body);
   console.log("🚀 getExecute - Chat config ready, model:", chatConfig.model);
 
   try {
