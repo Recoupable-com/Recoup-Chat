@@ -10,6 +10,7 @@ import { handleNanoBananaModel } from "./handleNanoBananaModel";
 import { extractImageUrlsFromMessages } from "./extractImageUrlsFromMessages";
 import { buildSystemPromptWithImages } from "./buildSystemPromptWithImages";
 import { setupToolsForRequest } from "./setupToolsForRequest";
+import { getRoutingDecision } from "@/lib/agents/routingAgent";
 
 export async function setupChatRequest(body: ChatRequest): Promise<ChatConfig> {
   const {
@@ -22,13 +23,10 @@ export async function setupChatRequest(body: ChatRequest): Promise<ChatConfig> {
     timezone,
   } = body;
 
+  await getRoutingDecision(body);
+
   // Configure model and tools based on nano banana selection
   const nanoBananaConfig = handleNanoBananaModel(body);
-  console.log("🔧 setupChatRequest - Model config:", {
-    requestedModel: body.model,
-    resolvedModel: nanoBananaConfig.resolvedModel,
-    excludeTools: nanoBananaConfig.excludeTools,
-  });
 
   const finalExcludeTools = nanoBananaConfig.excludeTools || excludeTools;
   const tools = setupToolsForRequest(finalExcludeTools);
@@ -71,7 +69,7 @@ export async function setupChatRequest(body: ChatRequest): Promise<ChatConfig> {
             // Download file when model doesn't support URL
             const response = await fetch(file.url.href);
             const data = new Uint8Array(await response.arrayBuffer());
-            const mediaType = response.headers.get('content-type') || undefined;
+            const mediaType = response.headers.get("content-type") || undefined;
             return { data, mediaType };
           })
         );
