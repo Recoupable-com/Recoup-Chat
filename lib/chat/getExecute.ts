@@ -15,6 +15,10 @@ const getExecute = async (options: ExecuteOptions, body: ChatRequest) => {
   try {
     const result = await agent.stream(chatConfig);
 
+    // Enable server-side stream completion even if client disconnects
+    // This ensures onFinish callback in route.ts runs and messages are saved
+    result.consumeStream();
+
     writer.merge(result.toUIMessageStream());
     const usage = await result.usage;
     console.log("🚀 getExecute - Stream complete, usage:", usage);
