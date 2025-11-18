@@ -49,7 +49,7 @@ export default function FileInfoDialog({ file, open, onOpenChange }: FileInfoDia
     enabled: !!ownerAccountId && !!artistAccountId && !!userData && open,
   });
 
-  const ownerEmail = emails?.[0]?.email;
+  const ownerEmail = emails?.[0]?.email || undefined;
 
   // File editing state and operations
   const {
