@@ -24,8 +24,12 @@ type FileInfoDialogProps = {
 };
 
 export default function FileInfoDialog({ file, open, onOpenChange }: FileInfoDialogProps) {
-  const { content } = useFileContent(file?.file_name || "", file?.storage_key || "");
   const { userData } = useUserProvider();
+  const { content } = useFileContent(
+    file?.file_name || "", 
+    file?.storage_key || "", 
+    userData?.account_id || ""
+  );
   
   // Extract account IDs and check if file is editable
   const { ownerAccountId, artistAccountId } = file 
@@ -107,6 +111,7 @@ export default function FileInfoDialog({ file, open, onOpenChange }: FileInfoDia
             isEditing={isEditing}
             fileName={file.file_name}
             storageKey={file.storage_key}
+            accountId={userData?.account_id || ""}
             editedContent={editedContent}
             onContentChange={setEditedContent}
           />

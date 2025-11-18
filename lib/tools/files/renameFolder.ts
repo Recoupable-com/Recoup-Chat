@@ -8,6 +8,8 @@ import supabase from "@/lib/supabase/serverClient";
 import { escapeLikePattern } from "@/lib/files/escapeLikePattern";
 import { generateStorageKey } from "@/lib/files/generateStoragePath";
 import { handleToolError } from "@/lib/files/handleToolError";
+import { copyFileByKey } from "@/lib/supabase/storage/copyFileByKey";
+import { deleteFileByKey } from "@/lib/supabase/storage/deleteFileByKey";
 
 const renameFolder = tool({
   description: `
@@ -138,6 +140,19 @@ Important:
             newStorageKey
           );
           
+          // Only move actual files in storage, not directory records
+          const isChildDirectory = child.storage_key.endsWith('/');
+          
+          if (!isChildDirectory) {
+            // Copy file to new location in storage
+            try {
+              await copyFileByKey(child.storage_key, newChildStorageKey);
+            } catch (copyError) {
+              throw new Error(`Failed to copy file in storage: ${copyError instanceof Error ? copyError.message : 'Unknown error'}`);
+            }
+          }
+          
+          // Update database record with new storage_key
           const { error: updateError } = await supabase
             .from("files")
             .update({
@@ -147,7 +162,17 @@ Important:
             .eq("id", child.id);
 
           if (updateError) {
-            throw new Error(`Failed to update child: ${updateError.message}`);
+            throw new Error(`Failed to update child database record: ${updateError.message}`);
+          }
+          
+          // Delete old file from storage
+          if (!isChildDirectory) {
+            try {
+              await deleteFileByKey(child.storage_key);
+            } catch (deleteError) {
+              // Silently continue if delete fails - database is already updated
+              // Old file will be orphaned but new file works correctly
+            }
           }
         }
       }
