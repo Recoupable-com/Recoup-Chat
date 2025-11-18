@@ -25,67 +25,65 @@ export async function findFileByName(
 
   // Normalize path: remove leading/trailing slashes
   const normalizedPath = path?.replace(/^\/+|\/+$/g, '');
-  
-  const pathPattern = normalizedPath
-    ? `files/${ownerAccountId}/${artistAccountId}/${normalizedPath}/${fileName}`
-    : `files/${ownerAccountId}/${artistAccountId}/${fileName}`;
 
-  // Also create a folder pattern (with trailing slash for directories)
-  const folderPattern = pathPattern + '/';
-
-  // Escape both patterns for PostgREST
-  const escapedFilePattern = escapePostgrestValue(pathPattern);
-  const escapedFolderPattern = escapePostgrestValue(folderPattern);
-
-  // Try to find by file_name AND storage_key (check both file and folder patterns)
-  const { data, error} = await supabase
+  // Find by artist and filename only (matches any owner who shares this artist)
+  const { data, error } = await supabase
     .from("files")
     .select()
-    .eq("owner_account_id", ownerAccountId)
     .eq("artist_account_id", artistAccountId)
     .eq("file_name", fileName)
-    .or(`storage_key.eq.${escapedFilePattern},storage_key.eq.${escapedFolderPattern}`)
-    .order("created_at", { ascending: false })
-    .limit(1)
-    .single();
+    .order("created_at", { ascending: false });
 
-  if (error && error.code === 'PGRST116') {
-    // No rows found - try bidirectional normalization (spaces ↔ underscores)
-    const fileNameWithSpaces = fileName.replace(/_/g, ' ');
-    const fileNameWithUnderscores = fileName.replace(/ /g, '_');
-    
-    const storageKeyPatternSpaces = normalizedPath
-      ? `files/${ownerAccountId}/${artistAccountId}/${normalizedPath}/${fileNameWithSpaces}`
-      : `files/${ownerAccountId}/${artistAccountId}/${fileNameWithSpaces}`;
-    
-    const storageKeyPatternUnderscores = normalizedPath
-      ? `files/${ownerAccountId}/${artistAccountId}/${normalizedPath}/${fileNameWithUnderscores}`
-      : `files/${ownerAccountId}/${artistAccountId}/${fileNameWithUnderscores}`;
-
-    // Escape values for PostgREST (handles filenames with commas, periods, etc.)
-    const escapedPatternSpaces = escapePostgrestValue(storageKeyPatternSpaces);
-    const escapedPatternUnderscores = escapePostgrestValue(storageKeyPatternUnderscores);
-
-    const { data: dataByKey, error: errorByKey } = await supabase
-      .from("files")
-      .select()
-      .eq("owner_account_id", ownerAccountId)
-      .eq("artist_account_id", artistAccountId)
-      .or(`storage_key.eq.${escapedPatternSpaces},storage_key.eq.${escapedPatternUnderscores}`)
-      .order("created_at", { ascending: false })
-      .limit(1)
-      .single();
-
-    if (errorByKey || !dataByKey) {
-      return null;
-    }
-
-    return dataByKey;
-  }
-
-  if (error || !data) {
+  if (error) {
     return null;
   }
 
-  return data;
+  if (!data || data.length === 0) {
+    // Try with filename normalization (spaces ↔ underscores)
+    const fileNameWithSpaces = fileName.replace(/_/g, ' ');
+    const fileNameWithUnderscores = fileName.replace(/ /g, '_');
+    
+    const { data: normalizedData } = await supabase
+      .from("files")
+      .select()
+      .eq("artist_account_id", artistAccountId)
+      .or(`file_name.eq.${escapePostgrestValue(fileNameWithSpaces)},file_name.eq.${escapePostgrestValue(fileNameWithUnderscores)}`)
+      .order("created_at", { ascending: false });
+
+    if (!normalizedData || normalizedData.length === 0) {
+      return null;
+    }
+
+    // Filter by path if specified
+    const filtered = normalizedPath
+      ? normalizedData.filter((file) => {
+          const match = file.storage_key.match(/^files\/[^\/]+\/[^\/]+\/(.+)$/);
+          if (!match) return false;
+          const relativePath = match[1];
+          const expectedPrefix = normalizedPath + '/';
+          return relativePath.startsWith(expectedPrefix);
+        })
+      : normalizedData.filter((file) => {
+          const match = file.storage_key.match(/^files\/[^\/]+\/[^\/]+\/([^\/]+)\/?$/);
+          return !!match;
+        });
+
+    return filtered[0] || null;
+  }
+
+  // Filter by path if specified
+  const filtered = normalizedPath
+    ? data.filter((file) => {
+        const match = file.storage_key.match(/^files\/[^\/]+\/[^\/]+\/(.+)$/);
+        if (!match) return false;
+        const relativePath = match[1];
+        const expectedPrefix = normalizedPath + '/';
+        return relativePath.startsWith(expectedPrefix);
+      })
+    : data.filter((file) => {
+        const match = file.storage_key.match(/^files\/[^\/]+\/[^\/]+\/([^\/]+)\/?$/);
+        return !!match;
+      });
+
+  return filtered[0] || null;
 }
