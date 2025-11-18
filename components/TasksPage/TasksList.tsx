@@ -34,11 +34,13 @@ const TasksList: React.FC<TasksListProps> = ({ tasks, isLoading, isError }) => {
       if (accountIds.length === 0) return [];
       const params = new URLSearchParams();
       accountIds.forEach(id => params.append("accountIds", id));
+      params.append("currentAccountId", userData.id);
+      params.append("artistAccountId", selectedArtist.account_id);
       const response = await fetch(`/api/account-emails?${params}`);
       if (!response.ok) throw new Error("Failed to fetch emails");
       return response.json();
     },
-    enabled: accountIds.length > 0,
+    enabled: accountIds.length > 0 && !!userData && !!selectedArtist,
   });
 
   // Create lookup map for O(1) email access
