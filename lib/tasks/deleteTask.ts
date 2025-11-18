@@ -9,6 +9,27 @@ export interface DeleteTaskResponse {
   error?: string;
 }
 
+const SCHEDULE_NOT_FOUND_MSG = "Schedule not found";
+
+/**
+ * Check if error indicates schedule not found in external scheduler
+ * Paused tasks are removed from the scheduler, making this error expected
+ */
+function isScheduleNotFoundError(errorText: string): boolean {
+  return errorText.includes(SCHEDULE_NOT_FOUND_MSG);
+}
+
+/**
+ * Delete task record from database when scheduler deletion isn't possible
+ */
+async function deleteTaskFromDatabase(taskId: string): Promise<void> {
+  await fetch("/api/scheduled-actions/delete", {
+    method: "DELETE",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ id: taskId }),
+  });
+}
+
 /**
  * Deletes a task via the Recoup API and database
  * @see https://docs.recoupable.com/tasks/delete
@@ -28,13 +49,8 @@ export async function deleteTask(params: DeleteTaskParams): Promise<void> {
     if (!response.ok) {
       const errorText = await response.text();
       
-      // Paused tasks are removed from scheduler, so "not found" is expected
-      if (errorText.includes("Schedule not found")) {
-        await fetch("/api/scheduled-actions/delete", {
-          method: "DELETE",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ id: params.id }),
-        });
+      if (isScheduleNotFoundError(errorText)) {
+        await deleteTaskFromDatabase(params.id);
         return;
       }
       
@@ -44,13 +60,8 @@ export async function deleteTask(params: DeleteTaskParams): Promise<void> {
     const data: DeleteTaskResponse = await response.json();
 
     if (data.status === "error") {
-      // Paused tasks are removed from scheduler, so "not found" is expected
-      if (data.error?.includes("Schedule not found")) {
-        await fetch("/api/scheduled-actions/delete", {
-          method: "DELETE",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ id: params.id }),
-        });
+      if (data.error && isScheduleNotFoundError(data.error)) {
+        await deleteTaskFromDatabase(params.id);
         return;
       }
       throw new Error(data.error || "Unknown error occurred");
