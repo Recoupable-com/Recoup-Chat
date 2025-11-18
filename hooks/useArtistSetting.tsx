@@ -16,6 +16,10 @@ const useArtistSetting = () => {
   const [instagram, setInstagram] = useState("");
   const [youtube, setYoutube] = useState("");
   const [twitter, setTwitter] = useState("");
+  const [facebook, setFacebook] = useState("");
+  const [threads, setThreads] = useState("");
+  const [linkedin, setLinkedIn] = useState("");
+  const [snapchat, setSnapchat] = useState("");
   const [bases, setBases] = useState<
     Array<{ name: string; url: string; type: string }>
   >([]);
@@ -87,6 +91,10 @@ const useArtistSetting = () => {
     setTikTok("");
     setYoutube("");
     setTwitter("");
+    setFacebook("");
+    setThreads("");
+    setLinkedIn("");
+    setSnapchat("");
     setBases([]);
     setEditableArtist(null);
   };
@@ -105,6 +113,10 @@ const useArtistSetting = () => {
         INSTAGRAM: setInstagram,
         SPOTIFY: setSpotifyUrl,
         TIKTOK: setTikTok,
+        FACEBOOK: setFacebook,
+        THREADS: setThreads,
+        LINKEDIN: setLinkedIn,
+        SNAPCHAT: setSnapchat,
       };
       Object.entries(socialMediaTypes).forEach(([type, setter]) => {
         const link = editableArtist?.account_socials?.find(
@@ -138,6 +150,14 @@ const useArtistSetting = () => {
     setYoutube,
     twitter,
     setTwitter,
+    facebook,
+    setFacebook,
+    threads,
+    setThreads,
+    linkedin,
+    setLinkedIn,
+    snapchat,
+    setSnapchat,
     bases,
     setBases,
     imageRef,
