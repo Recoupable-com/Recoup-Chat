@@ -12,6 +12,10 @@ export const validation = JoiBase.object({
   instagram: JoiBase.allow(),
   youtube: JoiBase.allow(),
   twitter: JoiBase.allow(),
+  facebook: JoiBase.allow(),
+  threads: JoiBase.allow(),
+  linkedin: JoiBase.allow(),
+  snapchat: JoiBase.allow(),
 });
 
 export const accountValidation = JoiBase.object({
