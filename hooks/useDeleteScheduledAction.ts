@@ -31,7 +31,10 @@ export const useDeleteScheduledAction = () => {
       throw error;
     } finally {
       setIsLoading(false);
-      queryClient.invalidateQueries({ queryKey: ["scheduled-actions"] });
+      queryClient.invalidateQueries({ 
+        queryKey: ["scheduled-actions"],
+        exact: false 
+      });
     }
   };
 
