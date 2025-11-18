@@ -169,7 +169,7 @@ Important:
           if (!isChildDirectory) {
             try {
               await deleteFileByKey(child.storage_key);
-            } catch (deleteError) {
+            } catch {
               // Silently continue if delete fails - database is already updated
               // Old file will be orphaned but new file works correctly
             }
