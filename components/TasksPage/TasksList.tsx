@@ -31,7 +31,7 @@ const TasksList: React.FC<TasksListProps> = ({ tasks, isLoading, isError }) => {
   const { data: accountEmails = [] } = useQuery<AccountEmail[]>({
     queryKey: ["task-owner-emails", accountIds],
     queryFn: async () => {
-      if (accountIds.length === 0) return [];
+      if (accountIds.length === 0 || !userData || !selectedArtist) return [];
       const params = new URLSearchParams();
       accountIds.forEach(id => params.append("accountIds", id));
       params.append("currentAccountId", userData.id);
