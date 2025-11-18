@@ -4,9 +4,10 @@ import type { FileRow } from "@/components/Files/types";
 
 type FileInfoDialogMetadataProps = {
   file: FileRow;
+  ownerEmail?: string;
 };
 
-export default function FileInfoDialogMetadata({ file }: FileInfoDialogMetadataProps) {
+export default function FileInfoDialogMetadata({ file, ownerEmail }: FileInfoDialogMetadataProps) {
   return (
     <div className="w-full sm:w-64 border-t sm:border-t-0 sm:border-l bg-background overflow-auto">
       <div className="p-3 sm:p-4">
@@ -38,6 +39,14 @@ export default function FileInfoDialogMetadata({ file }: FileInfoDialogMetadataP
               <FileRelativePath storageKey={file.storage_key} isDirectory={file.is_directory} />
             </div>
           </div>
+          {ownerEmail && (
+            <div>
+              <div className="text-[10px] sm:text-xs text-muted-foreground mb-1">Owner</div>
+              <div className="text-xs sm:text-sm font-medium break-all">
+                {ownerEmail}
+              </div>
+            </div>
+          )}
         </div>
       </div>
     </div>
