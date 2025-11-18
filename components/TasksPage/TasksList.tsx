@@ -4,8 +4,11 @@ import TaskSkeleton from "./TaskSkeleton";
 import TaskDetailsDialog from "@/components/VercelChat/dialogs/tasks/TaskDetailsDialog";
 import { useArtistProvider } from "@/providers/ArtistProvider";
 import { useUserProvider } from "@/providers/UserProvder";
+import { useMemo } from "react";
+import { useQuery } from "@tanstack/react-query";
 
 type ScheduledAction = Tables<"scheduled_actions">;
+type AccountEmail = Tables<"account_emails">;
 
 interface TasksListProps {
   tasks: ScheduledAction[];
@@ -17,6 +20,37 @@ const TasksList: React.FC<TasksListProps> = ({ tasks, isLoading, isError }) => {
   const { userData } = useUserProvider();
   const { selectedArtist } = useArtistProvider();
   const isArtistSelected = !!selectedArtist;
+
+  // Extract unique account IDs from tasks
+  const accountIds = useMemo(
+    () => [...new Set(tasks.map(task => task.account_id))],
+    [tasks]
+  );
+
+  // Batch fetch emails for all task owners
+  const { data: accountEmails = [] } = useQuery<AccountEmail[]>({
+    queryKey: ["task-owner-emails", accountIds],
+    queryFn: async () => {
+      if (accountIds.length === 0) return [];
+      const params = new URLSearchParams();
+      accountIds.forEach(id => params.append("accountIds", id));
+      const response = await fetch(`/api/account-emails?${params}`);
+      if (!response.ok) throw new Error("Failed to fetch emails");
+      return response.json();
+    },
+    enabled: accountIds.length > 0,
+  });
+
+  // Create lookup map for O(1) email access
+  const emailByAccountId = useMemo(() => {
+    const map = new Map<string, string>();
+    accountEmails.forEach(ae => {
+      if (ae.account_id && ae.email) {
+        map.set(ae.account_id, ae.email);
+      }
+    });
+    return map;
+  }, [accountEmails]);
 
   if (isError) {
     return <div className="text-sm text-red-600 dark:text-red-400">Failed to load tasks</div>;
@@ -54,7 +88,10 @@ const TasksList: React.FC<TasksListProps> = ({ tasks, isLoading, isError }) => {
               index !== tasks.length - 1 ? "border-b border-border " : ""
             }
           >
-            <TaskCard task={task} />
+            <TaskCard 
+              task={task} 
+              ownerEmail={emailByAccountId.get(task.account_id)}
+            />
           </div>
         </TaskDetailsDialog>
       ))}

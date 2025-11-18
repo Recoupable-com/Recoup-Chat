@@ -19,9 +19,10 @@ type ScheduledAction = Tables<"scheduled_actions">;
 export interface TaskCardProps {
   task: ScheduledAction;
   isDeleted?: boolean;
+  ownerEmail?: string;
 }
 
-const TaskCard: React.FC<TaskCardProps> = ({ task, isDeleted }) => {
+const TaskCard: React.FC<TaskCardProps> = ({ task, isDeleted, ownerEmail }) => {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const { updateAction, isLoading: isUpdating } = useUpdateScheduledAction();
   const { deleteAction, isLoading: isDeleting } = useDeleteScheduledAction();
@@ -65,7 +66,14 @@ const TaskCard: React.FC<TaskCardProps> = ({ task, isDeleted }) => {
     >
       <div className="flex items-center space-x-4">
         <TaskArtistImage artistAccountId={task.artist_account_id} />
-        <h4 className="text-base font-medium text-foreground">{task.title}</h4>
+        <div className="flex items-center gap-2">
+          <h4 className="text-base font-medium text-foreground">{task.title}</h4>
+          {ownerEmail && (
+            <span className="px-2 py-1 text-xs bg-muted text-muted-foreground rounded-full">
+              {ownerEmail}
+            </span>
+          )}
+        </div>
       </div>
 
       <div className="flex items-center space-x-4">
