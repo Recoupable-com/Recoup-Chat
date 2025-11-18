@@ -10,7 +10,7 @@ export interface DeleteTaskResponse {
 }
 
 /**
- * Deletes a task via the Recoup API
+ * Deletes a task via the Recoup API and database
  * @see https://docs.recoupable.com/tasks/delete
  */
 export async function deleteTask(params: DeleteTaskParams): Promise<void> {
@@ -30,6 +30,11 @@ export async function deleteTask(params: DeleteTaskParams): Promise<void> {
       
       // Paused tasks are removed from scheduler, so "not found" is expected
       if (errorText.includes("Schedule not found")) {
+        await fetch("/api/scheduled-actions/delete", {
+          method: "DELETE",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ id: params.id }),
+        });
         return;
       }
       
@@ -41,13 +46,18 @@ export async function deleteTask(params: DeleteTaskParams): Promise<void> {
     if (data.status === "error") {
       // Paused tasks are removed from scheduler, so "not found" is expected
       if (data.error?.includes("Schedule not found")) {
+        await fetch("/api/scheduled-actions/delete", {
+          method: "DELETE",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ id: params.id }),
+        });
         return;
       }
       throw new Error(data.error || "Unknown error occurred");
     }
   } catch (error) {
-    console.error("Error deleting task:", error);
     throw error;
   }
 }
+
 

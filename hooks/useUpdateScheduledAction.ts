@@ -35,7 +35,10 @@ export const useUpdateScheduledAction = () => {
       throw error;
     } finally {
       setIsLoading(false);
-      queryClient.invalidateQueries({ queryKey: ["scheduled-actions"] });
+      queryClient.invalidateQueries({ 
+        queryKey: ["scheduled-actions"],
+        exact: false 
+      });
     }
   };
 
