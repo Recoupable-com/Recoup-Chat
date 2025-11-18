@@ -27,12 +27,22 @@ export async function deleteTask(params: DeleteTaskParams): Promise<void> {
 
     if (!response.ok) {
       const errorText = await response.text();
+      
+      // Paused tasks are removed from scheduler, so "not found" is expected
+      if (errorText.includes("Schedule not found")) {
+        return;
+      }
+      
       throw new Error(`HTTP ${response.status}: ${errorText}`);
     }
 
     const data: DeleteTaskResponse = await response.json();
 
     if (data.status === "error") {
+      // Paused tasks are removed from scheduler, so "not found" is expected
+      if (data.error?.includes("Schedule not found")) {
+        return;
+      }
       throw new Error(data.error || "Unknown error occurred");
     }
   } catch (error) {
