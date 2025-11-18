@@ -39,7 +39,7 @@ export function GoogleImagesResult({
     return (
       <div className="p-4 rounded-lg bg-muted/50">
         <p className="text-sm text-muted-foreground">
-          No images found for "{result.query}"
+          No images found for &quot;{result.query}&quot;
         </p>
       </div>
     );
@@ -49,7 +49,7 @@ export function GoogleImagesResult({
   return (
     <div className="flex flex-col gap-3 max-w-4xl">
       <div className="text-sm text-muted-foreground">
-        Found {result.total_results} images for "{result.query}"
+        Found {result.total_results} images for &quot;{result.query}&quot;
       </div>
       
       <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
