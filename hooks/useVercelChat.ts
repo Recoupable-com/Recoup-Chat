@@ -115,7 +115,7 @@ export function useVercelChat({
         await Promise.all(
           toFetch.map(async (f) => {
             const res = await fetch(
-              `/api/files/get-signed-url?key=${encodeURIComponent(f.storage_key)}&expires=${SIGNED_URL_EXPIRES_SECONDS}`
+              `/api/files/get-signed-url?key=${encodeURIComponent(f.storage_key)}&accountId=${encodeURIComponent(userData?.account_id || "")}&expires=${SIGNED_URL_EXPIRES_SECONDS}`
             );
             if (!res.ok) throw new Error("Failed to get signed URL");
             const { signedUrl } = (await res.json()) as { signedUrl: string };
