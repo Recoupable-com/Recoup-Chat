@@ -3,11 +3,12 @@ import { MAX_MESSAGES } from "./const";
 import { type ChatRequest, type ChatConfig } from "./types";
 import { AnthropicProviderOptions } from "@ai-sdk/anthropic";
 import { convertToModelMessages } from "ai";
-import getPrepareStepResult from "./toolChains/getPrepareStepResult";
-import { getRoutingDecision } from "@/lib/agents/routingAgent";
+// import getPrepareStepResult from "./toolChains/getPrepareStepResult";
+// import { getRoutingDecision } from "@/lib/agents/routingAgent";
+import getPlanningAgent from "../agents/planningAgent/getPlanningAgent";
 
 export async function setupChatRequest(body: ChatRequest): Promise<ChatConfig> {
-  const decision = await getRoutingDecision(body);
+  const decision = await getPlanningAgent(body);
 
   const system = decision.instructions;
   const tools = decision.agent.tools;
@@ -45,13 +46,13 @@ export async function setupChatRequest(body: ChatRequest): Promise<ChatConfig> {
         );
       },
     }),
-    prepareStep: (options) => {
-      const next = getPrepareStepResult(options);
-      if (next) {
-        return { ...options, ...next };
-      }
-      return options;
-    },
+    // prepareStep: (options) => {
+    //   const next = getPrepareStepResult(options);
+    //   if (next) {
+    //     return { ...options, ...next };
+    //   }
+    //   return options;
+    // },
     providerOptions: {
       anthropic: {
         thinking: { type: "enabled", budgetTokens: 12000 },

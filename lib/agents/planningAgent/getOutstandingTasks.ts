@@ -1,4 +1,5 @@
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-export function getOutstandingTasks(plan: string[]): string[] {
-  return [];
+import type { Plan } from "./addTasksToPlan";
+
+export function getOutstandingTasks(plan: Plan): Plan {
+  return plan.filter((t) => !t.completed);
 }

@@ -1,9 +1,8 @@
 import { ChatRequest, RoutingDecision } from "@/lib/chat/types";
-// import { routingAgent } from "./routingAgent";
-// import { getGoogleSheetsAgent } from "@/lib/agents/googleSheetsAgent";
-// import { getGeneralAgent } from "@/lib/agents/generalAgent";
-// import { convertToModelMessages } from "ai";
-import getPlanningAgent from "@/lib/agents/planningAgent/getPlanningAgent";
+import { routingAgent } from "./routingAgent";
+import { getGoogleSheetsAgent } from "@/lib/agents/googleSheetsAgent";
+import { getGeneralAgent } from "@/lib/agents/generalAgent";
+import { convertToModelMessages } from "ai";
 
 /**
  * Routing agent that determines which specialized agent should handle the request.
@@ -13,30 +12,28 @@ import getPlanningAgent from "@/lib/agents/planningAgent/getPlanningAgent";
 export async function getRoutingDecision(
   body: ChatRequest
 ): Promise<RoutingDecision> {
-  // const { messages } = body;
+  const { messages } = body;
 
-  return getPlanningAgent(body);
+  const generalAgentDecision = await getGeneralAgent(body);
 
-  // const generalAgentDecision = await getGeneralAgent(body);
+  try {
+    const result = await routingAgent.generate({
+      messages: convertToModelMessages(messages),
+    });
 
-  // try {
-  //   const result = await routingAgent.generate({
-  //     messages: convertToModelMessages(messages),
-  //   });
+    const routingDecision = result.output || {
+      agent: "generalAgent",
+      reason: "agent-default",
+    };
 
-  //   const routingDecision = result.output || {
-  //     agent: "generalAgent",
-  //     reason: "agent-default",
-  //   };
+    if (routingDecision.agent === "googleSheetsAgent") {
+      const googleSheetsDecision = await getGoogleSheetsAgent(body);
+      return googleSheetsDecision;
+    }
 
-  //   if (routingDecision.agent === "googleSheetsAgent") {
-  //     const googleSheetsDecision = await getGoogleSheetsAgent(body);
-  //     return googleSheetsDecision;
-  //   }
-
-  //   return generalAgentDecision;
-  // } catch (error) {
-  //   console.error("Routing agent error:", error);
-  //   return generalAgentDecision;
-  // }
+    return generalAgentDecision;
+  } catch (error) {
+    console.error("Routing agent error:", error);
+    return generalAgentDecision;
+  }
 }
