@@ -30,7 +30,6 @@ export default async function getPlanningAgent(
     tools,
     stopWhen,
     prepareStep: async (options) => {
-      console.log("prepareStep", options);
       if (getOutstandingTasks(plan).length > 0) {
         console.log("getOutstandingTasks", getOutstandingTasks(plan));
         console.log("renderPlan", renderPlan(plan));
@@ -40,7 +39,7 @@ export default async function getPlanningAgent(
           toolChoice: { toolName: "executeTask", type: "tool" },
         };
       }
-      return undefined;
+      return options;
     },
   });
 

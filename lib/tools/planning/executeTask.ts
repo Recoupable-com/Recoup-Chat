@@ -27,7 +27,6 @@ export function createExecuteTaskTool(
       const messages = convertToModelMessages(inputMessages);
 
       const decision = await getRoutingDecision(body);
-      console.log("decision", decision);
 
       let summary: string = "";
       if (writer) {
@@ -36,6 +35,13 @@ export function createExecuteTaskTool(
         });
         writer.merge(result.toUIMessageStream());
         summary = await result.text;
+        const toolResults = await result.toolResults;
+        console.log("toolResults.output", toolResults[0]?.output);
+        console.log(
+          "stringified toolResults.output",
+          JSON.stringify(toolResults[0]?.output, null, 2)
+        );
+        summary += JSON.stringify(toolResults[0]?.output, null, 2);
       } else {
         const result = await decision.agent.generate({
           messages,
