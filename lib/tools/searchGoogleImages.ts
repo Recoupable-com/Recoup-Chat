@@ -47,7 +47,9 @@ const getSearchGoogleImagesTool = () => {
           aspectRatio,
         });
 
-        const finalResult = {
+        // Build final result with all image data
+        // Return (don't yield) so it persists in message history
+        return {
           success: true,
           query,
           total_results: response.images_results.length,
@@ -63,13 +65,6 @@ const getSearchGoogleImagesTool = () => {
           })),
           message: `Found ${response.images_results.length} images for "${query}"`,
         };
-        
-        // Yield final result to UI (for live streaming)
-        yield finalResult;
-        
-        // Return the same rich result so it persists in message history
-        // This ensures images are available after chat refresh/reload
-        return finalResult;
       } catch (error) {
         throw new Error(`Google Images search failed: ${error}`);
       }
