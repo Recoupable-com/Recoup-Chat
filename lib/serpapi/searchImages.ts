@@ -37,27 +37,52 @@ export async function searchGoogleImages(
 
   const url = `${SERPAPI_BASE_URL}/search.json?${params.toString()}`;
 
-  const response = await fetch(url, {
-    method: "GET",
-    headers: {
-      "Content-Type": "application/json",
-    },
-  });
+  // Create AbortController for timeout handling
+  const controller = new AbortController();
+  const timeoutId = setTimeout(() => {
+    controller.abort();
+  }, 10000); // 10 second timeout
 
-  if (!response.ok) {
-    const errorText = await response.text();
-    throw new Error(
-      `SerpAPI request failed: ${response.status} - ${errorText}`
-    );
+  try {
+    const response = await fetch(url, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      signal: controller.signal,
+    });
+
+    // Clear timeout on successful response
+    clearTimeout(timeoutId);
+
+    if (!response.ok) {
+      const errorText = await response.text();
+      throw new Error(
+        `SerpAPI request failed: ${response.status} - ${errorText}`
+      );
+    }
+
+    const data: SerpApiResponse = await response.json();
+
+    // Limit results if specified
+    if (limit && data.images_results) {
+      data.images_results = data.images_results.slice(0, limit);
+    }
+
+    return data;
+  } catch (error) {
+    // Clear timeout in case of error
+    clearTimeout(timeoutId);
+    
+    // Handle timeout specifically
+    if (error instanceof Error && error.name === "AbortError") {
+      throw new Error(
+        "Google Images search timed out after 10 seconds. Please try again with a more specific query."
+      );
+    }
+    
+    // Re-throw other errors
+    throw error;
   }
-
-  const data: SerpApiResponse = await response.json();
-
-  // Limit results if specified
-  if (limit && data.images_results) {
-    data.images_results = data.images_results.slice(0, limit);
-  }
-
-  return data;
 }
 

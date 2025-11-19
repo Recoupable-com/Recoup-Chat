@@ -64,14 +64,12 @@ const getSearchGoogleImagesTool = () => {
           message: `Found ${response.images_results.length} images for "${query}"`,
         };
         
-        // Yield final result to UI
+        // Yield final result to UI (for live streaming)
         yield finalResult;
         
-        // Return simplified result for AI
-        return {
-          success: true,
-          message: `Found ${response.images_results.length} images for "${query}"`,
-        };
+        // Return the same rich result so it persists in message history
+        // This ensures images are available after chat refresh/reload
+        return finalResult;
       } catch (error) {
         throw new Error(`Google Images search failed: ${error}`);
       }
