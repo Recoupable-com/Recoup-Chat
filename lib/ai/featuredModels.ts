@@ -25,6 +25,21 @@ export interface FeaturedModelConfig {
  */
 export const FEATURED_MODELS: FeaturedModelConfig[] = [
   {
+    id: "google/gemini-3-pro-preview",
+    displayName: "Gemini 3 Pro",
+    isPro: true,
+    pill: "New",
+    description: "Google's latest model",
+    tooltip: "Google's newest Gemini 3 Pro preview model",
+  },
+  {
+    id: "anthropic/claude-sonnet-4.5",
+    displayName: "Claude Sonnet 4.5",
+    isPro: true,
+    description: "Great for agents",
+    tooltip: "Anthropic's latest model",
+  },
+  {
     id: "openai/gpt-5",
     displayName: "GPT-5",
     isPro: true,
@@ -53,13 +68,6 @@ export const FEATURED_MODELS: FeaturedModelConfig[] = [
     isPro: false,
     description: "Great for everyday",
     tooltip: "OpenAI's faster model",
-  },
-  {
-    id: "anthropic/claude-sonnet-4.5",
-    displayName: "Claude Sonnet 4.5",
-    isPro: true,
-    description: "Great for agents",
-    tooltip: "Anthropic's latest model",
   },
   {
     id: "google/gemini-2.5-pro",
