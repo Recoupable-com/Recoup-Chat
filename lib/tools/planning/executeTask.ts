@@ -23,10 +23,10 @@ export function createExecuteTaskTool(
         return "No outstanding tasks to execute.";
       }
 
-      const { id } = currentTask;
+      const { id, task } = currentTask;
       const messages = convertToModelMessages(inputMessages);
 
-      const decision = await getRoutingDecision(body);
+      const decision = await getRoutingDecision(task, body);
 
       let summary: string = "";
       if (writer) {
