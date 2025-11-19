@@ -18,6 +18,7 @@ import { DEFAULT_MODEL } from "@/lib/consts";
 import { usePaymentProvider } from "@/providers/PaymentProvider";
 import useArtistFilesForMentions from "@/hooks/useArtistFilesForMentions";
 import type { KnowledgeBaseEntry } from "@/lib/supabase/getArtistKnowledge";
+import { buildSignedUrlApiUrl } from "@/lib/files/buildSignedUrlApiUrl";
 
 // 30 days in seconds for Supabase signed URL expiry
 const SIGNED_URL_EXPIRES_SECONDS = 60 * 60 * 24 * 30;
@@ -114,9 +115,12 @@ export function useVercelChat({
 
         await Promise.all(
           toFetch.map(async (f) => {
-            const res = await fetch(
-              `/api/files/get-signed-url?key=${encodeURIComponent(f.storage_key)}&accountId=${encodeURIComponent(userData?.account_id || "")}&expires=${SIGNED_URL_EXPIRES_SECONDS}`
+            const apiUrl = buildSignedUrlApiUrl(
+              f.storage_key,
+              userData?.account_id || "",
+              SIGNED_URL_EXPIRES_SECONDS
             );
+            const res = await fetch(apiUrl);
             if (!res.ok) throw new Error("Failed to get signed URL");
             const { signedUrl } = (await res.json()) as { signedUrl: string };
             const entry: KnowledgeBaseEntry = {

@@ -5,6 +5,7 @@ import { DropdownMenuItem } from "@/components/ui/dropdown-menu";
 import { Download, Loader2 } from "lucide-react";
 import { toast } from "sonner";
 import { useUserProvider } from "@/providers/UserProvder";
+import { buildSignedUrlApiUrl } from "@/lib/files/buildSignedUrlApiUrl";
 
 type DownloadMenuItemProps = {
   storageKey: string;
@@ -26,9 +27,8 @@ export default function DownloadMenuItem({
         description: `Starting download of ${fileName}`,
       });
       
-      const res = await fetch(
-        `/api/files/get-signed-url?key=${encodeURIComponent(storageKey)}&accountId=${encodeURIComponent(userData?.account_id || "")}`
-      );
+      const apiUrl = buildSignedUrlApiUrl(storageKey, userData?.account_id || "");
+      const res = await fetch(apiUrl);
       if (!res.ok) throw new Error("Failed to get signed URL");
       const { signedUrl } = (await res.json()) as { signedUrl: string };
 
