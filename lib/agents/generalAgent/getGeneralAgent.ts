@@ -40,7 +40,7 @@ export default async function getGeneralAgent(
   // Build General Agent
   const tools = setupToolsForRequest(finalExcludeTools);
   const model = nanoBananaConfig.resolvedModel || DEFAULT_MODEL;
-  const stopWhen = stepCountIs(111);
+  const stopWhen = stepCountIs(1);
 
   const agent = new ToolLoopAgent({
     model,

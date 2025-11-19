@@ -10,7 +10,7 @@ export default async function getGoogleSheetsAgent(
 
   const tools = await getGoogleSheetsTools(body);
   const model = bodyModel || DEFAULT_MODEL;
-  const stopWhen = stepCountIs(111);
+  const stopWhen = stepCountIs(1);
   const instructions = `You are a Google Sheets agent.
   account_id: ${accountId}`;
 
