@@ -48,8 +48,7 @@ const getSearchGoogleImagesTool = () => {
         });
 
         // Build final result with all image data
-        // Return (don't yield) so it persists in message history
-        return {
+        const finalResult = {
           success: true,
           query,
           total_results: response.images_results.length,
@@ -65,6 +64,13 @@ const getSearchGoogleImagesTool = () => {
           })),
           message: `Found ${response.images_results.length} images for "${query}"`,
         };
+        
+        // MUST yield (not return) for async generators to send to client
+        // Return value stays on server and never reaches the UI
+        yield finalResult;
+        
+        // Also return it so AI model gets the data
+        return finalResult;
       } catch (error) {
         throw new Error(`Google Images search failed: ${error}`);
       }
