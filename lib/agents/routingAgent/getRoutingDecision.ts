@@ -1,8 +1,9 @@
 import { ChatRequest, RoutingDecision } from "@/lib/chat/types";
-import { routingAgent } from "./routingAgent";
-import { getGoogleSheetsAgent } from "@/lib/agents/googleSheetsAgent";
-import { getGeneralAgent } from "@/lib/agents/generalAgent";
-import { convertToModelMessages } from "ai";
+// import { routingAgent } from "./routingAgent";
+// import { getGoogleSheetsAgent } from "@/lib/agents/googleSheetsAgent";
+// import { getGeneralAgent } from "@/lib/agents/generalAgent";
+// import { convertToModelMessages } from "ai";
+import getPlanningAgent from "@/lib/agents/planningAgent/getPlanningAgent";
 
 /**
  * Routing agent that determines which specialized agent should handle the request.
@@ -12,28 +13,30 @@ import { convertToModelMessages } from "ai";
 export async function getRoutingDecision(
   body: ChatRequest
 ): Promise<RoutingDecision> {
-  const { messages } = body;
+  // const { messages } = body;
 
-  const generalAgentDecision = await getGeneralAgent(body);
+  return getPlanningAgent(body);
 
-  try {
-    const result = await routingAgent.generate({
-      messages: convertToModelMessages(messages),
-    });
+  // const generalAgentDecision = await getGeneralAgent(body);
 
-    const routingDecision = result.output || {
-      agent: "generalAgent",
-      reason: "agent-default",
-    };
+  // try {
+  //   const result = await routingAgent.generate({
+  //     messages: convertToModelMessages(messages),
+  //   });
 
-    if (routingDecision.agent === "googleSheetsAgent") {
-      const googleSheetsDecision = await getGoogleSheetsAgent(body);
-      return googleSheetsDecision;
-    }
+  //   const routingDecision = result.output || {
+  //     agent: "generalAgent",
+  //     reason: "agent-default",
+  //   };
 
-    return generalAgentDecision;
-  } catch (error) {
-    console.error("Routing agent error:", error);
-    return generalAgentDecision;
-  }
+  //   if (routingDecision.agent === "googleSheetsAgent") {
+  //     const googleSheetsDecision = await getGoogleSheetsAgent(body);
+  //     return googleSheetsDecision;
+  //   }
+
+  //   return generalAgentDecision;
+  // } catch (error) {
+  //   console.error("Routing agent error:", error);
+  //   return generalAgentDecision;
+  // }
 }
