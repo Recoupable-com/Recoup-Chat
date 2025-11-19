@@ -2,13 +2,16 @@ import generateUUID from "@/lib/generateUUID";
 import { MAX_MESSAGES } from "./const";
 import { type ChatRequest, type ChatConfig } from "./types";
 import { AnthropicProviderOptions } from "@ai-sdk/anthropic";
-import { convertToModelMessages } from "ai";
+import { convertToModelMessages, UIMessageStreamWriter } from "ai";
 // import getPrepareStepResult from "./toolChains/getPrepareStepResult";
 // import { getRoutingDecision } from "@/lib/agents/routingAgent";
 import getPlanningAgent from "../agents/planningAgent/getPlanningAgent";
 
-export async function setupChatRequest(body: ChatRequest): Promise<ChatConfig> {
-  const decision = await getPlanningAgent(body);
+export async function setupChatRequest(
+  body: ChatRequest,
+  writer?: UIMessageStreamWriter
+): Promise<ChatConfig> {
+  const decision = await getPlanningAgent(body, writer);
 
   const system = decision.instructions;
   const tools = decision.agent.tools;

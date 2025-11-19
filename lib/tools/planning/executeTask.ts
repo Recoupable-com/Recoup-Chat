@@ -1,12 +1,16 @@
 import { z } from "zod";
-import { tool, convertToModelMessages } from "ai";
+import { tool, convertToModelMessages, UIMessageStreamWriter } from "ai";
 import type { Plan } from "@/lib/agents/planningAgent/addTasksToPlan";
 import { getCurrentTask } from "@/lib/agents/planningAgent/getCurrentTask";
 import { completeTask } from "@/lib/agents/planningAgent/completeTask";
 import { getRoutingDecision } from "@/lib/agents/routingAgent";
 import { ChatRequest } from "@/lib/chat/types";
 
-export function createExecuteTaskTool(plan: Plan, body: ChatRequest) {
+export function createExecuteTaskTool(
+  plan: Plan,
+  body: ChatRequest,
+  writer?: UIMessageStreamWriter
+) {
   const schema = z.object({});
   const { messages: inputMessages } = body;
 
@@ -25,13 +29,23 @@ export function createExecuteTaskTool(plan: Plan, body: ChatRequest) {
       const decision = await getRoutingDecision(body);
       console.log("decision", decision);
 
-      const result = await decision.agent.generate({
-        messages,
-      });
+      let summary: string = "";
+      if (writer) {
+        const result = await decision.agent.stream({
+          messages,
+        });
+        writer.merge(result.toUIMessageStream());
+        summary = await result.text;
+      } else {
+        const result = await decision.agent.generate({
+          messages,
+        });
+        summary = result.text;
+      }
 
       const output = {
         success: true,
-        summary: result.text,
+        summary,
       };
 
       if (output.success) {

@@ -1,4 +1,4 @@
-import { stepCountIs, ToolLoopAgent, ToolSet } from "ai";
+import { stepCountIs, ToolLoopAgent, ToolSet, UIMessageStreamWriter } from "ai";
 import { DEFAULT_MODEL } from "@/lib/consts";
 import { ChatRequest, RoutingDecision } from "@/lib/chat/types";
 import { getOutstandingTasks } from "./getOutstandingTasks";
@@ -8,7 +8,8 @@ import { createCreatePlanTool } from "@/lib/tools/planning/createPlan";
 import { createExecuteTaskTool } from "@/lib/tools/planning/executeTask";
 
 export default async function getPlanningAgent(
-  body: ChatRequest
+  body: ChatRequest,
+  writer?: UIMessageStreamWriter
 ): Promise<RoutingDecision> {
   const { model: bodyModel } = body;
 
@@ -19,7 +20,7 @@ export default async function getPlanningAgent(
   const instructions = "You are a planning agent.";
 
   const createPlan = createCreatePlanTool(plan);
-  const executeTask = createExecuteTaskTool(plan, body);
+  const executeTask = createExecuteTaskTool(plan, body, writer);
 
   const tools: ToolSet = { createPlan, executeTask };
 

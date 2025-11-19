@@ -10,7 +10,7 @@ type ExecuteOptions = {
 const getExecute = async (options: ExecuteOptions, body: ChatRequest) => {
   const { writer } = options;
 
-  const chatConfig = await setupChatRequest(body);
+  const chatConfig = await setupChatRequest(body, writer);
   const { agent } = chatConfig;
   try {
     const result = await agent.stream(chatConfig);
