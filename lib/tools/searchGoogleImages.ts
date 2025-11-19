@@ -6,15 +6,25 @@ import type { SearchProgress } from "./searchWeb/types";
 const getSearchGoogleImagesTool = () => {
   return tool({
     description:
-      "Search for images using Google Images. Use this when the user asks for photos, images, or visual content of artists, album covers, concert photos, or any other visual content. " +
-      "Returns a list of images with thumbnails and full-resolution URLs that can be displayed in chat or used in emails. " +
-      "Prefer real images over AI-generated ones when appropriate.",
+      "Search for EXISTING images on Google Images. Use this to FIND real photos, not create new ones.\n\n" +
+      "Use this tool when the user wants to:\n" +
+      "- FIND existing photos of artists, concerts, album covers, or events\n" +
+      "- SEE what something looks like (e.g., 'show me photos of Mac Miller', 'find concert images')\n" +
+      "- GET reference images or inspiration from real photos\n" +
+      "- SEARCH for visual content that already exists online\n\n" +
+      "DO NOT use this tool when the user wants to:\n" +
+      "- CREATE, GENERATE, or MAKE new images (use nano_banana_generate instead)\n" +
+      "- DESIGN custom album covers or artwork (use generate_image tools)\n" +
+      "- EDIT existing images (use nano_banana_edit instead)\n\n" +
+      "Key distinction: This finds what EXISTS, generative tools create what DOESN'T exist yet.\n\n" +
+      "Returns thumbnails and full-resolution URLs for displaying in chat or emails.\n\n" +
+      "TECHNICAL NOTES: Keep parameters simple. Query is most important. Optional filters can cause errors - if tool fails, retry with just query and limit.",
     inputSchema: z.object({
-      query: z.string().describe("The search query (e.g., 'Mac Miller concert', 'Wiz Khalifa album cover')"),
-      limit: z.number().optional().describe("Number of images to return (1-100, default: 8)"),
-      imageSize: z.enum(["l", "m", "i"]).optional().describe("Image size: 'l' (large), 'm' (medium), 'i' (icon/small). Default: 'l'"),
-      imageType: z.enum(["photo", "clipart", "lineart", "animated"]).optional().describe("Type of image. Default: 'photo'"),
-      aspectRatio: z.enum(["square", "wide", "tall", "panoramic"]).optional().describe("Aspect ratio of images"),
+      query: z.string().describe("The search query (e.g., 'Mac Miller concert', 'Wiz Khalifa album cover'). Be specific for best results."),
+      limit: z.number().optional().describe("Number of images to return (1-100, default: 8)."),
+      imageSize: z.enum(["l", "m", "i"]).optional().describe("Image size: 'l' (large, recommended), 'm' (medium), 'i' (icon/small). Leave unset if unsure."),
+      imageType: z.enum(["photo", "clipart", "lineart", "animated"]).optional().describe("Type of image: 'photo' (default, recommended), 'clipart', 'lineart', 'animated'. Leave unset if unsure."),
+      aspectRatio: z.enum(["square", "wide", "tall", "panoramic"]).optional().describe("Aspect ratio filter. WARNING: May not always be supported. Only use if specifically requested. Leave unset for general searches."),
     }),
     execute: async function* ({
       query,
@@ -30,7 +40,7 @@ const getSearchGoogleImagesTool = () => {
       // Initial searching status (streaming progress to UI)
       yield {
         status: 'searching' as const,
-        message: 'Searching Google Images...',
+        message: 'Searching Web for Images...',
         query,
       } satisfies SearchProgress;
 
