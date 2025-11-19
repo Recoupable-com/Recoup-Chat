@@ -62,6 +62,8 @@ import YouTubeSetThumbnailResult from "./tools/youtube/YouTubeSetThumbnailResult
 import YouTubeSetThumbnailSkeleton from "./tools/youtube/YouTubeSetThumbnailSkeleton";
 import type { YouTubeSetThumbnailResult as YouTubeSetThumbnailResultType } from "@/types/youtube";
 import SearchWebSkeleton from "./tools/SearchWeb/SearchWebSkeleton";
+import { GoogleImagesSkeleton } from "./tools/GoogleImagesSkeleton";
+import { GoogleImagesResult, type GoogleImagesResultType } from "./tools/GoogleImagesResult";
 import SpotifyDeepResearchSkeleton from "./tools/SpotifyDeepResearchSkeleton";
 import WebDeepResearchSkeleton from "./tools/SearchWeb/WebDeepResearchSkeleton";
 import { SearchWebResultType } from "./tools/SearchWeb/SearchWebResult";
@@ -177,6 +179,12 @@ export function getToolCallComponent(part: ToolUIPart) {
     return (
       <div key={toolCallId}>
         <SearchWebSkeleton />
+      </div>
+    );
+  } else if (toolName === "search_google_images") {
+    return (
+      <div key={toolCallId}>
+        <GoogleImagesSkeleton />
       </div>
     );
   } else if (toolName === "web_deep_research") {
@@ -430,6 +438,21 @@ export function getToolResultComponent(part: ToolUIPart) {
     return (
       <div key={toolCallId}>
         <SearchApiResult result={result as SearchWebResultType} />
+      </div>
+    );
+  } else if (toolName === "search_google_images") {
+    // Handle progress updates during search
+    if (isSearchProgressUpdate(result)) {
+      return (
+        <div key={toolCallId}>
+          <GoogleImagesSkeleton />
+        </div>
+      );
+    }
+
+    return (
+      <div key={toolCallId}>
+        <GoogleImagesResult result={result as GoogleImagesResultType} />
       </div>
     );
   } else if (isDeepResearchTool) {

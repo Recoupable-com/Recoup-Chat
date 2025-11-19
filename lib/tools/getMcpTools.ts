@@ -10,6 +10,7 @@ import getArtistSocials from "./getArtistSocials";
 import getSocialPosts from "./getSocialPosts";
 import getPostComments from "./getPostComments";
 import { searchWeb, webDeepResearch } from "./searchWeb";
+import searchGoogleImages from "./searchGoogleImages";
 import generateMermaidDiagram from "./generateMermaidDiagram";
 import createArtist from "./createArtist";
 import deleteArtist from "./deleteArtist";
@@ -51,6 +52,7 @@ export function getMcpTools(): ToolSet {
     get_social_posts: getSocialPosts,
     get_post_comments: getPostComments,
     search_web: searchWeb,
+    search_google_images: searchGoogleImages,
     web_deep_research: webDeepResearch,
     generate_mermaid_diagram: generateMermaidDiagram,
     create_new_artist: createArtist,

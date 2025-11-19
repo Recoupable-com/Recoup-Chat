@@ -17,7 +17,6 @@ interface TextMessagePartProps {
 }
 
 export function TextMessagePart({ text }: TextMessagePartProps) {
-  // Clean file mention markup to prevent [blocked] display
   const cleanedText = cleanFileMentions(text);
 
   return (
