@@ -19,7 +19,7 @@ export default async function getPlanningAgent(
   const stopWhen = stepCountIs(111);
   const instructions = "You are a planning agent.";
 
-  const createPlan = createCreatePlanTool(plan);
+  const createPlan = await createCreatePlanTool(plan, body);
   const executeTask = createExecuteTaskTool(plan, body, writer);
 
   const tools: ToolSet = { createPlan, executeTask };

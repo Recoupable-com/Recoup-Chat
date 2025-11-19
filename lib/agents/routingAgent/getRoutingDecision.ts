@@ -2,7 +2,6 @@ import { ChatRequest, RoutingDecision } from "@/lib/chat/types";
 import { routingAgent } from "./routingAgent";
 import { getGoogleSheetsAgent } from "@/lib/agents/googleSheetsAgent";
 import { getGeneralAgent } from "@/lib/agents/generalAgent";
-import { convertToModelMessages } from "ai";
 
 /**
  * Routing agent that determines which specialized agent should handle the request.
@@ -10,15 +9,14 @@ import { convertToModelMessages } from "ai";
  * Updates UI with routing status during the process if writer is provided.
  */
 export async function getRoutingDecision(
+  task: string,
   body: ChatRequest
 ): Promise<RoutingDecision> {
-  const { messages } = body;
-
   const generalAgentDecision = await getGeneralAgent(body);
 
   try {
     const result = await routingAgent.generate({
-      messages: convertToModelMessages(messages),
+      prompt: task,
     });
 
     const routingDecision = result.output || {
