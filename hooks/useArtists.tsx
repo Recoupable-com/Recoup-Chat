@@ -100,7 +100,7 @@ const useArtists = () => {
       }
       setIsLoading(false);
     },
-    [userData, email, artistMode]
+    [userData]
   );
 
   const saveSetting = async (

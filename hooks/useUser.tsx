@@ -24,7 +24,7 @@ const useUser = () => {
   const [companyName, setCompanyName] = useState("");
   const [onboardingStatus, setOnboardingStatus] = useState<any>(null);
   const [imageUploading, setImageUploading] = useState(false);
-  const imageRef = useRef() as any;
+  const imageRef = useRef<HTMLInputElement>(null);
   const [updating, setUpdating] = useState(false);
   const router = useRouter();
 
