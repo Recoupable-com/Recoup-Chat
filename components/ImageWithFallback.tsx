@@ -48,10 +48,11 @@ const ImageWithFallback = ({
 
   console.log("[ImageWithFallback] ✅ Rendering image with src:", src);
 
-  // Use regular img tag for external CDN URLs (Arweave, IPFS) to avoid Next.js Image optimization issues
-  const isExternalCDN = src.includes("arweave.net") || src.includes("ipfs.decentralized-content.com") || src.includes("ipfs://");
+  // Use regular img tag for all external URLs to avoid Next.js Image optimization issues in production
+  // External URLs are already optimized by their CDNs and don't benefit from Next.js optimization
+  const isExternalURL = src.startsWith("http://") || src.startsWith("https://");
   
-  if (isExternalCDN) {
+  if (isExternalURL) {
     return (
       <div className="w-full h-full min-w-8 min-h-8 relative">
         {/* eslint-disable-next-line @next/next/no-img-element */}
@@ -76,6 +77,7 @@ const ImageWithFallback = ({
     );
   }
 
+  // Fallback to Next.js Image for relative paths or data URLs (though we shouldn't hit this)
   return (
     <div className="w-full h-full min-w-8 min-h-8 relative">
       <Image
