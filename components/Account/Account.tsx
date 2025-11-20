@@ -17,6 +17,12 @@ const Account = () => {
     updating,
     organization,
     setOrganization,
+    jobTitle,
+    setJobTitle,
+    roleType,
+    setRoleType,
+    companyName,
+    setCompanyName,
     save,
     signOut,
     userData,
@@ -56,6 +62,30 @@ const Account = () => {
           name="organization"
           hookToForm
         />
+        <Input
+          value={jobTitle}
+          onChange={(e) => setJobTitle(e.target.value)}
+          label="Job Title"
+          id="jobTitle"
+          name="jobTitle"
+          hookToForm
+        />
+        <Input
+          value={roleType}
+          onChange={(e) => setRoleType(e.target.value)}
+          label="Role"
+          id="roleType"
+          name="roleType"
+          hookToForm
+        />
+        <Input
+          value={companyName}
+          onChange={(e) => setCompanyName(e.target.value)}
+          label="Company Name"
+          id="companyName"
+          name="companyName"
+          hookToForm
+        />
       </div>
       <div className="col-span-5 space-y-1 md:space-y-2">
         <p className="text-sm">Image</p>
@@ -65,7 +95,7 @@ const Account = () => {
         <ArtistInstructionTextArea
           value={instruction}
           onChange={(e) => setInstruction(e.target.value)}
-          label="Custom Instruction"
+          label="Custom Instructions"
           id="instruction"
           name="instruction"
           rows={3}

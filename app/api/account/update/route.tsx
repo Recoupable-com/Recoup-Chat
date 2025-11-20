@@ -6,7 +6,7 @@ import updateAccountInfo from "@/lib/supabase/accountInfo/updateAccountInfo";
 
 export async function POST(req: NextRequest) {
   const body = await req.json();
-  const { instruction, name, organization, accountId, image } = body;
+  const { instruction, name, organization, accountId, image, jobTitle, roleType, companyName } = body;
 
   try {
     const found = await getAccountById(accountId);
@@ -21,6 +21,9 @@ export async function POST(req: NextRequest) {
         organization,
         image,
         instruction,
+        job_title: jobTitle,
+        role_type: roleType,
+        company_name: companyName,
         account_id: accountId,
       });
     } else {
@@ -28,19 +31,23 @@ export async function POST(req: NextRequest) {
         organization,
         image,
         instruction,
+        job_title: jobTitle,
+        role_type: roleType,
+        company_name: companyName,
       });
     }
 
     // Fetch the updated account with all joined info
     const updated = await getAccountById(accountId);
     // Spread account_info, account_wallets, account_emails into top-level
-    const info = updated?.account_info?.[0] || {};
-    const wallet = updated?.account_wallets?.[0] || {};
-    const email = updated?.account_emails?.[0] || {};
+    const { id: _infoId, account_id, ...info } = updated?.account_info?.[0] || {} as any;
+    const { id: _walletId, ...wallet } = updated?.account_wallets?.[0] || {} as any;
+    const { id: _emailId, ...email } = updated?.account_emails?.[0] || {} as any;
     const response = {
       data: {
+        id: updated?.id,           // Keep the ACCOUNT id
+        account_id: updated?.id,   // Also set account_id for consistency
         name: updated?.name,
-        id: updated?.id,
         ...info,
         ...wallet,
         ...email,

@@ -33,11 +33,17 @@ const useUser = () => {
       setImageUploading(false);
       return;
     }
-    if (file) {
+    try {
       const { uri } = await uploadFile(file);
-      setImage(getIpfsLink(uri));
+      const ipfsLink = getIpfsLink(uri);
+      console.log("✅ Image uploaded to IPFS:", ipfsLink);
+      setImage(ipfsLink);
+    } catch (error) {
+      console.error("❌ Error uploading image:", error);
+      alert("Failed to upload image. Please try again.");
+    } finally {
+      setImageUploading(false);
     }
-    setImageUploading(false);
   };
 
   const save = async () => {
@@ -49,6 +55,9 @@ const useUser = () => {
         organization,
         name,
         image,
+        jobTitle,
+        roleType,
+        companyName,
         accountId: userData?.account_id,
       }),
       headers: {
@@ -77,6 +86,9 @@ const useUser = () => {
     setInstruction("");
     setImage("");
     setOrganization("");
+    setJobTitle("");
+    setRoleType("");
+    setCompanyName("");
     await logout();
     router.push("/signin");
   };
@@ -135,6 +147,12 @@ const useUser = () => {
     save,
     organization,
     setOrganization,
+    jobTitle,
+    setJobTitle,
+    roleType,
+    setRoleType,
+    companyName,
+    setCompanyName,
     signOut,
   };
 };
