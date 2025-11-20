@@ -126,7 +126,7 @@ ${knowledge}
   } else {
     console.log("[getSystemPrompt] ❌ User context section NOT found in system prompt");
   }
-  
+
   return systemPrompt;
 }
 
