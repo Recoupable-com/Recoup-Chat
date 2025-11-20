@@ -3,8 +3,7 @@ import { useRouter } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
 import { Address } from "viem";
 import useTrackEmail from "./useTrackEmail";
-import { uploadFile } from "@/lib/ipfs/uploadToIpfs";
-import getIpfsLink from "@/lib/ipfs/getIpfsLink";
+import { uploadFile } from "@/lib/arweave/uploadFile";
 import { useAccount } from "wagmi";
 
 const useUser = () => {
@@ -39,14 +38,13 @@ const useUser = () => {
     }
     try {
       const { uri } = await uploadFile(file);
-      const ipfsLink = getIpfsLink(uri);
-      console.log("✅ Image uploaded to IPFS:", ipfsLink);
-      setImage(ipfsLink);
+      console.log("[useUser] ✅ Image uploaded:", uri);
+      setImage(uri);
     } catch (error) {
-      console.error("❌ Error uploading image:", error);
+      console.error("[useUser] ❌ Error uploading image:", error);
       alert("Failed to upload image. Please try again.");
     } finally {
-    setImageUploading(false);
+      setImageUploading(false);
     }
   };
 
@@ -144,6 +142,11 @@ const useUser = () => {
       }
 
       const data = await response.json();
+      console.log("[useUser] Account data retrieved:", {
+        image: data.data?.image,
+        hasImage: !!data.data?.image,
+        imageType: typeof data.data?.image,
+      });
       setUserData(data.data);
       setImage(data.data?.image || "");
       setInstruction(data.data?.instruction || "");

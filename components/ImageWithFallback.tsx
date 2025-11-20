@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import Image from "next/image";
 import { User } from "lucide-react";
 
 const ImageWithFallback = ({
@@ -13,13 +14,16 @@ const ImageWithFallback = ({
 
   // Reset error state when src changes
   useEffect(() => {
+    console.log("[ImageWithFallback] Image src changed:", src);
     setImgError(false);
     setKeyValue((prev) => prev + 1);
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [src]);
 
   // If no src or error loading image, show placeholder
   if (!src || imgError) {
+    if (imgError) {
+      console.error("[ImageWithFallback] ❌ Image error state - showing placeholder. Original src:", src);
+    }
     return (
       <div className="w-full h-full min-w-8 min-h-8">
         <div className={`bg-muted w-full h-full flex items-center justify-center rounded-full border border-border ${className}`}>
@@ -29,15 +33,42 @@ const ImageWithFallback = ({
     );
   }
 
+  // Validate URL format
+  const isValidUrl = src.startsWith("http://") || src.startsWith("https://");
+  if (!isValidUrl) {
+    console.warn("[ImageWithFallback] ⚠️ Invalid image URL format:", src);
+    return (
+      <div className="w-full h-full min-w-8 min-h-8">
+        <div className={`bg-muted w-full h-full flex items-center justify-center rounded-full border border-border ${className}`}>
+          <User className="w-8 h-8 text-muted-foreground" />
+        </div>
+      </div>
+    );
+  }
+
+  console.log("[ImageWithFallback] ✅ Rendering image with src:", src);
+
   return (
-    <div className="w-full h-full min-w-8 min-h-8">
-      {/* eslint-disable-next-line @next/next/no-img-element */}
-      <img
+    <div className="w-full h-full min-w-8 min-h-8 relative">
+      <Image
         key={keyValue}
         src={src}
-        onError={() => setImgError(true)}
-        className={`object-cover w-full h-full ${className}`}
         alt="Profile avatar"
+        fill
+        className={`object-cover ${className}`}
+        onError={(e) => {
+          console.error("[ImageWithFallback] ❌ Image onError triggered:", {
+            src,
+            error: e,
+            target: e.currentTarget,
+          });
+          setImgError(true);
+        }}
+        onLoad={() => {
+          console.log("[ImageWithFallback] ✅ Image loaded successfully:", src);
+        }}
+        unoptimized={src.includes("ipfs.decentralized-content.com") || src.includes("ipfs://")}
+        sizes="128px"
       />
     </div>
   );
