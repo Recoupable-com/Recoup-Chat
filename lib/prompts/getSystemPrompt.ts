@@ -2,6 +2,7 @@ import { SYSTEM_PROMPT } from "@/lib/consts";
 import getArtistIdForRoom from "../supabase/getArtistIdForRoom";
 import getArtistInstruction from "../supabase/getArtistInstruction";
 import getKnowledgeBaseContext from "../agent/getKnowledgeBaseContext";
+import getUserInfo from "../supabase/getUserInfo";
 
 export async function getSystemPrompt({
   roomId,
@@ -50,20 +51,64 @@ export async function getSystemPrompt({
   - account_id: Use the account_id value shown above
   - DO NOT ask the user for any information - you have everything you need`;
 
+  // Add user information section
+  const userInfo = await getUserInfo(accountId || "");
+  if (userInfo) {
+    let userSection = `
+
+-----CURRENT USER CONTEXT-----
+This is information about the person currently using this application (the human you're talking to):
+
+Name: ${userInfo.name || "Not provided"}
+Email: ${userInfo.email || email || "Not provided"}`;
+
+    if (userInfo.job_title || userInfo.role_type || userInfo.company_name || userInfo.organization) {
+      userSection += `
+
+Professional Context:`;
+      if (userInfo.job_title) userSection += `
+- Job Title: ${userInfo.job_title}`;
+      if (userInfo.role_type) userSection += `
+- Role Type: ${userInfo.role_type}`;
+      if (userInfo.company_name) userSection += `
+- Company: ${userInfo.company_name}`;
+      if (userInfo.organization) userSection += `
+- Organization: ${userInfo.organization}`;
+    }
+
+    if (userInfo.instruction) {
+      userSection += `
+
+User's Custom Instructions & Preferences:
+${userInfo.instruction}`;
+    }
+
+    userSection += `
+-----END USER CONTEXT-----`;
+
+    systemPrompt = `${systemPrompt}${userSection}`;
+  }
+
   const customInstruction = artistInstruction || await getArtistInstruction(resolvedArtistId || "");
   if (customInstruction) {
     systemPrompt = `${systemPrompt}
------ARTIST CUSTOM INSTRUCTION-----
+
+-----SELECTED ARTIST/WORKSPACE CONTEXT-----
+This is information about the artist/workspace the user is currently working with:
+
+Custom Instructions for this Artist:
 ${customInstruction}
------END ARTIST CUSTOM INSTRUCTION-----`;
+-----END ARTIST/WORKSPACE CONTEXT-----`;
   }
 
   const knowledge = knowledgeBaseText || await getKnowledgeBaseContext(resolvedArtistId || "");
   if (knowledge) {
     systemPrompt = `${systemPrompt}
------ARTIST KNOWLEDGE BASE-----
+
+-----ARTIST/WORKSPACE KNOWLEDGE BASE-----
+Additional context and knowledge for the selected artist/workspace:
 ${knowledge}
------END KNOWLEDGE BASE-----`;
+-----END ARTIST/WORKSPACE KNOWLEDGE BASE-----`;
   }
 
   return systemPrompt;
