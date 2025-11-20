@@ -21,16 +21,18 @@ export async function POST(req: NextRequest) {
         organization,
         image,
         instruction,
+        account_id: accountId,
+        // @ts-expect-error - New onboarding fields not yet in generated types
         job_title: jobTitle,
         role_type: roleType,
         company_name: companyName,
-        account_id: accountId,
       });
     } else {
       await updateAccountInfo(accountId, {
         organization,
         image,
         instruction,
+        // @ts-expect-error - New onboarding fields not yet in generated types
         job_title: jobTitle,
         role_type: roleType,
         company_name: companyName,
@@ -39,10 +41,19 @@ export async function POST(req: NextRequest) {
 
     // Fetch the updated account with all joined info
     const updated = await getAccountById(accountId);
+    
     // Spread account_info, account_wallets, account_emails into top-level
-    const { id: _infoId, account_id, ...info } = updated?.account_info?.[0] || {} as any;
-    const { id: _walletId, ...wallet } = updated?.account_wallets?.[0] || {} as any;
-    const { id: _emailId, ...email } = updated?.account_emails?.[0] || {} as any;
+    // Destructure to avoid ID conflicts (exclude id and account_id from spreads)
+    const accountInfo = updated?.account_info?.[0];
+    const accountWallet = updated?.account_wallets?.[0];
+    const accountEmail = updated?.account_emails?.[0];
+    
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    const { id: _infoId, account_id: _accountId, ...info } = accountInfo || {};
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    const { id: _walletId, ...wallet } = accountWallet || {};
+    const email = accountEmail || {};
+    
     const response = {
       data: {
         id: updated?.id,           // Keep the ACCOUNT id

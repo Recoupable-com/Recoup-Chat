@@ -19,6 +19,10 @@ const useUser = () => {
   const [name, setName] = useState("");
   const [image, setImage] = useState("");
   const [organization, setOrganization] = useState("");
+  const [jobTitle, setJobTitle] = useState("");
+  const [roleType, setRoleType] = useState("");
+  const [companyName, setCompanyName] = useState("");
+  const [onboardingStatus, setOnboardingStatus] = useState<any>(null);
   const [imageUploading, setImageUploading] = useState(false);
   const imageRef = useRef() as any;
   const [updating, setUpdating] = useState(false);
@@ -119,6 +123,10 @@ const useUser = () => {
       setInstruction(data.data?.instruction || "");
       setName(data?.data?.name || "");
       setOrganization(data?.data?.organization || "");
+      setJobTitle(data?.data?.job_title || "");
+      setRoleType(data?.data?.role_type || "");
+      setCompanyName(data?.data?.company_name || "");
+      setOnboardingStatus(data?.data?.onboarding_status || null);
     };
     if (!email && !address) return;
     init();
