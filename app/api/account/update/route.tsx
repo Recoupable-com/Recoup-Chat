@@ -22,7 +22,6 @@ export async function POST(req: NextRequest) {
         image,
         instruction,
         account_id: accountId,
-        // @ts-expect-error - New onboarding fields not yet in generated types
         job_title: jobTitle,
         role_type: roleType,
         company_name: companyName,
@@ -32,7 +31,6 @@ export async function POST(req: NextRequest) {
         organization,
         image,
         instruction,
-        // @ts-expect-error - New onboarding fields not yet in generated types
         job_title: jobTitle,
         role_type: roleType,
         company_name: companyName,

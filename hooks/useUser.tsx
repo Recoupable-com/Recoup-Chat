@@ -58,27 +58,46 @@ const useUser = () => {
   };
 
   const save = async () => {
+    if (!userData?.account_id) {
+      console.error("❌ Cannot save account settings: missing account_id");
+      return;
+    }
+
     setUpdating(true);
-    const response = await fetch("/api/account/update", {
-      method: "POST",
-      body: JSON.stringify({
-        instruction,
-        organization,
-        name,
-        image,
-        jobTitle,
-        roleType,
-        companyName,
-        accountId: userData?.account_id,
-      }),
-      headers: {
-        "Content-Type": "application/json",
-      },
-    });
-    const data = await response.json();
-    setUserData(data.data);
-    setUpdating(false);
-    setIsModalOpen(false);
+    try {
+      const response = await fetch("/api/account/update", {
+        method: "POST",
+        body: JSON.stringify({
+          instruction,
+          organization,
+          name,
+          image,
+          jobTitle,
+          roleType,
+          companyName,
+          accountId: userData.account_id,
+        }),
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+
+      if (!response.ok) {
+        console.error("❌ Failed to save account settings", {
+          status: response.status,
+          statusText: response.statusText,
+        });
+        return;
+      }
+
+      const data = await response.json();
+      setUserData(data.data);
+      setIsModalOpen(false);
+    } catch (error) {
+      console.error("❌ Error saving account settings:", error);
+    } finally {
+      setUpdating(false);
+    }
   };
 
   const isPrepared = () => {

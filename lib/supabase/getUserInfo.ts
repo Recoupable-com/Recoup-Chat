@@ -1,9 +1,5 @@
 import supabase from "./serverClient";
 
-// NOTE: Migration needed! Run the migration at:
-// supabase/migrations/20251120000000_add_onboarding_to_account_info.sql
-// to add job_title, role_type, company_name columns
-
 export interface UserInfo {
   name?: string;
   email?: string;
@@ -25,10 +21,10 @@ async function getUserInfo(accountId: string): Promise<UserInfo | null> {
     return null;
   }
 
-  // Get user account info - only query existing columns for now
+  // Get user account info
   const { data: accountInfo } = await supabase
     .from("account_info")
-    .select("instruction, organization, knowledges")
+    .select("instruction, organization, knowledges, job_title, role_type, company_name")
     .eq("account_id", accountId)
     .single();
   
@@ -54,9 +50,9 @@ async function getUserInfo(accountId: string): Promise<UserInfo | null> {
     name: account?.name,
     email: accountEmail?.email,
     instruction: accountInfo?.instruction,
-    job_title: undefined, // Will be available after migration
-    role_type: undefined, // Will be available after migration
-    company_name: undefined, // Will be available after migration
+    job_title: accountInfo?.job_title,
+    role_type: accountInfo?.role_type,
+    company_name: accountInfo?.company_name,
     organization: accountInfo?.organization,
     knowledges: accountInfo?.knowledges,
   };

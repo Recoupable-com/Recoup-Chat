@@ -37,10 +37,10 @@ const Account = () => {
           <ImageSelect />
           {userData?.account_id && (
             <div className="mt-1">
-              <AccountIdDisplay
-                accountId={userData.account_id}
+            <AccountIdDisplay
+              accountId={userData.account_id}
                 label="ID"
-              />
+            />
             </div>
           )}
         </div>
@@ -67,17 +67,17 @@ const Account = () => {
             name="jobTitle"
             hookToForm
             className="bg-background border-border text-foreground placeholder:text-muted-foreground focus-visible:ring-1 focus-visible:ring-ring/60 focus-visible:ring-offset-1 transition-all"
-          />
-          <Input
+        />
+        <Input
             value={companyName}
             onChange={(e) => setCompanyName(e.target.value)}
             label="Company"
             id="companyName"
             name="companyName"
-            hookToForm
+          hookToForm
             className="bg-background border-border text-foreground placeholder:text-muted-foreground focus-visible:ring-1 focus-visible:ring-ring/60 focus-visible:ring-offset-1 transition-all"
-          />
-        </div>
+        />
+      </div>
 
         {/* Hidden Fields (Preserved for future use) */}
         {/* 
@@ -89,39 +89,39 @@ const Account = () => {
           <div className="mb-1.5 flex justify-between items-baseline">
             <label className="text-sm font-medium text-foreground">Custom Instructions</label>
             <span className="text-[10px] text-muted-foreground">Help the AI know you better</span>
-          </div>
-          <ArtistInstructionTextArea
-            value={instruction}
-            onChange={(e) => setInstruction(e.target.value)}
+      </div>
+        <ArtistInstructionTextArea
+          value={instruction}
+          onChange={(e) => setInstruction(e.target.value)}
             label="" // Label handled above for custom styling
-            id="instruction"
-            name="instruction"
+          id="instruction"
+          name="instruction"
             rows={4}
-            hookToForm
+          hookToForm
             className="bg-background border-border text-foreground placeholder:text-muted-foreground focus-visible:ring-1 focus-visible:ring-ring/60 focus-visible:ring-offset-1 transition-all text-sm resize-none"
             placeholder="e.g. I prefer concise answers. I'm a visual learner. I work in the music industry."
-          />
+        />
         </div>
       </div>
 
       {/* Actions Section */}
       <div className="w-full space-y-3 mt-2">
-        <button
+      <button
           className="w-full bg-primary text-primary-foreground rounded-lg py-2.5 text-sm font-medium hover:bg-primary/90 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
-          type="submit"
-          onClick={save}
-          disabled={updating}
-        >
+        type="submit"
+        onClick={save}
+        disabled={updating}
+      >
           {updating ? "Saving..." : "Save Changes"}
-        </button>
+      </button>
         
-        <button
+      <button
           className="w-full text-destructive hover:text-destructive/90 text-sm py-2 hover:bg-destructive/10 rounded-lg transition-colors"
-          onClick={signOut}
-          type="button"
-        >
-          Log Out
-        </button>
+        onClick={signOut}
+        type="button"
+      >
+        Log Out
+      </button>
       </div>
     </Form>
   );

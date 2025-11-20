@@ -23,13 +23,13 @@ const ImageSelect = () => {
   return (
     <>
       <div className="group relative inline-block">
-        <button
+      <button
           className="rounded-full focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2"
-          type="button"
+        type="button"
           onClick={() => imageRef.current?.click()}
-        >
+      >
           <div className="size-32 rounded-full relative overflow-hidden flex items-center justify-center ring-1 ring-border bg-muted text-muted-foreground transition-all hover:ring-ring/50">
-            {imageUploading ? (
+          {imageUploading ? (
               <div className="absolute inset-0 bg-background/80 backdrop-blur-sm flex flex-col items-center justify-center z-20">
                 <Loader2 className="size-6 animate-spin text-primary" />
               </div>
@@ -52,9 +52,9 @@ const ImageSelect = () => {
                    <Upload className="size-6 text-muted-foreground" />
                 </div>
               </>
-            )}
-          </div>
-        </button>
+          )}
+        </div>
+      </button>
         
         {/* Edit Badge (Bottom Right) */}
         {!imageUploading && (
