@@ -3,8 +3,7 @@ import { useRouter } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
 import { Address } from "viem";
 import useTrackEmail from "./useTrackEmail";
-import { uploadFile } from "@/lib/ipfs/uploadToIpfs";
-import getIpfsLink from "@/lib/ipfs/getIpfsLink";
+import { uploadFile } from "@/lib/arweave/uploadFile";
 import { useAccount } from "wagmi";
 
 const useUser = () => {
@@ -19,8 +18,12 @@ const useUser = () => {
   const [name, setName] = useState("");
   const [image, setImage] = useState("");
   const [organization, setOrganization] = useState("");
+  const [jobTitle, setJobTitle] = useState("");
+  const [roleType, setRoleType] = useState("");
+  const [companyName, setCompanyName] = useState("");
+  const [onboardingStatus, setOnboardingStatus] = useState<any>(null);
   const [imageUploading, setImageUploading] = useState(false);
-  const imageRef = useRef() as any;
+  const imageRef = useRef<HTMLInputElement>(null);
   const [updating, setUpdating] = useState(false);
   const router = useRouter();
 
@@ -33,15 +36,30 @@ const useUser = () => {
       setImageUploading(false);
       return;
     }
-    if (file) {
+    try {
       const { uri } = await uploadFile(file);
-      setImage(getIpfsLink(uri));
-    }
+      setImage(uri);
+    } catch (error) {
+      alert("Failed to upload image. Please try again.");
+    } finally {
     setImageUploading(false);
+    }
+  };
+
+  const removeImage = () => {
+    setImage("");
+    if (imageRef.current) {
+      imageRef.current.value = "";
+    }
   };
 
   const save = async () => {
+    if (!userData?.account_id) {
+      return;
+    }
+
     setUpdating(true);
+    try {
     const response = await fetch("/api/account/update", {
       method: "POST",
       body: JSON.stringify({
@@ -49,16 +67,28 @@ const useUser = () => {
         organization,
         name,
         image,
-        accountId: userData?.account_id,
+          jobTitle,
+          roleType,
+          companyName,
+          accountId: userData.account_id,
       }),
       headers: {
         "Content-Type": "application/json",
       },
     });
+
+      if (!response.ok) {
+        return;
+      }
+
     const data = await response.json();
     setUserData(data.data);
+      setIsModalOpen(false);
+    } catch (error) {
+      // Error handled silently
+    } finally {
     setUpdating(false);
-    setIsModalOpen(false);
+    }
   };
 
   const isPrepared = () => {
@@ -77,6 +107,9 @@ const useUser = () => {
     setInstruction("");
     setImage("");
     setOrganization("");
+    setJobTitle("");
+    setRoleType("");
+    setCompanyName("");
     await logout();
     router.push("/signin");
   };
@@ -107,6 +140,10 @@ const useUser = () => {
       setInstruction(data.data?.instruction || "");
       setName(data?.data?.name || "");
       setOrganization(data?.data?.organization || "");
+      setJobTitle(data?.data?.job_title || "");
+      setRoleType(data?.data?.role_type || "");
+      setCompanyName(data?.data?.company_name || "");
+      setOnboardingStatus(data?.data?.onboarding_status || null);
     };
     if (!email && !address) return;
     init();
@@ -135,7 +172,14 @@ const useUser = () => {
     save,
     organization,
     setOrganization,
+    jobTitle,
+    setJobTitle,
+    roleType,
+    setRoleType,
+    companyName,
+    setCompanyName,
     signOut,
+    removeImage,
   };
 };
 

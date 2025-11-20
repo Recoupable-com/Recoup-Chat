@@ -86,9 +86,10 @@ const useArtists = () => {
       if (data.artists.length === 0) {
         setSelectedArtist(null);
         setIsLoading(false);
-        if (email) {
-          artistMode.toggleCreation();
-        }
+        // TODO: Decide if auto-create flow should be re-enabled after ID bug is confirmed fixed
+        // if (email) {
+        //   artistMode.toggleCreation();
+        // }
         return;
       }
       if (artistId) {

@@ -124,32 +124,47 @@ export type Database = {
       account_info: {
         Row: {
           account_id: string | null
+          company_name: string | null
           id: string
           image: string | null
           instruction: string | null
+          job_title: string | null
           knowledges: Json | null
           label: string | null
+          onboarding_data: Json | null
+          onboarding_status: Json | null
           organization: string | null
+          role_type: string | null
           updated_at: string
         }
         Insert: {
           account_id?: string | null
+          company_name?: string | null
           id?: string
           image?: string | null
           instruction?: string | null
+          job_title?: string | null
           knowledges?: Json | null
           label?: string | null
+          onboarding_data?: Json | null
+          onboarding_status?: Json | null
           organization?: string | null
+          role_type?: string | null
           updated_at?: string
         }
         Update: {
           account_id?: string | null
+          company_name?: string | null
           id?: string
           image?: string | null
           instruction?: string | null
+          job_title?: string | null
           knowledges?: Json | null
           label?: string | null
+          onboarding_data?: Json | null
+          onboarding_status?: Json | null
           organization?: string | null
+          role_type?: string | null
           updated_at?: string
         }
         Relationships: [
@@ -2329,6 +2344,7 @@ export type Database = {
           prompt: string
           schedule: string
           title: string
+          trigger_schedule_id: string | null
           updated_at: string | null
         }
         Insert: {
@@ -2342,6 +2358,7 @@ export type Database = {
           prompt: string
           schedule: string
           title: string
+          trigger_schedule_id?: string | null
           updated_at?: string | null
         }
         Update: {
@@ -2355,6 +2372,7 @@ export type Database = {
           prompt?: string
           schedule?: string
           title?: string
+          trigger_schedule_id?: string | null
           updated_at?: string | null
         }
         Relationships: [

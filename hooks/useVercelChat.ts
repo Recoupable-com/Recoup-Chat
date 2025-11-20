@@ -41,7 +41,8 @@ export function useVercelChat({
   const { userData, email } = useUserProvider();
   const { selectedArtist } = useArtistProvider();
   const { roomId } = useParams();
-  const userId = userData?.id;
+  
+  const userId = userData?.account_id || userData?.id; // Use account_id if available, fallback to id
   const artistId = selectedArtist?.account_id;
   const [hasChatApiError, setHasChatApiError] = useState(false);
   const messagesLengthRef = useRef<number>();

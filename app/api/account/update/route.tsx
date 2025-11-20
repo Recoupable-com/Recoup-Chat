@@ -6,7 +6,7 @@ import updateAccountInfo from "@/lib/supabase/accountInfo/updateAccountInfo";
 
 export async function POST(req: NextRequest) {
   const body = await req.json();
-  const { instruction, name, organization, accountId, image } = body;
+  const { instruction, name, organization, accountId, image, jobTitle, roleType, companyName } = body;
 
   try {
     const found = await getAccountById(accountId);
@@ -22,25 +22,42 @@ export async function POST(req: NextRequest) {
         image,
         instruction,
         account_id: accountId,
+        job_title: jobTitle,
+        role_type: roleType,
+        company_name: companyName,
       });
     } else {
       await updateAccountInfo(accountId, {
         organization,
         image,
         instruction,
+        job_title: jobTitle,
+        role_type: roleType,
+        company_name: companyName,
       });
     }
 
     // Fetch the updated account with all joined info
     const updated = await getAccountById(accountId);
+    
     // Spread account_info, account_wallets, account_emails into top-level
-    const info = updated?.account_info?.[0] || {};
-    const wallet = updated?.account_wallets?.[0] || {};
-    const email = updated?.account_emails?.[0] || {};
+    // Destructure to avoid ID conflicts (exclude id and account_id from all spreads for consistency)
+    const accountInfo = updated?.account_info?.[0];
+    const accountWallet = updated?.account_wallets?.[0];
+    const accountEmail = updated?.account_emails?.[0];
+    
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    const { id: _infoId, account_id: _accountId, ...info } = accountInfo || {};
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    const { id: _walletId, ...wallet } = accountWallet || {};
+    // account_emails only has 'email' field (no id to exclude)
+    const email = accountEmail || {};
+    
     const response = {
       data: {
+        id: updated?.id,           // Keep the ACCOUNT id
+        account_id: updated?.id,   // Also set account_id for consistency
         name: updated?.name,
-        id: updated?.id,
         ...info,
         ...wallet,
         ...email,

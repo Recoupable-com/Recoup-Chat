@@ -35,11 +35,26 @@ export async function POST(req: NextRequest) {
     if (wallet) {
       try {
         const account = await getAccountByWallet(wallet);
+        
+        // Destructure to avoid ID conflicts
+        const accountInfo = account.account_info?.[0];
+        const accountEmail = account.account_emails?.[0];
+        const accountWallet = account.account_wallets?.[0];
+        
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
+        const { id: _infoId, account_id: _accountId, ...info } = accountInfo || {};
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
+        const { id: _walletId, ...walletData } = accountWallet || {};
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
+        const { id: _emailId, account_id: _emailAccountId, ...email } = accountEmail || {};
+        
         const accountData = {
-          ...account.account_info[0],
-          ...account.account_emails[0],
-          ...account.account_wallets[0],
-          ...account,
+          id: account.id,           // Keep the ACCOUNT id
+          account_id: account.id,   // Also set account_id for consistency
+          name: account.name,
+          ...info,
+          ...walletData,
+          ...email,
         };
         return Response.json({ data: accountData }, { status: 200 });
       } catch (error) {
