@@ -50,6 +50,13 @@ const useUser = () => {
     }
   };
 
+  const removeImage = () => {
+    setImage("");
+    if (imageRef.current) {
+      imageRef.current.value = "";
+    }
+  };
+
   const save = async () => {
     setUpdating(true);
     const response = await fetch("/api/account/update", {
@@ -162,6 +169,7 @@ const useUser = () => {
     companyName,
     setCompanyName,
     signOut,
+    removeImage,
   };
 };
 

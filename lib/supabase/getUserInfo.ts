@@ -21,41 +21,32 @@ export interface UserInfo {
  * @returns The user info object or null if not found
  */
 async function getUserInfo(accountId: string): Promise<UserInfo | null> {
-  console.log("[getUserInfo] Called with accountId:", accountId);
   if (!accountId) {
-    console.log("[getUserInfo] No accountId provided, returning null");
     return null;
   }
 
   // Get user account info - only query existing columns for now
-  const { data: accountInfo, error: accountInfoError } = await supabase
+  const { data: accountInfo } = await supabase
     .from("account_info")
     .select("instruction, organization, knowledges")
     .eq("account_id", accountId)
     .single();
   
-  console.log("[getUserInfo] account_info query result:", { accountInfo, error: accountInfoError });
-
   // Get user name from accounts table (email is in account_emails table)
-  const { data: account, error: accountError } = await supabase
+  const { data: account } = await supabase
     .from("accounts")
     .select("name")
     .eq("id", accountId)
     .single();
   
-  console.log("[getUserInfo] accounts query result:", { account, error: accountError });
-
   // Get user email from account_emails table
-  const { data: accountEmail, error: emailError } = await supabase
+  const { data: accountEmail } = await supabase
     .from("account_emails")
     .select("email")
     .eq("account_id", accountId)
     .single();
-  
-  console.log("[getUserInfo] account_emails query result:", { accountEmail, error: emailError });
 
   if (!accountInfo && !account && !accountEmail) {
-    console.log("[getUserInfo] No data found, returning null");
     return null;
   }
 
@@ -70,7 +61,6 @@ async function getUserInfo(accountId: string): Promise<UserInfo | null> {
     knowledges: accountInfo?.knowledges,
   };
   
-  console.log("[getUserInfo] Returning user info:", JSON.stringify(userInfo, null, 2));
   return userInfo;
 }
 

@@ -42,9 +42,6 @@ export function useVercelChat({
   const { selectedArtist } = useArtistProvider();
   const { roomId } = useParams();
   
-  // Debug log to see what userData contains
-  console.log("[useVercelChat] userData:", JSON.stringify(userData, null, 2));
-  
   const userId = userData?.account_id || userData?.id; // Use account_id if available, fallback to id
   const artistId = selectedArtist?.account_id;
   const [hasChatApiError, setHasChatApiError] = useState(false);
