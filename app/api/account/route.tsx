@@ -44,7 +44,7 @@ export async function POST(req: NextRequest) {
         // eslint-disable-next-line @typescript-eslint/no-unused-vars
         const { id: _infoId, account_id: _accountId, ...info } = accountInfo || {};
         // eslint-disable-next-line @typescript-eslint/no-unused-vars
-        const { id: _walletId, ...wallet: walletData } = accountWallet || {};
+        const { id: _walletId, ...walletData } = accountWallet || {};
         // account_emails only has 'email' field
         const email = accountEmail || {};
         
