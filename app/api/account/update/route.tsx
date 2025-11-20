@@ -43,7 +43,7 @@ export async function POST(req: NextRequest) {
     const updated = await getAccountById(accountId);
     
     // Spread account_info, account_wallets, account_emails into top-level
-    // Destructure to avoid ID conflicts (exclude id and account_id from spreads)
+    // Destructure to avoid ID conflicts (exclude id and account_id from all spreads for consistency)
     const accountInfo = updated?.account_info?.[0];
     const accountWallet = updated?.account_wallets?.[0];
     const accountEmail = updated?.account_emails?.[0];
@@ -52,6 +52,7 @@ export async function POST(req: NextRequest) {
     const { id: _infoId, account_id: _accountId, ...info } = accountInfo || {};
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const { id: _walletId, ...wallet } = accountWallet || {};
+    // account_emails only has 'email' field (no id to exclude)
     const email = accountEmail || {};
     
     const response = {
