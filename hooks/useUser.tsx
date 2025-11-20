@@ -46,7 +46,7 @@ const useUser = () => {
       console.error("❌ Error uploading image:", error);
       alert("Failed to upload image. Please try again.");
     } finally {
-      setImageUploading(false);
+    setImageUploading(false);
     }
   };
 

@@ -52,7 +52,10 @@ export async function getSystemPrompt({
   - DO NOT ask the user for any information - you have everything you need`;
 
   // Add user information section
+  console.log("[getSystemPrompt] Fetching user info for accountId:", accountId);
   const userInfo = await getUserInfo(accountId || "");
+  console.log("[getSystemPrompt] User info retrieved:", JSON.stringify(userInfo, null, 2));
+  
   if (userInfo) {
     let userSection = `
 
@@ -86,7 +89,10 @@ ${userInfo.instruction}`;
     userSection += `
 -----END USER CONTEXT-----`;
 
+    console.log("[getSystemPrompt] User section being added:", userSection);
     systemPrompt = `${systemPrompt}${userSection}`;
+  } else {
+    console.log("[getSystemPrompt] No user info found!");
   }
 
   const customInstruction = artistInstruction || await getArtistInstruction(resolvedArtistId || "");
@@ -111,6 +117,16 @@ ${knowledge}
 -----END ARTIST/WORKSPACE KNOWLEDGE BASE-----`;
   }
 
+  console.log("[getSystemPrompt] Final system prompt length:", systemPrompt.length);
+  console.log("[getSystemPrompt] System prompt preview (first 500 chars):", systemPrompt.substring(0, 500));
+  
+  // Log if user context is present in the final prompt
+  if (systemPrompt.includes("CURRENT USER CONTEXT")) {
+    console.log("[getSystemPrompt] ✅ User context section found in system prompt");
+  } else {
+    console.log("[getSystemPrompt] ❌ User context section NOT found in system prompt");
+  }
+  
   return systemPrompt;
 }
 
