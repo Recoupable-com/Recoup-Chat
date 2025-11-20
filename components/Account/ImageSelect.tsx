@@ -15,7 +15,7 @@ const ImageSelect = () => {
         type="button"
         onClick={() => imageRef.current?.click()}
       >
-        <div className="w-full aspect-square max-w-[150px] rounded-xl relative overflow-hidden flex items-center justify-center border-2 border-dashed border-muted-foreground/30 hover:border-muted-foreground/60 transition-colors cursor-pointer bg-muted/20">
+        <div className="w-full aspect-square max-w-[150px] rounded-full relative overflow-hidden flex items-center justify-center border-2 border-dashed border-muted-foreground/30 hover:border-muted-foreground/60 transition-colors cursor-pointer bg-muted/20">
           {imageUploading ? (
             <div className="absolute inset-0 bg-background/90 backdrop-blur-sm flex flex-col items-center justify-center gap-2">
               <Loader2 className="size-8 animate-spin text-primary" />
