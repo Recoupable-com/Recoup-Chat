@@ -48,6 +48,34 @@ const ImageWithFallback = ({
 
   console.log("[ImageWithFallback] ✅ Rendering image with src:", src);
 
+  // Use regular img tag for external CDN URLs (Arweave, IPFS) to avoid Next.js Image optimization issues
+  const isExternalCDN = src.includes("arweave.net") || src.includes("ipfs.decentralized-content.com") || src.includes("ipfs://");
+  
+  if (isExternalCDN) {
+    return (
+      <div className="w-full h-full min-w-8 min-h-8 relative">
+        {/* eslint-disable-next-line @next/next/no-img-element */}
+        <img
+          key={keyValue}
+          src={src}
+          alt="Profile avatar"
+          className={`object-cover w-full h-full ${className}`}
+          onError={(e) => {
+            console.error("[ImageWithFallback] ❌ Image onError triggered:", {
+              src,
+              error: e,
+              target: e.currentTarget,
+            });
+            setImgError(true);
+          }}
+          onLoad={() => {
+            console.log("[ImageWithFallback] ✅ Image loaded successfully:", src);
+          }}
+        />
+      </div>
+    );
+  }
+
   return (
     <div className="w-full h-full min-w-8 min-h-8 relative">
       <Image
@@ -67,7 +95,6 @@ const ImageWithFallback = ({
         onLoad={() => {
           console.log("[ImageWithFallback] ✅ Image loaded successfully:", src);
         }}
-        unoptimized={src.includes("ipfs.decentralized-content.com") || src.includes("ipfs://")}
         sizes="128px"
       />
     </div>
