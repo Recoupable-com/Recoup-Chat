@@ -32,8 +32,8 @@ const ImageWithFallback = ({
   // Validate URL format
   const isValidUrl = src.startsWith("http://") || src.startsWith("https://");
   if (!isValidUrl) {
-    return (
-      <div className="w-full h-full min-w-8 min-h-8">
+  return (
+    <div className="w-full h-full min-w-8 min-h-8">
         <div className={`bg-muted w-full h-full flex items-center justify-center rounded-full border border-border ${className}`}>
           <User className="w-8 h-8 text-muted-foreground" />
         </div>
@@ -48,8 +48,8 @@ const ImageWithFallback = ({
   if (isExternalURL) {
     return (
       <div className="w-full h-full min-w-8 min-h-8 relative">
-        {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img
+      {/* eslint-disable-next-line @next/next/no-img-element */}
+      <img
           key={keyValue}
           src={src}
           alt="Profile avatar"
