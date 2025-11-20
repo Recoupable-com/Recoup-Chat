@@ -38,10 +38,8 @@ const useUser = () => {
     }
     try {
       const { uri } = await uploadFile(file);
-      console.log("[useUser] ✅ Image uploaded:", uri);
       setImage(uri);
     } catch (error) {
-      console.error("[useUser] ❌ Error uploading image:", error);
       alert("Failed to upload image. Please try again.");
     } finally {
       setImageUploading(false);
@@ -57,7 +55,6 @@ const useUser = () => {
 
   const save = async () => {
     if (!userData?.account_id) {
-      console.error("❌ Cannot save account settings: missing account_id");
       return;
     }
 
@@ -81,10 +78,6 @@ const useUser = () => {
       });
 
       if (!response.ok) {
-        console.error("❌ Failed to save account settings", {
-          status: response.status,
-          statusText: response.statusText,
-        });
         return;
       }
 
@@ -92,7 +85,7 @@ const useUser = () => {
       setUserData(data.data);
       setIsModalOpen(false);
     } catch (error) {
-      console.error("❌ Error saving account settings:", error);
+      // Error handled silently
     } finally {
       setUpdating(false);
     }
@@ -142,11 +135,6 @@ const useUser = () => {
       }
 
       const data = await response.json();
-      console.log("[useUser] Account data retrieved:", {
-        image: data.data?.image,
-        hasImage: !!data.data?.image,
-        imageType: typeof data.data?.image,
-      });
       setUserData(data.data);
       setImage(data.data?.image || "");
       setInstruction(data.data?.instruction || "");

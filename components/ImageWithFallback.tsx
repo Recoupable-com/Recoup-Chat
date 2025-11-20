@@ -14,16 +14,12 @@ const ImageWithFallback = ({
 
   // Reset error state when src changes
   useEffect(() => {
-    console.log("[ImageWithFallback] Image src changed:", src);
     setImgError(false);
     setKeyValue((prev) => prev + 1);
   }, [src]);
 
   // If no src or error loading image, show placeholder
   if (!src || imgError) {
-    if (imgError) {
-      console.error("[ImageWithFallback] ❌ Image error state - showing placeholder. Original src:", src);
-    }
     return (
       <div className="w-full h-full min-w-8 min-h-8">
         <div className={`bg-muted w-full h-full flex items-center justify-center rounded-full border border-border ${className}`}>
@@ -36,7 +32,6 @@ const ImageWithFallback = ({
   // Validate URL format
   const isValidUrl = src.startsWith("http://") || src.startsWith("https://");
   if (!isValidUrl) {
-    console.warn("[ImageWithFallback] ⚠️ Invalid image URL format:", src);
     return (
       <div className="w-full h-full min-w-8 min-h-8">
         <div className={`bg-muted w-full h-full flex items-center justify-center rounded-full border border-border ${className}`}>
@@ -45,8 +40,6 @@ const ImageWithFallback = ({
       </div>
     );
   }
-
-  console.log("[ImageWithFallback] ✅ Rendering image with src:", src);
 
   // Use regular img tag for all external URLs to avoid Next.js Image optimization issues in production
   // External URLs are already optimized by their CDNs and don't benefit from Next.js optimization
@@ -61,17 +54,10 @@ const ImageWithFallback = ({
           src={src}
           alt="Profile avatar"
           className={`object-cover w-full h-full ${className}`}
-          onError={(e) => {
-            console.error("[ImageWithFallback] ❌ Image onError triggered:", {
-              src,
-              error: e,
-              target: e.currentTarget,
-            });
+          onError={() => {
             setImgError(true);
           }}
-          onLoad={() => {
-            console.log("[ImageWithFallback] ✅ Image loaded successfully:", src);
-          }}
+          onLoad={() => {}}
         />
       </div>
     );
@@ -86,17 +72,10 @@ const ImageWithFallback = ({
         alt="Profile avatar"
         fill
         className={`object-cover ${className}`}
-        onError={(e) => {
-          console.error("[ImageWithFallback] ❌ Image onError triggered:", {
-            src,
-            error: e,
-            target: e.currentTarget,
-          });
+        onError={() => {
           setImgError(true);
         }}
-        onLoad={() => {
-          console.log("[ImageWithFallback] ✅ Image loaded successfully:", src);
-        }}
+        onLoad={() => {}}
         sizes="128px"
       />
     </div>

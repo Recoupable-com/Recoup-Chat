@@ -50,8 +50,8 @@ export async function POST(req: NextRequest) {
     const { id: _infoId, account_id: _accountId, ...info } = accountInfo || {};
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const { id: _walletId, ...wallet } = accountWallet || {};
-    // account_emails only has 'email' field (no id to exclude)
-    const email = accountEmail || {};
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    const { id: _emailId, account_id: _emailAccountId, ...email } = accountEmail || {};
     
     const response = {
       data: {
