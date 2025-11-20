@@ -54,14 +54,15 @@ const Account = () => {
           name="name"
           hookToForm
         />
-        <Input
-          value={organization}
-          onChange={(e) => setOrganization(e.target.value)}
-          label="Organization"
-          id="organization"
-          name="organization"
+        {/* Hidden for now - defaulted to "User" */}
+        {/* <Input
+          value={roleType}
+          onChange={(e) => setRoleType(e.target.value)}
+          label="Role"
+          id="roleType"
+          name="roleType"
           hookToForm
-        />
+        /> */}
         <Input
           value={jobTitle}
           onChange={(e) => setJobTitle(e.target.value)}
@@ -71,21 +72,22 @@ const Account = () => {
           hookToForm
         />
         <Input
-          value={roleType}
-          onChange={(e) => setRoleType(e.target.value)}
-          label="Role"
-          id="roleType"
-          name="roleType"
-          hookToForm
-        />
-        <Input
           value={companyName}
           onChange={(e) => setCompanyName(e.target.value)}
-          label="Company Name"
+          label="Company"
           id="companyName"
           name="companyName"
           hookToForm
         />
+        {/* Hidden for now - using Company instead */}
+        {/* <Input
+          value={organization}
+          onChange={(e) => setOrganization(e.target.value)}
+          label="Organization"
+          id="organization"
+          name="organization"
+          hookToForm
+        /> */}
       </div>
       <div className="col-span-5 space-y-1 md:space-y-2">
         <p className="text-sm">Image</p>
