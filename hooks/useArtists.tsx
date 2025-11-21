@@ -118,8 +118,6 @@ const useArtists = () => {
         APPLE: artistSetting.appleUrl,
         FACEBOOK: artistSetting.facebook,
         THREADS: artistSetting.threads,
-        LINKEDIN: artistSetting.linkedin,
-        SNAPCHAT: artistSetting.snapchat,
       };
       const data = await saveArtist({
         name: artistSetting.name,

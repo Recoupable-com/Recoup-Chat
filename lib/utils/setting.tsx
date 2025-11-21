@@ -14,8 +14,6 @@ export const validation = JoiBase.object({
   twitter: JoiBase.allow(),
   facebook: JoiBase.allow(),
   threads: JoiBase.allow(),
-  linkedin: JoiBase.allow(),
-  snapchat: JoiBase.allow(),
 });
 
 export const accountValidation = JoiBase.object({
