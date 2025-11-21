@@ -6,6 +6,7 @@ import { buildSystemPromptWithImages } from "@/lib/chat/buildSystemPromptWithIma
 import { getSystemPrompt } from "@/lib/prompts/getSystemPrompt";
 import { setupToolsForRequest } from "@/lib/chat/setupToolsForRequest";
 import { handleNanoBananaModel } from "@/lib/chat/handleNanoBananaModel";
+import { getGoogleSheetsTools } from "@/lib/agents/googleSheetsAgent";
 
 export default async function getGeneralAgent(
   body: ChatRequest
@@ -38,7 +39,9 @@ export default async function getGeneralAgent(
   const finalExcludeTools = nanoBananaConfig.excludeTools || excludeTools;
 
   // Build General Agent
-  const tools = setupToolsForRequest(finalExcludeTools);
+  const recoupTools = setupToolsForRequest(finalExcludeTools);
+  const googleSheetsTools = await getGoogleSheetsTools(body);
+  const tools = { ...recoupTools, ...googleSheetsTools };
   const model = nanoBananaConfig.resolvedModel || DEFAULT_MODEL;
   const stopWhen = stepCountIs(111);
 
