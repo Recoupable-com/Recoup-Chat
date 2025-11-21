@@ -18,7 +18,12 @@ const updateArtistSocials = async (
 
   const profilePromises = Object.entries(profileUrls).map(
     async ([type, value]) => {
-      const social = value ? await getSocialByProfileUrl(value) : null;
+      // Transform threads.com to threads.net for scraper compatibility
+      let normalizedValue = value;
+      if (value && type === "THREADS" && value.includes("threads.com")) {
+        normalizedValue = value.replace("threads.com", "threads.net");
+      }
+      const social = normalizedValue ? await getSocialByProfileUrl(normalizedValue) : null;
       const existingSocial = account_socials?.find(
         (account_social: AccountSocialWithSocial) =>
           getSocialPlatformByLink(account_social.social.profile_url) === type
@@ -27,7 +32,7 @@ const updateArtistSocials = async (
       if (existingSocial) {
         await deleteAccountSocial(artistId, existingSocial.social.id);
       }
-      if (value) {
+      if (normalizedValue) {
         if (social) {
           const existing = await getAccountSocials({
             accountId: artistId,
@@ -38,8 +43,8 @@ const updateArtistSocials = async (
           }
         } else {
           const new_socials = await insertSocials([{
-            username: getUserNameByProfileLink(value),
-            profile_url: value,
+            username: getUserNameByProfileLink(normalizedValue),
+            profile_url: normalizedValue,
           }]);
           if (new_socials.length > 0) {
             await insertAccountSocial(artistId, new_socials[0].id);

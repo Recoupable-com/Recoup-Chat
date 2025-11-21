@@ -7,7 +7,7 @@ const getSocialPlatformByLink = (link: string) => {
   if (link.includes("apple.com")) return "APPPLE";
   if (link.includes("youtube.")) return "YOUTUBE";
   if (link.includes("facebook.com")) return "FACEBOOK";
-  if (link.includes("threads.com")) return "THREADS";
+  if (link.includes("threads.net") || link.includes("threads.com")) return "THREADS";
   if (link.includes("linkedin.com")) return "LINKEDIN";
   if (link.includes("snapchat.com")) return "SNAPCHAT";
 
