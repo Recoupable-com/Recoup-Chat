@@ -27,10 +27,6 @@ const Inputs = () => {
     setFacebook,
     threads,
     setThreads,
-    linkedin,
-    setLinkedIn,
-    snapchat,
-    setSnapchat,
     editableArtist,
   } = useArtistProvider();
   return (
@@ -138,26 +134,6 @@ const Inputs = () => {
           label="Threads"
           id="threads"
           name="threads"
-          hookToForm
-        />
-      </div>
-      <div className="col-span-6 space-y-1 md:space-y-2">
-        <Input
-          value={linkedin}
-          onChange={(e) => setLinkedIn(e.target.value)}
-          label="LinkedIn"
-          id="linkedin"
-          name="linkedin"
-          hookToForm
-        />
-      </div>
-      <div className="col-span-6 space-y-1 md:space-y-2">
-        <Input
-          value={snapchat}
-          onChange={(e) => setSnapchat(e.target.value)}
-          label="Snapchat"
-          id="snapchat"
-          name="snapchat"
           hookToForm
         />
       </div>
