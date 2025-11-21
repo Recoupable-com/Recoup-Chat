@@ -1,3 +1,3 @@
-import getGoogleSheetsAgent from "./getGoogleSheetsAgent";
+import getGoogleSheetsTools from "./getGoogleSheetsTools";
 
-export { getGoogleSheetsAgent };
+export { getGoogleSheetsTools };

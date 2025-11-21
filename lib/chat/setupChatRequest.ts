@@ -4,10 +4,10 @@ import { type ChatRequest, type ChatConfig } from "./types";
 import { AnthropicProviderOptions } from "@ai-sdk/anthropic";
 import { convertToModelMessages } from "ai";
 import getPrepareStepResult from "./toolChains/getPrepareStepResult";
-import { getRoutingDecision } from "@/lib/agents/routingAgent";
+import { getGeneralAgent } from "../agents/generalAgent";
 
 export async function setupChatRequest(body: ChatRequest): Promise<ChatConfig> {
-  const decision = await getRoutingDecision(body);
+  const decision = await getGeneralAgent(body);
 
   const system = decision.instructions;
   const tools = decision.agent.tools;
