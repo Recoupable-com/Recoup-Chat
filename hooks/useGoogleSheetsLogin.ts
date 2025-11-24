@@ -11,12 +11,6 @@ export function useGoogleSheetsLogin() {
   const accountId = userData?.account_id;
 
   const handleLogin = async () => {
-    if (!accountId) {
-      console.error("Account ID is required for Google Sheets login");
-      return;
-    }
-
-    // Build redirectUrl using latest user message, matching getGoogleSheetsTools.ts
     const latestUserMessageText = getLatestUserMessageText(messages);
     const redirectUrl = `https://chat.recoupable.com?q=${encodeURIComponent(
       latestUserMessageText
@@ -30,7 +24,6 @@ export function useGoogleSheetsLogin() {
         redirectUrl,
       });
 
-      // Open the OAuth URL in a new tab
       if (data.redirect_url) {
         window.open(data.redirect_url, "_blank", "noopener,noreferrer");
       }
