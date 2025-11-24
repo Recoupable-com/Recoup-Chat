@@ -63,7 +63,10 @@ import YouTubeSetThumbnailSkeleton from "./tools/youtube/YouTubeSetThumbnailSkel
 import type { YouTubeSetThumbnailResult as YouTubeSetThumbnailResultType } from "@/types/youtube";
 import SearchWebSkeleton from "./tools/SearchWeb/SearchWebSkeleton";
 import { GoogleImagesSkeleton } from "./tools/GoogleImagesSkeleton";
-import { GoogleImagesResult, type GoogleImagesResultType } from "./tools/GoogleImagesResult";
+import {
+  GoogleImagesResult,
+  type GoogleImagesResultType,
+} from "./tools/GoogleImagesResult";
 import SpotifyDeepResearchSkeleton from "./tools/SpotifyDeepResearchSkeleton";
 import WebDeepResearchSkeleton from "./tools/SearchWeb/WebDeepResearchSkeleton";
 import { SearchWebResultType } from "./tools/SearchWeb/SearchWebResult";
@@ -102,6 +105,8 @@ import {
   UpdateFileResult,
   UpdateFileResultType,
 } from "./tools/files/UpdateFileResult";
+import GoogleSheetsLoginResult from "./tools/googleSheets/GoogleSheetsLoginResult";
+import GoogleSheetsLoginLoading from "./tools/googleSheets/GoogleSheetsLoginLoading";
 
 export function getToolCallComponent(part: ToolUIPart) {
   const { toolCallId } = part as ToolUIPart;
@@ -276,6 +281,12 @@ export function getToolCallComponent(part: ToolUIPart) {
     return (
       <div key={toolCallId}>
         <CatalogSongsSkeleton />
+      </div>
+    );
+  } else if (toolName === "googleSheetsLoginTool") {
+    return (
+      <div key={toolCallId}>
+        <GoogleSheetsLoginLoading />
       </div>
     );
   }
@@ -544,6 +555,12 @@ export function getToolResultComponent(part: ToolUIPart) {
     return (
       <div key={toolCallId}>
         <UpdateFileResult result={result as UpdateFileResultType} />
+      </div>
+    );
+  } else if (toolName === "googleSheetsLoginTool") {
+    return (
+      <div key={toolCallId}>
+        <GoogleSheetsLoginResult />
       </div>
     );
   }
