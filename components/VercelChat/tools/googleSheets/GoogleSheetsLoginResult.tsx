@@ -19,9 +19,6 @@ export function GoogleSheetsLoginResult() {
         <span className="font-medium text-foreground">
           Google Sheets Access Required
         </span>
-        <span className="text-xs text-orange-600 bg-orange-100 px-2 py-1 rounded">
-          Live
-        </span>
       </div>
 
       <p className="text-sm text-muted-foreground">

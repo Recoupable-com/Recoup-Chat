@@ -3,6 +3,7 @@ import { useUserProvider } from "@/providers/UserProvder";
 import { useVercelChatContext } from "@/providers/VercelChatProvider";
 import getLatestUserMessageText from "@/lib/messages/getLatestUserMessageText";
 import { fetchConnectedAccountsRefresh } from "@/lib/composio/googleSheets/fetchConnectedAccountsRefresh";
+import { toast } from "sonner";
 
 export function useGoogleSheetsLogin() {
   const [isLoading, setIsLoading] = useState(false);
@@ -29,7 +30,7 @@ export function useGoogleSheetsLogin() {
       }
     } catch (error) {
       console.error("Error initiating Google Sheets login:", error);
-      alert("Failed to initiate Google Sheets login. Please try again.");
+      toast.error("Failed to initiate Google Sheets login. Please try again.");
     } finally {
       setIsLoading(false);
     }
