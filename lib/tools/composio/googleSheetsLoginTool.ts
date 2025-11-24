@@ -16,7 +16,12 @@ const googleSheetsLoginTool = tool({
     "Initiate the authentication flow for the Google Sheets account.",
   inputSchema: schema,
   execute: async ({ account_id }) => {
-    return await getConnectedAccount(account_id);
+    await getConnectedAccount(account_id);
+    return {
+      success: true,
+      message:
+        "Google Sheets login initiated successfully. Please click the button above to login with Google Sheets.",
+    };
   },
 });
 
