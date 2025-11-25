@@ -7,6 +7,8 @@ import useArtistFilesForMentions from "@/hooks/useArtistFilesForMentions";
 
 export interface GroupedSuggestion extends SuggestionDataItem {
   group: string;
+  mime_type: string | null;
+  storage_key: string;
 }
 
 export default function useFileMentionSuggestions(value: string) {
@@ -26,7 +28,13 @@ export default function useFileMentionSuggestions(value: string) {
           const lastSlash = rel.lastIndexOf("/");
           const group = lastSlash > 0 ? rel.slice(0, lastSlash) : "Home";
           const name = lastSlash > -1 ? rel.slice(lastSlash + 1) : rel;
-          return { id: f.id, display: name, group } as GroupedSuggestion;
+          return { 
+            id: f.id, 
+            display: name, 
+            group,
+            mime_type: f.mime_type,
+            storage_key: f.storage_key
+          } as GroupedSuggestion;
         })
         .filter((it) => !mentionedIds.has(String(it.id)))
         .filter(

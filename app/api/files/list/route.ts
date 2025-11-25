@@ -7,13 +7,14 @@ export async function GET(req: Request) {
     const ownerAccountId = searchParams.get("ownerAccountId");
     const artistAccountId = searchParams.get("artistAccountId");
     const path = searchParams.get("path") || undefined;
+    const recursive = searchParams.get("recursive") === "true";
 
     if (!ownerAccountId || !artistAccountId) {
       return NextResponse.json({ error: "Missing ownerAccountId or artistAccountId" }, { status: 400 });
     }
 
     // Use shared helper function (properly filters team files and immediate children)
-    const files = await listFilesByArtist(ownerAccountId, artistAccountId, path);
+    const files = await listFilesByArtist(ownerAccountId, artistAccountId, path, recursive);
 
     return NextResponse.json({ files }, { status: 200 });
   } catch (err) {
@@ -21,5 +22,3 @@ export async function GET(req: Request) {
     return NextResponse.json({ error: message }, { status: 500 });
   }
 }
-
-
