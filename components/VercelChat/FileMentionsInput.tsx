@@ -1,11 +1,12 @@
 "use client";
 
-import cn from "classnames";
 import { useEffect, useState } from "react";
 import { MentionsInput, Mention, OnChangeHandlerFunc, SuggestionDataItem } from "react-mentions";
 import { Card } from "@/components/ui/card";
 import { mentionsStyles } from "./mentionsStyles";
 import useFileMentionSuggestions, { GroupedSuggestion } from "@/hooks/useFileMentionSuggestions";
+import { useBatchSignedUrls } from "@/hooks/useBatchSignedUrls";
+import { SuggestionItem } from "./SuggestionItem";
 
 interface FileMentionsInputProps {
 	value: string;
@@ -14,21 +15,20 @@ interface FileMentionsInputProps {
 	model: string;
 }
 
-// GroupedSuggestion type imported from hook
-
 export default function FileMentionsInput({ value, onChange, disabled, model }: FileMentionsInputProps) {
 	const [portalHost, setPortalHost] = useState<Element | undefined>(undefined);
 	useEffect(() => {
 		if (typeof window !== "undefined") setPortalHost(document.body);
 	}, []);
 
-
-
 	const handleMentionsChange: OnChangeHandlerFunc = (_event, newValue) => {
 		onChange(newValue);
 	};
 
 	const { provideSuggestions, lastResults } = useFileMentionSuggestions(value);
+    
+    // Batch fetch signed URLs using the custom hook
+    const signedUrls = useBatchSignedUrls(lastResults as GroupedSuggestion[]);
 
 	return (
 		<MentionsInput
@@ -61,7 +61,12 @@ export default function FileMentionsInput({ value, onChange, disabled, model }: 
 				data={(query: string, callback: (results: SuggestionDataItem[]) => void) => provideSuggestions(query, callback)}
 				displayTransform={(_id: string, display: string) => display}
 				appendSpaceOnAdd
-				style={{}}
+				style={{
+                    // Highlight color for the mentioned file (pill effect)
+                    // Using rgba instead of hsl(var(--primary)) because react-mentions doesn't support nested CSS variables properly here
+                    backgroundColor: "rgba(59, 130, 246, 0.15)", // blue-500 at 15%
+                    borderRadius: "2px",
+				}}
 				renderSuggestion={(
 					entry: SuggestionDataItem,
 					_search: string,
@@ -72,23 +77,25 @@ export default function FileMentionsInput({ value, onChange, disabled, model }: 
 					const current = lastResults[index] as GroupedSuggestion | undefined;
 					const prev = index > 0 ? (lastResults[index - 1] as GroupedSuggestion | undefined) : undefined;
 					const showHeader = !prev || (current && prev && current.group !== prev.group);
+                    
+                    // Pass the pre-loaded URL if available
+                    const url = current?.storage_key ? signedUrls[current.storage_key] : undefined;
+
 					return (
-						<div>
+						<div key={entry.id}>
 							{showHeader && current && (
 								<div className="px-3 pt-2 pb-1 text-[11px] uppercase tracking-wide text-muted-foreground">
 									{current.group}
 								</div>
 							)}
-							<div
-								className={cn(
-									"px-3 py-2 text-[13px] cursor-pointer select-none",
-									"flex items-center gap-2 rounded-md",
-									focused ? "bg-accent text-foreground" : "text-muted-foreground hover:bg-accent/50"
-								)}
-							>
-								<div className="size-2 rounded-full bg-primary/60" />
-								<span className="truncate">{highlightedDisplay || entry.display}</span>
-							</div>
+                            {current && (
+                                <SuggestionItem 
+                                    entry={current} 
+                                    focused={focused} 
+                                    highlightedDisplay={highlightedDisplay} 
+                                    imageUrl={url}
+                                />
+                            )}
 						</div>
 					);
 				}}

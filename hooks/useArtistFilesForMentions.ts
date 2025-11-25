@@ -14,7 +14,7 @@ export type MentionableFile = {
 };
 
 export default function useArtistFilesForMentions() {
-  const fm = useFilesManager(undefined);
+  const fm = useFilesManager(undefined, true);
   const ownerAccountId = fm.ownerAccountId;
   const artistAccountId = fm.artistAccountId;
   const rows = (fm.files as unknown) as ListedFileRow[];
