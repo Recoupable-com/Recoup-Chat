@@ -1,7 +1,6 @@
 "use client";
 
-import cn from "classnames";
-import { useEffect, useState, useMemo } from "react";
+import { useEffect, useState } from "react";
 import { MentionsInput, Mention, OnChangeHandlerFunc, SuggestionDataItem } from "react-mentions";
 import { Card } from "@/components/ui/card";
 import { mentionsStyles } from "./mentionsStyles";

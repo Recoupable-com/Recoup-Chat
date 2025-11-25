@@ -15,7 +15,7 @@ export async function createSignedUrlClient(storageKey: string): Promise<string>
 
     const data = await res.json();
     return data.signedUrl || "";
-  } catch (err) {
+  } catch {
     // Silently fail on error
     return "";
   }
@@ -38,7 +38,7 @@ export async function createBatchSignedUrlsClient(storageKeys: string[]): Promis
 
     const data = await res.json();
     return data.signedUrls || {};
-  } catch (err) {
+  } catch {
     // Silently fail on error
     return {};
   }
