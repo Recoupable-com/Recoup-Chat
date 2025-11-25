@@ -52,14 +52,14 @@ const updateArtistProfile = async (
         infoUpdate.knowledges = account_info.knowledges;
       }
       
-      infoUpdate.label = label || account_info.label;
+      infoUpdate.label = label === "" ? null : label;
       await updateAccountInfo(artistId, infoUpdate);
     } else {
       await insertAccountInfo({
         image,
         instruction,
         knowledges,
-        label,
+        label: label === "" ? null : label,
         account_id: artistId,
       });
     }
@@ -77,7 +77,7 @@ const updateArtistProfile = async (
       image,
       instruction,
       knowledges,
-      label,
+      label: label === "" ? null : label,
       account_id: newArtistAccount.id,
     });
   }

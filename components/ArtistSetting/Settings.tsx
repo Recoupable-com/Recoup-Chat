@@ -27,10 +27,12 @@ const Settings = () => {
   } = useArtistProvider();
   const [isVisibleDeleteModal, setIsVisibleDeleteModal] = useState(false);
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const handleSave = async () => {
     const artistInfo = await saveSetting();
-    setSelectedArtist(artistInfo);
+    // Only update selected artist if save was successful
+    if (artistInfo) {
+      setSelectedArtist(artistInfo);
+    }
     toggleSettingModal();
   };
 
