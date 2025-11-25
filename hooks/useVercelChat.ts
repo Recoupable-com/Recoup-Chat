@@ -2,7 +2,6 @@ import { useChat } from "@ai-sdk/react";
 import { useMessageLoader } from "./useMessageLoader";
 import { useUserProvider } from "@/providers/UserProvder";
 import { useArtistProvider } from "@/providers/ArtistProvider";
-import { useArtistInstruction } from "./useArtistInstruction";
 import { useArtistKnowledgeText } from "./useArtistKnowledgeText";
 import { useParams } from "next/navigation";
 import { toast } from "react-toastify";
@@ -58,8 +57,8 @@ export function useVercelChat({
   // Load artist files for mentions (from Supabase)
   const { files: allArtistFiles = [] } = useArtistFilesForMentions();
 
-  // Fetch custom artist instruction on client
-  const { data: artistInstruction } = useArtistInstruction(artistId);
+  // Note: Artist instruction is fetched directly from database by backend (getArtistInstruction)
+  // This ensures fresh data after saving, matching how user instructions work
 
   // Extract mentioned file ids from input markup '@[display](id)'
   const selectedFileIds = useMemo(() => {
@@ -179,7 +178,6 @@ export function useVercelChat({
         email,
         model,
         timezone,
-        artistInstruction,
         knowledgeBaseText,
       },
     }),
@@ -190,7 +188,6 @@ export function useVercelChat({
       email,
       model,
       timezone,
-      artistInstruction,
       knowledgeBaseText,
     ]
   );
