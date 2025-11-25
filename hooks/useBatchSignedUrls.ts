@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { createBatchSignedUrlsClient } from "@/utils/createSignedUrlClient";
+import { createBatchSignedUrlsClient } from "@/lib/supabase/storage/client";
 import { GroupedSuggestion } from "@/hooks/useFileMentionSuggestions";
 
 export function useBatchSignedUrls(suggestions: GroupedSuggestion[]) {

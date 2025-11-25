@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { createSignedUrlClient } from "@/utils/createSignedUrlClient";
+import { createSignedUrlClient } from "@/lib/supabase/storage/client";
 
 export default function useSignedUrl(storageKey?: string) {
   const [url, setUrl] = useState<string | undefined>(undefined);
