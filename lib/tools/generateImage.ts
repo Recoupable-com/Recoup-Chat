@@ -28,8 +28,7 @@ export interface ImageGenerationResult {
 
 // Define the generateImage tool
 const generateImage = tool({
-  description:
-    "Generate an image based on a text prompt. The image will be automatically stored on Arweave and includes In Process moment metadata for provenance and ownership tracking.",
+  description: "Generate an image based on a text prompt.",
   inputSchema: schema,
   execute: async ({ prompt, account_id }): Promise<ImageGenerationResult> => {
     try {
