@@ -34,7 +34,6 @@ const ChatItem = ({
   isActive = false,
   isSelected = false,
   isSelectionMode = false,
-  isShiftPressed = false,
   menuRef,
   setButtonRef,
   onMouseEnter,
@@ -96,7 +95,7 @@ const ChatItem = ({
       onMouseEnter={onMouseEnter}
       onMouseLeave={onMouseLeave}
     >
-      {(isShiftPressed || isSelectionMode) && (
+      {isSelectionMode && (
         <button
           type="button"
           onClick={(event) => {

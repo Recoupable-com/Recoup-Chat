@@ -17,14 +17,30 @@ type FileRecord = Tables<"files">;
  * @param ownerAccountId - Currently unused, kept for backward compatibility
  * @param artistAccountId - The artist account to get files for
  * @param path - Optional path filter for immediate children only
+ * @param recursive - If true, returns all files (and nested files) under the path (or all files if no path)
  */
 export async function listFilesByArtist(
   ownerAccountId: string,
   artistAccountId: string,
-  path?: string
+  path?: string,
+  recursive: boolean = false
 ): Promise<FileRecord[]> {
   // Get all files for the artist from database
   const allFiles = await getFilesByArtistId(artistAccountId);
+
+  if (recursive) {
+    if (path) {
+        // Basic prefix filtering for recursive mode
+        const pathPrefix = path.endsWith('/') ? path : path + '/';
+        return allFiles.filter(f => {
+            const match = f.storage_key.match(/^files\/[^\/]+\/[^\/]+\/(.+)$/);
+            if (!match) return false;
+            const relativePath = match[1];
+            return relativePath.startsWith(pathPrefix);
+        });
+    }
+    return allFiles;
+ }
 
   // Apply path filtering logic
   return filterFilesByPath(allFiles, path);

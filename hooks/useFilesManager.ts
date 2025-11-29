@@ -13,7 +13,7 @@ export interface ListedFileRow {
   is_directory?: boolean;
 }
 
-export default function useFilesManager(activePath?: string) {
+export default function useFilesManager(activePath?: string, recursive: boolean = false) {
   const { userData } = useUserProvider();
   const { selectedArtist } = useArtistProvider();
 
@@ -25,7 +25,7 @@ export default function useFilesManager(activePath?: string) {
   const qc = useQueryClient();
 
   const { data, isLoading } = useQuery<{ files: Array<ListedFileRow> }>({
-    queryKey: ["files", ownerAccountId, artistAccountId, activePath],
+    queryKey: ["files", ownerAccountId, artistAccountId, activePath, recursive],
     queryFn: async () => {
       // Transform full storage path to relative path for API
       // From: files/{owner_id}/{artist_id}/relative/path/
@@ -40,7 +40,8 @@ export default function useFilesManager(activePath?: string) {
       }
       
       const p = relativePath ? `&path=${encodeURIComponent(relativePath)}` : "";
-      const url = `/api/files/list?ownerAccountId=${ownerAccountId}&artistAccountId=${artistAccountId}${p}`;
+      const r = recursive ? "&recursive=true" : "";
+      const url = `/api/files/list?ownerAccountId=${ownerAccountId}&artistAccountId=${artistAccountId}${p}${r}`;
       const res = await fetch(url, { cache: "no-store" });
       if (!res.ok) throw new Error("Failed to load files");
       return res.json();
