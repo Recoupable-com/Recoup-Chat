@@ -1,53 +1,62 @@
-import generateImage from "./ai/generateImage";
-import createCollection from "@/app/api/in_process/createCollection";
-import { uploadMetadataJson } from "./arweave/uploadMetadataJson";
+import { Experimental_GenerateImageResult } from "ai";
+import Transaction from "arweave/node/lib/transaction";
+import { Address, Hash } from "viem";
+
+interface RecoupImageGenerateResponse extends Experimental_GenerateImageResult {
+  imageUrl: string;
+  arweaveResult: Transaction;
+  moment: {
+    contractAddress: Address;
+    tokenId: string;
+    hash: Hash;
+    chainId: number;
+  };
+}
 
 export interface GeneratedImageResponse {
-  arweave?: string | null;
-  smartAccount: {
-    address: string;
-    [key: string]: unknown;
-  };
-  transactionHash: string | null;
+  imageUrl: string | null;
 }
 
 export async function generateAndProcessImage(
-  prompt: string
+  prompt: string,
+  accountId: string
 ): Promise<GeneratedImageResponse> {
-  if (!process.env.OPENAI_API_KEY) {
-    throw new Error(
-      "OpenAI API key is missing. Please add it to your environment variables."
-    );
-  }
-
   if (!prompt) {
     throw new Error("Prompt is required");
   }
 
-  // Generate the image using OpenAI
-  const image = await generateImage(prompt);
+  if (!accountId) {
+    throw new Error("Account ID is required");
+  }
 
-  const metadataArweave = await uploadMetadataJson({
-    image: image || "",
-    content: {
-      mime: "image/png",
-      uri: image || "",
+  const apiUrl = new URL("https://recoup-api.vercel.app/api/image/generate");
+  apiUrl.searchParams.set("prompt", prompt);
+  apiUrl.searchParams.set("account_id", accountId);
+
+  const response = await fetch(apiUrl.toString(), {
+    method: "GET",
+    headers: {
+      "Content-Type": "application/json",
     },
-    description: prompt,
-    name: prompt,
   });
 
-  // Create a collection on the blockchain using the metadata id
-  const result = await createCollection({
-    collectionName: prompt,
-    uri: metadataArweave || "",
-  });
-  const transactionHash = result.transactionHash || null;
+  if (!response.ok) {
+    const errorText = await response.text();
+    let errorMessage = `HTTP error! status: ${response.status}`;
 
-  // Return complete response
+    try {
+      const errorData = JSON.parse(errorText);
+      errorMessage = errorData.message || errorData.error || errorMessage;
+    } catch {
+      errorMessage = errorText || errorMessage;
+    }
+
+    throw new Error(errorMessage);
+  }
+
+  const data: RecoupImageGenerateResponse = await response.json();
+
   return {
-    arweave: image,
-    smartAccount: result.smartAccount,
-    transactionHash,
+    imageUrl: data.imageUrl || null,
   };
 }
