@@ -8,9 +8,13 @@ interface ImageResultProps {
 }
 
 export function ImageResult({ result }: ImageResultProps) {
+  const imageSrc = result.base64
+    ? `data:image/png;base64,${result.base64}`
+    : null;
+
   const { isDownloading, isReady, handleDownload } = useImageDownloader({
-    imageUrl: result.arweaveUrl,
-    enabled: result.success,
+    imageUrl: imageSrc,
+    enabled: result.success && !!imageSrc,
   });
 
   if (!result.success) {
@@ -28,7 +32,7 @@ export function ImageResult({ result }: ImageResultProps) {
 
   return (
     <div className="flex justify-start my-3">
-      {result.arweaveUrl ? (
+      {imageSrc ? (
         <div className="border border-border rounded-2xl group cursor-pointer relative overflow-hidden max-w-md max-h-md">
           <div className="relative w-full h-full max-h-[28rem]">
             {/* Top gradient overlay */}
@@ -52,7 +56,7 @@ export function ImageResult({ result }: ImageResultProps) {
 
             <div className="w-full h-auto max-w-md max-h-md">
               <Image
-                src={result.arweaveUrl}
+                src={imageSrc}
                 alt="Generated image"
                 width={448}
                 height={448}
