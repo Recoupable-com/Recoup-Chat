@@ -13,7 +13,7 @@ export function ImageResult({ result }: ImageResultProps) {
     : null;
 
   const { isDownloading, isReady, handleDownload } = useImageDownloader({
-    imageUrl: imageSrc,
+    imageSrc,
     enabled: result.success && !!imageSrc,
   });
 

@@ -10,7 +10,7 @@ interface NanoBananaResultProps {
 
 export function NanoBananaResult({ result }: NanoBananaResultProps) {
   const { isDownloading, isReady, handleDownload } = useImageDownloader({
-    imageUrl: result.imageUrl,
+    imageSrc: result.imageUrl,
     enabled: result.success,
   });
 
