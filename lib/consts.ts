@@ -90,6 +90,7 @@ export const ROSTRUM_ORG_ARTIST_IDS: string[] = [
   "a1fdc861-d1c2-4582-99da-6ac755b52f0a", // Cantora Records
   "29cfd55a-98d9-45a5-96c9-c751a88f7799", // Rostrum Pacific
   "4e8b9e7d-01f6-4bb8-b333-7673c357b77c", // SpaceHeater
+  "4d271c96-b888-482a-bd6d-6c7b259b4630", // Rostrum Records
 ];
 
 // Supabase Private Storage Bucket
