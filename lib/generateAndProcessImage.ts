@@ -14,7 +14,7 @@ interface RecoupImageGenerateResponse extends Experimental_GenerateImageResult {
 }
 
 export interface GeneratedImageResponse {
-  imageUrl: string | null;
+  base64: string | null;
 }
 
 export async function generateAndProcessImage(
@@ -57,6 +57,6 @@ export async function generateAndProcessImage(
   const data: RecoupImageGenerateResponse = await response.json();
 
   return {
-    imageUrl: data.imageUrl || null,
+    base64: data.image?.base64 || null,
   };
 }

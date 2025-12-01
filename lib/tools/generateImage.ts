@@ -21,7 +21,7 @@ const schema = z.object({
  */
 export interface ImageGenerationResult {
   success: boolean;
-  arweaveUrl: string | null;
+  base64: string | null;
   message?: string;
   error?: string;
 }
@@ -38,7 +38,7 @@ const generateImage = tool({
       // Create a response in a format useful for the chat interface
       return {
         success: true,
-        arweaveUrl: result.imageUrl || null,
+        base64: result.base64 || null,
         message: "Image successfully generated and stored onchain.",
       };
     } catch (error) {
@@ -57,7 +57,7 @@ const generateImage = tool({
 
       return {
         success: false,
-        arweaveUrl: null,
+        base64: null,
         error: errorMessage,
         message: "Failed to generate image. " + errorMessage,
       };
