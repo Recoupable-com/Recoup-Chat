@@ -1,11 +1,10 @@
 import Image from "next/image";
-import { NanoBananaGenerateResult } from "@/lib/tools/nanoBanana/nanoBananaGenerate";
 import { NanoBananaEditResult } from "@/lib/tools/nanoBanana/nanoBananaEdit";
 import { useImageDownloader } from "@/hooks/useImageDownloader";
 import MessageMediaDownloadButton from "../../MessageMediaDownloadButton";
 
 interface NanoBananaResultProps {
-  result: NanoBananaGenerateResult | NanoBananaEditResult;
+  result: NanoBananaEditResult;
 }
 
 export function NanoBananaResult({ result }: NanoBananaResultProps) {

@@ -36,10 +36,8 @@ export default async function getGeneralAgent(
   // Handle nano banana specific logic
   const nanoBananaConfig = handleNanoBananaModel(body);
 
-  const finalExcludeTools = nanoBananaConfig.excludeTools || excludeTools;
-
   // Build General Agent
-  const recoupTools = setupToolsForRequest(finalExcludeTools);
+  const recoupTools = setupToolsForRequest(excludeTools);
   const googleSheetsTools = await getGoogleSheetsTools(body);
   const tools = { ...recoupTools, ...googleSheetsTools };
   const model = nanoBananaConfig.resolvedModel || DEFAULT_MODEL;
