@@ -17,9 +17,15 @@ export interface GeneratedImageResponse {
   imageUrl: string | null;
 }
 
+interface FileInput {
+  url: string;
+  type: string;
+}
+
 export async function generateAndProcessImage(
   prompt: string,
-  accountId: string
+  accountId: string,
+  files?: FileInput[]
 ): Promise<GeneratedImageResponse> {
   if (!prompt) {
     throw new Error("Prompt is required");
@@ -32,6 +38,14 @@ export async function generateAndProcessImage(
   const apiUrl = new URL("https://recoup-api.vercel.app/api/image/generate");
   apiUrl.searchParams.set("prompt", prompt);
   apiUrl.searchParams.set("account_id", accountId);
+
+  // Format files parameter: files=url1:type1|url2:type2
+  if (files && files.length > 0) {
+    const filesParam = files
+      .map((file) => `${file.url}:${file.type}`)
+      .join("|");
+    apiUrl.searchParams.set("files", filesParam);
+  }
 
   const response = await fetch(apiUrl.toString(), {
     method: "GET",

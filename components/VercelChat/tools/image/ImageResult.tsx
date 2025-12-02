@@ -1,5 +1,5 @@
 import Image from "next/image";
-import { ImageGenerationResult } from "@/lib/tools/generateImage";
+import { ImageGenerationResult } from "@/lib/tools/images/generateImage";
 import { useImageDownloader } from "@/hooks/useImageDownloader";
 import MessageMediaDownloadButton from "../../MessageMediaDownloadButton";
 
@@ -8,8 +8,10 @@ interface ImageResultProps {
 }
 
 export function ImageResult({ result }: ImageResultProps) {
+  const imageUrl = result.arweaveUrl;
+
   const { isDownloading, isReady, handleDownload } = useImageDownloader({
-    imageUrl: result.arweaveUrl,
+    imageUrl,
     enabled: result.success,
   });
 
@@ -28,7 +30,7 @@ export function ImageResult({ result }: ImageResultProps) {
 
   return (
     <div className="flex justify-start my-3">
-      {result.arweaveUrl ? (
+      {imageUrl ? (
         <div className="border border-border rounded-2xl group cursor-pointer relative overflow-hidden max-w-md max-h-md">
           <div className="relative w-full h-full max-h-[28rem]">
             {/* Top gradient overlay */}
@@ -52,7 +54,7 @@ export function ImageResult({ result }: ImageResultProps) {
 
             <div className="w-full h-auto max-w-md max-h-md">
               <Image
-                src={result.arweaveUrl}
+                src={imageUrl}
                 alt="Generated image"
                 width={448}
                 height={448}
