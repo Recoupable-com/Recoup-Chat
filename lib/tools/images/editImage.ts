@@ -30,29 +30,13 @@ const editImage = tool({
     account_id,
   }): Promise<ImageGenerationResult> => {
     try {
-      // Determine media type from URL extension, default to image/png
-      const getMediaType = (url: string): string => {
-        const extension = url.split(".").pop()?.toLowerCase();
-        const mediaTypeMap: Record<string, string> = {
-          png: "image/png",
-          jpg: "image/jpeg",
-          jpeg: "image/jpeg",
-          gif: "image/gif",
-          webp: "image/webp",
-          svg: "image/svg+xml",
-        };
-        return mediaTypeMap[extension || ""] || "image/png";
-      };
-
-      // Generate the edited image with the provided prompt and image URL
       const result = await generateAndProcessImage(prompt, account_id, [
         {
           url: imageUrl,
-          type: getMediaType(imageUrl),
+          type: "image/png",
         },
       ]);
 
-      // Create a response in a format useful for the chat interface
       return {
         success: true,
         arweaveUrl: result.imageUrl || null,
@@ -61,21 +45,8 @@ const editImage = tool({
     } catch (error) {
       console.error("Error in editImage tool:", error);
 
-      // Format helpful error messages based on common issues
-      let errorMessage =
+      const errorMessage =
         error instanceof Error ? error.message : "An unexpected error occurred";
-
-      if (errorMessage.includes("content policy")) {
-        errorMessage =
-          "Your prompt may violate content policy. Please try a different prompt.";
-      } else if (errorMessage.includes("rate limit")) {
-        errorMessage = "Rate limit exceeded. Please try again later.";
-      } else if (errorMessage.includes("Invalid image URL")) {
-        errorMessage = "The image URL provided is invalid or inaccessible.";
-      } else if (errorMessage.includes("Unprocessable Entity")) {
-        errorMessage =
-          "The image format or content is not supported for editing. Please try a different image.";
-      }
 
       return {
         success: false,
