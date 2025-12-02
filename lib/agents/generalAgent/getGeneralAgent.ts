@@ -33,7 +33,7 @@ export default async function getGeneralAgent(
   const imageUrls = extractImageUrlsFromMessages(messages);
   const instructions = buildSystemPromptWithImages(baseSystemPrompt, imageUrls);
 
-  const isNanoBananaModel = bodyModel !== "fal-ai/nano-banana/edit";
+  const isNanoBananaModel = bodyModel === "fal-ai/nano-banana/edit";
   const isDefaultModel = !bodyModel || isNanoBananaModel;
 
   // Build General Agent
