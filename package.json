@@ -22,7 +22,6 @@
     "@coinbase/onchainkit": "^0.38.8",
     "@composio/core": "^0.2.4",
     "@composio/vercel": "^0.2.16",
-    "@fal-ai/client": "^1.6.2",
     "@farcaster/frame-sdk": "^0.0.44",
     "@farcaster/frame-wagmi-connector": "^0.0.37",
     "@google/genai": "^1.24.0",
