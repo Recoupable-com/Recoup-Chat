@@ -22,7 +22,7 @@ const schema = z.object({
 
 const editImage = tool({
   description:
-    "Edit existing images using Fal's nano banana image editing model. Modifies images based on text prompts while preserving the original context and style. IMPORTANT: (1) The account_id parameter is always available in your system context - look for 'account_id:' in your instructions. (2) The imageUrl should be extracted from file attachments in the user's message - check message parts for files with image media types.",
+    "Edit existing images. Modifies images based on text prompts while preserving the original context and style. IMPORTANT: (1) The account_id parameter is always available in your system context - look for 'account_id:' in your instructions. (2) The imageUrl should be extracted from file attachments in the user's message - check message parts for files with image media types.",
   inputSchema: schema,
   execute: async ({
     prompt,
