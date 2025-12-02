@@ -7,24 +7,20 @@ import { ChatRequest } from "./types";
  */
 export function handleNanoBananaModel(body: ChatRequest) {
   const { model } = body;
-  
+
   // Only handle if nano banana model is selected
   if (model !== "fal-ai/nano-banana/edit") {
     return {
       resolvedModel: model,
-      forcedToolChoice: undefined,
-      excludeTools: undefined,
       shouldPassImageUrlsThrough: false,
     };
   }
 
   // Configure nano banana model with appropriate tool filtering
   // Using GPT-5 which has excellent vision + tool calling capabilities
-  
+
   return {
     resolvedModel: "openai/gpt-5",
-    forcedToolChoice: undefined, // Let LM decide, but only nano banana tools available
-    excludeTools: ["generate_image"], // Exclude the regular image generation tool
     shouldPassImageUrlsThrough: true, // Enable URL passthrough for image editing
   };
 }
