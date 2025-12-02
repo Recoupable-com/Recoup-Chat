@@ -1,8 +1,6 @@
 import { ImageSkeleton } from "@/components/VercelChat/tools/image/ImageSkeleton";
 import { ImageResult } from "@/components/VercelChat/tools/image/ImageResult";
-import { NanoBananaResult } from "@/components/VercelChat/tools/image/NanoBananaResult";
-import { ImageGenerationResult } from "@/lib/tools/generateImage";
-import { NanoBananaEditResult } from "@/lib/tools/nanoBanana/nanoBananaEdit";
+import { ImageGenerationResult } from "@/lib/tools/images/generateImage";
 import MermaidDiagram from "@/components/VercelChat/tools/mermaid/MermaidDiagram";
 import { MermaidDiagramSkeleton } from "@/components/VercelChat/tools/mermaid/MermaidDiagramSkeleton";
 import { GenerateMermaidDiagramResult } from "@/lib/tools/generateMermaidDiagram";
@@ -112,12 +110,7 @@ export function getToolCallComponent(part: ToolUIPart) {
   const toolName = getToolName(part);
   const isSearchWebTool = toolName === "search_web";
 
-  // Handle image generation tools (including nano banana variants)
-  if (
-    toolName === "generate_image" ||
-    toolName === "nano_banana_edit" ||
-    toolName === "default_api.nano_banana_edit"
-  ) {
+  if (toolName === "generate_image" || toolName === "edit_image") {
     return (
       <div key={toolCallId} className="skeleton">
         <ImageSkeleton />
@@ -306,7 +299,7 @@ export function getToolResultComponent(part: ToolUIPart) {
   const isSearchWebTool = toolName === "search_web";
   const isDeepResearchTool = toolName === "web_deep_research";
 
-  if (toolName === "generate_image") {
+  if (toolName === "generate_image" || toolName === "edit_image") {
     return (
       <div key={toolCallId}>
         <ImageResult result={result as ImageGenerationResult} />
@@ -321,15 +314,6 @@ export function getToolResultComponent(part: ToolUIPart) {
     return (
       <div key={toolCallId}>
         <BrowserToolResult result={result as BrowserToolResultType} />
-      </div>
-    );
-  } else if (
-    toolName === "nano_banana_edit" ||
-    toolName === "default_api.nano_banana_edit"
-  ) {
-    return (
-      <div key={toolCallId}>
-        <NanoBananaResult result={result as NanoBananaEditResult} />
       </div>
     );
   } else if (toolName === "generate_mermaid_diagram") {

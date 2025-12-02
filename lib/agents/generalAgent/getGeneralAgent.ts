@@ -5,7 +5,6 @@ import { extractImageUrlsFromMessages } from "@/lib/chat/extractImageUrlsFromMes
 import { buildSystemPromptWithImages } from "@/lib/chat/buildSystemPromptWithImages";
 import { getSystemPrompt } from "@/lib/prompts/getSystemPrompt";
 import { setupToolsForRequest } from "@/lib/chat/setupToolsForRequest";
-import { handleNanoBananaModel } from "@/lib/chat/handleNanoBananaModel";
 import { getGoogleSheetsTools } from "@/lib/agents/googleSheetsAgent";
 
 export default async function getGeneralAgent(
@@ -20,6 +19,7 @@ export default async function getGeneralAgent(
     knowledgeBaseText,
     timezone,
     excludeTools,
+    model: bodyModel,
   } = body;
   const baseSystemPrompt = await getSystemPrompt({
     roomId: body.roomId,
@@ -33,14 +33,14 @@ export default async function getGeneralAgent(
   const imageUrls = extractImageUrlsFromMessages(messages);
   const instructions = buildSystemPromptWithImages(baseSystemPrompt, imageUrls);
 
-  // Handle nano banana specific logic
-  const nanoBananaConfig = handleNanoBananaModel(body);
+  const isNanoBananaModel = bodyModel === "fal-ai/nano-banana/edit";
+  const isDefaultModel = !bodyModel || isNanoBananaModel;
 
   // Build General Agent
   const recoupTools = setupToolsForRequest(excludeTools);
   const googleSheetsTools = await getGoogleSheetsTools(body);
   const tools = { ...recoupTools, ...googleSheetsTools };
-  const model = nanoBananaConfig.resolvedModel || DEFAULT_MODEL;
+  const model = isDefaultModel ? DEFAULT_MODEL : bodyModel;
   const stopWhen = stepCountIs(111);
 
   const agent = new ToolLoopAgent({

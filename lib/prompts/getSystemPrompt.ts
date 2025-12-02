@@ -39,13 +39,13 @@ export async function getSystemPrompt({
   When the user asks to edit an image (e.g., "add glasses", "make it darker", "add a hat"):
   
   **WHICH IMAGE TO EDIT:**
-  1. Check conversation history for the most recent nano_banana_edit tool result
+  1. Check conversation history for the most recent edit_image tool result
   2. If found: Use the imageUrl from that result (e.g., "https://v3b.fal.media/files/...")
   3. If NOT found OR user says "original": Use the URL from "ATTACHED IMAGE URLS" section below
   4. This ensures edits build on each other (glasses → then hat keeps the glasses)
   
   **HOW TO CALL THE TOOL:**
-  - IMMEDIATELY call nano_banana_edit (don't explain first)
+  - IMMEDIATELY call edit_image (don't explain first)
   - imageUrl: The URL determined from steps above (NEVER use "attachment://")
   - prompt: Describe the edit clearly (e.g., "add sunglasses to the person")
   - account_id: Use the account_id value shown above

@@ -15,7 +15,7 @@ const getSearchGoogleImagesTool = () => {
       "DO NOT use this tool when the user wants to:\n" +
       "- CREATE, GENERATE, or MAKE new images (use generate_image instead)\n" +
       "- DESIGN custom album covers or artwork (use generate_image tools)\n" +
-      "- EDIT existing images (use nano_banana_edit instead)\n\n" +
+      "- EDIT existing images (use edit_image instead)\n\n" +
       "Key distinction: This finds what EXISTS, generative tools create what DOESN'T exist yet.\n\n" +
       "Returns thumbnails and full-resolution URLs for displaying in chat or emails.\n\n" +
       "TECHNICAL NOTES: Keep parameters simple. Query is most important. Optional filters can cause errors - if tool fails, retry with just query and limit.",

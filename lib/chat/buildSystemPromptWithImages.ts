@@ -12,6 +12,6 @@ export function buildSystemPromptWithImages(
     return basePrompt;
   }
 
-  return `${basePrompt}\n\n**ATTACHED IMAGE URLS (for nano_banana_edit imageUrl parameter):**\n${imageUrls.map((url, i) => `- Image ${i}: ${url}`).join('\n')}`;
+  return `${basePrompt}\n\n**ATTACHED IMAGE URLS (for edit_image imageUrl parameter):**\n${imageUrls.map((url, i) => `- Image ${i}: ${url}`).join('\n')}`;
 }
 

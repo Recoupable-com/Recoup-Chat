@@ -1,6 +1,5 @@
 import { ToolSet } from "ai";
-import generateImage from "./generateImage";
-import nanoBananaTools from "./nanoBanana";
+import imageTools from "./images";
 import sora2Tools from "./sora2";
 import createTxtFile from "./createTxtFile";
 import getSegmentFans from "./getSegmentFans";
@@ -42,7 +41,6 @@ import browserTools from "./browser";
 
 export function getMcpTools(): ToolSet {
   const tools = {
-    generate_image: generateImage,
     generate_txt_file: createTxtFile,
     contact_team: contactTeam,
     create_segments: createSegments,
@@ -78,7 +76,7 @@ export function getMcpTools(): ToolSet {
     get_local_time: getLocalTime,
     ...tasksTools,
     ...filesTools,
-    ...nanoBananaTools,
+    ...imageTools,
     ...youtubeTools,
     ...catalogTools,
     ...sora2Tools,
