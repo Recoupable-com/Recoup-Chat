@@ -1,13 +1,10 @@
-import { Button } from "@/components/ui/button";
-import { ChevronDown, Moon, Sun, Monitor } from "lucide-react";
+import { Moon, Sun, Monitor } from "lucide-react";
 import {
-  DropdownMenu,
   DropdownMenuContent,
   DropdownMenuGroup,
   DropdownMenuItem,
   DropdownMenuLabel,
   DropdownMenuSeparator,
-  DropdownMenuTrigger,
   DropdownMenuSub,
   DropdownMenuSubContent,
   DropdownMenuSubTrigger,
@@ -31,13 +28,7 @@ const UserProfileDropdown = () => {
   };
 
   return (
-    <DropdownMenu>
-      <DropdownMenuTrigger asChild>
-        <Button variant="ghost" className="p-0">
-          <ChevronDown className="h-4 w-4 shrink-0 text-muted-foreground ml-auto" />
-        </Button>
-      </DropdownMenuTrigger>
-      <DropdownMenuContent className="w-56" align="start">
+    <DropdownMenuContent className="w-56" align="start">
         <DropdownMenuLabel className="text-sm font-semibold">
           My Account
         </DropdownMenuLabel>
@@ -96,7 +87,6 @@ const UserProfileDropdown = () => {
           Log out
         </DropdownMenuItem>
       </DropdownMenuContent>
-    </DropdownMenu>
   );
 };
 
