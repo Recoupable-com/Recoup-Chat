@@ -10,14 +10,13 @@ import { useUserProvider } from "@/providers/UserProvder";
 import { useSidebarExpansion } from "@/providers/SidebarExpansionContext";
 import { cn } from "@/lib/utils";
 import { useArtistPinRenderer } from "@/hooks/useArtistPinRenderer";
+import CreateWorkspaceModal from "@/components/CreateWorkspaceModal";
 
 const ArtistsSidebar = () => {
   const {
-    toggleCreation,
     sorted,
     selectedArtist,
     isCreatingArtist,
-    setIsCreatingArtist,
     isLoading,
   } = useArtistProvider();
   const { isPrepared, email } = useUserProvider();
@@ -26,6 +25,7 @@ const ArtistsSidebar = () => {
   const isArtistSelected = !!selectedArtist;
 
   const [menuExpanded, setMenuExpanded] = useState(false);
+  const [isModalOpen, setIsModalOpen] = useState(false);
   const { renderArtistListWithPins } = useArtistPinRenderer({ sorted, menuExpanded });
   const animate = { width: menuExpanded ? 220 : 80 };
   const initial = { width: 80 };
@@ -35,10 +35,9 @@ const ArtistsSidebar = () => {
     setIsExpanded(menuExpanded);
   }, [menuExpanded, setIsExpanded]);
 
-  const handleCreate = () => {
+  const handleOpenModal = () => {
     if (!isPrepared()) return;
-    setIsCreatingArtist(true);
-    toggleCreation();
+    setIsModalOpen(true);
   };
 
   const renderArtistList = () => {
@@ -75,24 +74,27 @@ const ArtistsSidebar = () => {
       <button
         className={cn(
           "flex transition-colors hover:bg-accent dark:hover:bg-[#2a2a2a] border border-transparent hover:border-grey-dark-1 dark:hover:border-[#444] rounded-md",
-          menuExpanded ? "px-2 py-1 gap-2 text-sm items-center text-grey-dark-1 dark:text-muted-foreground" : "justify-center",
-          !isArtistSelected && "relative z-[70] brightness-125"
+          menuExpanded ? "px-2 py-1 gap-2 text-sm items-center text-grey-dark-1 dark:text-muted-foreground" : "justify-center p-2",
+          !isArtistSelected && "relative z-70 brightness-125"
         )}
-        onClick={handleCreate}
         type="button"
+        onClick={handleOpenModal}
         disabled={isCreatingArtist}
       >
-        <div
-          className={`w-8 flex justify-center ${!menuExpanded && "mx-auto"}`}
-        >
+        <div className="flex justify-center">
           {isCreatingArtist ? (
             <Loader className="size-5 text-grey-dark-1 dark:text-muted-foreground animate-spin" />
           ) : (
             <Plus className="size-5 text-grey-dark-1 dark:text-muted-foreground" />
           )}
         </div>
-        {menuExpanded && "New Artist"}
+        {menuExpanded && <span>New Workspace</span>}
       </button>
+      
+      <CreateWorkspaceModal 
+        isOpen={isModalOpen} 
+        onClose={() => setIsModalOpen(false)} 
+      />
     </motion.div>
   );
 };

@@ -10,14 +10,20 @@ export type AccountWithInfoAndEmail = Tables<"accounts"> & {
 const getAccountById = async (
   id: string
 ): Promise<AccountWithInfoAndEmail | null> => {
-  const { data } = await supabase
+  const { data, error } = await supabase
     .from("accounts")
     .select(
       "*, account_emails(email), account_info(*), account_wallets(wallet)"
     )
     .eq("id", id)
     .single();
-  return data || null;
+
+  if (error) {
+    console.error("Error fetching account by id:", error);
+    return null;
+  }
+
+  return data;
 };
 
 export default getAccountById;

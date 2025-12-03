@@ -29,6 +29,11 @@ const Inputs = () => {
     setThreads,
     editableArtist,
   } = useArtistProvider();
+  
+  // Determine if this is a workspace (not an artist)
+  const isWorkspace = editableArtist?.account_type === "workspace";
+  const entityLabel = isWorkspace ? "Workspace" : "Artist";
+  
   return (
     <>
       <div className="col-span-8 space-y-1 md:space-y-2">
@@ -38,7 +43,10 @@ const Inputs = () => {
           onChange={(e) => setInstruction(e.target.value)}
           id="instruction"
           name="instruction"
-          placeholder="Instructions added directly to the AI system prompt. Use for artist-specific tone, style guidance, or special responses."
+          placeholder={isWorkspace 
+            ? "Instructions added directly to the AI system prompt. Use for workspace-specific tone, style guidance, or special responses."
+            : "Instructions added directly to the AI system prompt. Use for artist-specific tone, style guidance, or special responses."
+          }
           rows={4}
         />
       </div>
@@ -46,7 +54,7 @@ const Inputs = () => {
         <Input
           value={name}
           onChange={(e) => setName(e.target.value)}
-          label="Artist Name"
+          label={`${entityLabel} Name`}
           id="name"
           name="name"
           required
@@ -57,32 +65,37 @@ const Inputs = () => {
         <Input
           value={label}
           onChange={(e) => setLabel(e.target.value)}
-          label="Artist Label"
+          label={isWorkspace ? "Description" : "Artist Label"}
           id="label"
           name="label"
           hookToForm
         />
       </div>
-      <div className="col-span-6 space-y-1 md:space-y-2">
-        <Input
-          value={spotifyUrl}
-          onChange={(e) => setSpotifyUrl(e.target.value)}
-          label="Spotify URL"
-          id="spotifyUrl"
-          name="spotifyUrl"
-          hookToForm
-        />
-      </div>
-      <div className="col-span-6 space-y-1 md:space-y-2">
-        <Input
-          value={appleUrl}
-          onChange={(e) => setAppleUrl(e.target.value)}
-          label="Apple URL"
-          id="appleUrl"
-          name="appleUrl"
-          hookToForm
-        />
-      </div>
+      {/* Only show streaming URLs for artists */}
+      {!isWorkspace && (
+        <>
+          <div className="col-span-6 space-y-1 md:space-y-2">
+            <Input
+              value={spotifyUrl}
+              onChange={(e) => setSpotifyUrl(e.target.value)}
+              label="Spotify URL"
+              id="spotifyUrl"
+              name="spotifyUrl"
+              hookToForm
+            />
+          </div>
+          <div className="col-span-6 space-y-1 md:space-y-2">
+            <Input
+              value={appleUrl}
+              onChange={(e) => setAppleUrl(e.target.value)}
+              label="Apple URL"
+              id="appleUrl"
+              name="appleUrl"
+              hookToForm
+            />
+          </div>
+        </>
+      )}
       <div className="col-span-6 space-y-1 md:space-y-2">
         <Input
           value={tiktok}

@@ -1,26 +1,32 @@
 import supabase from "@/lib/supabase/serverClient";
 
+type AccountType = "customer" | "artist" | "workspace" | "organization" | "campaign";
+
 /**
- * Create a new artist account in the database
- * @param name Name of the artist to create
+ * Create a new account in the database
+ * @param name Name of the account to create
+ * @param accountType Type of account: 'user', 'artist', 'workspace', 'organization', 'campaign'
  * @returns Created account data or null if creation failed
  */
-export async function createArtistAccount(name: string) {
+export async function createArtistAccount(
+  name: string,
+  accountType: AccountType = "artist"
+) {
   try {
     const { data, error } = await supabase
       .from("accounts")
-      .insert({ name })
+      .insert({ name, account_type: accountType })
       .select("*")
       .single();
 
     if (error) {
-      console.error("Error creating artist account:", error);
+      console.error("Error creating account:", error);
       return null;
     }
 
     return data;
   } catch (error) {
-    console.error("Unexpected error creating artist account:", error);
+    console.error("Unexpected error creating account:", error);
     return null;
   }
 }
