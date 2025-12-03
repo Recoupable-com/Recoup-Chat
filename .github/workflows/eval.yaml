@@ -36,6 +36,7 @@ jobs:
       NEXT_PUBLIC_CDP_CLIENT_API_KEY: ${{secrets.NEXT_PUBLIC_CDP_CLIENT_API_KEY}}
       CDP_API_KEY_ID: ${{secrets.CDP_API_KEY_ID}}
       COMPOSIO_API_KEY: ${{secrets.COMPOSIO_API_KEY}}
+      COMPOSIO_GOOGLE_SHEETS_AUTH_CONFIG_ID: ${{secrets.COMPOSIO_GOOGLE_SHEETS_AUTH_CONFIG_ID}}
 
     steps:
       - name: Checkout
