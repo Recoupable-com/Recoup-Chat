@@ -35,6 +35,7 @@ jobs:
       CDP_API_KEY_SECRET: ${{secrets.CDP_API_KEY_SECRET}}
       NEXT_PUBLIC_CDP_CLIENT_API_KEY: ${{secrets.NEXT_PUBLIC_CDP_CLIENT_API_KEY}}
       CDP_API_KEY_ID: ${{secrets.CDP_API_KEY_ID}}
+      COMPOSIO_API_KEY: ${{secrets.COMPOSIO_API_KEY}}
 
     steps:
       - name: Checkout
