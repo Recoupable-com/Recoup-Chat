@@ -11,7 +11,6 @@ import MobileDownloadModal from "@/components/ModalDownloadModal";
 import ArtistsSidebar from "@/components/Artists/ArtistsSidebar";
 import { ToastContainer } from "react-toastify";
 import { Analytics } from "@vercel/analytics/react";
-import ArtistSelectionOverlay from "@/components/ArtistSelectionOverlay";
 import { Toaster } from "sonner";
 import { Geist, Geist_Mono } from "next/font/google";
 
@@ -94,7 +93,6 @@ export default function RootLayout({
               </div>
               <MobileDownloadModal />
             </div>
-            <ArtistSelectionOverlay />
             <ToastContainer />
             <Toaster />
           </Providers>

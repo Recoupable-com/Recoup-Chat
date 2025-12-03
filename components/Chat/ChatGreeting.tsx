@@ -36,7 +36,7 @@ export function ChatGreeting({ isVisible }: { isVisible: boolean }) {
       `}
     >
       <span className="text-foreground font-medium inline-flex items-center gap-3 flex-wrap justify-center">
-        Ask me about
+        Ask me about{" "}
         {isArtistSelected && artistImage && (
           <span className="inline-block w-12 h-12 rounded-full overflow-hidden flex-shrink-0 ring-1 ring-foreground shadow-md">
             <ImageWithFallback src={artistImage} />
