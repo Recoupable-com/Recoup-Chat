@@ -1,3 +1,4 @@
+import { NEW_API_BASE_URL } from "../consts";
 import { CatalogSongsResponse } from "./getCatalogSongs";
 import { Tables } from "@/types/database.types";
 
@@ -17,16 +18,13 @@ export async function postCatalogSongs(
   songs: CatalogSongInput[]
 ): Promise<CatalogSongsResponse> {
   try {
-    const response = await fetch(
-      "https://api.recoupable.com/api/catalogs/songs",
-      {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ songs }),
-      }
-    );
+    const response = await fetch(`${NEW_API_BASE_URL}/api/catalogs/songs`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ songs }),
+    });
 
     if (!response.ok) {
       const errorText = await response.text();

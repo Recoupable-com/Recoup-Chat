@@ -3,6 +3,7 @@
  */
 
 import { Tables } from "@/types/database.types";
+import { NEW_API_BASE_URL } from "../consts";
 
 type Song = Tables<"songs">;
 type Account = Tables<"accounts">;
@@ -42,7 +43,7 @@ export async function getCatalogSongs(
     }
 
     const response = await fetch(
-      `https://api.recoupable.com/api/catalogs/songs?${params}`,
+      `${NEW_API_BASE_URL}/api/catalogs/songs?${params}`,
       {
         method: "GET",
         headers: {
