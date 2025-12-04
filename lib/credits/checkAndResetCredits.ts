@@ -6,12 +6,6 @@ import isActiveSubscription from "../stripe/isActiveSubscription";
 import { getActiveSubscriptionDetails } from "../stripe/getActiveSubscriptionDetails";
 import { getOrgSubscription } from "../stripe/getOrgSubscription";
 
-// Track which check determined pro status
-export interface ProSource {
-  accountSubscription: boolean;
-  orgSubscription: boolean;
-}
-
 export const checkAndResetCredits = async (
   accountId: string
 ): Promise<CreditsUsage | null> => {
@@ -25,21 +19,18 @@ export const checkAndResetCredits = async (
   const oneMonthAgo = new Date();
   oneMonthAgo.setMonth(oneMonthAgo.getMonth() - 1);
 
-  // Check all pro sources (account subscription or org subscription)
+  // Check pro sources (account subscription or org subscription)
   const accountSubscription = await getActiveSubscriptionDetails(accountId);
   const orgSubscription = await getOrgSubscription(accountId);
 
-  const proSource: ProSource = {
-    accountSubscription: isActiveSubscription(accountSubscription),
-    orgSubscription: isActiveSubscription(orgSubscription),
-  };
-
-  const isPro = proSource.accountSubscription || proSource.orgSubscription;
+  const hasAccountSubscription = isActiveSubscription(accountSubscription);
+  const hasOrgSubscription = isActiveSubscription(orgSubscription);
+  const isPro = hasAccountSubscription || hasOrgSubscription;
 
   // Use the actual active subscription for period tracking (prefer account over org)
-  const activeSubscription = proSource.accountSubscription
+  const activeSubscription = hasAccountSubscription
     ? accountSubscription
-    : proSource.orgSubscription
+    : hasOrgSubscription
       ? orgSubscription
       : null;
   const subscriptionStartUnix =
