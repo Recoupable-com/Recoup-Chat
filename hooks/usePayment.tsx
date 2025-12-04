@@ -16,14 +16,14 @@ const usePayment = () => {
   const credits = creditsData?.remaining_credits || 0;
 
   // Check pro status (account subscription or org subscription)
-  const subscriptionActive = proStatusData?.isPro || false;
-  const totalCredits = subscriptionActive ? PRO_CREDITS : DEFAULT_CREDITS;
+  const isSubscribed = proStatusData?.isPro || false;
+  const totalCredits = isSubscribed ? PRO_CREDITS : DEFAULT_CREDITS;
 
   return {
     isLoading: isLoadingCredits || isLoadingProStatus || isLoadingUser,
     credits,
     totalCredits,
-    subscriptionActive,
+    isSubscribed,
     refetchCredits,
   };
 };
