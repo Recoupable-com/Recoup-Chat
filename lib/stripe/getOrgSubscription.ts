@@ -17,15 +17,13 @@ export async function getOrgSubscription(
   const accountOrgs = await getAccountOrganizations(accountId);
   if (accountOrgs.length === 0) return null;
 
-  // Check each org for an active subscription
-  for (const org of accountOrgs) {
-    const subscription = await getActiveSubscriptionDetails(org.organization_id);
-    if (subscription) {
-      return subscription;
-    }
-  }
+  // Check all orgs in parallel for faster UX
+  const subscriptions = await Promise.all(
+    accountOrgs.map((org) => getActiveSubscriptionDetails(org.organization_id))
+  );
 
-  return null;
+  // Return first active subscription found
+  return subscriptions.find((sub) => sub !== null) ?? null;
 }
 
 export default getOrgSubscription;
