@@ -12,7 +12,7 @@ export async function createAccountInfo(account_id: string) {
       .insert({ account_id });
 
     if (error) {
-      console.error("Error creating artist account info:", error);
+      console.error("Error creating account info:", error);
       return false;
     }
 

@@ -28,7 +28,7 @@ const UserProfileDropdown = () => {
   };
 
   return (
-    <DropdownMenuContent className="w-56" align="start">
+      <DropdownMenuContent className="w-56" align="start">
         <DropdownMenuLabel className="text-sm font-semibold">
           My Account
         </DropdownMenuLabel>

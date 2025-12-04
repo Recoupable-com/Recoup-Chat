@@ -6,7 +6,7 @@ const insertAccount = async (account: {
 }): Promise<Tables<"accounts"> | null> => {
   const { data } = await supabase
     .from("accounts")
-    .insert(account)
+    .insert({ ...account, account_type: "customer" })
     .select("*")
     .single();
   return data || null;

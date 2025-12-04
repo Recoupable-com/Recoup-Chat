@@ -1,6 +1,6 @@
 "use client";
 
-import { MicVocal } from "lucide-react";
+import { MicVocal, FolderOpen } from "lucide-react";
 import Form from "../Form";
 import { validation } from "@/lib/utils/setting";
 import { useArtistProvider } from "@/providers/ArtistProvider";
@@ -26,6 +26,10 @@ const Settings = () => {
     editableArtist,
   } = useArtistProvider();
   const [isVisibleDeleteModal, setIsVisibleDeleteModal] = useState(false);
+  
+  // Determine if this is a workspace (not an artist)
+  const isWorkspace = editableArtist?.account_type === "workspace";
+  const entityLabel = isWorkspace ? "Workspace" : "Artist";
 
   const handleSave = async () => {
     const artistInfo = await saveSetting();
@@ -45,21 +49,25 @@ const Settings = () => {
     >
       <div className={cn("col-span-12 flex justify-between items-center pb-3", borderPatterns.divider)}>
         <div className="flex gap-2 items-center">
-          <MicVocal className={iconPatterns.primary} />
+          {isWorkspace ? (
+            <FolderOpen className={iconPatterns.primary} />
+          ) : (
+            <MicVocal className={iconPatterns.primary} />
+          )}
           <div className="flex flex-col">
             <p className={textPatterns.heading}>
               {settingMode === SETTING_MODE.CREATE
-                ? "Add Artist"
-                : "Artist Settings"}
+                ? `Add ${entityLabel}`
+                : `${entityLabel} Settings`}
             </p>
             {settingMode === SETTING_MODE.UPDATE && editableArtist && (
-              <AccountIdDisplay accountId={editableArtist.account_id} />
+              <AccountIdDisplay accountId={editableArtist.account_id} label={`${entityLabel} ID`} />
             )}
           </div>
         </div>
       </div>
       <div className="col-span-4 space-y-1 md:space-y-2">
-        <p className="text-sm text-muted-foreground">Artist Image</p>
+        <p className="text-sm text-muted-foreground">{entityLabel} Image</p>
         <ImageSelect />
       </div>
       <Inputs />

@@ -1,23 +1,24 @@
 import { ArtistRecord } from "@/types/Artist";
 import Artist from "./Artist";
 import { useArtistProvider } from "@/providers/ArtistProvider";
-import { Plus } from "lucide-react";
+import { Plus, Loader } from "lucide-react";
 import { Dispatch, SetStateAction } from "react";
-import { useUserProvider } from "@/providers/UserProvder";
 import { containerPatterns } from "@/lib/styles/patterns";
 import { cn } from "@/lib/utils";
+import CreateWorkspaceModal from "@/components/CreateWorkspaceModal";
+import { useCreateWorkspaceModal } from "@/hooks/useCreateWorkspaceModal";
 
 const ArtistDropDown = ({
   setIsVisibleDropDown,
 }: {
   setIsVisibleDropDown: Dispatch<SetStateAction<boolean>>;
 }) => {
-  const { sorted, toggleCreation } = useArtistProvider();
-  const { isPrepared } = useUserProvider();
+  const { sorted, isCreatingArtist } = useArtistProvider();
+  const { isOpen: isModalOpen, open: openModal, close: closeModal } = useCreateWorkspaceModal();
 
-  const handleCreate = () => {
-    if (!isPrepared()) return;
-    toggleCreation();
+  const handleCloseModal = () => {
+    closeModal();
+    setIsVisibleDropDown(false);
   };
 
   return (
@@ -36,13 +37,19 @@ const ArtistDropDown = ({
             />
           ))}
           <button
-            className="flex px-2 py-1 gap-2 text-sm items-center text-muted-foreground hover:text-foreground hover:bg-accent rounded-md transition-colors"
-            onClick={handleCreate}
+            type="button"
+            className="flex px-2 py-1 gap-2 text-sm items-center text-muted-foreground hover:text-foreground hover:bg-accent rounded-md transition-colors w-full"
+            onClick={openModal}
+            disabled={isCreatingArtist}
           >
             <div className="w-8 flex justify-center">
-              <Plus className="size-5" />
+              {isCreatingArtist ? (
+                <Loader className="size-5 animate-spin" />
+              ) : (
+                <Plus className="size-5" />
+              )}
             </div>
-            New Artist
+            New Workspace
           </button>
         </div>
       </div>
@@ -50,6 +57,11 @@ const ArtistDropDown = ({
         className="absolute top-[calc(100%-20px)] right-full space-y-1 h-[40px] w-[80px] z-[2]"
         onMouseOver={() => setIsVisibleDropDown(true)}
         onMouseOut={() => setIsVisibleDropDown(false)}
+      />
+      
+      <CreateWorkspaceModal 
+        isOpen={isModalOpen} 
+        onClose={handleCloseModal} 
       />
     </>
   );
