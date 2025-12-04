@@ -1,3 +1,5 @@
+import { NEW_API_BASE_URL } from "../consts";
+
 interface SpotifyArtist {
   external_urls: {
     spotify: string;
@@ -41,7 +43,7 @@ interface SpotifySearchResponse {
 export async function getSpotifyFollowers(artistName: string): Promise<number> {
   try {
     const encodedName = encodeURIComponent(artistName);
-    const url = `https://api.recoupable.com/api/spotify/search?q=${encodedName}&type=artist`;
+    const url = `${NEW_API_BASE_URL}/api/spotify/search?q=${encodedName}&type=artist`;
 
     const response = await fetch(url);
 
