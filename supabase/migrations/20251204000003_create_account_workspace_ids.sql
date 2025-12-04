@@ -34,23 +34,7 @@ CREATE TRIGGER set_updated_at
     FOR EACH ROW
     EXECUTE FUNCTION trigger_set_updated_at();
 
--- Grant permissions to all roles
-GRANT DELETE ON TABLE "public"."account_workspace_ids" TO "anon";
-GRANT INSERT ON TABLE "public"."account_workspace_ids" TO "anon";
-GRANT REFERENCES ON TABLE "public"."account_workspace_ids" TO "anon";
-GRANT SELECT ON TABLE "public"."account_workspace_ids" TO "anon";
-GRANT TRIGGER ON TABLE "public"."account_workspace_ids" TO "anon";
-GRANT TRUNCATE ON TABLE "public"."account_workspace_ids" TO "anon";
-GRANT UPDATE ON TABLE "public"."account_workspace_ids" TO "anon";
-
-GRANT DELETE ON TABLE "public"."account_workspace_ids" TO "authenticated";
-GRANT INSERT ON TABLE "public"."account_workspace_ids" TO "authenticated";
-GRANT REFERENCES ON TABLE "public"."account_workspace_ids" TO "authenticated";
-GRANT SELECT ON TABLE "public"."account_workspace_ids" TO "authenticated";
-GRANT TRIGGER ON TABLE "public"."account_workspace_ids" TO "authenticated";
-GRANT TRUNCATE ON TABLE "public"."account_workspace_ids" TO "authenticated";
-GRANT UPDATE ON TABLE "public"."account_workspace_ids" TO "authenticated";
-
+-- Grant permissions only to service_role (server-side access only)
 GRANT DELETE ON TABLE "public"."account_workspace_ids" TO "service_role";
 GRANT INSERT ON TABLE "public"."account_workspace_ids" TO "service_role";
 GRANT REFERENCES ON TABLE "public"."account_workspace_ids" TO "service_role";

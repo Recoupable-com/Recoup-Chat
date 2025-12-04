@@ -28,23 +28,7 @@ CREATE UNIQUE INDEX organization_domains_domain_unique ON "public"."organization
 CREATE INDEX idx_organization_domains_domain ON "public"."organization_domains" ("domain");
 CREATE INDEX idx_organization_domains_organization_id ON "public"."organization_domains" ("organization_id");
 
--- Grant permissions to all roles
-GRANT DELETE ON TABLE "public"."organization_domains" TO "anon";
-GRANT INSERT ON TABLE "public"."organization_domains" TO "anon";
-GRANT REFERENCES ON TABLE "public"."organization_domains" TO "anon";
-GRANT SELECT ON TABLE "public"."organization_domains" TO "anon";
-GRANT TRIGGER ON TABLE "public"."organization_domains" TO "anon";
-GRANT TRUNCATE ON TABLE "public"."organization_domains" TO "anon";
-GRANT UPDATE ON TABLE "public"."organization_domains" TO "anon";
-
-GRANT DELETE ON TABLE "public"."organization_domains" TO "authenticated";
-GRANT INSERT ON TABLE "public"."organization_domains" TO "authenticated";
-GRANT REFERENCES ON TABLE "public"."organization_domains" TO "authenticated";
-GRANT SELECT ON TABLE "public"."organization_domains" TO "authenticated";
-GRANT TRIGGER ON TABLE "public"."organization_domains" TO "authenticated";
-GRANT TRUNCATE ON TABLE "public"."organization_domains" TO "authenticated";
-GRANT UPDATE ON TABLE "public"."organization_domains" TO "authenticated";
-
+-- Grant permissions only to service_role (server-side access only)
 GRANT DELETE ON TABLE "public"."organization_domains" TO "service_role";
 GRANT INSERT ON TABLE "public"."organization_domains" TO "service_role";
 GRANT REFERENCES ON TABLE "public"."organization_domains" TO "service_role";
