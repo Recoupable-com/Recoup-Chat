@@ -1,5 +1,6 @@
 import { z } from "zod";
 import { tool } from "ai";
+import { NEW_API_BASE_URL } from "../consts";
 
 /**
  * Types for Spotify Get Artist Top Tracks response
@@ -91,9 +92,7 @@ const getSpotifyArtistTopTracks = tool({
     market,
   }): Promise<GetSpotifyArtistTopTracksResponse> => {
     try {
-      const url = new URL(
-        "https://api.recoupable.com/api/spotify/artist/topTracks"
-      );
+      const url = new URL(`${NEW_API_BASE_URL}/api/spotify/artist/topTracks`);
       url.searchParams.append("id", id);
       if (market) url.searchParams.append("market", market);
 

@@ -1,5 +1,6 @@
 import { z } from "zod";
 import { tool } from "ai";
+import { NEW_API_BASE_URL } from "../consts";
 
 // Types for the API response based on Recoup docs
 export interface SimplifiedArtist {
@@ -68,7 +69,7 @@ const getSpotifyArtistAlbums = tool({
     limit = 20,
     offset = 0,
   }): Promise<ArtistAlbumsResponse> => {
-    const url = new URL("https://api.recoupable.com/api/spotify/artist/albums");
+    const url = new URL(`${NEW_API_BASE_URL}/api/spotify/artist/albums`);
     url.searchParams.append("id", id);
     if (include_groups)
       url.searchParams.append("include_groups", include_groups);
