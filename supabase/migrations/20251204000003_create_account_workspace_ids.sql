@@ -28,9 +28,6 @@ ALTER TABLE "public"."account_workspace_ids" ADD CONSTRAINT "account_workspace_i
     FOREIGN KEY (workspace_id) REFERENCES accounts(id) ON DELETE CASCADE NOT VALID;
 ALTER TABLE "public"."account_workspace_ids" VALIDATE CONSTRAINT "account_workspace_ids_workspace_id_fkey";
 
--- Unique constraint to prevent duplicate account-workspace links
-CREATE UNIQUE INDEX account_workspace_ids_unique ON "public"."account_workspace_ids" ("account_id", "workspace_id");
-
 -- Updated_at trigger (uses existing trigger function)
 CREATE TRIGGER set_updated_at
     BEFORE UPDATE ON account_workspace_ids
