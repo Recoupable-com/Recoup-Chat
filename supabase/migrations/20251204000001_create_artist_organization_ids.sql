@@ -16,9 +16,9 @@ ALTER TABLE "public"."artist_organization_ids" ENABLE ROW LEVEL SECURITY;
 CREATE UNIQUE INDEX artist_organization_ids_pkey ON public.artist_organization_ids USING btree (id);
 ALTER TABLE "public"."artist_organization_ids" ADD CONSTRAINT "artist_organization_ids_pkey" PRIMARY KEY USING INDEX "artist_organization_ids_pkey";
 
--- Foreign key to artists table
+-- Foreign key to accounts table (artist accounts where account_type = 'artist')
 ALTER TABLE "public"."artist_organization_ids" ADD CONSTRAINT "artist_organization_ids_artist_id_fkey" 
-    FOREIGN KEY (artist_id) REFERENCES artists(id) ON DELETE CASCADE NOT VALID;
+    FOREIGN KEY (artist_id) REFERENCES accounts(id) ON DELETE CASCADE NOT VALID;
 ALTER TABLE "public"."artist_organization_ids" VALIDATE CONSTRAINT "artist_organization_ids_artist_id_fkey";
 
 -- Foreign key to accounts table (organization accounts)
@@ -65,5 +65,5 @@ GRANT TRUNCATE ON TABLE "public"."artist_organization_ids" TO "service_role";
 GRANT UPDATE ON TABLE "public"."artist_organization_ids" TO "service_role";
 
 -- Comment for documentation
-COMMENT ON TABLE "public"."artist_organization_ids" IS 'Links artists to organizations. An artist can belong to multiple orgs. When either is deleted, the link is automatically removed.';
+COMMENT ON TABLE "public"."artist_organization_ids" IS 'Links artist accounts to organizations. An artist can belong to multiple orgs. When either is deleted, the link is automatically removed. Note: artist_id references accounts(id) where account_type = artist.';
 
