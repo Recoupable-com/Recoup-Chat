@@ -2,7 +2,7 @@ import supabase from "@/lib/supabase/serverClient";
 import type { Tables } from "@/types/database.types";
 
 /**
- * Insert a new account (used for customer/user accounts on login)
+ * Insert a new account (used on login/signup)
  * @param account Account data to insert
  * @returns Created account or null if failed
  */

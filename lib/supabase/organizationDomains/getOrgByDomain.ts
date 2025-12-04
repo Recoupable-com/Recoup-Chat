@@ -2,7 +2,7 @@ import supabase from "@/lib/supabase/serverClient";
 
 /**
  * Look up an organization by email domain
- * Used to auto-assign users to orgs on login
+ * Used to assign accounts to orgs on login
  *
  * @param domain - Email domain (e.g., "rostrum.com")
  * @returns Organization ID if found, null otherwise

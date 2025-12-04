@@ -6,19 +6,19 @@ import isActiveSubscription from "@/lib/stripe/isActiveSubscription";
 export interface ProStatusResponse {
   isPro: boolean;
   proSource: {
-    userSubscription: boolean;
+    accountSubscription: boolean;
     orgSubscription: boolean;
   };
   subscription?: {
     id: string;
     status: string;
-    source: "user" | "org";
+    source: "account" | "organization";
   };
 }
 
 /**
  * GET /api/subscription/status?accountId=xxx
- * Returns the user's pro status and which check passed
+ * Returns the account's pro status and which check passed
  */
 export async function GET(req: NextRequest): Promise<Response> {
   const accountId = req.nextUrl.searchParams.get("accountId");
@@ -28,36 +28,33 @@ export async function GET(req: NextRequest): Promise<Response> {
   }
 
   try {
-    // Check all pro sources in parallel (user subscription or org subscription)
-    const [userSubscription, orgSubscription] = await Promise.all([
+    // Check all pro sources in parallel (account subscription or org subscription)
+    const [accountSubscription, orgSubscription] = await Promise.all([
       getActiveSubscriptionDetails(accountId),
       getOrgSubscription(accountId),
     ]);
 
     const proSource = {
-      userSubscription: isActiveSubscription(userSubscription),
+      accountSubscription: isActiveSubscription(accountSubscription),
       orgSubscription: isActiveSubscription(orgSubscription),
     };
 
-    // Log for debugging
-    console.log(`[Pro Status] accountId: ${accountId}`, proSource);
-
-    const isPro = proSource.userSubscription || proSource.orgSubscription;
+    const isPro = proSource.accountSubscription || proSource.orgSubscription;
 
     // Return the active subscription info based on which check actually passed
-    // Prefer user subscription over org subscription if both are active
+    // Prefer account subscription over org subscription if both are active
     let subscriptionInfo: ProStatusResponse["subscription"];
-    if (proSource.userSubscription && userSubscription) {
+    if (proSource.accountSubscription && accountSubscription) {
       subscriptionInfo = {
-        id: userSubscription.id,
-        status: userSubscription.status,
-        source: "user",
+        id: accountSubscription.id,
+        status: accountSubscription.status,
+        source: "account",
       };
     } else if (proSource.orgSubscription && orgSubscription) {
       subscriptionInfo = {
         id: orgSubscription.id,
         status: orgSubscription.status,
-        source: "org",
+        source: "organization",
       };
     }
 
@@ -78,4 +75,3 @@ export async function GET(req: NextRequest): Promise<Response> {
 export const dynamic = "force-dynamic";
 export const fetchCache = "force-no-store";
 export const revalidate = 0;
-

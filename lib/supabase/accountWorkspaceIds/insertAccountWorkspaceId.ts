@@ -1,8 +1,8 @@
 import supabase from "@/lib/supabase/serverClient";
 
 /**
- * Link a workspace account to a user account
- * @param accountId - The user's account ID (owner)
+ * Link a workspace to an owner account
+ * @param accountId - The owner's account ID
  * @param workspaceId - The workspace account ID
  * @returns The created record or null if failed
  */

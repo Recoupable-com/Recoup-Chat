@@ -1,5 +1,5 @@
 -- Create account_workspace_ids table
--- Links user/customer accounts to workspace accounts
+-- Links owner accounts to workspace accounts
 -- Similar structure to account_artist_ids (without pinned column)
 -- Used to identify which accounts are workspaces (vs artists)
 
@@ -18,7 +18,7 @@ CREATE UNIQUE INDEX account_workspace_ids_pkey ON public.account_workspace_ids U
 ALTER TABLE "public"."account_workspace_ids" ADD CONSTRAINT "account_workspace_ids_pkey" PRIMARY KEY USING INDEX "account_workspace_ids_pkey";
 
 -- Foreign keys with cascade delete
--- account_id references the user/customer account (owner)
+-- account_id references the owner account
 ALTER TABLE "public"."account_workspace_ids" ADD CONSTRAINT "account_workspace_ids_account_id_fkey" 
     FOREIGN KEY (account_id) REFERENCES accounts(id) ON DELETE CASCADE NOT VALID;
 ALTER TABLE "public"."account_workspace_ids" VALIDATE CONSTRAINT "account_workspace_ids_account_id_fkey";
@@ -64,5 +64,5 @@ CREATE INDEX idx_account_workspace_ids_account_id ON "public"."account_workspace
 CREATE INDEX idx_account_workspace_ids_workspace_id ON "public"."account_workspace_ids" ("workspace_id");
 
 -- Comment for documentation
-COMMENT ON TABLE "public"."account_workspace_ids" IS 'Links customer accounts to workspace accounts. When either account is deleted, the link is automatically removed. Used to identify workspaces (vs artists) without relying on account_type column.';
+COMMENT ON TABLE "public"."account_workspace_ids" IS 'Links owner accounts to workspace accounts. When either account is deleted, the link is automatically removed. Used to identify workspaces (vs artists) without relying on account_type column.';
 

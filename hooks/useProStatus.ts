@@ -14,7 +14,7 @@ const fetchProStatus = async (accountId: string): Promise<ProStatusResponse> => 
 };
 
 /**
- * Hook to get user's pro status including org subscription check
+ * Hook to get account's pro status including org subscription check
  */
 const useProStatus = (): UseQueryResult<ProStatusResponse> => {
   const { userData } = useUserProvider();

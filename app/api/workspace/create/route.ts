@@ -2,7 +2,7 @@ import { NextRequest } from "next/server";
 import { createArtistInDb } from "@/lib/supabase/createArtistInDb";
 
 /**
- * Create a blank workspace (account) for a user
+ * Create a blank workspace for an account
  * Uses the same underlying structure as artists
  */
 export async function POST(req: NextRequest) {

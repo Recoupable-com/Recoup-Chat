@@ -1,8 +1,8 @@
 -- Drop account_type column from accounts table
 -- We now use join tables to determine account type:
---   - account_artist_ids: links users to their artists
---   - account_workspace_ids: links users to their workspaces
---   - account_organization_ids: links users to their organizations
+--   - account_artist_ids: links owner accounts to their artists
+--   - account_workspace_ids: links owner accounts to their workspaces
+--   - account_organization_ids: links accounts to their organizations
 --   - artist_organization_ids: links artists to organizations
 
 -- Drop the index first

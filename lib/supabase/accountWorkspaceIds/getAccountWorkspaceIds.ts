@@ -5,7 +5,7 @@ import type { ArtistRecord } from "@/types/Artist";
 /**
  * Get all workspaces for an account, with full info
  *
- * @param accountId The user's account ID
+ * @param accountId The owner's account ID
  * @returns Array of formatted workspace objects with isWorkspace: true
  */
 export async function getAccountWorkspaceIds(
