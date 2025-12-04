@@ -27,6 +27,9 @@ ALTER TABLE "public"."account_organization_ids" ADD CONSTRAINT "account_organiza
     FOREIGN KEY (organization_id) REFERENCES accounts(id) ON DELETE CASCADE NOT VALID;
 ALTER TABLE "public"."account_organization_ids" VALIDATE CONSTRAINT "account_organization_ids_organization_id_fkey";
 
+-- Unique constraint to prevent duplicate account-org links
+CREATE UNIQUE INDEX account_organization_ids_unique ON "public"."account_organization_ids" ("account_id", "organization_id");
+
 -- Updated_at trigger (uses existing trigger function)
 CREATE TRIGGER set_updated_at
     BEFORE UPDATE ON account_organization_ids
