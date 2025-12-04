@@ -33,14 +33,35 @@ export async function createArtistInDb(
     const associated = await associateArtistWithAccount(account_id, account.id);
     if (!associated) return null;
 
-    // Return formatted data
-    // IMPORTANT: id and account_id must come AFTER spreading account_info
-    // because account_info has its own id and account_id fields that would overwrite
+    // Build return object by explicitly picking fields
+    // This avoids fragile spread-order dependencies where account_info.id
+    // could accidentally overwrite accounts.id
+    const accountInfo = artist.account_info?.[0];
+    
     return {
-      ...artist,
-      ...artist.account_info[0],
-      id: artist.id,          // The workspace's accounts.id (not account_info.id)
-      account_id: artist.id,  // The workspace's own ID, not the foreign key
+      // Core account fields from accounts table
+      id: artist.id,
+      account_id: artist.id,  // Alias used by ArtistRecord type
+      name: artist.name,
+      account_type: artist.account_type,
+      created_at: artist.created_at,
+      updated_at: artist.updated_at,
+      
+      // Profile fields from account_info table (explicitly picked, not spread)
+      image: accountInfo?.image ?? null,
+      instruction: accountInfo?.instruction ?? null,
+      knowledges: accountInfo?.knowledges ?? null,
+      label: accountInfo?.label ?? null,
+      organization: accountInfo?.organization ?? null,
+      company_name: accountInfo?.company_name ?? null,
+      job_title: accountInfo?.job_title ?? null,
+      role_type: accountInfo?.role_type ?? null,
+      onboarding_status: accountInfo?.onboarding_status ?? null,
+      onboarding_data: accountInfo?.onboarding_data ?? null,
+      
+      // Related data arrays
+      account_info: artist.account_info,
+      account_socials: artist.account_socials,
     };
   } catch (error) {
     console.error("Unexpected error creating artist:", error);
