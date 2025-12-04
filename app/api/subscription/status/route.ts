@@ -5,20 +5,11 @@ import isActiveSubscription from "@/lib/stripe/isActiveSubscription";
 
 export interface ProStatusResponse {
   isPro: boolean;
-  proSource: {
-    accountSubscription: boolean;
-    orgSubscription: boolean;
-  };
-  subscription?: {
-    id: string;
-    status: string;
-    source: "account" | "organization";
-  };
 }
 
 /**
  * GET /api/subscription/status?accountId=xxx
- * Returns the account's pro status and which check passed
+ * Returns whether the account has pro status (via account or org subscription)
  */
 export async function GET(req: NextRequest): Promise<Response> {
   const accountId = req.nextUrl.searchParams.get("accountId");
@@ -34,37 +25,11 @@ export async function GET(req: NextRequest): Promise<Response> {
       getOrgSubscription(accountId),
     ]);
 
-    const proSource = {
-      accountSubscription: isActiveSubscription(accountSubscription),
-      orgSubscription: isActiveSubscription(orgSubscription),
-    };
+    const isPro =
+      isActiveSubscription(accountSubscription) ||
+      isActiveSubscription(orgSubscription);
 
-    const isPro = proSource.accountSubscription || proSource.orgSubscription;
-
-    // Return the active subscription info based on which check actually passed
-    // Prefer account subscription over org subscription if both are active
-    let subscriptionInfo: ProStatusResponse["subscription"];
-    if (proSource.accountSubscription && accountSubscription) {
-      subscriptionInfo = {
-        id: accountSubscription.id,
-        status: accountSubscription.status,
-        source: "account",
-      };
-    } else if (proSource.orgSubscription && orgSubscription) {
-      subscriptionInfo = {
-        id: orgSubscription.id,
-        status: orgSubscription.status,
-        source: "organization",
-      };
-    }
-
-    const response: ProStatusResponse = {
-      isPro,
-      proSource,
-      subscription: subscriptionInfo,
-    };
-
-    return Response.json(response, { status: 200 });
+    return Response.json({ isPro }, { status: 200 });
   } catch (error) {
     console.error("[Pro Status] Error:", error);
     const message = error instanceof Error ? error.message : "failed";

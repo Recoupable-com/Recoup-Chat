@@ -25,7 +25,6 @@ const usePayment = () => {
     totalCredits,
     subscriptionActive,
     refetchCredits,
-    proSource: proStatusData?.proSource,
   };
 };
 
