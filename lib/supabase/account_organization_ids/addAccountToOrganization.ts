@@ -6,7 +6,7 @@ import supabase from "@/lib/supabase/serverClient";
  *
  * @param accountId - The account ID
  * @param organizationId - The organization ID to add them to
- * @returns The created record ID, or null if failed/already exists
+ * @returns The created record ID, or null if failed (including if already exists)
  */
 export async function addAccountToOrganization(
   accountId: string,
@@ -14,38 +14,18 @@ export async function addAccountToOrganization(
 ): Promise<string | null> {
   if (!accountId || !organizationId) return null;
 
-  try {
-    // Check if already a member
-    const { data: existing } = await supabase
-      .from("account_organization_ids")
-      .select("id")
-      .eq("account_id", accountId)
-      .eq("organization_id", organizationId)
-      .single();
+  const { data, error } = await supabase
+    .from("account_organization_ids")
+    .insert({
+      account_id: accountId,
+      organization_id: organizationId,
+    })
+    .select("id")
+    .single();
 
-    if (existing) {
-      // Already a member, return existing ID
-      return existing.id;
-    }
+  if (error) return null;
 
-    // Add to organization
-    const { data, error } = await supabase
-      .from("account_organization_ids")
-      .insert({
-        account_id: accountId,
-        organization_id: organizationId,
-      })
-      .select("id")
-      .single();
-
-    if (error) {
-      return null;
-    }
-
-    return data?.id || null;
-  } catch {
-    return null;
-  }
+  return data?.id || null;
 }
 
 export default addAccountToOrganization;
