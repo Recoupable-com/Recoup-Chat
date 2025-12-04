@@ -12,7 +12,7 @@
  */
 
 import { NextRequest, NextResponse } from "next/server";
-import insertYouTubeTokens from "@/lib/supabase/youtubeTokens/insertYouTubeTokens";
+import insertYouTubeTokens from "@/lib/supabase/youtube_tokens/insertYouTubeTokens";
 import { createYouTubeOAuthClient } from "@/lib/youtube/oauth-client";
 
 const oauth2Client = createYouTubeOAuthClient();

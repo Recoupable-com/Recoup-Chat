@@ -1,5 +1,5 @@
 import { getActiveSubscriptionDetails } from "./getActiveSubscriptionDetails";
-import getAccountOrganizations from "@/lib/supabase/accountOrganizationIds/getAccountOrganizations";
+import getAccountOrganizations from "@/lib/supabase/account_organization_ids/getAccountOrganizations";
 import Stripe from "stripe";
 
 /**

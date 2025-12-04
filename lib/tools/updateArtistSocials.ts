@@ -2,7 +2,7 @@ import { z } from "zod";
 import { tool } from "ai";
 import updateArtistSocials from "../supabase/updateArtistSocials";
 import getSocialPlatformByLink from "../getSocialPlatformByLink";
-import type { AccountSocialWithSocial } from "../supabase/accountSocials/getAccountSocials";
+import type { AccountSocialWithSocial } from "../supabase/account_socials/getAccountSocials";
 
 export interface UpdateArtistSocialsResult {
   success: boolean;

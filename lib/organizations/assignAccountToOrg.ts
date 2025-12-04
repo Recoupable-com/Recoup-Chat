@@ -1,6 +1,6 @@
 import extractDomain from "@/lib/email/extractDomain";
-import getOrgByDomain from "@/lib/supabase/organizationDomains/getOrgByDomain";
-import addAccountToOrganization from "@/lib/supabase/accountOrganizationIds/addAccountToOrganization";
+import getOrgByDomain from "@/lib/supabase/organization_domains/getOrgByDomain";
+import addAccountToOrganization from "@/lib/supabase/account_organization_ids/addAccountToOrganization";
 
 /**
  * Assign an account to their organization based on email domain.

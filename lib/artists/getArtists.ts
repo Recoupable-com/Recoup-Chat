@@ -1,7 +1,7 @@
-import getAccountArtistIds from "@/lib/supabase/accountArtistIds/getAccountArtistIds";
-import getAccountWorkspaceIds from "@/lib/supabase/accountWorkspaceIds/getAccountWorkspaceIds";
-import getAccountOrganizations from "@/lib/supabase/accountOrganizationIds/getAccountOrganizations";
-import getArtistsByOrganization from "@/lib/supabase/artistOrganizationIds/getArtistsByOrganization";
+import getAccountArtistIds from "@/lib/supabase/account_artist_ids/getAccountArtistIds";
+import getAccountWorkspaceIds from "@/lib/supabase/account_workspace_ids/getAccountWorkspaceIds";
+import getAccountOrganizations from "@/lib/supabase/account_organization_ids/getAccountOrganizations";
+import getArtistsByOrganization from "@/lib/supabase/artist_organization_ids/getArtistsByOrganization";
 import type { ArtistRecord } from "@/types/Artist";
 
 const getArtists = async (accountId: string): Promise<ArtistRecord[]> => {

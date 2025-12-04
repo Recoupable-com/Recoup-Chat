@@ -1,4 +1,4 @@
-import getAccountEmails from "@/lib/supabase/accountEmails/getAccountEmails";
+import getAccountEmails from "@/lib/supabase/account_emails/getAccountEmails";
 import { getAgentTemplateSharesByTemplateIds } from "./getAgentTemplateSharesByTemplateIds";
 
 export async function getSharedEmailsForTemplates(templateIds: string[]): Promise<Record<string, string[]>> {
