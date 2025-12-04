@@ -1,3 +1,4 @@
+import { NEW_API_BASE_URL } from "@/lib/consts";
 import { z } from "zod";
 import { tool } from "ai";
 
@@ -36,7 +37,7 @@ const getArtistSegments = tool({
   execute: async ({ artist_account_id, page, limit }) => {
     try {
       // Construct URL with query parameters
-      const url = new URL("https://api.recoupable.com/api/artist/segments");
+      const url = new URL(`${NEW_API_BASE_URL}/api/artist/segments`);
       url.searchParams.append("artist_account_id", artist_account_id);
       if (page) url.searchParams.append("page", page.toString());
       if (limit) url.searchParams.append("limit", limit.toString());
