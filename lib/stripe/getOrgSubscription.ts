@@ -18,8 +18,12 @@ export async function getOrgSubscription(
   if (accountOrgs.length === 0) return null;
 
   // Check all orgs in parallel for faster UX
+  const orgIds = accountOrgs
+    .map((org) => org.organization_id)
+    .filter((id): id is string => id !== null);
+  
   const subscriptions = await Promise.all(
-    accountOrgs.map((org) => getActiveSubscriptionDetails(org.organization_id))
+    orgIds.map((orgId) => getActiveSubscriptionDetails(orgId))
   );
 
   // Return first active subscription found

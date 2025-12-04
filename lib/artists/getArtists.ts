@@ -13,7 +13,9 @@ const getArtists = async (accountId: string): Promise<ArtistRecord[]> => {
   ]);
 
   // Get artists from all orgs the account belongs to
-  const orgIds = accountOrgs.map((org) => org.organization_id);
+  const orgIds = accountOrgs
+    .map((org) => org.organization_id)
+    .filter((id): id is string => id !== null);
   const orgArtists = orgIds.length > 0
     ? await getArtistsByOrganization(orgIds)
     : [];

@@ -2,7 +2,7 @@ import createAccount from "./accounts/createAccount";
 import createAccountInfo from "./artist/createAccountInfo";
 import getArtistById from "./artist/getArtistById";
 import associateArtistWithAccount from "./artist/associateArtistWithAccount";
-import insertAccountWorkspaceId from "./accountWorkspaceIds/insertAccountWorkspaceId";
+import insertAccountWorkspaceId from "./account_workspace_ids/insertAccountWorkspaceId";
 
 /**
  * Create a new account in the database and associate it with an owner account
