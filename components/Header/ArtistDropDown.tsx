@@ -2,11 +2,11 @@ import { ArtistRecord } from "@/types/Artist";
 import Artist from "./Artist";
 import { useArtistProvider } from "@/providers/ArtistProvider";
 import { Plus, Loader } from "lucide-react";
-import { Dispatch, SetStateAction, useState } from "react";
-import { useUserProvider } from "@/providers/UserProvder";
+import { Dispatch, SetStateAction } from "react";
 import { containerPatterns } from "@/lib/styles/patterns";
 import { cn } from "@/lib/utils";
 import CreateWorkspaceModal from "@/components/CreateWorkspaceModal";
+import { useCreateWorkspaceModal } from "@/hooks/useCreateWorkspaceModal";
 
 const ArtistDropDown = ({
   setIsVisibleDropDown,
@@ -14,16 +14,10 @@ const ArtistDropDown = ({
   setIsVisibleDropDown: Dispatch<SetStateAction<boolean>>;
 }) => {
   const { sorted, isCreatingArtist } = useArtistProvider();
-  const { isPrepared } = useUserProvider();
-  const [isModalOpen, setIsModalOpen] = useState(false);
-
-  const handleOpenModal = () => {
-    if (!isPrepared()) return;
-    setIsModalOpen(true);
-  };
+  const { isOpen: isModalOpen, open: openModal, close: closeModal } = useCreateWorkspaceModal();
 
   const handleCloseModal = () => {
-    setIsModalOpen(false);
+    closeModal();
     setIsVisibleDropDown(false);
   };
 
@@ -45,7 +39,7 @@ const ArtistDropDown = ({
           <button
             type="button"
             className="flex px-2 py-1 gap-2 text-sm items-center text-muted-foreground hover:text-foreground hover:bg-accent rounded-md transition-colors w-full"
-            onClick={handleOpenModal}
+            onClick={openModal}
             disabled={isCreatingArtist}
           >
             <div className="w-8 flex justify-center">

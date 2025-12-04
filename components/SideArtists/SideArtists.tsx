@@ -1,10 +1,10 @@
-import { useState } from "react";
 import SideModal from "../SideModal";
 import { useUserProvider } from "@/providers/UserProvder";
 import { useArtistProvider } from "@/providers/ArtistProvider";
 import { Plus, Loader } from "lucide-react";
 import { useArtistPinRenderer } from "@/hooks/useArtistPinRenderer";
 import CreateWorkspaceModal from "@/components/CreateWorkspaceModal";
+import { useCreateWorkspaceModal } from "@/hooks/useCreateWorkspaceModal";
 
 const SideArtists = ({
   isVisible,
@@ -13,18 +13,13 @@ const SideArtists = ({
   isVisible: boolean;
   toggleModal: () => void;
 }) => {
-  const { address, isPrepared } = useUserProvider();
+  const { address } = useUserProvider();
   const { sorted, isCreatingArtist } = useArtistProvider();
   const { renderArtistListWithPins } = useArtistPinRenderer({ sorted, menuExpanded: true });
-  const [isModalOpen, setIsModalOpen] = useState(false);
-
-  const handleOpenModal = () => {
-    if (!isPrepared()) return;
-    setIsModalOpen(true);
-  };
+  const { isOpen: isModalOpen, open: openModal, close: closeModal } = useCreateWorkspaceModal();
 
   const handleCloseModal = () => {
-    setIsModalOpen(false);
+    closeModal();
     toggleModal();
   };
 
@@ -47,7 +42,7 @@ const SideArtists = ({
         <button
           className="flex px-2 py-1 gap-2 text-sm items-center text-grey-dark-1 w-full hover:bg-muted"
           type="button"
-          onClick={handleOpenModal}
+          onClick={openModal}
           disabled={isCreatingArtist}
         >
           <div className="w-8 flex justify-center">

@@ -1,9 +1,8 @@
-import createArtistAccount from "./artist/createArtistAccount";
+import createAccount from "./accounts/createAccount";
 import createAccountInfo from "./artist/createAccountInfo";
 import getArtistById from "./artist/getArtistById";
 import associateArtistWithAccount from "./artist/associateArtistWithAccount";
-
-type AccountType = "customer" | "artist" | "workspace" | "organization" | "campaign";
+import type { AccountType } from "@/types/AccountType";
 
 /**
  * Create a new account in the database and associate it with a user account
@@ -19,7 +18,7 @@ export async function createArtistInDb(
 ) {
   try {
     // Step 1: Create the account with specified type
-    const account = await createArtistAccount(name, accountType);
+    const account = await createAccount(name, accountType);
     if (!account) return null;
 
     // Step 2: Create account info for the account

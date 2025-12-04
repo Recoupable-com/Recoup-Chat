@@ -11,6 +11,7 @@ import { useSidebarExpansion } from "@/providers/SidebarExpansionContext";
 import { cn } from "@/lib/utils";
 import { useArtistPinRenderer } from "@/hooks/useArtistPinRenderer";
 import CreateWorkspaceModal from "@/components/CreateWorkspaceModal";
+import { useCreateWorkspaceModal } from "@/hooks/useCreateWorkspaceModal";
 
 const ArtistsSidebar = () => {
   const {
@@ -19,13 +20,13 @@ const ArtistsSidebar = () => {
     isCreatingArtist,
     isLoading,
   } = useArtistProvider();
-  const { isPrepared, email } = useUserProvider();
+  const { email } = useUserProvider();
   const { setIsExpanded } = useSidebarExpansion();
   const isMobile = useIsMobile();
   const isArtistSelected = !!selectedArtist;
+  const { isOpen: isModalOpen, open: openModal, close: closeModal } = useCreateWorkspaceModal();
 
   const [menuExpanded, setMenuExpanded] = useState(false);
-  const [isModalOpen, setIsModalOpen] = useState(false);
   const { renderArtistListWithPins } = useArtistPinRenderer({ sorted, menuExpanded });
   const animate = { width: menuExpanded ? 220 : 80 };
   const initial = { width: 80 };
@@ -34,11 +35,6 @@ const ArtistsSidebar = () => {
   useEffect(() => {
     setIsExpanded(menuExpanded);
   }, [menuExpanded, setIsExpanded]);
-
-  const handleOpenModal = () => {
-    if (!isPrepared()) return;
-    setIsModalOpen(true);
-  };
 
   const renderArtistList = () => {
     if (isLoading) {
@@ -78,7 +74,7 @@ const ArtistsSidebar = () => {
           !isArtistSelected && "relative z-70 brightness-125"
         )}
         type="button"
-        onClick={handleOpenModal}
+        onClick={openModal}
         disabled={isCreatingArtist}
       >
         <div className="flex justify-center">
@@ -93,7 +89,7 @@ const ArtistsSidebar = () => {
       
       <CreateWorkspaceModal 
         isOpen={isModalOpen} 
-        onClose={() => setIsModalOpen(false)} 
+        onClose={closeModal} 
       />
     </motion.div>
   );

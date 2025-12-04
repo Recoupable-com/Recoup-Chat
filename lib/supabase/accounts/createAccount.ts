@@ -1,6 +1,5 @@
 import supabase from "@/lib/supabase/serverClient";
-
-type AccountType = "customer" | "artist" | "workspace" | "organization" | "campaign";
+import type { AccountType } from "@/types/AccountType";
 
 /**
  * Create a new account in the database
@@ -8,7 +7,7 @@ type AccountType = "customer" | "artist" | "workspace" | "organization" | "campa
  * @param accountType Type of account: 'customer', 'artist', 'workspace', 'organization', 'campaign'
  * @returns Created account data or null if creation failed
  */
-export async function createArtistAccount(
+export async function createAccount(
   name: string,
   accountType: AccountType = "artist"
 ) {
@@ -31,4 +30,5 @@ export async function createArtistAccount(
   }
 }
 
-export default createArtistAccount;
+export default createAccount;
+
