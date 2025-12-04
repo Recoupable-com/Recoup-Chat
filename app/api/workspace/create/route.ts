@@ -20,9 +20,9 @@ export async function POST(req: NextRequest) {
     // Create workspace with provided name or default to "Untitled"
     const workspaceName = name?.trim() || "Untitled";
 
-    // Create workspace account with type 'workspace'
-    // This creates: account record (type=workspace) + account_info + account_artist_ids link
-    const workspace = await createArtistInDb(workspaceName, account_id, "workspace");
+    // Create workspace account
+    // This creates: account record + account_info + account_workspace_ids link
+    const workspace = await createArtistInDb(workspaceName, account_id, true);
 
     if (!workspace) {
       return Response.json(

@@ -1,20 +1,20 @@
 import supabase from "@/lib/supabase/serverClient";
 
-export interface UserOrganization {
+export interface AccountOrganization {
   id: string;
   organization_id: string;
   organization_name?: string;
 }
 
 /**
- * Get all organizations a user belongs to
+ * Get all organizations an account belongs to
  *
- * @param accountId - The user's account ID
- * @returns Array of organizations the user is a member of
+ * @param accountId - The account ID
+ * @returns Array of organizations the account is a member of
  */
-export async function getUserOrganizations(
+export async function getAccountOrganizations(
   accountId: string
-): Promise<UserOrganization[]> {
+): Promise<AccountOrganization[]> {
   if (!accountId) return [];
 
   try {
@@ -43,5 +43,5 @@ export async function getUserOrganizations(
   }
 }
 
-export default getUserOrganizations;
+export default getAccountOrganizations;
 

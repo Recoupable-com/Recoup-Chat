@@ -28,7 +28,7 @@ const Settings = () => {
   const [isVisibleDeleteModal, setIsVisibleDeleteModal] = useState(false);
   
   // Determine if this is a workspace (not an artist)
-  const isWorkspace = editableArtist?.account_type === "workspace";
+  const isWorkspace = editableArtist?.isWorkspace === true;
   const entityLabel = isWorkspace ? "Workspace" : "Artist";
 
   const handleSave = async () => {

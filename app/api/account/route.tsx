@@ -6,7 +6,7 @@ import insertAccount from "@/lib/supabase/accounts/insertAccount";
 import insertAccountEmail from "@/lib/supabase/accountEmails/insertAccountEmail";
 import { insertAccountWallet } from "@/lib/supabase/accounts/insertAccountWallet";
 import { initializeAccountCredits } from "@/lib/supabase/credits_usage/initializeAccountCredits";
-import autoAssignUserToOrg from "@/lib/organizations/autoAssignUserToOrg";
+import autoAssignAccountToOrg from "@/lib/organizations/autoAssignAccountToOrg";
 
 export async function POST(req: NextRequest) {
   const body = await req.json();
@@ -20,7 +20,7 @@ export async function POST(req: NextRequest) {
         const emailRecord = await getAccountByEmail(email);
         if (emailRecord?.account_id) {
           // Auto-assign to org based on email domain (idempotent)
-          await autoAssignUserToOrg(emailRecord.account_id, email);
+          await autoAssignAccountToOrg(emailRecord.account_id, email);
           
           const accountData = await getAccountWithDetails(
             emailRecord.account_id
@@ -78,8 +78,8 @@ export async function POST(req: NextRequest) {
 
     if (email) {
       await insertAccountEmail(newAccount.id, email);
-      // Auto-assign new user to org based on email domain
-      await autoAssignUserToOrg(newAccount.id, email);
+      // Auto-assign new account to org based on email domain
+      await autoAssignAccountToOrg(newAccount.id, email);
     }
 
     if (wallet) {

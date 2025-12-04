@@ -1,16 +1,16 @@
 import extractDomain from "@/lib/email/extractDomain";
 import getOrgByDomain from "@/lib/supabase/organizationDomains/getOrgByDomain";
-import addUserToOrganization from "@/lib/supabase/accountOrganizationIds/addUserToOrganization";
+import addAccountToOrganization from "@/lib/supabase/accountOrganizationIds/addAccountToOrganization";
 
 /**
- * Auto-assign a user to their organization based on email domain.
- * Called on login to ensure users are linked to their org.
+ * Auto-assign an account to their organization based on email domain.
+ * Called on login to ensure accounts are linked to their org.
  *
- * @param accountId - The user's account ID
- * @param email - The user's email address
+ * @param accountId - The account ID
+ * @param email - The account's email address
  * @returns The org ID if assigned, null otherwise
  */
-export async function autoAssignUserToOrg(
+export async function autoAssignAccountToOrg(
   accountId: string,
   email: string
 ): Promise<string | null> {
@@ -22,9 +22,9 @@ export async function autoAssignUserToOrg(
   const orgId = await getOrgByDomain(domain);
   if (!orgId) return null;
 
-  await addUserToOrganization(accountId, orgId);
+  await addAccountToOrganization(accountId, orgId);
   return orgId;
 }
 
-export default autoAssignUserToOrg;
+export default autoAssignAccountToOrg;
 

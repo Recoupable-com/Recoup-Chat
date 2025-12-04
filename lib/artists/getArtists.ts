@@ -1,26 +1,29 @@
 import getAccountArtistIds from "@/lib/supabase/accountArtistIds/getAccountArtistIds";
-import getUserOrganizations from "@/lib/supabase/accountOrganizationIds/getUserOrganizations";
+import getAccountWorkspaceIds from "@/lib/supabase/accountWorkspaceIds/getAccountWorkspaceIds";
+import getAccountOrganizations from "@/lib/supabase/accountOrganizationIds/getAccountOrganizations";
 import getArtistsByOrganization from "@/lib/supabase/artistOrganizationIds/getArtistsByOrganization";
 import type { ArtistRecord } from "@/types/Artist";
 
 const getArtists = async (accountId: string): Promise<ArtistRecord[]> => {
-  // Get user's personal artists and org memberships in parallel
-  const [userArtists, userOrgs] = await Promise.all([
+  // Get account's personal artists, workspaces, and org memberships in parallel
+  const [accountArtists, accountWorkspaces, accountOrgs] = await Promise.all([
     getAccountArtistIds({ accountIds: [accountId] }),
-    getUserOrganizations(accountId),
+    getAccountWorkspaceIds(accountId),
+    getAccountOrganizations(accountId),
   ]);
 
-  // Get artists from all orgs the user belongs to
-  const orgIds = userOrgs.map((org) => org.organization_id);
+  // Get artists from all orgs the account belongs to
+  const orgIds = accountOrgs.map((org) => org.organization_id);
   const orgArtists = orgIds.length > 0
     ? await getArtistsByOrganization(orgIds)
     : [];
 
+  // Combine all: personal artists + workspaces + org artists
   // Deduplicate by account_id
   const uniqueByAccountId = new Map<string, ArtistRecord>();
-  [...userArtists, ...orgArtists].forEach((artist) => {
-    if (artist?.account_id && !uniqueByAccountId.has(artist.account_id)) {
-      uniqueByAccountId.set(artist.account_id, artist);
+  [...accountArtists, ...accountWorkspaces, ...orgArtists].forEach((entity) => {
+    if (entity?.account_id && !uniqueByAccountId.has(entity.account_id)) {
+      uniqueByAccountId.set(entity.account_id, entity);
     }
   });
 
