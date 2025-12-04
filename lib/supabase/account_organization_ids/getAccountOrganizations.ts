@@ -23,8 +23,7 @@ export async function getAccountOrganizations(
   const { data, error } = await supabase
     .from("account_organization_ids")
     .select(`
-      id,
-      organization_id,
+      *,
       organization:accounts!account_organization_ids_organization_id_fkey (
         name
       )
