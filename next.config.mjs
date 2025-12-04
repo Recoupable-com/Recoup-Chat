@@ -6,8 +6,7 @@ import withPWA from "next-pwa";
 const nextConfig = {
   reactStrictMode: true,
   transpilePackages: ["geist"],
-  serverExternalPackages: ["@browserbasehq/stagehand", "playwright"],
-  turbopack: {},
+  serverExternalPackages: ['@browserbasehq/stagehand', 'playwright'],
   images: {
     domains: [
       "i.imgur.com",
@@ -29,22 +28,22 @@ const nextConfig = {
     ],
     remotePatterns: [
       {
-        protocol: "https",
-        hostname: "*.fal.media",
-        port: "",
-        pathname: "/**",
+        protocol: 'https',
+        hostname: '*.fal.media',
+        port: '',
+        pathname: '/**',
       },
       {
-        protocol: "https",
-        hostname: "ipfs.decentralized-content.com",
-        port: "",
-        pathname: "/**",
+        protocol: 'https',
+        hostname: 'ipfs.decentralized-content.com',
+        port: '',
+        pathname: '/**',
       },
       {
-        protocol: "https",
-        hostname: "arweave.net",
-        port: "",
-        pathname: "/**",
+        protocol: 'https',
+        hostname: 'arweave.net',
+        port: '',
+        pathname: '/**',
       },
     ],
   },
