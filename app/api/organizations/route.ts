@@ -1,5 +1,5 @@
 import { NextRequest } from "next/server";
-import getUserOrganizations from "@/lib/supabase/accountOrganizationIds/getUserOrganizations";
+import getAccountOrganizations from "@/lib/supabase/accountOrganizationIds/getAccountOrganizations";
 
 /**
  * GET /api/organizations?accountId=xxx
@@ -13,7 +13,7 @@ export async function GET(req: NextRequest): Promise<Response> {
   }
 
   try {
-    const organizations = await getUserOrganizations(accountId);
+    const organizations = await getAccountOrganizations(accountId);
     return Response.json({ organizations }, { status: 200 });
   } catch (error) {
     const message = error instanceof Error ? error.message : "failed";

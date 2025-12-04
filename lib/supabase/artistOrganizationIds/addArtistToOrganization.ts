@@ -2,7 +2,7 @@ import supabase from "@/lib/supabase/serverClient";
 
 /**
  * Add an artist to an organization
- * Used when creating new artists to auto-link them to the user's org
+ * Used when creating new artists to link them to an org
  *
  * @param artistId - The artist's account ID
  * @param organizationId - The organization ID to add them to

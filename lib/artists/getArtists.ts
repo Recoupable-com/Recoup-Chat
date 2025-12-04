@@ -1,6 +1,7 @@
 import getAccountArtistIds from "@/lib/supabase/accountArtistIds/getAccountArtistIds";
 import getUserPinnedArtistIds from "@/lib/supabase/accountArtistIds/getUserPinnedArtistIds";
-import getUserOrganizations from "@/lib/supabase/accountOrganizationIds/getUserOrganizations";
+import getAccountWorkspaceIds from "@/lib/supabase/accountWorkspaceIds/getAccountWorkspaceIds";
+import getAccountOrganizations from "@/lib/supabase/accountOrganizationIds/getAccountOrganizations";
 import getArtistsByOrganization from "@/lib/supabase/artistOrganizationIds/getArtistsByOrganization";
 import type { ArtistRecord } from "@/types/Artist";
 
@@ -20,53 +21,58 @@ const getArtists = async (
 
   const { accountId, orgId } = options;
 
-  // If filtering by a specific org, return org's artists with user's pinned status
+  // If filtering by a specific org, return org's artists with account's pinned status
   if (orgId) {
     const [orgArtists, pinnedIds] = await Promise.all([
       getArtistsByOrganization([orgId]),
       getUserPinnedArtistIds(accountId),
     ]);
 
-    // Merge user's pinned preferences with org artists
+    // Merge account's pinned preferences with org artists
     return orgArtists.map((artist) => ({
       ...artist,
       pinned: pinnedIds.has(artist.account_id),
     }));
   }
 
-  // If orgId is explicitly null, return only personal artists (excluding org artists)
+  // If orgId is explicitly null, return only personal artists + workspaces (excluding org artists)
   if (orgId === null) {
-    const [userArtists, userOrgs] = await Promise.all([
+    const [accountArtists, accountWorkspaces, accountOrgs] = await Promise.all([
       getAccountArtistIds({ accountIds: [accountId] }),
-      getUserOrganizations(accountId),
+      getAccountWorkspaceIds(accountId),
+      getAccountOrganizations(accountId),
     ]);
 
     // Get all org artist IDs to exclude from personal view
-    const orgIds = userOrgs.map((org) => org.organization_id);
+    const orgIds = accountOrgs.map((org) => org.organization_id);
     const orgArtists =
       orgIds.length > 0 ? await getArtistsByOrganization(orgIds) : [];
     const orgArtistIds = new Set(orgArtists.map((a) => a.account_id));
 
-    // Return only artists NOT in any org
-    return userArtists.filter((artist) => !orgArtistIds.has(artist.account_id));
+    // Return only artists + workspaces NOT in any org
+    const personalEntities = [...accountArtists, ...accountWorkspaces];
+    return personalEntities.filter((entity) => !orgArtistIds.has(entity.account_id));
   }
 
-  // Default: return all artists (personal + all orgs)
-  const [userArtists, userOrgs] = await Promise.all([
+  // Default: return all artists + workspaces (personal + all orgs)
+  const [accountArtists, accountWorkspaces, accountOrgs] = await Promise.all([
     getAccountArtistIds({ accountIds: [accountId] }),
-    getUserOrganizations(accountId),
+    getAccountWorkspaceIds(accountId),
+    getAccountOrganizations(accountId),
   ]);
 
-  const orgIds = userOrgs.map((org) => org.organization_id);
+  // Get artists from all orgs the account belongs to
+  const orgIds = accountOrgs.map((org) => org.organization_id);
   const orgArtists = orgIds.length > 0
     ? await getArtistsByOrganization(orgIds)
-      : [];
+    : [];
 
+  // Combine all: personal artists + workspaces + org artists
   // Deduplicate by account_id
   const uniqueByAccountId = new Map<string, ArtistRecord>();
-  [...userArtists, ...orgArtists].forEach((artist) => {
-    if (artist?.account_id && !uniqueByAccountId.has(artist.account_id)) {
-      uniqueByAccountId.set(artist.account_id, artist);
+  [...accountArtists, ...accountWorkspaces, ...orgArtists].forEach((entity) => {
+    if (entity?.account_id && !uniqueByAccountId.has(entity.account_id)) {
+      uniqueByAccountId.set(entity.account_id, entity);
     }
   });
 

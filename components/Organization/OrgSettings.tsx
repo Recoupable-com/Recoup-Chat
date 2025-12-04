@@ -3,6 +3,7 @@
 import Form from "../Form";
 import Input from "../Input";
 import useOrgSettings from "@/hooks/useOrgSettings";
+import { orgValidation } from "@/lib/utils/setting";
 import { useOrganization } from "@/providers/OrganizationProvider";
 import AccountIdDisplay from "../ArtistSetting/AccountIdDisplay";
 import ArtistInstructionTextArea from "../Account/ArtistInstructionTextArea";
@@ -56,6 +57,7 @@ const OrgSettings = () => {
     <Form
       id="org-setting"
       className="w-full flex flex-col items-center max-w-md mx-auto pb-2"
+      validationSchema={orgValidation}
     >
       {/* Header Section */}
       <div className="w-full flex flex-col items-center space-y-4 mb-4">
@@ -73,10 +75,7 @@ const OrgSettings = () => {
                 ) : hasImage ? (
                   <ImageWithFallback
                     src={image}
-                    fallbackSrc=""
-                    alt={name || "Organization"}
-                    fill
-                    className="object-cover"
+                    className="rounded-full"
                   />
                 ) : (
                   <span className="text-3xl font-semibold">{initials}</span>

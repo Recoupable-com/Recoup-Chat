@@ -31,7 +31,7 @@ const Settings = () => {
   const [isVisibleDeleteModal, setIsVisibleDeleteModal] = useState(false);
   
   // Determine if this is a workspace (not an artist)
-  const isWorkspace = editableArtist?.account_type === "workspace";
+  const isWorkspace = editableArtist?.isWorkspace === true;
   
   // Show "Add to Org" only when editing in Personal view
   const showAddToOrg = settingMode === SETTING_MODE.UPDATE && selectedOrgId === null;

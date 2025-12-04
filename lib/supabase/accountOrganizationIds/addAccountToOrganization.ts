@@ -1,14 +1,14 @@
 import supabase from "@/lib/supabase/serverClient";
 
 /**
- * Add a user to an organization
+ * Add an account to an organization
  * Used for auto-assignment on login based on email domain
  *
- * @param accountId - The user's account ID
+ * @param accountId - The account ID
  * @param organizationId - The organization ID to add them to
  * @returns The created record ID, or null if failed/already exists
  */
-export async function addUserToOrganization(
+export async function addAccountToOrganization(
   accountId: string,
   organizationId: string
 ): Promise<string | null> {
@@ -48,5 +48,5 @@ export async function addUserToOrganization(
   }
 }
 
-export default addUserToOrganization;
+export default addAccountToOrganization;
 

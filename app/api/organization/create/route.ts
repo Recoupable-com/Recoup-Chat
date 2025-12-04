@@ -1,6 +1,6 @@
 import { NextRequest } from "next/server";
 import createAccount from "@/lib/supabase/accounts/createAccount";
-import { addUserToOrganization } from "@/lib/supabase/accountOrganizationIds/addUserToOrganization";
+import { addAccountToOrganization } from "@/lib/supabase/accountOrganizationIds/addAccountToOrganization";
 import insertAccountInfo from "@/lib/supabase/accountInfo/insertAccountInfo";
 
 export async function POST(req: NextRequest) {
@@ -16,7 +16,8 @@ export async function POST(req: NextRequest) {
 
   try {
     // Create the organization account
-    const org = await createAccount(name, "organization");
+    // Note: Organization type is determined by usage (being in organization tables), not account_type
+    const org = await createAccount(name);
     if (!org) {
       return Response.json(
         { message: "Failed to create organization" },
@@ -28,7 +29,7 @@ export async function POST(req: NextRequest) {
     await insertAccountInfo({ account_id: org.id });
 
     // Add the creator as a member of the org
-    await addUserToOrganization(userId, org.id);
+    await addAccountToOrganization(userId, org.id);
 
     return Response.json(
       {

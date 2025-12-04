@@ -54,10 +54,11 @@ const createArtist = tool({
   }): Promise<CreateArtistResult> => {
     try {
       // Step 1: Create the artist account (with optional org linking)
+      // isWorkspace = false since this is an artist, not a workspace
       const artist = await createArtistInDb(
         name,
         account_id,
-        "artist",
+        false,
         organization_id
       );
 

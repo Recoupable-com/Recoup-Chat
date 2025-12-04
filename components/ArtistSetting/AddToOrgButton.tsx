@@ -14,7 +14,7 @@ interface AddToOrgButtonProps {
 
 const AddToOrgButton = ({ artistId }: AddToOrgButtonProps) => {
   const { data: organizations } = useUserOrganizations();
-  const { getArtists, toggleSettingModal } = useArtistProvider();
+  const { toggleSettingModal } = useArtistProvider();
   const { setSelectedOrgId } = useOrganization();
   const [addingToOrg, setAddingToOrg] = useState<string | null>(null);
   const [isOpen, setIsOpen] = useState(false);
