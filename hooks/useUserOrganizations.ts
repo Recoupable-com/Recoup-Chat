@@ -5,6 +5,7 @@ export interface UserOrganization {
   id: string;
   organization_id: string;
   organization_name?: string;
+  organization_image?: string;
 }
 
 interface OrganizationsResponse {

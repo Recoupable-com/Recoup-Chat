@@ -4,6 +4,7 @@ export interface UserOrganization {
   id: string;
   organization_id: string;
   organization_name?: string;
+  organization_image?: string;
 }
 
 /**
@@ -24,7 +25,10 @@ export async function getUserOrganizations(
         id,
         organization_id,
         organization:accounts!account_organization_ids_organization_id_fkey (
-          name
+          name,
+          account_info (
+            image
+          )
         )
       `)
       .eq("account_id", accountId);
@@ -33,11 +37,15 @@ export async function getUserOrganizations(
       return [];
     }
 
-    return (data || []).map((row) => ({
-      id: row.id,
-      organization_id: row.organization_id,
-      organization_name: (row.organization as { name?: string })?.name,
-    }));
+    return (data || []).map((row) => {
+      const org = row.organization as { name?: string; account_info?: { image?: string }[] };
+      return {
+        id: row.id,
+        organization_id: row.organization_id,
+        organization_name: org?.name,
+        organization_image: org?.account_info?.[0]?.image,
+      };
+    });
   } catch {
     return [];
   }

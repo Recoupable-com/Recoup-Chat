@@ -1,4 +1,5 @@
 import getAccountArtistIds from "@/lib/supabase/accountArtistIds/getAccountArtistIds";
+import getUserPinnedArtistIds from "@/lib/supabase/accountArtistIds/getUserPinnedArtistIds";
 import getUserOrganizations from "@/lib/supabase/accountOrganizationIds/getUserOrganizations";
 import getArtistsByOrganization from "@/lib/supabase/artistOrganizationIds/getArtistsByOrganization";
 import type { ArtistRecord } from "@/types/Artist";
@@ -19,16 +20,35 @@ const getArtists = async (
 
   const { accountId, orgId } = options;
 
-  // If filtering by a specific org, only return that org's artists
+  // If filtering by a specific org, return org's artists with user's pinned status
   if (orgId) {
-    const orgArtists = await getArtistsByOrganization([orgId]);
-    return orgArtists;
+    const [orgArtists, pinnedIds] = await Promise.all([
+      getArtistsByOrganization([orgId]),
+      getUserPinnedArtistIds(accountId),
+    ]);
+
+    // Merge user's pinned preferences with org artists
+    return orgArtists.map((artist) => ({
+      ...artist,
+      pinned: pinnedIds.has(artist.account_id),
+    }));
   }
 
-  // If orgId is explicitly null, return only personal artists
+  // If orgId is explicitly null, return only personal artists (excluding org artists)
   if (orgId === null) {
-    const userArtists = await getAccountArtistIds({ accountIds: [accountId] });
-    return userArtists;
+    const [userArtists, userOrgs] = await Promise.all([
+      getAccountArtistIds({ accountIds: [accountId] }),
+      getUserOrganizations(accountId),
+    ]);
+
+    // Get all org artist IDs to exclude from personal view
+    const orgIds = userOrgs.map((org) => org.organization_id);
+    const orgArtists =
+      orgIds.length > 0 ? await getArtistsByOrganization(orgIds) : [];
+    const orgArtistIds = new Set(orgArtists.map((a) => a.account_id));
+
+    // Return only artists NOT in any org
+    return userArtists.filter((artist) => !orgArtistIds.has(artist.account_id));
   }
 
   // Default: return all artists (personal + all orgs)

@@ -41,7 +41,8 @@ const useArtists = () => {
   const { handleSelectArtist } = useInitialArtists(
     artists,
     selectedArtist,
-    setSelectedArtist
+    setSelectedArtist,
+    selectedOrgId
   );
   const [menuVisibleArtistId, setMenuVisibleArtistId] = useState<any>("");
   const { isCreatingArtist, setIsCreatingArtist, updateChatState } =
@@ -93,22 +94,36 @@ const useArtists = () => {
 
       const response = await fetch(`/api/artists?${params.toString()}`);
       const data = await response.json();
-      setArtists(data.artists);
-      if (data.artists.length === 0) {
+      const newArtists: ArtistRecord[] = data.artists;
+      setArtists(newArtists);
+
+      if (newArtists.length === 0) {
         setSelectedArtist(null);
         setIsLoading(false);
-        // TODO: Decide if auto-create flow should be re-enabled after ID bug is confirmed fixed
-        // if (email) {
-        //   artistMode.toggleCreation();
-        // }
         return;
       }
+
+      // If specific artistId provided, select it
       if (artistId) {
-        const newUpdatedInfo = data.artists.find(
+        const newUpdatedInfo = newArtists.find(
           (artist: ArtistRecord) => artist.account_id === artistId
         );
-        if (newUpdatedInfo) setSelectedArtist(newUpdatedInfo);
+        if (newUpdatedInfo) {
+          setSelectedArtist(newUpdatedInfo);
+          setIsLoading(false);
+          return;
+        }
       }
+
+      // Check if current selectedArtist is still in the new list
+      setSelectedArtist((current) => {
+        if (!current) return newArtists[0] || null;
+        const stillExists = newArtists.find(
+          (a) => a.account_id === current.account_id
+        );
+        return stillExists || newArtists[0] || null;
+      });
+
       setIsLoading(false);
     },
     [userData, selectedOrgId]

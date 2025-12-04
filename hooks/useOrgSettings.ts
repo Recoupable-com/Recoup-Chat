@@ -1,0 +1,161 @@
+import { useState, useEffect, useRef, useCallback } from "react";
+import { uploadFile } from "@/lib/arweave/uploadFile";
+import { getFileMimeType } from "@/utils/getFileMimeType";
+
+interface KnowledgeItem {
+  name: string;
+  url: string;
+  type: string;
+}
+
+interface OrgData {
+  id: string;
+  name: string;
+  image?: string;
+  instruction?: string;
+  knowledges?: KnowledgeItem[];
+}
+
+const useOrgSettings = (orgId: string | null) => {
+  const [orgData, setOrgData] = useState<OrgData | null>(null);
+  const [name, setName] = useState("");
+  const [image, setImage] = useState("");
+  const [instruction, setInstruction] = useState("");
+  const [knowledges, setKnowledges] = useState<KnowledgeItem[]>([]);
+  const [isLoading, setIsLoading] = useState(false);
+  const [isSaving, setIsSaving] = useState(false);
+  const [imageUploading, setImageUploading] = useState(false);
+  const [knowledgeUploading, setKnowledgeUploading] = useState(false);
+  const imageRef = useRef<HTMLInputElement>(null);
+  const knowledgeRef = useRef<HTMLInputElement>(null);
+
+  // Fetch org data when orgId changes
+  useEffect(() => {
+    if (!orgId) {
+      setOrgData(null);
+      return;
+    }
+
+    const fetchOrg = async () => {
+      setIsLoading(true);
+      try {
+        const response = await fetch(`/api/account/get?accountId=${orgId}`);
+        if (response.ok) {
+          const data = await response.json();
+          setOrgData(data.data);
+          setName(data.data?.name || "");
+          setImage(data.data?.image || "");
+          setInstruction(data.data?.instruction || "");
+          setKnowledges(data.data?.knowledges || []);
+        }
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    fetchOrg();
+  }, [orgId]);
+
+  const handleImageSelected = useCallback(async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    setImageUploading(true);
+    try {
+      const { uri } = await uploadFile(file);
+      setImage(uri);
+    } finally {
+      setImageUploading(false);
+    }
+  }, []);
+
+  const removeImage = useCallback(() => {
+    setImage("");
+    if (imageRef.current) {
+      imageRef.current.value = "";
+    }
+  }, []);
+
+  const handleKnowledgesSelected = useCallback(
+    async (e: React.ChangeEvent<HTMLInputElement>) => {
+      const files = e.target.files;
+      if (!files) return;
+
+      setKnowledgeUploading(true);
+      const newKnowledges: KnowledgeItem[] = [];
+      try {
+        for (const file of files) {
+          const name = file.name;
+          const type = getFileMimeType(file);
+          const { uri } = await uploadFile(file);
+          newKnowledges.push({ name, url: uri, type });
+        }
+        setKnowledges((prev) => [...prev, ...newKnowledges]);
+      } finally {
+        setKnowledgeUploading(false);
+        if (knowledgeRef.current) {
+          knowledgeRef.current.value = "";
+        }
+      }
+    },
+    []
+  );
+
+  const handleDeleteKnowledge = useCallback((index: number) => {
+    setKnowledges((prev) => prev.filter((_, i) => i !== index));
+  }, []);
+
+  const save = useCallback(async () => {
+    if (!orgId) return false;
+
+    setIsSaving(true);
+    try {
+      const response = await fetch("/api/account/update", {
+        method: "POST",
+        body: JSON.stringify({
+          accountId: orgId,
+          name,
+          image,
+          instruction,
+          knowledges,
+        }),
+        headers: { "Content-Type": "application/json" },
+      });
+
+      if (response.ok) {
+        const data = await response.json();
+        setOrgData(data.data);
+        return true;
+      }
+      return false;
+    } finally {
+      setIsSaving(false);
+    }
+  }, [orgId, name, image, instruction, knowledges]);
+
+  return {
+    orgData,
+    name,
+    setName,
+    image,
+    setImage,
+    instruction,
+    setInstruction,
+    knowledges,
+    setKnowledges,
+    isLoading,
+    isSaving,
+    imageUploading,
+    knowledgeUploading,
+    imageRef,
+    knowledgeRef,
+    handleImageSelected,
+    removeImage,
+    handleKnowledgesSelected,
+    handleDeleteKnowledge,
+    save,
+  };
+};
+
+export default useOrgSettings;
+
