@@ -5,7 +5,7 @@ type AccountType = "customer" | "artist" | "workspace" | "organization" | "campa
 /**
  * Create a new account in the database
  * @param name Name of the account to create
- * @param accountType Type of account: 'user', 'artist', 'workspace', 'organization', 'campaign'
+ * @param accountType Type of account: 'customer', 'artist', 'workspace', 'organization', 'campaign'
  * @returns Created account data or null if creation failed
  */
 export async function createArtistAccount(
