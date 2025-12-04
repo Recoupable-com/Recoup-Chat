@@ -56,17 +56,20 @@ GRANT UPDATE ON TABLE "public"."organization_domains" TO "service_role";
 -- Comment for documentation
 COMMENT ON TABLE "public"."organization_domains" IS 'Maps email domains to organizations. Used for auto-assigning users to orgs on login. Each domain can only belong to one org.';
 
--- Seed Rostrum Pacific domains
--- Organization ID: cebcc866-34c3-451c-8cd7-f63309acff0a (Rostrum Pacific)
-INSERT INTO "public"."organization_domains" (domain, organization_id) VALUES
-    ('recoupable.com', 'cebcc866-34c3-451c-8cd7-f63309acff0a'),
-    ('rostrum.com', 'cebcc866-34c3-451c-8cd7-f63309acff0a'),
-    ('rostrumrecords.com', 'cebcc866-34c3-451c-8cd7-f63309acff0a'),
-    ('spaceheatermusic.io', 'cebcc866-34c3-451c-8cd7-f63309acff0a'),
-    ('fatbeats.com', 'cebcc866-34c3-451c-8cd7-f63309acff0a'),
-    ('cantorarecords.net', 'cebcc866-34c3-451c-8cd7-f63309acff0a');
-
--- NOTE: When onboarding new enterprise customers:
+-- NOTE: Seed data is NOT included in this migration because it references 
+-- the Rostrum Pacific org which only exists in production.
+-- 
+-- After deploying to production, run this SQL manually:
+--
+-- INSERT INTO "public"."organization_domains" (domain, organization_id) VALUES
+--     ('recoupable.com', 'cebcc866-34c3-451c-8cd7-f63309acff0a'),
+--     ('rostrum.com', 'cebcc866-34c3-451c-8cd7-f63309acff0a'),
+--     ('rostrumrecords.com', 'cebcc866-34c3-451c-8cd7-f63309acff0a'),
+--     ('spaceheatermusic.io', 'cebcc866-34c3-451c-8cd7-f63309acff0a'),
+--     ('fatbeats.com', 'cebcc866-34c3-451c-8cd7-f63309acff0a'),
+--     ('cantorarecords.net', 'cebcc866-34c3-451c-8cd7-f63309acff0a');
+--
+-- When onboarding new enterprise customers:
 -- 1. Create their organization account (account_type = 'organization')
 -- 2. Add their domains to this table
 -- 3. Also add 'recoupable.com' to their org so Recoup team can access it
