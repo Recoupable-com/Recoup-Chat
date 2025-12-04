@@ -34,15 +34,6 @@ CREATE TRIGGER set_updated_at
     FOR EACH ROW
     EXECUTE FUNCTION trigger_set_updated_at();
 
--- Grant permissions only to service_role (server-side access only)
-GRANT DELETE ON TABLE "public"."account_workspace_ids" TO "service_role";
-GRANT INSERT ON TABLE "public"."account_workspace_ids" TO "service_role";
-GRANT REFERENCES ON TABLE "public"."account_workspace_ids" TO "service_role";
-GRANT SELECT ON TABLE "public"."account_workspace_ids" TO "service_role";
-GRANT TRIGGER ON TABLE "public"."account_workspace_ids" TO "service_role";
-GRANT TRUNCATE ON TABLE "public"."account_workspace_ids" TO "service_role";
-GRANT UPDATE ON TABLE "public"."account_workspace_ids" TO "service_role";
-
 -- Indexes for faster lookups
 CREATE INDEX idx_account_workspace_ids_account_id ON "public"."account_workspace_ids" ("account_id");
 CREATE INDEX idx_account_workspace_ids_workspace_id ON "public"."account_workspace_ids" ("workspace_id");

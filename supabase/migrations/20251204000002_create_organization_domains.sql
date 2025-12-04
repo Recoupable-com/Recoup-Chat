@@ -28,15 +28,6 @@ CREATE UNIQUE INDEX organization_domains_domain_unique ON "public"."organization
 CREATE INDEX idx_organization_domains_domain ON "public"."organization_domains" ("domain");
 CREATE INDEX idx_organization_domains_organization_id ON "public"."organization_domains" ("organization_id");
 
--- Grant permissions only to service_role (server-side access only)
-GRANT DELETE ON TABLE "public"."organization_domains" TO "service_role";
-GRANT INSERT ON TABLE "public"."organization_domains" TO "service_role";
-GRANT REFERENCES ON TABLE "public"."organization_domains" TO "service_role";
-GRANT SELECT ON TABLE "public"."organization_domains" TO "service_role";
-GRANT TRIGGER ON TABLE "public"."organization_domains" TO "service_role";
-GRANT TRUNCATE ON TABLE "public"."organization_domains" TO "service_role";
-GRANT UPDATE ON TABLE "public"."organization_domains" TO "service_role";
-
 -- Comment for documentation
 COMMENT ON TABLE "public"."organization_domains" IS 'Maps email domains to organizations. Used for auto-assigning users to orgs on login. Each domain can only belong to one org.';
 

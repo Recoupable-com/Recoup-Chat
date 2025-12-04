@@ -39,15 +39,6 @@ CREATE TRIGGER set_updated_at
     FOR EACH ROW
     EXECUTE FUNCTION trigger_set_updated_at();
 
--- Grant permissions only to service_role (server-side access only)
-GRANT DELETE ON TABLE "public"."artist_organization_ids" TO "service_role";
-GRANT INSERT ON TABLE "public"."artist_organization_ids" TO "service_role";
-GRANT REFERENCES ON TABLE "public"."artist_organization_ids" TO "service_role";
-GRANT SELECT ON TABLE "public"."artist_organization_ids" TO "service_role";
-GRANT TRIGGER ON TABLE "public"."artist_organization_ids" TO "service_role";
-GRANT TRUNCATE ON TABLE "public"."artist_organization_ids" TO "service_role";
-GRANT UPDATE ON TABLE "public"."artist_organization_ids" TO "service_role";
-
 -- Comment for documentation
 COMMENT ON TABLE "public"."artist_organization_ids" IS 'Links artist accounts to organizations. An artist can belong to multiple orgs. When either is deleted, the link is automatically removed. Note: artist_id references accounts(id) where account_type = artist.';
 
