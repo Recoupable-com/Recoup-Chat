@@ -3,18 +3,44 @@ import getUserOrganizations from "@/lib/supabase/accountOrganizationIds/getUserO
 import getArtistsByOrganization from "@/lib/supabase/artistOrganizationIds/getArtistsByOrganization";
 import type { ArtistRecord } from "@/types/Artist";
 
-const getArtists = async (accountId: string): Promise<ArtistRecord[]> => {
-  // Get user's personal artists and org memberships in parallel
+interface GetArtistsOptions {
+  accountId: string;
+  orgId?: string | null; // Filter by specific org, null = personal only, undefined = all
+}
+
+const getArtists = async (
+  accountIdOrOptions: string | GetArtistsOptions
+): Promise<ArtistRecord[]> => {
+  // Support both old signature (string) and new signature (options object)
+  const options: GetArtistsOptions =
+    typeof accountIdOrOptions === "string"
+      ? { accountId: accountIdOrOptions }
+      : accountIdOrOptions;
+
+  const { accountId, orgId } = options;
+
+  // If filtering by a specific org, only return that org's artists
+  if (orgId) {
+    const orgArtists = await getArtistsByOrganization([orgId]);
+    return orgArtists;
+  }
+
+  // If orgId is explicitly null, return only personal artists
+  if (orgId === null) {
+    const userArtists = await getAccountArtistIds({ accountIds: [accountId] });
+    return userArtists;
+  }
+
+  // Default: return all artists (personal + all orgs)
   const [userArtists, userOrgs] = await Promise.all([
     getAccountArtistIds({ accountIds: [accountId] }),
     getUserOrganizations(accountId),
   ]);
 
-  // Get artists from all orgs the user belongs to
   const orgIds = userOrgs.map((org) => org.organization_id);
   const orgArtists = orgIds.length > 0
     ? await getArtistsByOrganization(orgIds)
-    : [];
+      : [];
 
   // Deduplicate by account_id
   const uniqueByAccountId = new Map<string, ArtistRecord>();

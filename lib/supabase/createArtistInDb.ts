@@ -2,6 +2,7 @@ import createAccount from "./accounts/createAccount";
 import createAccountInfo from "./artist/createAccountInfo";
 import getArtistById from "./artist/getArtistById";
 import associateArtistWithAccount from "./artist/associateArtistWithAccount";
+import { addArtistToOrganization } from "./artistOrganizationIds/addArtistToOrganization";
 import type { AccountType } from "@/types/AccountType";
 
 /**
@@ -9,12 +10,14 @@ import type { AccountType } from "@/types/AccountType";
  * @param name Name of the account to create
  * @param account_id ID of the user account that will have access
  * @param accountType Type of account: 'artist', 'workspace', etc. Defaults to 'artist'
+ * @param organizationId Optional organization ID to link the new artist to
  * @returns Created account object or null if creation failed
  */
 export async function createArtistInDb(
   name: string,
   account_id: string,
-  accountType: AccountType = "artist"
+  accountType: AccountType = "artist",
+  organizationId?: string | null
 ) {
   try {
     // Step 1: Create the account with specified type
@@ -32,6 +35,11 @@ export async function createArtistInDb(
     // Step 4: Associate the account with the user
     const associated = await associateArtistWithAccount(account_id, account.id);
     if (!associated) return null;
+
+    // Step 5: Link to organization if provided
+    if (organizationId) {
+      await addArtistToOrganization(account.id, organizationId);
+    }
 
     // Build return object by explicitly picking fields
     // This avoids fragile spread-order dependencies where account_info.id

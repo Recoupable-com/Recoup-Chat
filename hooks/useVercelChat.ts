@@ -2,6 +2,7 @@ import { useChat } from "@ai-sdk/react";
 import { useMessageLoader } from "./useMessageLoader";
 import { useUserProvider } from "@/providers/UserProvder";
 import { useArtistProvider } from "@/providers/ArtistProvider";
+import { useOrganization } from "@/providers/OrganizationProvider";
 import { useArtistKnowledgeText } from "./useArtistKnowledgeText";
 import { useParams } from "next/navigation";
 import { toast } from "react-toastify";
@@ -39,6 +40,7 @@ export function useVercelChat({
 }: UseVercelChatProps) {
   const { userData, email } = useUserProvider();
   const { selectedArtist } = useArtistProvider();
+  const { selectedOrgId } = useOrganization();
   const { roomId } = useParams();
   
   const userId = userData?.account_id || userData?.id; // Use account_id if available, fallback to id
@@ -179,6 +181,7 @@ export function useVercelChat({
         model,
         timezone,
         knowledgeBaseText,
+        organizationId: selectedOrgId,
       },
     }),
     [
@@ -189,6 +192,7 @@ export function useVercelChat({
       model,
       timezone,
       knowledgeBaseText,
+      selectedOrgId,
     ]
   );
 

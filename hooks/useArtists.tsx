@@ -1,4 +1,5 @@
 import { useUserProvider } from "@/providers/UserProvder";
+import { useOrganization } from "@/providers/OrganizationProvider";
 import { ArtistRecord } from "@/types/Artist";
 import { useCallback, useEffect, useState } from "react";
 import useArtistSetting from "./useArtistSetting";
@@ -26,6 +27,7 @@ const useArtists = () => {
   const artistSetting = useArtistSetting();
   const [isLoading, setIsLoading] = useState(true);
   const { email, userData } = useUserProvider();
+  const { selectedOrgId } = useOrganization();
   const [artists, setArtists] = useState<ArtistRecord[]>([]);
   const [selectedArtist, setSelectedArtist] = useState<ArtistRecord | null>(
     null
@@ -78,9 +80,18 @@ const useArtists = () => {
         setArtists([]);
         return;
       }
-      const response = await fetch(
-        `/api/artists?accountId=${encodeURIComponent(userData?.id as string)}`
-      );
+
+      // Build URL with orgId filter
+      const params = new URLSearchParams({
+        accountId: userData.id as string,
+      });
+      
+      // Pass orgId to filter: "null" for personal, org ID for specific org
+      if (selectedOrgId !== undefined) {
+        params.set("orgId", selectedOrgId === null ? "null" : selectedOrgId);
+      }
+
+      const response = await fetch(`/api/artists?${params.toString()}`);
       const data = await response.json();
       setArtists(data.artists);
       if (data.artists.length === 0) {
@@ -100,7 +111,7 @@ const useArtists = () => {
       }
       setIsLoading(false);
     },
-    [userData]
+    [userData, selectedOrgId]
   );
 
   const saveSetting = async (
@@ -131,6 +142,8 @@ const useArtists = () => {
             ? ""
             : artistSetting.editableArtist?.account_id,
         email,
+        // Link new artist to selected org (only applies when creating)
+        organizationId: saveMode === SETTING_MODE.CREATE ? selectedOrgId : null,
       });
       await getArtists(data.artist?.account_id);
       setUpdating(false);
@@ -146,7 +159,7 @@ const useArtists = () => {
 
   useEffect(() => {
     getArtists();
-  }, [getArtists, userData]);
+  }, [getArtists, userData, selectedOrgId]);
 
   return {
     sorted,
