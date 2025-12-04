@@ -1,4 +1,4 @@
-import { checkAccountArtistAccess } from "@/lib/supabase/accountArtistIds/checkAccountArtistAccess";
+import { checkAccountArtistAccess } from "@/lib/supabase/account_artist_ids/checkAccountArtistAccess";
 
 /**
  * Check if a user has access to a file

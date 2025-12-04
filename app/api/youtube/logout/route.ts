@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import deleteYouTubeTokens from "@/lib/supabase/youtubeTokens/deleteYouTubeTokens";
+import deleteYouTubeTokens from "@/lib/supabase/youtube_tokens/deleteYouTubeTokens";
 
 export async function DELETE(request: NextRequest) {
   const { searchParams } = new URL(request.url);

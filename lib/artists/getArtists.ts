@@ -1,26 +1,31 @@
-import getAccountArtistIds from "@/lib/supabase/accountArtistIds/getAccountArtistIds";
-import isEnterpriseAccount from "@/lib/recoup/isEnterpriseAccount";
+import getAccountArtistIds from "@/lib/supabase/account_artist_ids/getAccountArtistIds";
+import getAccountWorkspaceIds from "@/lib/supabase/account_workspace_ids/getAccountWorkspaceIds";
+import getAccountOrganizations from "@/lib/supabase/account_organization_ids/getAccountOrganizations";
+import getArtistsByOrganization from "@/lib/supabase/artist_organization_ids/getArtistsByOrganization";
 import type { ArtistRecord } from "@/types/Artist";
-import { ROSTRUM_ORG_ARTIST_IDS } from "../consts";
 
 const getArtists = async (accountId: string): Promise<ArtistRecord[]> => {
-  // Run parallel queries for better performance
-  const [userArtists, enterprise] = await Promise.all([
+  // Get account's personal artists, workspaces, and org memberships in parallel
+  const [accountArtists, accountWorkspaces, accountOrgs] = await Promise.all([
     getAccountArtistIds({ accountIds: [accountId] }),
-    isEnterpriseAccount(accountId)
+    getAccountWorkspaceIds(accountId),
+    getAccountOrganizations(accountId),
   ]);
 
-  // Optionally fetch org artists if enterprise and list provided
-  const orgArtists =
-    enterprise && ROSTRUM_ORG_ARTIST_IDS.length
-      ? await getAccountArtistIds({ artistIds: ROSTRUM_ORG_ARTIST_IDS })
-      : [];
+  // Get artists from all orgs the account belongs to
+  const orgIds = accountOrgs
+    .map((org) => org.organization_id)
+    .filter((id): id is string => id !== null);
+  const orgArtists = orgIds.length > 0
+    ? await getArtistsByOrganization(orgIds)
+    : [];
 
-  // Deduplicate by account_id to avoid duplicate entries
+  // Combine all: personal artists + workspaces + org artists
+  // Deduplicate by account_id
   const uniqueByAccountId = new Map<string, ArtistRecord>();
-  [...userArtists, ...orgArtists].forEach((artist) => {
-    if (artist?.account_id && !uniqueByAccountId.has(artist.account_id)) {
-      uniqueByAccountId.set(artist.account_id, artist);
+  [...accountArtists, ...accountWorkspaces, ...orgArtists].forEach((entity) => {
+    if (entity?.account_id && !uniqueByAccountId.has(entity.account_id)) {
+      uniqueByAccountId.set(entity.account_id, entity);
     }
   });
 

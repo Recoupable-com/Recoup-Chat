@@ -2,9 +2,9 @@ import getSocialPlatformByLink from "../getSocialPlatformByLink";
 import getUserNameByProfileLink from "../getUserNameByProfileLink";
 import getAccountSocials, {
   AccountSocialWithSocial,
-} from "./accountSocials/getAccountSocials";
-import deleteAccountSocial from "./accountSocials/deleteAccountSocial";
-import insertAccountSocial from "./accountSocials/insertAccountSocial";
+} from "./account_socials/getAccountSocials";
+import deleteAccountSocial from "./account_socials/deleteAccountSocial";
+import insertAccountSocial from "./account_socials/insertAccountSocial";
 import getSocialByProfileUrl from "./socials/getSocialByProfileUrl";
 import insertSocials from "./socials/insertSocials";
 

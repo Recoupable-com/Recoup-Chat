@@ -5,12 +5,12 @@ import createClientCheckoutSession from "@/lib/stripe/createClientCheckoutSessio
 
 const useSubscribeClick = () => {
   const { userData } = useUserProvider();
-  const { subscription } = usePaymentProvider();
+  const { isSubscribed } = usePaymentProvider();
 
   const handleClick = () => {
     if (!userData?.account_id) return;
 
-    if (subscription) {
+    if (isSubscribed) {
       createClientPortalSession(userData.account_id);
       return;
     }
@@ -19,7 +19,7 @@ const useSubscribeClick = () => {
 
   return {
     handleClick,
-    subscription,
+    isSubscribed,
   };
 };
 

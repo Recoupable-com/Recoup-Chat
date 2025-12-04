@@ -1,4 +1,4 @@
-import getAccountSocials from "../supabase/accountSocials/getAccountSocials";
+import getAccountSocials from "../supabase/account_socials/getAccountSocials";
 import { selectSocialFans } from "../supabase/social_fans/selectSocialFans";
 import { generateSegments } from "./generateSegments";
 import { insertSegments } from "../supabase/segments/insertSegments";

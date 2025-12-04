@@ -1,6 +1,6 @@
 import getArtistById from "@/lib/supabase/artist/getArtistById";
-import deleteAccountArtistId from "@/lib/supabase/accountArtistIds/deleteAccountArtistId";
-import getAccountArtistIds from "@/lib/supabase/accountArtistIds/getAccountArtistIds";
+import deleteAccountArtistId from "@/lib/supabase/account_artist_ids/deleteAccountArtistId";
+import getAccountArtistIds from "@/lib/supabase/account_artist_ids/getAccountArtistIds";
 import deleteAccountById from "@/lib/supabase/accounts/deleteAccountById";
 
 /**

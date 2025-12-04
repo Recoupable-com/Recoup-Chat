@@ -13,7 +13,7 @@ export type ArtistRecord = {
   name: string | null;
   image?: string | null;
   account_socials?: Array<SOCIAL>;
-  account_type?: "customer" | "artist" | "workspace" | "organization" | "campaign" | null;
+  isWorkspace?: boolean;  // true if workspace, false/undefined if artist
   created_at?: string;
   id?: string;
   instruction?: string | null;

@@ -3,9 +3,10 @@ import getAccountByEmail from "@/lib/supabase/accounts/getAccountByEmail";
 import { getAccountByWallet } from "@/lib/supabase/accounts/getAccountByWallet";
 import { getAccountWithDetails } from "@/lib/supabase/accounts/getAccountWithDetails";
 import insertAccount from "@/lib/supabase/accounts/insertAccount";
-import insertAccountEmail from "@/lib/supabase/accountEmails/insertAccountEmail";
+import insertAccountEmail from "@/lib/supabase/account_emails/insertAccountEmail";
 import { insertAccountWallet } from "@/lib/supabase/accounts/insertAccountWallet";
 import { initializeAccountCredits } from "@/lib/supabase/credits_usage/initializeAccountCredits";
+import assignAccountToOrg from "@/lib/organizations/assignAccountToOrg";
 
 export async function POST(req: NextRequest) {
   const body = await req.json();
@@ -18,6 +19,9 @@ export async function POST(req: NextRequest) {
       try {
         const emailRecord = await getAccountByEmail(email);
         if (emailRecord?.account_id) {
+          // Assign to org based on email domain (idempotent)
+          await assignAccountToOrg(emailRecord.account_id, email);
+          
           const accountData = await getAccountWithDetails(
             emailRecord.account_id
           );
@@ -74,6 +78,8 @@ export async function POST(req: NextRequest) {
 
     if (email) {
       await insertAccountEmail(newAccount.id, email);
+      // Assign new account to org based on email domain
+      await assignAccountToOrg(newAccount.id, email);
     }
 
     if (wallet) {
