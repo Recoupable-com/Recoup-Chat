@@ -1,7 +1,6 @@
 "use client";
 
 import cn from "classnames";
-import { useArtistProvider } from "@/providers/ArtistProvider";
 import { useVercelChatContext } from "@/providers/VercelChatProvider";
 import AttachmentsPreview from "./AttachmentsPreview";
 import PureAttachmentsButton from "./PureAttachmentsButton";
@@ -17,7 +16,6 @@ import ModelSelect from "@/components/ModelSelect";
 import FileMentionsInput from "./FileMentionsInput";
 
 export function ChatInput() {
-  const { selectedArtist, sorted } = useArtistProvider();
   const {
     hasPendingUploads,
     messages,
@@ -30,7 +28,8 @@ export function ChatInput() {
     setInput,
     input,
   } = useVercelChatContext();
-  const isDisabled = !selectedArtist && sorted.length > 0;
+  // Allow typing regardless of artist selection
+  const isDisabled = false;
 
   const handleSend = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();

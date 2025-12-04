@@ -42,7 +42,7 @@ export function ChatGreeting({ isVisible }: { isVisible: boolean }) {
             <ImageWithFallback src={artistImage} />
           </span>
         )}
-        {isArtistSelected ? artistName : "your artist"}
+        {isArtistSelected ? artistName : "your roster"}
       </span>
     </div>
   );

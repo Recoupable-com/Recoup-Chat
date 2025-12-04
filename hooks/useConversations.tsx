@@ -38,9 +38,14 @@ const useConversations = () => {
   }, [fetchedConversations, agents]);
 
   const conversations = useMemo(() => {
+    // If no artist selected, show ALL conversations
+    if (!selectedArtist) {
+      return combinedConversations;
+    }
+    // If artist selected, filter to only that artist's conversations
     return combinedConversations.filter(
       (item: Conversation | ArtistAgent) =>
-        "artist_id" in item && item.artist_id === selectedArtist?.account_id
+        "artist_id" in item && item.artist_id === selectedArtist.account_id
     );
   }, [selectedArtist, combinedConversations]);
 
