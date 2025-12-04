@@ -40,8 +40,12 @@ export const checkAndResetCredits = async (
 
   const isPro = proSource.userSubscription || proSource.orgSubscription;
 
-  // Use user subscription for period tracking, fall back to org subscription
-  const activeSubscription = userSubscription || orgSubscription;
+  // Use the actual active subscription for period tracking (prefer user over org)
+  const activeSubscription = proSource.userSubscription
+    ? userSubscription
+    : proSource.orgSubscription
+      ? orgSubscription
+      : null;
   const subscriptionStartUnix =
     activeSubscription?.current_period_start ?? activeSubscription?.start_date;
   const isMonthlyRefill = lastUpdatedCredits < oneMonthAgo;

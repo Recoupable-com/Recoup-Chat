@@ -44,15 +44,22 @@ export async function GET(req: NextRequest): Promise<Response> {
 
     const isPro = proSource.userSubscription || proSource.orgSubscription;
 
-    // Return the active subscription info (prefer user sub over org sub)
-    const activeSubscription = userSubscription || orgSubscription;
-    const subscriptionInfo = activeSubscription
-      ? {
-          id: activeSubscription.id,
-          status: activeSubscription.status,
-          source: userSubscription ? ("user" as const) : ("org" as const),
-        }
-      : undefined;
+    // Return the active subscription info based on which check actually passed
+    // Prefer user subscription over org subscription if both are active
+    let subscriptionInfo: ProStatusResponse["subscription"];
+    if (proSource.userSubscription && userSubscription) {
+      subscriptionInfo = {
+        id: userSubscription.id,
+        status: userSubscription.status,
+        source: "user",
+      };
+    } else if (proSource.orgSubscription && orgSubscription) {
+      subscriptionInfo = {
+        id: orgSubscription.id,
+        status: orgSubscription.status,
+        source: "org",
+      };
+    }
 
     const response: ProStatusResponse = {
       isPro,
