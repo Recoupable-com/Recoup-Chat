@@ -20,11 +20,17 @@ const FOCUSABLE_SELECTOR =
 const Modal = ({ children, onClose, className, containerClasses }: IModal) => {
   const modalRef = useRef<HTMLDivElement>(null);
   const previousActiveElement = useRef<Element | null>(null);
+  const onCloseRef = useRef(onClose);
 
-  // Handle Escape key and focus trapping
+  // Keep onClose ref updated without triggering effect re-runs
+  useEffect(() => {
+    onCloseRef.current = onClose;
+  }, [onClose]);
+
+  // Handle Escape key and focus trapping (stable reference via ref)
   const handleKeyDown = useCallback((e: KeyboardEvent) => {
     if (e.key === "Escape") {
-      onClose();
+      onCloseRef.current();
       return;
     }
 
@@ -42,7 +48,7 @@ const Modal = ({ children, onClose, className, containerClasses }: IModal) => {
         firstElement?.focus();
       }
     }
-  }, [onClose]);
+  }, []); // Empty deps - uses ref for onClose
 
   useEffect(() => {
     // SSR guard
@@ -58,7 +64,7 @@ const Modal = ({ children, onClose, className, containerClasses }: IModal) => {
     // Add keyboard listener
     document.addEventListener("keydown", handleKeyDown);
 
-    // Focus first focusable element in modal
+    // Focus first focusable element in modal (only on mount)
     const focusableElements = modalRef.current?.querySelectorAll<HTMLElement>(FOCUSABLE_SELECTOR);
     focusableElements?.[0]?.focus();
 
@@ -72,7 +78,7 @@ const Modal = ({ children, onClose, className, containerClasses }: IModal) => {
         previousActiveElement.current.focus();
       }
     };
-  }, [handleKeyDown]);
+  }, [handleKeyDown]); // handleKeyDown is now stable (empty deps)
 
   // SSR guard: portals require document to exist
   if (typeof document === "undefined") return null;
