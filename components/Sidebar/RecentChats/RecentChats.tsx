@@ -6,11 +6,9 @@ import RecentChatList from "./RecentChatList";
 import SelectionModeHeader from "./SelectionModeHeader";
 import NoRecentChats from "./NoRecentChats";
 import { useUserProvider } from "@/providers/UserProvder";
-import { useArtistProvider } from "@/providers/ArtistProvider";
 
 const RecentChats = ({ toggleModal }: { toggleModal: () => void }) => {
   const { userData } = useUserProvider();
-  const { selectedArtist } = useArtistProvider();
   const {
     conversations,
     isLoading,
@@ -38,7 +36,7 @@ const RecentChats = ({ toggleModal }: { toggleModal: () => void }) => {
     isShiftPressed,
   } = useRecentChats({ toggleModal });
 
-  const showSkeleton = isLoading || isFetching || !userData || !selectedArtist;
+  const showSkeleton = isLoading || isFetching || !userData;
 
   return (
     <div className="w-full flex-grow min-h-0 flex flex-col">

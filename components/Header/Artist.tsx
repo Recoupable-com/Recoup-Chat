@@ -36,6 +36,13 @@ const Artist = ({
 
   const handleClick = () => {
     toggleDropDown();
+    
+    // If clicking the already selected artist, unselect it
+    if (isSelectedArtist) {
+      setSelectedArtist(null);
+      return;
+    }
+    
     if (pathname.includes("/chat/") && selectedArtist) {
       if (selectedArtist.account_id !== artist?.account_id) {
         replace("/chat");
