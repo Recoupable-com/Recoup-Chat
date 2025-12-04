@@ -1,5 +1,11 @@
 import supabase from "@/lib/supabase/serverClient";
 import type { AccountType } from "@/types/AccountType";
+import type { Tables } from "@/types/database.types";
+
+/** Account row from database with account_type field */
+export type AccountRow = Tables<"accounts"> & {
+  account_type?: AccountType | null;
+};
 
 /**
  * Create a new account in the database
@@ -10,7 +16,7 @@ import type { AccountType } from "@/types/AccountType";
 export async function createAccount(
   name: string,
   accountType: AccountType = "artist"
-) {
+): Promise<AccountRow | null> {
   try {
     const { data, error } = await supabase
       .from("accounts")
@@ -23,7 +29,8 @@ export async function createAccount(
       return null;
     }
 
-    return data;
+    // Cast to AccountRow since account_type column exists but isn't in generated types yet
+    return data as AccountRow;
   } catch (error) {
     console.error("Unexpected error creating account:", error);
     return null;
