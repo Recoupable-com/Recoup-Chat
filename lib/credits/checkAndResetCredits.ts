@@ -4,7 +4,13 @@ import { CreditsUsage } from "@/lib/supabase/credits_usage/selectCreditsUsage";
 import { DEFAULT_CREDITS, PRO_CREDITS } from "../consts";
 import isActiveSubscription from "../stripe/isActiveSubscription";
 import { getActiveSubscriptionDetails } from "../stripe/getActiveSubscriptionDetails";
-import isEnterpriseAccount from "@/lib/recoup/isEnterpriseAccount";
+import { getOrgSubscription } from "../stripe/getOrgSubscription";
+
+// Track which check determined pro status (for debugging)
+export interface ProSource {
+  userSubscription: boolean;
+  orgSubscription: boolean;
+}
 
 export const checkAndResetCredits = async (
   accountId: string
@@ -18,13 +24,28 @@ export const checkAndResetCredits = async (
   const lastUpdatedCredits = new Date(creditsUsage.timestamp);
   const oneMonthAgo = new Date();
   oneMonthAgo.setMonth(oneMonthAgo.getMonth() - 1);
-  const subscription = await getActiveSubscriptionDetails(accountId);
-  const subscriptionActive = isActiveSubscription(subscription);
+
+  // Check all pro sources (user subscription or org subscription)
+  const userSubscription = await getActiveSubscriptionDetails(accountId);
+  const orgSubscription = await getOrgSubscription(accountId);
+
+  // Track which check passed (for debugging)
+  const proSource: ProSource = {
+    userSubscription: isActiveSubscription(userSubscription),
+    orgSubscription: isActiveSubscription(orgSubscription),
+  };
+
+  // Log pro source for debugging
+  console.log(`[Pro Check] accountId: ${accountId}`, proSource);
+
+  const isPro = proSource.userSubscription || proSource.orgSubscription;
+
+  // Use user subscription for period tracking, fall back to org subscription
+  const activeSubscription = userSubscription || orgSubscription;
   const subscriptionStartUnix =
-    subscription?.current_period_start ?? subscription?.start_date;
+    activeSubscription?.current_period_start ?? activeSubscription?.start_date;
   const isMonthlyRefill = lastUpdatedCredits < oneMonthAgo;
-  const enterprise = await isEnterpriseAccount(accountId);
-  const hasActiveSubscription = subscriptionActive && subscriptionStartUnix;
+  const hasActiveSubscription = isPro && subscriptionStartUnix;
   const subscriptionStart = hasActiveSubscription
     ? new Date(subscriptionStartUnix * 1000)
     : null;
@@ -32,7 +53,6 @@ export const checkAndResetCredits = async (
     subscriptionStart && lastUpdatedCredits < subscriptionStart;
   const isRefill = isMonthlyRefill || isSubscriptionStartedAfterLastUpdate;
   if (!isRefill) return creditsUsage;
-  const isPro = subscriptionActive || enterprise;
 
   return updateCreditsUsage({
     account_id: accountId,

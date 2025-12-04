@@ -53,47 +53,6 @@ export const META_DESCRIPTION =
 export const DEFAULT_CREDITS = 333;
 export const PRO_CREDITS = 1000;
 
-export const ENTERPRISE_DOMAINS: ReadonlySet<string> = new Set([
-  "recoupable.com",
-  "rostrum.com",
-  "spaceheatermusic.io",
-  "fatbeats.com",
-  "cantorarecords.net",
-  "rostrumrecords.com",
-]);
-
-export const ROSTRUM_ORG_ARTIST_IDS: string[] = [
-  "1873859c-dd37-4e9a-9bac-80d3558527a9", // Gatsby Grace
-  "3f9dd138-f5f2-442b-b009-222f37cd2972", // Gliiico
-  "c182c7b4-5956-4f72-a375-df4240caab97", // Julius Black
-  "2e8e643e-ab6e-49e0-bd58-f06dc39a4ee9", // No Love For The Middle Child
-  "a92841a7-edab-43b2-b0c4-1ea1d90b2d32", // Murdermart
-  "32e83747-de64-4154-93c5-c001ec02b4a8", // BearHands
-  "b67e1902-12d8-42f2-9930-b1d40ea8ec4a", // Kaash Paige
-  "becf071a-a834-47b6-8510-4573d205c3eb", // Baro Sura
-  "06c7682c-bcc1-465a-a51d-f640d7edaa84", // Niko IS
-  "496027b3-e60d-4a6f-9eca-4cffd39e911d", // Solene
-  "ce53c5cb-97f1-40b3-90b1-3e1bd3ba012a", // Soul The Horn
-  "8dde6db5-5c6b-4cc4-a6a3-b647c5dbd3a8", // Jeezy
-  "cf7ebe4a-cbbf-4d41-adfa-217da5e6267e", // Raekwon
-  "a61cf649-d323-4bec-a772-cc1331842262", // Theo Croker
-  "9b6a7524-af66-4a55-b88f-95241c4ae58a", // Rashad Thomas
-  "f95b0f73-4ac6-4063-9633-e8b17c5c31e4", // Mac Miller
-  "4f07f136-b30b-4bf5-bcf9-5ff40989ca8e", // Wiz Khalifa
-  "7c351892-2649-4946-8532-56e0314af0cf", // DC The Don
-  "2edaec49-6cef-4846-ac6c-0f44d9c2a92f", // MGMT
-  "8d61f25a-ca47-4a7e-89c5-1ce643b2f666", // Mod Sun
-  "be17e29b-5208-455d-a701-cc8b29c05a54", // Alé Araya
-  "94c884f9-34e8-46a4-9240-cf33ebf67390", // El Michels Affair
-  "8f94490f-5141-4626-a955-e22043d3e3ca", // Teammate
-  "d21d6bf6-900d-4e77-b15e-6830c03d3936", // Mike Taylor
-  "9bde0bd3-6236-4403-9dae-0eeecf380fbd", // FatBeats
-  "a1fdc861-d1c2-4582-99da-6ac755b52f0a", // Cantora Records
-  "29cfd55a-98d9-45a5-96c9-c751a88f7799", // Rostrum Pacific
-  "4e8b9e7d-01f6-4bb8-b333-7673c357b77c", // SpaceHeater
-  "4d271c96-b888-482a-bd6d-6c7b259b4630", // Rostrum Records
-];
-
 // Supabase Private Storage Bucket
 export const SUPABASE_STORAGE_BUCKET = "user-files";
 

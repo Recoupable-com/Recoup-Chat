@@ -6,7 +6,6 @@ import Stripe from "stripe";
 type SubscriptionResponse = {
   status: "success" | "error";
   subscription?: Stripe.Subscription;
-  isEnterprise?: true;
 };
 
 const useSubscription = (): UseQueryResult<SubscriptionResponse> => {

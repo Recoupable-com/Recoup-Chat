@@ -15,26 +15,14 @@ export async function addArtistToOrganization(
   if (!artistId || !organizationId) return null;
 
   try {
-    // Check if already linked
-    const { data: existing } = await supabase
-      .from("artist_organization_ids")
-      .select("id")
-      .eq("artist_id", artistId)
-      .eq("organization_id", organizationId)
-      .single();
-
-    if (existing) {
-      // Already linked, return existing ID
-      return existing.id;
-    }
-
-    // Add to organization
+    // Atomic upsert: insert or return existing row
+    // Requires unique constraint on (artist_id, organization_id)
     const { data, error } = await supabase
       .from("artist_organization_ids")
-      .insert({
-        artist_id: artistId,
-        organization_id: organizationId,
-      })
+      .upsert(
+        { artist_id: artistId, organization_id: organizationId },
+        { onConflict: "artist_id,organization_id", ignoreDuplicates: false }
+      )
       .select("id")
       .single();
 
