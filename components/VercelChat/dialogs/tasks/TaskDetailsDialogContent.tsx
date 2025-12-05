@@ -14,10 +14,9 @@ import { CronEditor } from "@/components/CronEditor";
 import TaskPromptSection from "./TaskPromptSection";
 import TaskLastRunSection from "./TaskLastRunSection";
 import TaskScheduleSection from "./TaskScheduleSection";
-import { getFeaturedModelConfig, FEATURED_MODELS } from "@/lib/ai/featuredModels";
+import { getFeaturedModelConfig } from "@/lib/ai/featuredModels";
 import { organizeModels } from "@/lib/ai/organizeModels";
 import useAvailableModels from "@/hooks/useAvailableModels";
-import { GatewayLanguageModelEntry } from "@ai-sdk/gateway";
 
 interface TaskDetailsDialogContentProps {
   task: Tables<"scheduled_actions">;
