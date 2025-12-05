@@ -1,6 +1,7 @@
 import { z } from "zod";
 import { tool } from "ai";
 import { SpotifySearchResponse } from "../../types/spotify";
+import { NEW_API_BASE_URL } from "../consts";
 
 // Supported Spotify search types
 const SPOTIFY_TYPES = [
@@ -40,7 +41,7 @@ const getSpotifySearch = tool({
     limit = 5,
   }): Promise<GetSpotifySearchResult> => {
     try {
-      const url = new URL("https://api.recoupable.com/api/spotify/search");
+      const url = new URL(`${NEW_API_BASE_URL}/api/spotify/search`);
       url.searchParams.append("q", name);
       url.searchParams.append("type", type.join(","));
       url.searchParams.append("limit", limit.toString());

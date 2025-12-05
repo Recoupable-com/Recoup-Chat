@@ -1,5 +1,6 @@
 import { z } from "zod";
 import { tool } from "ai";
+import { NEW_API_BASE_URL } from "../consts";
 
 export interface SpotifyAlbum {
   album_type: string;
@@ -86,7 +87,7 @@ const getSpotifyAlbum = tool({
     "Retrieve Spotify catalog information for a single album. You should call get_spotify_artist_albums or get_spotify_search first in order to get an album ID to use in the tool call.",
   inputSchema: schema,
   execute: async ({ id, market }): Promise<SpotifyAlbum> => {
-    const url = new URL("https://api.recoupable.com/api/spotify/album");
+    const url = new URL(`${NEW_API_BASE_URL}/api/spotify/album`);
     url.searchParams.append("id", id);
     if (market) url.searchParams.append("market", market);
 

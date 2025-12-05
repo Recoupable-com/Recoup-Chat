@@ -12,6 +12,7 @@ export interface UpdateTaskParams {
   account_id?: string;
   artist_account_id?: string;
   enabled?: boolean | null;
+  model?: string | null;
 }
 
 /**
@@ -39,6 +40,7 @@ export async function updateTask(
           artist_account_id: params.artist_account_id,
         }),
         ...(params.enabled !== undefined && { enabled: params.enabled }),
+        ...(params.model !== undefined && { model: params.model }),
       }),
     });
 

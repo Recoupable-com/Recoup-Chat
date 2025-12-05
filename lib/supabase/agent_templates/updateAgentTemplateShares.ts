@@ -1,4 +1,4 @@
-import getAccountDetailsByEmails from "@/lib/supabase/accountEmails/getAccountDetailsByEmails";
+import getAccountDetailsByEmails from "@/lib/supabase/account_emails/getAccountDetailsByEmails";
 import { deleteAgentTemplateSharesByTemplateId } from "./deleteAgentTemplateShares";
 import { insertAgentTemplateShares } from "./insertAgentTemplateShares";
 

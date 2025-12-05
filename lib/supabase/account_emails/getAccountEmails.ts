@@ -4,12 +4,15 @@ import { Tables } from "@/types/database.types";
 type AccountEmail = Tables<"account_emails">;
 
 export const getAccountEmails = async (
-  accountId: string
+  accountIds: string | string[]
 ): Promise<AccountEmail[]> => {
+  const ids = Array.isArray(accountIds) ? accountIds : [accountIds];
+  if (ids.length === 0) return [];
+
   const { data, error } = await serverClient
     .from("account_emails")
     .select("*")
-    .eq("account_id", accountId);
+    .in("account_id", ids);
 
   if (error) {
     console.error("Error fetching account emails:", error);
@@ -18,3 +21,5 @@ export const getAccountEmails = async (
 
   return data || [];
 };
+
+export default getAccountEmails;

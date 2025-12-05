@@ -1,8 +1,8 @@
-import getAccountArtistIds from "@/lib/supabase/accountArtistIds/getAccountArtistIds";
-import getUserPinnedArtistIds from "@/lib/supabase/accountArtistIds/getUserPinnedArtistIds";
-import getAccountWorkspaceIds from "@/lib/supabase/accountWorkspaceIds/getAccountWorkspaceIds";
-import getAccountOrganizations from "@/lib/supabase/accountOrganizationIds/getAccountOrganizations";
-import getArtistsByOrganization from "@/lib/supabase/artistOrganizationIds/getArtistsByOrganization";
+import getAccountArtistIds from "@/lib/supabase/account_artist_ids/getAccountArtistIds";
+import getUserPinnedArtistIds from "@/lib/supabase/account_artist_ids/getUserPinnedArtistIds";
+import getAccountWorkspaceIds from "@/lib/supabase/account_workspace_ids/getAccountWorkspaceIds";
+import getAccountOrganizations from "@/lib/supabase/account_organization_ids/getAccountOrganizations";
+import getArtistsByOrganization from "@/lib/supabase/artist_organization_ids/getArtistsByOrganization";
 import type { ArtistRecord } from "@/types/Artist";
 
 interface GetArtistsOptions {
@@ -62,7 +62,9 @@ const getArtists = async (
   ]);
 
   // Get artists from all orgs the account belongs to
-  const orgIds = accountOrgs.map((org) => org.organization_id);
+  const orgIds = accountOrgs
+    .map((org) => org.organization_id)
+    .filter((id): id is string => id !== null);
   const orgArtists = orgIds.length > 0
     ? await getArtistsByOrganization(orgIds)
     : [];

@@ -1,11 +1,11 @@
 import getAccountById from "@/lib/supabase/accounts/getAccountById";
 import updateAccount from "@/lib/supabase/accounts/updateAccount";
-import getAccountInfoById from "@/lib/supabase/accountInfo/getAccountInfoById";
-import updateAccountInfo from "@/lib/supabase/accountInfo/updateAccountInfo";
-import insertAccountInfo from "@/lib/supabase/accountInfo/insertAccountInfo";
+import getAccountInfoById from "@/lib/supabase/account_info/getAccountInfoById";
+import updateAccountInfo from "@/lib/supabase/account_info/updateAccountInfo";
+import insertAccountInfo from "@/lib/supabase/account_info/insertAccountInfo";
 import getAccountByEmail from "@/lib/supabase/accounts/getAccountByEmail";
 import insertAccount from "@/lib/supabase/accounts/insertAccount";
-import insertAccountArtistId from "@/lib/supabase/accountArtistIds/insertAccountArtistId";
+import insertAccountArtistId from "@/lib/supabase/account_artist_ids/insertAccountArtistId";
 import type { Tables } from "@/types/database.types";
 
 export type Knowledge = {

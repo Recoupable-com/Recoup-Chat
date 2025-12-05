@@ -1,8 +1,8 @@
 import { NextRequest } from "next/server";
 import getAccountById from "@/lib/supabase/accounts/getAccountById";
 import updateAccount from "@/lib/supabase/accounts/updateAccount";
-import insertAccountInfo from "@/lib/supabase/accountInfo/insertAccountInfo";
-import updateAccountInfo from "@/lib/supabase/accountInfo/updateAccountInfo";
+import insertAccountInfo from "@/lib/supabase/account_info/insertAccountInfo";
+import updateAccountInfo from "@/lib/supabase/account_info/updateAccountInfo";
 
 export async function POST(req: NextRequest) {
   const body = await req.json();

@@ -10,6 +10,7 @@ interface TaskDetailsDialogActionButtonsProps {
   editTitle: string;
   editPrompt: string;
   editCron: string;
+  editModel: string;
   onSaveSuccess: () => void;
   onDeleteSuccess: () => void;
   isEnabled: boolean;
@@ -23,6 +24,7 @@ const TaskDetailsDialogActionButtons: React.FC<
   editTitle,
   editPrompt,
   editCron,
+  editModel,
   onSaveSuccess,
   onDeleteSuccess,
   isEnabled,
@@ -74,6 +76,7 @@ const TaskDetailsDialogActionButtons: React.FC<
           title: editTitle,
           prompt: editPrompt,
           schedule: cronExpression,
+          model: editModel,
         },
         onSuccess: () => {
           onSaveSuccess();
@@ -110,7 +113,6 @@ const TaskDetailsDialogActionButtons: React.FC<
       <Button
         onClick={handleSave}
         disabled={isLoading}
-        className="bg-background hover:bg-card"
         size="sm"
       >
         {isLoading ? "Saving..." : "Save"}

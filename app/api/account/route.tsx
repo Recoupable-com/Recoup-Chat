@@ -3,7 +3,7 @@ import getAccountByEmail from "@/lib/supabase/accounts/getAccountByEmail";
 import { getAccountByWallet } from "@/lib/supabase/accounts/getAccountByWallet";
 import { getAccountWithDetails } from "@/lib/supabase/accounts/getAccountWithDetails";
 import insertAccount from "@/lib/supabase/accounts/insertAccount";
-import insertAccountEmail from "@/lib/supabase/accountEmails/insertAccountEmail";
+import insertAccountEmail from "@/lib/supabase/account_emails/insertAccountEmail";
 import { insertAccountWallet } from "@/lib/supabase/accounts/insertAccountWallet";
 import { initializeAccountCredits } from "@/lib/supabase/credits_usage/initializeAccountCredits";
 import assignAccountToOrg from "@/lib/organizations/assignAccountToOrg";

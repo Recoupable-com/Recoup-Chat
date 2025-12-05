@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import { Tables } from "@/types/database.types";
+import { DEFAULT_MODEL } from "@/lib/consts";
 
 interface UseTaskDetailsDialogParams {
   task: Tables<"scheduled_actions">;
@@ -16,12 +17,14 @@ export const useTaskDetailsDialog = ({
   const [editCron, setEditCron] = useState(
     task.schedule?.trim() || "0 9 * * *"
   );
+  const [editModel, setEditModel] = useState(task.model || DEFAULT_MODEL);
 
   // Sync edit state when task prop changes
   useEffect(() => {
     setEditTitle(task.title);
     setEditPrompt(task.prompt);
     setEditCron(task.schedule?.trim() || "0 9 * * *");
+    setEditModel(task.model || DEFAULT_MODEL);
   }, [task]);
 
   const isActive = Boolean(task.enabled && !isDeleted);
@@ -37,6 +40,8 @@ export const useTaskDetailsDialog = ({
     setEditPrompt,
     editCron,
     setEditCron,
+    editModel,
+    setEditModel,
     isActive,
     isPaused,
     canEdit,

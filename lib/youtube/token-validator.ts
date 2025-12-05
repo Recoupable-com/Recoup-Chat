@@ -1,4 +1,4 @@
-import getYouTubeTokens from "@/lib/supabase/youtubeTokens/getYouTubeTokens";
+import getYouTubeTokens from "@/lib/supabase/youtube_tokens/getYouTubeTokens";
 import { YouTubeTokenValidationResult } from "@/types/youtube";
 import { YouTubeErrorBuilder, YouTubeErrorMessages } from "@/lib/youtube/error-builder";
 import { refreshStoredYouTubeToken } from "@/lib/youtube/token-refresher";
