@@ -9,6 +9,7 @@ export interface CreateTaskParams {
   schedule: string;
   account_id: string;
   artist_account_id: string;
+  model?: string;
 }
 
 export interface CreateTaskResponse {
@@ -36,6 +37,7 @@ export async function createTask(
         schedule: params.schedule,
         account_id: params.account_id,
         artist_account_id: params.artist_account_id,
+        ...(params.model && { model: params.model }),
       }),
     });
 

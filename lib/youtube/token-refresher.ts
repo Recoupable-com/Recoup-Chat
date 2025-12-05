@@ -6,7 +6,7 @@
  */
 
 import { createYouTubeOAuthClient } from "@/lib/youtube/oauth-client";
-import insertYouTubeTokens from "@/lib/supabase/youtubeTokens/insertYouTubeTokens";
+import insertYouTubeTokens from "@/lib/supabase/youtube_tokens/insertYouTubeTokens";
 import { YouTubeTokensRow } from "@/types/youtube";
 import { YouTubeErrorBuilder, YouTubeErrorMessages } from "@/lib/youtube/error-builder";
 

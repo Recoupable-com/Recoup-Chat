@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
-import getAccountEmails from "@/lib/supabase/accountEmails/getAccountEmails";
-import { checkAccountArtistAccess } from "@/lib/supabase/accountArtistIds/checkAccountArtistAccess";
+import getAccountEmails from "@/lib/supabase/account_emails/getAccountEmails";
+import { checkAccountArtistAccess } from "@/lib/supabase/account_artist_ids/checkAccountArtistAccess";
 
 export async function GET(req: NextRequest) {
   const accountIds = req.nextUrl.searchParams.getAll("accountIds");

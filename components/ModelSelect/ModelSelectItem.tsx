@@ -7,10 +7,10 @@ import { getFeaturedModelConfig } from "@/lib/ai/featuredModels";
 import { Tooltip } from "../common/Tooltip";
 
 const ModelSelectItem = ({ model }: { model: GatewayLanguageModelEntry }) => {
-  const { subscriptionActive } = usePaymentProvider();
+  const { isSubscribed } = usePaymentProvider();
   const isModelFree = isFreeModel(model);
-  const isLocked = !isModelFree && !subscriptionActive;
-  const isUnlockedPro = !isModelFree && subscriptionActive;
+  const isLocked = !isModelFree && !isSubscribed;
+  const isUnlockedPro = !isModelFree && isSubscribed;
   
   // Get featured model config for pills and descriptions
   const featuredConfig = getFeaturedModelConfig(model.id);

@@ -5,12 +5,12 @@ import { usePaymentProvider } from "@/providers/PaymentProvider";
 
 const ManageSubscriptionButton = () => {
   const { handleClick } = useSubscribeClick();
-  const { subscription } = usePaymentProvider();
+  const { isSubscribed } = usePaymentProvider();
 
   return (
     <DropdownMenuItem onClick={handleClick} className="cursor-pointer">
       <IconCreditCard />
-      {subscription ? "Billing" : "Subscribe"}
+      {isSubscribed ? "Billing" : "Subscribe"}
     </DropdownMenuItem>
   );
 };

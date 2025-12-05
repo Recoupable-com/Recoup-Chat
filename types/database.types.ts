@@ -177,6 +177,42 @@ export type Database = {
           },
         ]
       }
+      account_organization_ids: {
+        Row: {
+          account_id: string | null
+          id: string
+          organization_id: string | null
+          updated_at: string | null
+        }
+        Insert: {
+          account_id?: string | null
+          id?: string
+          organization_id?: string | null
+          updated_at?: string | null
+        }
+        Update: {
+          account_id?: string | null
+          id?: string
+          organization_id?: string | null
+          updated_at?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "account_organization_ids_account_id_fkey"
+            columns: ["account_id"]
+            isOneToOne: false
+            referencedRelation: "accounts"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "account_organization_ids_organization_id_fkey"
+            columns: ["organization_id"]
+            isOneToOne: false
+            referencedRelation: "accounts"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       account_phone_numbers: {
         Row: {
           account_id: string
@@ -262,6 +298,42 @@ export type Database = {
           {
             foreignKeyName: "account_wallets_account_id_fkey"
             columns: ["account_id"]
+            isOneToOne: false
+            referencedRelation: "accounts"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      account_workspace_ids: {
+        Row: {
+          account_id: string | null
+          id: string
+          updated_at: string | null
+          workspace_id: string | null
+        }
+        Insert: {
+          account_id?: string | null
+          id?: string
+          updated_at?: string | null
+          workspace_id?: string | null
+        }
+        Update: {
+          account_id?: string | null
+          id?: string
+          updated_at?: string | null
+          workspace_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "account_workspace_ids_account_id_fkey"
+            columns: ["account_id"]
+            isOneToOne: false
+            referencedRelation: "accounts"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "account_workspace_ids_workspace_id_fkey"
+            columns: ["workspace_id"]
             isOneToOne: false
             referencedRelation: "accounts"
             referencedColumns: ["id"]
@@ -731,6 +803,45 @@ export type Database = {
             columns: ["fan_social_id"]
             isOneToOne: false
             referencedRelation: "socials"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      artist_organization_ids: {
+        Row: {
+          artist_id: string
+          created_at: string | null
+          id: string
+          organization_id: string
+          updated_at: string | null
+        }
+        Insert: {
+          artist_id: string
+          created_at?: string | null
+          id?: string
+          organization_id: string
+          updated_at?: string | null
+        }
+        Update: {
+          artist_id?: string
+          created_at?: string | null
+          id?: string
+          organization_id?: string
+          updated_at?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "artist_organization_ids_artist_id_fkey"
+            columns: ["artist_id"]
+            isOneToOne: false
+            referencedRelation: "accounts"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "artist_organization_ids_organization_id_fkey"
+            columns: ["organization_id"]
+            isOneToOne: false
+            referencedRelation: "accounts"
             referencedColumns: ["id"]
           },
         ]
@@ -1898,6 +2009,35 @@ export type Database = {
             columns: ["billing_customer_id"]
             isOneToOne: false
             referencedRelation: "billing_customers"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      organization_domains: {
+        Row: {
+          created_at: string | null
+          domain: string
+          id: string
+          organization_id: string
+        }
+        Insert: {
+          created_at?: string | null
+          domain: string
+          id?: string
+          organization_id: string
+        }
+        Update: {
+          created_at?: string | null
+          domain?: string
+          id?: string
+          organization_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "organization_domains_organization_id_fkey"
+            columns: ["organization_id"]
+            isOneToOne: false
+            referencedRelation: "accounts"
             referencedColumns: ["id"]
           },
         ]

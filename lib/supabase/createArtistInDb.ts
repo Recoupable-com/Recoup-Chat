@@ -2,23 +2,23 @@ import createAccount from "./accounts/createAccount";
 import createAccountInfo from "./artist/createAccountInfo";
 import getArtistById from "./artist/getArtistById";
 import associateArtistWithAccount from "./artist/associateArtistWithAccount";
-import type { AccountType } from "@/types/AccountType";
+import insertAccountWorkspaceId from "./account_workspace_ids/insertAccountWorkspaceId";
 
 /**
- * Create a new account in the database and associate it with a user account
+ * Create a new account in the database and associate it with an owner account
  * @param name Name of the account to create
- * @param account_id ID of the user account that will have access
- * @param accountType Type of account: 'artist', 'workspace', etc. Defaults to 'artist'
+ * @param account_id ID of the owner account that will have access
+ * @param isWorkspace If true, creates a workspace; if false, creates an artist (default)
  * @returns Created account object or null if creation failed
  */
 export async function createArtistInDb(
   name: string,
   account_id: string,
-  accountType: AccountType = "artist"
+  isWorkspace: boolean = false
 ) {
   try {
-    // Step 1: Create the account with specified type
-    const account = await createAccount(name, accountType);
+    // Step 1: Create the account (no account_type needed)
+    const account = await createAccount(name);
     if (!account) return null;
 
     // Step 2: Create account info for the account
@@ -29,9 +29,16 @@ export async function createArtistInDb(
     const artist = await getArtistById(account.id);
     if (!artist) return null;
 
-    // Step 4: Associate the account with the user
+    // Step 4: Associate the account with the owner via the appropriate join table
+    if (isWorkspace) {
+      // For workspaces, add to account_workspace_ids
+      const workspaceLinked = await insertAccountWorkspaceId(account_id, account.id);
+      if (!workspaceLinked) return null;
+    } else {
+      // For artists, add to account_artist_ids
     const associated = await associateArtistWithAccount(account_id, account.id);
     if (!associated) return null;
+    }
 
     // Build return object by explicitly picking fields
     // This avoids fragile spread-order dependencies where account_info.id
@@ -43,7 +50,7 @@ export async function createArtistInDb(
       id: artist.id,
       account_id: artist.id,  // Alias used by ArtistRecord type
       name: artist.name,
-      account_type: artist.account_type,
+      isWorkspace,  // Return this so UI knows what type it is
       created_at: artist.created_at,
       updated_at: artist.updated_at,
       
