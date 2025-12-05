@@ -13,7 +13,24 @@ export async function GET(req: NextRequest): Promise<Response> {
   }
 
   try {
-    const organizations = await getAccountOrganizations(accountId);
+    const rawOrgs = await getAccountOrganizations(accountId);
+    
+    // Map nested organization data to flat structure expected by frontend
+    // and deduplicate by organization_id
+    const seen = new Set<string>();
+    const organizations = rawOrgs
+      .filter((org) => {
+        if (!org.organization_id || seen.has(org.organization_id)) return false;
+        seen.add(org.organization_id);
+        return true;
+      })
+      .map((org) => ({
+        id: org.id,
+        organization_id: org.organization_id,
+        organization_name: org.organization?.name || null,
+        organization_image: org.organization?.account_info?.[0]?.image || null,
+      }));
+    
     return Response.json({ organizations }, { status: 200 });
   } catch (error) {
     const message = error instanceof Error ? error.message : "failed";
