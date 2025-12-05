@@ -342,16 +342,19 @@ export type Database = {
       }
       accounts: {
         Row: {
+          account_type: string | null
           id: string
           name: string | null
           timestamp: number | null
         }
         Insert: {
+          account_type?: string | null
           id?: string
           name?: string | null
           timestamp?: number | null
         }
         Update: {
+          account_type?: string | null
           id?: string
           name?: string | null
           timestamp?: number | null
@@ -2480,6 +2483,7 @@ export type Database = {
           enabled: boolean | null
           id: string
           last_run: string | null
+          model: string | null
           next_run: string | null
           prompt: string
           schedule: string
@@ -2494,6 +2498,7 @@ export type Database = {
           enabled?: boolean | null
           id?: string
           last_run?: string | null
+          model?: string | null
           next_run?: string | null
           prompt: string
           schedule: string
@@ -2508,6 +2513,7 @@ export type Database = {
           enabled?: boolean | null
           id?: string
           last_run?: string | null
+          model?: string | null
           next_run?: string | null
           prompt?: string
           schedule?: string
