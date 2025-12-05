@@ -1,51 +1,92 @@
+"use client";
+
 import { DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Tables } from "@/types/database.types";
-import { Play, Pause, Trash2 } from "lucide-react";
+import { Copy, Check } from "lucide-react";
 import { cn } from "@/lib/utils";
-import AccountIdDisplay from "@/components/ArtistSetting/AccountIdDisplay";
+import { Switch } from "@/components/ui/switch";
+import { useState } from "react";
 
 interface TaskDetailsDialogHeaderProps {
   task: Tables<"scheduled_actions">;
-  isActive?: boolean;
-  isPaused?: boolean;
+  isEnabled: boolean;
   isDeleted?: boolean;
+  onToggleEnabled?: () => void;
+  isLoading?: boolean;
 }
 
 const TaskDetailsDialogHeader = ({
   task,
-  isActive = false,
-  isPaused = false,
+  isEnabled,
   isDeleted = false,
+  onToggleEnabled,
+  isLoading = false,
 }: TaskDetailsDialogHeaderProps) => {
+  const [copied, setCopied] = useState(false);
+
+  const handleCopy = async () => {
+    try {
+      await navigator.clipboard.writeText(task.id);
+      setCopied(true);
+      setTimeout(() => setCopied(false), 2000);
+    } catch (err) {
+      console.error("Failed to copy task ID:", err);
+    }
+  };
+
   return (
-    <DialogHeader
-      className={cn("pb-2 shrink-0", {
-        "border-b border-red-100 mb-2": isDeleted,
-      })}
-    >
-      <DialogTitle className="flex items-center gap-1.5 text-base text-left">
-        {isActive && <Play className="h-4 w-4 text-green-500 flex-shrink-0" />}
-        {isPaused && <Pause className="h-4 w-4 text-muted-foreground flex-shrink-0" />}
-        {isDeleted && <Trash2 className="h-4 w-4 text-red-500 flex-shrink-0" />}
-        <span className={cn("truncate", { "text-red-800": isDeleted })}>
-          {task.title}
-        </span>
-        <span
-          className={cn(
-            "ml-auto inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium flex-shrink-0",
-            isActive
-              ? "bg-green-100 text-green-800"
-              : isPaused
-                ? "bg-muted text-muted-foreground"
-                : "bg-red-200 text-red-800"
-          )}
+    <DialogHeader className="pb-3 shrink-0 space-y-2">
+      {/* Title row with toggle */}
+      <div className="flex items-start justify-between gap-3">
+        <DialogTitle
+          className={cn("text-base text-left leading-tight pr-2", {
+            "text-red-800": isDeleted,
+          })}
         >
-          {isActive ? "Active" : isPaused ? "Paused" : "Deleted"}
-        </span>
-      </DialogTitle>
-      <div className="mt-1">
-        <AccountIdDisplay accountId={task.id} label="Task ID" />
+          {task.title}
+        </DialogTitle>
+
+        {!isDeleted && onToggleEnabled && (
+          <div className="flex items-center gap-2 shrink-0">
+            <span
+              className={cn(
+                "text-xs font-medium",
+                isEnabled ? "text-green-600" : "text-muted-foreground"
+              )}
+            >
+              {isEnabled ? "Active" : "Paused"}
+            </span>
+            <Switch
+              checked={isEnabled}
+              onCheckedChange={onToggleEnabled}
+              disabled={isLoading}
+              className={cn(
+                isEnabled && "data-[state=checked]:bg-green-500"
+              )}
+            />
+          </div>
+        )}
+
+        {isDeleted && (
+          <span className="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-red-100 text-red-800 shrink-0">
+            Deleted
+          </span>
+        )}
       </div>
+
+      {/* Compact Task ID - just copy button */}
+      <button
+        type="button"
+        onClick={handleCopy}
+        className="flex items-center gap-1.5 text-xs text-muted-foreground hover:text-foreground transition-colors w-fit"
+      >
+        {copied ? (
+          <Check className="w-3 h-3 text-green-600" />
+        ) : (
+          <Copy className="w-3 h-3" />
+        )}
+        <span>Copy Task ID</span>
+      </button>
     </DialogHeader>
   );
 };

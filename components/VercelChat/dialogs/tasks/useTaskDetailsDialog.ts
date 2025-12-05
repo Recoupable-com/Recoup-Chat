@@ -32,8 +32,6 @@ export const useTaskDetailsDialog = ({
     setEditModel(task.model || DEFAULT_MODEL);
   }, [task]);
 
-  const isActive = Boolean(task.enabled && !isDeleted);
-  const isPaused = Boolean(!task.enabled && !isDeleted);
   const canEdit = !isDeleted;
 
   return {
@@ -47,8 +45,6 @@ export const useTaskDetailsDialog = ({
     setEditCron,
     editModel,
     setEditModel,
-    isActive,
-    isPaused,
     canEdit,
   };
 };
