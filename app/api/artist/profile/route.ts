@@ -2,7 +2,7 @@ import getFormattedArtist from "@/lib/getFormattedArtist";
 import supabase from "@/lib/supabase/serverClient";
 import updateArtistProfile from "@/lib/supabase/artist/updateArtistProfile";
 import updateArtistSocials from "@/lib/supabase/updateArtistSocials";
-import { addArtistToOrganization } from "@/lib/supabase/artistOrganizationIds/addArtistToOrganization";
+import { addArtistToOrganization } from "@/lib/supabase/artist_organization_ids/addArtistToOrganization";
 import { NextRequest } from "next/server";
 
 export async function POST(req: NextRequest) {

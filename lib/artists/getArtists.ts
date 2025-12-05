@@ -44,7 +44,9 @@ const getArtists = async (
     ]);
 
     // Get all org artist IDs to exclude from personal view
-    const orgIds = accountOrgs.map((org) => org.organization_id);
+    const orgIds = accountOrgs
+      .map((org) => org.organization_id)
+      .filter((id): id is string => id !== null);
     const orgArtists =
       orgIds.length > 0 ? await getArtistsByOrganization(orgIds) : [];
     const orgArtistIds = new Set(orgArtists.map((a) => a.account_id));

@@ -1,5 +1,5 @@
 import { NextRequest } from "next/server";
-import { addArtistToOrganization } from "@/lib/supabase/artistOrganizationIds/addArtistToOrganization";
+import { addArtistToOrganization } from "@/lib/supabase/artist_organization_ids/addArtistToOrganization";
 
 export async function POST(req: NextRequest) {
   const body = await req.json();

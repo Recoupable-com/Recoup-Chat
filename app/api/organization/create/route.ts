@@ -1,7 +1,7 @@
 import { NextRequest } from "next/server";
 import createAccount from "@/lib/supabase/accounts/createAccount";
-import { addAccountToOrganization } from "@/lib/supabase/accountOrganizationIds/addAccountToOrganization";
-import insertAccountInfo from "@/lib/supabase/accountInfo/insertAccountInfo";
+import { addAccountToOrganization } from "@/lib/supabase/account_organization_ids/addAccountToOrganization";
+import insertAccountInfo from "@/lib/supabase/account_info/insertAccountInfo";
 
 export async function POST(req: NextRequest) {
   const body = await req.json();

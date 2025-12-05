@@ -1,5 +1,5 @@
 import { NextRequest } from "next/server";
-import getAccountOrganizations from "@/lib/supabase/accountOrganizationIds/getAccountOrganizations";
+import getAccountOrganizations from "@/lib/supabase/account_organization_ids/getAccountOrganizations";
 
 /**
  * GET /api/organizations?accountId=xxx
