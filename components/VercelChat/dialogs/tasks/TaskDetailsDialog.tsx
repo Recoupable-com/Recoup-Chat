@@ -7,7 +7,6 @@ import TaskDetailsDialogHeader from "./TaskDetailsDialogHeader";
 import TaskDetailsDialogContent from "./TaskDetailsDialogContent";
 import TaskDetailsDialogActionButtons from "./TaskDetailsDialogActionButtons";
 import { useTaskDetailsDialog } from "./useTaskDetailsDialog";
-import { useUpdateScheduledAction } from "@/hooks/useUpdateScheduledAction";
 
 interface TaskDetailsDialogProps {
   children: React.ReactNode;
@@ -33,26 +32,10 @@ const TaskDetailsDialog: React.FC<TaskDetailsDialogProps> = ({
     setEditCron,
     editModel,
     setEditModel,
+    isActive,
+    isPaused,
     canEdit,
   } = useTaskDetailsDialog({ task, isDeleted });
-
-  const { updateAction, isLoading: isToggling } = useUpdateScheduledAction();
-
-  const handleToggleEnabled = async () => {
-    if (!canEdit) return;
-
-    try {
-      await updateAction({
-        updates: {
-          id: task.id,
-          enabled: !task.enabled,
-        },
-        successMessage: task.enabled ? "Task paused" : "Task activated",
-      });
-    } catch (error) {
-      console.error("Failed to toggle task status:", error);
-    }
-  };
 
   return (
     <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
@@ -60,14 +43,15 @@ const TaskDetailsDialog: React.FC<TaskDetailsDialogProps> = ({
         <div className="cursor-pointer">{children}</div>
       </DialogTrigger>
       <DialogContent
-        className={cn("max-w-sm md:max-w-[420px] p-5 flex flex-col gap-4")}
+        className={cn(
+          "max-w-xs md:max-w-md p-6 max-h-[90vh] overflow-hidden flex flex-col pt-10"
+        )}
       >
         <TaskDetailsDialogHeader
           task={task}
-          isEnabled={!!task.enabled}
+          isActive={isActive}
+          isPaused={isPaused}
           isDeleted={isDeleted}
-          onToggleEnabled={canEdit ? handleToggleEnabled : undefined}
-          isLoading={isToggling}
         />
 
         <TaskDetailsDialogContent
@@ -97,6 +81,7 @@ const TaskDetailsDialog: React.FC<TaskDetailsDialogProps> = ({
               setIsDialogOpen(false);
               onDelete?.();
             }}
+            isEnabled={!!task.enabled}
             canEdit={canEdit}
           />
         )}
