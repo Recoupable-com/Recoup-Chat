@@ -20,6 +20,7 @@ const createTaskTool = tool({
   - schedule: A cron expression defining when the task should run
   - account_id: The account ID of the user creating the task
   - artist_account_id: The account ID of the artist this task is for
+  - model: (optional) The AI model to use for this task
   
   The schedule parameter must be a valid cron expression (e.g. "0 0 * * *" for daily at midnight).
   `,
@@ -39,6 +40,12 @@ const createTaskTool = tool({
       .describe(
         "The account ID of the artist this task is for. If not provided, get this from the system prompt as the active artist id."
       ),
+    model: z
+      .string()
+      .optional()
+      .describe(
+        "The AI model to use for this task (e.g., 'anthropic/claude-sonnet-4.5'). If not specified, uses the default model."
+      ),
   }),
   execute: async ({
     title,
@@ -46,6 +53,7 @@ const createTaskTool = tool({
     schedule,
     account_id,
     artist_account_id,
+    model,
   }): Promise<CreateTaskResult> => {
     try {
       const createdTask = await createTask({
@@ -54,6 +62,7 @@ const createTaskTool = tool({
         schedule,
         account_id,
         artist_account_id,
+        model,
       });
 
       return {
