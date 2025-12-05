@@ -4,7 +4,13 @@
 const nextConfig = {
   reactStrictMode: true,
   transpilePackages: ["geist"],
-  serverExternalPackages: ["@browserbasehq/stagehand", "playwright"],
+  serverExternalPackages: [
+    "@browserbasehq/stagehand",
+    "playwright",
+    "pino",
+    "pino-pretty",
+    "thread-stream",
+  ],
   images: {
     remotePatterns: [
       {
