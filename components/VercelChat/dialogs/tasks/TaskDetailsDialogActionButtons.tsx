@@ -113,7 +113,6 @@ const TaskDetailsDialogActionButtons: React.FC<
       <Button
         onClick={handleSave}
         disabled={isLoading}
-        className="bg-background hover:bg-card"
         size="sm"
       >
         {isLoading ? "Saving..." : "Save"}
