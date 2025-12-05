@@ -2,13 +2,8 @@ import { useState, useEffect } from "react";
 import { Tables } from "@/types/database.types";
 import { DEFAULT_MODEL } from "@/lib/consts";
 
-// Extended type to include model field (added via migration)
-type ScheduledActionWithModel = Tables<"scheduled_actions"> & {
-  model?: string | null;
-};
-
 interface UseTaskDetailsDialogParams {
-  task: ScheduledActionWithModel;
+  task: Tables<"scheduled_actions">;
   isDeleted?: boolean;
 }
 

@@ -1,22 +1,22 @@
+import { useMemo } from "react";
 import { cn } from "@/lib/utils";
 import { Tables } from "@/types/database.types";
 import { Textarea } from "@/components/ui/textarea";
 import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
+  PromptInputModelSelect,
+  PromptInputModelSelectTrigger,
+  PromptInputModelSelectValue,
+  PromptInputModelSelectContent,
+} from "@/components/ai-elements/prompt-input";
+import ModelSelectItem from "@/components/ModelSelect/ModelSelectItem";
 import TaskDetailsDialogTitle from "./TaskDetailsDialogTitle";
 import { CronEditor } from "@/components/CronEditor";
 import TaskPromptSection from "./TaskPromptSection";
 import TaskLastRunSection from "./TaskLastRunSection";
 import TaskScheduleSection from "./TaskScheduleSection";
-import {
-  FEATURED_MODELS,
-  getFeaturedModelConfig,
-} from "@/lib/ai/featuredModels";
+import { getFeaturedModelConfig } from "@/lib/ai/featuredModels";
+import { organizeModels } from "@/lib/ai/organizeModels";
+import useAvailableModels from "@/hooks/useAvailableModels";
 
 interface TaskDetailsDialogContentProps {
   task: Tables<"scheduled_actions">;
@@ -45,7 +45,16 @@ const TaskDetailsDialogContent: React.FC<TaskDetailsDialogContentProps> = ({
   canEdit,
   isDeleted = false,
 }) => {
+  const { data: availableModels = [] } = useAvailableModels();
   const modelConfig = getFeaturedModelConfig(editModel);
+  
+  const organizedModels = useMemo(() => {
+    return organizeModels(availableModels);
+  }, [availableModels]);
+
+  const selectedModel = availableModels.find(m => m.id === editModel);
+  const displayName = modelConfig?.displayName || selectedModel?.name || editModel;
+
   return (
     <div className={cn("flex flex-col gap-3 mt-1 overflow-y-auto")}>
       {/* Title Section */}
@@ -91,30 +100,37 @@ const TaskDetailsDialogContent: React.FC<TaskDetailsDialogContentProps> = ({
       <div className="space-y-2">
         <label className="text-xs font-medium text-foreground">Model</label>
         {canEdit ? (
-          <Select value={editModel} onValueChange={onModelChange}>
-            <SelectTrigger className="w-full text-xs">
-              <SelectValue>
-                {modelConfig?.displayName || editModel}
-              </SelectValue>
-            </SelectTrigger>
-            <SelectContent>
-              {FEATURED_MODELS.map((model) => (
-                <SelectItem key={model.id} value={model.id} className="text-xs">
-                  <div className="flex items-center gap-2">
-                    <span>{model.displayName}</span>
-                    {model.pill && (
-                      <span className="text-[10px] px-1.5 py-0.5 rounded bg-muted text-muted-foreground">
-                        {model.pill}
-                      </span>
-                    )}
-                  </div>
-                </SelectItem>
+          <PromptInputModelSelect value={editModel} onValueChange={onModelChange}>
+            <PromptInputModelSelectTrigger>
+              <PromptInputModelSelectValue placeholder="Select a model">
+                {displayName}
+              </PromptInputModelSelectValue>
+            </PromptInputModelSelectTrigger>
+            <PromptInputModelSelectContent>
+              {/* Featured Models */}
+              {organizedModels.featuredModels.map((model) => (
+                <ModelSelectItem key={model.id} model={model} />
               ))}
-            </SelectContent>
-          </Select>
+
+              {/* More Models Section */}
+              {organizedModels.otherModels.length > 0 && (
+                <>
+                  {organizedModels.featuredModels.length > 0 && (
+                    <div className="my-1 h-px bg-border" />
+                  )}
+                  <div className="px-3 py-2.5 text-sm font-medium text-muted-foreground">
+                    More Models
+                  </div>
+                  {organizedModels.otherModels.map((model) => (
+                    <ModelSelectItem key={model.id} model={model} />
+                  ))}
+                </>
+              )}
+            </PromptInputModelSelectContent>
+          </PromptInputModelSelect>
         ) : (
           <p className="text-xs text-muted-foreground">
-            {modelConfig?.displayName || "Default"}
+            {displayName || "Default"}
           </p>
         )}
       </div>
