@@ -104,12 +104,10 @@ import {
 } from "./tools/files/UpdateFileResult";
 import GoogleSheetsLoginResult from "./tools/googleSheets/GoogleSheetsLoginResult";
 import GoogleSheetsLoginLoading from "./tools/googleSheets/GoogleSheetsLoginLoading";
+import { TextContent } from "@modelcontextprotocol/sdk/types.js";
 
 type CallToolResult = {
-  content: {
-    type: "text";
-    text: string;
-  }[];
+  content: TextContent[];
 };
 
 export function getToolCallComponent(part: ToolUIPart) {
