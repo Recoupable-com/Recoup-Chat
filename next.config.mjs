@@ -4,7 +4,7 @@
 const nextConfig = {
   reactStrictMode: true,
   transpilePackages: ["geist"],
-  serverExternalPackages: ["@browserbasehq/stagehand", "playwright"],
+  serverExternalPackages: ["@browserbasehq/stagehand", "playwright", "tape"],
   experimental: {
     turbo: {
       resolveAlias: {
