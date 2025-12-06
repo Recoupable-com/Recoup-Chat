@@ -15,7 +15,7 @@ export default function GetArtistSocialsResult({
   title?: string;
 }) {
   console.log("result", result);
-  if (!result.success) {
+  if (result.status !== "success") {
     return (
       <div className="flex items-center gap-2 p-3 bg-destructive/10 text-destructive rounded-md">
         <span>{errorText ?? "Artist socials failed"}</span>
