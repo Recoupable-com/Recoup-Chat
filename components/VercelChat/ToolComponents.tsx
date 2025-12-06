@@ -105,6 +105,13 @@ import {
 import GoogleSheetsLoginResult from "./tools/googleSheets/GoogleSheetsLoginResult";
 import GoogleSheetsLoginLoading from "./tools/googleSheets/GoogleSheetsLoginLoading";
 
+type CallToolResult = {
+  content: {
+    type: "text";
+    text: string;
+  }[];
+};
+
 export function getToolCallComponent(part: ToolUIPart) {
   const { toolCallId } = part as ToolUIPart;
   const toolName = getToolOrDynamicToolName(part);
@@ -465,7 +472,11 @@ export function getToolResultComponent(part: ToolUIPart) {
     return (
       <div key={toolCallId}>
         <GetArtistSocialsResult
-          result={JSON.parse(result as string) as ArtistSocialsResultType}
+          result={
+            JSON.parse(
+              (result as CallToolResult).content[0].text
+            ) as ArtistSocialsResultType
+          }
         />
       </div>
     );
