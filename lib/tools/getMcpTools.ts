@@ -33,7 +33,6 @@ import createSegments from "./createSegments";
 import createReleaseReport from "./createReleaseReport";
 import tasksTools from "./tasks";
 import youtubeTools from "./youtube";
-import getLocalTime from "./getLocalTime";
 import catalogTools from "./catalogs";
 import filesTools from "./files";
 import browserTools from "./browser";
@@ -71,7 +70,6 @@ export function getMcpTools(): ToolSet {
     send_email: sendEmailTool,
     get_social_fans: getSocialFans,
     create_release_report: createReleaseReport,
-    get_local_time: getLocalTime,
     ...tasksTools,
     ...filesTools,
     ...imageTools,
