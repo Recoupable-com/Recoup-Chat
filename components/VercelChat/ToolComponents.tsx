@@ -17,7 +17,7 @@ import {
   SpotifySearchResponse,
 } from "@/types/spotify";
 // import { ArtistSocialsResultType } from "@/types/ArtistSocials";
-import { ToolUIPart, getToolName } from "ai";
+import { ToolUIPart, getToolOrDynamicToolName } from "ai";
 import UpdateArtistInfoSuccess from "./tools/UpdateArtistInfoSuccess";
 import { UpdateAccountInfoResult } from "@/lib/tools/updateAccountInfo";
 import UpdateArtistSocialsSuccess from "./tools/UpdateArtistSocialsSuccess";
@@ -107,7 +107,7 @@ import GoogleSheetsLoginLoading from "./tools/googleSheets/GoogleSheetsLoginLoad
 
 export function getToolCallComponent(part: ToolUIPart) {
   const { toolCallId } = part as ToolUIPart;
-  const toolName = getToolName(part);
+  const toolName = getToolOrDynamicToolName(part);
   const isSearchWebTool = toolName === "search_web";
 
   if (toolName === "generate_image" || toolName === "edit_image") {
@@ -295,7 +295,7 @@ export function getToolCallComponent(part: ToolUIPart) {
 
 export function getToolResultComponent(part: ToolUIPart) {
   const { toolCallId, output: result } = part as ToolUIPart;
-  const toolName = getToolName(part);
+  const toolName = getToolOrDynamicToolName(part);
   const isSearchWebTool = toolName === "search_web";
   const isDeepResearchTool = toolName === "web_deep_research";
 
