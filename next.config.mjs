@@ -10,26 +10,7 @@ const nextConfig = {
     "pino",
     "pino-pretty",
     "thread-stream",
-    "shiki",
-    "shiki/wasm",
   ],
-  experimental: {
-    turbo: {
-      resolveAlias: {
-        // Prevent Turbopack from trying to process test files
-        "thread-stream/test": false,
-      },
-      resolveExtensions: [
-        ".js",
-        ".jsx",
-        ".ts",
-        ".tsx",
-        ".json",
-        ".mjs",
-        ".cjs",
-      ],
-    },
-  },
   images: {
     remotePatterns: [
       {
