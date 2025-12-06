@@ -1,14 +1,5 @@
 import { Account, toAccount } from "viem/accounts";
-import { CdpClient } from "@coinbase/cdp-sdk";
-
-let cdp: CdpClient | null = null;
-
-function getCdpClient() {
-  if (!cdp) {
-    cdp = new CdpClient();
-  }
-  return cdp;
-}
+import { getCdpClient } from "./getCdpClient";
 
 export async function getOrCreatePurchaserAccount(): Promise<Account> {
   const cdpClient = getCdpClient();
