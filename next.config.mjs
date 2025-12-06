@@ -4,13 +4,17 @@
 const nextConfig = {
   reactStrictMode: true,
   transpilePackages: ["geist"],
-  serverExternalPackages: [
-    "@browserbasehq/stagehand",
-    "playwright",
-    "pino",
-    "pino-pretty",
-    "thread-stream",
-  ],
+  serverExternalPackages: ["@browserbasehq/stagehand", "playwright"],
+  experimental: {
+    turbo: {
+      resolveAlias: {
+        // Prevent Turbopack from processing test files
+        "./test": false,
+        "../test": false,
+        "thread-stream/test": false,
+      },
+    },
+  },
   images: {
     remotePatterns: [
       {
