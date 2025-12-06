@@ -17,7 +17,12 @@ import {
   SpotifySearchResponse,
 } from "@/types/spotify";
 import { ArtistSocialsResultType } from "@/types/ArtistSocials";
-import { ToolUIPart, getToolOrDynamicToolName } from "ai";
+import {
+  ToolUIPart,
+  getToolOrDynamicToolName,
+  isToolOrDynamicToolUIPart,
+  DynamicToolUIPart,
+} from "ai";
 import UpdateArtistInfoSuccess from "./tools/UpdateArtistInfoSuccess";
 import { UpdateAccountInfoResult } from "@/lib/tools/updateAccountInfo";
 import UpdateArtistSocialsSuccess from "./tools/UpdateArtistSocialsSuccess";
@@ -301,7 +306,11 @@ export function getToolCallComponent(part: ToolUIPart) {
 }
 
 export function getToolResultComponent(part: ToolUIPart) {
-  const { toolCallId, output: result } = part as ToolUIPart;
+  const { toolCallId, output, type } = part as ToolUIPart | DynamicToolUIPart;
+  const isMcp = type === "dynamic-tool";
+  const result = isMcp
+    ? JSON.parse((output as CallToolResult).content[0].text)
+    : output;
   const toolName = getToolOrDynamicToolName(part);
   const isSearchWebTool = toolName === "search_web";
   const isDeepResearchTool = toolName === "web_deep_research";
@@ -471,13 +480,7 @@ export function getToolResultComponent(part: ToolUIPart) {
   } else if (toolName === "get_artist_socials") {
     return (
       <div key={toolCallId}>
-        <GetArtistSocialsResult
-          result={
-            JSON.parse(
-              (result as CallToolResult).content[0].text
-            ) as ArtistSocialsResultType
-          }
-        />
+        <GetArtistSocialsResult result={result as ArtistSocialsResultType} />
       </div>
     );
   } else if (toolName === "get_spotify_artist_albums") {
