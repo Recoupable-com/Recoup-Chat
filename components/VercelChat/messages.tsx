@@ -32,6 +32,7 @@ interface MessagesProps {
 
 const MessagesComponent = ({ children }: MessagesProps) => {
   const { messages, status } = useVercelChatContext();
+  console.log("messages", messages);
   // Conversation component handles scrolling automatically
   // No need for manual scroll logic
 
