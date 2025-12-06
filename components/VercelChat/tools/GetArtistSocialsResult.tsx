@@ -14,6 +14,7 @@ export default function GetArtistSocialsResult({
   icon?: ReactNode;
   title?: string;
 }) {
+  console.log("result", result);
   if (!result.success) {
     return (
       <div className="flex items-center gap-2 p-3 bg-destructive/10 text-destructive rounded-md">
