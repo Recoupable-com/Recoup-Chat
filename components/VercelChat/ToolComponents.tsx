@@ -16,7 +16,7 @@ import {
   SpotifyArtistTopTracksResultType,
   SpotifySearchResponse,
 } from "@/types/spotify";
-import { ArtistSocialsResultType } from "@/types/ArtistSocials";
+// import { ArtistSocialsResultType } from "@/types/ArtistSocials";
 import { ToolUIPart, getToolName } from "ai";
 import UpdateArtistInfoSuccess from "./tools/UpdateArtistInfoSuccess";
 import { UpdateAccountInfoResult } from "@/lib/tools/updateAccountInfo";
@@ -71,7 +71,7 @@ import SearchApiResult from "./tools/SearchWeb/SearchApiResult";
 import SearchWebProgress from "./tools/SearchWeb/SearchWebProgress";
 import WebDeepResearchProgress from "./tools/SearchWeb/WebDeepResearchProgress";
 import SpotifyDeepResearchResult from "./tools/SpotifyDeepResearchResult";
-import GetArtistSocialsResult from "./tools/GetArtistSocialsResult";
+// import GetArtistSocialsResult from "./tools/GetArtistSocialsResult";
 import GetArtistSocialsSkeleton from "./tools/GetArtistSocialsSkeleton";
 import GetSpotifyArtistAlbumsResult from "./tools/GetSpotifyArtistAlbumsResult";
 import { SpotifyArtistAlbumsResultUIType } from "@/types/spotify";
@@ -461,12 +461,12 @@ export function getToolResultComponent(part: ToolUIPart) {
         />
       </div>
     );
-  } else if (toolName === "get_artist_socials") {
-    return (
-      <div key={toolCallId}>
-        <GetArtistSocialsResult result={result as ArtistSocialsResultType} />
-      </div>
-    );
+    // } else if (toolName === "get_artist_socials") {
+    //   return (
+    //     <div key={toolCallId}>
+    //       <GetArtistSocialsResult result={result as ArtistSocialsResultType} />
+    //     </div>
+    //   );
   } else if (toolName === "get_spotify_artist_albums") {
     return (
       <div key={toolCallId}>
