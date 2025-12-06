@@ -5,7 +5,6 @@ import createTxtFile from "./createTxtFile";
 import getSegmentFans from "./getSegmentFans";
 import contactTeam from "./contactTeam";
 import getArtistSegments from "./getArtistSegments";
-import getArtistSocials from "./getArtistSocials";
 import getSocialPosts from "./getSocialPosts";
 import getPostComments from "./getPostComments";
 import { searchWeb, webDeepResearch } from "./searchWeb";
@@ -46,7 +45,6 @@ export function getMcpTools(): ToolSet {
     create_segments: createSegments,
     get_artist_segments: getArtistSegments,
     get_segment_fans: getSegmentFans,
-    get_artist_socials: getArtistSocials,
     get_social_posts: getSocialPosts,
     get_post_comments: getPostComments,
     search_web: searchWeb,
