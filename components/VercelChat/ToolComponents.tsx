@@ -17,7 +17,7 @@ import {
   SpotifySearchResponse,
 } from "@/types/spotify";
 import { ArtistSocialsResultType } from "@/types/ArtistSocials";
-import { ToolUIPart, getToolName } from "ai";
+import { ToolUIPart, getToolOrDynamicToolName, DynamicToolUIPart } from "ai";
 import UpdateArtistInfoSuccess from "./tools/UpdateArtistInfoSuccess";
 import { UpdateAccountInfoResult } from "@/lib/tools/updateAccountInfo";
 import UpdateArtistSocialsSuccess from "./tools/UpdateArtistSocialsSuccess";
@@ -104,10 +104,15 @@ import {
 } from "./tools/files/UpdateFileResult";
 import GoogleSheetsLoginResult from "./tools/googleSheets/GoogleSheetsLoginResult";
 import GoogleSheetsLoginLoading from "./tools/googleSheets/GoogleSheetsLoginLoading";
+import { TextContent } from "@modelcontextprotocol/sdk/types.js";
+
+type CallToolResult = {
+  content: TextContent[];
+};
 
 export function getToolCallComponent(part: ToolUIPart) {
   const { toolCallId } = part as ToolUIPart;
-  const toolName = getToolName(part);
+  const toolName = getToolOrDynamicToolName(part);
   const isSearchWebTool = toolName === "search_web";
 
   if (toolName === "generate_image" || toolName === "edit_image") {
@@ -293,9 +298,13 @@ export function getToolCallComponent(part: ToolUIPart) {
   );
 }
 
-export function getToolResultComponent(part: ToolUIPart) {
-  const { toolCallId, output: result } = part as ToolUIPart;
-  const toolName = getToolName(part);
+export function getToolResultComponent(part: ToolUIPart | DynamicToolUIPart) {
+  const { toolCallId, output, type } = part;
+  const isMcp = type === "dynamic-tool";
+  const result = isMcp
+    ? JSON.parse((output as CallToolResult).content[0].text)
+    : output;
+  const toolName = getToolOrDynamicToolName(part);
   const isSearchWebTool = toolName === "search_web";
   const isDeepResearchTool = toolName === "web_deep_research";
 

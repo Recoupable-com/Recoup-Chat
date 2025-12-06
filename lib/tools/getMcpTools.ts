@@ -5,7 +5,6 @@ import createTxtFile from "./createTxtFile";
 import getSegmentFans from "./getSegmentFans";
 import contactTeam from "./contactTeam";
 import getArtistSegments from "./getArtistSegments";
-import getArtistSocials from "./getArtistSocials";
 import getSocialPosts from "./getSocialPosts";
 import getPostComments from "./getPostComments";
 import { searchWeb, webDeepResearch } from "./searchWeb";
@@ -34,7 +33,6 @@ import createSegments from "./createSegments";
 import createReleaseReport from "./createReleaseReport";
 import tasksTools from "./tasks";
 import youtubeTools from "./youtube";
-import getLocalTime from "./getLocalTime";
 import catalogTools from "./catalogs";
 import filesTools from "./files";
 import browserTools from "./browser";
@@ -46,7 +44,6 @@ export function getMcpTools(): ToolSet {
     create_segments: createSegments,
     get_artist_segments: getArtistSegments,
     get_segment_fans: getSegmentFans,
-    get_artist_socials: getArtistSocials,
     get_social_posts: getSocialPosts,
     get_post_comments: getPostComments,
     search_web: searchWeb,
@@ -73,7 +70,6 @@ export function getMcpTools(): ToolSet {
     send_email: sendEmailTool,
     get_social_fans: getSocialFans,
     create_release_report: createReleaseReport,
-    get_local_time: getLocalTime,
     ...tasksTools,
     ...filesTools,
     ...imageTools,
