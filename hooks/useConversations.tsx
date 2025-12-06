@@ -9,9 +9,15 @@ import { ArtistAgent } from "@/lib/supabase/getArtistAgents";
 
 const useConversations = () => {
   const { userData } = useUserProvider();
-  const { selectedArtist } = useArtistProvider();
+  const { selectedArtist, artists } = useArtistProvider();
   const { agents } = useArtistAgents();
   const queryClient = useQueryClient();
+
+  // Get artist IDs in the current org/view for filtering
+  const orgArtistIds = useMemo(
+    () => new Set(artists.map((a) => a.account_id)),
+    [artists]
+  );
 
   const accountId = userData?.id;
   const queryKey = useMemo(
@@ -38,16 +44,25 @@ const useConversations = () => {
   }, [fetchedConversations, agents]);
 
   const conversations = useMemo(() => {
-    // If no artist selected, show ALL conversations
-    if (!selectedArtist) {
-      return combinedConversations;
-    }
     // If artist selected, filter to only that artist's conversations
+    if (selectedArtist) {
     return combinedConversations.filter(
       (item: Conversation | ArtistAgent) =>
         "artist_id" in item && item.artist_id === selectedArtist.account_id
     );
-  }, [selectedArtist, combinedConversations]);
+    }
+
+    // No artist selected - filter to artists in the current org view
+    if (orgArtistIds.size > 0) {
+      return combinedConversations.filter(
+        (item: Conversation | ArtistAgent) =>
+          "artist_id" in item && orgArtistIds.has(item.artist_id)
+      );
+    }
+
+    // Fallback: no artists in org (shouldn't happen normally)
+    return combinedConversations;
+  }, [selectedArtist, combinedConversations, orgArtistIds]);
 
   // Optimistic update helpers for creating a new chat room
   const addOptimisticConversation = (

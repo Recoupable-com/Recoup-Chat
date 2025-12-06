@@ -22,6 +22,7 @@ export interface ChatRequest {
   excludeTools?: string[];
   artistInstruction?: string;
   knowledgeBaseText?: string;
+  organizationId?: string | null;
 }
 
 export interface RoutingDecision {

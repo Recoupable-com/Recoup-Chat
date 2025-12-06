@@ -1,9 +1,11 @@
 import supabase from "@/lib/supabase/serverClient";
 import type { Tables } from "@/types/database.types";
 
-/** Row type with joined organization account */
+/** Row type with joined organization account and its info */
 export type AccountOrganization = Tables<"account_organization_ids"> & {
-  organization: Tables<"accounts"> | null;
+  organization: (Tables<"accounts"> & {
+    account_info: Tables<"account_info">[] | null;
+  }) | null;
 };
 
 /**
@@ -18,7 +20,10 @@ export async function getAccountOrganizations(
     .from("account_organization_ids")
     .select(`
       *,
-      organization:accounts!account_organization_ids_organization_id_fkey ( * )
+      organization:accounts!account_organization_ids_organization_id_fkey (
+        *,
+        account_info ( * )
+      )
     `)
     .eq("account_id", accountId);
 

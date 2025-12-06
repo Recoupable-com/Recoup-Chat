@@ -3,18 +3,21 @@ import createAccountInfo from "./artist/createAccountInfo";
 import getArtistById from "./artist/getArtistById";
 import associateArtistWithAccount from "./artist/associateArtistWithAccount";
 import insertAccountWorkspaceId from "./account_workspace_ids/insertAccountWorkspaceId";
+import { addArtistToOrganization } from "./artist_organization_ids/addArtistToOrganization";
 
 /**
  * Create a new account in the database and associate it with an owner account
  * @param name Name of the account to create
  * @param account_id ID of the owner account that will have access
  * @param isWorkspace If true, creates a workspace; if false, creates an artist (default)
+ * @param organizationId Optional organization ID to link the new artist to
  * @returns Created account object or null if creation failed
  */
 export async function createArtistInDb(
   name: string,
   account_id: string,
-  isWorkspace: boolean = false
+  isWorkspace: boolean = false,
+  organizationId?: string | null
 ) {
   try {
     // Step 1: Create the account (no account_type needed)
@@ -36,8 +39,13 @@ export async function createArtistInDb(
       if (!workspaceLinked) return null;
     } else {
       // For artists, add to account_artist_ids
-    const associated = await associateArtistWithAccount(account_id, account.id);
-    if (!associated) return null;
+      const associated = await associateArtistWithAccount(account_id, account.id);
+      if (!associated) return null;
+    }
+
+    // Step 5: Link to organization if provided
+    if (organizationId) {
+      await addArtistToOrganization(account.id, organizationId);
     }
 
     // Build return object by explicitly picking fields

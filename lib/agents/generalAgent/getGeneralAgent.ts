@@ -18,6 +18,7 @@ export default async function getGeneralAgent(
     knowledgeBaseText,
     timezone,
     model: bodyModel,
+    organizationId,
   } = body;
   const baseSystemPrompt = await getSystemPrompt({
     roomId: body.roomId,
@@ -27,6 +28,7 @@ export default async function getGeneralAgent(
     artistInstruction,
     knowledgeBaseText,
     timezone,
+    organizationId,
   });
   const imageUrls = extractImageUrlsFromMessages(messages);
   const instructions = buildSystemPromptWithImages(baseSystemPrompt, imageUrls);

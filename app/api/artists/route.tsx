@@ -3,6 +3,7 @@ import getArtists from "@/lib/artists/getArtists";
 
 export async function GET(req: NextRequest) {
   const accountId = req.nextUrl.searchParams.get("accountId");
+  const orgId = req.nextUrl.searchParams.get("orgId");
 
   try {
     if (!accountId) {
@@ -12,7 +13,13 @@ export async function GET(req: NextRequest) {
       );
     }
 
-    const artists = await getArtists(accountId);
+    // Parse orgId: "null" string means personal only, undefined means all
+    const parsedOrgId = orgId === "null" ? null : orgId || undefined;
+
+    const artists = await getArtists({
+      accountId,
+      orgId: parsedOrgId,
+    });
     return Response.json({ artists }, { status: 200 });
   } catch (error) {
     console.error(error);

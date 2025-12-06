@@ -2,6 +2,7 @@ import getFormattedArtist from "@/lib/getFormattedArtist";
 import supabase from "@/lib/supabase/serverClient";
 import updateArtistProfile from "@/lib/supabase/artist/updateArtistProfile";
 import updateArtistSocials from "@/lib/supabase/updateArtistSocials";
+import { addArtistToOrganization } from "@/lib/supabase/artist_organization_ids/addArtistToOrganization";
 import { NextRequest } from "next/server";
 
 export async function POST(req: NextRequest) {
@@ -14,8 +15,12 @@ export async function POST(req: NextRequest) {
   const label = body.label;
   const instruction = body.instruction;
   const knowledges = body.knowledges;
+  const organizationId = body.organizationId; // Optional: link new artist to org
 
   try {
+    // Track if this is a new artist creation (artistId is empty)
+    const isNewArtist = !artistId;
+
     const { account_id: artistAccountId } = await updateArtistProfile(
       artistId,
       email,
@@ -27,6 +32,11 @@ export async function POST(req: NextRequest) {
     );
 
     await updateArtistSocials(artistAccountId as string, profileUrls);
+
+    // Link new artist to organization if organizationId provided
+    if (isNewArtist && organizationId && artistAccountId) {
+      await addArtistToOrganization(artistAccountId as string, organizationId);
+    }
     const { data: account } = await supabase
       .from("accounts")
       .select("*, account_info(*), account_socials(*, social:socials(*))")
