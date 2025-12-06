@@ -1,0 +1,2 @@
+patchedDependencies:
+  thread-stream@0.15.2: patches/thread-stream@0.15.2.patch

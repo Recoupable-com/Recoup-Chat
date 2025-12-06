@@ -1,0 +1,99 @@
+diff --git a/LICENSE b/LICENSE
+deleted file mode 100644
+index 2c1a038fd1e9b4fe7f936bdf9509406236d6a767..0000000000000000000000000000000000000000
+diff --git a/README.md b/README.md
+deleted file mode 100644
+index 1a67c2900ab325308bb3a005bb609f9723995c6f..0000000000000000000000000000000000000000
+diff --git a/bench.js b/bench.js
+deleted file mode 100644
+index 9f0aa38b2f32f6634104a704f8fee161c141d26b..0000000000000000000000000000000000000000
+diff --git a/test/base.test.js b/test/base.test.js
+deleted file mode 100644
+index e4a656a8ffb3f976332a7923895be08ae359785f..0000000000000000000000000000000000000000
+diff --git a/test/bench.test.js b/test/bench.test.js
+deleted file mode 100644
+index 7e90d2cd951426d4f05fbbb6f8b41aa7b2081211..0000000000000000000000000000000000000000
+diff --git a/test/bundlers.test.js b/test/bundlers.test.js
+deleted file mode 100644
+index d44468de13da7126678c4e425191f7a44c59bce0..0000000000000000000000000000000000000000
+diff --git a/test/close-on-gc.js b/test/close-on-gc.js
+deleted file mode 100644
+index d84baa2ec1b2acc94e36fffd0d1f089cb5385394..0000000000000000000000000000000000000000
+diff --git a/test/commonjs-fallback.test.js b/test/commonjs-fallback.test.js
+deleted file mode 100644
+index 8dd0e9254783a5a19cf22fb1f356f2cec8505dc2..0000000000000000000000000000000000000000
+diff --git a/test/create-and-exit.js b/test/create-and-exit.js
+deleted file mode 100644
+index d6f12fa9c01b978cba4e290e4b4bc1dbaee8b21b..0000000000000000000000000000000000000000
+diff --git a/test/custom-worker.js b/test/custom-worker.js
+deleted file mode 100644
+index e78340cdf3043a8969d497142e80ea45c4e1a44a..0000000000000000000000000000000000000000
+diff --git a/test/dir with spaces/test-package.zip b/test/dir with spaces/test-package.zip
+deleted file mode 100644
+index 7a2aee81814cf39508ff83e00261e7663c56b57d..0000000000000000000000000000000000000000
+diff --git a/test/end.test.js b/test/end.test.js
+deleted file mode 100644
+index d96a94190bc6b984a6f650b0307caedc115a4467..0000000000000000000000000000000000000000
+diff --git a/test/error.js b/test/error.js
+deleted file mode 100644
+index 0c7d598f17981a8712513dab55ea81d5ff557ede..0000000000000000000000000000000000000000
+diff --git a/test/esm.test.mjs b/test/esm.test.mjs
+deleted file mode 100644
+index 364bf10bb6fcf16302e2309f6a11c2dbaa4cdb16..0000000000000000000000000000000000000000
+diff --git a/test/exit.js b/test/exit.js
+deleted file mode 100644
+index 673ff2aa2ed3aef42e55e7d93ac3183830a90884..0000000000000000000000000000000000000000
+diff --git a/test/helper.d.ts b/test/helper.d.ts
+deleted file mode 100644
+index 7c00f2f0da96f38c40de57b73c69cbe86e94f6c1..0000000000000000000000000000000000000000
+diff --git a/test/helper.js b/test/helper.js
+deleted file mode 100644
+index 31c5ec3345ad20831753768c2cbe5ebc6e51e1be..0000000000000000000000000000000000000000
+diff --git a/test/indexes.js b/test/indexes.js
+deleted file mode 100644
+index e70f06b29d40a445bcb2d2f104ab1bc5769fd00c..0000000000000000000000000000000000000000
+diff --git a/test/multibyte-chars.test.mjs b/test/multibyte-chars.test.mjs
+deleted file mode 100644
+index dff32dd818fe6b43016ead1402d5c9e0bfbe8f92..0000000000000000000000000000000000000000
+diff --git a/test/port.js b/test/port.js
+deleted file mode 100644
+index 8c73b636222e797d2d820a0b391a3071ce5eb102..0000000000000000000000000000000000000000
+diff --git a/test/string-limit-2.test.js b/test/string-limit-2.test.js
+deleted file mode 100644
+index 213c070e413fbf1cb623bc3c518cf5d9a6c2ead8..0000000000000000000000000000000000000000
+diff --git a/test/string-limit.test.js b/test/string-limit.test.js
+deleted file mode 100644
+index fd78f541c0cac88c2358c5478fcb64e3014455eb..0000000000000000000000000000000000000000
+diff --git a/test/thread-management.test.js b/test/thread-management.test.js
+deleted file mode 100644
+index 0c87208e9420e6186f9333e98ef8a95b21a2e072..0000000000000000000000000000000000000000
+diff --git a/test/to-file-on-destroy.js b/test/to-file-on-destroy.js
+deleted file mode 100644
+index 7bfc5a8b87f9dc342572393e7828569c7763cd12..0000000000000000000000000000000000000000
+diff --git a/test/to-file-on-final.js b/test/to-file-on-final.js
+deleted file mode 100644
+index 4cefdeb95f8cab0840ede04bd5e82d62996ad06c..0000000000000000000000000000000000000000
+diff --git a/test/to-file.js b/test/to-file.js
+deleted file mode 100644
+index 9ceb636efb194ec10e08127bbf03169a8c07b934..0000000000000000000000000000000000000000
+diff --git a/test/to-file.mjs b/test/to-file.mjs
+deleted file mode 100644
+index 2fcfe2d1495b869ad7861d87ef8253a7b67eee11..0000000000000000000000000000000000000000
+diff --git a/test/transpiled.test.js b/test/transpiled.test.js
+deleted file mode 100644
+index 047486f421944bb2c2d213c1100f2f5ddbca7005..0000000000000000000000000000000000000000
+diff --git a/test/ts/to-file.ts b/test/ts/to-file.ts
+deleted file mode 100644
+index da132eb56a672554ee7142c6c8e5ef37c4afc243..0000000000000000000000000000000000000000
+diff --git a/test/ts/transpile.sh b/test/ts/transpile.sh
+deleted file mode 100755
+index 890b40d65ed467c32dc3fcbebb4d4be22d9ebdd5..0000000000000000000000000000000000000000
+diff --git a/test/ts.test.ts b/test/ts.test.ts
+deleted file mode 100644
+index 70113c5cbe8306ddf353121fbfcc5453d7a8779f..0000000000000000000000000000000000000000
+diff --git a/test/uncaughtException.js b/test/uncaughtException.js
+deleted file mode 100644
+index 7f01e2f444a5e722c0e79605750280fb2b750f9a..0000000000000000000000000000000000000000
+diff --git a/test/unhandledRejection.js b/test/unhandledRejection.js
+deleted file mode 100644
+index d7cc6c239c4c0591b6e5fa88f4c5c79cf1725b4a..0000000000000000000000000000000000000000
