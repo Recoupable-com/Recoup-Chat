@@ -17,12 +17,7 @@ import {
   SpotifySearchResponse,
 } from "@/types/spotify";
 import { ArtistSocialsResultType } from "@/types/ArtistSocials";
-import {
-  ToolUIPart,
-  getToolOrDynamicToolName,
-  isToolOrDynamicToolUIPart,
-  DynamicToolUIPart,
-} from "ai";
+import { ToolUIPart, getToolOrDynamicToolName, DynamicToolUIPart } from "ai";
 import UpdateArtistInfoSuccess from "./tools/UpdateArtistInfoSuccess";
 import { UpdateAccountInfoResult } from "@/lib/tools/updateAccountInfo";
 import UpdateArtistSocialsSuccess from "./tools/UpdateArtistSocialsSuccess";
@@ -305,8 +300,8 @@ export function getToolCallComponent(part: ToolUIPart) {
   );
 }
 
-export function getToolResultComponent(part: ToolUIPart) {
-  const { toolCallId, output, type } = part as ToolUIPart | DynamicToolUIPart;
+export function getToolResultComponent(part: ToolUIPart | DynamicToolUIPart) {
+  const { toolCallId, output, type } = part;
   const isMcp = type === "dynamic-tool";
   const result = isMcp
     ? JSON.parse((output as CallToolResult).content[0].text)
