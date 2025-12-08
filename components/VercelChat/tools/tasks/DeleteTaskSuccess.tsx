@@ -1,6 +1,6 @@
 import React from "react";
 import { Trash2, CheckCircle } from "lucide-react";
-import { DeleteTaskResult } from "@/lib/tools/tasks/deleteTask";
+import { DeleteTaskResult } from "@/components/VercelChat/types";
 import TaskCard from "./TaskCard";
 import TaskDetailsDialog from "../../dialogs/tasks/TaskDetailsDialog";
 

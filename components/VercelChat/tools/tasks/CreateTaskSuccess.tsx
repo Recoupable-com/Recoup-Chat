@@ -1,5 +1,5 @@
 import React from "react";
-import { CreateTaskResult } from "@/lib/tools/tasks/createTask";
+import { CreateTaskResult } from "@/components/VercelChat/types";
 import TaskCard from "./TaskCard";
 import TaskError from "./TaskError";
 import { CheckCircle, Calendar } from "lucide-react";

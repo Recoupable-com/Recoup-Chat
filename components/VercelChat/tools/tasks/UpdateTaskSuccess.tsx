@@ -1,8 +1,8 @@
 import React from "react";
 import TaskCard from "./TaskCard";
 import { CheckCircle, Calendar } from "lucide-react";
-import TaskDetailsDialog from "../../dialogs/tasks/TaskDetailsDialog";
-import { UpdateTaskResult } from "@/lib/tools/tasks/updateTask";
+import TaskDetailsDialog from "@/components/VercelChat/dialogs/tasks/TaskDetailsDialog";
+import { UpdateTaskResult } from "@/components/VercelChat/types";
 import TaskError from "./TaskError";
 
 const UpdateTaskSuccess = ({ result }: { result: UpdateTaskResult }) => {
