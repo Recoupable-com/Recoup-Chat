@@ -1,6 +1,10 @@
 import { ImageSkeleton } from "@/components/VercelChat/tools/image/ImageSkeleton";
 import { ImageResult } from "@/components/VercelChat/tools/image/ImageResult";
-import { ImageGenerationResult } from "@/lib/tools/images/generateImage";
+import {
+  ImageGenerationResult,
+  ScheduledAction,
+  RetrieveVideoContentResult,
+} from "@/components/VercelChat/types";
 import MermaidDiagram from "@/components/VercelChat/tools/mermaid/MermaidDiagram";
 import { MermaidDiagramSkeleton } from "@/components/VercelChat/tools/mermaid/MermaidDiagramSkeleton";
 import { GenerateMermaidDiagramResult } from "@/lib/tools/generateMermaidDiagram";
@@ -17,7 +21,7 @@ import {
   SpotifySearchResponse,
 } from "@/types/spotify";
 import { ArtistSocialsResultType } from "@/types/ArtistSocials";
-import { ToolUIPart, getToolName } from "ai";
+import { ToolUIPart, getToolOrDynamicToolName, DynamicToolUIPart } from "ai";
 import UpdateArtistInfoSuccess from "./tools/UpdateArtistInfoSuccess";
 import { UpdateAccountInfoResult } from "@/lib/tools/updateAccountInfo";
 import UpdateArtistSocialsSuccess from "./tools/UpdateArtistSocialsSuccess";
@@ -79,21 +83,16 @@ import GetSpotifyArtistAlbumsSkeleton from "./tools/GetSpotifyArtistAlbumsSkelet
 import SpotifyArtistTopTracksResult from "./tools/SpotifyArtistTopTracksResult";
 import SpotifyArtistTopTracksSkeleton from "./tools/SpotifyArtistTopTracksSkeleton";
 import GetTasksSuccess from "./tools/tasks/GetTasksSuccess";
-import { GetTasksResult } from "@/lib/tools/tasks/getTasks";
 import CreateTaskSuccess from "./tools/tasks/CreateTaskSuccess";
 import TasksSkeleton from "@/components/shared/TasksSkeleton";
-import { CreateTaskResult } from "@/lib/tools/tasks/createTask";
 import GetSpotifyAlbumWithTracksResult from "./tools/GetSpotifyAlbumWithTracksResult";
 import GetSpotifyAlbumWithTracksSkeleton from "./tools/GetSpotifyAlbumWithTracksSkeleton";
 import { SpotifyAlbum } from "@/lib/tools/getSpotifyAlbum";
 import DeleteTaskSuccess from "./tools/tasks/DeleteTaskSuccess";
 import DeleteTaskSkeleton from "./tools/tasks/DeleteTaskSkeleton";
-import { DeleteTaskResult } from "@/lib/tools/tasks/deleteTask";
 import UpdateTaskSuccess from "./tools/tasks/UpdateTaskSuccess";
-import { UpdateTaskResult } from "@/lib/tools/tasks/updateTask";
 import { Sora2VideoSkeleton } from "./tools/sora2/Sora2VideoSkeleton";
 import { Sora2VideoResult } from "./tools/sora2/Sora2VideoResult";
-import { RetrieveVideoContentResult } from "@/lib/tools/sora2/retrieveVideoContent";
 import CatalogSongsSkeleton from "./tools/catalog/CatalogSongsSkeleton";
 import CatalogSongsResult, {
   CatalogSongsResult as CatalogSongsResultType,
@@ -104,10 +103,15 @@ import {
 } from "./tools/files/UpdateFileResult";
 import GoogleSheetsLoginResult from "./tools/googleSheets/GoogleSheetsLoginResult";
 import GoogleSheetsLoginLoading from "./tools/googleSheets/GoogleSheetsLoginLoading";
+import { TextContent } from "@modelcontextprotocol/sdk/types.js";
+
+type CallToolResult = {
+  content: TextContent[];
+};
 
 export function getToolCallComponent(part: ToolUIPart) {
   const { toolCallId } = part as ToolUIPart;
-  const toolName = getToolName(part);
+  const toolName = getToolOrDynamicToolName(part);
   const isSearchWebTool = toolName === "search_web";
 
   if (toolName === "generate_image" || toolName === "edit_image") {
@@ -293,9 +297,13 @@ export function getToolCallComponent(part: ToolUIPart) {
   );
 }
 
-export function getToolResultComponent(part: ToolUIPart) {
-  const { toolCallId, output: result } = part as ToolUIPart;
-  const toolName = getToolName(part);
+export function getToolResultComponent(part: ToolUIPart | DynamicToolUIPart) {
+  const { toolCallId, output, type } = part;
+  const isMcp = type === "dynamic-tool";
+  const result = isMcp
+    ? JSON.parse((output as CallToolResult).content[0].text)
+    : output;
+  const toolName = getToolOrDynamicToolName(part);
   const isSearchWebTool = toolName === "search_web";
   const isDeepResearchTool = toolName === "web_deep_research";
 
@@ -486,13 +494,13 @@ export function getToolResultComponent(part: ToolUIPart) {
   } else if (toolName === "get_tasks") {
     return (
       <div key={toolCallId}>
-        <GetTasksSuccess result={result as GetTasksResult} />
+        <GetTasksSuccess result={result as ScheduledAction[]} />
       </div>
     );
   } else if (toolName === "create_task") {
     return (
       <div key={toolCallId}>
-        <CreateTaskSuccess result={result as CreateTaskResult} />
+        <CreateTaskSuccess result={result as ScheduledAction} />
       </div>
     );
   } else if (toolName === "get_spotify_album") {
@@ -504,13 +512,13 @@ export function getToolResultComponent(part: ToolUIPart) {
   } else if (toolName === "delete_task") {
     return (
       <div key={toolCallId}>
-        <DeleteTaskSuccess result={result as DeleteTaskResult} />
+        <DeleteTaskSuccess result={result as ScheduledAction} />
       </div>
     );
   } else if (toolName === "update_task") {
     return (
       <div key={toolCallId}>
-        <UpdateTaskSuccess result={result as UpdateTaskResult} />
+        <UpdateTaskSuccess result={result as ScheduledAction} />
       </div>
     );
   } else if (toolName === "retrieve_sora_2_video_content") {

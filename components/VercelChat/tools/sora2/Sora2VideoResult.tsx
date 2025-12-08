@@ -1,4 +1,4 @@
-import { RetrieveVideoContentResult } from "@/lib/tools/sora2/retrieveVideoContent";
+import { RetrieveVideoContentResult } from "@/components/VercelChat/types";
 import { Download, Video } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useState } from "react";

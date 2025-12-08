@@ -5,7 +5,6 @@ import { extractImageUrlsFromMessages } from "@/lib/chat/extractImageUrlsFromMes
 import { buildSystemPromptWithImages } from "@/lib/chat/buildSystemPromptWithImages";
 import { getSystemPrompt } from "@/lib/prompts/getSystemPrompt";
 import { setupToolsForRequest } from "@/lib/chat/setupToolsForRequest";
-import { getGoogleSheetsTools } from "@/lib/agents/googleSheetsAgent";
 
 export default async function getGeneralAgent(
   body: ChatRequest
@@ -18,7 +17,6 @@ export default async function getGeneralAgent(
     artistInstruction,
     knowledgeBaseText,
     timezone,
-    excludeTools,
     model: bodyModel,
     organizationId,
   } = body;
@@ -39,9 +37,7 @@ export default async function getGeneralAgent(
   const isDefaultModel = !bodyModel || isNanoBananaModel;
 
   // Build General Agent
-  const recoupTools = setupToolsForRequest(excludeTools);
-  const googleSheetsTools = await getGoogleSheetsTools(body);
-  const tools = { ...recoupTools, ...googleSheetsTools };
+  const tools = await setupToolsForRequest(body);
   const model = isDefaultModel ? DEFAULT_MODEL : bodyModel;
   const stopWhen = stepCountIs(111);
 
