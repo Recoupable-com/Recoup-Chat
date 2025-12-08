@@ -1,5 +1,5 @@
 import { NextRequest } from "next/server";
-import getAccountById from "@/lib/supabase/accounts/getAccountById";
+import { getAccountWithDetails } from "@/lib/supabase/accounts/getAccountWithDetails";
 
 export async function GET(req: NextRequest) {
   const accountId = req.nextUrl.searchParams.get("accountId");
@@ -9,26 +9,14 @@ export async function GET(req: NextRequest) {
   }
 
   try {
-    const account = await getAccountById(accountId);
-    if (!account) {
-      return Response.json({ message: "Account not found" }, { status: 404 });
-    }
-
-    const accountInfo = account.account_info?.[0];
-
-    const response = {
-      data: {
-        id: account.id,
-        name: account.name,
-        image: accountInfo?.image || "",
-        instruction: accountInfo?.instruction || "",
-      },
-    };
-
-    return Response.json(response, { status: 200 });
+    // Reuses existing getAccountWithDetails function (DRY principle)
+    const accountData = await getAccountWithDetails(accountId);
+    return Response.json({ data: accountData }, { status: 200 });
   } catch (error) {
     const message = error instanceof Error ? error.message : "failed";
-    return Response.json({ message }, { status: 400 });
+    // getAccountWithDetails throws "Account not found" if not found
+    const status = message === "Account not found" ? 404 : 400;
+    return Response.json({ message }, { status });
   }
 }
 

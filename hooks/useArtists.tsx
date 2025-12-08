@@ -87,9 +87,11 @@ const useArtists = () => {
         accountId: userData.id as string,
       });
       
-      // Pass orgId to filter: "null" for personal, org ID for specific org
-      if (selectedOrgId !== undefined) {
-        params.set("orgId", selectedOrgId === null ? "null" : selectedOrgId);
+      // Pass org filter: personal=true for personal only, orgId for specific org
+      if (selectedOrgId === null) {
+        params.set("personal", "true");
+      } else if (selectedOrgId) {
+        params.set("orgId", selectedOrgId);
       }
 
       const response = await fetch(`/api/artists?${params.toString()}`);
