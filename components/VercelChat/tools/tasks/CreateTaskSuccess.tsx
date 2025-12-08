@@ -12,8 +12,6 @@ interface CreateTaskSuccessProps {
 const CreateTaskSuccess: React.FC<CreateTaskSuccessProps> = ({
   result: task,
 }) => {
-  console.log("CreateTaskSuccess task", task);
-
   // Error state
   if (!task) {
     return (
