@@ -3,7 +3,6 @@ import { ImageResult } from "@/components/VercelChat/tools/image/ImageResult";
 import {
   ImageGenerationResult,
   ScheduledAction,
-  CreateTaskResult,
   DeleteTaskResult,
   UpdateTaskResult,
   RetrieveVideoContentResult,
@@ -503,7 +502,7 @@ export function getToolResultComponent(part: ToolUIPart | DynamicToolUIPart) {
   } else if (toolName === "create_task") {
     return (
       <div key={toolCallId}>
-        <CreateTaskSuccess result={result as CreateTaskResult} />
+        <CreateTaskSuccess result={result as ScheduledAction} />
       </div>
     );
   } else if (toolName === "get_spotify_album") {

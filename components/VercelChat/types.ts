@@ -11,12 +11,6 @@ export interface ImageGenerationResult {
 // TASKS
 export type ScheduledAction = Tables<"scheduled_actions">;
 
-export interface CreateTaskResult {
-  task: ScheduledAction;
-  message: string;
-  error?: string;
-}
-
 export interface DeleteTaskResult {
   task: ScheduledAction | null;
   message: string;

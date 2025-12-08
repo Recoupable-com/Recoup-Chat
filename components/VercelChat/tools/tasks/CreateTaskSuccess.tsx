@@ -1,23 +1,25 @@
 import React from "react";
-import { CreateTaskResult } from "@/components/VercelChat/types";
+import { ScheduledAction } from "@/components/VercelChat/types";
 import TaskCard from "./TaskCard";
 import TaskError from "./TaskError";
 import { CheckCircle, Calendar } from "lucide-react";
 import TaskDetailsDialog from "../../dialogs/tasks/TaskDetailsDialog";
 
 interface CreateTaskSuccessProps {
-  result: CreateTaskResult;
+  result: ScheduledAction;
 }
 
-const CreateTaskSuccess: React.FC<CreateTaskSuccessProps> = ({ result }) => {
-  const { task, message, error } = result;
+const CreateTaskSuccess: React.FC<CreateTaskSuccessProps> = ({
+  result: task,
+}) => {
+  console.log("CreateTaskSuccess task", task);
 
   // Error state
-  if (error) {
+  if (!task) {
     return (
       <TaskError
-        message={message}
-        error={error}
+        message="Failed to Create Task"
+        error="Failed to Create Task"
         title="Failed to Create Task"
       />
     );
