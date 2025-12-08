@@ -17,12 +17,6 @@ export interface DeleteTaskResult {
   error?: string;
 }
 
-export interface UpdateTaskResult {
-  task: ScheduledAction;
-  message: string;
-  error?: string;
-}
-
 // SORA 2
 export interface RetrieveVideoContentResult {
   success: boolean;

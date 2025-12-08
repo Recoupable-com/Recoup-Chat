@@ -4,7 +4,6 @@ import {
   ImageGenerationResult,
   ScheduledAction,
   DeleteTaskResult,
-  UpdateTaskResult,
   RetrieveVideoContentResult,
 } from "@/components/VercelChat/types";
 import MermaidDiagram from "@/components/VercelChat/tools/mermaid/MermaidDiagram";
@@ -520,7 +519,7 @@ export function getToolResultComponent(part: ToolUIPart | DynamicToolUIPart) {
   } else if (toolName === "update_task") {
     return (
       <div key={toolCallId}>
-        <UpdateTaskSuccess result={result as UpdateTaskResult} />
+        <UpdateTaskSuccess result={result as ScheduledAction} />
       </div>
     );
   } else if (toolName === "retrieve_sora_2_video_content") {

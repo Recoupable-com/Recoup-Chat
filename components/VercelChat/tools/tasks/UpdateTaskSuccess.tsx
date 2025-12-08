@@ -2,18 +2,16 @@ import React from "react";
 import TaskCard from "./TaskCard";
 import { CheckCircle, Calendar } from "lucide-react";
 import TaskDetailsDialog from "@/components/VercelChat/dialogs/tasks/TaskDetailsDialog";
-import { UpdateTaskResult } from "@/components/VercelChat/types";
+import { ScheduledAction } from "@/components/VercelChat/types";
 import TaskError from "./TaskError";
 
-const UpdateTaskSuccess = ({ result }: { result: UpdateTaskResult }) => {
-  const { task, message, error } = result;
-
+const UpdateTaskSuccess = ({ result: task }: { result: ScheduledAction }) => {
   // Error state
-  if (error) {
+  if (!task) {
     return (
       <TaskError
-        message={message}
-        error={error}
+        message="Failed to Update Task"
+        error="Failed to Update Task"
         title="Failed to Update Task"
       />
     );
