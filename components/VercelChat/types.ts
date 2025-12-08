@@ -11,12 +11,6 @@ export interface ImageGenerationResult {
 // TASKS
 export type ScheduledAction = Tables<"scheduled_actions">;
 
-export interface DeleteTaskResult {
-  task: ScheduledAction | null;
-  message: string;
-  error?: string;
-}
-
 // SORA 2
 export interface RetrieveVideoContentResult {
   success: boolean;
