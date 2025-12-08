@@ -27,7 +27,6 @@ interface CatalogSongsResultProps {
 export default function CatalogSongsResult({
   result,
 }: CatalogSongsResultProps) {
-  console.log("CatalogSongsResult result", result);
   const catalogId = result.songs?.[0]?.catalog_id;
   const {
     isUploading,
