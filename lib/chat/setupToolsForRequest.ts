@@ -31,9 +31,9 @@ export async function setupToolsForRequest(
   const mcpClientTools = await mcpClient.tools();
   const googleSheetsTools = await getGoogleSheetsTools(body);
   const allTools: ToolSet = {
-    ...localTools,
     ...mcpClientTools,
     ...googleSheetsTools,
+    ...localTools,
   };
 
   const tools = filterExcludedTools(allTools, excludeTools);

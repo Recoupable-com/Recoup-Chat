@@ -31,6 +31,7 @@ import createReleaseReport from "./createReleaseReport";
 import youtubeTools from "./youtube";
 import filesTools from "./files";
 import browserTools from "./browser";
+import getCatalogSongs from "./catalogs/getCatalogSongs";
 
 export function getMcpTools(): ToolSet {
   const tools = {
@@ -64,6 +65,7 @@ export function getMcpTools(): ToolSet {
     send_email: sendEmailTool,
     get_social_fans: getSocialFans,
     create_release_report: createReleaseReport,
+    get_catalog_songs: getCatalogSongs,
     ...filesTools,
     ...youtubeTools,
     ...browserTools,
