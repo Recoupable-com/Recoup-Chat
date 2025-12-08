@@ -52,6 +52,7 @@ export default function CatalogSongsResult({
     return hideIncomplete ? songs.filter(isCompleteSong) : songs;
   }, [displayResult.songs, hideIncomplete]);
 
+  const isSuccess = displayResult?.songs && displayResult.songs?.length > 0;
   return (
     <div className="flex flex-col gap-3 py-2">
       <InsertCatalogSongsStatus
@@ -61,21 +62,21 @@ export default function CatalogSongsResult({
       />
 
       {/* Songs Added Summary */}
-      {displayResult.success && (
+      {isSuccess && (
         <InsertCatalogSongsSummary
           totalAdded={displayResult.total_added}
           pagination={displayResult.pagination}
         />
       )}
 
-      {displayResult.success && displayResult.songs && (
+      {isSuccess && (
         <HideMissingItemsToggle
           checked={hideIncomplete}
           onCheckedChange={setHideIncomplete}
         />
       )}
 
-      {displayResult.success && displayResult.songs && (
+      {isSuccess && (
         <div className="max-h-[60vh] overflow-y-auto">
           <InsertCatalogSongsList songs={filteredSongs} />
         </div>
