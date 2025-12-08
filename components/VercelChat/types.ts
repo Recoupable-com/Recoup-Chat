@@ -2,10 +2,7 @@ import { Tables } from "@/types/database.types";
 
 // IMAGES
 export interface ImageGenerationResult {
-  success: boolean;
-  arweaveUrl: string | null;
-  message?: string;
-  error?: string;
+  imageUrl: string | null;
 }
 
 // TASKS
