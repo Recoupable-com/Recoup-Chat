@@ -3,7 +3,6 @@ import { ImageResult } from "@/components/VercelChat/tools/image/ImageResult";
 import {
   ImageGenerationResult,
   ScheduledAction,
-  DeleteTaskResult,
   RetrieveVideoContentResult,
 } from "@/components/VercelChat/types";
 import MermaidDiagram from "@/components/VercelChat/tools/mermaid/MermaidDiagram";
@@ -513,7 +512,7 @@ export function getToolResultComponent(part: ToolUIPart | DynamicToolUIPart) {
   } else if (toolName === "delete_task") {
     return (
       <div key={toolCallId}>
-        <DeleteTaskSuccess result={result as DeleteTaskResult} />
+        <DeleteTaskSuccess result={result as ScheduledAction} />
       </div>
     );
   } else if (toolName === "update_task") {
