@@ -1,16 +1,14 @@
 import React from "react";
 import { ListTodo, CheckCircle2 } from "lucide-react";
-import { GetTasksResult } from "@/components/VercelChat/types";
+import { ScheduledAction } from "@/components/VercelChat/types";
 import TaskCard from "./TaskCard";
 import TaskDetailsDialog from "@/components/VercelChat/dialogs/tasks/TaskDetailsDialog";
 
 export interface GetTasksSuccessProps {
-  result: GetTasksResult;
+  result: ScheduledAction[];
 }
 
-const GetTasksSuccess: React.FC<GetTasksSuccessProps> = ({ result }) => {
-  const { tasks, message } = result;
-
+const GetTasksSuccess: React.FC<GetTasksSuccessProps> = ({ result: tasks }) => {
   return (
     <div className="bg-card border border-border rounded-lg shadow-sm max-w-2xl">
       {/* Header */}
@@ -20,7 +18,7 @@ const GetTasksSuccess: React.FC<GetTasksSuccessProps> = ({ result }) => {
           <h3 className="text-sm font-semibold text-foreground">Tasks</h3>
         </div>
         <p className="text-xs text-muted-foreground dark:text-muted-foreground mt-1">
-          {message}
+          Successfully retrieved tasks
         </p>
       </div>
 

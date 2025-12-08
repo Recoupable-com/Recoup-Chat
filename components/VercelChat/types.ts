@@ -9,13 +9,7 @@ export interface ImageGenerationResult {
 }
 
 // TASKS
-type ScheduledAction = Tables<"scheduled_actions">;
-
-export interface GetTasksResult {
-  tasks: ScheduledAction[];
-  message: string;
-  error?: string;
-}
+export type ScheduledAction = Tables<"scheduled_actions">;
 
 export interface CreateTaskResult {
   task: ScheduledAction;

@@ -2,7 +2,7 @@ import { ImageSkeleton } from "@/components/VercelChat/tools/image/ImageSkeleton
 import { ImageResult } from "@/components/VercelChat/tools/image/ImageResult";
 import {
   ImageGenerationResult,
-  GetTasksResult,
+  ScheduledAction,
   CreateTaskResult,
   DeleteTaskResult,
   UpdateTaskResult,
@@ -497,7 +497,7 @@ export function getToolResultComponent(part: ToolUIPart | DynamicToolUIPart) {
   } else if (toolName === "get_tasks") {
     return (
       <div key={toolCallId}>
-        <GetTasksSuccess result={result as GetTasksResult} />
+        <GetTasksSuccess result={result as ScheduledAction[]} />
       </div>
     );
   } else if (toolName === "create_task") {
