@@ -1,9 +1,6 @@
 import { ToolSet } from "ai";
-import imageTools from "./images";
-import sora2Tools from "./sora2";
 import createTxtFile from "./createTxtFile";
 import getSegmentFans from "./getSegmentFans";
-import contactTeam from "./contactTeam";
 import getArtistSegments from "./getArtistSegments";
 import getSocialPosts from "./getSocialPosts";
 import getPostComments from "./getPostComments";
@@ -31,16 +28,14 @@ import sendEmailTool from "./sendEmailTool";
 import getSocialFans from "./getSocialFans";
 import createSegments from "./createSegments";
 import createReleaseReport from "./createReleaseReport";
-import tasksTools from "./tasks";
 import youtubeTools from "./youtube";
-import catalogTools from "./catalogs";
 import filesTools from "./files";
 import browserTools from "./browser";
+import getCatalogSongs from "./catalogs/getCatalogSongs";
 
 export function getMcpTools(): ToolSet {
   const tools = {
     generate_txt_file: createTxtFile,
-    contact_team: contactTeam,
     create_segments: createSegments,
     get_artist_segments: getArtistSegments,
     get_segment_fans: getSegmentFans,
@@ -70,12 +65,9 @@ export function getMcpTools(): ToolSet {
     send_email: sendEmailTool,
     get_social_fans: getSocialFans,
     create_release_report: createReleaseReport,
-    ...tasksTools,
+    get_catalog_songs: getCatalogSongs,
     ...filesTools,
-    ...imageTools,
     ...youtubeTools,
-    ...catalogTools,
-    ...sora2Tools,
     ...browserTools,
   };
 

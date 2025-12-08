@@ -1,12 +1,8 @@
+import { ScheduledAction } from "@/components/VercelChat/types";
 import { TASKS_API_URL } from "@/lib/consts";
 
 export interface DeleteTaskParams {
   id: string;
-}
-
-export interface DeleteTaskResponse {
-  status: "success" | "error";
-  error?: string;
 }
 
 const SCHEDULE_NOT_FOUND_MSG = "Schedule not found";
@@ -48,27 +44,21 @@ export async function deleteTask(params: DeleteTaskParams): Promise<void> {
 
     if (!response.ok) {
       const errorText = await response.text();
-      
+
       if (isScheduleNotFoundError(errorText)) {
         await deleteTaskFromDatabase(params.id);
         return;
       }
-      
+
       throw new Error(`HTTP ${response.status}: ${errorText}`);
     }
 
-    const data: DeleteTaskResponse = await response.json();
+    const data: ScheduledAction = await response.json();
 
-    if (data.status === "error") {
-      if (data.error && isScheduleNotFoundError(data.error)) {
-        await deleteTaskFromDatabase(params.id);
-        return;
-      }
-      throw new Error(data.error || "Unknown error occurred");
+    if (!data) {
+      throw new Error("Failed to delete task");
     }
   } catch (error) {
     throw error;
   }
 }
-
-
