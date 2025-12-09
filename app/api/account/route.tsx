@@ -7,6 +7,7 @@ import insertAccountEmail from "@/lib/supabase/account_emails/insertAccountEmail
 import { insertAccountWallet } from "@/lib/supabase/accounts/insertAccountWallet";
 import { initializeAccountCredits } from "@/lib/supabase/credits_usage/initializeAccountCredits";
 import assignAccountToOrg from "@/lib/organizations/assignAccountToOrg";
+import { AccountWithDetails } from "@/lib/supabase/accounts/getAccountWithDetails";
 
 export async function POST(req: NextRequest) {
   const body = await req.json();
@@ -21,7 +22,7 @@ export async function POST(req: NextRequest) {
         if (emailRecord?.account_id) {
           // Assign to org based on email domain (idempotent)
           await assignAccountToOrg(emailRecord.account_id, email);
-          
+
           const accountData = await getAccountWithDetails(
             emailRecord.account_id
           );
@@ -39,27 +40,37 @@ export async function POST(req: NextRequest) {
     if (wallet) {
       try {
         const account = await getAccountByWallet(wallet);
-        
+
         // Destructure to avoid ID conflicts
         const accountInfo = account.account_info?.[0];
         const accountEmail = account.account_emails?.[0];
         const accountWallet = account.account_wallets?.[0];
-        
-        // eslint-disable-next-line @typescript-eslint/no-unused-vars
-        const { id: _infoId, account_id: _accountId, ...info } = accountInfo || {};
+
+        const {
+          // eslint-disable-next-line @typescript-eslint/no-unused-vars
+          id: _infoId,
+          // eslint-disable-next-line @typescript-eslint/no-unused-vars
+          account_id: _accountId,
+          ...info
+        } = accountInfo || {};
         // eslint-disable-next-line @typescript-eslint/no-unused-vars
         const { id: _walletId, ...walletData } = accountWallet || {};
-        // eslint-disable-next-line @typescript-eslint/no-unused-vars
-        const { id: _emailId, account_id: _emailAccountId, ...email } = accountEmail || {};
-        
+        const {
+          // eslint-disable-next-line @typescript-eslint/no-unused-vars
+          id: _emailId,
+          // eslint-disable-next-line @typescript-eslint/no-unused-vars
+          account_id: _emailAccountId,
+          ...email
+        } = accountEmail || {};
+
         const accountData = {
-          id: account.id,           // Keep the ACCOUNT id
-          account_id: account.id,   // Also set account_id for consistency
+          id: account.id, // Keep the ACCOUNT id
+          account_id: account.id, // Also set account_id for consistency
           name: account.name,
           ...info,
           ...walletData,
           ...email,
-        };
+        } as AccountWithDetails;
         return Response.json({ data: accountData }, { status: 200 });
       } catch (error) {
         console.log(

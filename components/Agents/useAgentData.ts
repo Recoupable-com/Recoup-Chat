@@ -14,10 +14,10 @@ export function useAgentData() {
   const [tags, setTags] = useState<string[]>(["Recommended"]);
   const [showAllTags, setShowAllTags] = useState(false);
   const [isPrivate, setIsPrivate] = useState(false);
-  
+
   const { data, isPending } = useQuery<Agent[]>({
     queryKey: ["agent-templates"],
-    queryFn: () => fetchAgentTemplates(userData),
+    queryFn: () => fetchAgentTemplates(userData!),
     retry: 1,
     enabled: !!userData?.id,
   });
@@ -26,7 +26,13 @@ export function useAgentData() {
     if (!data) return;
     setAgents(data);
     // Action tags that should NOT appear in top filters (now multi-word)
-    const actionTags = ["Deep Research", "Send Report", "Email Outreach", "Scheduled Action", "Creative Content"];
+    const actionTags = [
+      "Deep Research",
+      "Send Report",
+      "Email Outreach",
+      "Scheduled Action",
+      "Creative Content",
+    ];
     // Build a unique tag list from all agents, excluding action tags
     const uniqueTags = Array.from(
       new Set(

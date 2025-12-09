@@ -5,13 +5,15 @@ import { Address } from "viem";
 import useTrackEmail from "./useTrackEmail";
 import { uploadFile } from "@/lib/arweave/uploadFile";
 import { useAccount } from "wagmi";
+import { toast } from "sonner";
+import { AccountWithDetails } from "@/lib/supabase/accounts/getAccountWithDetails";
 
 const useUser = () => {
   const { login, user, logout } = usePrivy();
   const { address: wagmiAddress } = useAccount();
   const address = (user?.wallet?.address as Address) || wagmiAddress;
   const email = user?.email?.address;
-  const [userData, setUserData] = useState<any>(null);
+  const [userData, setUserData] = useState<AccountWithDetails | null>(null);
   const { trackId } = useTrackEmail();
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [instruction, setInstruction] = useState("");
@@ -21,7 +23,6 @@ const useUser = () => {
   const [jobTitle, setJobTitle] = useState("");
   const [roleType, setRoleType] = useState("");
   const [companyName, setCompanyName] = useState("");
-  const [onboardingStatus, setOnboardingStatus] = useState<any>(null);
   const [imageUploading, setImageUploading] = useState(false);
   const imageRef = useRef<HTMLInputElement>(null);
   const [updating, setUpdating] = useState(false);
@@ -29,9 +30,11 @@ const useUser = () => {
 
   const toggleModal = () => setIsModalOpen(!isModalOpen);
 
-  const handleImageSelected = async (e: any) => {
+  const handleImageSelected = async (
+    e: React.ChangeEvent<HTMLInputElement>
+  ) => {
     setImageUploading(true);
-    const file = e.target.files[0];
+    const file = e.target.files?.[0];
     if (!file) {
       setImageUploading(false);
       return;
@@ -39,10 +42,10 @@ const useUser = () => {
     try {
       const { uri } = await uploadFile(file);
       setImage(uri);
-    } catch (error) {
-      alert("Failed to upload image. Please try again.");
+    } catch {
+      toast.error("Failed to upload image. Please try again.");
     } finally {
-    setImageUploading(false);
+      setImageUploading(false);
     }
   };
 
@@ -60,34 +63,34 @@ const useUser = () => {
 
     setUpdating(true);
     try {
-    const response = await fetch("/api/account/update", {
-      method: "POST",
-      body: JSON.stringify({
-        instruction,
-        organization,
-        name,
-        image,
+      const response = await fetch("/api/account/update", {
+        method: "POST",
+        body: JSON.stringify({
+          instruction,
+          organization,
+          name,
+          image,
           jobTitle,
           roleType,
           companyName,
           accountId: userData.account_id,
-      }),
-      headers: {
-        "Content-Type": "application/json",
-      },
-    });
+        }),
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
 
       if (!response.ok) {
         return;
       }
 
-    const data = await response.json();
-    setUserData(data.data);
+      const data = await response.json();
+      setUserData(data.data);
       setIsModalOpen(false);
-    } catch (error) {
+    } catch {
       // Error handled silently
     } finally {
-    setUpdating(false);
+      setUpdating(false);
     }
   };
 
@@ -143,7 +146,6 @@ const useUser = () => {
       setJobTitle(data?.data?.job_title || "");
       setRoleType(data?.data?.role_type || "");
       setCompanyName(data?.data?.company_name || "");
-      setOnboardingStatus(data?.data?.onboarding_status || null);
     };
     if (!email && !address) return;
     init();
