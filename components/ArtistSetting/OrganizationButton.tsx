@@ -2,7 +2,7 @@ import { Loader2 } from "lucide-react";
 
 interface OrganizationButtonProps {
   organizationId: string;
-  organizationName: string | null;
+  organizationName: string | null | undefined;
   isLoading: boolean;
   disabled: boolean;
   onClick: () => void;
