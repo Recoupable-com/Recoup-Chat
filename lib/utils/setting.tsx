@@ -21,3 +21,8 @@ export const accountValidation = JoiBase.object({
   instruction: JoiBase.allow(),
   organization: JoiBase.allow(),
 });
+
+export const orgValidation = JoiBase.object({
+  orgName: JoiBase.string().allow(),
+  orgInstruction: JoiBase.allow(),
+});

@@ -13,6 +13,7 @@ export async function getSystemPrompt({
   artistInstruction,
   conversationName = "New conversation",
   timezone,
+  organizationId,
 }: {
   roomId?: string;
   artistId?: string;
@@ -22,6 +23,7 @@ export async function getSystemPrompt({
   artistInstruction?: string;
   conversationName?: string;
   timezone?: string;
+  organizationId?: string | null;
 }): Promise<string> {
   const resolvedArtistId = artistId || (await getArtistIdForRoom(roomId || ""));
 
@@ -34,6 +36,7 @@ export async function getSystemPrompt({
   - active_conversation_id: ${roomId || "No ID"}
   - active_conversation_name: ${conversationName || "No Chat Name"}
   - active_timezone: ${timezone || "Unknown"} (use with get_local_time tool when available)
+  - organization_id: ${organizationId || "null"} (use when creating artists to link them to the selected org)
 
   **IMAGE EDITING INSTRUCTIONS:**
   When the user asks to edit an image (e.g., "add glasses", "make it darker", "add a hat"):

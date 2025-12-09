@@ -6,6 +6,10 @@ interface ToggleArtistPinParams {
   pinned: boolean;
 }
 
+/**
+ * Toggle the pinned status of an artist for a user.
+ * Uses upsert to create the row if it doesn't exist (for org artists).
+ */
 export const toggleArtistPin = async ({
   accountId,
   artistId,
@@ -13,12 +17,12 @@ export const toggleArtistPin = async ({
 }: ToggleArtistPinParams) => {
   const { error } = await supabase
     .from("account_artist_ids")
-    .update({ pinned })
-    .eq("account_id", accountId)
-    .eq("artist_id", artistId);
+    .upsert(
+      { account_id: accountId, artist_id: artistId, pinned },
+      { onConflict: "account_id,artist_id" }
+    );
 
   if (error) {
-    console.error("Error updating pinned status:", error);
     throw new Error("Failed to update pinned status");
   }
 

@@ -1,4 +1,5 @@
 import { useUserProvider } from "@/providers/UserProvder";
+import { useOrganization } from "@/providers/OrganizationProvider";
 import { ArtistRecord } from "@/types/Artist";
 import { useCallback, useEffect, useState } from "react";
 import useArtistSetting from "./useArtistSetting";
@@ -26,6 +27,7 @@ const useArtists = () => {
   const artistSetting = useArtistSetting();
   const [isLoading, setIsLoading] = useState(true);
   const { email, userData } = useUserProvider();
+  const { selectedOrgId } = useOrganization();
   const [artists, setArtists] = useState<ArtistRecord[]>([]);
   const [selectedArtist, setSelectedArtist] = useState<ArtistRecord | null>(
     null
@@ -39,7 +41,8 @@ const useArtists = () => {
   const { handleSelectArtist } = useInitialArtists(
     artists,
     selectedArtist,
-    setSelectedArtist
+    setSelectedArtist,
+    selectedOrgId
   );
   const [menuVisibleArtistId, setMenuVisibleArtistId] = useState<any>("");
   const { isCreatingArtist, setIsCreatingArtist, updateChatState } =
@@ -78,29 +81,54 @@ const useArtists = () => {
         setArtists([]);
         return;
       }
-      const response = await fetch(
-        `/api/artists?accountId=${encodeURIComponent(userData?.id as string)}`
-      );
+
+      // Build URL with orgId filter
+      const params = new URLSearchParams({
+        accountId: userData.id as string,
+      });
+      
+      // Pass org filter: personal=true for personal only, orgId for specific org
+      if (selectedOrgId === null) {
+        params.set("personal", "true");
+      } else if (selectedOrgId) {
+        params.set("orgId", selectedOrgId);
+      }
+
+      const response = await fetch(`/api/artists?${params.toString()}`);
       const data = await response.json();
-      setArtists(data.artists);
-      if (data.artists.length === 0) {
+      const newArtists: ArtistRecord[] = data.artists;
+      setArtists(newArtists);
+
+      if (newArtists.length === 0) {
         setSelectedArtist(null);
         setIsLoading(false);
-        // TODO: Decide if auto-create flow should be re-enabled after ID bug is confirmed fixed
-        // if (email) {
-        //   artistMode.toggleCreation();
-        // }
         return;
       }
+
+      // If specific artistId provided, select it
       if (artistId) {
-        const newUpdatedInfo = data.artists.find(
+        const newUpdatedInfo = newArtists.find(
           (artist: ArtistRecord) => artist.account_id === artistId
         );
-        if (newUpdatedInfo) setSelectedArtist(newUpdatedInfo);
+        if (newUpdatedInfo) {
+          setSelectedArtist(newUpdatedInfo);
+          setIsLoading(false);
+          return;
+        }
       }
+
+      // Check if current selectedArtist is still in the new list
+      setSelectedArtist((current) => {
+        if (!current) return newArtists[0] || null;
+        const stillExists = newArtists.find(
+          (a) => a.account_id === current.account_id
+        );
+        return stillExists || newArtists[0] || null;
+      });
+
       setIsLoading(false);
     },
-    [userData]
+    [userData, selectedOrgId]
   );
 
   const saveSetting = async (
@@ -131,6 +159,8 @@ const useArtists = () => {
             ? ""
             : artistSetting.editableArtist?.account_id,
         email,
+        // Link new artist to selected org (only applies when creating)
+        organizationId: saveMode === SETTING_MODE.CREATE ? selectedOrgId : null,
       });
       await getArtists(data.artist?.account_id);
       setUpdating(false);
@@ -146,7 +176,7 @@ const useArtists = () => {
 
   useEffect(() => {
     getArtists();
-  }, [getArtists, userData]);
+  }, [getArtists, userData, selectedOrgId]);
 
   return {
     sorted,

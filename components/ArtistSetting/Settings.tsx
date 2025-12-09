@@ -10,10 +10,12 @@ import ImageSelect from "./ImageSelect";
 import KnowledgeSelect from "./KnowledgeSelect";
 import Inputs from "./Inputs";
 import DeleteModal from "./DeleteModal";
+import AddToOrgButton from "./AddToOrgButton";
 import { useState } from "react";
 import AccountIdDisplay from "./AccountIdDisplay";
 import { borderPatterns, buttonPatterns, iconPatterns, textPatterns } from "@/lib/styles/patterns";
 import { cn } from "@/lib/utils";
+import { useOrganization } from "@/providers/OrganizationProvider";
 
 const Settings = () => {
   const {
@@ -25,10 +27,14 @@ const Settings = () => {
     setSelectedArtist,
     editableArtist,
   } = useArtistProvider();
+  const { selectedOrgId } = useOrganization();
   const [isVisibleDeleteModal, setIsVisibleDeleteModal] = useState(false);
   
   // Determine if this is a workspace (not an artist)
   const isWorkspace = editableArtist?.isWorkspace === true;
+  
+  // Show "Add to Org" only when editing in Personal view
+  const showAddToOrg = settingMode === SETTING_MODE.UPDATE && selectedOrgId === null;
   const entityLabel = isWorkspace ? "Workspace" : "Artist";
 
   const handleSave = async () => {
@@ -88,6 +94,9 @@ const Settings = () => {
       >
         {updating ? "Saving..." : "Save"}
       </button>
+      {showAddToOrg && editableArtist && (
+        <AddToOrgButton artistId={editableArtist.account_id} />
+      )}
       <button
         className={cn(buttonPatterns.danger, "col-span-12 py-2 mb-4")}
         onClick={() => setIsVisibleDeleteModal(true)}

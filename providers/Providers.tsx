@@ -12,6 +12,7 @@ import { MiniKitProvider } from "./MiniKitProvider";
 import WagmiProvider from "./WagmiProvider";
 import { MiniAppProvider } from "./MiniAppProvider";
 import { ThemeProvider } from "./ThemeProvider";
+import { OrganizationProvider } from "./OrganizationProvider";
 
 const queryClient = new QueryClient();
 
@@ -28,6 +29,7 @@ const Providers = ({ children }: { children: React.ReactNode }) => (
           <MiniKitProvider>
             <MiniAppProvider>
               <UserProvider>
+                <OrganizationProvider>
                 <FunnelReportProvider>
                   <ArtistProvider>
                     <SidebarExpansionProvider>
@@ -37,6 +39,7 @@ const Providers = ({ children }: { children: React.ReactNode }) => (
                     </SidebarExpansionProvider>
                   </ArtistProvider>
                 </FunnelReportProvider>
+                </OrganizationProvider>
               </UserProvider>
             </MiniAppProvider>
           </MiniKitProvider>

@@ -14,6 +14,7 @@ import { useUserProvider } from "@/providers/UserProvder";
 import CreditsUsage from "./CreditsUsage";
 import AccountIdDisplay from "@/components/ArtistSetting/AccountIdDisplay";
 import ManageSubscriptionButton from "./ManageSubscriptionButton";
+import OrgSelector from "./OrgSelector";
 import { useTheme } from "next-themes";
 import { Check } from "lucide-react";
 
@@ -47,6 +48,7 @@ const UserProfileDropdown = () => {
             <IconUser />
             Profile
           </DropdownMenuItem>
+          <OrgSelector />
           <ManageSubscriptionButton />
           <DropdownMenuSub>
             <DropdownMenuSubTrigger className="cursor-pointer">

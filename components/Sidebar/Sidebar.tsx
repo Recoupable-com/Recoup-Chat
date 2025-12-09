@@ -5,6 +5,8 @@ import MiniMenu from "./MiniMenu";
 import { motion } from "framer-motion";
 import Menu from "./Menu";
 import AccountModal from "../AccountModal";
+import OrgSettingsModal from "../Organization/OrgSettingsModal";
+import CreateOrgModal from "../Organization/CreateOrgModal";
 
 const Sidebar = () => {
   const [menuExpanded, setMenuExpanded] = useState(true);
@@ -25,6 +27,8 @@ const Sidebar = () => {
         <MiniMenu toggleMenuExpanded={toggleMenuExpanded} />
       )}
       <AccountModal />
+      <OrgSettingsModal />
+      <CreateOrgModal />
     </motion.div>
   );
 };
