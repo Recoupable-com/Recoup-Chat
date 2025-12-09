@@ -22,9 +22,12 @@ export function ApiKeyForm() {
       return;
     }
     setIsCreating(true);
-    await createApiKey(keyName.trim());
-    setIsCreating(false);
-    setKeyName("");
+    try {
+      await createApiKey(keyName.trim());
+      setKeyName("");
+    } finally {
+      setIsCreating(false);
+    }
   };
 
   return (
