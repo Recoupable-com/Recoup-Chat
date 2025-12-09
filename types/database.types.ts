@@ -14,6 +14,41 @@ export type Database = {
   }
   public: {
     Tables: {
+      account_api_keys: {
+        Row: {
+          account: string | null
+          created_at: string
+          id: string
+          key_hash: string | null
+          last_used: string | null
+          name: string
+        }
+        Insert: {
+          account?: string | null
+          created_at?: string
+          id?: string
+          key_hash?: string | null
+          last_used?: string | null
+          name: string
+        }
+        Update: {
+          account?: string | null
+          created_at?: string
+          id?: string
+          key_hash?: string | null
+          last_used?: string | null
+          name?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "account_api_keys_account_fkey"
+            columns: ["account"]
+            isOneToOne: false
+            referencedRelation: "accounts"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       account_artist_ids: {
         Row: {
           account_id: string | null
@@ -342,19 +377,16 @@ export type Database = {
       }
       accounts: {
         Row: {
-          account_type: string | null
           id: string
           name: string | null
           timestamp: number | null
         }
         Insert: {
-          account_type?: string | null
           id?: string
           name?: string | null
           timestamp?: number | null
         }
         Update: {
-          account_type?: string | null
           id?: string
           name?: string | null
           timestamp?: number | null
@@ -3545,11 +3577,11 @@ export type Database = {
         }[]
       }
       get_campaign:
+        | { Args: { clientid: string }; Returns: Json }
         | {
             Args: { artistid: string; campaignid: string; email: string }
             Returns: Json
           }
-        | { Args: { clientid: string }; Returns: Json }
       get_campaign_fans: {
         Args: { artistid: string; email: string }
         Returns: Json
@@ -3561,14 +3593,14 @@ export type Database = {
       }
       get_message_counts_by_user:
         | {
-            Args: { end_date: string; start_date: string }
+            Args: { start_date: string }
             Returns: {
               account_email: string
               message_count: number
             }[]
           }
         | {
-            Args: { start_date: string }
+            Args: { end_date: string; start_date: string }
             Returns: {
               account_email: string
               message_count: number

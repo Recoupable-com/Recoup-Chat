@@ -21,7 +21,6 @@ const useUser = () => {
   const [jobTitle, setJobTitle] = useState("");
   const [roleType, setRoleType] = useState("");
   const [companyName, setCompanyName] = useState("");
-  const [onboardingStatus, setOnboardingStatus] = useState<any>(null);
   const [imageUploading, setImageUploading] = useState(false);
   const imageRef = useRef<HTMLInputElement>(null);
   const [updating, setUpdating] = useState(false);
@@ -42,7 +41,7 @@ const useUser = () => {
     } catch (error) {
       alert("Failed to upload image. Please try again.");
     } finally {
-    setImageUploading(false);
+      setImageUploading(false);
     }
   };
 
@@ -60,34 +59,34 @@ const useUser = () => {
 
     setUpdating(true);
     try {
-    const response = await fetch("/api/account/update", {
-      method: "POST",
-      body: JSON.stringify({
-        instruction,
-        organization,
-        name,
-        image,
+      const response = await fetch("/api/account/update", {
+        method: "POST",
+        body: JSON.stringify({
+          instruction,
+          organization,
+          name,
+          image,
           jobTitle,
           roleType,
           companyName,
           accountId: userData.account_id,
-      }),
-      headers: {
-        "Content-Type": "application/json",
-      },
-    });
+        }),
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
 
       if (!response.ok) {
         return;
       }
 
-    const data = await response.json();
-    setUserData(data.data);
+      const data = await response.json();
+      setUserData(data.data);
       setIsModalOpen(false);
     } catch (error) {
       // Error handled silently
     } finally {
-    setUpdating(false);
+      setUpdating(false);
     }
   };
 
@@ -143,7 +142,6 @@ const useUser = () => {
       setJobTitle(data?.data?.job_title || "");
       setRoleType(data?.data?.role_type || "");
       setCompanyName(data?.data?.company_name || "");
-      setOnboardingStatus(data?.data?.onboarding_status || null);
     };
     if (!email && !address) return;
     init();
