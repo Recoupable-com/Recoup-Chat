@@ -34,8 +34,7 @@ export function ApiKeyList() {
     <div className="space-y-4">
       <div className="rounded-lg border border-amber-200 bg-amber-50 p-4">
         <p className="text-sm font-medium text-amber-800">
-          {`We don't store your API keys. Please be sure to store them somewhere safe! Maximum 5 keys
-          per account.`}
+          {`We don't store your API keys. Please be sure to store them somewhere safe!`}
         </p>
       </div>
 
