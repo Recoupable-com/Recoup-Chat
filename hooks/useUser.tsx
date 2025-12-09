@@ -6,13 +6,14 @@ import useTrackEmail from "./useTrackEmail";
 import { uploadFile } from "@/lib/arweave/uploadFile";
 import { useAccount } from "wagmi";
 import { toast } from "sonner";
+import { AccountWithDetails } from "@/lib/supabase/accounts/getAccountWithDetails";
 
 const useUser = () => {
   const { login, user, logout } = usePrivy();
   const { address: wagmiAddress } = useAccount();
   const address = (user?.wallet?.address as Address) || wagmiAddress;
   const email = user?.email?.address;
-  const [userData, setUserData] = useState<any>(null);
+  const [userData, setUserData] = useState<AccountWithDetails | null>(null);
   const { trackId } = useTrackEmail();
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [instruction, setInstruction] = useState("");
