@@ -3,7 +3,6 @@ import { useEffect, useState } from "react";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import type { AgentTemplateRow } from "@/types/AgentTemplates";
 import fetchAgentTemplates from "@/lib/agent-templates/fetchAgentTemplates";
-import { AccountWithDetails } from "@/lib/supabase/accounts/getAccountWithDetails";
 
 export type Agent = AgentTemplateRow;
 
@@ -18,7 +17,7 @@ export function useAgentData() {
 
   const { data, isPending } = useQuery<Agent[]>({
     queryKey: ["agent-templates"],
-    queryFn: () => fetchAgentTemplates(userData as AccountWithDetails),
+    queryFn: () => fetchAgentTemplates(userData!),
     retry: 1,
     enabled: !!userData?.id,
   });
