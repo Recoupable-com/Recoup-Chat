@@ -9,7 +9,7 @@ export function useGoogleSheetsLogin() {
   const [isLoading, setIsLoading] = useState(false);
   const { userData } = useUserProvider();
   const { messages } = useVercelChatContext();
-  const accountId = userData?.account_id;
+  const accountId = userData?.account_id as string;
 
   const handleLogin = async () => {
     const latestUserMessageText = getLatestUserMessageText(messages);
