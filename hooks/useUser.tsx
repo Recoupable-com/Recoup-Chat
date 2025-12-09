@@ -5,6 +5,7 @@ import { Address } from "viem";
 import useTrackEmail from "./useTrackEmail";
 import { uploadFile } from "@/lib/arweave/uploadFile";
 import { useAccount } from "wagmi";
+import { toast } from "sonner";
 
 const useUser = () => {
   const { login, user, logout } = usePrivy();
@@ -28,9 +29,11 @@ const useUser = () => {
 
   const toggleModal = () => setIsModalOpen(!isModalOpen);
 
-  const handleImageSelected = async (e: any) => {
+  const handleImageSelected = async (
+    e: React.ChangeEvent<HTMLInputElement>
+  ) => {
     setImageUploading(true);
-    const file = e.target.files[0];
+    const file = e.target.files?.[0];
     if (!file) {
       setImageUploading(false);
       return;
@@ -38,8 +41,8 @@ const useUser = () => {
     try {
       const { uri } = await uploadFile(file);
       setImage(uri);
-    } catch (error) {
-      alert("Failed to upload image. Please try again.");
+    } catch {
+      toast.error("Failed to upload image. Please try again.");
     } finally {
       setImageUploading(false);
     }
@@ -83,7 +86,7 @@ const useUser = () => {
       const data = await response.json();
       setUserData(data.data);
       setIsModalOpen(false);
-    } catch (error) {
+    } catch {
       // Error handled silently
     } finally {
       setUpdating(false);
