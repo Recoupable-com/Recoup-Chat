@@ -9,7 +9,7 @@ const useCredits = (): UseQueryResult<CreditsUsage> => {
   const { userData } = useUserProvider();
   return useQuery({
     queryKey: ["credits", userData?.account_id],
-    queryFn: () => getCredits(userData?.account_id),
+    queryFn: () => getCredits(userData?.account_id as string),
     enabled: !!userData?.account_id,
     staleTime: 5 * 60 * 1000, // 5 minutes
     refetchOnWindowFocus: true,
