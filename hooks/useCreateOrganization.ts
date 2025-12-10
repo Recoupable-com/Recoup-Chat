@@ -2,6 +2,7 @@ import { useState, useCallback } from "react";
 import { useQueryClient } from "@tanstack/react-query";
 import { useOrganization } from "@/providers/OrganizationProvider";
 import { useUserProvider } from "@/providers/UserProvder";
+import { NEW_API_BASE_URL } from "@/lib/consts";
 
 /**
  * Hook to handle creating a new organization.
@@ -19,7 +20,7 @@ const useCreateOrganization = () => {
 
     setIsCreating(true);
     try {
-      const response = await fetch("/api/organizations", {
+      const response = await fetch(`${NEW_API_BASE_URL}/api/organizations`, {
         method: "POST",
         body: JSON.stringify({
           name: name.trim(),

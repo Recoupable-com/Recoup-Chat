@@ -1,5 +1,6 @@
 import { useQuery, UseQueryResult } from "@tanstack/react-query";
 import { useUserProvider } from "@/providers/UserProvder";
+import { NEW_API_BASE_URL } from "@/lib/consts";
 
 export interface UserOrganization {
   id: string;
@@ -18,7 +19,7 @@ interface OrganizationsResponse {
 const fetchUserOrganizations = async (
   accountId: string
 ): Promise<UserOrganization[]> => {
-  const response = await fetch(`/api/organizations?accountId=${accountId}`);
+  const response = await fetch(`${NEW_API_BASE_URL}/api/organizations?accountId=${accountId}`);
   if (!response.ok) {
     throw new Error(`Error: ${response.status}`);
   }

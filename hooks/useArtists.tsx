@@ -8,6 +8,7 @@ import useArtistMode from "./useArtistMode";
 import saveArtist from "@/lib/saveArtist";
 import useInitialArtists from "./useInitialArtists";
 import useCreateArtists from "./useCreateArtists";
+import { NEW_API_BASE_URL } from "@/lib/consts";
 
 // Helper function to sort artists with pinned first, then alphabetically
 const sortArtistsWithPinnedFirst = (artists: ArtistRecord[]): ArtistRecord[] => {
@@ -94,7 +95,7 @@ const useArtists = () => {
         params.set("orgId", selectedOrgId);
       }
 
-      const response = await fetch(`/api/artists?${params.toString()}`);
+      const response = await fetch(`${NEW_API_BASE_URL}/api/artists?${params.toString()}`);
       const data = await response.json();
       const newArtists: ArtistRecord[] = data.artists;
       setArtists(newArtists);
