@@ -4,7 +4,7 @@ import { useState, useRef, useMemo, useCallback } from "react";
 import { Building2, ChevronDown } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { buttonPatterns } from "@/lib/styles/patterns";
-import useUserOrganizations from "@/hooks/useUserOrganizations";
+import useAccountOrganizations from "@/hooks/useAccountOrganizations";
 import useAddArtistToOrganization from "@/hooks/useAddArtistToOrganization";
 import useClickOutside from "@/hooks/useClickOutside";
 import { useArtistProvider } from "@/providers/ArtistProvider";
@@ -16,7 +16,7 @@ interface AddToOrgButtonProps {
 }
 
 const AddToOrgButton = ({ artistId }: AddToOrgButtonProps) => {
-  const { data: organizations } = useUserOrganizations();
+  const { data: organizations } = useAccountOrganizations();
   const { toggleSettingModal } = useArtistProvider();
   const { setSelectedOrgId } = useOrganization();
   const [isOpen, setIsOpen] = useState(false);

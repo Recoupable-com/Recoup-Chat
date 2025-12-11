@@ -2,7 +2,7 @@ import { useQuery, UseQueryResult } from "@tanstack/react-query";
 import { useUserProvider } from "@/providers/UserProvder";
 import { NEW_API_BASE_URL } from "@/lib/consts";
 
-export interface UserOrganization {
+export interface AccountOrganization {
   id: string;
   organization_id: string;
   organization_name?: string;
@@ -10,15 +10,15 @@ export interface UserOrganization {
 }
 
 interface OrganizationsResponse {
-  organizations: UserOrganization[];
+  organizations: AccountOrganization[];
 }
 
 /**
- * Fetch user's organizations from the API
+ * Fetch account's organizations from the API
  */
-const fetchUserOrganizations = async (
+const fetchAccountOrganizations = async (
   accountId: string
-): Promise<UserOrganization[]> => {
+): Promise<AccountOrganization[]> => {
   const response = await fetch(`${NEW_API_BASE_URL}/api/organizations?accountId=${accountId}`);
   if (!response.ok) {
     throw new Error(`Error: ${response.status}`);
@@ -28,18 +28,17 @@ const fetchUserOrganizations = async (
 };
 
 /**
- * Hook to get all organizations the user belongs to
+ * Hook to get all organizations the account belongs to
  */
-const useUserOrganizations = (): UseQueryResult<UserOrganization[]> => {
+const useAccountOrganizations = (): UseQueryResult<AccountOrganization[]> => {
   const { userData } = useUserProvider();
   return useQuery({
-    queryKey: ["userOrganizations", userData?.account_id],
-    queryFn: () => fetchUserOrganizations(userData?.account_id || ""),
+    queryKey: ["accountOrganizations", userData?.account_id],
+    queryFn: () => fetchAccountOrganizations(userData?.account_id || ""),
     enabled: !!userData?.account_id,
     staleTime: 10 * 60 * 1000, // 10 minutes
     refetchOnWindowFocus: false,
   });
 };
 
-export default useUserOrganizations;
-
+export default useAccountOrganizations;
