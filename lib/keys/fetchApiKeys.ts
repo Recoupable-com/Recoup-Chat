@@ -6,15 +6,20 @@ export type ApiKey = Tables<"account_api_keys">;
 /**
  * Fetch API keys for an account
  * @param accountId - The account ID to retrieve API keys for
+ * @param accessToken - The access token for authentication
  * @returns Promise with the list of API keys
  */
-export async function fetchApiKeys(accountId: string): Promise<ApiKey[]> {
+export async function fetchApiKeys(
+  accountId: string,
+  accessToken: string
+): Promise<ApiKey[]> {
   const response = await fetch(
     `${NEW_API_BASE_URL}/api/keys?account_id=${accountId}`,
     {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
+        Authorization: `Bearer ${accessToken}`,
       },
     }
   );
