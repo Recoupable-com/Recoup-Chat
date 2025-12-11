@@ -56,7 +56,7 @@ const UserProfileButton = () => {
           aria-label="Open user menu"
         >
           <Avatar className="h-10 w-10">
-            <AvatarImage src={avatarImage} alt={primaryName} />
+            <AvatarImage src={avatarImage!} alt={primaryName} />
             <AvatarFallback>{avatarInitials}</AvatarFallback>
           </Avatar>
           <div className="flex-1 min-w-0 text-left overflow-hidden">
