@@ -30,7 +30,6 @@ export default function useApiKey(): UseApiKeyReturn {
     queryKey,
     queryFn: async () => {
       const accessToken = await getAccessToken();
-      console.log("accessToken", accessToken);
       if (!accessToken) {
         throw new Error("Not authenticated");
       }
