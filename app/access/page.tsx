@@ -1,6 +1,7 @@
 "use client";
 
-import { useEffect, useState, useCallback } from "react";
+import { useEffect } from "react";
+import { useQuery } from "@tanstack/react-query";
 import { usePrivy } from "@privy-io/react-auth";
 import {
   Card,
@@ -12,45 +13,40 @@ import {
 import { Button } from "@/components/ui/button";
 import { Copy, Check } from "lucide-react";
 import { toast } from "sonner";
+import { useCopy } from "@/hooks/useCopy";
 
 export default function AccessPage() {
   const { getAccessToken, ready, authenticated } = usePrivy();
-  const [accessToken, setAccessToken] = useState<string | null>(null);
-  const [loading, setLoading] = useState(false);
-  const [copied, setCopied] = useState(false);
+  const { copied, copy } = useCopy();
 
-  const fetchToken = useCallback(async () => {
-    if (!ready || !authenticated) return;
-
-    setLoading(true);
-    try {
+  const {
+    data: accessToken,
+    isLoading: loading,
+    refetch,
+    isError,
+    error,
+  } = useQuery({
+    queryKey: ["accessToken"],
+    queryFn: async () => {
       const token = await getAccessToken();
-      setAccessToken(token);
-    } catch (err) {
-      toast.error("Failed to get access token");
-      console.error(err);
-    } finally {
-      setLoading(false);
-    }
-  }, [getAccessToken, ready, authenticated]);
+      if (!token) {
+        throw new Error("Failed to get access token");
+      }
+      return token;
+    },
+    enabled: ready && authenticated,
+  });
 
   useEffect(() => {
-    if (ready && authenticated) {
-      fetchToken();
+    if (isError && error) {
+      toast.error("Failed to get access token");
+      console.error(error);
     }
-  }, [ready, authenticated, fetchToken]);
+  }, [isError, error]);
 
   const handleCopy = async () => {
     if (!accessToken) return;
-
-    try {
-      await navigator.clipboard.writeText(accessToken);
-      setCopied(true);
-      toast.success("Access token copied to clipboard");
-      setTimeout(() => setCopied(false), 2000);
-    } catch {
-      toast.error("Failed to copy access token");
-    }
+    await copy(accessToken);
   };
 
   if (!ready) {
@@ -117,7 +113,7 @@ export default function AccessPage() {
                     </>
                   )}
                 </Button>
-                <Button onClick={fetchToken} variant="outline">
+                <Button onClick={() => refetch()} variant="outline">
                   Refresh Token
                 </Button>
               </div>
@@ -125,9 +121,11 @@ export default function AccessPage() {
           ) : (
             <div className="py-8 text-center">
               <p className="text-muted-foreground mb-4">
-                No access token available
+                {isError
+                  ? "Failed to load access token"
+                  : "No access token available"}
               </p>
-              <Button onClick={fetchToken}>Get Access Token</Button>
+              <Button onClick={() => refetch()}>Get Access Token</Button>
             </div>
           )}
         </CardContent>
