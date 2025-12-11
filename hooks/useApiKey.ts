@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
+import { usePrivy } from "@privy-io/react-auth";
 import { useUserProvider } from "@/providers/UserProvder";
 import { toast } from "sonner";
 import { createApiKey } from "@/lib/keys/createApiKey";
@@ -20,24 +21,38 @@ export default function useApiKey(): UseApiKeyReturn {
   const [apiKey, setApiKey] = useState<string | null>(null);
   const [showApiKeyModal, setShowApiKeyModal] = useState(false);
   const { userData } = useUserProvider();
+  const { getAccessToken } = usePrivy();
   const queryClient = useQueryClient();
 
   const queryKey = ["apiKeys", userData?.account_id] as const;
 
   const { data: apiKeys = [], isLoading: loadingKeys } = useQuery<ApiKey[]>({
     queryKey,
-    queryFn: () => fetchApiKeys(userData!.account_id),
+    queryFn: async () => {
+      const accessToken = await getAccessToken();
+      console.log("accessToken", accessToken);
+      if (!accessToken) {
+        throw new Error("Not authenticated");
+      }
+      return fetchApiKeys(userData!.account_id, accessToken);
+    },
     enabled: Boolean(userData?.account_id),
   });
 
   const createApiKeyMutation = useMutation({
-    mutationFn: ({
+    mutationFn: async ({
       keyName,
       accountId,
     }: {
       keyName: string;
       accountId: string;
-    }) => createApiKey(keyName.trim(), accountId),
+    }) => {
+      const accessToken = await getAccessToken();
+      if (!accessToken) {
+        throw new Error("Not authenticated");
+      }
+      return createApiKey(keyName.trim(), accountId, accessToken);
+    },
     onSuccess: (key) => {
       setApiKey(key);
       setShowApiKeyModal(true);
@@ -49,7 +64,13 @@ export default function useApiKey(): UseApiKeyReturn {
   });
 
   const deleteApiKeyMutation = useMutation({
-    mutationFn: deleteApiKey,
+    mutationFn: async (keyId: string) => {
+      const accessToken = await getAccessToken();
+      if (!accessToken) {
+        throw new Error("Not authenticated");
+      }
+      return deleteApiKey(keyId, accessToken);
+    },
     onSuccess: () => {
       toast.success("API key deleted successfully");
       queryClient.invalidateQueries({ queryKey });
