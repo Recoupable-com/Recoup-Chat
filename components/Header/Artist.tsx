@@ -109,14 +109,14 @@ const Artist = ({
           <div
             key={artist?.account_id}
             className={cn(
-              "text-left grow text-foreground",
+              "text-left grow text-foreground min-w-0 truncate",
               shouldHighlight && "font-medium"
             )}
             title={artist?.name || ""}
           >
             {displayName}
           </div>
-          <div className="ml-auto flex gap-1">
+          <div className="ml-auto flex gap-1 flex-shrink-0">
             <ArtistActionButton
               onClick={handlePinToggle}
               disabled={isPinning}
