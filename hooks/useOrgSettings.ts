@@ -66,9 +66,11 @@ const useOrgSettings = (orgId: string | null) => {
         const response = await fetch(`${NEW_API_BASE_URL}/api/accounts/${orgId}`);
         if (response.ok) {
           const data = await response.json();
-          setOrgData(data.data);
-          setInstruction(data.data?.instruction || "");
-          setKnowledges(data.data?.knowledges || []);
+          // Response structure: { status: "success", account: {...} }
+          const account = data.account;
+          setOrgData(account);
+          setInstruction(account?.instruction || "");
+          setKnowledges(account?.knowledges || []);
         }
       } catch (error) {
         console.error("Error fetching org details:", error);
