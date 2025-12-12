@@ -6,11 +6,11 @@ import {
   DropdownMenuItem,
   DropdownMenuSeparator,
 } from "@/components/ui/dropdown-menu";
-import useUserOrganizations from "@/hooks/useUserOrganizations";
+import useAccountOrganizations from "@/hooks/useAccountOrganizations";
 import { useOrganization } from "@/providers/OrganizationProvider";
 
 const OrgSelector = () => {
-  const { data: organizations, isLoading } = useUserOrganizations();
+  const { data: organizations, isLoading } = useAccountOrganizations();
   const { selectedOrgId, setSelectedOrgId, openOrgSettings, openCreateOrg } =
     useOrganization();
 

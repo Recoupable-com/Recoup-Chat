@@ -1,6 +1,7 @@
 import { useState, useEffect, useRef, useCallback } from "react";
 import { uploadFile } from "@/lib/arweave/uploadFile";
 import { getFileMimeType } from "@/utils/getFileMimeType";
+import { NEW_API_BASE_URL } from "@/lib/consts";
 
 interface KnowledgeItem {
   name: string;
@@ -39,7 +40,7 @@ const useOrgSettings = (orgId: string | null) => {
     const fetchOrg = async () => {
       setIsLoading(true);
       try {
-        const response = await fetch(`/api/account/get?accountId=${orgId}`);
+        const response = await fetch(`${NEW_API_BASE_URL}/api/accounts/${orgId}`);
         if (response.ok) {
           const data = await response.json();
           setOrgData(data.data);

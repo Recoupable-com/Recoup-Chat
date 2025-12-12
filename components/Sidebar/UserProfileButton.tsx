@@ -1,6 +1,6 @@
 import { useUserProvider } from "@/providers/UserProvder";
 import { useOrganization } from "@/providers/OrganizationProvider";
-import useUserOrganizations from "@/hooks/useUserOrganizations";
+import useAccountOrganizations from "@/hooks/useAccountOrganizations";
 import UserProfileDropdown from "./UserProfileDropdown";
 import UserProfileButtonSkeleton from "./UserProfileButtonSkeleton";
 import {
@@ -13,7 +13,7 @@ import { ChevronDown } from "lucide-react";
 const UserProfileButton = () => {
   const { email, userData } = useUserProvider();
   const { selectedOrgId } = useOrganization();
-  const { data: organizations } = useUserOrganizations();
+  const { data: organizations } = useAccountOrganizations();
 
   if (!userData) return <UserProfileButtonSkeleton />;
 
