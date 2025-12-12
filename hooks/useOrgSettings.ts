@@ -2,6 +2,8 @@ import { useState, useEffect, useRef, useCallback } from "react";
 import { uploadFile } from "@/lib/arweave/uploadFile";
 import { getFileMimeType } from "@/utils/getFileMimeType";
 import { NEW_API_BASE_URL } from "@/lib/consts";
+import useAccountOrganizations from "./useAccountOrganizations";
+import { useUserProvider } from "@/providers/UserProvder";
 
 interface KnowledgeItem {
   name: string;
@@ -18,6 +20,8 @@ interface OrgData {
 }
 
 const useOrgSettings = (orgId: string | null) => {
+  const { userData } = useUserProvider();
+  const { data: organizations } = useAccountOrganizations();
   const [orgData, setOrgData] = useState<OrgData | null>(null);
   const [name, setName] = useState("");
   const [image, setImage] = useState("");
@@ -30,32 +34,51 @@ const useOrgSettings = (orgId: string | null) => {
   const imageRef = useRef<HTMLInputElement>(null);
   const knowledgeRef = useRef<HTMLInputElement>(null);
 
-  // Fetch org data when orgId changes
+  // Fetch org data when orgId or organizations change
   useEffect(() => {
-    if (!orgId) {
+    if (!orgId || !organizations) {
       setOrgData(null);
+      setName("");
+      setImage("");
+      setInstruction("");
+      setKnowledges([]);
       return;
     }
 
-    const fetchOrg = async () => {
+    // Find the organization from the list (same as button does)
+    const selectedOrg = organizations.find(
+      (org) => org.organization_id === orgId
+    );
+
+    if (!selectedOrg) {
+      setIsLoading(false);
+      return;
+    }
+
+    // Set name and image from organizations data (same source as button)
+    setName(selectedOrg.organization_name || "");
+    setImage(selectedOrg.organization_image || "");
+
+    // Fetch account details for instruction and knowledges
+    const fetchOrgDetails = async () => {
       setIsLoading(true);
       try {
         const response = await fetch(`${NEW_API_BASE_URL}/api/accounts/${orgId}`);
         if (response.ok) {
           const data = await response.json();
           setOrgData(data.data);
-          setName(data.data?.name || "");
-          setImage(data.data?.image || "");
           setInstruction(data.data?.instruction || "");
           setKnowledges(data.data?.knowledges || []);
         }
+      } catch (error) {
+        console.error("Error fetching org details:", error);
       } finally {
         setIsLoading(false);
       }
     };
 
-    fetchOrg();
-  }, [orgId]);
+    fetchOrgDetails();
+  }, [orgId, organizations]);
 
   const handleImageSelected = useCallback(async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
