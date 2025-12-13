@@ -1,5 +1,4 @@
 import { ToolSet } from "ai";
-import createTxtFile from "./createTxtFile";
 import getSegmentFans from "./getSegmentFans";
 import getArtistSegments from "./getArtistSegments";
 import getSocialPosts from "./getSocialPosts";
@@ -27,7 +26,6 @@ import getCatalogSongs from "./catalogs/getCatalogSongs";
 
 export function getMcpTools(): ToolSet {
   const tools = {
-    generate_txt_file: createTxtFile,
     create_segments: createSegments,
     get_artist_segments: getArtistSegments,
     get_segment_fans: getSegmentFans,
