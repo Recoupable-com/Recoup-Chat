@@ -9,7 +9,6 @@ import searchGoogleImages from "./searchGoogleImages";
 import generateMermaidDiagram from "./generateMermaidDiagram";
 import createArtist from "./createArtist";
 import deleteArtist from "./deleteArtist";
-import getSpotifyAlbum from "./getSpotifyAlbum";
 import updateAccountInfo from "./updateAccountInfo";
 import updateArtistSocialsTool from "./updateArtistSocials";
 import searchTwitter from "./searchTwitter";
@@ -44,7 +43,6 @@ export function getMcpTools(): ToolSet {
     generate_mermaid_diagram: generateMermaidDiagram,
     create_new_artist: createArtist,
     delete_artist: deleteArtist,
-    get_spotify_album: getSpotifyAlbum,
     update_account_info: updateAccountInfo,
     update_artist_socials: updateArtistSocialsTool,
     search_twitter: searchTwitter,
