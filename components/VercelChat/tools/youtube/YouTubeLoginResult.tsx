@@ -13,8 +13,17 @@
 
 import React from "react";
 import { YouTubeErrorDisplay } from "./YouTubeErrorDisplay";
-import { YouTubeLoginResultType } from "@/lib/tools/youtube/youtubeLogin";
 import GenericSuccess from "@/components/VercelChat/tools/GenericSuccess";
+
+export interface YouTubeLoginResultType {
+  success: boolean;
+  message: string;
+  status: string;
+  authentication?: {
+    access_token: string | null;
+    refresh_token: string | null;
+  };
+}
 
 interface YouTubeLoginResultProps {
   result: YouTubeLoginResultType;
