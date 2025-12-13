@@ -9,7 +9,6 @@ import searchGoogleImages from "./searchGoogleImages";
 import generateMermaidDiagram from "./generateMermaidDiagram";
 import createArtist from "./createArtist";
 import deleteArtist from "./deleteArtist";
-import getSpotifySearch from "./getSpotifySearch";
 import getSpotifyArtistTopTracks from "./getSpotifyArtistTopTracks";
 import getSpotifyArtistAlbums from "./getSpotifyArtistAlbums";
 import getSpotifyAlbum from "./getSpotifyAlbum";
@@ -47,7 +46,6 @@ export function getMcpTools(): ToolSet {
     generate_mermaid_diagram: generateMermaidDiagram,
     create_new_artist: createArtist,
     delete_artist: deleteArtist,
-    get_spotify_search: getSpotifySearch,
     get_spotify_artist_top_tracks: getSpotifyArtistTopTracks,
     get_spotify_artist_albums: getSpotifyArtistAlbums,
     get_spotify_album: getSpotifyAlbum,
