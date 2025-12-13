@@ -25,9 +25,7 @@ const SearchApiResult = ({ result }: { result: SearchApiResultType }) => {
     );
   }
 
-  // Use results directly instead of parsing formatted string
   const searchResults: ParsedSearchResult[] = result.results;
-  console.log("searchResults", searchResults);
 
   if (searchResults.length === 0) {
     return (
