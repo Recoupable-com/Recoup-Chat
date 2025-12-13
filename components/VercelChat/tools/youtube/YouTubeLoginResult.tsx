@@ -16,13 +16,8 @@ import { YouTubeErrorDisplay } from "./YouTubeErrorDisplay";
 import GenericSuccess from "@/components/VercelChat/tools/GenericSuccess";
 
 export interface YouTubeLoginResultType {
-  success: boolean;
   message: string;
-  status: string;
-  authentication?: {
-    access_token: string | null;
-    refresh_token: string | null;
-  };
+  authenticated: boolean;
 }
 
 interface YouTubeLoginResultProps {
@@ -31,7 +26,7 @@ interface YouTubeLoginResultProps {
 
 export function YouTubeLoginResult({ result }: YouTubeLoginResultProps) {
   // Success state - show generic success
-  if (result.success) {
+  if (result.authenticated) {
     return (
       <GenericSuccess
         name="YouTube Login Successful"
