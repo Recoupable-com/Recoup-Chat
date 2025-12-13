@@ -1,7 +1,7 @@
 import React from "react";
 import { Badge } from "@/components/ui/badge";
 import { Play, ExternalLink } from "lucide-react";
-import { SpotifyAlbum } from "@/lib/tools/getSpotifyAlbum";
+import { SpotifyAlbum } from "@/types/spotify";
 import { formatDuration } from "@/lib/spotify/formatDuration";
 import Link from "next/link";
 import SpotifyAlbumWithTracksHero from "./SpotifyAlbumWithTracksHero";

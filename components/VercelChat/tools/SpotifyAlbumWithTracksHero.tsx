@@ -1,6 +1,6 @@
 import React from "react";
 import { Music } from "lucide-react";
-import { SpotifyAlbum } from "@/lib/tools/getSpotifyAlbum";
+import { SpotifyAlbum } from "@/types/spotify";
 import SpotifyAlbumWithTracksMeta from "./SpotifyAlbumWithTracksMeta";
 
 interface SpotifyAlbumWithTracksHeroProps {
