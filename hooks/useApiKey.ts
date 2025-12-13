@@ -33,24 +33,18 @@ export default function useApiKey(): UseApiKeyReturn {
       if (!accessToken) {
         throw new Error("Not authenticated");
       }
-      return fetchApiKeys(userData!.account_id, accessToken);
+      return fetchApiKeys(accessToken);
     },
     enabled: Boolean(userData?.account_id),
   });
 
   const createApiKeyMutation = useMutation({
-    mutationFn: async ({
-      keyName,
-      accountId,
-    }: {
-      keyName: string;
-      accountId: string;
-    }) => {
+    mutationFn: async (keyName: string) => {
       const accessToken = await getAccessToken();
       if (!accessToken) {
         throw new Error("Not authenticated");
       }
-      return createApiKey(keyName.trim(), accountId, accessToken);
+      return createApiKey(keyName.trim(), accessToken);
     },
     onSuccess: (key) => {
       setApiKey(key);
@@ -85,10 +79,7 @@ export default function useApiKey(): UseApiKeyReturn {
       return;
     }
 
-    await createApiKeyMutation.mutateAsync({
-      keyName,
-      accountId: userData.account_id,
-    });
+    await createApiKeyMutation.mutateAsync(keyName);
   };
 
   const deleteApiKeyHandler = async (keyId: string): Promise<void> => {
