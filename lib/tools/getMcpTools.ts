@@ -9,7 +9,6 @@ import searchGoogleImages from "./searchGoogleImages";
 import generateMermaidDiagram from "./generateMermaidDiagram";
 import createArtist from "./createArtist";
 import deleteArtist from "./deleteArtist";
-import updateArtistSocialsTool from "./updateArtistSocials";
 import searchTwitter from "./searchTwitter";
 import getTwitterTrends from "./getTwitterTrends";
 import scrapeInstagramProfile from "./scrapeInstagramProfile";
@@ -41,7 +40,6 @@ export function getMcpTools(): ToolSet {
     generate_mermaid_diagram: generateMermaidDiagram,
     create_new_artist: createArtist,
     delete_artist: deleteArtist,
-    update_artist_socials: updateArtistSocialsTool,
     search_twitter: searchTwitter,
     get_twitter_trends: getTwitterTrends,
     scrape_instagram_profile: scrapeInstagramProfile,
