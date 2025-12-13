@@ -4,25 +4,18 @@ import { Tables } from "@/types/database.types";
 export type ApiKey = Tables<"account_api_keys">;
 
 /**
- * Fetch API keys for an account
- * @param accountId - The account ID to retrieve API keys for
+ * Fetch API keys for the authenticated account
  * @param accessToken - The access token for authentication
  * @returns Promise with the list of API keys
  */
-export async function fetchApiKeys(
-  accountId: string,
-  accessToken: string
-): Promise<ApiKey[]> {
-  const response = await fetch(
-    `${NEW_API_BASE_URL}/api/keys?account_id=${accountId}`,
-    {
-      method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${accessToken}`,
-      },
-    }
-  );
+export async function fetchApiKeys(accessToken: string): Promise<ApiKey[]> {
+  const response = await fetch(`${NEW_API_BASE_URL}/api/keys`, {
+    method: "GET",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${accessToken}`,
+    },
+  });
 
   const data = await response.json();
 
