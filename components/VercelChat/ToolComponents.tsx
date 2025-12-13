@@ -70,7 +70,7 @@ import {
 } from "./tools/GoogleImagesResult";
 import SpotifyDeepResearchSkeleton from "./tools/SpotifyDeepResearchSkeleton";
 import WebDeepResearchSkeleton from "./tools/SearchWeb/WebDeepResearchSkeleton";
-import { SearchWebResultType } from "./tools/SearchWeb/SearchWebResult";
+import { SearchApiResultType } from "./tools/SearchWeb/SearchApiResult";
 import SearchApiResult from "./tools/SearchWeb/SearchApiResult";
 import SearchWebProgress from "./tools/SearchWeb/SearchWebProgress";
 import WebDeepResearchProgress from "./tools/SearchWeb/WebDeepResearchProgress";
@@ -433,7 +433,7 @@ export function getToolResultComponent(part: ToolUIPart | DynamicToolUIPart) {
 
     return (
       <div key={toolCallId}>
-        <SearchApiResult result={result as SearchWebResultType} />
+        <SearchApiResult result={result as SearchApiResultType} />
       </div>
     );
   } else if (toolName === "search_google_images") {
