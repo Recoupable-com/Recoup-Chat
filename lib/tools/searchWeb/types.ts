@@ -1,4 +1,8 @@
-export type SearchProgressStatus = 'searching' | 'reviewing' | 'streaming' | 'complete';
+export type SearchProgressStatus =
+  | "searching"
+  | "reviewing"
+  | "streaming"
+  | "complete";
 
 export type SearchProgress = {
   status: SearchProgressStatus;
@@ -15,9 +19,3 @@ export type SearchProgress = {
   }>;
   citations?: string[];
 };
-
-export type SearchWebResult = {
-  content: Array<{ type: string; text: string }>;
-  isError: boolean;
-};
-

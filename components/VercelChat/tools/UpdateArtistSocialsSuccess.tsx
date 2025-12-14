@@ -1,11 +1,17 @@
 import { useArtistProvider } from "@/providers/ArtistProvider";
-import { UpdateArtistSocialsResult } from "@/lib/tools/updateArtistSocials";
 import ArtistHeroSection from "./ArtistHeroSection";
 import { ArtistProfile } from "@/lib/supabase/artist/updateArtistProfile";
+import { AccountSocialWithSocial } from "@/lib/supabase/account_socials/getAccountSocials";
 import Link from "next/link";
 import { ExternalLink, Globe } from "lucide-react";
 import getSocialPlatformByLink from "@/lib/getSocialPlatformByLink";
 import { useEffect } from "react";
+
+export interface UpdateArtistSocialsResult {
+  success: boolean;
+  message: string;
+  socials?: AccountSocialWithSocial[];
+}
 
 export interface UpdateArtistSocialsSuccessProps {
   result: UpdateArtistSocialsResult;
@@ -32,7 +38,8 @@ const UpdateArtistSocialsSuccess: React.FC<UpdateArtistSocialsSuccessProps> = ({
           {result.socials?.map((social) => (
             <Link
               href={
-                social.social.profile_url.startsWith("http://") || social.social.profile_url.startsWith("https://")
+                social.social.profile_url.startsWith("http://") ||
+                social.social.profile_url.startsWith("https://")
                   ? social.social.profile_url
                   : `https://${social.social.profile_url}`
               }
@@ -45,16 +52,18 @@ const UpdateArtistSocialsSuccess: React.FC<UpdateArtistSocialsSuccessProps> = ({
                 <div className="w-8 h-8 bg-muted rounded flex items-center justify-center">
                   <Globe className="w-4 h-4 text-muted-foreground" />
                 </div>
-                
+
                 <div className="flex-1 min-w-0">
                   <div className="text-white text-sm font-medium truncate">
                     {social.social.profile_url}
                   </div>
                   <div className="text-xs text-muted-foreground">
-                    {getSocialPlatformByLink(social.social.profile_url).toLowerCase() || 'Social Link'}
+                    {getSocialPlatformByLink(
+                      social.social.profile_url
+                    ).toLowerCase() || "Social Link"}
                   </div>
                 </div>
-                
+
                 <div className="opacity-0 group-hover:opacity-100 transition-opacity">
                   <ExternalLink className="w-4 h-4 text-muted-foreground hover:text-foreground" />
                 </div>

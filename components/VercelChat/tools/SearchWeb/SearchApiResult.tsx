@@ -1,17 +1,21 @@
 import React from "react";
-import { parseSearchResults } from "@/lib/search/parseSearchResults";
 import SearchResultItem from "./SearchResultItem";
 
+export interface ParsedSearchResult {
+  title: string;
+  url: string;
+  snippet?: string;
+  date?: string;
+  last_updated?: string;
+}
+
 export interface SearchApiResultType {
-  content: {
-    text: string;
-    type: string;
-  }[];
-  isError: boolean;
+  results: ParsedSearchResult[];
+  formatted: string;
 }
 
 const SearchApiResult = ({ result }: { result: SearchApiResultType }) => {
-  if (result.isError) {
+  if (!result) {
     return (
       <div className="py-3 px-4 bg-destructive/10 border border-destructive/30 rounded-lg">
         <p className="text-sm text-destructive font-medium">
@@ -21,13 +25,14 @@ const SearchApiResult = ({ result }: { result: SearchApiResultType }) => {
     );
   }
 
-  const text = result.content[0]?.text || "";
-  const searchResults = parseSearchResults(text);
+  const searchResults: ParsedSearchResult[] = result.results;
 
   if (searchResults.length === 0) {
     return (
       <div className="py-3 px-4">
-        <p className="text-sm text-muted-foreground">No search results found.</p>
+        <p className="text-sm text-muted-foreground">
+          No search results found.
+        </p>
       </div>
     );
   }
@@ -37,13 +42,10 @@ const SearchApiResult = ({ result }: { result: SearchApiResultType }) => {
       <p className="text-sm text-muted-foreground">
         Reviewing sources · {searchResults.length}
       </p>
-      
+
       <div className="space-y-1">
         {searchResults.map((item, index) => (
-          <SearchResultItem 
-            key={index} 
-            result={item}
-          />
+          <SearchResultItem key={index} result={item} />
         ))}
       </div>
     </div>
@@ -51,4 +53,3 @@ const SearchApiResult = ({ result }: { result: SearchApiResultType }) => {
 };
 
 export default SearchApiResult;
-

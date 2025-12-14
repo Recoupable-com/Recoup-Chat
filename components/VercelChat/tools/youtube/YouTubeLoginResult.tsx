@@ -13,8 +13,12 @@
 
 import React from "react";
 import { YouTubeErrorDisplay } from "./YouTubeErrorDisplay";
-import { YouTubeLoginResultType } from "@/lib/tools/youtube/youtubeLogin";
 import GenericSuccess from "@/components/VercelChat/tools/GenericSuccess";
+
+export interface YouTubeLoginResultType {
+  message: string;
+  authenticated: boolean;
+}
 
 interface YouTubeLoginResultProps {
   result: YouTubeLoginResultType;
@@ -22,7 +26,7 @@ interface YouTubeLoginResultProps {
 
 export function YouTubeLoginResult({ result }: YouTubeLoginResultProps) {
   // Success state - show generic success
-  if (result.success) {
+  if (result.authenticated) {
     return (
       <GenericSuccess
         name="YouTube Login Successful"

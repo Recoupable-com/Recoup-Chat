@@ -1,6 +1,10 @@
 import React from "react";
-import { getDomain, getFaviconUrl, getFallbackFaviconUrl } from "@/lib/search/urlUtils";
-import type { ParsedSearchResult } from "@/lib/search/parseSearchResults";
+import {
+  getDomain,
+  getFaviconUrl,
+  getFallbackFaviconUrl,
+} from "@/lib/search/urlUtils";
+import type { ParsedSearchResult } from "./SearchApiResult";
 
 interface SearchResultItemProps {
   result: ParsedSearchResult;
@@ -18,9 +22,9 @@ const SearchResultItem: React.FC<SearchResultItemProps> = ({ result }) => {
       className="flex items-center justify-between gap-3 px-3 py-2 rounded-lg hover:bg-muted dark:hover:bg-zinc-900 transition-colors group"
     >
       <div className="flex items-center gap-2 min-w-0 flex-1">
-        <img 
-          src={faviconUrl} 
-          alt="" 
+        <img
+          src={faviconUrl}
+          alt=""
           className="w-4 h-4 flex-shrink-0"
           onError={(e) => {
             e.currentTarget.src = getFallbackFaviconUrl();
@@ -38,4 +42,3 @@ const SearchResultItem: React.FC<SearchResultItemProps> = ({ result }) => {
 };
 
 export default SearchResultItem;
-

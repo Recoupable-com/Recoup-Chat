@@ -1,7 +1,7 @@
 import React from "react";
 import { Badge } from "@/components/ui/badge";
 import { Calendar, Clock, Music, ExternalLink } from "lucide-react";
-import { SpotifyAlbum } from "@/lib/tools/getSpotifyAlbum";
+import { SpotifyAlbum } from "@/types/spotify";
 import { formatDuration } from "@/lib/spotify/formatDuration";
 import Link from "next/link";
 
@@ -92,4 +92,4 @@ const SpotifyAlbumWithTracksMeta: React.FC<SpotifyAlbumWithTracksMetaProps> = ({
   );
 };
 
-export default SpotifyAlbumWithTracksMeta; 
+export default SpotifyAlbumWithTracksMeta;
