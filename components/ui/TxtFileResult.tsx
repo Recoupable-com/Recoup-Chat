@@ -2,8 +2,17 @@ import React, { useState, useEffect } from "react";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
-import { TxtFileGenerationResult } from "@/lib/tools/createTxtFile";
 import { Download } from "lucide-react";
+
+export interface TxtFileGenerationResult {
+  success: boolean;
+  arweaveUrl: string | null;
+  smartAccountAddress?: string;
+  transactionHash?: string | null;
+  blockExplorerUrl?: string | null;
+  message?: string;
+  error?: string;
+}
 
 interface TxtFileResultProps {
   result: TxtFileGenerationResult;
@@ -82,22 +91,29 @@ export function TxtFileResult({ result }: TxtFileResultProps) {
               disabled={!result.arweaveUrl}
               className="h-8 px-3 text-xs rounded-xl ml-auto"
             >
-              <Download className="w-4 h-4" /> <span className="hidden sm:block">Download</span>
+              <Download className="w-4 h-4" />{" "}
+              <span className="hidden sm:block">Download</span>
             </Button>
           </div>
         </div>
 
         <div className="prose prose-sm dark:prose-invert max-w-none">
-          <div 
+          <div
             className={cn(
               "mb-4 whitespace-pre-wrap font-mono text-sm p-3 bg-muted/50 rounded-md overflow-auto",
               "max-h-[200px] md:max-h-[400px] scrollbar-thin scrollbar-thumb-rounded scrollbar-thumb-gray-300 dark:scrollbar-thumb-gray-600"
             )}
-            style={{transition: "max-height 0.3s cubic-bezier(0.4, 0, 0.2, 1)"}}
+            style={{
+              transition: "max-height 0.3s cubic-bezier(0.4, 0, 0.2, 1)",
+            }}
           >
-            {loading ? (<p className="text-muted-foreground">Loading file contents...</p>) : 
-             fetchError ? (<p className="text-destructive">{fetchError}</p>) 
-             : (displayText)}
+            {loading ? (
+              <p className="text-muted-foreground">Loading file contents...</p>
+            ) : fetchError ? (
+              <p className="text-destructive">{fetchError}</p>
+            ) : (
+              displayText
+            )}
           </div>
         </div>
       </CardContent>
