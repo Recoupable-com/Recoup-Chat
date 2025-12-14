@@ -127,7 +127,6 @@ export interface SpotifyDeepResearchResultUIType {
   };
 }
 export interface SpotifyArtistTopTracksResultType {
-  status: string;
   tracks: SpotifyTrackSearchResult[];
 }
 
