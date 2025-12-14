@@ -19,7 +19,6 @@ import sendEmailTool from "./sendEmailTool";
 import getSocialFans from "./getSocialFans";
 import createSegments from "./createSegments";
 import createReleaseReport from "./createReleaseReport";
-import youtubeTools from "./youtube";
 import filesTools from "./files";
 import browserTools from "./browser";
 import getCatalogSongs from "./catalogs/getCatalogSongs";
@@ -48,7 +47,6 @@ export function getMcpTools(): ToolSet {
     create_release_report: createReleaseReport,
     get_catalog_songs: getCatalogSongs,
     ...filesTools,
-    ...youtubeTools,
     ...browserTools,
   };
 
