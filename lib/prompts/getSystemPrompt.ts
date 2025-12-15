@@ -1,5 +1,4 @@
 import { SYSTEM_PROMPT } from "@/lib/consts";
-import getArtistInstruction from "../supabase/getArtistInstruction";
 import getUserInfo from "../supabase/getUserInfo";
 
 export async function getSystemPrompt({
@@ -13,7 +12,7 @@ export async function getSystemPrompt({
 }: {
   roomId?: string;
   artistId?: string;
-  accountId?: string;
+  accountId: string;
   email?: string;
   knowledgeBaseText?: string;
   artistInstruction?: string;
@@ -92,16 +91,14 @@ ${userInfo.instruction}`;
     systemPrompt = `${systemPrompt}${userSection}`;
   }
 
-  const customInstruction =
-    artistInstruction || (await getArtistInstruction(artistId || ""));
-  if (customInstruction) {
+  if (artistInstruction) {
     systemPrompt = `${systemPrompt}
 
 -----SELECTED ARTIST/WORKSPACE CONTEXT-----
 This is information about the artist/workspace the user is currently working with:
 
 Custom Instructions for this Artist:
-${customInstruction}
+${artistInstruction}
 -----END ARTIST/WORKSPACE CONTEXT-----`;
   }
 
