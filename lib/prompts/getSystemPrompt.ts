@@ -12,8 +12,6 @@ export async function getSystemPrompt({
   knowledgeBaseText,
   artistInstruction,
   conversationName = "New conversation",
-  timezone,
-  organizationId,
 }: {
   roomId?: string;
   artistId?: string;
@@ -22,8 +20,6 @@ export async function getSystemPrompt({
   knowledgeBaseText?: string;
   artistInstruction?: string;
   conversationName?: string;
-  timezone?: string;
-  organizationId?: string | null;
 }): Promise<string> {
   const resolvedArtistId = artistId || (await getArtistIdForRoom(roomId || ""));
 
@@ -35,8 +31,6 @@ export async function getSystemPrompt({
   - active_account_email: ${email || "Unknown"}
   - active_conversation_id: ${roomId || "No ID"}
   - active_conversation_name: ${conversationName || "No Chat Name"}
-  - active_timezone: ${timezone || "Unknown"} (use with get_local_time tool when available)
-  - organization_id: ${organizationId || "null"} (use when creating artists to link them to the selected org)
 
   **IMAGE EDITING INSTRUCTIONS:**
   When the user asks to edit an image (e.g., "add glasses", "make it darker", "add a hat"):
@@ -56,7 +50,7 @@ export async function getSystemPrompt({
 
   // Add user information section
   const userInfo = await getUserInfo(accountId || "");
-  
+
   if (userInfo) {
     let userSection = `
 
@@ -66,17 +60,26 @@ This is information about the person currently using this application (the human
 Name: ${userInfo.name || "Not provided"}
 Email: ${userInfo.email || email || "Not provided"}`;
 
-    if (userInfo.job_title || userInfo.role_type || userInfo.company_name || userInfo.organization) {
+    if (
+      userInfo.job_title ||
+      userInfo.role_type ||
+      userInfo.company_name ||
+      userInfo.organization
+    ) {
       userSection += `
 
 Professional Context:`;
-      if (userInfo.job_title) userSection += `
+      if (userInfo.job_title)
+        userSection += `
 - Job Title: ${userInfo.job_title}`;
-      if (userInfo.role_type) userSection += `
+      if (userInfo.role_type)
+        userSection += `
 - Role Type: ${userInfo.role_type}`;
-      if (userInfo.company_name) userSection += `
+      if (userInfo.company_name)
+        userSection += `
 - Company: ${userInfo.company_name}`;
-      if (userInfo.organization) userSection += `
+      if (userInfo.organization)
+        userSection += `
 - Organization: ${userInfo.organization}`;
     }
 
@@ -93,7 +96,8 @@ ${userInfo.instruction}`;
     systemPrompt = `${systemPrompt}${userSection}`;
   }
 
-  const customInstruction = artistInstruction || await getArtistInstruction(resolvedArtistId || "");
+  const customInstruction =
+    artistInstruction || (await getArtistInstruction(resolvedArtistId || ""));
   if (customInstruction) {
     systemPrompt = `${systemPrompt}
 
@@ -105,7 +109,9 @@ ${customInstruction}
 -----END ARTIST/WORKSPACE CONTEXT-----`;
   }
 
-  const knowledge = knowledgeBaseText || await getKnowledgeBaseContext(resolvedArtistId || "");
+  const knowledge =
+    knowledgeBaseText ||
+    (await getKnowledgeBaseContext(resolvedArtistId || ""));
   if (knowledge) {
     systemPrompt = `${systemPrompt}
 
