@@ -25,11 +25,46 @@ export default async function getGeneralAgent(
   // Use the first email from the list
   const email = accountEmails[0]?.email || undefined;
 
-  // Fetch artist instruction if artistId is provided
+  // Fetch artist instruction and knowledge base if artistId is provided
   let artistInstruction: string | undefined;
+  let knowledgeBaseText: string | undefined;
   if (artistId) {
     const artistAccountInfo = await getAccountInfoById(artistId);
     artistInstruction = artistAccountInfo?.instruction || undefined;
+
+    // Process knowledge base files from account_info
+    const knowledges = artistAccountInfo?.knowledges;
+    if (knowledges && Array.isArray(knowledges) && knowledges.length > 0) {
+      const textTypes = new Set([
+        "text/plain",
+        "text/markdown",
+        "application/json",
+        "text/csv",
+      ]);
+      const knowledgeFiles = knowledges as Array<{
+        name?: string;
+        url?: string;
+        type?: string;
+      }>;
+      const texts = await Promise.all(
+        knowledgeFiles
+          .filter((f) => f.type && textTypes.has(f.type) && f.url)
+          .map(async (f) => {
+            try {
+              const res = await fetch(f.url!);
+              if (!res.ok) return "";
+              const content = await res.text();
+              return `--- ${f.name || "Unknown"} ---\n${content}`;
+            } catch {
+              return "";
+            }
+          })
+      );
+      const combinedText = texts.filter(Boolean).join("\n\n");
+      if (combinedText) {
+        knowledgeBaseText = combinedText;
+      }
+    }
   }
 
   const baseSystemPrompt = await getSystemPrompt({
@@ -38,7 +73,7 @@ export default async function getGeneralAgent(
     accountId,
     email,
     artistInstruction,
-    // knowledgeBaseText,
+    knowledgeBaseText,
   });
   const imageUrls = extractImageUrlsFromMessages(messages);
   const instructions = buildSystemPromptWithImages(baseSystemPrompt, imageUrls);
