@@ -1,5 +1,4 @@
 import { SYSTEM_PROMPT } from "@/lib/consts";
-import getArtistIdForRoom from "../supabase/getArtistIdForRoom";
 import getArtistInstruction from "../supabase/getArtistInstruction";
 import getUserInfo from "../supabase/getUserInfo";
 
@@ -20,13 +19,11 @@ export async function getSystemPrompt({
   artistInstruction?: string;
   conversationName?: string;
 }): Promise<string> {
-  const resolvedArtistId = artistId || (await getArtistIdForRoom(roomId || ""));
-
   let systemPrompt = `${SYSTEM_PROMPT} 
 
   **IMPORTANT CONTEXT VALUES (use these exact values in tools):**
   - account_id: ${accountId || "Unknown"} (use this for ALL tools that require account_id parameter)
-  - artist_account_id: ${resolvedArtistId}
+  - artist_account_id: ${artistId}
   - active_account_email: ${email || "Unknown"}
   - active_conversation_id: ${roomId || "No ID"}
   - active_conversation_name: ${conversationName || "No Chat Name"}
@@ -96,7 +93,7 @@ ${userInfo.instruction}`;
   }
 
   const customInstruction =
-    artistInstruction || (await getArtistInstruction(resolvedArtistId || ""));
+    artistInstruction || (await getArtistInstruction(artistId || ""));
   if (customInstruction) {
     systemPrompt = `${systemPrompt}
 
