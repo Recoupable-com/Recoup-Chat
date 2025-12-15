@@ -6,7 +6,6 @@ import { serializeError } from "@/lib/errors/serializeError";
 import { sendErrorNotification } from "@/lib/telegram/errors/sendErrorNotification";
 import { handleChatCompletion } from "@/lib/chat/handleChatCompletion";
 import { getCorsHeaders } from "@/lib/chat/getCorsHeaders";
-import { type ChatRequest } from "@/lib/chat/types";
 import generateUUID from "@/lib/generateUUID";
 import getExecute from "@/lib/chat/getExecute";
 import { validateChatRequest } from "@/lib/chat/validateChatRequest";
@@ -24,7 +23,7 @@ export async function POST(request: NextRequest) {
   if (validatedBodyOrError instanceof Response) {
     return validatedBodyOrError;
   }
-  const body = validatedBodyOrError as ChatRequest;
+  const body = validatedBodyOrError;
 
   try {
     const stream = createUIMessageStream({
