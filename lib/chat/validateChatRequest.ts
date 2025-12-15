@@ -8,8 +8,8 @@ import { getMessages } from "@/lib/messages/getMessages";
 export const chatRequestSchema = z
   .object({
     // Core routing / context fields
-    roomId: z.string().min(1, "roomId is required").optional(),
-    accountId: z.string().min(1, "accountId is required").optional(),
+    roomId: z.string().optional(),
+    accountId: z.string().optional(),
     artistId: z.string().optional(),
     model: z.string().optional(),
     excludeTools: z.array(z.string()).optional(),
