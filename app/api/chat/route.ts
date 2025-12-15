@@ -9,7 +9,7 @@ import { getCorsHeaders } from "@/lib/chat/getCorsHeaders";
 import { type ChatRequest } from "@/lib/chat/types";
 import generateUUID from "@/lib/generateUUID";
 import getExecute from "@/lib/chat/getExecute";
-import { validateHeaders } from "@/lib/chat/validateHeaders";
+import { validateChatRequest } from "@/lib/chat/validateChatRequest";
 
 // Handle OPTIONS preflight requests
 export async function OPTIONS() {
@@ -20,15 +20,11 @@ export async function OPTIONS() {
 }
 
 export async function POST(request: NextRequest) {
-  const body: ChatRequest = await request.json();
-
-  const headerValidationResult = await validateHeaders(request);
-  if (headerValidationResult instanceof Response) {
-    return headerValidationResult;
+  const validatedBodyOrError = await validateChatRequest(request);
+  if (validatedBodyOrError instanceof Response) {
+    return validatedBodyOrError;
   }
-  if (headerValidationResult.accountId) {
-    body.accountId = headerValidationResult.accountId;
-  }
+  const body = validatedBodyOrError as ChatRequest;
 
   try {
     const stream = createUIMessageStream({
