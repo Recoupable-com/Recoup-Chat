@@ -2,7 +2,7 @@ import { UIMessage } from "ai";
 import { DEFAULT_MODEL, EVAL_ACCOUNT_ID } from "@/lib/consts";
 import { setupChatRequest } from "@/lib/chat/setupChatRequest";
 import { generateText } from "ai";
-import { type ChatRequest } from "@/lib/chat/types";
+import { ChatRequestBody } from "@/lib/chat/validateChatRequest";
 
 /**
  * Call the chat functions and return the full result including tool calls from ALL steps.
@@ -24,7 +24,7 @@ export async function callChatFunctionsWithResult(input: string) {
     },
   ];
 
-  const body: ChatRequest = {
+  const body: ChatRequestBody = {
     messages,
     roomId: "3779c62e-7583-40c6-a0bb-6bbac841a531",
     accountId: EVAL_ACCOUNT_ID,

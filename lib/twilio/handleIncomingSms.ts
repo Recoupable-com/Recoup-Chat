@@ -2,13 +2,8 @@ import { ParsedSmsMessage } from "@/types/twilio";
 import { generateText, UIMessage } from "ai";
 import generateUUID from "@/lib/generateUUID";
 import { setupChatRequest } from "@/lib/chat/setupChatRequest";
-import { type ChatRequest } from "@/lib/chat/types";
-import {
-  SMS_ACCOUNT_ID,
-  SMS_ROOM_ID,
-  SMS_ARTIST_INSTRUCTION,
-  SMS_FALLBACK_MESSAGE,
-} from "./constants";
+import { SMS_ACCOUNT_ID, SMS_ROOM_ID, SMS_FALLBACK_MESSAGE } from "./constants";
+import { ChatRequestBody } from "@/lib/chat/validateChatRequest";
 
 /**
  * Processes incoming SMS message and generates AI response
@@ -36,10 +31,9 @@ export const handleIncomingSms = async (
       ],
     };
 
-    const chatRequest: ChatRequest = {
+    const chatRequest: ChatRequestBody = {
       roomId: SMS_ROOM_ID,
       messages: [userMessage],
-      artistInstruction: SMS_ARTIST_INSTRUCTION,
       accountId: SMS_ACCOUNT_ID,
     };
 
