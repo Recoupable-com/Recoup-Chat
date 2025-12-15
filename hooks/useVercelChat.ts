@@ -159,6 +159,14 @@ export function useVercelChat({
     return outputs;
   }, [knowledgeFiles]);
 
+  const headers = useMemo(() => {
+    return accessToken
+      ? {
+          Authorization: `Bearer ${accessToken}`,
+        }
+      : undefined;
+  }, [accessToken]);
+
   const chatRequestOptions = useMemo(
     () => ({
       body: {
@@ -166,13 +174,9 @@ export function useVercelChat({
         artistId,
         model,
       },
-      headers: accessToken
-        ? {
-            Authorization: `Bearer ${accessToken}`,
-          }
-        : undefined,
+      headers,
     }),
-    [id, artistId, model, accessToken]
+    [id, artistId, model, headers]
   );
 
   const { messages, status, stop, sendMessage, setMessages, regenerate } =
