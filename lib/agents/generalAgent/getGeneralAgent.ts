@@ -8,6 +8,7 @@ import { setupToolsForRequest } from "@/lib/chat/setupToolsForRequest";
 import { ChatRequestBody } from "@/lib/chat/validateChatRequest";
 import { getAccountEmails } from "@/lib/supabase/account_emails/getAccountEmails";
 import getAccountInfoById from "@/lib/supabase/account_info/getAccountInfoById";
+import { getKnowledgeBaseText } from "@/lib/files/getKnowledgeBaseText";
 
 export default async function getGeneralAgent(
   body: ChatRequestBody
@@ -33,38 +34,9 @@ export default async function getGeneralAgent(
     artistInstruction = artistAccountInfo?.instruction || undefined;
 
     // Process knowledge base files from account_info
-    const knowledges = artistAccountInfo?.knowledges;
-    if (knowledges && Array.isArray(knowledges) && knowledges.length > 0) {
-      const textTypes = new Set([
-        "text/plain",
-        "text/markdown",
-        "application/json",
-        "text/csv",
-      ]);
-      const knowledgeFiles = knowledges as Array<{
-        name?: string;
-        url?: string;
-        type?: string;
-      }>;
-      const texts = await Promise.all(
-        knowledgeFiles
-          .filter((f) => f.type && textTypes.has(f.type) && f.url)
-          .map(async (f) => {
-            try {
-              const res = await fetch(f.url!);
-              if (!res.ok) return "";
-              const content = await res.text();
-              return `--- ${f.name || "Unknown"} ---\n${content}`;
-            } catch {
-              return "";
-            }
-          })
-      );
-      const combinedText = texts.filter(Boolean).join("\n\n");
-      if (combinedText) {
-        knowledgeBaseText = combinedText;
-      }
-    }
+    knowledgeBaseText = await getKnowledgeBaseText(
+      artistAccountInfo?.knowledges
+    );
   }
 
   const baseSystemPrompt = await getSystemPrompt({
