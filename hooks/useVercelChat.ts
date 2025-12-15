@@ -2,8 +2,6 @@ import { useChat } from "@ai-sdk/react";
 import { useMessageLoader } from "./useMessageLoader";
 import { useUserProvider } from "@/providers/UserProvder";
 import { useArtistProvider } from "@/providers/ArtistProvider";
-import { useOrganization } from "@/providers/OrganizationProvider";
-import { useArtistKnowledgeText } from "./useArtistKnowledgeText";
 import { useParams } from "next/navigation";
 import { toast } from "react-toastify";
 import { useEffect, useState, useRef, useMemo, useCallback } from "react";
@@ -18,6 +16,7 @@ import { DEFAULT_MODEL } from "@/lib/consts";
 import { usePaymentProvider } from "@/providers/PaymentProvider";
 import useArtistFilesForMentions from "@/hooks/useArtistFilesForMentions";
 import type { KnowledgeBaseEntry } from "@/lib/supabase/getArtistKnowledge";
+import { useAccessToken } from "./useAccessToken";
 
 // 30 days in seconds for Supabase signed URL expiry
 const SIGNED_URL_EXPIRES_SECONDS = 60 * 60 * 24 * 30;
@@ -38,11 +37,10 @@ export function useVercelChat({
   initialMessages,
   attachments = [],
 }: UseVercelChatProps) {
-  const { userData, email } = useUserProvider();
+  const { userData } = useUserProvider();
   const { selectedArtist } = useArtistProvider();
-  const { selectedOrgId } = useOrganization();
   const { roomId } = useParams();
-  
+
   const userId = userData?.account_id || userData?.id; // Use account_id if available, fallback to id
   const artistId = selectedArtist?.account_id;
   const [hasChatApiError, setHasChatApiError] = useState(false);
@@ -55,6 +53,7 @@ export function useVercelChat({
     availableModels[0]?.id ?? ""
   );
   const { refetchCredits } = usePaymentProvider();
+  const accessToken = useAccessToken();
 
   // Load artist files for mentions (from Supabase)
   const { files: allArtistFiles = [] } = useArtistFilesForMentions();
@@ -147,13 +146,7 @@ export function useVercelChat({
     return () => {
       cancelled = true;
     };
-  }, [selectedFileIds, allArtistFiles]);
-
-  // Build knowledge base text from selected files (text-like types only)
-  const { data: knowledgeBaseText } = useArtistKnowledgeText(
-    artistId,
-    knowledgeFiles
-  );
+  }, [selectedFileIds, allArtistFiles, userData?.account_id]);
 
   // Convert selected signed files to FileUIPart attachments (pdf/images)
   const selectedFileAttachments = useMemo(() => {
@@ -166,34 +159,24 @@ export function useVercelChat({
     return outputs;
   }, [knowledgeFiles]);
 
-  const timezone = useMemo(
-    () => Intl.DateTimeFormat().resolvedOptions().timeZone,
-    []
-  );
+  const headers = useMemo(() => {
+    return accessToken
+      ? {
+          Authorization: `Bearer ${accessToken}`,
+        }
+      : undefined;
+  }, [accessToken]);
 
   const chatRequestOptions = useMemo(
     () => ({
       body: {
         roomId: id,
         artistId,
-        accountId: userId,
-        email,
         model,
-        timezone,
-        knowledgeBaseText,
-        organizationId: selectedOrgId,
       },
+      headers,
     }),
-    [
-      id,
-      artistId,
-      userId,
-      email,
-      model,
-      timezone,
-      knowledgeBaseText,
-      selectedOrgId,
-    ]
+    [id, artistId, model, headers]
   );
 
   const { messages, status, stop, sendMessage, setMessages, regenerate } =
