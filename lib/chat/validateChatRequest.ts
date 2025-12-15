@@ -3,6 +3,7 @@ import { NextResponse } from "next/server";
 import { z } from "zod";
 import { getCorsHeaders } from "@/lib/chat/getCorsHeaders";
 import { validateHeaders } from "@/lib/chat/validateHeaders";
+import { getMessages } from "@/lib/messages/getMessages";
 
 export const chatRequestSchema = z
   .object({
@@ -94,6 +95,19 @@ export async function validateChatRequest(
         headers: getCorsHeaders(),
       }
     );
+  }
+
+  // Normalize chat content:
+  // - If messages are provided, keep them as-is
+  // - If only prompt is provided, convert it into a single user UIMessage
+  const hasMessages =
+    Array.isArray(validatedBody.messages) && validatedBody.messages.length > 0;
+  const hasPrompt =
+    typeof validatedBody.prompt === "string" &&
+    validatedBody.prompt.trim().length > 0;
+
+  if (!hasMessages && hasPrompt) {
+    validatedBody.messages = getMessages(validatedBody.prompt);
   }
 
   return validatedBody;
