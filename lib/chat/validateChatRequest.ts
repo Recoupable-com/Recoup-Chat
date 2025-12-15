@@ -7,15 +7,15 @@ import { getMessages } from "@/lib/messages/getMessages";
 
 export const chatRequestSchema = z
   .object({
+    // Chat content
+    prompt: z.string().optional(),
+    messages: z.array(z.any()).default([]),
     // Core routing / context fields
     roomId: z.string().optional(),
     accountId: z.string().optional(),
     artistId: z.string().optional(),
     model: z.string().optional(),
     excludeTools: z.array(z.string()).optional(),
-    // Chat content
-    prompt: z.string().optional(),
-    messages: z.array(z.any()).default([]),
   })
   .superRefine((data, ctx) => {
     const hasMessages =
