@@ -8,7 +8,7 @@ export const chatRequestSchema = z
   .object({
     // Core routing / context fields
     roomId: z.string().min(1, "roomId is required"),
-    accountId: z.string().min(1, "accountId is required"),
+    accountId: z.string().min(1, "accountId is required").optional(),
     artistId: z.string().optional(),
     model: z.string().optional(),
     excludeTools: z.array(z.string()).optional(),
@@ -77,6 +77,23 @@ export async function validateChatRequest(
   }
   if (headerValidationResult.accountId) {
     validatedBody.accountId = headerValidationResult.accountId;
+  }
+
+  const hasAccountId =
+    typeof validatedBody.accountId === "string" &&
+    validatedBody.accountId.trim().length > 0;
+
+  if (!hasAccountId) {
+    return NextResponse.json(
+      {
+        status: "error",
+        message: "x-api-key header required",
+      },
+      {
+        status: 401,
+        headers: getCorsHeaders(),
+      }
+    );
   }
 
   return validatedBody;
