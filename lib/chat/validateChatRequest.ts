@@ -7,7 +7,7 @@ import { validateHeaders } from "@/lib/chat/validateHeaders";
 export const chatRequestSchema = z
   .object({
     // Core routing / context fields
-    roomId: z.string().min(1, "roomId is required"),
+    roomId: z.string().min(1, "roomId is required").optional(),
     accountId: z.string().min(1, "accountId is required").optional(),
     artistId: z.string().optional(),
     model: z.string().optional(),
