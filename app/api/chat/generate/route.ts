@@ -5,10 +5,9 @@ import { sendErrorNotification } from "@/lib/telegram/errors/sendErrorNotificati
 import { setupChatRequest } from "@/lib/chat/setupChatRequest";
 import { handleChatCompletion } from "@/lib/chat/handleChatCompletion";
 import { getCorsHeaders } from "@/lib/chat/getCorsHeaders";
-import { type ChatRequest } from "@/lib/chat/types";
 import generateUUID from "@/lib/generateUUID";
 import { handleChatCredits } from "@/lib/credits/handleChatCredits";
-import { validateHeaders } from "@/lib/chat/validateHeaders";
+import { validateChatRequest } from "@/lib/chat/validateChatRequest";
 
 // Handle OPTIONS preflight requests
 export async function OPTIONS() {
@@ -19,16 +18,11 @@ export async function OPTIONS() {
 }
 
 export async function POST(request: NextRequest) {
-  const body: ChatRequest = await request.json();
-
-  // If auth headers are present, resolve accountId via GET /api/accounts/id
-  const headerValidationResult = await validateHeaders(request);
-  if (headerValidationResult instanceof Response) {
-    return headerValidationResult;
+  const validatedBodyOrError = await validateChatRequest(request);
+  if (validatedBodyOrError instanceof Response) {
+    return validatedBodyOrError;
   }
-  if (headerValidationResult.accountId) {
-    body.accountId = headerValidationResult.accountId;
-  }
+  const body = validatedBodyOrError;
 
   try {
     const chatConfig = await setupChatRequest(body);
