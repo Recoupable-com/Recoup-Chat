@@ -6,6 +6,7 @@ import { buildSystemPromptWithImages } from "@/lib/chat/buildSystemPromptWithIma
 import { getSystemPrompt } from "@/lib/prompts/getSystemPrompt";
 import { setupToolsForRequest } from "@/lib/chat/setupToolsForRequest";
 import { ChatRequestBody } from "@/lib/chat/validateChatRequest";
+import { getAccountEmails } from "@/lib/supabase/account_emails/getAccountEmails";
 
 export default async function getGeneralAgent(
   body: ChatRequestBody
@@ -14,22 +15,29 @@ export default async function getGeneralAgent(
     accountId,
     messages,
     artistId,
-    // email,
     // artistInstruction,
     // knowledgeBaseText,
-    // timezone,
     model: bodyModel,
-    // organizationId,
   } = body;
+
+  // Fetch account email(s)
+  let email: string | undefined;
+  try {
+    const accountEmails = await getAccountEmails(accountId);
+    // Use the first email from the list
+    email = accountEmails[0]?.email || undefined;
+  } catch (error) {
+    console.error("Error fetching account emails:", error);
+    // Continue without email if fetch fails
+  }
+
   const baseSystemPrompt = await getSystemPrompt({
     roomId: body.roomId,
     artistId,
     accountId,
-    // email,
+    email,
     // artistInstruction,
     // knowledgeBaseText,
-    // timezone,
-    // organizationId,
   });
   const imageUrls = extractImageUrlsFromMessages(messages);
   const instructions = buildSystemPromptWithImages(baseSystemPrompt, imageUrls);
