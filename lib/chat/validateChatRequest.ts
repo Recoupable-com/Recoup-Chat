@@ -37,7 +37,11 @@ export const chatRequestSchema = z
     }
   });
 
-export type ChatRequestBody = z.infer<typeof chatRequestSchema>;
+type BaseChatRequestBody = z.infer<typeof chatRequestSchema>;
+
+export type ChatRequestBody = BaseChatRequestBody & {
+  accountId: string;
+};
 
 /**
  * Validates chat request body and auth headers.
@@ -69,7 +73,7 @@ export async function validateChatRequest(
     );
   }
 
-  const validatedBody: ChatRequestBody = validationResult.data;
+  const validatedBody: BaseChatRequestBody = validationResult.data;
 
   // If auth headers are present, resolve accountId via GET /api/accounts/id
   const headerValidationResult = await validateHeaders(request);
@@ -110,5 +114,5 @@ export async function validateChatRequest(
     validatedBody.messages = getMessages(validatedBody.prompt);
   }
 
-  return validatedBody;
+  return validatedBody as ChatRequestBody;
 }

@@ -1,5 +1,5 @@
 import { UIMessageStreamWriter } from "ai";
-import { ChatRequest } from "./types";
+import { ChatRequestBody } from "./validateChatRequest";
 import { setupChatRequest } from "./setupChatRequest";
 import { handleChatCredits } from "@/lib/credits/handleChatCredits";
 
@@ -7,7 +7,7 @@ type ExecuteOptions = {
   writer: UIMessageStreamWriter;
 };
 
-const getExecute = async (options: ExecuteOptions, body: ChatRequest) => {
+const getExecute = async (options: ExecuteOptions, body: ChatRequestBody) => {
   const { writer } = options;
 
   const chatConfig = await setupChatRequest(body);

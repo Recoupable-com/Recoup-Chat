@@ -1,12 +1,15 @@
 import generateUUID from "@/lib/generateUUID";
 import { MAX_MESSAGES } from "./const";
-import { type ChatRequest, type ChatConfig } from "./types";
+import { type ChatConfig } from "./types";
 import { AnthropicProviderOptions } from "@ai-sdk/anthropic";
 import { convertToModelMessages } from "ai";
 import getPrepareStepResult from "./toolChains/getPrepareStepResult";
 import { getGeneralAgent } from "../agents/generalAgent";
+import { ChatRequestBody } from "./validateChatRequest";
 
-export async function setupChatRequest(body: ChatRequest): Promise<ChatConfig> {
+export async function setupChatRequest(
+  body: ChatRequestBody
+): Promise<ChatConfig> {
   const decision = await getGeneralAgent(body);
 
   const system = decision.instructions;

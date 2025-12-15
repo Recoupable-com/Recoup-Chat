@@ -8,16 +8,16 @@ import filterMessageContentForMemories from "@/lib/messages/filterMessageContent
 import { serializeError } from "@/lib/errors/serializeError";
 import { sendErrorNotification } from "@/lib/telegram/errors/sendErrorNotification";
 import { getAccountEmails } from "@/lib/supabase/account_emails/getAccountEmails";
-import { type ChatRequest } from "./types";
+import { ChatRequestBody } from "./validateChatRequest";
 import { UIMessage } from "ai";
 
 export async function handleChatCompletion(
-  body: ChatRequest,
+  body: ChatRequestBody,
   responseMessages: UIMessage[]
 ): Promise<void> {
   try {
-    const { messages, roomId, accountId, artistId } = body;
-    let email = body.email || "";
+    const { messages, roomId = "", accountId, artistId } = body;
+    let email = "";
 
     if (!email && accountId) {
       const emails = await getAccountEmails(accountId);

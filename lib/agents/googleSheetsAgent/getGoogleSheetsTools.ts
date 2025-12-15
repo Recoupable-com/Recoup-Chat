@@ -1,7 +1,7 @@
 import { ToolSet } from "ai";
 import { CreateConnectedAccountOptions } from "@composio/core";
 import { getComposioClient } from "@/lib/composio/client";
-import { ChatRequest } from "@/lib/chat/types";
+import { ChatRequestBody } from "@/lib/chat/validateChatRequest";
 import getLatestUserMessageText from "@/lib/messages/getLatestUserMessageText";
 import getConnectedAccount, {
   GOOGLE_SHEETS_TOOLKIT_SLUG,
@@ -9,7 +9,7 @@ import getConnectedAccount, {
 import googleSheetsLoginTool from "@/lib/tools/composio/googleSheetsLoginTool";
 
 export default async function getGoogleSheetsTools(
-  body: ChatRequest
+  body: ChatRequestBody
 ): Promise<ToolSet> {
   const { accountId, messages } = body;
 

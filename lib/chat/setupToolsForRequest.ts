@@ -7,7 +7,7 @@ import { StreamableHTTPClientTransport } from "@modelcontextprotocol/sdk/client/
 import { getOrCreatePurchaserAccount } from "@/lib/coinbase/getOrCreatePurchaserAccount";
 import { NEW_API_BASE_URL } from "@/lib/consts";
 import { getGoogleSheetsTools } from "@/lib/agents/googleSheetsAgent";
-import { ChatRequest } from "@/lib/chat/types";
+import { ChatRequestBody } from "./validateChatRequest";
 
 /**
  * Sets up and filters tools for a chat request
@@ -15,7 +15,7 @@ import { ChatRequest } from "@/lib/chat/types";
  * @returns Filtered tool set ready for use
  */
 export async function setupToolsForRequest(
-  body: ChatRequest
+  body: ChatRequestBody
 ): Promise<ToolSet> {
   const { excludeTools } = body;
   const localTools = getMcpTools();
