@@ -3,7 +3,6 @@ import { uploadFile } from "@/lib/arweave/uploadFile";
 import { getFileMimeType } from "@/utils/getFileMimeType";
 import { NEW_API_BASE_URL } from "@/lib/consts";
 import useAccountOrganizations from "./useAccountOrganizations";
-import { useUserProvider } from "@/providers/UserProvder";
 
 interface KnowledgeItem {
   name: string;
@@ -20,7 +19,6 @@ interface OrgData {
 }
 
 const useOrgSettings = (orgId: string | null) => {
-  const { userData } = useUserProvider();
   const { data: organizations } = useAccountOrganizations();
   const [orgData, setOrgData] = useState<OrgData | null>(null);
   const [name, setName] = useState("");
@@ -63,7 +61,9 @@ const useOrgSettings = (orgId: string | null) => {
     const fetchOrgDetails = async () => {
       setIsLoading(true);
       try {
-        const response = await fetch(`${NEW_API_BASE_URL}/api/accounts/${orgId}`);
+        const response = await fetch(
+          `${NEW_API_BASE_URL}/api/accounts/${orgId}`
+        );
         if (response.ok) {
           const data = await response.json();
           // Response structure: { status: "success", account: {...} }
@@ -82,18 +82,21 @@ const useOrgSettings = (orgId: string | null) => {
     fetchOrgDetails();
   }, [orgId, organizations]);
 
-  const handleImageSelected = useCallback(async (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    if (!file) return;
+  const handleImageSelected = useCallback(
+    async (e: React.ChangeEvent<HTMLInputElement>) => {
+      const file = e.target.files?.[0];
+      if (!file) return;
 
-    setImageUploading(true);
-    try {
-      const { uri } = await uploadFile(file);
-      setImage(uri);
-    } finally {
-      setImageUploading(false);
-    }
-  }, []);
+      setImageUploading(true);
+      try {
+        const { uri } = await uploadFile(file);
+        setImage(uri);
+      } finally {
+        setImageUploading(false);
+      }
+    },
+    []
+  );
 
   const removeImage = useCallback(() => {
     setImage("");
@@ -184,4 +187,3 @@ const useOrgSettings = (orgId: string | null) => {
 };
 
 export default useOrgSettings;
-
