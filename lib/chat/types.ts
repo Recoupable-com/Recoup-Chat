@@ -4,26 +4,11 @@ import { OpenAIResponsesProviderOptions } from "@ai-sdk/openai";
 import { VercelToolCollection } from "@composio/vercel";
 import {
   type ModelMessage,
-  type UIMessage,
   type ToolSet,
   type StopCondition,
   type PrepareStepFunction,
   type ToolLoopAgent,
 } from "ai";
-
-export interface ChatRequest {
-  messages: Array<UIMessage>;
-  roomId: string;
-  artistId?: string;
-  accountId: string;
-  email?: string;
-  model?: string;
-  timezone?: string;
-  excludeTools?: string[];
-  artistInstruction?: string;
-  knowledgeBaseText?: string;
-  organizationId?: string | null;
-}
 
 export interface RoutingDecision {
   model: string;
