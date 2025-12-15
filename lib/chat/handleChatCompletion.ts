@@ -17,13 +17,11 @@ export async function handleChatCompletion(
 ): Promise<void> {
   try {
     const { messages, roomId = "", accountId, artistId } = body;
-    let email = "";
 
-    if (!email && accountId) {
-      const emails = await getAccountEmails(accountId);
-      if (emails.length > 0 && emails[0].email) {
-        email = emails[0].email;
-      }
+    let email = "";
+    const emails = await getAccountEmails(accountId);
+    if (emails.length > 0 && emails[0].email) {
+      email = emails[0].email;
     }
 
     const { lastMessage } = validateMessages(messages);
