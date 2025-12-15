@@ -1,7 +1,4 @@
 import { SYSTEM_PROMPT } from "@/lib/consts";
-import getArtistIdForRoom from "../supabase/getArtistIdForRoom";
-import getArtistInstruction from "../supabase/getArtistInstruction";
-import getKnowledgeBaseContext from "../agent/getKnowledgeBaseContext";
 import getUserInfo from "../supabase/getUserInfo";
 
 export async function getSystemPrompt({
@@ -12,31 +9,23 @@ export async function getSystemPrompt({
   knowledgeBaseText,
   artistInstruction,
   conversationName = "New conversation",
-  timezone,
-  organizationId,
 }: {
   roomId?: string;
   artistId?: string;
-  accountId?: string;
+  accountId: string;
   email?: string;
   knowledgeBaseText?: string;
   artistInstruction?: string;
   conversationName?: string;
-  timezone?: string;
-  organizationId?: string | null;
 }): Promise<string> {
-  const resolvedArtistId = artistId || (await getArtistIdForRoom(roomId || ""));
-
   let systemPrompt = `${SYSTEM_PROMPT} 
 
   **IMPORTANT CONTEXT VALUES (use these exact values in tools):**
   - account_id: ${accountId || "Unknown"} (use this for ALL tools that require account_id parameter)
-  - artist_account_id: ${resolvedArtistId}
+  - artist_account_id: ${artistId}
   - active_account_email: ${email || "Unknown"}
   - active_conversation_id: ${roomId || "No ID"}
   - active_conversation_name: ${conversationName || "No Chat Name"}
-  - active_timezone: ${timezone || "Unknown"} (use with get_local_time tool when available)
-  - organization_id: ${organizationId || "null"} (use when creating artists to link them to the selected org)
 
   **IMAGE EDITING INSTRUCTIONS:**
   When the user asks to edit an image (e.g., "add glasses", "make it darker", "add a hat"):
@@ -56,7 +45,7 @@ export async function getSystemPrompt({
 
   // Add user information section
   const userInfo = await getUserInfo(accountId || "");
-  
+
   if (userInfo) {
     let userSection = `
 
@@ -66,17 +55,26 @@ This is information about the person currently using this application (the human
 Name: ${userInfo.name || "Not provided"}
 Email: ${userInfo.email || email || "Not provided"}`;
 
-    if (userInfo.job_title || userInfo.role_type || userInfo.company_name || userInfo.organization) {
+    if (
+      userInfo.job_title ||
+      userInfo.role_type ||
+      userInfo.company_name ||
+      userInfo.organization
+    ) {
       userSection += `
 
 Professional Context:`;
-      if (userInfo.job_title) userSection += `
+      if (userInfo.job_title)
+        userSection += `
 - Job Title: ${userInfo.job_title}`;
-      if (userInfo.role_type) userSection += `
+      if (userInfo.role_type)
+        userSection += `
 - Role Type: ${userInfo.role_type}`;
-      if (userInfo.company_name) userSection += `
+      if (userInfo.company_name)
+        userSection += `
 - Company: ${userInfo.company_name}`;
-      if (userInfo.organization) userSection += `
+      if (userInfo.organization)
+        userSection += `
 - Organization: ${userInfo.organization}`;
     }
 
@@ -93,25 +91,23 @@ ${userInfo.instruction}`;
     systemPrompt = `${systemPrompt}${userSection}`;
   }
 
-  const customInstruction = artistInstruction || await getArtistInstruction(resolvedArtistId || "");
-  if (customInstruction) {
+  if (artistInstruction) {
     systemPrompt = `${systemPrompt}
 
 -----SELECTED ARTIST/WORKSPACE CONTEXT-----
 This is information about the artist/workspace the user is currently working with:
 
 Custom Instructions for this Artist:
-${customInstruction}
+${artistInstruction}
 -----END ARTIST/WORKSPACE CONTEXT-----`;
   }
 
-  const knowledge = knowledgeBaseText || await getKnowledgeBaseContext(resolvedArtistId || "");
-  if (knowledge) {
+  if (knowledgeBaseText) {
     systemPrompt = `${systemPrompt}
 
 -----ARTIST/WORKSPACE KNOWLEDGE BASE-----
 Additional context and knowledge for the selected artist/workspace:
-${knowledge}
+${knowledgeBaseText}
 -----END ARTIST/WORKSPACE KNOWLEDGE BASE-----`;
   }
 

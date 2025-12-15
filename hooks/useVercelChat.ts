@@ -58,9 +58,6 @@ export function useVercelChat({
   // Load artist files for mentions (from Supabase)
   const { files: allArtistFiles = [] } = useArtistFilesForMentions();
 
-  // Note: Artist instruction is fetched directly from database by backend (getArtistInstruction)
-  // This ensures fresh data after saving, matching how user instructions work
-
   // Extract mentioned file ids from input markup '@[display](id)'
   const selectedFileIds = useMemo(() => {
     const ids = new Set<string>();

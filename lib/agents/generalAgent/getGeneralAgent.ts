@@ -6,6 +6,9 @@ import { buildSystemPromptWithImages } from "@/lib/chat/buildSystemPromptWithIma
 import { getSystemPrompt } from "@/lib/prompts/getSystemPrompt";
 import { setupToolsForRequest } from "@/lib/chat/setupToolsForRequest";
 import { ChatRequestBody } from "@/lib/chat/validateChatRequest";
+import { getAccountEmails } from "@/lib/supabase/account_emails/getAccountEmails";
+import getAccountInfoById from "@/lib/supabase/account_info/getAccountInfoById";
+import { getKnowledgeBaseText } from "@/lib/files/getKnowledgeBaseText";
 
 export default async function getGeneralAgent(
   body: ChatRequestBody
@@ -14,22 +17,35 @@ export default async function getGeneralAgent(
     accountId,
     messages,
     artistId,
-    // email,
-    // artistInstruction,
     // knowledgeBaseText,
-    // timezone,
     model: bodyModel,
-    // organizationId,
   } = body;
+
+  // Fetch account email(s)
+  const accountEmails = await getAccountEmails(accountId);
+  // Use the first email from the list
+  const email = accountEmails[0]?.email || undefined;
+
+  // Fetch artist instruction and knowledge base if artistId is provided
+  let artistInstruction: string | undefined;
+  let knowledgeBaseText: string | undefined;
+  if (artistId) {
+    const artistAccountInfo = await getAccountInfoById(artistId);
+    artistInstruction = artistAccountInfo?.instruction || undefined;
+
+    // Process knowledge base files from account_info
+    knowledgeBaseText = await getKnowledgeBaseText(
+      artistAccountInfo?.knowledges
+    );
+  }
+
   const baseSystemPrompt = await getSystemPrompt({
     roomId: body.roomId,
     artistId,
     accountId,
-    // email,
-    // artistInstruction,
-    // knowledgeBaseText,
-    // timezone,
-    // organizationId,
+    email,
+    artistInstruction,
+    knowledgeBaseText,
   });
   const imageUrls = extractImageUrlsFromMessages(messages);
   const instructions = buildSystemPromptWithImages(baseSystemPrompt, imageUrls);
