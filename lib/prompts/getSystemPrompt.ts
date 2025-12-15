@@ -1,7 +1,6 @@
 import { SYSTEM_PROMPT } from "@/lib/consts";
 import getArtistIdForRoom from "../supabase/getArtistIdForRoom";
 import getArtistInstruction from "../supabase/getArtistInstruction";
-import getKnowledgeBaseContext from "../agent/getKnowledgeBaseContext";
 import getUserInfo from "../supabase/getUserInfo";
 
 export async function getSystemPrompt({
@@ -109,15 +108,12 @@ ${customInstruction}
 -----END ARTIST/WORKSPACE CONTEXT-----`;
   }
 
-  const knowledge =
-    knowledgeBaseText ||
-    (await getKnowledgeBaseContext(resolvedArtistId || ""));
-  if (knowledge) {
+  if (knowledgeBaseText) {
     systemPrompt = `${systemPrompt}
 
 -----ARTIST/WORKSPACE KNOWLEDGE BASE-----
 Additional context and knowledge for the selected artist/workspace:
-${knowledge}
+${knowledgeBaseText}
 -----END ARTIST/WORKSPACE KNOWLEDGE BASE-----`;
   }
 
