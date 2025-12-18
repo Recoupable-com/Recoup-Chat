@@ -1,2 +1,0 @@
--- Migration file emptied - new migration created with proper timestamp
--- This file kept to avoid missing migration errors during deployment
