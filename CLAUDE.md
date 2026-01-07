@@ -60,7 +60,7 @@ pnpm eval           # Run Braintrust evals with Playwright/Stagehand
 ## Code Principles (from principles.md)
 
 - **DRY**: Extract shared logic into reusable utilities
-- **YAGNI**: You Aren't Gonna Need It - don't build for hypothetical future needs
+- **YAGNI**: You Aren't Gonna Need It - don't build for hypothetical future needs; delete unused files/code that are not imported
 - **KISS**: Keep It Simple, Stupid - prefer simple solutions over clever ones
 - **OCP**: Open/Closed Principle - open for extension, closed for modification
 - **Single Responsibility**: One function per file, clear naming
