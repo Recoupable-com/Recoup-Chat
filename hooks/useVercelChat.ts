@@ -194,15 +194,35 @@ export function useVercelChat({
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    const payload = {
-      text: input,
-      files: undefined as FileUIPart[] | undefined,
-    };
+
+    // Combine all attachments
     const combined: FileUIPart[] = [];
     if (attachments && attachments.length > 0) combined.push(...attachments);
     if (selectedFileAttachments.length > 0)
       combined.push(...selectedFileAttachments);
-    if (combined.length > 0) payload.files = combined;
+
+    // Separate audio files (can't be sent to AI as file parts)
+    const audioAttachments = combined.filter((f) =>
+      f.mediaType?.startsWith("audio/")
+    );
+    const nonAudioAttachments = combined.filter(
+      (f) => !f.mediaType?.startsWith("audio/")
+    );
+
+    // Build message text with audio URLs prepended
+    let messageText = input;
+    if (audioAttachments.length > 0) {
+      const audioContext = audioAttachments
+        .map((a) => `[Audio: ${a.filename || "audio"}]\nURL: ${a.url}`)
+        .join("\n\n");
+      messageText = audioContext + "\n\n" + input;
+    }
+
+    const payload = {
+      text: messageText,
+      files: nonAudioAttachments.length > 0 ? nonAudioAttachments : undefined,
+    };
+
     sendMessage(payload, chatRequestOptions);
     setInput("");
   };
