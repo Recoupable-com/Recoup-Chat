@@ -41,7 +41,22 @@ export async function getSystemPrompt({
   - imageUrl: The URL determined from steps above (NEVER use "attachment://")
   - prompt: Describe the edit clearly (e.g., "add sunglasses to the person")
   - account_id: Use the account_id value shown above
-  - DO NOT ask the user for any information - you have everything you need`;
+  - DO NOT ask the user for any information - you have everything you need
+
+  **AUDIO TRANSCRIPTION INSTRUCTIONS:**
+  When the user shares an audio file URL (e.g., arweave.net, or any audio URL) and asks to transcribe, get lyrics, or analyze audio:
+  
+  **IMMEDIATELY call transcribe_audio with:**
+  - audio_url: The audio URL from the message
+  - account_id: Use the account_id value shown above
+  - artist_account_id: Use the artist_account_id value shown above
+  - title: Extract from filename or use a descriptive title
+  - include_timestamps: true (if user wants timestamps, otherwise false)
+  
+  **DO NOT:**
+  - Use the browser tool to access audio files
+  - Ask the user for more information - you have everything you need
+  - Explain before calling the tool - just call it immediately`;
 
   // Add user information section
   const userInfo = await getUserInfo(accountId || "");

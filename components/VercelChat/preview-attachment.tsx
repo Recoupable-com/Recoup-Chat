@@ -1,5 +1,5 @@
 import type { FileUIPart } from "ai";
-import { Loader2, FileIcon } from "lucide-react";
+import { Loader2, FileIcon, Music } from "lucide-react";
 import { PDFIcon } from "./icons";
 import { PhotoView } from "react-photo-view";
 import "react-photo-view/dist/react-photo-view.css";
@@ -31,6 +31,11 @@ export const PreviewAttachment = ({
             {contentType === "application/pdf" && (
               <div className="flex items-center justify-center bg-transparent">
                 <PDFIcon />
+              </div>
+            )}
+            {contentType.startsWith("audio") && (
+              <div className="flex items-center justify-center w-full h-full bg-zinc-800 rounded-lg">
+                <Music size={28} className="text-zinc-300" />
               </div>
             )}
           </>
