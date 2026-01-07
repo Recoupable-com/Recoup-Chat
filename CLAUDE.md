@@ -8,20 +8,15 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 1. After making code changes, always commit with a descriptive message
 2. Push commits to the current feature branch
-3. **NEVER push directly to `main` or `test` branches** - always use feature branches and PRs
-4. Before pushing, verify the current branch is not `main` or `test`
+3. **NEVER push directly to `main`** - always use feature branches and PRs
 
 ### Starting a New Task
 
-When starting a new task, **first sync the `test` branch with `main`**:
+Branch from `main`:
 
 ```bash
-git checkout test && git pull origin test && git fetch origin main && git merge origin/main && git push origin test
+git checkout main && git pull origin main && git checkout -b <branch-name>
 ```
-
-Then checkout main, pull latest, and create your feature branch from there.
-
-This is the **only** time you should push directly to `test`.
 
 ## Build Commands
 
