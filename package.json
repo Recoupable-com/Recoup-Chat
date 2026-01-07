@@ -8,6 +8,8 @@
     "start": "next start",
     "lint": "next lint",
     "format": "prettier --write app components providers types hooks lib && pnpm lint",
+    "test": "vitest run",
+    "test:watch": "vitest",
     "update-types": "npx supabase gen types typescript --project-id godremdqwajrwazhbrue --schema public > types/database.types.ts",
     "eval": "braintrust eval --external-packages playwright playwright-core chromium-bidi @browserbasehq/stagehand"
   },

@@ -10,6 +10,8 @@ import { sendErrorNotification } from "@/lib/telegram/errors/sendErrorNotificati
 import { getAccountEmails } from "@/lib/supabase/account_emails/getAccountEmails";
 import { ChatRequestBody } from "./validateChatRequest";
 import { UIMessage } from "ai";
+import { extractSendEmailResults } from "@/lib/emails/extractSendEmailResults";
+import { insertMemoryEmail } from "@/lib/supabase/memory_emails/insertMemoryEmail";
 
 export async function handleChatCompletion(
   body: ChatRequestBody,
@@ -66,6 +68,16 @@ export async function handleChatCompletion(
         responseMessages[responseMessages.length - 1]
       ),
     });
+
+    // Link any sent emails to their corresponding memories
+    const emailResults = extractSendEmailResults(responseMessages);
+    for (const { emailId, messageId } of emailResults) {
+      await insertMemoryEmail({
+        email_id: emailId,
+        memory: messageId,
+        message_id: messageId,
+      });
+    }
   } catch (error) {
     sendErrorNotification({
       ...body,
