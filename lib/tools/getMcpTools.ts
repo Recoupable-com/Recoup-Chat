@@ -15,7 +15,6 @@ import getApifyScraper from "./getApifyScraper";
 import scrapeInstagramComments from "./scrapeInstagramComments";
 import artistDeepResearch from "./artistDeepResearch";
 import getVideoGameCampaignPlays from "./getVideoGameCampaignPlays";
-import sendEmailTool from "./sendEmailTool";
 import getSocialFans from "./getSocialFans";
 import createSegments from "./createSegments";
 import createReleaseReport from "./createReleaseReport";
@@ -42,7 +41,6 @@ export function getMcpTools(): ToolSet {
     scrape_instagram_comments: scrapeInstagramComments,
     artist_deep_research: artistDeepResearch,
     get_video_game_campaign_plays: getVideoGameCampaignPlays,
-    send_email: sendEmailTool,
     get_social_fans: getSocialFans,
     create_release_report: createReleaseReport,
     get_catalog_songs: getCatalogSongs,
