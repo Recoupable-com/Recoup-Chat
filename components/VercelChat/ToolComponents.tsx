@@ -103,6 +103,8 @@ import {
 } from "./tools/files/UpdateFileResult";
 import GoogleSheetsLoginResult from "./tools/googleSheets/GoogleSheetsLoginResult";
 import GoogleSheetsLoginLoading from "./tools/googleSheets/GoogleSheetsLoginLoading";
+import GoogleDriveLoginResult from "./tools/googleDrive/GoogleDriveLoginResult";
+import GoogleDriveLoginLoading from "./tools/googleDrive/GoogleDriveLoginLoading";
 import { TextContent } from "@modelcontextprotocol/sdk/types.js";
 
 type CallToolResult = {
@@ -281,6 +283,12 @@ export function getToolCallComponent(part: ToolUIPart) {
     return (
       <div key={toolCallId}>
         <GoogleSheetsLoginLoading />
+      </div>
+    );
+  } else if (toolName === "googleDriveLoginTool") {
+    return (
+      <div key={toolCallId}>
+        <GoogleDriveLoginLoading />
       </div>
     );
   }
@@ -546,6 +554,12 @@ export function getToolResultComponent(part: ToolUIPart | DynamicToolUIPart) {
     return (
       <div key={toolCallId}>
         <GoogleSheetsLoginResult />
+      </div>
+    );
+  } else if (toolName === "googleDriveLoginTool") {
+    return (
+      <div key={toolCallId}>
+        <GoogleDriveLoginResult />
       </div>
     );
   }
