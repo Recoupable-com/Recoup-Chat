@@ -8,7 +8,7 @@ export async function handleSendEmailToolOutputs(
   const emailResults = extractSendEmailResults(responseMessages);
   if (emailResults.length === 0) return;
 
-  const results = await Promise.allSettled(
+  await Promise.all(
     emailResults.map(({ emailId, messageId }) =>
       insertMemoryEmail({
         email_id: emailId,
@@ -17,14 +17,4 @@ export async function handleSendEmailToolOutputs(
       })
     )
   );
-
-  results.forEach((result, index) => {
-    if (result.status === "rejected") {
-      const { emailId, messageId } = emailResults[index];
-      console.error(
-        `Failed to link email ${emailId} to memory ${messageId}:`,
-        result.reason
-      );
-    }
-  });
 }
