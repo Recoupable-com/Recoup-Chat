@@ -6,11 +6,25 @@ export async function handleSendEmailToolOutputs(
   responseMessages: UIMessage[]
 ): Promise<void> {
   const emailResults = extractSendEmailResults(responseMessages);
-  for (const { emailId, messageId } of emailResults) {
-    await insertMemoryEmail({
-      email_id: emailId,
-      memory: messageId,
-      message_id: messageId,
-    });
-  }
+  if (emailResults.length === 0) return;
+
+  const results = await Promise.allSettled(
+    emailResults.map(({ emailId, messageId }) =>
+      insertMemoryEmail({
+        email_id: emailId,
+        memory: messageId,
+        message_id: messageId,
+      })
+    )
+  );
+
+  results.forEach((result, index) => {
+    if (result.status === "rejected") {
+      const { emailId, messageId } = emailResults[index];
+      console.error(
+        `Failed to link email ${emailId} to memory ${messageId}:`,
+        result.reason
+      );
+    }
+  });
 }
