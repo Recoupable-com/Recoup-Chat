@@ -19,27 +19,29 @@ export function extractSendEmailResults(
 
   for (const message of responseMessages) {
     for (const part of message.parts) {
-      // Check if this is a send_email tool part with output available
-      if (
-        "type" in part &&
-        typeof part.type === "string" &&
-        part.type === "tool-send_email" &&
-        "state" in part &&
-        part.state === "output-available" &&
-        "output" in part &&
-        part.output
-      ) {
-        // The MCP tool returns { success: true, data: { id: "email-id" }, message: "..." }
+      const isDynamicTool = part.type === "dynamic-tool";
+      const isSendEmailTool =
+        isDynamicTool && "toolName" in part && part.toolName === "send_email";
+      const hasEmailOutput =
+        isSendEmailTool && part.state === "output-available";
+
+      if (hasEmailOutput) {
         const output = part.output as {
-          success?: boolean;
-          data?: { id?: string };
+          content?: Array<{ type?: string; text?: string }>;
+          isError?: boolean;
         };
 
-        if (output.data?.id) {
-          results.push({
-            emailId: output.data.id,
-            messageId: message.id,
-          });
+        if (output.content?.[0]?.text) {
+          const parsed = JSON.parse(output.content[0].text) as {
+            success?: boolean;
+            data?: { id?: string };
+          };
+          if (parsed.data?.id) {
+            results.push({
+              emailId: parsed.data.id,
+              messageId: message.id,
+            });
+          }
         }
       }
     }

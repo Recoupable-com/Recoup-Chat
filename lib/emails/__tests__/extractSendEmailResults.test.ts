@@ -2,6 +2,29 @@ import { describe, it, expect } from "vitest";
 import { extractSendEmailResults } from "../extractSendEmailResults";
 import { UIMessage } from "ai";
 
+// Helper to create MCP tool output structure
+const createMcpOutput = (data: { id?: string }) => ({
+  content: [
+    {
+      type: "text",
+      text: JSON.stringify({ success: true, data, message: "Email sent" }),
+    },
+  ],
+  isError: false,
+});
+
+// Helper to create a send_email dynamic-tool part
+const createSendEmailPart = (
+  state: string,
+  output?: ReturnType<typeof createMcpOutput>
+) =>
+  ({
+    type: "dynamic-tool",
+    toolName: "send_email",
+    state,
+    output,
+  }) as unknown as UIMessage["parts"][number];
+
 describe("extractSendEmailResults", () => {
   it("returns empty array when no messages", () => {
     const result = extractSendEmailResults([]);
@@ -27,17 +50,7 @@ describe("extractSendEmailResults", () => {
       {
         id: "msg-1",
         role: "assistant",
-        parts: [
-          {
-            type: "tool-send_email",
-            state: "output-available",
-            output: {
-              success: true,
-              data: { id: "email-123" },
-              message: "Email sent successfully",
-            },
-          } as unknown as UIMessage["parts"][number],
-        ],
+        parts: [createSendEmailPart("output-available", createMcpOutput({ id: "email-123" }))],
         content: "",
         createdAt: new Date(),
       },
@@ -51,26 +64,14 @@ describe("extractSendEmailResults", () => {
       {
         id: "msg-1",
         role: "assistant",
-        parts: [
-          {
-            type: "tool-send_email",
-            state: "output-available",
-            output: { success: true, data: { id: "email-1" } },
-          } as unknown as UIMessage["parts"][number],
-        ],
+        parts: [createSendEmailPart("output-available", createMcpOutput({ id: "email-1" }))],
         content: "",
         createdAt: new Date(),
       },
       {
         id: "msg-2",
         role: "assistant",
-        parts: [
-          {
-            type: "tool-send_email",
-            state: "output-available",
-            output: { success: true, data: { id: "email-2" } },
-          } as unknown as UIMessage["parts"][number],
-        ],
+        parts: [createSendEmailPart("output-available", createMcpOutput({ id: "email-2" }))],
         content: "",
         createdAt: new Date(),
       },
@@ -87,12 +88,7 @@ describe("extractSendEmailResults", () => {
       {
         id: "msg-1",
         role: "assistant",
-        parts: [
-          {
-            type: "tool-send_email",
-            state: "pending",
-          } as unknown as UIMessage["parts"][number],
-        ],
+        parts: [createSendEmailPart("pending")],
         content: "",
         createdAt: new Date(),
       },
@@ -106,13 +102,7 @@ describe("extractSendEmailResults", () => {
       {
         id: "msg-1",
         role: "assistant",
-        parts: [
-          {
-            type: "tool-send_email",
-            state: "output-available",
-            output: { success: true, data: {} },
-          } as unknown as UIMessage["parts"][number],
-        ],
+        parts: [createSendEmailPart("output-available", createMcpOutput({}))],
         content: "",
         createdAt: new Date(),
       },
@@ -128,11 +118,7 @@ describe("extractSendEmailResults", () => {
         role: "assistant",
         parts: [
           { type: "text", text: "I'll send that email for you" },
-          {
-            type: "tool-send_email",
-            state: "output-available",
-            output: { success: true, data: { id: "email-abc" } },
-          } as unknown as UIMessage["parts"][number],
+          createSendEmailPart("output-available", createMcpOutput({ id: "email-abc" })),
           { type: "text", text: "Email sent!" },
         ],
         content: "",
