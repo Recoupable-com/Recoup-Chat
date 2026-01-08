@@ -6,12 +6,12 @@ import { withPayment } from "x402-mcp";
 import { StreamableHTTPClientTransport } from "@modelcontextprotocol/sdk/client/streamableHttp.js";
 import { getOrCreatePurchaserAccount } from "@/lib/coinbase/getOrCreatePurchaserAccount";
 import { NEW_API_BASE_URL } from "@/lib/consts";
-import { getGoogleSheetsTools } from "@/lib/agents/googleSheetsAgent";
+import { getToolkitTools } from "@/lib/agents/composioAgent";
 import { ChatRequestBody } from "./validateChatRequest";
 
 /**
  * Sets up and filters tools for a chat request
- * @param excludeTools - Optional array of tool names to exclude
+ * @param body - The chat request body
  * @returns Filtered tool set ready for use
  */
 export async function setupToolsForRequest(
@@ -29,13 +29,19 @@ export async function setupToolsForRequest(
   }).then((client) => withPayment(client, { account, network: "base" }));
 
   const mcpClientTools = await mcpClient.tools();
-  const googleSheetsTools = await getGoogleSheetsTools(body);
+
+  // Get tools for all Composio toolkits
+  const [googleSheetsTools, googleDriveTools] = await Promise.all([
+    getToolkitTools("GOOGLE_SHEETS", body),
+    getToolkitTools("GOOGLE_DRIVE", body),
+  ]);
+
   const allTools: ToolSet = {
     ...mcpClientTools,
     ...googleSheetsTools,
+    ...googleDriveTools,
     ...localTools,
   };
 
-  const tools = filterExcludedTools(allTools, excludeTools);
-  return tools;
+  return filterExcludedTools(allTools, excludeTools);
 }
