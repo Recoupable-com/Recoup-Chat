@@ -10,6 +10,7 @@ import { sendErrorNotification } from "@/lib/telegram/errors/sendErrorNotificati
 import { getAccountEmails } from "@/lib/supabase/account_emails/getAccountEmails";
 import { ChatRequestBody } from "./validateChatRequest";
 import { UIMessage } from "ai";
+import { handleSendEmailToolOutputs } from "@/lib/emails/handleSendEmailToolOutputs";
 
 export async function handleChatCompletion(
   body: ChatRequestBody,
@@ -66,6 +67,8 @@ export async function handleChatCompletion(
         responseMessages[responseMessages.length - 1]
       ),
     });
+
+    await handleSendEmailToolOutputs(responseMessages);
   } catch (error) {
     sendErrorNotification({
       ...body,
