@@ -101,8 +101,7 @@ import {
   UpdateFileResult,
   UpdateFileResultType,
 } from "./tools/files/UpdateFileResult";
-import GoogleSheetsLoginResult from "./tools/googleSheets/GoogleSheetsLoginResult";
-import GoogleSheetsLoginLoading from "./tools/googleSheets/GoogleSheetsLoginLoading";
+import ComposioAuthResult from "./tools/composio/ComposioAuthResult";
 import { TextContent } from "@modelcontextprotocol/sdk/types.js";
 
 type CallToolResult = {
@@ -275,12 +274,6 @@ export function getToolCallComponent(part: ToolUIPart) {
     return (
       <div key={toolCallId}>
         <CatalogSongsSkeleton />
-      </div>
-    );
-  } else if (toolName === "googleSheetsLoginTool") {
-    return (
-      <div key={toolCallId}>
-        <GoogleSheetsLoginLoading />
       </div>
     );
   }
@@ -542,12 +535,27 @@ export function getToolResultComponent(part: ToolUIPart | DynamicToolUIPart) {
         <UpdateFileResult result={result as UpdateFileResultType} />
       </div>
     );
-  } else if (toolName === "googleSheetsLoginTool") {
-    return (
-      <div key={toolCallId}>
-        <GoogleSheetsLoginResult />
-      </div>
-    );
+  } else if (toolName === "composio") {
+    // Check if this is an auth result (has redirect_url OR status is Active)
+    const composioResult = result as {
+      data?: {
+        results?: Record<string, { redirect_url?: string; status?: string }>;
+      };
+    };
+    const results = composioResult?.data?.results;
+    const hasAuthResult = results
+      ? Object.values(results).some(
+          (r) => r.redirect_url || r.status?.toLowerCase() === "active",
+        )
+      : false;
+
+    if (hasAuthResult) {
+      return (
+        <div key={toolCallId}>
+          <ComposioAuthResult result={composioResult} />
+        </div>
+      );
+    }
   }
 
   // Default generic result for other tools

@@ -1,4 +1,5 @@
-import { Moon, Sun, Monitor } from "lucide-react";
+import { Moon, Sun, Monitor, Plug } from "lucide-react";
+import Link from "next/link";
 import {
   DropdownMenuContent,
   DropdownMenuGroup,
@@ -50,6 +51,12 @@ const UserProfileDropdown = () => {
           </DropdownMenuItem>
           <OrgSelector />
           <ManageSubscriptionButton />
+          <DropdownMenuItem asChild className="cursor-pointer">
+            <Link href="/settings/connectors">
+              <Plug className="h-4 w-4" />
+              Connectors
+            </Link>
+          </DropdownMenuItem>
           <DropdownMenuSub>
             <DropdownMenuSubTrigger className="cursor-pointer">
               {getThemeIcon()}

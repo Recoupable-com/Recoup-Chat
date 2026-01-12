@@ -29,6 +29,7 @@
     "@farcaster/frame-wagmi-connector": "^0.0.37",
     "@google/genai": "^1.24.0",
     "@hookform/resolvers": "^3.9.1",
+    "@icons-pack/react-simple-icons": "^13.8.0",
     "@modelcontextprotocol/sdk": "^1.24.3",
     "@privy-io/react-auth": "^1.88.4",
     "@radix-ui/react-alert-dialog": "^1.1.15",
