@@ -9,14 +9,15 @@ export default function SpotifyDeepResearchResult({
 }: {
   result: SpotifyDeepResearchResultUIType;
 }) {
+  const socials = result.artistSocials?.socials ?? [];
   const processedResult = {
     success: result.success,
-    socials: result.artistSocials.socials,
+    socials,
     status: result.success ? "success" : "error",
     pagination: {
       page: 1,
       limit: 10,
-      total_count: result.artistSocials.socials.length,
+      total_count: socials.length,
       total_pages: 1,
     },
   } as ArtistSocialsResultType;
