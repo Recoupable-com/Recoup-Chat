@@ -10,7 +10,7 @@ import { MermaidDiagramSkeleton } from "@/components/VercelChat/tools/mermaid/Me
 import { GenerateMermaidDiagramResult } from "@/lib/tools/generateMermaidDiagram";
 import CreateArtistToolCall from "./tools/CreateArtistToolCall";
 import CreateArtistToolResult from "./tools/CreateArtistToolResult";
-import { CreateArtistResult } from "@/lib/tools/createArtist";
+import { CreateArtistResult } from "@/types/createArtistResult";
 import DeleteArtistToolCall from "./tools/DeleteArtistToolCall";
 import DeleteArtistToolResult from "./tools/DeleteArtistToolResult";
 import { DeleteArtistResult } from "@/lib/tools/deleteArtist";
