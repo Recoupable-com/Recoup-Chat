@@ -41,7 +41,7 @@ type BaseChatRequestBody = z.infer<typeof chatRequestSchema>;
 
 export type ChatRequestBody = BaseChatRequestBody & {
   accountId: string;
-  accessToken?: string;
+  accessToken: string;
 };
 
 /**
@@ -92,8 +92,11 @@ export async function validateChatRequest(
   const hasAccountId =
     typeof validatedBody.accountId === "string" &&
     validatedBody.accountId.trim().length > 0;
+  const hasAccessToken =
+    typeof validatedBody.accessToken === "string" &&
+    validatedBody.accessToken.trim().length > 0;
 
-  if (!hasAccountId) {
+  if (!hasAccountId || !hasAccessToken) {
     return NextResponse.json(
       {
         status: "error",

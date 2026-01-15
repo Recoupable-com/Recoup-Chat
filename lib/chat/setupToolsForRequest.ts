@@ -26,9 +26,9 @@ export async function setupToolsForRequest(
     transport: new StreamableHTTPClientTransport(
       new URL("/mcp", NEW_API_BASE_URL),
       {
-        requestInit: accessToken
-          ? { headers: { Authorization: `Bearer ${accessToken}` } }
-          : undefined,
+        requestInit: {
+          headers: { Authorization: `Bearer ${accessToken}` },
+        },
       }
     ),
   }).then((client) => withPayment(client, { account, network: "base" }));
