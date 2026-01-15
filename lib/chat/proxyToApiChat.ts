@@ -7,7 +7,22 @@ export type ProxyOptions = {
   streaming: boolean;
 };
 
+const SUNSET_DAYS = 90;
+
+function getDeprecationHeaders(): Record<string, string> {
+  const sunsetDate = new Date();
+  sunsetDate.setDate(sunsetDate.getDate() + SUNSET_DAYS);
+
+  return {
+    Deprecation: "true",
+    Sunset: sunsetDate.toUTCString(),
+    Link: `<${NEW_API_BASE_URL}/api/chat>; rel="deprecation"`,
+  };
+}
+
 /**
+ * @deprecated This endpoint is deprecated. Use recoup-api directly at recoup-api.vercel.app/api/chat
+ *
  * Proxies chat requests to recoup-api.
  *
  * This function forwards the incoming request to the appropriate recoup-api
@@ -50,7 +65,11 @@ export async function proxyToApiChat(
 
     const responseHeaders = new Headers(response.headers);
     const corsHeaders = getCorsHeaders();
+    const deprecationHeaders = getDeprecationHeaders();
     Object.entries(corsHeaders).forEach(([key, value]) => {
+      responseHeaders.set(key, value);
+    });
+    Object.entries(deprecationHeaders).forEach(([key, value]) => {
       responseHeaders.set(key, value);
     });
 
@@ -66,6 +85,7 @@ export async function proxyToApiChat(
       headers: {
         "Content-Type": "application/json",
         ...getCorsHeaders(),
+        ...getDeprecationHeaders(),
       },
     });
   }

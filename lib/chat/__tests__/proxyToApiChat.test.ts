@@ -280,4 +280,119 @@ describe("proxyToApiChat", () => {
       expect(response.headers.get("Access-Control-Allow-Origin")).toBe("*");
     });
   });
+
+  describe("deprecation headers", () => {
+    it("should include Deprecation header in streaming response", async () => {
+      const mockResponse = new Response("data: test\n\n", {
+        status: 200,
+        headers: { "Content-Type": "text/event-stream" },
+      });
+      mockFetch.mockResolvedValueOnce(mockResponse);
+
+      const request = new NextRequest("https://chat.recoupable.com/api/chat", {
+        method: "POST",
+        headers: {
+          Authorization: "Bearer test-token",
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ messages: [{ role: "user", content: "hello" }] }),
+      });
+
+      const response = await proxyToApiChat(request, { streaming: true });
+
+      expect(response.headers.get("Deprecation")).toBe("true");
+    });
+
+    it("should include Deprecation header in non-streaming response", async () => {
+      const mockResponse = new Response(
+        JSON.stringify({ text: "Hello!", finishReason: "stop" }),
+        {
+          status: 200,
+          headers: { "Content-Type": "application/json" },
+        }
+      );
+      mockFetch.mockResolvedValueOnce(mockResponse);
+
+      const request = new NextRequest(
+        "https://chat.recoupable.com/api/chat/generate",
+        {
+          method: "POST",
+          headers: {
+            Authorization: "Bearer test-token",
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ prompt: "Say hello" }),
+        }
+      );
+
+      const response = await proxyToApiChat(request, { streaming: false });
+
+      expect(response.headers.get("Deprecation")).toBe("true");
+    });
+
+    it("should include Sunset header with future date", async () => {
+      const mockResponse = new Response("data: test\n\n", {
+        status: 200,
+        headers: { "Content-Type": "text/event-stream" },
+      });
+      mockFetch.mockResolvedValueOnce(mockResponse);
+
+      const request = new NextRequest("https://chat.recoupable.com/api/chat", {
+        method: "POST",
+        headers: {
+          Authorization: "Bearer test-token",
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ messages: [{ role: "user", content: "hello" }] }),
+      });
+
+      const response = await proxyToApiChat(request, { streaming: true });
+
+      const sunsetHeader = response.headers.get("Sunset");
+      expect(sunsetHeader).toBeDefined();
+      // Sunset date should be a valid HTTP date format
+      expect(new Date(sunsetHeader!).getTime()).toBeGreaterThan(Date.now());
+    });
+
+    it("should include Link header with deprecation rel pointing to new API", async () => {
+      const mockResponse = new Response("data: test\n\n", {
+        status: 200,
+        headers: { "Content-Type": "text/event-stream" },
+      });
+      mockFetch.mockResolvedValueOnce(mockResponse);
+
+      const request = new NextRequest("https://chat.recoupable.com/api/chat", {
+        method: "POST",
+        headers: {
+          Authorization: "Bearer test-token",
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ messages: [{ role: "user", content: "hello" }] }),
+      });
+
+      const response = await proxyToApiChat(request, { streaming: true });
+
+      const linkHeader = response.headers.get("Link");
+      expect(linkHeader).toContain("rel=\"deprecation\"");
+      expect(linkHeader).toContain("recoup-api");
+    });
+
+    it("should include deprecation headers in error responses", async () => {
+      mockFetch.mockRejectedValueOnce(new Error("Network error"));
+
+      const request = new NextRequest("https://chat.recoupable.com/api/chat", {
+        method: "POST",
+        headers: {
+          Authorization: "Bearer test-token",
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ messages: [{ role: "user", content: "hello" }] }),
+      });
+
+      const response = await proxyToApiChat(request, { streaming: true });
+
+      expect(response.status).toBe(500);
+      expect(response.headers.get("Deprecation")).toBe("true");
+    });
+  });
 });
