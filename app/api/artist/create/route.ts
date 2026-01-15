@@ -1,32 +1,39 @@
 import { NextRequest } from "next/server";
-import { createArtistInDb } from "@/lib/supabase/createArtistInDb";
+import { NEW_API_BASE_URL } from "@/lib/consts";
 
-export async function GET(req: NextRequest) {
-  const name = req.nextUrl.searchParams.get("name");
-  const account_id = req.nextUrl.searchParams.get("account_id");
+/**
+ * POST /api/artist/create
+ *
+ * Forwards request to recoup-api POST /api/artists endpoint.
+ * Requires Authorization header with Privy access token.
+ */
+export async function POST(req: NextRequest) {
+  const authHeader = req.headers.get("Authorization");
 
-  if (!name || !account_id) {
+  if (!authHeader) {
     return Response.json(
-      { message: "Missing required parameters: name and account_id" },
-      { status: 400 }
+      { status: "error", error: "Authorization header required" },
+      { status: 401 }
     );
   }
 
   try {
-    const artist = await createArtistInDb(name, account_id);
+    const body = await req.json();
 
-    if (!artist) {
-      return Response.json(
-        { message: "Failed to create artist" },
-        { status: 500 }
-      );
-    }
+    const response = await fetch(`${NEW_API_BASE_URL}/api/artists`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: authHeader,
+      },
+      body: JSON.stringify(body),
+    });
 
-    return Response.json({ artist }, { status: 200 });
+    const data = await response.json();
+    return Response.json(data, { status: response.status });
   } catch (error) {
-    console.error(error);
-    const message = error instanceof Error ? error.message : "failed";
-    return Response.json({ message }, { status: 400 });
+    const message = error instanceof Error ? error.message : "Failed to create artist";
+    return Response.json({ status: "error", error: message }, { status: 500 });
   }
 }
 
