@@ -14,6 +14,7 @@ export const chatRequestSchema = z
     roomId: z.string().optional(),
     accountId: z.string().optional(),
     artistId: z.string().optional(),
+    organizationId: z.string().optional(),
     model: z.string().optional(),
     excludeTools: z.array(z.string()).optional(),
   })
