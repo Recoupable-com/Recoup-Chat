@@ -1,13 +1,14 @@
+import { NEW_API_BASE_URL } from "@/lib/consts";
+
 const createArtist = async (name: string, account_id: string) => {
   try {
     const response = await fetch(
-      `/api/artist/create?name=${encodeURIComponent(name)}&account_id=${account_id}`,
+      `${NEW_API_BASE_URL}/api/artist/create?name=${encodeURIComponent(name)}&account_id=${account_id}`,
     );
     const data = await response.json();
 
     return data.artist;
   } catch (error) {
-    console.error(error);
     return null;
   }
 };
