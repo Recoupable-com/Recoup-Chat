@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { useVercelChatContext } from "@/providers/VercelChatProvider";
 import { useConversationsProvider } from "@/providers/ConversationsProvider";
-import { CreateArtistResult } from "@/lib/tools/createArtist";
+import { CreateArtistResult } from "@/types/createArtistResult";
 import copyMessagesClient from "@/lib/copyMessagesClient";
 
 /**

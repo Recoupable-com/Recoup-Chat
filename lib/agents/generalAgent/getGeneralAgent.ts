@@ -17,13 +17,12 @@ export default async function getGeneralAgent(
     accountId,
     messages,
     artistId,
-    // knowledgeBaseText,
+    organizationId,
     model: bodyModel,
   } = body;
 
   // Fetch account email(s)
   const accountEmails = await getAccountEmails(accountId);
-  // Use the first email from the list
   const email = accountEmails[0]?.email || undefined;
 
   // Fetch artist instruction and knowledge base if artistId is provided
@@ -43,6 +42,7 @@ export default async function getGeneralAgent(
     roomId: body.roomId,
     artistId,
     accountId,
+    organizationId,
     email,
     artistInstruction,
     knowledgeBaseText,

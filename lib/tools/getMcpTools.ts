@@ -6,7 +6,6 @@ import getPostComments from "./getPostComments";
 import { webDeepResearch } from "./searchWeb";
 import searchGoogleImages from "./searchGoogleImages";
 import generateMermaidDiagram from "./generateMermaidDiagram";
-import createArtist from "./createArtist";
 import deleteArtist from "./deleteArtist";
 import searchTwitter from "./searchTwitter";
 import getTwitterTrends from "./getTwitterTrends";
@@ -32,7 +31,6 @@ export function getMcpTools(): ToolSet {
     search_google_images: searchGoogleImages,
     web_deep_research: webDeepResearch,
     generate_mermaid_diagram: generateMermaidDiagram,
-    create_new_artist: createArtist,
     delete_artist: deleteArtist,
     search_twitter: searchTwitter,
     get_twitter_trends: getTwitterTrends,
