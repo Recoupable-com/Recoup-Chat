@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import { CreateArtistResult } from "@/lib/tools/createArtist";
+import { CreateArtistResult } from "@/types/createArtistResult";
 import useCreateArtistTool from "@/hooks/useCreateArtistTool";
 import GenericSuccess from "./GenericSuccess";
 import { useArtistProvider } from "@/providers/ArtistProvider";
