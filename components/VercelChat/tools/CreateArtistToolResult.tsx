@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import { CreateArtistResult } from "@/lib/tools/createArtist";
+import { CreateArtistResult } from "@/types/CreateArtistResult";
 import useCreateArtistTool from "@/hooks/useCreateArtistTool";
 import GenericSuccess from "./GenericSuccess";
 import { useArtistProvider } from "@/providers/ArtistProvider";
@@ -44,7 +44,7 @@ export function CreateArtistToolResult({
 
   return (
     <GenericSuccess
-      image={result.artist.image}
+      image={result.artist.image ?? undefined}
       name={result.artist.name}
       message={
         isProcessing
