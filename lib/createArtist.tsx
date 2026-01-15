@@ -2,14 +2,14 @@ import { NEW_API_BASE_URL } from "@/lib/consts";
 
 interface CreateArtistParams {
   name: string;
-  apiKey: string;
+  accessToken: string;
   accountId?: string;
   organizationId?: string;
 }
 
 const createArtist = async ({
   name,
-  apiKey,
+  accessToken,
   accountId,
   organizationId,
 }: CreateArtistParams) => {
@@ -18,7 +18,7 @@ const createArtist = async ({
       method: "POST",
       headers: {
         "Content-Type": "application/json",
-        "x-api-key": apiKey,
+        Authorization: `Bearer ${accessToken}`,
       },
       body: JSON.stringify({
         name,
