@@ -41,10 +41,13 @@ const useInitialArtists = (
         (artist: ArtistRecord) =>
           artist.account_id === selectedArtist.account_id,
       );
-      if (currentArtist && !selectedArtist?.isWrapped)
+      if (currentArtist && !selectedArtist?.isWrapped) {
         setSelectedArtist(currentArtist);
+        // Persist fresh data to localStorage so page reload shows updated image
+        saveSelection(currentArtist);
+      }
     }
-  }, [artists, selectedArtist, setSelectedArtist]);
+  }, [artists, selectedArtist, setSelectedArtist, saveSelection]);
 
   const handleSelectArtist = (artist: ArtistRecord | null) => {
     setSelectedArtist(artist);
