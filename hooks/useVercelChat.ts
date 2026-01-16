@@ -171,7 +171,8 @@ export function useVercelChat({
       body: {
         roomId: id,
         artistId,
-        organizationId,
+        // Only include organizationId if it's not null (schema expects string | undefined)
+        ...(organizationId && { organizationId }),
         model,
       },
       headers,
