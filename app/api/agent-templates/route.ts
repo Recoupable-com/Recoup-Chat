@@ -6,10 +6,29 @@ import { updateAgentTemplate } from "@/lib/supabase/agent_templates/updateAgentT
 import { deleteAgentTemplate } from "@/lib/supabase/agent_templates/deleteAgentTemplate";
 import { verifyAgentTemplateOwner } from "@/lib/supabase/agent_templates/verifyAgentTemplateOwner";
 import { getSharedEmailsForTemplates } from "@/lib/supabase/agent_templates/getSharedEmailsForTemplates";
+import { NEW_API_BASE_URL } from "@/lib/consts";
 
 export const runtime = "edge";
 
+const SUNSET_DAYS = 90;
+
+function getDeprecationHeaders(): Record<string, string> {
+  const sunsetDate = new Date();
+  sunsetDate.setDate(sunsetDate.getDate() + SUNSET_DAYS);
+
+  return {
+    Deprecation: "true",
+    Sunset: sunsetDate.toUTCString(),
+    Link: `<${NEW_API_BASE_URL}/api/agent-templates>; rel="deprecation"`,
+  };
+}
+
+/**
+ * @deprecated This endpoint is deprecated. Use recoup-api directly at recoup-api.vercel.app/api/agent-templates
+ */
 export async function GET(request: Request) {
+  const deprecationHeaders = getDeprecationHeaders();
+
   try {
     const { searchParams } = new URL(request.url);
     const userId = searchParams.get("userId");
@@ -32,10 +51,10 @@ export async function GET(request: Request) {
       shared_emails: template.is_private ? (sharedEmails[template.id] || []) : []
     }));
 
-    return NextResponse.json(templatesWithEmails);
+    return NextResponse.json(templatesWithEmails, { headers: deprecationHeaders });
   } catch (error) {
     console.error('Error fetching agent templates:', error);
-    return NextResponse.json({ error: 'Failed to fetch templates' }, { status: 500 });
+    return NextResponse.json({ error: 'Failed to fetch templates' }, { status: 500, headers: deprecationHeaders });
   }
 }
 

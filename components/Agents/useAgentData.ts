@@ -3,12 +3,14 @@ import { useEffect, useState } from "react";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import type { AgentTemplateRow } from "@/types/AgentTemplates";
 import fetchAgentTemplates from "@/lib/agent-templates/fetchAgentTemplates";
+import { useAccessToken } from "@/hooks/useAccessToken";
 
 export type Agent = AgentTemplateRow;
 
 export function useAgentData() {
   const { userData } = useUserProvider();
   const queryClient = useQueryClient();
+  const accessToken = useAccessToken();
   const [agents, setAgents] = useState<Agent[]>([]);
   const [selectedTag, setSelectedTag] = useState("Recommended");
   const [tags, setTags] = useState<string[]>(["Recommended"]);
@@ -17,9 +19,9 @@ export function useAgentData() {
 
   const { data, isPending } = useQuery<Agent[]>({
     queryKey: ["agent-templates"],
-    queryFn: () => fetchAgentTemplates(userData!),
+    queryFn: () => fetchAgentTemplates(userData!, accessToken),
     retry: 1,
-    enabled: !!userData?.id,
+    enabled: !!userData?.id && !!accessToken,
   });
 
   useEffect(() => {
@@ -64,10 +66,10 @@ export function useAgentData() {
 
   // Prefetch agent data for better performance on hover
   const prefetchAgents = () => {
-    if (userData?.id) {
+    if (userData?.id && accessToken) {
       queryClient.prefetchQuery({
         queryKey: ["agent-templates"],
-        queryFn: () => fetchAgentTemplates(userData),
+        queryFn: () => fetchAgentTemplates(userData, accessToken),
         staleTime: 5 * 60 * 1000, // 5 minutes
       });
     }
