@@ -3,8 +3,27 @@ import { createRoomWithReport } from "@/lib/supabase/createRoomWithReport";
 import { generateChatTitle } from "@/lib/chat/generateChatTitle";
 import { sendNewConversationNotification } from "@/lib/telegram/sendNewConversationNotification";
 import { CreateChatRequest } from "@/types/Chat";
+import { NEW_API_BASE_URL } from "@/lib/consts";
 
+const SUNSET_DAYS = 90;
+
+function getDeprecationHeaders(): Record<string, string> {
+  const sunsetDate = new Date();
+  sunsetDate.setDate(sunsetDate.getDate() + SUNSET_DAYS);
+
+  return {
+    Deprecation: "true",
+    Sunset: sunsetDate.toUTCString(),
+    Link: `<${NEW_API_BASE_URL}/api/chats>; rel="deprecation"`,
+  };
+}
+
+/**
+ * @deprecated This endpoint is deprecated. Use recoup-api directly at recoup-api.vercel.app/api/chats
+ */
 export async function POST(request: NextRequest) {
+  const deprecationHeaders = getDeprecationHeaders();
+
   try {
     const body: CreateChatRequest = await request.json();
 
@@ -18,6 +37,7 @@ export async function POST(request: NextRequest) {
         },
         {
           status: 400,
+          headers: deprecationHeaders,
         }
       );
     }
@@ -42,6 +62,7 @@ export async function POST(request: NextRequest) {
         },
         {
           status: 500,
+          headers: deprecationHeaders,
         }
       );
     }
@@ -67,6 +88,7 @@ export async function POST(request: NextRequest) {
       },
       {
         status: 200,
+        headers: deprecationHeaders,
       }
     );
   } catch (error) {
@@ -78,6 +100,7 @@ export async function POST(request: NextRequest) {
       },
       {
         status: 500,
+        headers: deprecationHeaders,
       }
     );
   }
