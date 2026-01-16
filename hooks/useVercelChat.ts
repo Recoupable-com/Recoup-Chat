@@ -171,7 +171,8 @@ export function useVercelChat({
       body: {
         roomId: id,
         artistId,
-        organizationId,
+        // Only include organizationId if it's not null (schema expects string | undefined)
+        ...(organizationId && { organizationId }),
         model,
       },
       headers,
@@ -313,7 +314,9 @@ export function useVercelChat({
     const isReady = status === "ready";
     const hasMessages = messages.length > 1;
     const hasInitialMessages = initialMessages && initialMessages.length > 0;
-    if (!hasInitialMessages || !isReady || hasMessages || !isFullyLoggedIn)
+    const hasAccessToken = !!accessToken;
+    // Wait for access token before sending initial message to avoid 401 errors
+    if (!hasInitialMessages || !isReady || hasMessages || !isFullyLoggedIn || !hasAccessToken)
       return;
     handleSendQueryMessages(initialMessages[0]);
   }, [
@@ -322,6 +325,7 @@ export function useVercelChat({
     userId,
     handleSendQueryMessages,
     messages.length,
+    accessToken,
   ]);
 
   // Sync state when models first load and prioritize preferred model
