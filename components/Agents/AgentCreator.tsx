@@ -3,6 +3,7 @@
 import { useQuery } from "@tanstack/react-query";
 import Image from "next/image";
 import { Avatar, AvatarImage } from "@/components/ui/avatar";
+import { NEW_API_BASE_URL } from "@/lib/consts";
 
 interface AgentCreatorProps {
   creatorId: string | null;
@@ -21,7 +22,10 @@ const AgentCreator = ({ creatorId, className }: AgentCreatorProps) => {
   const { data } = useQuery<CreatorResponse>({
     queryKey: ["agent-creator", creatorId],
     queryFn: async () => {
-      const res = await fetch(`/api/agent-creator?creatorId=${creatorId}`, { cache: "no-store" });
+      const res = await fetch(
+        `${NEW_API_BASE_URL}/api/agent-creator?creatorId=${creatorId}`,
+        { cache: "no-store" }
+      );
       if (!res.ok) throw new Error("failed");
       return (await res.json()) as CreatorResponse;
     },
