@@ -1,4 +1,5 @@
 import { useState, useEffect, useRef, useCallback } from "react";
+import { useQueryClient } from "@tanstack/react-query";
 import { uploadFile } from "@/lib/arweave/uploadFile";
 import { getFileMimeType } from "@/utils/getFileMimeType";
 import { NEW_API_BASE_URL } from "@/lib/consts";
@@ -20,6 +21,7 @@ interface OrgData {
 
 const useOrgSettings = (orgId: string | null) => {
   const { data: organizations } = useAccountOrganizations();
+  const queryClient = useQueryClient();
   const [orgData, setOrgData] = useState<OrgData | null>(null);
   const [name, setName] = useState("");
   const [image, setImage] = useState("");
@@ -154,13 +156,15 @@ const useOrgSettings = (orgId: string | null) => {
       if (response.ok) {
         const data = await response.json();
         setOrgData(data.data);
+        // Invalidate org list cache so sidebar shows updated image/name immediately
+        await queryClient.invalidateQueries({ queryKey: ["accountOrganizations"] });
         return true;
       }
       return false;
     } finally {
       setIsSaving(false);
     }
-  }, [orgId, name, image, instruction, knowledges]);
+  }, [orgId, name, image, instruction, knowledges, queryClient]);
 
   return {
     orgData,

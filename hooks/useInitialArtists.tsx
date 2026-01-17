@@ -30,9 +30,12 @@ const useInitialArtists = (
   useEffect(() => {
     const savedArtist = selections[orgKey];
     if (savedArtist && Object.keys(savedArtist).length > 0) {
-      setSelectedArtist(savedArtist);
+      // Only update if the saved artist differs from current selection
+      if (savedArtist.account_id !== selectedArtist?.account_id) {
+        setSelectedArtist(savedArtist);
+      }
     }
-  }, [orgKey, selections, setSelectedArtist]);
+  }, [orgKey, selections, selectedArtist?.account_id, setSelectedArtist]);
 
   // Update selected artist with fresh data from artists list
   useEffect(() => {
@@ -41,10 +44,13 @@ const useInitialArtists = (
         (artist: ArtistRecord) =>
           artist.account_id === selectedArtist.account_id,
       );
-      if (currentArtist && !selectedArtist?.isWrapped)
+      if (currentArtist && !selectedArtist?.isWrapped) {
         setSelectedArtist(currentArtist);
+        // Persist fresh data to localStorage so page reload shows updated image
+        saveSelection(currentArtist);
+      }
     }
-  }, [artists, selectedArtist, setSelectedArtist]);
+  }, [artists, selectedArtist, setSelectedArtist, saveSelection]);
 
   const handleSelectArtist = (artist: ArtistRecord | null) => {
     setSelectedArtist(artist);
