@@ -43,7 +43,6 @@ const CreateWorkspaceModal = ({ isOpen, onClose }: CreateWorkspaceModalProps) =>
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           account_id: userData.id,
-          // Keep workspace linked to current org context when applicable.
           organization_id: selectedOrgId,
         }),
       });

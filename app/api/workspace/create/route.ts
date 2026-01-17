@@ -26,7 +26,6 @@ export async function POST(req: NextRequest) {
       workspaceName,
       account_id,
       true,
-      // Link workspaces to org when created in org context.
       organization_id,
     );
 
