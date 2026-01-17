@@ -8,7 +8,7 @@ import { createArtistInDb } from "@/lib/supabase/createArtistInDb";
 export async function POST(req: NextRequest) {
   try {
     const body = await req.json();
-    const { account_id, name } = body;
+    const { account_id, name, organization_id } = body;
 
     if (!account_id) {
       return Response.json(
@@ -22,7 +22,13 @@ export async function POST(req: NextRequest) {
 
     // Create workspace account
     // This creates: account record + account_info + account_workspace_ids link
-    const workspace = await createArtistInDb(workspaceName, account_id, true);
+    const workspace = await createArtistInDb(
+      workspaceName,
+      account_id,
+      true,
+      // Link workspaces to org when created in org context.
+      organization_id,
+    );
 
     if (!workspace) {
       return Response.json(

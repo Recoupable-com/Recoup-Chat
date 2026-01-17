@@ -6,6 +6,7 @@ import { toast } from "sonner";
 import Modal from "./Modal";
 import { useArtistProvider } from "@/providers/ArtistProvider";
 import { useUserProvider } from "@/providers/UserProvder";
+import { useOrganization } from "@/providers/OrganizationProvider";
 import { cn } from "@/lib/utils";
 
 interface CreateWorkspaceModalProps {
@@ -23,6 +24,7 @@ const CreateWorkspaceModal = ({ isOpen, onClose }: CreateWorkspaceModalProps) =>
     setIsOpenSettingModal,
   } = useArtistProvider();
   const { userData } = useUserProvider();
+  const { selectedOrgId } = useOrganization();
   const [isCreating, setIsCreating] = useState(false);
 
   const handleCreateArtist = () => {
@@ -39,7 +41,11 @@ const CreateWorkspaceModal = ({ isOpen, onClose }: CreateWorkspaceModalProps) =>
       const response = await fetch("/api/workspace/create", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ account_id: userData.id }),
+        body: JSON.stringify({
+          account_id: userData.id,
+          // Keep workspace linked to current org context when applicable.
+          organization_id: selectedOrgId,
+        }),
       });
       
       const data = await response.json();
