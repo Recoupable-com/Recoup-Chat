@@ -5,6 +5,7 @@ import { serializeError } from "@/lib/errors/serializeError";
 
 export type HeaderValidationResult = {
   accountId?: string;
+  accessToken?: string;
 };
 
 /**
@@ -55,7 +56,9 @@ export async function validateHeaders(
       });
     }
 
-    return { accountId: result.accountId as string };
+    // Return accountId and access token for MCP auth
+    const accessToken = apiKeyHeader || authHeader?.replace(/^Bearer\s+/i, "");
+    return { accountId: result.accountId as string, accessToken };
   } catch (e) {
     console.error("💬 validateHeaders accountId lookup error:", e);
     return new Response(JSON.stringify(serializeError(e)), {

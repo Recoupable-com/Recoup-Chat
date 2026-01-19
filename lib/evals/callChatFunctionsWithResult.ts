@@ -1,5 +1,5 @@
 import { UIMessage } from "ai";
-import { DEFAULT_MODEL, EVAL_ACCOUNT_ID } from "@/lib/consts";
+import { DEFAULT_MODEL, EVAL_ACCOUNT_ID, EVAL_ACCESS_TOKEN } from "@/lib/consts";
 import { setupChatRequest } from "@/lib/chat/setupChatRequest";
 import { generateText } from "ai";
 import { ChatRequestBody } from "@/lib/chat/validateChatRequest";
@@ -28,6 +28,7 @@ export async function callChatFunctionsWithResult(input: string) {
     messages,
     roomId: "3779c62e-7583-40c6-a0bb-6bbac841a531",
     accountId: EVAL_ACCOUNT_ID,
+    accessToken: EVAL_ACCESS_TOKEN,
     artistId: "29cfd55a-98d9-45a5-96c9-c751a88f7799",
     model: DEFAULT_MODEL,
     excludeTools: [], // Don't exclude any tools - we want to test tool usage

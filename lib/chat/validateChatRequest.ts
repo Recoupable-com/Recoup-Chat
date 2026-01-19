@@ -14,6 +14,7 @@ export const chatRequestSchema = z
     roomId: z.string().optional(),
     accountId: z.string().optional(),
     artistId: z.string().optional(),
+    organizationId: z.string().optional(),
     model: z.string().optional(),
     excludeTools: z.array(z.string()).optional(),
   })
@@ -41,6 +42,7 @@ type BaseChatRequestBody = z.infer<typeof chatRequestSchema>;
 
 export type ChatRequestBody = BaseChatRequestBody & {
   accountId: string;
+  accessToken: string;
 };
 
 /**
@@ -73,7 +75,8 @@ export async function validateChatRequest(
     );
   }
 
-  const validatedBody: BaseChatRequestBody = validationResult.data;
+  const validatedBody: BaseChatRequestBody & { accessToken?: string } =
+    validationResult.data;
 
   // If auth headers are present, resolve accountId via GET /api/accounts/id
   const headerValidationResult = await validateHeaders(request);
@@ -83,12 +86,18 @@ export async function validateChatRequest(
   if (headerValidationResult.accountId) {
     validatedBody.accountId = headerValidationResult.accountId;
   }
+  if (headerValidationResult.accessToken) {
+    validatedBody.accessToken = headerValidationResult.accessToken;
+  }
 
   const hasAccountId =
     typeof validatedBody.accountId === "string" &&
     validatedBody.accountId.trim().length > 0;
+  const hasAccessToken =
+    typeof validatedBody.accessToken === "string" &&
+    validatedBody.accessToken.trim().length > 0;
 
-  if (!hasAccountId) {
+  if (!hasAccountId || !hasAccessToken) {
     return NextResponse.json(
       {
         status: "error",

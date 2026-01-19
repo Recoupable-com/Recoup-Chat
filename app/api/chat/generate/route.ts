@@ -1,13 +1,6 @@
-import { generateText, UIMessage } from "ai";
 import { NextRequest } from "next/server";
-import { serializeError } from "@/lib/errors/serializeError";
-import { sendErrorNotification } from "@/lib/telegram/errors/sendErrorNotification";
-import { setupChatRequest } from "@/lib/chat/setupChatRequest";
-import { handleChatCompletion } from "@/lib/chat/handleChatCompletion";
 import { getCorsHeaders } from "@/lib/chat/getCorsHeaders";
-import generateUUID from "@/lib/generateUUID";
-import { handleChatCredits } from "@/lib/credits/handleChatCredits";
-import { validateChatRequest } from "@/lib/chat/validateChatRequest";
+import { proxyToApiChat } from "@/lib/chat/proxyToApiChat";
 
 // Handle OPTIONS preflight requests
 export async function OPTIONS() {
@@ -17,66 +10,34 @@ export async function OPTIONS() {
   });
 }
 
+/**
+ * POST /api/chat/generate
+ *
+ * Non-streaming chat endpoint that proxies requests to recoup-api.
+ *
+ * Authentication: Authorization header (Bearer token) or x-api-key header required.
+ * The account ID is inferred from the authentication.
+ *
+ * Request body:
+ * - messages: Array of chat messages (mutually exclusive with prompt)
+ * - prompt: String prompt (mutually exclusive with messages)
+ * - roomId: Optional UUID of the chat room
+ * - artistId: Optional UUID of the artist account
+ * - model: Optional model ID override
+ * - excludeTools: Optional array of tool names to exclude
+ * - accountId: Optional accountId override (requires org API key)
+ *
+ * Response body:
+ * - text: The generated text response
+ * - reasoningText: Optional reasoning text (for models that support it)
+ * - sources: Array of sources used in generation
+ * - finishReason: The reason generation finished
+ * - usage: Token usage information
+ * - response: Additional response metadata
+ *
+ * @param request - The request object
+ * @returns A JSON response from recoup-api
+ */
 export async function POST(request: NextRequest) {
-  const validatedBodyOrError = await validateChatRequest(request);
-  if (validatedBodyOrError instanceof Response) {
-    return validatedBodyOrError;
-  }
-  const body = validatedBodyOrError;
-
-  try {
-    const chatConfig = await setupChatRequest(body);
-    const result = await generateText(chatConfig);
-    await handleChatCredits({
-      usage: result.usage,
-      model: chatConfig.model,
-      accountId: body.accountId,
-    });
-    const responseUIMessage = {
-      id: generateUUID(),
-      role: "assistant",
-      parts: [
-        {
-          type: "text",
-          text: result?.text || "",
-        },
-      ],
-    } as UIMessage;
-    await handleChatCompletion(body, [responseUIMessage]);
-    return new Response(
-      JSON.stringify({
-        text: result.content,
-        reasoningText: result.reasoningText,
-        sources: result.sources,
-        finishReason: result.finishReason,
-        usage: result.usage,
-        response: {
-          messages: result.response.messages,
-          headers: result.response.headers,
-          body: result.response.body,
-        },
-      }),
-      {
-        status: 200,
-        headers: {
-          "Content-Type": "application/json",
-          ...getCorsHeaders(),
-        },
-      }
-    );
-  } catch (e) {
-    sendErrorNotification({
-      ...body,
-      error: serializeError(e),
-      path: "/api/chat/generate",
-    });
-    console.error("Global error in chat generate API:", e);
-    return new Response(JSON.stringify(serializeError(e)), {
-      status: 500,
-      headers: {
-        "Content-Type": "application/json",
-        ...getCorsHeaders(),
-      },
-    });
-  }
+  return proxyToApiChat(request, { streaming: false });
 }

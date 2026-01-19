@@ -2,6 +2,7 @@ import { useChat } from "@ai-sdk/react";
 import { useMessageLoader } from "./useMessageLoader";
 import { useUserProvider } from "@/providers/UserProvder";
 import { useArtistProvider } from "@/providers/ArtistProvider";
+import { useOrganization } from "@/providers/OrganizationProvider";
 import { useParams } from "next/navigation";
 import { toast } from "react-toastify";
 import { useEffect, useState, useRef, useMemo, useCallback } from "react";
@@ -39,6 +40,7 @@ export function useVercelChat({
 }: UseVercelChatProps) {
   const { userData } = useUserProvider();
   const { selectedArtist } = useArtistProvider();
+  const { selectedOrgId: organizationId } = useOrganization();
   const { roomId } = useParams();
 
   const userId = userData?.account_id || userData?.id; // Use account_id if available, fallback to id
@@ -169,11 +171,13 @@ export function useVercelChat({
       body: {
         roomId: id,
         artistId,
+        // Only include organizationId if it's not null (schema expects string | undefined)
+        ...(organizationId && { organizationId }),
         model,
       },
       headers,
     }),
-    [id, artistId, model, headers]
+    [id, artistId, organizationId, model, headers]
   );
 
   const { messages, status, stop, sendMessage, setMessages, regenerate } =
@@ -310,7 +314,9 @@ export function useVercelChat({
     const isReady = status === "ready";
     const hasMessages = messages.length > 1;
     const hasInitialMessages = initialMessages && initialMessages.length > 0;
-    if (!hasInitialMessages || !isReady || hasMessages || !isFullyLoggedIn)
+    const hasAccessToken = !!accessToken;
+    // Wait for access token before sending initial message to avoid 401 errors
+    if (!hasInitialMessages || !isReady || hasMessages || !isFullyLoggedIn || !hasAccessToken)
       return;
     handleSendQueryMessages(initialMessages[0]);
   }, [
@@ -319,6 +325,7 @@ export function useVercelChat({
     userId,
     handleSendQueryMessages,
     messages.length,
+    accessToken,
   ]);
 
   // Sync state when models first load and prioritize preferred model
