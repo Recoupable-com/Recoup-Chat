@@ -1,5 +1,4 @@
-import { Moon, Sun, Monitor, Plug } from "lucide-react";
-import Link from "next/link";
+import { Moon, Sun, Monitor } from "lucide-react";
 import {
   DropdownMenuContent,
   DropdownMenuGroup,
@@ -15,6 +14,7 @@ import { useUserProvider } from "@/providers/UserProvder";
 import CreditsUsage from "./CreditsUsage";
 import AccountIdDisplay from "@/components/ArtistSetting/AccountIdDisplay";
 import ManageSubscriptionButton from "./ManageSubscriptionButton";
+import ConnectorsMenuItem from "./ConnectorsMenuItem";
 import OrgSelector from "./OrgSelector";
 import { useTheme } from "next-themes";
 import { Check } from "lucide-react";
@@ -51,12 +51,7 @@ const UserProfileDropdown = () => {
           </DropdownMenuItem>
           <OrgSelector />
           <ManageSubscriptionButton />
-          <DropdownMenuItem asChild className="cursor-pointer">
-            <Link href="/settings/connectors">
-              <Plug className="h-4 w-4" />
-              Connectors
-            </Link>
-          </DropdownMenuItem>
+          <ConnectorsMenuItem />
           <DropdownMenuSub>
             <DropdownMenuSubTrigger className="cursor-pointer">
               {getThemeIcon()}
