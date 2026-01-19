@@ -3,11 +3,12 @@
 import { useState } from "react";
 import { Music, FolderPlus, Loader } from "lucide-react";
 import { toast } from "sonner";
+import { usePrivy } from "@privy-io/react-auth";
 import Modal from "./Modal";
 import { useArtistProvider } from "@/providers/ArtistProvider";
-import { useUserProvider } from "@/providers/UserProvder";
 import { useOrganization } from "@/providers/OrganizationProvider";
 import { cn } from "@/lib/utils";
+import { NEW_API_BASE_URL } from "@/lib/consts";
 
 interface CreateWorkspaceModalProps {
   isOpen: boolean;
@@ -23,7 +24,7 @@ const CreateWorkspaceModal = ({ isOpen, onClose }: CreateWorkspaceModalProps) =>
     setEditableArtist,
     setIsOpenSettingModal,
   } = useArtistProvider();
-  const { userData } = useUserProvider();
+  const { getAccessToken } = usePrivy();
   const { selectedOrgId } = useOrganization();
   const [isCreating, setIsCreating] = useState(false);
 
@@ -34,15 +35,21 @@ const CreateWorkspaceModal = ({ isOpen, onClose }: CreateWorkspaceModalProps) =>
   };
 
   const handleCreateWorkspace = async () => {
-    if (!userData?.id) return;
-    
     setIsCreating(true);
     try {
-      const response = await fetch("/api/workspace/create", {
+      const accessToken = await getAccessToken();
+      if (!accessToken) {
+        toast.error("Please sign in to create a workspace");
+        return;
+      }
+
+      const response = await fetch(`${NEW_API_BASE_URL}/api/workspaces`, {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
+        headers: { 
+          "Content-Type": "application/json",
+          "Authorization": `Bearer ${accessToken}`,
+        },
         body: JSON.stringify({
-          account_id: userData.id,
           organization_id: selectedOrgId,
         }),
       });
@@ -50,26 +57,19 @@ const CreateWorkspaceModal = ({ isOpen, onClose }: CreateWorkspaceModalProps) =>
       const data = await response.json();
       
       if (response.ok && data.workspace) {
-        // Format workspace to match ArtistRecord structure
         const newWorkspace = {
           ...data.workspace,
           account_id: data.workspace.id,
         };
         
-        // Auto-select the new workspace
         setSelectedArtist(newWorkspace);
-        
-        // Set it as editable and open settings modal
         setEditableArtist(newWorkspace);
         setIsOpenSettingModal(true);
-        
-        // Refresh the list to include the new workspace
         await getArtists();
       } else {
-        toast.error("Failed to create workspace");
+        toast.error(data.error || "Failed to create workspace");
       }
-    } catch (error) {
-      console.error("Error creating workspace:", error);
+    } catch {
       toast.error("Failed to create workspace");
     } finally {
       setIsCreating(false);
