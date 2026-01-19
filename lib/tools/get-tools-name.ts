@@ -7,6 +7,8 @@ export const getDisplayToolName = (name: string) => {
   switch (cleanName) {
     case "search_web":
       return "Search Internet";
+    case "COMPOSIO_MANAGE_CONNECTIONS":
+      return "Manage Connections";
     default:
       return cleanName
         .split("_")

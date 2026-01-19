@@ -44,6 +44,12 @@ function getToolInfo(toolName: string): { message: string } {
       message: "Information retrieved",
     };
   }
+  // Connector management
+  else if (toolName === "COMPOSIO_MANAGE_CONNECTIONS") {
+    return {
+      message: "Connection managed",
+    };
+  }
   // Default for any other tool
   else {
     return {
