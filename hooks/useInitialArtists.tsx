@@ -43,21 +43,20 @@ const useInitialArtists = (
     }
   }, [orgKey, selections, selectedArtist?.account_id, setSelectedArtist, artists.length, validArtistIds]);
 
-  // Sync selection with fresh artist data, clear if artist left current org
+  // Sync selection with fresh artist data, clear if artist left current org or was deleted
   useEffect(() => {
-    if (artists.length === 0) return;
+    if (!selectedArtist) return;
 
-    if (selectedArtist) {
-      const currentArtist = artists.find(
-        (artist: ArtistRecord) =>
-          artist.account_id === selectedArtist.account_id,
-      );
-      if (currentArtist && !selectedArtist?.isWrapped) {
-        setSelectedArtist(currentArtist);
-        saveSelection(currentArtist);
-      } else if (!currentArtist) {
-        setSelectedArtist(null);
-      }
+    const currentArtist = artists.find(
+      (artist: ArtistRecord) =>
+        artist.account_id === selectedArtist.account_id,
+    );
+
+    if (!currentArtist) {
+      setSelectedArtist(null);
+    } else if (!selectedArtist?.isWrapped) {
+      setSelectedArtist(currentArtist);
+      saveSelection(currentArtist);
     }
   }, [artists, selectedArtist, setSelectedArtist, saveSelection]);
 
