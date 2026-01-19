@@ -1,7 +1,7 @@
 "use client";
 
 import React from "react";
-import { formatConnectorName } from "@/lib/connectors/formatConnectorName";
+import { formatConnectorName } from "@/lib/composio/formatConnectorName";
 import { ComposioConnectedState } from "./ComposioConnectedState";
 import { ComposioConnectPrompt } from "./ComposioConnectPrompt";
 

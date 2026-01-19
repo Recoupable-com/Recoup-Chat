@@ -2,9 +2,9 @@
 
 import { ConnectorInfo } from "@/hooks/useConnectors";
 import { useConnectorHandlers } from "@/hooks/useConnectorHandlers";
-import { getConnectorMeta } from "@/lib/connectors/connectorMetadata";
-import { formatConnectorName } from "@/lib/connectors/formatConnectorName";
-import { getConnectorIcon } from "@/lib/connectors/getConnectorIcon";
+import { getConnectorMeta } from "@/lib/composio/connectorMetadata";
+import { formatConnectorName } from "@/lib/composio/formatConnectorName";
+import { getConnectorIcon } from "@/lib/composio/getConnectorIcon";
 import { ConnectorComingSoon } from "./ConnectorComingSoon";
 import { ConnectorConnectedMenu } from "./ConnectorConnectedMenu";
 import { ConnectorEnableButton } from "./ConnectorEnableButton";
