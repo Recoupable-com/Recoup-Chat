@@ -9,6 +9,12 @@ export const getDisplayToolName = (name: string) => {
       return "Search Internet";
     case "COMPOSIO_MANAGE_CONNECTIONS":
       return "Manage Connections";
+    case "COMPOSIO_SEARCH_TOOLS":
+      return "Search Tools";
+    case "COMPOSIO_GET_TOOL_SCHEMAS":
+      return "Get Tool Details";
+    case "COMPOSIO_MULTI_EXECUTE_TOOL":
+      return "Execute Action";
     default:
       return cleanName
         .split("_")

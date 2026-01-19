@@ -44,10 +44,22 @@ function getToolInfo(toolName: string): { message: string } {
       message: "Information retrieved",
     };
   }
-  // Connector management
+  // Connector tools
   else if (toolName === "COMPOSIO_MANAGE_CONNECTIONS") {
     return {
       message: "Connection managed",
+    };
+  } else if (toolName === "COMPOSIO_SEARCH_TOOLS") {
+    return {
+      message: "Tools discovered",
+    };
+  } else if (toolName === "COMPOSIO_GET_TOOL_SCHEMAS") {
+    return {
+      message: "Tool details retrieved",
+    };
+  } else if (toolName === "COMPOSIO_MULTI_EXECUTE_TOOL") {
+    return {
+      message: "Action executed",
     };
   }
   // Default for any other tool
