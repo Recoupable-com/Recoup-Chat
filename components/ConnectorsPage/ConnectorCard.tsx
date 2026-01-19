@@ -1,8 +1,8 @@
 "use client";
 
-import { useState } from "react";
 import { Loader2, MoreVertical, RefreshCw, Unlink, CheckCircle } from "lucide-react";
 import { ConnectorInfo } from "@/hooks/useConnectors";
+import { useConnectorHandlers } from "@/hooks/useConnectorHandlers";
 import { getConnectorMeta } from "@/lib/connectors/connectorMetadata";
 import { formatConnectorName } from "@/lib/connectors/formatConnectorName";
 import { getConnectorIcon } from "@/lib/connectors/getConnectorIcon";
@@ -28,32 +28,14 @@ export function ConnectorCard({
   onConnect,
   onDisconnect,
 }: ConnectorCardProps) {
-  const [isConnecting, setIsConnecting] = useState(false);
-  const [isDisconnecting, setIsDisconnecting] = useState(false);
+  const { isConnecting, isDisconnecting, handleConnect, handleDisconnect } =
+    useConnectorHandlers({
+      slug: connector.slug,
+      connectedAccountId: connector.connectedAccountId,
+      onConnect,
+      onDisconnect,
+    });
   const meta = getConnectorMeta(connector.slug);
-
-  const handleConnect = async () => {
-    setIsConnecting(true);
-    try {
-      const redirectUrl = await onConnect(connector.slug);
-      if (redirectUrl) {
-        window.location.href = redirectUrl;
-      }
-    } finally {
-      setIsConnecting(false);
-    }
-  };
-
-  const handleDisconnect = async () => {
-    if (!connector.connectedAccountId) return;
-
-    setIsDisconnecting(true);
-    try {
-      await onDisconnect(connector.connectedAccountId);
-    } finally {
-      setIsDisconnecting(false);
-    }
-  };
 
   return (
     <div className="group flex items-center gap-4 p-4 rounded-xl border border-border bg-card hover:border-muted-foreground/30 hover:shadow-sm transition-all duration-200">
