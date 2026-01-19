@@ -21,7 +21,7 @@ interface ConnectorCardProps {
 
 /**
  * Card component for a single connector.
- * Uses branded icons from Simple Icons.
+ * Shows "Coming Soon" badge for unavailable connectors.
  */
 export function ConnectorCard({
   connector,
@@ -36,10 +36,23 @@ export function ConnectorCard({
       onDisconnect,
     });
   const meta = getConnectorMeta(connector.slug);
+  const isComingSoon = meta.comingSoon ?? false;
 
   return (
-    <div className="group flex items-center gap-4 p-4 rounded-xl border border-border bg-card hover:border-muted-foreground/30 hover:shadow-sm transition-all duration-200">
-      <div className="shrink-0 p-2.5 rounded-xl bg-muted/50 group-hover:bg-muted transition-colors">
+    <div
+      className={`group flex items-center gap-4 p-4 rounded-xl border border-border bg-card transition-all duration-200 ${
+        isComingSoon
+          ? "opacity-60"
+          : "hover:border-muted-foreground/30 hover:shadow-sm"
+      }`}
+    >
+      <div
+        className={`shrink-0 p-2.5 rounded-xl transition-colors ${
+          isComingSoon
+            ? "bg-muted/30 grayscale"
+            : "bg-muted/50 group-hover:bg-muted"
+        }`}
+      >
         {getConnectorIcon(connector.slug, 22)}
       </div>
 
@@ -53,7 +66,11 @@ export function ConnectorCard({
       </div>
 
       <div className="shrink-0">
-        {connector.isConnected ? (
+        {isComingSoon ? (
+          <span className="inline-flex items-center px-3 py-1.5 text-xs font-medium text-muted-foreground bg-muted/50 rounded-lg">
+            Coming Soon
+          </span>
+        ) : connector.isConnected ? (
           <div className="flex items-center gap-2">
             <span className="text-xs font-medium text-muted-foreground flex items-center gap-1">
               Connected
@@ -62,11 +79,11 @@ export function ConnectorCard({
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
                 <button
-                    className="p-1.5 rounded-md hover:bg-muted transition-colors"
-                    title="Connector options"
-                  >
-                    <MoreVertical className="h-4 w-4 text-muted-foreground" />
-                  </button>
+                  className="p-1.5 rounded-md hover:bg-muted transition-colors"
+                  title="Connector options"
+                >
+                  <MoreVertical className="h-4 w-4 text-muted-foreground" />
+                </button>
               </DropdownMenuTrigger>
               <DropdownMenuContent align="end">
                 <DropdownMenuItem

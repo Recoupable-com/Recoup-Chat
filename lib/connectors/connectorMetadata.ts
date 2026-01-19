@@ -1,10 +1,11 @@
 /**
  * Metadata for each connector.
- * Provides descriptions for the connectors page.
+ * Provides descriptions and availability status.
  */
 
 export interface ConnectorMeta {
   description: string;
+  comingSoon?: boolean;
 }
 
 /**
@@ -12,29 +13,43 @@ export interface ConnectorMeta {
  * Keys are connector slugs (lowercase).
  */
 export const connectorMetadata: Record<string, ConnectorMeta> = {
-  // Google Suite
+  // Available now
   googlesheets: { description: "Read, create, and update spreadsheets" },
-  googledrive: { description: "Access and manage your files and folders" },
-  googledocs: { description: "Create and edit documents" },
-  googlecalendar: { description: "Manage events and schedules" },
-  gmail: { description: "Search, read, and send emails" },
 
-  // Communication
-  slack: { description: "Post messages across your workspace" },
-  outlook: { description: "Search your emails and calendar events" },
+  // Coming soon - Google Suite
+  googledrive: {
+    description: "Access and manage your files and folders",
+    comingSoon: true,
+  },
+  googledocs: { description: "Create and edit documents", comingSoon: true },
+  googlecalendar: { description: "Manage events and schedules", comingSoon: true },
+  gmail: { description: "Search, read, and send emails", comingSoon: true },
 
-  // Productivity
-  notion: { description: "Search and create content on your pages" },
-  airtable: { description: "Manage bases, tables, and records" },
-  linear: { description: "Track projects, issues, and workflows" },
-  jira: { description: "Manage projects and track issues" },
-  hubspot: { description: "Manage contacts and CRM data" },
+  // Coming soon - Communication
+  slack: { description: "Post messages across your workspace", comingSoon: true },
+  outlook: {
+    description: "Search your emails and calendar events",
+    comingSoon: true,
+  },
 
-  // Development
-  github: { description: "Manage repositories, issues, and PRs" },
+  // Coming soon - Productivity
+  notion: {
+    description: "Search and create content on your pages",
+    comingSoon: true,
+  },
+  airtable: { description: "Manage bases, tables, and records", comingSoon: true },
+  linear: {
+    description: "Track projects, issues, and workflows",
+    comingSoon: true,
+  },
+  jira: { description: "Manage projects and track issues", comingSoon: true },
+  hubspot: { description: "Manage contacts and CRM data", comingSoon: true },
 
-  // Social
-  twitter: { description: "Post and manage tweets" },
+  // Coming soon - Development
+  github: { description: "Manage repositories, issues, and PRs", comingSoon: true },
+
+  // Coming soon - Social
+  twitter: { description: "Post and manage tweets", comingSoon: true },
 };
 
 /**
@@ -45,6 +60,7 @@ export function getConnectorMeta(slug: string): ConnectorMeta {
   return (
     connectorMetadata[slug.toLowerCase()] || {
       description: "Connect to enable this connector",
+      comingSoon: true,
     }
   );
 }
