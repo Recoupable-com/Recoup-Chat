@@ -535,7 +535,7 @@ export function getToolResultComponent(part: ToolUIPart | DynamicToolUIPart) {
         <UpdateFileResult result={result as UpdateFileResultType} />
       </div>
     );
-  } else if (toolName === "composio") {
+  } else if (toolName === "COMPOSIO_MANAGE_CONNECTIONS") {
     // Check if this is an auth result (has redirect_url OR status is Active)
     const composioResult = result as {
       data?: {
