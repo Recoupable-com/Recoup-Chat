@@ -1,17 +1,13 @@
 "use client";
 
-import { Loader2, MoreVertical, RefreshCw, Unlink, CheckCircle } from "lucide-react";
 import { ConnectorInfo } from "@/hooks/useConnectors";
 import { useConnectorHandlers } from "@/hooks/useConnectorHandlers";
 import { getConnectorMeta } from "@/lib/connectors/connectorMetadata";
 import { formatConnectorName } from "@/lib/connectors/formatConnectorName";
 import { getConnectorIcon } from "@/lib/connectors/getConnectorIcon";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
+import { ConnectorComingSoon } from "./ConnectorComingSoon";
+import { ConnectorConnectedMenu } from "./ConnectorConnectedMenu";
+import { ConnectorEnableButton } from "./ConnectorEnableButton";
 
 interface ConnectorCardProps {
   connector: ConnectorInfo;
@@ -21,7 +17,6 @@ interface ConnectorCardProps {
 
 /**
  * Card component for a single connector.
- * Shows "Coming Soon" badge for unavailable connectors.
  */
 export function ConnectorCard({
   connector,
@@ -67,56 +62,18 @@ export function ConnectorCard({
 
       <div className="shrink-0">
         {isComingSoon ? (
-          <span className="inline-flex items-center px-3 py-1.5 text-xs font-medium text-muted-foreground bg-muted/50 rounded-lg">
-            Coming Soon
-          </span>
+          <ConnectorComingSoon />
         ) : connector.isConnected ? (
-          <div className="flex items-center gap-2">
-            <span className="text-xs font-medium text-muted-foreground flex items-center gap-1">
-              Connected
-              <CheckCircle className="h-3.5 w-3.5 text-green-600 dark:text-green-500" />
-            </span>
-            <DropdownMenu>
-              <DropdownMenuTrigger asChild>
-                <button
-                  className="p-1.5 rounded-md hover:bg-muted transition-colors"
-                  title="Connector options"
-                >
-                  <MoreVertical className="h-4 w-4 text-muted-foreground" />
-                </button>
-              </DropdownMenuTrigger>
-              <DropdownMenuContent align="end">
-                <DropdownMenuItem
-                  onClick={handleConnect}
-                  className="cursor-pointer"
-                >
-                  <RefreshCw className="h-4 w-4 mr-2" />
-                  Reconnect
-                </DropdownMenuItem>
-                <DropdownMenuItem
-                  onClick={handleDisconnect}
-                  disabled={isDisconnecting}
-                  className="cursor-pointer text-red-600 dark:text-red-400"
-                >
-                  {isDisconnecting ? (
-                    <Loader2 className="h-4 w-4 mr-2 animate-spin" />
-                  ) : (
-                    <Unlink className="h-4 w-4 mr-2" />
-                  )}
-                  {isDisconnecting ? "Disconnecting..." : "Disconnect"}
-                </DropdownMenuItem>
-              </DropdownMenuContent>
-            </DropdownMenu>
-          </div>
+          <ConnectorConnectedMenu
+            isDisconnecting={isDisconnecting}
+            onReconnect={handleConnect}
+            onDisconnect={handleDisconnect}
+          />
         ) : (
-          <button
+          <ConnectorEnableButton
+            isConnecting={isConnecting}
             onClick={handleConnect}
-            disabled={isConnecting}
-            className="inline-flex items-center gap-1.5 px-4 py-2 text-sm font-medium text-foreground bg-transparent border border-border hover:bg-muted rounded-lg transition-colors disabled:opacity-50"
-          >
-            {isConnecting && <Loader2 className="h-4 w-4 animate-spin" />}
-            Enable
-          </button>
+          />
         )}
       </div>
     </div>
