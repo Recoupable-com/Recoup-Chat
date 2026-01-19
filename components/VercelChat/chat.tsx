@@ -18,8 +18,7 @@ import { UIMessage } from "ai";
 import { useDropzone } from "@/hooks/useDropzone";
 import FileDragOverlay from "./FileDragOverlay";
 import { Loader } from "lucide-react";
-import { memo, Suspense } from "react";
-import { ConnectionSuccessBanner } from "./ConnectionSuccessBanner";
+import { memo } from "react";
 
 interface ChatProps {
   id: string;
@@ -84,10 +83,6 @@ function ChatContentMemoized({
       )}
       {...getRootProps()}
     >
-      {/* Success banner for OAuth returns */}
-      <Suspense fallback={null}>
-        <ConnectionSuccessBanner />
-      </Suspense>
       {isDragActive && <FileDragOverlay />}
       <div className="absolute w-full h-6 bg-gradient-to-t from-transparent via-background/80 to-background z-10 top-0"></div>
       {isVisible ? (
