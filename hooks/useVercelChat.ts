@@ -13,7 +13,7 @@ import { useConversationsProvider } from "@/providers/ConversationsProvider";
 import { UIMessage, FileUIPart } from "ai";
 import useAvailableModels from "./useAvailableModels";
 import { useLocalStorage } from "usehooks-ts";
-import { DEFAULT_MODEL } from "@/lib/consts";
+import { DEFAULT_MODEL, NEW_API_BASE_URL } from "@/lib/consts";
 import { usePaymentProvider } from "@/providers/PaymentProvider";
 import useArtistFilesForMentions from "@/hooks/useArtistFilesForMentions";
 import type { KnowledgeBaseEntry } from "@/lib/supabase/getArtistKnowledge";
@@ -183,6 +183,7 @@ export function useVercelChat({
   const { messages, status, stop, sendMessage, setMessages, regenerate } =
     useChat({
       id,
+      api: `${NEW_API_BASE_URL}/api/chat`,
       experimental_throttle: 100,
       generateId: generateUUID,
       onError: (e) => {
