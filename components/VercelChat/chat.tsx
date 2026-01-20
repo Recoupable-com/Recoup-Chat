@@ -19,6 +19,7 @@ import { useDropzone } from "@/hooks/useDropzone";
 import FileDragOverlay from "./FileDragOverlay";
 import { Loader } from "lucide-react";
 import { memo } from "react";
+import { useOrganization } from "@/providers/OrganizationProvider";
 
 interface ChatProps {
   id: string;
@@ -27,8 +28,11 @@ interface ChatProps {
 }
 
 export function Chat({ id, reportId, initialMessages }: ChatProps) {
+  const { selectedOrgId } = useOrganization();
+  const providerKey = `${id}-${selectedOrgId ?? "personal"}`;
+  
   return (
-    <VercelChatProvider chatId={id} initialMessages={initialMessages}>
+    <VercelChatProvider key={providerKey} chatId={id} initialMessages={initialMessages}>
       <ChatContent reportId={reportId} id={id} />
     </VercelChatProvider>
   );

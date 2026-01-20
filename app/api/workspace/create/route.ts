@@ -1,41 +1,55 @@
 import { NextRequest } from "next/server";
-import { createArtistInDb } from "@/lib/supabase/createArtistInDb";
+import { NEW_API_BASE_URL } from "@/lib/consts";
 
 /**
- * Create a blank workspace for an account
- * Uses the same underlying structure as artists
+ * @deprecated This endpoint is deprecated. Use recoup-api directly at POST /api/workspaces
+ *
+ * Create a blank workspace for an account.
+ * This route now proxies to recoup-api for workspace creation.
  */
 export async function POST(req: NextRequest) {
+  const sunsetDate = new Date("2026-03-01");
+  const deprecationHeaders = {
+    Deprecation: "true",
+    Sunset: sunsetDate.toUTCString(),
+    Link: `<${NEW_API_BASE_URL}/api/workspaces>; rel="deprecation"`,
+  };
+
   try {
-    const body = await req.json();
-    const { account_id, name } = body;
+    const body = await req.text();
 
-    if (!account_id) {
-      return Response.json(
-        { message: "Missing required parameter: account_id" },
-        { status: 400 }
-      );
+    // Forward auth headers to recoup-api
+    const headers = new Headers();
+    const authHeader = req.headers.get("authorization");
+    const apiKeyHeader = req.headers.get("x-api-key");
+
+    if (authHeader) {
+      headers.set("authorization", authHeader);
     }
-
-    // Create workspace with provided name or default to "Untitled"
-    const workspaceName = name?.trim() || "Untitled";
-
-    // Create workspace account
-    // This creates: account record + account_info + account_workspace_ids link
-    const workspace = await createArtistInDb(workspaceName, account_id, true);
-
-    if (!workspace) {
-      return Response.json(
-        { message: "Failed to create workspace" },
-        { status: 500 }
-      );
+    if (apiKeyHeader) {
+      headers.set("x-api-key", apiKeyHeader);
     }
+    headers.set("Content-Type", "application/json");
 
-    return Response.json({ workspace }, { status: 200 });
+    const response = await fetch(`${NEW_API_BASE_URL}/api/workspaces`, {
+      method: "POST",
+      headers,
+      body,
+    });
+
+    const responseData = await response.json();
+
+    return Response.json(responseData, {
+      status: response.status,
+      headers: deprecationHeaders,
+    });
   } catch (error) {
-    console.error("Error creating workspace:", error);
+    console.error("Error proxying workspace creation:", error);
     const message = error instanceof Error ? error.message : "Failed to create workspace";
-    return Response.json({ message }, { status: 400 });
+    return Response.json(
+      { status: "error", error: message },
+      { status: 500, headers: deprecationHeaders }
+    );
   }
 }
 

@@ -1,5 +1,5 @@
 import { ArtistRecord } from "@/types/Artist";
-import { Dispatch, SetStateAction, useEffect, useCallback } from "react";
+import { Dispatch, SetStateAction, useEffect, useCallback, useMemo } from "react";
 import { useLocalStorage } from "usehooks-ts";
 
 type ArtistSelections = Record<string, ArtistRecord>;
@@ -10,7 +10,6 @@ const useInitialArtists = (
   setSelectedArtist: Dispatch<SetStateAction<ArtistRecord | null>>,
   selectedOrgId: string | null,
 ) => {
-  // Store all org selections in a single object
   const [selections, setSelections] = useLocalStorage<ArtistSelections>(
     "RECOUP_ARTIST_SELECTIONS",
     {}
@@ -18,7 +17,11 @@ const useInitialArtists = (
 
   const orgKey = selectedOrgId || "personal";
 
-  // Save selected artist for current org
+  const validArtistIds = useMemo(
+    () => new Set(artists.map((a) => a.account_id)),
+    [artists]
+  );
+
   const saveSelection = useCallback(
     (artist: ArtistRecord) => {
       setSelections((prev) => ({ ...prev, [orgKey]: artist }));
@@ -26,29 +29,34 @@ const useInitialArtists = (
     [orgKey, setSelections]
   );
 
-  // Restore selected artist when org changes
+  // Restore saved artist only if it belongs to current org
   useEffect(() => {
+    if (artists.length === 0) return;
+
     const savedArtist = selections[orgKey];
     if (savedArtist && Object.keys(savedArtist).length > 0) {
-      // Only update if the saved artist differs from current selection
-      if (savedArtist.account_id !== selectedArtist?.account_id) {
-        setSelectedArtist(savedArtist);
+      if (validArtistIds.has(savedArtist.account_id)) {
+        if (savedArtist.account_id !== selectedArtist?.account_id) {
+          setSelectedArtist(savedArtist);
+        }
       }
     }
-  }, [orgKey, selections, selectedArtist?.account_id, setSelectedArtist]);
+  }, [orgKey, selections, selectedArtist?.account_id, setSelectedArtist, artists.length, validArtistIds]);
 
-  // Update selected artist with fresh data from artists list
+  // Sync selection with fresh artist data, clear if artist left current org or was deleted
   useEffect(() => {
-    if (selectedArtist && artists.length > 0) {
-      const currentArtist = artists.find(
-        (artist: ArtistRecord) =>
-          artist.account_id === selectedArtist.account_id,
-      );
-      if (currentArtist && !selectedArtist?.isWrapped) {
-        setSelectedArtist(currentArtist);
-        // Persist fresh data to localStorage so page reload shows updated image
-        saveSelection(currentArtist);
-      }
+    if (!selectedArtist) return;
+
+    const currentArtist = artists.find(
+      (artist: ArtistRecord) =>
+        artist.account_id === selectedArtist.account_id,
+    );
+
+    if (!currentArtist) {
+      setSelectedArtist(null);
+    } else if (!selectedArtist?.isWrapped) {
+      setSelectedArtist(currentArtist);
+      saveSelection(currentArtist);
     }
   }, [artists, selectedArtist, setSelectedArtist, saveSelection]);
 
