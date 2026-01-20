@@ -6,12 +6,16 @@ import { withPayment } from "x402-mcp";
 import { StreamableHTTPClientTransport } from "@modelcontextprotocol/sdk/client/streamableHttp.js";
 import { getOrCreatePurchaserAccount } from "@/lib/coinbase/getOrCreatePurchaserAccount";
 import { NEW_API_BASE_URL } from "@/lib/consts";
-import { getGoogleSheetsTools } from "@/lib/agents/googleSheetsAgent";
 import { ChatRequestBody } from "./validateChatRequest";
 
 /**
- * Sets up and filters tools for a chat request
- * @param excludeTools - Optional array of tool names to exclude
+ * Sets up and filters tools for a chat request.
+ *
+ * Tools are sourced from:
+ * - MCP client (Recoup-API) - includes Composio Tool Router for Google Sheets, etc.
+ * - Local tools (getMcpTools)
+ *
+ * @param body - The chat request body
  * @returns Filtered tool set ready for use
  */
 export async function setupToolsForRequest(
@@ -34,10 +38,8 @@ export async function setupToolsForRequest(
   }).then((client) => withPayment(client, { account, network: "base" }));
 
   const mcpClientTools = await mcpClient.tools();
-  const googleSheetsTools = await getGoogleSheetsTools(body);
   const allTools: ToolSet = {
     ...mcpClientTools,
-    ...googleSheetsTools,
     ...localTools,
   };
 

@@ -101,8 +101,7 @@ import {
   UpdateFileResult,
   UpdateFileResultType,
 } from "./tools/files/UpdateFileResult";
-import GoogleSheetsLoginResult from "./tools/googleSheets/GoogleSheetsLoginResult";
-import GoogleSheetsLoginLoading from "./tools/googleSheets/GoogleSheetsLoginLoading";
+import ComposioAuthResult from "./tools/composio/ComposioAuthResult";
 import { TextContent } from "@modelcontextprotocol/sdk/types.js";
 
 type CallToolResult = {
@@ -275,12 +274,6 @@ export function getToolCallComponent(part: ToolUIPart) {
     return (
       <div key={toolCallId}>
         <CatalogSongsSkeleton />
-      </div>
-    );
-  } else if (toolName === "googleSheetsLoginTool") {
-    return (
-      <div key={toolCallId}>
-        <GoogleSheetsLoginLoading />
       </div>
     );
   }
@@ -542,10 +535,10 @@ export function getToolResultComponent(part: ToolUIPart | DynamicToolUIPart) {
         <UpdateFileResult result={result as UpdateFileResultType} />
       </div>
     );
-  } else if (toolName === "googleSheetsLoginTool") {
+  } else if (toolName === "COMPOSIO_MANAGE_CONNECTIONS") {
     return (
       <div key={toolCallId}>
-        <GoogleSheetsLoginResult />
+        <ComposioAuthResult result={result} />
       </div>
     );
   }
