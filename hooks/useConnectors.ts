@@ -15,17 +15,10 @@ export interface ConnectorInfo {
 }
 
 /**
- * Internal connectors hidden from end users.
- * These are developer tools or infrastructure connectors.
+ * Connectors visible to end users.
+ * Only these connectors will be shown on the settings page.
  */
-const HIDDEN_CONNECTORS = [
-  "composio",
-  "supabase",
-  "perplexityai",
-  "codeinterpreter",
-  "serpapi",
-  "firecrawl",
-];
+const ALLOWED_CONNECTORS = ["googlesheets"];
 
 /**
  * Hook for managing connectors.
@@ -59,8 +52,8 @@ export function useConnectors() {
       }
 
       const data = await response.json();
-      const visible = data.data.connectors.filter(
-        (c: ConnectorInfo) => !HIDDEN_CONNECTORS.includes(c.slug.toLowerCase()),
+      const visible = data.data.connectors.filter((c: ConnectorInfo) =>
+        ALLOWED_CONNECTORS.includes(c.slug.toLowerCase()),
       );
       setConnectors(visible);
     } catch (err) {
