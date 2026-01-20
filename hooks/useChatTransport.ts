@@ -21,5 +21,5 @@ export function useChatTransport() {
     });
   }, [headers]);
 
-  return { transport, headers };
+  return { transport, headers, accessToken };
 }
