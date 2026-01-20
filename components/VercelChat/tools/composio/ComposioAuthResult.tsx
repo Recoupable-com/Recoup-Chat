@@ -2,46 +2,13 @@
 
 import React from "react";
 import { formatConnectorName } from "@/lib/composio/formatConnectorName";
+import { findAuthResult } from "@/lib/composio/findAuthResult";
+import { hasValidAuthData } from "@/lib/composio/hasValidAuthData";
 import { ComposioConnectedState } from "./ComposioConnectedState";
 import { ComposioConnectPrompt } from "./ComposioConnectPrompt";
 
-interface ComposioResultEntry {
-  toolkit?: string;
-  status?: string;
-  redirect_url?: string;
-  instruction?: string;
-}
-
 interface ComposioAuthResultProps {
   result: unknown;
-}
-
-/**
- * Find the auth result entry that has redirect_url or active status.
- * Returns null if no valid auth result is found.
- */
-function findAuthResult(
-  results: Record<string, ComposioResultEntry> | undefined
-): ComposioResultEntry | null {
-  if (!results) return null;
-
-  const entries = Object.values(results);
-  return (
-    entries.find(
-      (r) => r.redirect_url || r.status?.toLowerCase() === "active"
-    ) || null
-  );
-}
-
-/**
- * Check if the result contains valid auth data.
- */
-function hasValidAuthData(result: unknown): result is {
-  data?: { results?: Record<string, ComposioResultEntry> };
-} {
-  if (!result || typeof result !== "object") return false;
-  const r = result as { data?: { results?: unknown } };
-  return r.data?.results !== undefined;
 }
 
 /**
