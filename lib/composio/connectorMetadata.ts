@@ -1,11 +1,9 @@
 /**
  * Metadata for each connector.
- * Provides descriptions and availability status.
  */
 
 export interface ConnectorMeta {
   description: string;
-  comingSoon?: boolean;
 }
 
 /**
@@ -24,7 +22,6 @@ export function getConnectorMeta(slug: string): ConnectorMeta {
   return (
     connectorMetadata[slug.toLowerCase()] || {
       description: "Connect to enable this connector",
-      comingSoon: true,
     }
   );
 }

@@ -5,7 +5,6 @@ import { useConnectorHandlers } from "@/hooks/useConnectorHandlers";
 import { getConnectorMeta } from "@/lib/composio/connectorMetadata";
 import { formatConnectorName } from "@/lib/composio/formatConnectorName";
 import { getConnectorIcon } from "@/lib/composio/getConnectorIcon";
-import { ConnectorComingSoon } from "./ConnectorComingSoon";
 import { ConnectorConnectedMenu } from "./ConnectorConnectedMenu";
 import { ConnectorEnableButton } from "./ConnectorEnableButton";
 
@@ -31,23 +30,10 @@ export function ConnectorCard({
       onDisconnect,
     });
   const meta = getConnectorMeta(connector.slug);
-  const isComingSoon = meta.comingSoon ?? false;
 
   return (
-    <div
-      className={`group flex items-center gap-4 p-4 rounded-xl border border-border bg-card transition-all duration-200 ${
-        isComingSoon
-          ? "opacity-60"
-          : "hover:border-muted-foreground/30 hover:shadow-sm"
-      }`}
-    >
-      <div
-        className={`shrink-0 p-2.5 rounded-xl transition-colors ${
-          isComingSoon
-            ? "bg-muted/30 grayscale"
-            : "bg-muted/50 group-hover:bg-muted"
-        }`}
-      >
+    <div className="group flex items-center gap-4 p-4 rounded-xl border border-border bg-card transition-all duration-200 hover:border-muted-foreground/30 hover:shadow-sm">
+      <div className="shrink-0 p-2.5 rounded-xl transition-colors bg-muted/50 group-hover:bg-muted">
         {getConnectorIcon(connector.slug, 22)}
       </div>
 
@@ -61,9 +47,7 @@ export function ConnectorCard({
       </div>
 
       <div className="shrink-0">
-        {isComingSoon ? (
-          <ConnectorComingSoon />
-        ) : connector.isConnected ? (
+        {connector.isConnected ? (
           <ConnectorConnectedMenu
             isDisconnecting={isDisconnecting}
             onReconnect={handleConnect}
