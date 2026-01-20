@@ -10,14 +10,14 @@ import getEarliestFailedUserMessageId from "@/lib/messages/getEarliestFailedUser
 import { clientDeleteTrailingMessages } from "@/lib/messages/clientDeleteTrailingMessages";
 import { generateUUID } from "@/lib/generateUUID";
 import { useConversationsProvider } from "@/providers/ConversationsProvider";
-import { UIMessage, FileUIPart, DefaultChatTransport } from "ai";
+import { UIMessage, FileUIPart } from "ai";
 import useAvailableModels from "./useAvailableModels";
 import { useLocalStorage } from "usehooks-ts";
-import { DEFAULT_MODEL, NEW_API_BASE_URL } from "@/lib/consts";
+import { DEFAULT_MODEL } from "@/lib/consts";
 import { usePaymentProvider } from "@/providers/PaymentProvider";
 import useArtistFilesForMentions from "@/hooks/useArtistFilesForMentions";
 import type { KnowledgeBaseEntry } from "@/lib/supabase/getArtistKnowledge";
-import { useAccessToken } from "./useAccessToken";
+import { useChatTransport } from "./useChatTransport";
 
 // 30 days in seconds for Supabase signed URL expiry
 const SIGNED_URL_EXPIRES_SECONDS = 60 * 60 * 24 * 30;
@@ -55,7 +55,7 @@ export function useVercelChat({
     availableModels[0]?.id ?? "",
   );
   const { refetchCredits } = usePaymentProvider();
-  const accessToken = useAccessToken();
+  const { transport, headers } = useChatTransport();
 
   // Load artist files for mentions (from Supabase)
   const { files: allArtistFiles = [] } = useArtistFilesForMentions();
@@ -157,21 +157,6 @@ export function useVercelChat({
     }
     return outputs;
   }, [knowledgeFiles]);
-
-  const headers = useMemo(() => {
-    return accessToken
-      ? {
-          Authorization: `Bearer ${accessToken}`,
-        }
-      : undefined;
-  }, [accessToken]);
-
-  const transport = useMemo(() => {
-    return new DefaultChatTransport({
-      api: `${NEW_API_BASE_URL}/api/chat`,
-      ...(headers && { headers }),
-    });
-  }, [headers]);
 
   const chatRequestOptions = useMemo(
     () => ({
