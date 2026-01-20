@@ -166,6 +166,13 @@ export function useVercelChat({
       : undefined;
   }, [accessToken]);
 
+  const transport = useMemo(() => {
+    return new DefaultChatTransport({
+      api: `${NEW_API_BASE_URL}/api/chat`,
+      ...(headers && { headers }),
+    });
+  }, [headers]);
+
   const chatRequestOptions = useMemo(
     () => ({
       body: {
@@ -183,9 +190,7 @@ export function useVercelChat({
   const { messages, status, stop, sendMessage, setMessages, regenerate } =
     useChat({
       id,
-      transport: new DefaultChatTransport({
-        api: `${NEW_API_BASE_URL}/api/chat`,
-      }),
+      transport,
       experimental_throttle: 100,
       generateId: generateUUID,
       onError: (e) => {
