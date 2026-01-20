@@ -63,16 +63,16 @@ export function ConnectorsPage() {
             title="Installed Connectors"
             description="Connected tools provide richer and more accurate answers, gated by permissions you have granted."
             connectors={connected}
-            onConnect={authorize}
-            onDisconnect={disconnect}
-          />
+                    onConnect={authorize}
+                    onDisconnect={disconnect}
+                  />
           <ConnectorsSection
             title="Available Connectors"
             description="Connect your tools to search across them and take action. Your permissions are always respected."
             connectors={available}
-            onConnect={authorize}
-            onDisconnect={disconnect}
-          />
+                    onConnect={authorize}
+                    onDisconnect={disconnect}
+                  />
           {connectors.length === 0 && <ConnectorsEmptyState />}
         </div>
       )}

@@ -53,7 +53,7 @@ export function ConnectorCard({
             onReconnect={handleConnect}
             onDisconnect={handleDisconnect}
           />
-        ) : (
+                  ) : (
           <ConnectorEnableButton
             isConnecting={isConnecting}
             onClick={handleConnect}
