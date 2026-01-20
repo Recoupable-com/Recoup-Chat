@@ -17,6 +17,7 @@ import { DEFAULT_MODEL } from "@/lib/consts";
 import { usePaymentProvider } from "@/providers/PaymentProvider";
 import useArtistFilesForMentions from "@/hooks/useArtistFilesForMentions";
 import type { KnowledgeBaseEntry } from "@/lib/supabase/getArtistKnowledge";
+import { useChatTransport } from "./useChatTransport";
 import { useAccessToken } from "./useAccessToken";
 
 // 30 days in seconds for Supabase signed URL expiry
@@ -52,9 +53,10 @@ export function useVercelChat({
   const [input, setInput] = useState("");
   const [model, setModel] = useLocalStorage(
     "RECOUP_MODEL",
-    availableModels[0]?.id ?? ""
+    availableModels[0]?.id ?? "",
   );
   const { refetchCredits } = usePaymentProvider();
+  const { transport, headers } = useChatTransport();
   const accessToken = useAccessToken();
 
   // Load artist files for mentions (from Supabase)
@@ -74,7 +76,7 @@ export function useVercelChat({
 
   // Resolve selected files to signed URLs for attachment
   const [knowledgeFiles, setKnowledgeFiles] = useState<KnowledgeBaseEntry[]>(
-    []
+    [],
   );
   const [isLoadingSignedUrls, setIsLoadingSignedUrls] = useState(false);
   // Cache signed URLs by storage_key to avoid redundant refetches
@@ -115,7 +117,7 @@ export function useVercelChat({
         await Promise.all(
           toFetch.map(async (f) => {
             const res = await fetch(
-              `/api/files/get-signed-url?key=${encodeURIComponent(f.storage_key)}&accountId=${encodeURIComponent(userData?.account_id || "")}&expires=${SIGNED_URL_EXPIRES_SECONDS}`
+              `/api/files/get-signed-url?key=${encodeURIComponent(f.storage_key)}&accountId=${encodeURIComponent(userData?.account_id || "")}&expires=${SIGNED_URL_EXPIRES_SECONDS}`,
             );
             if (!res.ok) throw new Error("Failed to get signed URL");
             const { signedUrl } = (await res.json()) as { signedUrl: string };
@@ -125,7 +127,7 @@ export function useVercelChat({
               type: f.mime_type || "application/octet-stream",
             };
             cache.set(f.storage_key, entry);
-          })
+          }),
         );
 
         // Compose final entries in the order of selection
@@ -158,14 +160,6 @@ export function useVercelChat({
     return outputs;
   }, [knowledgeFiles]);
 
-  const headers = useMemo(() => {
-    return accessToken
-      ? {
-          Authorization: `Bearer ${accessToken}`,
-        }
-      : undefined;
-  }, [accessToken]);
-
   const chatRequestOptions = useMemo(
     () => ({
       body: {
@@ -177,12 +171,13 @@ export function useVercelChat({
       },
       headers,
     }),
-    [id, artistId, organizationId, model, headers]
+    [id, artistId, organizationId, model, headers],
   );
 
   const { messages, status, stop, sendMessage, setMessages, regenerate } =
     useChat({
       id,
+      transport,
       experimental_throttle: 100,
       generateId: generateUUID,
       onError: (e) => {
@@ -207,10 +202,10 @@ export function useVercelChat({
 
     // Separate audio files (can't be sent to AI as file parts)
     const audioAttachments = combined.filter((f) =>
-      f.mediaType?.startsWith("audio/")
+      f.mediaType?.startsWith("audio/"),
     );
     const nonAudioAttachments = combined.filter(
-      (f) => !f.mediaType?.startsWith("audio/")
+      (f) => !f.mediaType?.startsWith("audio/"),
     );
 
     // Build message text with audio URLs prepended
@@ -241,7 +236,7 @@ export function useVercelChat({
   const { isLoading: isMessagesLoading, hasError } = useMessageLoader(
     messages.length === 0 ? id : undefined,
     userId,
-    setMessages
+    setMessages,
   );
 
   // Only show loading state if:
@@ -262,7 +257,7 @@ export function useVercelChat({
       if (successfulDeletion) {
         setMessages((messages) => {
           const index = messages.findIndex(
-            (m) => m.id === earliestFailedUserMessageId
+            (m) => m.id === earliestFailedUserMessageId,
           );
           if (index !== -1) {
             return [...messages.slice(0, index)];
@@ -306,7 +301,7 @@ export function useVercelChat({
       silentlyUpdateUrl();
       sendMessage(initialMessage, chatRequestOptions);
     },
-    [silentlyUpdateUrl, sendMessage, chatRequestOptions]
+    [silentlyUpdateUrl, sendMessage, chatRequestOptions],
   );
 
   useEffect(() => {
@@ -316,7 +311,13 @@ export function useVercelChat({
     const hasInitialMessages = initialMessages && initialMessages.length > 0;
     const hasAccessToken = !!accessToken;
     // Wait for access token before sending initial message to avoid 401 errors
-    if (!hasInitialMessages || !isReady || hasMessages || !isFullyLoggedIn || !hasAccessToken)
+    if (
+      !hasInitialMessages ||
+      !isReady ||
+      hasMessages ||
+      !isFullyLoggedIn ||
+      !hasAccessToken
+    )
       return;
     handleSendQueryMessages(initialMessages[0]);
   }, [
