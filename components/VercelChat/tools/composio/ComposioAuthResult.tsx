@@ -5,20 +5,43 @@ import { formatConnectorName } from "@/lib/composio/formatConnectorName";
 import { ComposioConnectedState } from "./ComposioConnectedState";
 import { ComposioConnectPrompt } from "./ComposioConnectPrompt";
 
+interface ComposioResultEntry {
+  toolkit?: string;
+  status?: string;
+  redirect_url?: string;
+  instruction?: string;
+}
+
 interface ComposioAuthResultProps {
-  result: {
-    data?: {
-      results?: Record<
-        string,
-        {
-          toolkit?: string;
-          status?: string;
-          redirect_url?: string;
-          instruction?: string;
-        }
-      >;
-    };
-  };
+  result: unknown;
+}
+
+/**
+ * Find the auth result entry that has redirect_url or active status.
+ * Returns null if no valid auth result is found.
+ */
+function findAuthResult(
+  results: Record<string, ComposioResultEntry> | undefined
+): ComposioResultEntry | null {
+  if (!results) return null;
+
+  const entries = Object.values(results);
+  return (
+    entries.find(
+      (r) => r.redirect_url || r.status?.toLowerCase() === "active"
+    ) || null
+  );
+}
+
+/**
+ * Check if the result contains valid auth data.
+ */
+function hasValidAuthData(result: unknown): result is {
+  data?: { results?: Record<string, ComposioResultEntry> };
+} {
+  if (!result || typeof result !== "object") return false;
+  const r = result as { data?: { results?: unknown } };
+  return r.data?.results !== undefined;
 }
 
 /**
@@ -26,27 +49,33 @@ interface ComposioAuthResultProps {
  * Shows different UI based on connection status:
  * - "Active": Shows connected confirmation
  * - "initiated": Shows connect button
+ * Returns null if no valid auth result is found.
  */
 export function ComposioAuthResult({ result }: ComposioAuthResultProps) {
-  const results = result?.data?.results;
-  const firstResult = results ? Object.values(results)[0] : null;
-  const redirectUrl = firstResult?.redirect_url;
-  const connector = firstResult?.toolkit || "Connector";
-  const status = firstResult?.status;
+  if (!hasValidAuthData(result)) {
+    return null;
+  }
+
+  const authResult = findAuthResult(result.data?.results);
+  if (!authResult) {
+    return null;
+  }
+
+  const connector = authResult.toolkit || "Connector";
   const displayName = formatConnectorName(connector);
 
-  if (status?.toLowerCase() === "active") {
+  if (authResult.status?.toLowerCase() === "active") {
     return <ComposioConnectedState displayName={displayName} />;
   }
 
-  if (!redirectUrl) {
+  if (!authResult.redirect_url) {
     return null;
   }
 
   return (
     <ComposioConnectPrompt
       displayName={displayName}
-      redirectUrl={redirectUrl}
+      redirectUrl={authResult.redirect_url}
       connector={connector}
     />
   );

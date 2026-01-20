@@ -536,26 +536,11 @@ export function getToolResultComponent(part: ToolUIPart | DynamicToolUIPart) {
       </div>
     );
   } else if (toolName === "COMPOSIO_MANAGE_CONNECTIONS") {
-    // Check if this is an auth result (has redirect_url OR status is Active)
-    const composioResult = result as {
-      data?: {
-        results?: Record<string, { redirect_url?: string; status?: string }>;
-      };
-    };
-    const results = composioResult?.data?.results;
-    const hasAuthResult = results
-      ? Object.values(results).some(
-          (r) => r.redirect_url || r.status?.toLowerCase() === "active",
-        )
-      : false;
-
-    if (hasAuthResult) {
-      return (
-        <div key={toolCallId}>
-          <ComposioAuthResult result={composioResult} />
-        </div>
-      );
-    }
+    return (
+      <div key={toolCallId}>
+        <ComposioAuthResult result={result} />
+      </div>
+    );
   }
 
   // Default generic result for other tools

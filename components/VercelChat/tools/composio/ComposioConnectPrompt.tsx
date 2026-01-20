@@ -36,10 +36,6 @@ export function ComposioConnectPrompt({
 
       <a
         href={redirectUrl}
-        onClick={(e) => {
-          e.preventDefault();
-          window.location.href = redirectUrl;
-        }}
         className="w-full inline-flex items-center justify-center bg-green-600 hover:bg-green-700 text-white rounded-md px-4 py-2 text-sm font-medium transition-colors cursor-pointer"
       >
         {getIcon("h-4 w-4")}
