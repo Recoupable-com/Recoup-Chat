@@ -10,7 +10,7 @@ import getEarliestFailedUserMessageId from "@/lib/messages/getEarliestFailedUser
 import { clientDeleteTrailingMessages } from "@/lib/messages/clientDeleteTrailingMessages";
 import { generateUUID } from "@/lib/generateUUID";
 import { useConversationsProvider } from "@/providers/ConversationsProvider";
-import { UIMessage, FileUIPart } from "ai";
+import { UIMessage, FileUIPart, DefaultChatTransport } from "ai";
 import useAvailableModels from "./useAvailableModels";
 import { useLocalStorage } from "usehooks-ts";
 import { DEFAULT_MODEL, NEW_API_BASE_URL } from "@/lib/consts";
@@ -183,9 +183,9 @@ export function useVercelChat({
   const { messages, status, stop, sendMessage, setMessages, regenerate } =
     useChat({
       id,
-      transport: {
+      transport: new DefaultChatTransport({
         api: `${NEW_API_BASE_URL}/api/chat`,
-      },
+      }),
       experimental_throttle: 100,
       generateId: generateUUID,
       onError: (e) => {
