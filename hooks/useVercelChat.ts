@@ -1,4 +1,4 @@
-import { useChat } from "@ai-sdk/react";
+import { useChat, DefaultChatTransport } from "@ai-sdk/react";
 import { useMessageLoader } from "./useMessageLoader";
 import { useUserProvider } from "@/providers/UserProvder";
 import { useArtistProvider } from "@/providers/ArtistProvider";
@@ -183,7 +183,9 @@ export function useVercelChat({
   const { messages, status, stop, sendMessage, setMessages, regenerate } =
     useChat({
       id,
-      api: `${NEW_API_BASE_URL}/api/chat`,
+      transport: new DefaultChatTransport({
+        api: `${NEW_API_BASE_URL}/api/chat`,
+      }),
       experimental_throttle: 100,
       generateId: generateUUID,
       onError: (e) => {
