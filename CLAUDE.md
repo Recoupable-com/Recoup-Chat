@@ -27,7 +27,6 @@ pnpm build          # Production build (uses webpack)
 pnpm lint           # Run linter
 pnpm format         # Run prettier + lint
 pnpm update-types   # Regenerate Supabase types
-pnpm eval           # Run Braintrust evals with Playwright/Stagehand
 ```
 
 ## Architecture
@@ -45,7 +44,6 @@ pnpm eval           # Run Braintrust evals with Playwright/Stagehand
   - `lib/stripe/` - Payment processing
 - `providers/` - React context providers
 - `types/` - TypeScript type definitions
-- `evals/` - Braintrust evaluation scripts
 
 ## Key Technologies
 
