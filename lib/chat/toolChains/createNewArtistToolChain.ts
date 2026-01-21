@@ -8,7 +8,11 @@ export const createNewArtistToolChain: ToolChainItem[] = [
     system:
       "From the get_spotify_search results, select the artist whose name best matches the user-provided artist name (prefer exact, case-insensitive match; otherwise choose the closest by name and popularity). Update the account using the update_account_info tool with the artist's basic information: name, image, label, etc.",
   },
-  { toolName: "update_artist_socials" },
+  {
+    toolName: "update_artist_socials",
+    system:
+      "Using the matched Spotify artist from the get_spotify_search results, update the artist's socials with the Spotify profile URL (found in external_urls.spotify). Pass the URL in the urls array to update_artist_socials.",
+  },
   { toolName: "artist_deep_research" },
   { toolName: "spotify_deep_research" },
   { toolName: "get_artist_socials" },
