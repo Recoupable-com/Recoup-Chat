@@ -11,6 +11,7 @@ const RecentChats = ({ toggleModal }: { toggleModal: () => void }) => {
   const { userData } = useUserProvider();
   const {
     conversations,
+    isFetching,
     hoveredChatId,
     setHoveredChatId,
     openMenuId,
@@ -34,8 +35,8 @@ const RecentChats = ({ toggleModal }: { toggleModal: () => void }) => {
     isShiftPressed,
   } = useRecentChats({ toggleModal });
 
-  // Only show skeleton when user data hasn't loaded yet
-  const showSkeleton = !userData;
+  // Only show skeleton on initial load, not during background refetches
+  const showSkeleton = !userData || (isFetching && conversations.length === 0);
 
   return (
     <div className="w-full flex-grow min-h-0 flex flex-col">
