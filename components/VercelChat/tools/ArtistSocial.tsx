@@ -2,7 +2,7 @@ import { Social as SocialType } from "@/types/ArtistSocials";
 import Link from "next/link";
 import ArtistSocialDisplayText from "./ArtistSocialDisplayText";
 import getSocialPlatformByLink from "@/lib/getSocialPlatformByLink";
-import getPlatformDisplayName from "@/lib/getPlatformDisplayName";
+import getPlatformDisplayName from "@/lib/socials/getPlatformDisplayName";
 
 export const ArtistSocial = ({ social }: { social: SocialType }) => {
   const platformType = getSocialPlatformByLink(social.profile_url);
