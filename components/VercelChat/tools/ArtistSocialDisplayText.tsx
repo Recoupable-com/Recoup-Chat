@@ -1,11 +1,24 @@
 import { getYoutubeChannelNameFromURL } from "@/lib/youtube/getYoutubeChannelNameFromURL";
 import { Social as SocialType } from "@/types/ArtistSocials";
+import getSocialPlatformByLink from "@/lib/getSocialPlatformByLink";
 
 const ArtistSocialDisplayText = ({ social }: { social: SocialType }) => {
-  const platform = social.profile_url.split("/")[0].split(".")[0];
-  const hasUsername = Boolean(social.username && social.username.length > 0 && platform !== "youtube");
-  const username = social.username.startsWith("@") ? social.username : `@${social.username}`;
-  const isYoutube = platform === "youtube" || social.profile_url.includes("youtube.com");
+  const platformType = getSocialPlatformByLink(social.profile_url);
+  const isYoutube = platformType === "YOUTUBE";
+  const isSpotify = platformType === "SPOTIFY";
+
+  // For Spotify, we don't have a display-friendly username (only the ID), so skip username display
+  const hasUsername = Boolean(
+    social.username &&
+    social.username.length > 0 &&
+    !isYoutube &&
+    !isSpotify
+  );
+
+  const username = hasUsername && social.username
+    ? (social.username.startsWith("@") ? social.username : `@${social.username}`)
+    : "";
+
   const youtubeChannelName = isYoutube ? getYoutubeChannelNameFromURL(social.profile_url) : "";
 
   if (hasUsername) {
