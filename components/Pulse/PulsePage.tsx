@@ -1,12 +1,11 @@
 "use client";
 
-import { useState } from "react";
 import { useAutoLogin } from "@/hooks/useAutoLogin";
 import PulseHeader from "./PulseHeader";
 import PulseGreeting from "./PulseGreeting";
 import PulseCard from "./PulseCard";
 import PulseCurateButton from "./PulseCurateButton";
-import PulseArticleDrawer, { PulseArticle } from "./PulseArticleDrawer";
+import { PulseArticle } from "./PulseArticleDrawer";
 
 const MOCK_ARTICLES: PulseArticle[] = [
   {
@@ -64,16 +63,9 @@ const MOCK_ARTICLES: PulseArticle[] = [
 
 const PulsePage = () => {
   useAutoLogin();
-  const [selectedArticle, setSelectedArticle] = useState<PulseArticle | null>(null);
-  const [drawerOpen, setDrawerOpen] = useState(false);
 
   const greeting =
     "Hey Aleks, your big trip is around the corner. Here's a handy guide for Heathrow and a few dinner ideas.";
-
-  const handleCardClick = (article: PulseArticle) => {
-    setSelectedArticle(article);
-    setDrawerOpen(true);
-  };
 
   return (
     <div className="relative min-h-full bg-background">
@@ -85,13 +77,7 @@ const PulsePage = () => {
 
         <div className="mt-6 flex flex-col gap-6">
           {MOCK_ARTICLES.map((article) => (
-            <PulseCard
-              key={article.id}
-              imageUrl={article.imageUrl}
-              title={article.title}
-              description={article.description}
-              onClick={() => handleCardClick(article)}
-            />
+            <PulseCard key={article.id} article={article} />
           ))}
         </div>
       </div>
@@ -99,12 +85,6 @@ const PulsePage = () => {
       <div className="sticky bottom-6 flex justify-end px-6 pb-6 pointer-events-none">
         <PulseCurateButton />
       </div>
-
-      <PulseArticleDrawer
-        article={selectedArticle}
-        open={drawerOpen}
-        onOpenChange={setDrawerOpen}
-      />
     </div>
   );
 };
