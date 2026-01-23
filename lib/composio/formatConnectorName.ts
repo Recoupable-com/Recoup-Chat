@@ -7,6 +7,8 @@
 
 const CONNECTOR_DISPLAY_NAMES: Record<string, string> = {
   googlesheets: "Google Sheets",
+  googledrive: "Google Drive",
+  googledocs: "Google Docs",
 };
 
 export function formatConnectorName(name: string, slug?: string): string {

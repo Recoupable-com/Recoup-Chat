@@ -1,4 +1,4 @@
-import { FileSpreadsheet, Link2 } from "lucide-react";
+import { FileSpreadsheet, HardDrive, FileText, Link2 } from "lucide-react";
 
 interface ComposioConnectPromptProps {
   displayName: string;
@@ -15,8 +15,15 @@ export function ComposioConnectPrompt({
   connector,
 }: ComposioConnectPromptProps) {
   const getIcon = (className = "h-5 w-5") => {
-    if (connector.toLowerCase().includes("sheet")) {
+    const key = connector.toLowerCase();
+    if (key.includes("sheet")) {
       return <FileSpreadsheet className={className} />;
+    }
+    if (key.includes("drive")) {
+      return <HardDrive className={className} />;
+    }
+    if (key.includes("docs")) {
+      return <FileText className={className} />;
     }
     return <Link2 className={className} />;
   };
