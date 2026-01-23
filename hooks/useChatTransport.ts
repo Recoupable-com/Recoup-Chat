@@ -2,9 +2,13 @@ import { useMemo } from "react";
 import { DefaultChatTransport } from "ai";
 import { NEW_API_BASE_URL } from "@/lib/consts";
 import { useAccessToken } from "./useAccessToken";
+import { useApiOverride } from "./useApiOverride";
 
 export function useChatTransport() {
   const accessToken = useAccessToken();
+  const apiOverride = useApiOverride();
+
+  const baseUrl = apiOverride || NEW_API_BASE_URL;
 
   const headers = useMemo(() => {
     return accessToken
@@ -16,10 +20,10 @@ export function useChatTransport() {
 
   const transport = useMemo(() => {
     return new DefaultChatTransport({
-      api: `${NEW_API_BASE_URL}/api/chat`,
+      api: `${baseUrl}/api/chat`,
       ...(headers && { headers }),
     });
-  }, [headers]);
+  }, [baseUrl, headers]);
 
   return { transport, headers };
 }
