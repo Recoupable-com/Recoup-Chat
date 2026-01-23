@@ -7,7 +7,7 @@ import {
 } from "@/components/ui/drawer";
 import PulseArticleHero from "./PulseArticleHero";
 import PulseArticleSection from "./PulseArticleSection";
-import PulseArticleChat from "./PulseArticleChat";
+import ChatInput from "@/components/VercelChat/ChatInput";
 
 export interface PulseArticle {
   id: string;
@@ -65,7 +65,9 @@ const PulseArticleDrawer = ({
             </div>
           </div>
 
-          <PulseArticleChat />
+          <div className="border-t border-border p-4">
+            <ChatInput />
+          </div>
         </div>
       </DrawerContent>
     </Drawer>
