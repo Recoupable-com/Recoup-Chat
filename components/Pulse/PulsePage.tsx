@@ -1,3 +1,6 @@
+"use client";
+
+import { useAutoLogin } from "@/hooks/useAutoLogin";
 import PulseHeader from "./PulseHeader";
 import PulseGreeting from "./PulseGreeting";
 import PulseCard from "./PulseCard";
@@ -17,6 +20,8 @@ const MOCK_CARDS = [
 ];
 
 const PulsePage = () => {
+  useAutoLogin();
+
   const greeting =
     "Hey Aleks, your big trip is around the corner. Here's a handy guide for Heathrow and a few dinner ideas.";
 
