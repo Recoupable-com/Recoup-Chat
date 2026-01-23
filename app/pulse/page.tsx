@@ -1,9 +1,5 @@
-const PulsePage = () => {
-  return (
-    <div className="flex h-screen items-center justify-center">
-      <h1 className="text-2xl font-semibold">Pulse</h1>
-    </div>
-  );
-};
+import PulsePage from "@/components/Pulse/PulsePage";
 
-export default PulsePage;
+export default function Page() {
+  return <PulsePage />;
+}
