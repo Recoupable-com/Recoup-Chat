@@ -25,5 +25,5 @@ export function useChatTransport() {
     });
   }, [baseUrl, headers]);
 
-  return { transport, headers, apiOverride };
+  return { transport, headers };
 }
