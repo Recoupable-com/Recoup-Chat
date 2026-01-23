@@ -5,7 +5,6 @@ import {
   DrawerContent,
   DrawerTitle,
 } from "@/components/ui/drawer";
-import { VisuallyHidden } from "@radix-ui/react-visually-hidden";
 import PulseArticleHero from "./PulseArticleHero";
 import PulseArticleSection from "./PulseArticleSection";
 import PulseArticleChat from "./PulseArticleChat";
@@ -38,9 +37,7 @@ const PulseArticleDrawer = ({
   return (
     <Drawer open={open} onOpenChange={onOpenChange}>
       <DrawerContent className="h-[95vh] max-h-[95vh]">
-        <VisuallyHidden>
-          <DrawerTitle>{article.title}</DrawerTitle>
-        </VisuallyHidden>
+        <DrawerTitle className="sr-only">{article.title}</DrawerTitle>
         <div className="flex flex-col h-full overflow-hidden">
           <div className="flex-1 overflow-y-auto">
             <div className="mx-auto max-w-md px-6 py-4 pb-24">
