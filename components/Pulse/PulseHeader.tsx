@@ -1,9 +1,7 @@
-interface PulseHeaderProps {
-  date: Date;
-}
+"use client";
 
-const PulseHeader = ({ date }: PulseHeaderProps) => {
-  const formattedDate = date.toLocaleDateString("en-US", {
+const PulseHeader = () => {
+  const formattedDate = new Date().toLocaleDateString("en-US", {
     month: "long",
     day: "numeric",
   });

@@ -24,7 +24,7 @@ const PulsePage = () => {
     <div className="relative min-h-full bg-background">
       <div className="mx-auto max-w-md px-6 py-8 pb-24">
         <div className="flex flex-col gap-4">
-          <PulseHeader date={new Date()} />
+          <PulseHeader />
           <PulseGreeting message={greeting} />
         </div>
 
