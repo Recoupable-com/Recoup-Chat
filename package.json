@@ -105,6 +105,7 @@
     "use-stick-to-bottom": "^1.1.1",
     "usehooks-ts": "^3.1.0",
     "uuid": "^10.0.0",
+    "vaul": "^1.1.2",
     "viem": "2.x",
     "wagmi": "^2.15.4",
     "x402-mcp": "^0.1.1",
