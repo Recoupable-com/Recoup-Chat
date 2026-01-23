@@ -8,11 +8,13 @@ import PulseCurateButton from "./PulseCurateButton";
 
 const MOCK_CARDS = [
   {
+    id: "airport-guide",
     imageUrl: "https://images.unsplash.com/photo-1436491865332-7a61a109cc05?w=800",
     title: "A Guide to Europe's Busiest Airport",
     description: "Check Your Terminal: Heathrow has four terminals, and they're far apart.",
   },
   {
+    id: "dinner-gems",
     imageUrl: "https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?w=800",
     title: "Hidden Gems for Dinner",
     description: "Discover the best local restaurants near your destination.",
@@ -34,9 +36,10 @@ const PulsePage = () => {
         </div>
 
         <div className="mt-6 flex flex-col gap-6">
-          {MOCK_CARDS.map((card, index) => (
+          {MOCK_CARDS.map((card) => (
             <PulseCard
-              key={index}
+              key={card.id}
+              id={card.id}
               imageUrl={card.imageUrl}
               title={card.title}
               description={card.description}
