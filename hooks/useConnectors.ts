@@ -18,7 +18,7 @@ export interface ConnectorInfo {
  * Connectors visible to end users.
  * Only these connectors will be shown on the settings page.
  */
-const ALLOWED_CONNECTORS = ["googlesheets"];
+const ALLOWED_CONNECTORS = ["googlesheets", "googledrive", "googledocs"];
 
 /**
  * Hook for managing connectors.
