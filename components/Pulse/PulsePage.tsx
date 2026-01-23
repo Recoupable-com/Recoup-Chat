@@ -21,7 +21,7 @@ const PulsePage = () => {
     "Hey Aleks, your big trip is around the corner. Here's a handy guide for Heathrow and a few dinner ideas.";
 
   return (
-    <div className="min-h-screen bg-background">
+    <div className="relative min-h-full bg-background">
       <div className="mx-auto max-w-md px-6 py-8 pb-24">
         <div className="flex flex-col gap-4">
           <PulseHeader date={new Date()} />
@@ -40,7 +40,9 @@ const PulsePage = () => {
         </div>
       </div>
 
-      <PulseCurateButton />
+      <div className="sticky bottom-6 flex justify-end px-6 pb-6 pointer-events-none">
+        <PulseCurateButton />
+      </div>
     </div>
   );
 };
