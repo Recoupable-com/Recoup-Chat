@@ -1,13 +1,21 @@
 "use client";
 
+import { useState } from "react";
+import { Plus } from "lucide-react";
 import {
   Drawer,
   DrawerContent,
   DrawerTitle,
 } from "@/components/ui/drawer";
+import {
+  PromptInput,
+  PromptInputTextarea,
+  PromptInputToolbar,
+  PromptInputButton,
+  PromptInputSubmit,
+} from "@/components/ai-elements/prompt-input";
 import PulseArticleHero from "./PulseArticleHero";
 import PulseArticleSection from "./PulseArticleSection";
-import ChatInput from "@/components/VercelChat/ChatInput";
 
 export interface PulseArticle {
   id: string;
@@ -32,7 +40,16 @@ const PulseArticleDrawer = ({
   open,
   onOpenChange,
 }: PulseArticleDrawerProps) => {
+  const [input, setInput] = useState("");
+
   if (!article) return null;
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!input.trim()) return;
+    // TODO: Handle chat submission
+    setInput("");
+  };
 
   return (
     <Drawer open={open} onOpenChange={onOpenChange}>
@@ -66,7 +83,19 @@ const PulseArticleDrawer = ({
           </div>
 
           <div className="border-t border-border p-4">
-            <ChatInput />
+            <PromptInput onSubmit={handleSubmit}>
+              <PromptInputTextarea
+                value={input}
+                onChange={(e) => setInput(e.target.value)}
+                placeholder="Ask about this article..."
+              />
+              <PromptInputToolbar>
+                <PromptInputButton>
+                  <Plus className="h-4 w-4" />
+                </PromptInputButton>
+                <PromptInputSubmit disabled={!input.trim()} />
+              </PromptInputToolbar>
+            </PromptInput>
           </div>
         </div>
       </DrawerContent>
