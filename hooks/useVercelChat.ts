@@ -18,6 +18,7 @@ import { usePaymentProvider } from "@/providers/PaymentProvider";
 import useArtistFilesForMentions from "@/hooks/useArtistFilesForMentions";
 import type { KnowledgeBaseEntry } from "@/lib/supabase/getArtistKnowledge";
 import { useChatTransport } from "./useChatTransport";
+import { usePrivy } from "@privy-io/react-auth";
 
 // 30 days in seconds for Supabase signed URL expiry
 const SIGNED_URL_EXPIRES_SECONDS = 60 * 60 * 24 * 30;
@@ -56,6 +57,7 @@ export function useVercelChat({
   );
   const { refetchCredits } = usePaymentProvider();
   const { transport } = useChatTransport();
+  const { ready: privyReady, authenticated } = usePrivy();
 
   // Load artist files for mentions (from Supabase)
   const { files: allArtistFiles = [] } = useArtistFilesForMentions();
@@ -306,12 +308,13 @@ export function useVercelChat({
     const isReady = status === "ready";
     const hasMessages = messages.length > 1;
     const hasInitialMessages = initialMessages && initialMessages.length > 0;
-    // Wait for chat readiness and identity before sending initial message
+    const isAuthReady = privyReady && authenticated;
     if (
       !hasInitialMessages ||
       !isReady ||
       hasMessages ||
-      !isFullyLoggedIn
+      !isFullyLoggedIn ||
+      !isAuthReady
     )
       return;
     handleSendQueryMessages(initialMessages[0]);
@@ -321,6 +324,8 @@ export function useVercelChat({
     userId,
     handleSendQueryMessages,
     messages.length,
+    privyReady,
+    authenticated,
   ]);
 
   // Sync state when models first load and prioritize preferred model
