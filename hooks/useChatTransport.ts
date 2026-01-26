@@ -11,9 +11,13 @@ export function useChatTransport() {
   const baseUrl = apiOverride || NEW_API_BASE_URL;
 
   // Fetch a fresh token per request to avoid stale auth headers.
+  // Throws if token is unavailable to prevent unauthenticated requests.
   const headers = useCallback(async (): Promise<Record<string, string>> => {
     const token = await getAccessToken();
-    return token ? { Authorization: `Bearer ${token}` } : {};
+    if (!token) {
+      throw new Error("Authentication token not available. Please wait and try again.");
+    }
+    return { Authorization: `Bearer ${token}` };
   }, [getAccessToken]);
 
   const transport = useMemo(() => {
