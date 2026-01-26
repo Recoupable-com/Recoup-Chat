@@ -277,8 +277,16 @@ export function useVercelChat({
   const handleSendMessage = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
 
+    console.log("[DEBUG] handleSendMessage called:", {
+      privyReady,
+      authenticated,
+      userId,
+      hasInput: !!input,
+    });
+
     // Guard: Don't send if auth isn't ready
     if (!privyReady || !authenticated) {
+      console.log("[DEBUG] Auth not ready, blocking send");
       toast.error("Please wait, authenticating...");
       return;
     }
@@ -315,6 +323,18 @@ export function useVercelChat({
     const hasMessages = messages.length > 1;
     const hasInitialMessages = initialMessages && initialMessages.length > 0;
     const isAuthReady = privyReady && authenticated;
+
+    console.log("[DEBUG] Initial message useEffect:", {
+      hasInitialMessages,
+      isReady,
+      hasMessages,
+      isFullyLoggedIn: !!isFullyLoggedIn,
+      isAuthReady,
+      privyReady,
+      authenticated,
+      willSend: hasInitialMessages && isReady && !hasMessages && isFullyLoggedIn && isAuthReady,
+    });
+
     if (
       !hasInitialMessages ||
       !isReady ||
@@ -323,6 +343,7 @@ export function useVercelChat({
       !isAuthReady
     )
       return;
+    console.log("[DEBUG] Sending initial message now");
     handleSendQueryMessages(initialMessages[0]);
   }, [
     initialMessages,
