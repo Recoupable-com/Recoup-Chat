@@ -48,7 +48,8 @@ export function useVercelChat({
   const artistId = selectedArtist?.account_id;
   const [hasChatApiError, setHasChatApiError] = useState(false);
   const messagesLengthRef = useRef<number>();
-  const { addOptimisticConversation } = useConversationsProvider();
+  const { addOptimisticConversation, refetchConversations } =
+    useConversationsProvider();
   const { data: availableModels = [] } = useAvailableModels();
   const [input, setInput] = useState("");
   const [model, setModel] = useLocalStorage(
@@ -188,6 +189,8 @@ export function useVercelChat({
       onFinish: async () => {
         // Update credits after AI response completes
         await refetchCredits();
+        // Sync room data and title from backend
+        await refetchConversations();
       },
     });
 
