@@ -18,7 +18,6 @@ import { usePaymentProvider } from "@/providers/PaymentProvider";
 import useArtistFilesForMentions from "@/hooks/useArtistFilesForMentions";
 import type { KnowledgeBaseEntry } from "@/lib/supabase/getArtistKnowledge";
 import { useChatTransport } from "./useChatTransport";
-import { useAccessToken } from "./useAccessToken";
 
 // 30 days in seconds for Supabase signed URL expiry
 const SIGNED_URL_EXPIRES_SECONDS = 60 * 60 * 24 * 30;
@@ -56,8 +55,7 @@ export function useVercelChat({
     availableModels[0]?.id ?? "",
   );
   const { refetchCredits } = usePaymentProvider();
-  const { transport, headers } = useChatTransport();
-  const accessToken = useAccessToken();
+  const { transport } = useChatTransport();
 
   // Load artist files for mentions (from Supabase)
   const { files: allArtistFiles = [] } = useArtistFilesForMentions();
@@ -169,9 +167,8 @@ export function useVercelChat({
         ...(organizationId && { organizationId }),
         model,
       },
-      headers,
     }),
-    [id, artistId, organizationId, model, headers],
+    [id, artistId, organizationId, model],
   );
 
   const { messages, status, stop, sendMessage, setMessages, regenerate } =
@@ -309,14 +306,12 @@ export function useVercelChat({
     const isReady = status === "ready";
     const hasMessages = messages.length > 1;
     const hasInitialMessages = initialMessages && initialMessages.length > 0;
-    const hasAccessToken = !!accessToken;
-    // Wait for access token before sending initial message to avoid 401 errors
+    // Wait for chat readiness and identity before sending initial message
     if (
       !hasInitialMessages ||
       !isReady ||
       hasMessages ||
-      !isFullyLoggedIn ||
-      !hasAccessToken
+      !isFullyLoggedIn
     )
       return;
     handleSendQueryMessages(initialMessages[0]);
@@ -326,7 +321,6 @@ export function useVercelChat({
     userId,
     handleSendQueryMessages,
     messages.length,
-    accessToken,
   ]);
 
   // Sync state when models first load and prioritize preferred model
