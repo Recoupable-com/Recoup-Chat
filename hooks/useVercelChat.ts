@@ -277,6 +277,12 @@ export function useVercelChat({
   const handleSendMessage = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
 
+    // Guard: Don't send if auth isn't ready
+    if (!privyReady || !authenticated) {
+      toast.error("Please wait, authenticating...");
+      return;
+    }
+
     if (hasChatApiError) {
       await deleteTrailingMessages();
     }
