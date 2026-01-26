@@ -11,9 +11,9 @@ export function useChatTransport() {
   const baseUrl = apiOverride || NEW_API_BASE_URL;
 
   // Fetch a fresh token per request to avoid stale auth headers.
-  const headers = useCallback(async (): Promise<HeadersInit | undefined> => {
+  const headers = useCallback(async (): Promise<Record<string, string>> => {
     const token = await getAccessToken();
-    return token ? { Authorization: `Bearer ${token}` } : undefined;
+    return token ? { Authorization: `Bearer ${token}` } : {};
   }, [getAccessToken]);
 
   const transport = useMemo(() => {
