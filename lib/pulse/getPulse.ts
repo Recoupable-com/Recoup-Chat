@@ -2,13 +2,15 @@ import { NEW_API_BASE_URL } from "@/lib/consts";
 
 const PULSE_API_URL = `${NEW_API_BASE_URL}/api/pulse`;
 
+export type Pulse = {
+  id: string | null;
+  account_id: string;
+  active: boolean;
+};
+
 export type PulseResponse = {
   status: "success";
-  pulse: {
-    id: string;
-    account_id: string;
-    active: boolean;
-  };
+  pulse: Pulse;
 };
 
 export type GetPulseParams = {
