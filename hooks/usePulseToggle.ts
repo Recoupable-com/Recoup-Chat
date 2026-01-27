@@ -3,6 +3,8 @@ import { useUserProvider } from "@/providers/UserProvder";
 import { useAccessToken } from "@/hooks/useAccessToken";
 import { toast } from "sonner";
 
+const PULSE_API_URL = "https://recoup-api.vercel.app/api/pulse";
+
 export function usePulseToggle() {
   const { userData } = useUserProvider();
   const accessToken = useAccessToken();
@@ -13,7 +15,7 @@ export function usePulseToggle() {
     if (!accessToken) return;
 
     try {
-      const url = new URL("/api/pulse", window.location.origin);
+      const url = new URL(PULSE_API_URL);
       if (userData?.account_id) {
         url.searchParams.set("account_id", userData.account_id);
       }
@@ -21,7 +23,7 @@ export function usePulseToggle() {
       const response = await fetch(url.toString(), {
         method: "GET",
         headers: {
-          Authorization: `Bearer ${accessToken}`,
+          "x-api-key": accessToken,
         },
       });
 
@@ -50,15 +52,15 @@ export function usePulseToggle() {
     setActive(nextActive);
 
     try {
-      const response = await fetch("/api/pulse", {
+      const response = await fetch(PULSE_API_URL, {
         method: "PATCH",
         headers: {
           "Content-Type": "application/json",
-          Authorization: `Bearer ${accessToken}`,
+          "x-api-key": accessToken,
         },
         body: JSON.stringify({
           active: nextActive,
-          accountId: userData?.account_id,
+          account_id: userData?.account_id,
         }),
       });
 
