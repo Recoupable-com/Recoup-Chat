@@ -1,7 +1,6 @@
 "use client";
 
 import { useAutoLogin } from "@/hooks/useAutoLogin";
-import { usePulseToggle } from "@/hooks/usePulseToggle";
 import PulseHeader from "./PulseHeader";
 import PulseGreeting from "./PulseGreeting";
 import PulseCard from "./PulseCard";
@@ -64,7 +63,6 @@ const MOCK_ARTICLES: PulseArticle[] = [
 
 const PulsePage = () => {
   useAutoLogin();
-  const { active, isInitialLoading, isToggling, togglePulse } = usePulseToggle();
 
   const greeting =
     "Hey Aleks, your big trip is around the corner. Here's a handy guide for Heathrow and a few dinner ideas.";
@@ -73,12 +71,7 @@ const PulsePage = () => {
     <div className="relative min-h-full bg-background">
       <div className="mx-auto max-w-md px-6 py-8 pb-24">
         <div className="flex flex-col gap-4">
-          <PulseHeader
-            active={active}
-            isInitialLoading={isInitialLoading}
-            isToggling={isToggling}
-            onToggle={togglePulse}
-          />
+          <PulseHeader />
           <PulseGreeting message={greeting} />
         </div>
 

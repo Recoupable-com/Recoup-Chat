@@ -1,21 +1,12 @@
 "use client";
 
+import { usePulseToggle } from "@/hooks/usePulseToggle";
 import PulseToggle from "./PulseToggle";
 import PulseToggleSkeleton from "./PulseToggleSkeleton";
 
-interface PulseHeaderProps {
-  active: boolean;
-  isInitialLoading: boolean;
-  isToggling: boolean;
-  onToggle: (active: boolean) => void;
-}
+const PulseHeader = () => {
+  const { active, isInitialLoading, isToggling, togglePulse } = usePulseToggle();
 
-const PulseHeader = ({
-  active,
-  isInitialLoading,
-  isToggling,
-  onToggle,
-}: PulseHeaderProps) => {
   const formattedDate = new Date().toLocaleDateString("en-US", {
     month: "long",
     day: "numeric",
@@ -30,7 +21,7 @@ const PulseHeader = ({
         <PulseToggle
           active={active}
           isToggling={isToggling}
-          onToggle={onToggle}
+          onToggle={togglePulse}
         />
       )}
     </div>
