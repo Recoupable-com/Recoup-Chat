@@ -1,9 +1,8 @@
-import { useState, type RefObject, type MouseEvent } from "react";
+import { type RefObject, type MouseEvent } from "react";
 import { MoreHorizontal, Pencil, Trash2, Check } from "lucide-react";
 import type { Conversation } from "@/types/Chat";
 import type { ArtistAgent } from "@/lib/supabase/getArtistAgents";
 import { cn } from "@/lib/utils";
-import useCreateChat from "@/hooks/useCreateChat";
 import { getChatDisplayInfo } from "@/lib/chat/getChatDisplayInfo";
 
 type ChatItemProps = {
@@ -44,11 +43,10 @@ const ChatItem = ({
   onRenameClick,
   onDeleteClick,
 }: ChatItemProps) => {
-  const [displayName, setDisplayName] = useState(
-    getChatDisplayInfo(chatRoom).displayName
-  );
-
+  const { displayName } = getChatDisplayInfo(chatRoom);
   const showOptions = isMobile || isHovered || isActive;
+
+  // Optimistic items have a memory with optimistic: true flag
   const isOptimisticChatItem =
     "id" in chatRoom &&
     Array.isArray((chatRoom as Conversation).memories) &&
@@ -57,18 +55,11 @@ const ChatItem = ({
       if (!content || typeof content !== "object") {
         return false;
       }
-
       return (
         "optimistic" in (content as Record<string, unknown>) &&
         (content as { optimistic?: unknown }).optimistic === true
       );
     });
-
-  useCreateChat({
-    isOptimisticChatItem,
-    chatRoom,
-    setDisplayName,
-  });
 
   const handleClick = (event: MouseEvent) => {
     if (event.shiftKey || isSelectionMode) {
