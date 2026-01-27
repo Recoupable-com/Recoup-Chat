@@ -12,12 +12,7 @@ import ArtistsSidebar from "@/components/Artists/ArtistsSidebar";
 import { ToastContainer } from "react-toastify";
 import { Toaster } from "sonner";
 import { Geist, Geist_Mono } from "next/font/google";
-import dynamic from "next/dynamic";
-
-const Analytics = dynamic(
-  () => import("@vercel/analytics/react").then((mod) => mod.Analytics),
-  { ssr: false }
-);
+import DeferredAnalytics from "@/components/DeferredAnalytics";
 
 const geist = Geist({
   subsets: ["latin"],
@@ -102,7 +97,7 @@ export default function RootLayout({
             <Toaster />
           </Providers>
         </Suspense>
-        <Analytics />
+        <DeferredAnalytics />
       </body>
     </html>
   );
