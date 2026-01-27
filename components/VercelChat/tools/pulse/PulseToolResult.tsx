@@ -1,5 +1,7 @@
 "use client";
 
+import { useEffect } from "react";
+import { useRouter } from "next/navigation";
 import { usePulseToggle } from "@/hooks/usePulseToggle";
 import PulseToggle from "@/components/Pulse/PulseToggle";
 import PulseToggleSkeleton from "@/components/Pulse/PulseToggleSkeleton";
@@ -16,8 +18,17 @@ export default function PulseToolResult({
 }: {
   result: PulseToolResultType;
 }) {
+  const router = useRouter();
   const { active, isInitialLoading, isToggling, togglePulse } =
     usePulseToggle();
+
+  useEffect(() => {
+    router.prefetch("/pulse");
+  }, [router]);
+
+  const handleTitleClick = () => {
+    router.push("/pulse");
+  };
 
   if (result.error) {
     return (
@@ -38,10 +49,14 @@ export default function PulseToolResult({
       <div className="flex items-start space-x-3 mb-3">
         <CheckCircle className="h-5 w-5 text-green-500 flex-shrink-0" />
         <div className="flex-1">
-          <h3 className="text-sm font-medium text-foreground flex items-center space-x-2">
+          <button
+            type="button"
+            onClick={handleTitleClick}
+            className="text-sm font-medium text-foreground flex items-center space-x-2 hover:text-primary transition-colors"
+          >
             <Activity className="h-4 w-4" />
             <span>Pulse</span>
-          </h3>
+          </button>
         </div>
       </div>
 
