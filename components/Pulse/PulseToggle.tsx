@@ -5,13 +5,13 @@ import { Label } from "@/components/ui/label";
 
 interface PulseToggleProps {
   active: boolean;
-  isLoading: boolean;
+  isToggling: boolean;
   onToggle: (active: boolean) => void;
 }
 
 export default function PulseToggle({
   active,
-  isLoading,
+  isToggling,
   onToggle,
 }: PulseToggleProps) {
   return (
@@ -23,7 +23,7 @@ export default function PulseToggle({
         id="pulse-active"
         checked={active}
         onCheckedChange={onToggle}
-        disabled={isLoading}
+        disabled={isToggling}
       />
     </div>
   );

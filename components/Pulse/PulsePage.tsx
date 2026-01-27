@@ -64,7 +64,7 @@ const MOCK_ARTICLES: PulseArticle[] = [
 
 const PulsePage = () => {
   useAutoLogin();
-  const { active, isLoading, togglePulse } = usePulseToggle();
+  const { active, isInitialLoading, isToggling, togglePulse } = usePulseToggle();
 
   const greeting =
     "Hey Aleks, your big trip is around the corner. Here's a handy guide for Heathrow and a few dinner ideas.";
@@ -75,7 +75,8 @@ const PulsePage = () => {
         <div className="flex flex-col gap-4">
           <PulseHeader
             active={active}
-            isLoading={isLoading}
+            isInitialLoading={isInitialLoading}
+            isToggling={isToggling}
             onToggle={togglePulse}
           />
           <PulseGreeting message={greeting} />

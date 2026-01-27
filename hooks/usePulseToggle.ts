@@ -1,85 +1,58 @@
-import { useState, useEffect, useCallback } from "react";
+import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { useUserProvider } from "@/providers/UserProvder";
 import { useAccessToken } from "@/hooks/useAccessToken";
+import { getPulse } from "@/lib/pulse/getPulse";
+import { updatePulse } from "@/lib/pulse/updatePulse";
 import { toast } from "sonner";
-
-const PULSE_API_URL = "https://recoup-api.vercel.app/api/pulse";
 
 export function usePulseToggle() {
   const { userData } = useUserProvider();
   const accessToken = useAccessToken();
-  const [active, setActive] = useState(false);
-  const [isLoading, setIsLoading] = useState(true);
+  const queryClient = useQueryClient();
 
-  const fetchPulseStatus = useCallback(async () => {
-    if (!accessToken) return;
+  const queryKey = ["pulse", userData?.account_id];
 
-    try {
-      const url = new URL(PULSE_API_URL);
-      if (userData?.account_id) {
-        url.searchParams.set("account_id", userData.account_id);
-      }
+  const { data, isLoading: isInitialLoading } = useQuery({
+    queryKey,
+    queryFn: () =>
+      getPulse({
+        accessToken: accessToken!,
+        accountId: userData?.account_id,
+      }),
+    enabled: !!accessToken,
+  });
 
-      const response = await fetch(url.toString(), {
-        method: "GET",
-        headers: {
-          "x-api-key": accessToken,
-        },
-      });
-
-      if (response.ok) {
-        const data = await response.json();
-        if (data.status === "success" && data.pulse) {
-          setActive(data.pulse.active);
-        }
-      }
-    } catch {
-      // Silently fail - pulse might not exist yet
-    } finally {
-      setIsLoading(false);
-    }
-  }, [accessToken, userData?.account_id]);
-
-  useEffect(() => {
-    fetchPulseStatus();
-  }, [fetchPulseStatus]);
-
-  const togglePulse = async (nextActive: boolean) => {
-    if (isLoading || !accessToken) return;
-
-    setIsLoading(true);
-    const previousActive = active;
-    setActive(nextActive);
-
-    try {
-      const response = await fetch(PULSE_API_URL, {
-        method: "PATCH",
-        headers: {
-          "Content-Type": "application/json",
-          "x-api-key": accessToken,
-        },
-        body: JSON.stringify({
-          active: nextActive,
-          account_id: userData?.account_id,
-        }),
-      });
-
-      if (!response.ok) {
-        throw new Error("Failed to update pulse");
-      }
-
-      toast.success(nextActive ? "Pulse activated" : "Pulse deactivated");
-    } catch {
-      setActive(previousActive);
+  const { mutate, isPending: isToggling } = useMutation({
+    mutationFn: (active: boolean) =>
+      updatePulse({
+        accessToken: accessToken!,
+        active,
+        accountId: userData?.account_id,
+      }),
+    onMutate: async (newActive) => {
+      await queryClient.cancelQueries({ queryKey });
+      const previousData = queryClient.getQueryData(queryKey);
+      queryClient.setQueryData(queryKey, (old: typeof data) =>
+        old ? { ...old, pulse: { ...old.pulse, active: newActive } } : old
+      );
+      return { previousData };
+    },
+    onError: (_err, _newActive, context) => {
+      queryClient.setQueryData(queryKey, context?.previousData);
       toast.error("Failed to update pulse status");
-    } finally {
-      setIsLoading(false);
-    }
-  };
+    },
+    onSuccess: (data) => {
+      toast.success(data.pulse.active ? "Pulse activated" : "Pulse deactivated");
+    },
+    onSettled: () => {
+      queryClient.invalidateQueries({ queryKey });
+    },
+  });
 
   return {
-    active,
-    isLoading,
-    togglePulse,
+    active: data?.pulse?.active ?? false,
+    isInitialLoading,
+    isToggling,
+    togglePulse: mutate,
   };
 }

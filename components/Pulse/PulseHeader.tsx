@@ -1,14 +1,21 @@
 "use client";
 
 import PulseToggle from "./PulseToggle";
+import PulseToggleSkeleton from "./PulseToggleSkeleton";
 
 interface PulseHeaderProps {
   active: boolean;
-  isLoading: boolean;
+  isInitialLoading: boolean;
+  isToggling: boolean;
   onToggle: (active: boolean) => void;
 }
 
-const PulseHeader = ({ active, isLoading, onToggle }: PulseHeaderProps) => {
+const PulseHeader = ({
+  active,
+  isInitialLoading,
+  isToggling,
+  onToggle,
+}: PulseHeaderProps) => {
   const formattedDate = new Date().toLocaleDateString("en-US", {
     month: "long",
     day: "numeric",
@@ -17,7 +24,15 @@ const PulseHeader = ({ active, isLoading, onToggle }: PulseHeaderProps) => {
   return (
     <div className="flex items-center justify-between">
       <h1 className="text-3xl font-semibold tracking-tight">{formattedDate}</h1>
-      <PulseToggle active={active} isLoading={isLoading} onToggle={onToggle} />
+      {isInitialLoading ? (
+        <PulseToggleSkeleton />
+      ) : (
+        <PulseToggle
+          active={active}
+          isToggling={isToggling}
+          onToggle={onToggle}
+        />
+      )}
     </div>
   );
 };
