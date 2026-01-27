@@ -103,6 +103,10 @@ import {
 } from "./tools/files/UpdateFileResult";
 import ComposioAuthResult from "./tools/composio/ComposioAuthResult";
 import { TextContent } from "@modelcontextprotocol/sdk/types.js";
+import PulseToolSkeleton from "./tools/pulse/PulseToolSkeleton";
+import PulseToolResult, {
+  PulseToolResultType,
+} from "./tools/pulse/PulseToolResult";
 
 type CallToolResult = {
   content: TextContent[];
@@ -274,6 +278,12 @@ export function getToolCallComponent(part: ToolUIPart) {
     return (
       <div key={toolCallId}>
         <CatalogSongsSkeleton />
+      </div>
+    );
+  } else if (toolName === "get_pulse" || toolName === "update_pulse") {
+    return (
+      <div key={toolCallId}>
+        <PulseToolSkeleton />
       </div>
     );
   }
@@ -539,6 +549,18 @@ export function getToolResultComponent(part: ToolUIPart | DynamicToolUIPart) {
     return (
       <div key={toolCallId}>
         <ComposioAuthResult result={result} />
+      </div>
+    );
+  } else if (toolName === "get_pulse") {
+    return (
+      <div key={toolCallId}>
+        <PulseToolResult result={result as PulseToolResultType} />
+      </div>
+    );
+  } else if (toolName === "update_pulse") {
+    return (
+      <div key={toolCallId}>
+        <PulseToolResult result={result as PulseToolResultType} isUpdate />
       </div>
     );
   }
