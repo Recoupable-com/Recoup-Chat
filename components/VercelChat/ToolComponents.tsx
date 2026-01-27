@@ -5,8 +5,13 @@ import {
   ScheduledAction,
   RetrieveVideoContentResult,
 } from "@/components/VercelChat/types";
-import MermaidDiagram from "@/components/VercelChat/tools/mermaid/MermaidDiagram";
 import { MermaidDiagramSkeleton } from "@/components/VercelChat/tools/mermaid/MermaidDiagramSkeleton";
+import dynamic from "next/dynamic";
+
+const MermaidDiagram = dynamic(
+  () => import("@/components/VercelChat/tools/mermaid/MermaidDiagram"),
+  { ssr: false, loading: () => <MermaidDiagramSkeleton /> }
+);
 import { GenerateMermaidDiagramResult } from "@/lib/tools/generateMermaidDiagram";
 import CreateArtistToolCall from "./tools/CreateArtistToolCall";
 import CreateArtistToolResult from "./tools/CreateArtistToolResult";
@@ -33,10 +38,15 @@ import { getDisplayToolName } from "@/lib/tools/get-tools-name";
 import GenericSuccess from "./tools/GenericSuccess";
 import getToolInfo from "@/lib/utils/getToolsInfo";
 import { BrowserToolSkeleton } from "./BrowserToolSkeleton";
-import {
-  BrowserToolResult,
-  type BrowserToolResultType,
-} from "./tools/browser/BrowserToolResult";
+import type { BrowserToolResultType } from "./tools/browser/BrowserToolResult";
+
+const BrowserToolResult = dynamic(
+  () =>
+    import("./tools/browser/BrowserToolResult").then(
+      (mod) => mod.BrowserToolResult
+    ),
+  { ssr: false, loading: () => <BrowserToolSkeleton toolName="browser_agent" /> }
+);
 import { isSearchProgressUpdate } from "@/lib/search/searchProgressUtils";
 import { GetSpotifyPlayButtonClickedResult } from "@/lib/supabase/getSpotifyPlayButtonClicked";
 import GetVideoGameCampaignPlaysResultComponent from "./tools/GetVideoGameCampaignPlaysResult";
@@ -92,7 +102,12 @@ import DeleteTaskSuccess from "./tools/tasks/DeleteTaskSuccess";
 import DeleteTaskSkeleton from "./tools/tasks/DeleteTaskSkeleton";
 import UpdateTaskSuccess from "./tools/tasks/UpdateTaskSuccess";
 import { Sora2VideoSkeleton } from "./tools/sora2/Sora2VideoSkeleton";
-import { Sora2VideoResult } from "./tools/sora2/Sora2VideoResult";
+
+const Sora2VideoResult = dynamic(
+  () =>
+    import("./tools/sora2/Sora2VideoResult").then((mod) => mod.Sora2VideoResult),
+  { ssr: false, loading: () => <Sora2VideoSkeleton /> }
+);
 import CatalogSongsSkeleton from "./tools/catalog/CatalogSongsSkeleton";
 import CatalogSongsResult, {
   CatalogSongsResult as CatalogSongsResultType,

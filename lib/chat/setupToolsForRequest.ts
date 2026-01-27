@@ -24,20 +24,24 @@ export async function setupToolsForRequest(
   const { excludeTools, accessToken } = body;
   const localTools = getMcpTools();
 
-  const account = await getOrCreatePurchaserAccount();
+  // Run account fetch and MCP client creation in parallel
+  const [account, baseClient] = await Promise.all([
+    getOrCreatePurchaserAccount(),
+    createMCPClient({
+      transport: new StreamableHTTPClientTransport(
+        new URL("/mcp", NEW_API_BASE_URL),
+        {
+          requestInit: {
+            headers: { Authorization: `Bearer ${accessToken}` },
+          },
+        }
+      ),
+    }),
+  ]);
 
-  const mcpClient = await createMCPClient({
-    transport: new StreamableHTTPClientTransport(
-      new URL("/mcp", NEW_API_BASE_URL),
-      {
-        requestInit: {
-          headers: { Authorization: `Bearer ${accessToken}` },
-        },
-      }
-    ),
-  }).then((client) => withPayment(client, { account, network: "base" }));
-
+  const mcpClient = await withPayment(baseClient, { account, network: "base" });
   const mcpClientTools = await mcpClient.tools();
+
   const allTools: ToolSet = {
     ...mcpClientTools,
     ...localTools,

@@ -10,9 +10,14 @@ import ArtistSettingModal from "@/components/ArtistSettingModal";
 import MobileDownloadModal from "@/components/ModalDownloadModal";
 import ArtistsSidebar from "@/components/Artists/ArtistsSidebar";
 import { ToastContainer } from "react-toastify";
-import { Analytics } from "@vercel/analytics/react";
 import { Toaster } from "sonner";
 import { Geist, Geist_Mono } from "next/font/google";
+import dynamic from "next/dynamic";
+
+const Analytics = dynamic(
+  () => import("@vercel/analytics/react").then((mod) => mod.Analytics),
+  { ssr: false }
+);
 
 const geist = Geist({
   subsets: ["latin"],

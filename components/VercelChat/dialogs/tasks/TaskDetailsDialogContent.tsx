@@ -10,8 +10,13 @@ import {
 } from "@/components/ai-elements/prompt-input";
 import ModelSelectItem from "@/components/ModelSelect/ModelSelectItem";
 import TaskDetailsDialogTitle from "./TaskDetailsDialogTitle";
-import { CronEditor } from "@/components/CronEditor";
 import TaskPromptSection from "./TaskPromptSection";
+import dynamic from "next/dynamic";
+
+const CronEditor = dynamic(
+  () => import("@/components/CronEditor").then((mod) => mod.CronEditor),
+  { ssr: false }
+);
 import TaskLastRunSection from "./TaskLastRunSection";
 import TaskScheduleSection from "./TaskScheduleSection";
 import { getFeaturedModelConfig } from "@/lib/ai/featuredModels";
