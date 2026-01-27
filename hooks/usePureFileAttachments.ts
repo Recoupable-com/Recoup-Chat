@@ -2,6 +2,7 @@ import { useRef } from "react";
 import { FileUIPart } from "ai";
 import { useVercelChatContext } from "@/providers/VercelChatProvider";
 import { CHAT_INPUT_SUPPORTED_FILE } from "@/lib/chat/config";
+import { isAllowedByExtension } from "@/lib/files/isAllowedByExtension";
 import { useAttachCsv } from "./useAttachCsv";
 
 export function usePureFileAttachments() {
@@ -10,22 +11,6 @@ export function usePureFileAttachments() {
   const fileInputRef = useRef<HTMLInputElement>(null);
   const MAX_FILES = 10;
   const allowedTypes = Object.keys(CHAT_INPUT_SUPPORTED_FILE);
-  const allowedExtensions = new Set(
-    Object.values(CHAT_INPUT_SUPPORTED_FILE)
-      .flat()
-      .map((extension) => extension.toLowerCase())
-  );
-
-  const getFileExtension = (fileName: string): string | null => {
-    const lastDotIndex = fileName.lastIndexOf(".");
-    if (lastDotIndex <= 0) return null;
-    return fileName.slice(lastDotIndex).toLowerCase();
-  };
-
-  const isAllowedByExtension = (file: File): boolean => {
-    const extension = getFileExtension(file.name);
-    return extension ? allowedExtensions.has(extension) : false;
-  };
 
   const uploadFile = async (file: File) => {
     // Accept by MIME type first, then fall back to extension for browsers that
