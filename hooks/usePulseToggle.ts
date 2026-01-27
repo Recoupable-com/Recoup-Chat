@@ -1,23 +1,23 @@
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-import { useUserProvider } from "@/providers/UserProvder";
+import { useOrganization } from "@/providers/OrganizationProvider";
 import { useAccessToken } from "@/hooks/useAccessToken";
 import { getPulse } from "@/lib/pulse/getPulse";
 import { updatePulse } from "@/lib/pulse/updatePulse";
 import { toast } from "sonner";
 
 export function usePulseToggle() {
-  const { userData } = useUserProvider();
+  const { selectedOrgId } = useOrganization();
   const accessToken = useAccessToken();
   const queryClient = useQueryClient();
 
-  const queryKey = ["pulse", userData?.account_id];
+  const queryKey = ["pulse", selectedOrgId];
 
   const { data, isLoading: isInitialLoading } = useQuery({
     queryKey,
     queryFn: () =>
       getPulse({
         accessToken: accessToken!,
-        accountId: userData?.account_id,
+        accountId: selectedOrgId ?? undefined,
       }),
     enabled: !!accessToken,
   });
@@ -27,7 +27,7 @@ export function usePulseToggle() {
       updatePulse({
         accessToken: accessToken!,
         active,
-        accountId: userData?.account_id,
+        accountId: selectedOrgId ?? undefined,
       }),
     onMutate: async (newActive) => {
       await queryClient.cancelQueries({ queryKey });
