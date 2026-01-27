@@ -551,16 +551,10 @@ export function getToolResultComponent(part: ToolUIPart | DynamicToolUIPart) {
         <ComposioAuthResult result={result} />
       </div>
     );
-  } else if (toolName === "get_pulse") {
+  } else if (toolName === "get_pulse" || toolName === "update_pulse") {
     return (
       <div key={toolCallId}>
         <PulseToolResult result={result as PulseToolResultType} />
-      </div>
-    );
-  } else if (toolName === "update_pulse") {
-    return (
-      <div key={toolCallId}>
-        <PulseToolResult result={result as PulseToolResultType} isUpdate />
       </div>
     );
   }

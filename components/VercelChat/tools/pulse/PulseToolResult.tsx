@@ -11,15 +11,11 @@ export type PulseToolResultType = {
   error?: string;
 };
 
-interface PulseToolResultProps {
-  result: PulseToolResultType;
-  isUpdate?: boolean;
-}
-
 export default function PulseToolResult({
   result,
-  isUpdate = false,
-}: PulseToolResultProps) {
+}: {
+  result: PulseToolResultType;
+}) {
   const { active, isInitialLoading, isToggling, togglePulse } =
     usePulseToggle();
 
@@ -30,9 +26,7 @@ export default function PulseToolResult({
           <XCircle className="h-4 w-4 text-red-600" />
         </div>
         <div>
-          <p className="font-medium text-sm text-red-800">
-            {isUpdate ? "Failed to update pulse" : "Failed to get pulse"}
-          </p>
+          <p className="font-medium text-sm text-red-800">Pulse error</p>
           <p className="text-xs text-red-600">{result.error}</p>
         </div>
       </div>
@@ -46,9 +40,7 @@ export default function PulseToolResult({
         <div className="flex-1">
           <h3 className="text-sm font-medium text-foreground flex items-center space-x-2">
             <Activity className="h-4 w-4" />
-            <span>
-              {isUpdate ? "Pulse updated" : "Pulse status"}
-            </span>
+            <span>Pulse</span>
           </h3>
         </div>
       </div>
