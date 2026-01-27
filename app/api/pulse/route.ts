@@ -13,6 +13,7 @@ export async function GET(req: NextRequest) {
     );
   }
 
+  const accessToken = authHeader.replace(/^Bearer\s+/i, "");
   const accountId = req.nextUrl.searchParams.get("account_id");
 
   try {
@@ -24,7 +25,7 @@ export async function GET(req: NextRequest) {
     const response = await fetch(url.toString(), {
       method: "GET",
       headers: {
-        Authorization: authHeader,
+        "x-api-key": accessToken,
         "Content-Type": "application/json",
       },
     });
@@ -47,6 +48,7 @@ export async function PATCH(req: NextRequest) {
     );
   }
 
+  const accessToken = authHeader.replace(/^Bearer\s+/i, "");
   const body = await req.json();
   const { active, accountId } = body;
 
@@ -61,7 +63,7 @@ export async function PATCH(req: NextRequest) {
     const response = await fetch(`${NEW_API_BASE_URL}/api/pulse`, {
       method: "PATCH",
       headers: {
-        Authorization: authHeader,
+        "x-api-key": accessToken,
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
