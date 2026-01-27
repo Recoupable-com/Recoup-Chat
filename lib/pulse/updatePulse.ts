@@ -1,3 +1,5 @@
+import { PulseResponse } from "./getPulse";
+
 const PULSE_API_URL = "https://recoup-api.vercel.app/api/pulse";
 
 export type UpdatePulseParams = {
@@ -6,20 +8,11 @@ export type UpdatePulseParams = {
   accountId?: string;
 };
 
-export type UpdatePulseResponse = {
-  status: "success";
-  pulse: {
-    id: string;
-    account_id: string;
-    active: boolean;
-  };
-};
-
 export async function updatePulse({
   accessToken,
   active,
   accountId,
-}: UpdatePulseParams): Promise<UpdatePulseResponse> {
+}: UpdatePulseParams): Promise<PulseResponse> {
   const response = await fetch(PULSE_API_URL, {
     method: "PATCH",
     headers: {
