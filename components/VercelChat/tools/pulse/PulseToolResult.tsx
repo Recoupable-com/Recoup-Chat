@@ -4,13 +4,10 @@ import { usePulseToggle } from "@/hooks/usePulseToggle";
 import PulseToggle from "@/components/Pulse/PulseToggle";
 import PulseToggleSkeleton from "@/components/Pulse/PulseToggleSkeleton";
 import { CheckCircle, XCircle, Activity } from "lucide-react";
+import type { Pulse } from "@/lib/pulse/getPulse";
 
 export type PulseToolResultType = {
-  pulse: {
-    id: string | null;
-    account_id: string;
-    active: boolean;
-  };
+  pulse: Pulse;
   error?: string;
 };
 
