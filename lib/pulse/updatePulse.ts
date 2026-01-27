@@ -18,7 +18,7 @@ export async function updatePulse({
     method: "PATCH",
     headers: {
       "Content-Type": "application/json",
-      "x-api-key": accessToken,
+      Authorization: `Bearer ${accessToken}`,
     },
     body: JSON.stringify({
       active,

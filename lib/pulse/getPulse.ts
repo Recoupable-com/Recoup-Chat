@@ -28,7 +28,7 @@ export async function getPulse({
   const response = await fetch(url.toString(), {
     method: "GET",
     headers: {
-      "x-api-key": accessToken,
+      Authorization: `Bearer ${accessToken}`,
     },
   });
 
