@@ -1,6 +1,7 @@
+import { NEW_API_BASE_URL } from "@/lib/consts";
 import { PulseResponse } from "./getPulse";
 
-const PULSE_API_URL = "https://recoup-api.vercel.app/api/pulse";
+const PULSE_API_URL = `${NEW_API_BASE_URL}/api/pulse`;
 
 export type UpdatePulseParams = {
   accessToken: string;

@@ -1,4 +1,6 @@
-const PULSE_API_URL = "https://recoup-api.vercel.app/api/pulse";
+import { NEW_API_BASE_URL } from "@/lib/consts";
+
+const PULSE_API_URL = `${NEW_API_BASE_URL}/api/pulse`;
 
 export type PulseResponse = {
   status: "success";
