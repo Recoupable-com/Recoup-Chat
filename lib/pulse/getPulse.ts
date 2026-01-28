@@ -1,6 +1,6 @@
 import { NEW_API_BASE_URL } from "@/lib/consts";
 
-const PULSE_API_URL = `${NEW_API_BASE_URL}/api/pulse`;
+export const PULSE_API_URL = `${NEW_API_BASE_URL}/api/pulses`;
 
 export type Pulse = {
   id: string | null;
@@ -10,7 +10,7 @@ export type Pulse = {
 
 export type PulseResponse = {
   status: "success";
-  pulse: Pulse;
+  pulses: Pulse[];
 };
 
 export type GetPulseParams = {

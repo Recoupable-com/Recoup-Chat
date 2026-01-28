@@ -36,7 +36,9 @@ export function usePulseToggle() {
       await queryClient.cancelQueries({ queryKey });
       const previousData = queryClient.getQueryData(queryKey);
       queryClient.setQueryData(queryKey, (old: typeof data) =>
-        old ? { ...old, pulse: { ...old.pulse, active: newActive } } : old
+        old
+          ? { ...old, pulses: [{ ...old.pulses[0], active: newActive }] }
+          : old
       );
       return { previousData };
     },
@@ -45,7 +47,9 @@ export function usePulseToggle() {
       toast.error("Failed to update pulse status");
     },
     onSuccess: (data) => {
-      toast.success(data.pulse.active ? "Pulse activated" : "Pulse deactivated");
+      toast.success(
+        data.pulses[0].active ? "Pulse activated" : "Pulse deactivated"
+      );
     },
     onSettled: () => {
       queryClient.invalidateQueries({ queryKey });
@@ -53,7 +57,7 @@ export function usePulseToggle() {
   });
 
   return {
-    active: data?.pulse?.active ?? false,
+    active: data?.pulses?.[0]?.active ?? false,
     isInitialLoading,
     isToggling,
     togglePulse: mutate,
