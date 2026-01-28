@@ -7,30 +7,32 @@ import supabase from "./serverClient";
  * @returns True if access was newly granted, false if the user already had access
  */
 export async function ensureArtistAccess(
-  artistId: string, 
+  artistId: string,
   accountId: string
 ): Promise<boolean> {
   try {
-    // Verify the artist exists
-    const { data: artistExists, error: artistError } = await supabase
-      .from("accounts")
-      .select("id")
-      .eq("id", artistId)
-      .single();
-      
-    if (artistError || !artistExists) return false;
-    
-    // Check if user already has access
-    const { data: userArtistAccess } = await supabase
-      .from("account_artist_ids")
-      .select("artist_id")
-      .eq("account_id", accountId)
-      .eq("artist_id", artistId)
-      .maybeSingle();
-    
+    // Run both checks in parallel - they're independent
+    const [artistResult, accessResult] = await Promise.all([
+      // Verify the artist exists
+      supabase
+        .from("accounts")
+        .select("id")
+        .eq("id", artistId)
+        .single(),
+      // Check if user already has access
+      supabase
+        .from("account_artist_ids")
+        .select("artist_id")
+        .eq("account_id", accountId)
+        .eq("artist_id", artistId)
+        .maybeSingle(),
+    ]);
+
+    if (artistResult.error || !artistResult.data) return false;
+
     // User already has access
-    if (userArtistAccess) return false;
-    
+    if (accessResult.data) return false;
+
     // Grant access
     const { error: insertError } = await supabase
       .from("account_artist_ids")
@@ -38,7 +40,7 @@ export async function ensureArtistAccess(
         account_id: accountId,
         artist_id: artistId,
       });
-    
+
     return !insertError;
   } catch (error) {
     console.error("Error ensuring artist access:", error);
