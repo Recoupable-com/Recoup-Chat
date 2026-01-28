@@ -8,6 +8,7 @@ import React, {
 import { useVercelChat } from "@/hooks/useVercelChat";
 import { UseChatHelpers } from "@ai-sdk/react";
 import useAttachments from "@/hooks/useAttachments";
+import { useTextAttachments } from "@/hooks/useTextAttachments";
 import { ChatStatus, FileUIPart, UIMessage } from "ai";
 import { useArtistProvider } from "./ArtistProvider";
 import { GatewayLanguageModelEntry } from "@ai-sdk/gateway";
@@ -72,13 +73,24 @@ export function VercelChatProvider({
     pendingAttachments,
     setAttachments,
     removeAttachment,
-    clearAttachments,
+    clearAttachments: clearFileAttachments,
     hasPendingUploads,
+  } = useAttachments();
+
+  const {
     textAttachments,
     setTextAttachments,
     removeTextAttachment,
-  } = useAttachments();
+    clearTextAttachments,
+  } = useTextAttachments();
+
   const { updateChatState } = useArtistProvider();
+
+  // Compose clear function for both attachment types
+  const clearAttachments = useCallback(() => {
+    clearFileAttachments();
+    clearTextAttachments();
+  }, [clearFileAttachments, clearTextAttachments]);
 
   // Use the useVercelChat hook to get the chat state and functions
   const {

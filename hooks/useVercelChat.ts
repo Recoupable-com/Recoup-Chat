@@ -20,6 +20,7 @@ import type { KnowledgeBaseEntry } from "@/lib/supabase/getArtistKnowledge";
 import { useChatTransport } from "./useChatTransport";
 import { useAccessToken } from "./useAccessToken";
 import { TextAttachment } from "@/types/textAttachment";
+import { formatTextAttachments } from "@/lib/chat/formatTextAttachments";
 
 // 30 days in seconds for Supabase signed URL expiry
 const SIGNED_URL_EXPIRES_SECONDS = 60 * 60 * 24 * 30;
@@ -215,13 +216,8 @@ export function useVercelChat({
     let messageText = input;
 
     // Prepend text file content (markdown, CSV)
-    if (textAttachments.length > 0) {
-      const textContext = textAttachments
-        .map((t) => {
-          const label = t.type === "md" ? "Markdown" : "CSV";
-          return `--- ${label} File: ${t.filename} ---\n${t.content}\n--- End of ${label} ---`;
-        })
-        .join("\n\n");
+    const textContext = formatTextAttachments(textAttachments);
+    if (textContext) {
       messageText = textContext + "\n\n" + messageText;
     }
 
