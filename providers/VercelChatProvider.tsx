@@ -11,6 +11,7 @@ import useAttachments from "@/hooks/useAttachments";
 import { ChatStatus, FileUIPart, UIMessage } from "ai";
 import { useArtistProvider } from "./ArtistProvider";
 import { GatewayLanguageModelEntry } from "@ai-sdk/gateway";
+import { TextAttachment } from "@/types/textAttachment";
 
 // Interface for the context data
 interface VercelChatContextType {
@@ -37,6 +38,11 @@ interface VercelChatContextType {
   removeAttachment: (index: number) => void;
   clearAttachments: () => void;
   hasPendingUploads: boolean;
+  textAttachments: TextAttachment[];
+  setTextAttachments: (
+    attachments: TextAttachment[] | ((prev: TextAttachment[]) => TextAttachment[])
+  ) => void;
+  removeTextAttachment: (index: number) => void;
   model: string;
   setModel: (model: string) => void;
 }
@@ -68,6 +74,9 @@ export function VercelChatProvider({
     removeAttachment,
     clearAttachments,
     hasPendingUploads,
+    textAttachments,
+    setTextAttachments,
+    removeTextAttachment,
   } = useAttachments();
   const { updateChatState } = useArtistProvider();
 
@@ -93,6 +102,7 @@ export function VercelChatProvider({
     id: chatId,
     initialMessages,
     attachments,
+    textAttachments,
   });
 
   const reload = useCallback(() => {
@@ -134,6 +144,9 @@ export function VercelChatProvider({
     removeAttachment,
     clearAttachments,
     hasPendingUploads,
+    textAttachments,
+    setTextAttachments,
+    removeTextAttachment,
   };
 
   // Send chat status and messages to ArtistProvider

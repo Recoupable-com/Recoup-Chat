@@ -4,16 +4,25 @@ import { useVercelChatContext } from "@/providers/VercelChatProvider";
 import { CHAT_INPUT_SUPPORTED_FILE } from "@/lib/chat/config";
 import { isAllowedByExtension } from "@/lib/files/isAllowedByExtension";
 import { getFileExtension } from "@/lib/files/getFileExtension";
-import { useAttachCsv } from "./useAttachCsv";
-import { useAttachMarkdown } from "./useAttachMarkdown";
+import { TextAttachment } from "@/types/textAttachment";
 
 export function usePureFileAttachments() {
-  const { setAttachments } = useVercelChatContext();
-  const { attachCsvToInput } = useAttachCsv();
-  const { attachMarkdownToInput } = useAttachMarkdown();
+  const { setAttachments, setTextAttachments } = useVercelChatContext();
   const fileInputRef = useRef<HTMLInputElement>(null);
   const MAX_FILES = 10;
   const allowedTypes = Object.keys(CHAT_INPUT_SUPPORTED_FILE);
+
+  const addTextAttachment = async (
+    file: File,
+    type: TextAttachment["type"]
+  ) => {
+    const content = await file.text();
+    const lineCount = content.split("\n").length;
+    setTextAttachments((prev) => [
+      ...prev,
+      { filename: file.name, content, lineCount, type },
+    ]);
+  };
 
   const uploadFile = async (file: File) => {
     // Accept by MIME type first, then fall back to extension for browsers that
@@ -24,14 +33,15 @@ export function usePureFileAttachments() {
       return;
     }
 
-    if (file.type === "text/csv") {
-      await attachCsvToInput(file);
+    const ext = getFileExtension(file.name).toLowerCase();
+
+    // Handle CSV files
+    if (file.type === "text/csv" || ext === ".csv") {
+      await addTextAttachment(file, "csv");
       return;
     }
 
-    // Handle markdown files - parse content as text instead of uploading as attachment
-    // Check MIME type OR extension since browsers often don't report markdown MIME types
-    const ext = getFileExtension(file.name).toLowerCase();
+    // Handle markdown files
     const isMarkdown =
       file.type === "text/markdown" ||
       file.type === "text/x-markdown" ||
@@ -39,7 +49,7 @@ export function usePureFileAttachments() {
       ext === ".markdown";
 
     if (isMarkdown) {
-      await attachMarkdownToInput(file);
+      await addTextAttachment(file, "md");
       return;
     }
 

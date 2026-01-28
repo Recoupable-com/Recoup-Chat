@@ -19,6 +19,7 @@ import useArtistFilesForMentions from "@/hooks/useArtistFilesForMentions";
 import type { KnowledgeBaseEntry } from "@/lib/supabase/getArtistKnowledge";
 import { useChatTransport } from "./useChatTransport";
 import { useAccessToken } from "./useAccessToken";
+import { TextAttachment } from "@/types/textAttachment";
 
 // 30 days in seconds for Supabase signed URL expiry
 const SIGNED_URL_EXPIRES_SECONDS = 60 * 60 * 24 * 30;
@@ -27,6 +28,7 @@ interface UseVercelChatProps {
   id: string;
   initialMessages?: UIMessage[];
   attachments?: FileUIPart[];
+  textAttachments?: TextAttachment[];
 }
 
 /**
@@ -38,6 +40,7 @@ export function useVercelChat({
   id,
   initialMessages,
   attachments = [],
+  textAttachments = [],
 }: UseVercelChatProps) {
   const { userData } = useUserProvider();
   const { selectedArtist } = useArtistProvider();
@@ -208,13 +211,26 @@ export function useVercelChat({
       (f) => !f.mediaType?.startsWith("audio/"),
     );
 
-    // Build message text with audio URLs prepended
+    // Build message text with text file content and audio URLs prepended
     let messageText = input;
+
+    // Prepend text file content (markdown, CSV)
+    if (textAttachments.length > 0) {
+      const textContext = textAttachments
+        .map((t) => {
+          const label = t.type === "md" ? "Markdown" : "CSV";
+          return `--- ${label} File: ${t.filename} ---\n${t.content}\n--- End of ${label} ---`;
+        })
+        .join("\n\n");
+      messageText = textContext + "\n\n" + messageText;
+    }
+
+    // Prepend audio URLs
     if (audioAttachments.length > 0) {
       const audioContext = audioAttachments
         .map((a) => `[Audio: ${a.filename || "audio"}]\nURL: ${a.url}`)
         .join("\n\n");
-      messageText = audioContext + "\n\n" + input;
+      messageText = audioContext + "\n\n" + messageText;
     }
 
     const payload = {

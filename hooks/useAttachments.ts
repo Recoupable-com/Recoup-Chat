@@ -1,5 +1,6 @@
 import { useState, useCallback } from "react";
 import { FileUIPart } from "ai";
+import { TextAttachment } from "@/types/textAttachment";
 
 /**
  * Hook for managing file attachments in chat
@@ -7,6 +8,7 @@ import { FileUIPart } from "ai";
  */
 export default function useAttachments() {
   const [attachments, setAttachments] = useState<FileUIPart[]>([]);
+  const [textAttachments, setTextAttachments] = useState<TextAttachment[]>([]);
 
   // Remove an attachment by its index
   const removeAttachment = useCallback(
@@ -25,7 +27,12 @@ export default function useAttachments() {
     [attachments]
   );
 
-  // Clear all attachments
+  // Remove a text attachment by its index
+  const removeTextAttachment = useCallback((indexToRemove: number) => {
+    setTextAttachments((prev) => prev.filter((_, index) => index !== indexToRemove));
+  }, []);
+
+  // Clear all attachments (both file and text)
   const clearAttachments = useCallback(() => {
     // Revoke any blob URLs to prevent memory leaks
     attachments.forEach((attachment: FileUIPart) => {
@@ -35,6 +42,7 @@ export default function useAttachments() {
     });
 
     setAttachments([]);
+    setTextAttachments([]);
   }, [attachments]);
 
   // Filter for pending attachments (currently being uploaded)
@@ -53,5 +61,8 @@ export default function useAttachments() {
     removeAttachment,
     clearAttachments,
     hasPendingUploads,
+    textAttachments,
+    setTextAttachments,
+    removeTextAttachment,
   };
 }
