@@ -4,6 +4,7 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { useOnboarding, RecurringFrequency } from "@/hooks/useOnboarding";
 import { useUserProvider } from "@/providers/UserProvder";
+import { useArtistProvider } from "@/providers/ArtistProvider";
 import { Button } from "@/components/ui/button";
 
 interface CompleteStepProps {
@@ -21,8 +22,10 @@ export default function CompleteStep({ onNext, onBack }: CompleteStepProps) {
   void onNext;
   void onBack;
 
-  const { recurring, selectedTask, complete } = useOnboarding();
+  const { recurring, selectedTask, priorityArtists, complete } =
+    useOnboarding();
   const { userData } = useUserProvider();
+  const { artists, setSelectedArtist } = useArtistProvider();
   const router = useRouter();
   const [isSubmitting, setIsSubmitting] = useState(false);
 
@@ -35,6 +38,18 @@ export default function CompleteStep({ onNext, onBack }: CompleteStepProps) {
     setIsSubmitting(true);
     try {
       await complete(userData.account_id);
+
+      // Auto-select the first priority artist after onboarding
+      if (priorityArtists.length > 0) {
+        const firstPriorityArtistId = priorityArtists[0];
+        const artistToSelect = artists.find(
+          (a) => a.account_id === firstPriorityArtistId
+        );
+        if (artistToSelect) {
+          setSelectedArtist(artistToSelect);
+        }
+      }
+
       router.push("/");
     } catch {
       router.push("/");
