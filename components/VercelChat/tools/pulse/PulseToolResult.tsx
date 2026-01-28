@@ -8,17 +8,10 @@ import PulseToggleSkeleton from "@/components/Pulse/PulseToggleSkeleton";
 import { CheckCircle, XCircle, Activity } from "lucide-react";
 import type { Pulse } from "@/lib/pulse/getPulse";
 
-type PulseSuccessResult = {
-  status: "success";
-  pulses: Pulse[];
+export type PulseToolResultType = {
+  pulse: Pulse;
+  error?: string;
 };
-
-type PulseErrorResult = {
-  error: number;
-  message: string;
-};
-
-export type PulseToolResultType = PulseSuccessResult | PulseErrorResult;
 
 export default function PulseToolResult({
   result,
@@ -37,7 +30,7 @@ export default function PulseToolResult({
     router.push("/pulse");
   };
 
-  if ("error" in result) {
+  if (result.error) {
     return (
       <div className="flex items-center space-x-3 p-3 rounded-lg bg-red-50 border border-red-200 my-1 w-fit">
         <div className="h-8 w-8 rounded-full bg-red-100 flex items-center justify-center">
@@ -45,7 +38,7 @@ export default function PulseToolResult({
         </div>
         <div>
           <p className="font-medium text-sm text-red-800">Pulse error</p>
-          <p className="text-xs text-red-600">{result.message}</p>
+          <p className="text-xs text-red-600">{result.error}</p>
         </div>
       </div>
     );
