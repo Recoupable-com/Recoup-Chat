@@ -3,11 +3,14 @@ import { FileUIPart } from "ai";
 import { useVercelChatContext } from "@/providers/VercelChatProvider";
 import { CHAT_INPUT_SUPPORTED_FILE } from "@/lib/chat/config";
 import { isAllowedByExtension } from "@/lib/files/isAllowedByExtension";
+import { getFileExtension } from "@/lib/files/getFileExtension";
 import { useAttachCsv } from "./useAttachCsv";
+import { useAttachMarkdown } from "./useAttachMarkdown";
 
 export function usePureFileAttachments() {
   const { setAttachments } = useVercelChatContext();
   const { attachCsvToInput } = useAttachCsv();
+  const { attachMarkdownToInput } = useAttachMarkdown();
   const fileInputRef = useRef<HTMLInputElement>(null);
   const MAX_FILES = 10;
   const allowedTypes = Object.keys(CHAT_INPUT_SUPPORTED_FILE);
@@ -23,6 +26,20 @@ export function usePureFileAttachments() {
 
     if (file.type === "text/csv") {
       await attachCsvToInput(file);
+      return;
+    }
+
+    // Handle markdown files - parse content as text instead of uploading as attachment
+    // Check MIME type OR extension since browsers often don't report markdown MIME types
+    const ext = getFileExtension(file.name).toLowerCase();
+    const isMarkdown =
+      file.type === "text/markdown" ||
+      file.type === "text/x-markdown" ||
+      ext === ".md" ||
+      ext === ".markdown";
+
+    if (isMarkdown) {
+      await attachMarkdownToInput(file);
       return;
     }
 
