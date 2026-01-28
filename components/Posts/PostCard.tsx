@@ -1,12 +1,24 @@
 import { type Post } from "@/lib/recoup/fetchPosts";
 import { memo } from "react";
 import { useInView } from "react-intersection-observer";
-import {
-  TwitterEmbed,
-  TikTokEmbed,
-  InstagramEmbed,
-  GenericEmbed,
-} from "./embeds";
+import dynamic from "next/dynamic";
+
+const TwitterEmbed = dynamic(
+  () => import("./embeds/TwitterEmbed").then((mod) => mod.TwitterEmbed),
+  { ssr: false }
+);
+const TikTokEmbed = dynamic(
+  () => import("./embeds/TikTokEmbed").then((mod) => mod.TikTokEmbed),
+  { ssr: false }
+);
+const InstagramEmbed = dynamic(
+  () => import("./embeds/InstagramEmbed").then((mod) => mod.InstagramEmbed),
+  { ssr: false }
+);
+const GenericEmbed = dynamic(
+  () => import("./embeds/GenericEmbed").then((mod) => mod.GenericEmbed),
+  { ssr: false }
+);
 
 interface PostCardProps {
   post: Post;
