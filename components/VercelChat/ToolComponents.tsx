@@ -280,7 +280,7 @@ export function getToolCallComponent(part: ToolUIPart) {
         <CatalogSongsSkeleton />
       </div>
     );
-  } else if (toolName === "get_pulses" || toolName === "update_pulses") {
+  } else if (toolName === "get_pulses" || toolName === "update_pulse") {
     return (
       <div key={toolCallId}>
         <PulseToolSkeleton />
@@ -551,7 +551,7 @@ export function getToolResultComponent(part: ToolUIPart | DynamicToolUIPart) {
         <ComposioAuthResult result={result} />
       </div>
     );
-  } else if (toolName === "get_pulses" || toolName === "update_pulses") {
+  } else if (toolName === "get_pulses" || toolName === "update_pulse") {
     return (
       <div key={toolCallId}>
         <PulseToolResult result={result as PulseToolResultType} />
