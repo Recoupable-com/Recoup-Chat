@@ -3,7 +3,7 @@ import { UIMessage } from "ai";
 import { cn } from "@/lib/utils";
 import { TextMessagePart } from "./messages";
 import { parseTextAttachments } from "@/lib/chat/parseTextAttachments";
-import { TextAttachmentCard } from "./TextAttachmentCard";
+import { TextFileCard } from "./TextFileCard";
 
 interface ViewingMessageProps {
   message: UIMessage;
@@ -30,7 +30,12 @@ const ViewingMessageComponent: React.FC<ViewingMessageProps> = ({
       {hasAttachments && (
         <div className="flex flex-wrap gap-2">
           {textAttachments.map((attachment, index) => (
-            <TextAttachmentCard key={index} attachment={attachment} />
+            <TextFileCard
+              key={index}
+              filename={attachment.filename}
+              lineCount={attachment.lineCount}
+              type={attachment.type}
+            />
           ))}
         </div>
       )}

@@ -1,20 +1,29 @@
-import { TextAttachment } from "@/types/textAttachment";
-
-interface TextFilePreviewProps {
-  attachment: TextAttachment;
+interface TextFileCardProps {
+  filename: string;
+  lineCount: number;
+  type: "md" | "csv";
   onRemove?: () => void;
 }
 
-export function TextFilePreview({ attachment, onRemove }: TextFilePreviewProps) {
-  const badge = attachment.type.toUpperCase();
+/**
+ * Card component for displaying text file attachments.
+ * Used in both input preview (with onRemove) and message history (without).
+ */
+export function TextFileCard({
+  filename,
+  lineCount,
+  type,
+  onRemove,
+}: TextFileCardProps) {
+  const badge = type.toUpperCase();
 
   return (
     <div className="relative group">
       <div className="border border-border rounded-lg p-3 w-40 h-24 flex flex-col justify-between bg-background">
         <div>
-          <p className="text-sm font-medium truncate">{attachment.filename}</p>
+          <p className="text-sm font-medium truncate">{filename}</p>
           <p className="text-xs text-muted-foreground">
-            {attachment.lineCount} {attachment.lineCount === 1 ? "line" : "lines"}
+            {lineCount} {lineCount === 1 ? "line" : "lines"}
           </p>
         </div>
         <div className="self-start">

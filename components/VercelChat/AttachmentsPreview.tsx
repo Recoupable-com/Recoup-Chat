@@ -1,6 +1,6 @@
 import { useVercelChatContext } from "@/providers/VercelChatProvider";
 import { PreviewAttachment } from "./preview-attachment";
-import { TextFilePreview } from "./TextFilePreview";
+import { TextFileCard } from "./TextFileCard";
 import { PhotoProvider } from "react-photo-view";
 import { FileUIPart } from "ai";
 
@@ -18,9 +18,11 @@ function AttachmentsPreview() {
   return (
     <div className="flex gap-2 mb-2 overflow-visible flex-wrap">
       {textAttachments.map((attachment, index) => (
-        <TextFilePreview
+        <TextFileCard
           key={`text-${index}`}
-          attachment={attachment}
+          filename={attachment.filename}
+          lineCount={attachment.lineCount}
+          type={attachment.type}
           onRemove={() => removeTextAttachment(index)}
         />
       ))}
