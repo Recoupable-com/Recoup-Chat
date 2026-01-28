@@ -1,22 +1,84 @@
 "use client";
 
+import { useState } from "react";
+import { useRouter } from "next/navigation";
+import { useOnboarding, RecurringFrequency } from "@/hooks/useOnboarding";
+import { useUserProvider } from "@/providers/UserProvder";
+import { Button } from "@/components/ui/button";
+
 interface CompleteStepProps {
   onNext: () => void;
   onBack: () => void;
 }
 
+const FREQUENCY_LABELS: Record<NonNullable<RecurringFrequency>, string> = {
+  weekly: "week",
+  biweekly: "2 weeks",
+  monthly: "month",
+};
+
 export default function CompleteStep({ onNext, onBack }: CompleteStepProps) {
-  void onBack; // Not typically used at completion
+  void onNext;
+  void onBack;
+
+  const { recurring, selectedTask, complete } = useOnboarding();
+  const { userData } = useUserProvider();
+  const router = useRouter();
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
+  const handleGoToDashboard = async () => {
+    if (!userData?.account_id) {
+      router.push("/");
+      return;
+    }
+
+    setIsSubmitting(true);
+    try {
+      await complete(userData.account_id);
+      router.push("/");
+    } catch {
+      router.push("/");
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
   return (
-    <div className="flex flex-col items-center justify-center p-8">
-      <h2 className="text-xl font-semibold mb-4">Complete Step</h2>
-      <p className="text-muted-foreground mb-6">Placeholder for Complete Step</p>
-      <button
-        onClick={onNext}
-        className="px-4 py-2 bg-primary text-primary-foreground rounded-xl"
+    <div className="flex flex-col items-center justify-center p-8 max-w-2xl mx-auto text-center">
+      {/* Celebration icon */}
+      <div className="mb-6">
+        <div
+          className="h-20 w-20 rounded-full flex items-center justify-center mx-auto"
+          style={{ backgroundColor: "rgba(52, 90, 93, 0.1)" }}
+        >
+          <span className="text-4xl" role="img" aria-label="celebration">
+            🎉
+          </span>
+        </div>
+      </div>
+
+      <h1 className="text-3xl font-semibold mb-4">You&apos;re all set!</h1>
+
+      {recurring ? (
+        <p className="text-lg text-muted-foreground mb-8">
+          Your <span className="font-medium">{selectedTask?.title}</span> is
+          scheduled for every {FREQUENCY_LABELS[recurring]}.
+        </p>
+      ) : (
+        <p className="text-lg text-muted-foreground mb-8">
+          Your first report is on its way. Set up recurring tasks anytime from
+          the Tasks page.
+        </p>
+      )}
+
+      <Button
+        onClick={handleGoToDashboard}
+        disabled={isSubmitting}
+        className="px-8 py-3 text-lg"
+        style={{ backgroundColor: "#345A5D" }}
       >
-        Go to Dashboard
-      </button>
+        {isSubmitting ? "Finishing up..." : "Go to Dashboard"}
+      </Button>
     </div>
   );
 }
