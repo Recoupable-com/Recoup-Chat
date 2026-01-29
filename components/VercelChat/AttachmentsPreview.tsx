@@ -1,19 +1,34 @@
 import { useVercelChatContext } from "@/providers/VercelChatProvider";
 import { PreviewAttachment } from "./preview-attachment";
+import { TextFileCard } from "./TextFileCard";
 import { PhotoProvider } from "react-photo-view";
 import { FileUIPart } from "ai";
 
 function AttachmentsPreview() {
-  const { attachments, pendingAttachments, removeAttachment } =
-    useVercelChatContext();
+  const {
+    attachments,
+    pendingAttachments,
+    removeAttachment,
+    textAttachments,
+    removeTextAttachment,
+  } = useVercelChatContext();
 
-  if (attachments.length === 0) return null;
+  if (attachments.length === 0 && textAttachments.length === 0) return null;
 
   return (
-    <div className="flex gap-2 mb-2 overflow-visible">
+    <div className="flex gap-2 mb-2 overflow-visible flex-wrap">
+      {textAttachments.map((attachment, index) => (
+        <TextFileCard
+          key={`text-${index}`}
+          filename={attachment.filename}
+          lineCount={attachment.lineCount}
+          type={attachment.type}
+          onRemove={() => removeTextAttachment(index)}
+        />
+      ))}
       <PhotoProvider>
         {attachments.map((attachment: FileUIPart, index: number) => (
-          <div key={index} className="relative group">
+          <div key={`file-${index}`} className="relative group">
             <PreviewAttachment
               attachment={attachment}
               isUploading={pendingAttachments.includes(attachment)}
