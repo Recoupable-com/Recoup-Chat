@@ -15,14 +15,11 @@ const ConnectionsTab = () => {
   const tiktokConnector = connectors.find((c) => c.slug === "tiktok");
 
   const handleTikTokConnect = async () => {
-    const redirectUrl = await authorize("tiktok");
-    if (redirectUrl) {
-      window.location.href = redirectUrl;
-    }
+    return authorize("tiktok");
   };
 
   const handleTikTokDisconnect = async (connectedAccountId: string) => {
-    await disconnect(connectedAccountId);
+    return disconnect(connectedAccountId);
   };
 
   if (!artistId) {
