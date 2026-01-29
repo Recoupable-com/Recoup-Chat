@@ -1,16 +1,9 @@
 import Link from "next/link";
 import { MessageSquare, CheckCircle2, ChevronRight } from "lucide-react";
-
-export interface ChatItem {
-  id: string;
-  topic?: string | null;
-  account_id?: string | null;
-  artist_id?: string | null;
-  updated_at?: string;
-}
+import { Tables } from "@/types/database.types";
 
 export interface GetChatsResultType {
-  chats?: ChatItem[];
+  chats?: Tables<"rooms">[];
   status?: string;
   message?: string;
 }
