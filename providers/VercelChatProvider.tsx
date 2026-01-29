@@ -8,9 +8,11 @@ import React, {
 import { useVercelChat } from "@/hooks/useVercelChat";
 import { UseChatHelpers } from "@ai-sdk/react";
 import useAttachments from "@/hooks/useAttachments";
+import { useTextAttachments } from "@/hooks/useTextAttachments";
 import { ChatStatus, FileUIPart, UIMessage } from "ai";
 import { useArtistProvider } from "./ArtistProvider";
 import { GatewayLanguageModelEntry } from "@ai-sdk/gateway";
+import { TextAttachment } from "@/types/textAttachment";
 
 // Interface for the context data
 interface VercelChatContextType {
@@ -37,6 +39,12 @@ interface VercelChatContextType {
   removeAttachment: (index: number) => void;
   clearAttachments: () => void;
   hasPendingUploads: boolean;
+  textAttachments: TextAttachment[];
+  setTextAttachments: (
+    attachments: TextAttachment[] | ((prev: TextAttachment[]) => TextAttachment[])
+  ) => void;
+  addTextAttachment: (file: File, type: TextAttachment["type"]) => Promise<void>;
+  removeTextAttachment: (index: number) => void;
   model: string;
   setModel: (model: string) => void;
 }
@@ -66,10 +74,25 @@ export function VercelChatProvider({
     pendingAttachments,
     setAttachments,
     removeAttachment,
-    clearAttachments,
+    clearAttachments: clearFileAttachments,
     hasPendingUploads,
   } = useAttachments();
+
+  const {
+    textAttachments,
+    setTextAttachments,
+    addTextAttachment,
+    removeTextAttachment,
+    clearTextAttachments,
+  } = useTextAttachments();
+
   const { updateChatState } = useArtistProvider();
+
+  // Compose clear function for both attachment types
+  const clearAttachments = useCallback(() => {
+    clearFileAttachments();
+    clearTextAttachments();
+  }, [clearFileAttachments, clearTextAttachments]);
 
   // Use the useVercelChat hook to get the chat state and functions
   const {
@@ -93,6 +116,7 @@ export function VercelChatProvider({
     id: chatId,
     initialMessages,
     attachments,
+    textAttachments,
   });
 
   const reload = useCallback(() => {
@@ -134,6 +158,10 @@ export function VercelChatProvider({
     removeAttachment,
     clearAttachments,
     hasPendingUploads,
+    textAttachments,
+    setTextAttachments,
+    addTextAttachment,
+    removeTextAttachment,
   };
 
   // Send chat status and messages to ArtistProvider

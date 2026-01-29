@@ -27,6 +27,7 @@ export function ChatInput() {
     stop,
     setInput,
     input,
+    textAttachments,
   } = useVercelChatContext();
   // Allow typing regardless of artist selection
   const isDisabled = false;
@@ -41,7 +42,9 @@ export function ChatInput() {
     }
 
     // Only check input requirements for sending new messages
-    if (input === "" || isDisabled || hasPendingUploads || isLoadingSignedUrls)
+    // Allow sending if there are text attachments even without typed input
+    const hasContent = input !== "" || textAttachments.length > 0;
+    if (!hasContent || isDisabled || hasPendingUploads || isLoadingSignedUrls)
       return;
 
     handleSendMessage(event);

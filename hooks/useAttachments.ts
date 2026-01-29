@@ -2,8 +2,8 @@ import { useState, useCallback } from "react";
 import { FileUIPart } from "ai";
 
 /**
- * Hook for managing file attachments in chat
- * Handles file attachments state and pending uploads
+ * Hook for managing file attachments (images, PDFs, audio) in chat.
+ * Handles file attachments state and pending uploads.
  */
 export default function useAttachments() {
   const [attachments, setAttachments] = useState<FileUIPart[]>([]);

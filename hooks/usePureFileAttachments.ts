@@ -2,23 +2,41 @@ import { useRef } from "react";
 import { FileUIPart } from "ai";
 import { useVercelChatContext } from "@/providers/VercelChatProvider";
 import { CHAT_INPUT_SUPPORTED_FILE } from "@/lib/chat/config";
-import { useAttachCsv } from "./useAttachCsv";
+import { isAllowedByExtension } from "@/lib/files/isAllowedByExtension";
+import { getFileExtension } from "@/lib/files/getFileExtension";
 
 export function usePureFileAttachments() {
-  const { setAttachments } = useVercelChatContext();
-  const { attachCsvToInput } = useAttachCsv();
+  const { setAttachments, addTextAttachment } = useVercelChatContext();
   const fileInputRef = useRef<HTMLInputElement>(null);
   const MAX_FILES = 10;
   const allowedTypes = Object.keys(CHAT_INPUT_SUPPORTED_FILE);
 
   const uploadFile = async (file: File) => {
-    if (!allowedTypes.includes(file.type)) {
+    // Accept by MIME type first, then fall back to extension for browsers that
+    // report empty or generic MIME types (common for .md files).
+    const isAllowedMimeType = allowedTypes.includes(file.type);
+    if (!isAllowedMimeType && !isAllowedByExtension(file)) {
       console.error("File type not supported:", file.type);
       return;
     }
 
-    if (file.type === "text/csv") {
-      await attachCsvToInput(file);
+    const ext = getFileExtension(file.name).toLowerCase();
+
+    // Handle CSV files
+    if (file.type === "text/csv" || ext === ".csv") {
+      await addTextAttachment(file, "csv");
+      return;
+    }
+
+    // Handle markdown files
+    const isMarkdown =
+      file.type === "text/markdown" ||
+      file.type === "text/x-markdown" ||
+      ext === ".md" ||
+      ext === ".markdown";
+
+    if (isMarkdown) {
+      await addTextAttachment(file, "md");
       return;
     }
 
