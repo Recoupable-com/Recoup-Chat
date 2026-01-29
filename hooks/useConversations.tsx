@@ -6,12 +6,14 @@ import getConversations from "@/lib/getConversations";
 import { Conversation } from "@/types/Chat";
 import useArtistAgents from "./useArtistAgents";
 import { ArtistAgent } from "@/lib/supabase/getArtistAgents";
+import { useAccessToken } from "./useAccessToken";
 
 const useConversations = () => {
   const { userData } = useUserProvider();
   const { selectedArtist, artists } = useArtistProvider();
   const { agents } = useArtistAgents();
   const queryClient = useQueryClient();
+  const accessToken = useAccessToken();
 
   // Get artist IDs in the current org/view for filtering
   const orgArtistIds = useMemo(
@@ -21,8 +23,8 @@ const useConversations = () => {
 
   const accountId = userData?.id;
   const queryKey = useMemo(
-    () => ["conversations", accountId] as const,
-    [accountId]
+    () => ["conversations", accountId, accessToken] as const,
+    [accountId, accessToken]
   );
 
   const {
@@ -32,8 +34,8 @@ const useConversations = () => {
     refetch,
   } = useQuery<Conversation[]>({
     queryKey,
-    queryFn: () => getConversations(accountId as string),
-    enabled: Boolean(accountId),
+    queryFn: () => getConversations(accountId as string, accessToken as string),
+    enabled: Boolean(accountId) && Boolean(accessToken),
     initialData: [],
   });
 
