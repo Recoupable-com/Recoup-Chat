@@ -125,41 +125,6 @@ export function useArtistConnectors(artistId: string | undefined) {
     [accessToken, artistId, fetchConnectors],
   );
 
-  const complete = useCallback(
-    async (toolkitSlug: string): Promise<boolean> => {
-      if (!accessToken || !artistId) return false;
-
-      try {
-        const response = await fetch(
-          `${NEW_API_BASE_URL}/api/artist-connectors/complete`,
-          {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-              Authorization: `Bearer ${accessToken}`,
-            },
-            body: JSON.stringify({
-              artist_id: artistId,
-              toolkit_slug: toolkitSlug,
-            }),
-          },
-        );
-
-        if (!response.ok) {
-          throw new Error("Failed to complete artist connector");
-        }
-
-        // Refresh the connectors list after completion
-        await fetchConnectors();
-        return true;
-      } catch (err) {
-        setError(err instanceof Error ? err.message : "Unknown error");
-        return false;
-      }
-    },
-    [accessToken, artistId, fetchConnectors],
-  );
-
   useEffect(() => {
     fetchConnectors();
   }, [fetchConnectors]);
@@ -171,6 +136,5 @@ export function useArtistConnectors(artistId: string | undefined) {
     refetch: fetchConnectors,
     authorize,
     disconnect,
-    complete,
   };
 }
