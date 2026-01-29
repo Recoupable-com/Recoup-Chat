@@ -1,7 +1,9 @@
+import { TextAttachment } from "@/types/textAttachment";
+
 interface TextFileCardProps {
   filename: string;
   lineCount: number;
-  type: "md" | "csv";
+  type: TextAttachment["type"];
   onRemove?: () => void;
 }
 

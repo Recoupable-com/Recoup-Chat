@@ -1,6 +1,8 @@
+import { TextAttachment } from "@/types/textAttachment";
+
 export interface ParsedTextAttachment {
   filename: string;
-  type: "md" | "csv";
+  type: TextAttachment["type"];
   lineCount: number;
 }
 

@@ -4,25 +4,12 @@ import { useVercelChatContext } from "@/providers/VercelChatProvider";
 import { CHAT_INPUT_SUPPORTED_FILE } from "@/lib/chat/config";
 import { isAllowedByExtension } from "@/lib/files/isAllowedByExtension";
 import { getFileExtension } from "@/lib/files/getFileExtension";
-import { TextAttachment } from "@/types/textAttachment";
 
 export function usePureFileAttachments() {
-  const { setAttachments, setTextAttachments } = useVercelChatContext();
+  const { setAttachments, addTextAttachment } = useVercelChatContext();
   const fileInputRef = useRef<HTMLInputElement>(null);
   const MAX_FILES = 10;
   const allowedTypes = Object.keys(CHAT_INPUT_SUPPORTED_FILE);
-
-  const addTextAttachment = async (
-    file: File,
-    type: TextAttachment["type"]
-  ) => {
-    const content = await file.text();
-    const lineCount = content.split("\n").length;
-    setTextAttachments((prev) => [
-      ...prev,
-      { filename: file.name, content, lineCount, type },
-    ]);
-  };
 
   const uploadFile = async (file: File) => {
     // Accept by MIME type first, then fall back to extension for browsers that

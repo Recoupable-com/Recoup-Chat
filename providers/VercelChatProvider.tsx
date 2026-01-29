@@ -43,6 +43,7 @@ interface VercelChatContextType {
   setTextAttachments: (
     attachments: TextAttachment[] | ((prev: TextAttachment[]) => TextAttachment[])
   ) => void;
+  addTextAttachment: (file: File, type: TextAttachment["type"]) => Promise<void>;
   removeTextAttachment: (index: number) => void;
   model: string;
   setModel: (model: string) => void;
@@ -80,6 +81,7 @@ export function VercelChatProvider({
   const {
     textAttachments,
     setTextAttachments,
+    addTextAttachment,
     removeTextAttachment,
     clearTextAttachments,
   } = useTextAttachments();
@@ -158,6 +160,7 @@ export function VercelChatProvider({
     hasPendingUploads,
     textAttachments,
     setTextAttachments,
+    addTextAttachment,
     removeTextAttachment,
   };
 
