@@ -122,6 +122,10 @@ import PulseToolSkeleton from "./tools/pulse/PulseToolSkeleton";
 import PulseToolResult, {
   PulseToolResultType,
 } from "./tools/pulse/PulseToolResult";
+import GetChatsSkeleton from "./tools/chats/GetChatsSkeleton";
+import GetChatsResult, {
+  GetChatsResultType,
+} from "./tools/chats/GetChatsResult";
 
 type CallToolResult = {
   content: TextContent[];
@@ -299,6 +303,12 @@ export function getToolCallComponent(part: ToolUIPart) {
     return (
       <div key={toolCallId}>
         <PulseToolSkeleton />
+      </div>
+    );
+  } else if (toolName === "get_chats") {
+    return (
+      <div key={toolCallId}>
+        <GetChatsSkeleton />
       </div>
     );
   }
@@ -570,6 +580,12 @@ export function getToolResultComponent(part: ToolUIPart | DynamicToolUIPart) {
     return (
       <div key={toolCallId}>
         <PulseToolResult result={result as PulseToolResultType} />
+      </div>
+    );
+  } else if (toolName === "get_chats") {
+    return (
+      <div key={toolCallId}>
+        <GetChatsResult result={result as GetChatsResultType} />
       </div>
     );
   }
