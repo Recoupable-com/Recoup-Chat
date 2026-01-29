@@ -42,7 +42,8 @@ const GetChatsResult = ({ result }: GetChatsResultProps) => {
                 <li key={chat.id}>
                   <Link
                     href={`/chat/${chat.id}`}
-                    prefetch={true}
+                    target="_blank"
+                    rel="noopener noreferrer"
                     className="flex items-center gap-2 p-2 rounded-md hover:bg-muted transition-colors group"
                   >
                     <MessageSquare className="h-4 w-4 text-muted-foreground shrink-0" />
