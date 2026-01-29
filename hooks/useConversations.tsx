@@ -21,10 +21,9 @@ const useConversations = () => {
     [artists]
   );
 
-  const accountId = userData?.id;
   const queryKey = useMemo(
-    () => ["conversations", accountId, accessToken] as const,
-    [accountId, accessToken]
+    () => ["conversations", accessToken] as const,
+    [accessToken]
   );
 
   const {
@@ -34,8 +33,8 @@ const useConversations = () => {
     refetch,
   } = useQuery<Conversation[]>({
     queryKey,
-    queryFn: () => getConversations(accountId as string, accessToken as string),
-    enabled: Boolean(accountId) && Boolean(accessToken),
+    queryFn: () => getConversations(accessToken as string),
+    enabled: Boolean(accessToken),
     initialData: [],
   });
 

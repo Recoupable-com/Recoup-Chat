@@ -12,7 +12,7 @@ describe("getConversations", () => {
   });
 
   describe("successful responses", () => {
-    it("fetches conversations from NEW_API_BASE_URL", async () => {
+    it("fetches conversations from NEW_API_BASE_URL without account_id query param", async () => {
       const mockChats = [
         {
           id: "chat-1",
@@ -28,10 +28,11 @@ describe("getConversations", () => {
         json: async () => ({ status: "success", chats: mockChats }),
       });
 
-      const result = await getConversations("account-123", "test-token");
+      const result = await getConversations("test-token");
 
+      // Verify account_id is NOT passed as query param (per API docs for personal tokens)
       expect(mockFetch).toHaveBeenCalledWith(
-        `${NEW_API_BASE_URL}/api/chats?account_id=account-123`,
+        `${NEW_API_BASE_URL}/api/chats`,
         expect.objectContaining({
           method: "GET",
           headers: expect.objectContaining({
@@ -49,7 +50,7 @@ describe("getConversations", () => {
         json: async () => ({ status: "success" }),
       });
 
-      const result = await getConversations("account-123", "test-token");
+      const result = await getConversations("test-token");
 
       expect(result).toEqual([]);
     });
@@ -60,22 +61,15 @@ describe("getConversations", () => {
         json: async () => ({ status: "success", chats: null }),
       });
 
-      const result = await getConversations("account-123", "test-token");
+      const result = await getConversations("test-token");
 
       expect(result).toEqual([]);
     });
   });
 
   describe("error handling", () => {
-    it("returns empty array when accountId is empty", async () => {
-      const result = await getConversations("", "test-token");
-
-      expect(mockFetch).not.toHaveBeenCalled();
-      expect(result).toEqual([]);
-    });
-
     it("returns empty array when accessToken is empty", async () => {
-      const result = await getConversations("account-123", "");
+      const result = await getConversations("");
 
       expect(mockFetch).not.toHaveBeenCalled();
       expect(result).toEqual([]);
@@ -88,7 +82,7 @@ describe("getConversations", () => {
         text: async () => "Unauthorized",
       });
 
-      const result = await getConversations("account-123", "test-token");
+      const result = await getConversations("test-token");
 
       expect(result).toEqual([]);
     });
@@ -96,24 +90,28 @@ describe("getConversations", () => {
     it("returns empty array when fetch throws an error", async () => {
       mockFetch.mockRejectedValueOnce(new Error("Network error"));
 
-      const result = await getConversations("account-123", "test-token");
+      const result = await getConversations("test-token");
 
       expect(result).toEqual([]);
     });
   });
 
-  describe("URL construction", () => {
-    it("correctly encodes account_id in URL", async () => {
+  describe("authentication", () => {
+    it("uses Bearer token in Authorization header", async () => {
       mockFetch.mockResolvedValueOnce({
         ok: true,
         json: async () => ({ status: "success", chats: [] }),
       });
 
-      await getConversations("account-with-special-chars", "test-token");
+      await getConversations("my-privy-token");
 
       expect(mockFetch).toHaveBeenCalledWith(
-        expect.stringContaining("account_id=account-with-special-chars"),
-        expect.any(Object)
+        expect.any(String),
+        expect.objectContaining({
+          headers: expect.objectContaining({
+            Authorization: "Bearer my-privy-token",
+          }),
+        })
       );
     });
   });

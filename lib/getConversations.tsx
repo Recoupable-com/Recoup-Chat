@@ -2,25 +2,31 @@ import type { Conversation } from "@/types/Chat";
 import { NEW_API_BASE_URL } from "@/lib/consts";
 
 /**
- * Fetches conversations for an account from the Recoup API.
+ * Fetches conversations from the Recoup API.
  *
- * @param accountId - The account ID to fetch conversations for
+ * Authentication is via Bearer token (Privy access token).
+ * The account is automatically inferred from the authentication token.
+ *
+ * Note: account_id query parameter is intentionally NOT passed because
+ * personal Bearer tokens cannot use this filter (returns 403). Only
+ * organization API keys can filter by account_id.
+ *
+ * @see https://developers.recoupable.com/api-reference/chat/chats
+ *
  * @param accessToken - The Privy access token for authentication
  * @returns Array of conversations or empty array on error
  */
 const getConversations = async (
-  accountId: string,
   accessToken: string
 ): Promise<Conversation[]> => {
-  if (!accountId || !accessToken) {
+  if (!accessToken) {
     return [];
   }
 
   try {
-    const url = new URL(`${NEW_API_BASE_URL}/api/chats`);
-    url.searchParams.set("account_id", accountId);
+    const url = `${NEW_API_BASE_URL}/api/chats`;
 
-    const response = await fetch(url.toString(), {
+    const response = await fetch(url, {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
