@@ -31,15 +31,10 @@ export function useApiOverride() {
     }
 
     if (apiParam) {
-      // Validate it's a valid URL
-      try {
-        new URL(apiParam);
-        sessionStorage.setItem(STORAGE_KEY, apiParam);
-        setApiOverride(apiParam);
-        return;
-      } catch {
-        // Invalid URL, ignore
-      }
+      // Use the URL as-is, let the transport layer handle any errors
+      sessionStorage.setItem(STORAGE_KEY, apiParam);
+      setApiOverride(apiParam);
+      return;
     }
 
     // Fall back to stored value if no query param
