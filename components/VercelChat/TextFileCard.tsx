@@ -1,9 +1,8 @@
 import { TextAttachment } from "@/types/textAttachment";
 
-interface TextFileCardProps {
-  filename: string;
-  lineCount: number;
-  type: TextAttachment["type"];
+// Extends TextAttachment properties with optional remove handler
+interface TextFileCardProps
+  extends Pick<TextAttachment, "filename" | "lineCount" | "type"> {
   onRemove?: () => void;
 }
 

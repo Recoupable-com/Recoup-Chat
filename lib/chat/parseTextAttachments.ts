@@ -1,10 +1,10 @@
 import { TextAttachment } from "@/types/textAttachment";
 
-export interface ParsedTextAttachment {
-  filename: string;
-  type: TextAttachment["type"];
-  lineCount: number;
-}
+// Uses Pick to extract only the properties we need, following DRY principle
+export type ParsedTextAttachment = Pick<
+  TextAttachment,
+  "filename" | "type" | "lineCount"
+>;
 
 export interface ParsedMessageContent {
   textAttachments: ParsedTextAttachment[];
