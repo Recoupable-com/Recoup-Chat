@@ -1,0 +1,120 @@
+import { describe, it, expect, vi, beforeEach } from "vitest";
+import getConversations from "../getConversations";
+import { NEW_API_BASE_URL } from "../consts";
+
+// Mock fetch globally
+const mockFetch = vi.fn();
+global.fetch = mockFetch;
+
+describe("getConversations", () => {
+  beforeEach(() => {
+    vi.clearAllMocks();
+  });
+
+  describe("successful responses", () => {
+    it("fetches conversations from NEW_API_BASE_URL", async () => {
+      const mockChats = [
+        {
+          id: "chat-1",
+          account_id: "account-123",
+          artist_id: "artist-456",
+          topic: "Test Chat",
+          updated_at: "2024-01-01T00:00:00Z",
+        },
+      ];
+
+      mockFetch.mockResolvedValueOnce({
+        ok: true,
+        json: async () => ({ status: "success", chats: mockChats }),
+      });
+
+      const result = await getConversations("account-123", "test-token");
+
+      expect(mockFetch).toHaveBeenCalledWith(
+        `${NEW_API_BASE_URL}/api/chats?account_id=account-123`,
+        expect.objectContaining({
+          method: "GET",
+          headers: expect.objectContaining({
+            "Content-Type": "application/json",
+            Authorization: "Bearer test-token",
+          }),
+        })
+      );
+      expect(result).toEqual(mockChats);
+    });
+
+    it("returns empty array when chats is undefined in response", async () => {
+      mockFetch.mockResolvedValueOnce({
+        ok: true,
+        json: async () => ({ status: "success" }),
+      });
+
+      const result = await getConversations("account-123", "test-token");
+
+      expect(result).toEqual([]);
+    });
+
+    it("returns empty array when chats is null in response", async () => {
+      mockFetch.mockResolvedValueOnce({
+        ok: true,
+        json: async () => ({ status: "success", chats: null }),
+      });
+
+      const result = await getConversations("account-123", "test-token");
+
+      expect(result).toEqual([]);
+    });
+  });
+
+  describe("error handling", () => {
+    it("returns empty array when accountId is empty", async () => {
+      const result = await getConversations("", "test-token");
+
+      expect(mockFetch).not.toHaveBeenCalled();
+      expect(result).toEqual([]);
+    });
+
+    it("returns empty array when accessToken is empty", async () => {
+      const result = await getConversations("account-123", "");
+
+      expect(mockFetch).not.toHaveBeenCalled();
+      expect(result).toEqual([]);
+    });
+
+    it("returns empty array when response is not ok", async () => {
+      mockFetch.mockResolvedValueOnce({
+        ok: false,
+        status: 401,
+        text: async () => "Unauthorized",
+      });
+
+      const result = await getConversations("account-123", "test-token");
+
+      expect(result).toEqual([]);
+    });
+
+    it("returns empty array when fetch throws an error", async () => {
+      mockFetch.mockRejectedValueOnce(new Error("Network error"));
+
+      const result = await getConversations("account-123", "test-token");
+
+      expect(result).toEqual([]);
+    });
+  });
+
+  describe("URL construction", () => {
+    it("correctly encodes account_id in URL", async () => {
+      mockFetch.mockResolvedValueOnce({
+        ok: true,
+        json: async () => ({ status: "success", chats: [] }),
+      });
+
+      await getConversations("account-with-special-chars", "test-token");
+
+      expect(mockFetch).toHaveBeenCalledWith(
+        expect.stringContaining("account_id=account-with-special-chars"),
+        expect.any(Object)
+      );
+    });
+  });
+});

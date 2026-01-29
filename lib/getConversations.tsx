@@ -1,19 +1,30 @@
 import type { Conversation } from "@/types/Chat";
-import { AGENT_API } from "@/lib/consts";
+import { NEW_API_BASE_URL } from "@/lib/consts";
 
-const getConversations = async (accountId: string): Promise<Conversation[]> => {
-  if (!accountId) {
+/**
+ * Fetches conversations for an account from the Recoup API.
+ *
+ * @param accountId - The account ID to fetch conversations for
+ * @param accessToken - The Privy access token for authentication
+ * @returns Array of conversations or empty array on error
+ */
+const getConversations = async (
+  accountId: string,
+  accessToken: string
+): Promise<Conversation[]> => {
+  if (!accountId || !accessToken) {
     return [];
   }
 
   try {
-    const url = new URL(`${AGENT_API}/api/chats`);
+    const url = new URL(`${NEW_API_BASE_URL}/api/chats`);
     url.searchParams.set("account_id", accountId);
 
     const response = await fetch(url.toString(), {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
+        Authorization: `Bearer ${accessToken}`,
       },
     });
 
