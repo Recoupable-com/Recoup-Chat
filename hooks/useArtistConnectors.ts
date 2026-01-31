@@ -7,15 +7,18 @@ export type { ConnectorInfo as ArtistConnectorInfo } from "./useConnectorsBase";
 
 /**
  * Hook for managing artist-specific connectors (e.g., TikTok).
- * Fetches connector status and provides authorize/disconnect functions.
+ * Uses the unified /api/connectors endpoint with entity_type=artist.
  *
  * @param artistId - The artist ID to get connectors for (required)
  */
 export function useArtistConnectors(artistId: string | undefined) {
   return useConnectorsBase({
-    apiPath: "/api/artist-connectors",
+    apiPath: "/api/connectors",
     entityId: artistId,
-    entityQueryParam: "artist_id",
-    entityBodyParam: "artist_id",
+    entityQueryParam: "entity_id",
+    entityBodyParam: "entity_id",
+    // Additional query/body params for artist context
+    extraQueryParams: { entity_type: "artist" },
+    extraBodyParams: { entity_type: "artist" },
   });
 }

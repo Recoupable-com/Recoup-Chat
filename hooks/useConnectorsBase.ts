@@ -19,7 +19,7 @@ export interface ConnectorInfo {
  */
 export interface UseConnectorsConfig {
   /**
-   * Base API path (e.g., "/api/connectors" or "/api/artist-connectors")
+   * Base API path (e.g., "/api/connectors")
    */
   apiPath: string;
   /**
@@ -27,13 +27,21 @@ export interface UseConnectorsConfig {
    */
   entityId?: string;
   /**
-   * Query param name for entity ID (e.g., "artist_id")
+   * Query param name for entity ID (e.g., "entity_id")
    */
   entityQueryParam?: string;
   /**
-   * Body param name for entity ID (e.g., "artist_id")
+   * Body param name for entity ID (e.g., "entity_id")
    */
   entityBodyParam?: string;
+  /**
+   * Extra query params to include (e.g., { entity_type: "artist" })
+   */
+  extraQueryParams?: Record<string, string>;
+  /**
+   * Extra body params to include (e.g., { entity_type: "artist" })
+   */
+  extraBodyParams?: Record<string, string>;
   /**
    * Client-side filter for allowed connector slugs
    */
@@ -52,6 +60,8 @@ export function useConnectorsBase(config: UseConnectorsConfig) {
     entityId,
     entityQueryParam,
     entityBodyParam,
+    extraQueryParams,
+    extraBodyParams,
     allowedSlugs,
   } = config;
 
@@ -72,11 +82,19 @@ export function useConnectorsBase(config: UseConnectorsConfig) {
     setError(null);
 
     try {
-      // Build URL with optional entity query param
-      let url = `${NEW_API_BASE_URL}${apiPath}`;
+      // Build URL with query params
+      const params = new URLSearchParams();
       if (entityQueryParam && entityId) {
-        url += `?${entityQueryParam}=${encodeURIComponent(entityId)}`;
+        params.set(entityQueryParam, entityId);
       }
+      if (extraQueryParams) {
+        Object.entries(extraQueryParams).forEach(([key, value]) => {
+          params.set(key, value);
+        });
+      }
+
+      const queryString = params.toString();
+      const url = `${NEW_API_BASE_URL}${apiPath}${queryString ? `?${queryString}` : ""}`;
 
       const response = await fetch(url, {
         headers: {
@@ -104,7 +122,7 @@ export function useConnectorsBase(config: UseConnectorsConfig) {
     } finally {
       setIsLoading(false);
     }
-  }, [accessToken, apiPath, entityId, entityQueryParam, allowedSlugs]);
+  }, [accessToken, apiPath, entityId, entityQueryParam, extraQueryParams, allowedSlugs]);
 
   const authorize = useCallback(
     async (connector: string): Promise<string | null> => {
@@ -114,6 +132,9 @@ export function useConnectorsBase(config: UseConnectorsConfig) {
         const body: Record<string, string> = { connector };
         if (entityBodyParam && entityId) {
           body[entityBodyParam] = entityId;
+        }
+        if (extraBodyParams) {
+          Object.assign(body, extraBodyParams);
         }
 
         const response = await fetch(`${NEW_API_BASE_URL}${apiPath}/authorize`, {
@@ -136,7 +157,7 @@ export function useConnectorsBase(config: UseConnectorsConfig) {
         return null;
       }
     },
-    [accessToken, apiPath, entityId, entityBodyParam],
+    [accessToken, apiPath, entityId, entityBodyParam, extraBodyParams],
   );
 
   const disconnect = useCallback(
@@ -149,6 +170,9 @@ export function useConnectorsBase(config: UseConnectorsConfig) {
         };
         if (entityBodyParam && entityId) {
           body[entityBodyParam] = entityId;
+        }
+        if (extraBodyParams) {
+          Object.assign(body, extraBodyParams);
         }
 
         const response = await fetch(`${NEW_API_BASE_URL}${apiPath}`, {
@@ -172,7 +196,7 @@ export function useConnectorsBase(config: UseConnectorsConfig) {
         return false;
       }
     },
-    [accessToken, apiPath, entityId, entityBodyParam, fetchConnectors],
+    [accessToken, apiPath, entityId, entityBodyParam, extraBodyParams, fetchConnectors],
   );
 
   useEffect(() => {
