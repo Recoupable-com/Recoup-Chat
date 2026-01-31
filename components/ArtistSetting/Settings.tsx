@@ -78,8 +78,12 @@ const Settings = () => {
       {settingMode === SETTING_MODE.UPDATE ? (
         <Tabs defaultValue="general" className="w-full">
           <TabsList className="w-full mb-4">
-            <TabsTrigger value="general" className="flex-1">General</TabsTrigger>
-            <TabsTrigger value="connections" className="flex-1">Connections</TabsTrigger>
+            <TabsTrigger value="general" className="flex-1" asChild>
+              <button type="button">General</button>
+            </TabsTrigger>
+            <TabsTrigger value="connections" className="flex-1" asChild>
+              <button type="button">Connections</button>
+            </TabsTrigger>
           </TabsList>
 
           <TabsContent value="general">
