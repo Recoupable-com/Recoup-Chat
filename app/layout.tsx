@@ -55,7 +55,7 @@ export async function generateMetadata(): Promise<Metadata> {
     openGraph: {
       title: TITLE,
       description: META_DESCRIPTION,
-      images: "/icon-with-background.png",
+      images: "/backgrounds/marketing_screenshot.png",
     },
     manifest: "/manifest.json",
     icons: [{ rel: "icon", url: "/icon-with-background.png" }],

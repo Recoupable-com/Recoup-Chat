@@ -50,7 +50,7 @@ export const ROUTING_STATUS_DATA_TYPE = "data-agent-routing-status" as const;
 export const TITLE = "Recoupable";
 
 export const META_DESCRIPTION =
-  "Recoup is an AI agent platform for smarter song rollouts, unforgettable fan experiences, and lasting artist growth. Empowering music executives with actionable insights and next-gen tools.";
+  "Recoup helps artists build their own record label.";
 
 export const DEFAULT_CREDITS = 333;
 export const PRO_CREDITS = 1000;
