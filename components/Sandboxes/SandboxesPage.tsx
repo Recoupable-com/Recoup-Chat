@@ -3,7 +3,7 @@
 import { useState } from "react";
 import SandboxCreateSection from "@/components/Sandboxes/SandboxCreateSection";
 import SandboxList from "@/components/Sandboxes/SandboxList";
-import type { Sandbox } from "@/lib/sandbox/createSandbox";
+import type { Sandbox } from "@/lib/sandboxes/createSandbox";
 
 export default function SandboxesPage() {
   const [sandboxes, setSandboxes] = useState<Sandbox[]>([]);

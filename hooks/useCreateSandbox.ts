@@ -1,7 +1,7 @@
 import { useMutation } from "@tanstack/react-query";
 import { usePrivy } from "@privy-io/react-auth";
 import { toast } from "sonner";
-import { createSandbox, Sandbox } from "@/lib/sandbox/createSandbox";
+import { createSandbox, Sandbox } from "@/lib/sandboxes/createSandbox";
 
 interface UseCreateSandboxReturn {
   createSandbox: (prompt: string) => Promise<Sandbox[]>;

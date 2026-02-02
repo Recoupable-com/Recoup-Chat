@@ -1,4 +1,4 @@
-import type { Sandbox } from "@/lib/sandbox/createSandbox";
+import type { Sandbox } from "@/lib/sandboxes/createSandbox";
 
 interface SandboxListProps {
   sandboxes: Sandbox[];
