@@ -41,7 +41,7 @@ export default function SandboxesPage() {
         return;
       }
 
-      const response = await fetch(`${NEW_API_BASE_URL}/api/sandbox`, {
+      const response = await fetch(`${NEW_API_BASE_URL}/api/sandboxes`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
