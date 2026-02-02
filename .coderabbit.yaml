@@ -11,6 +11,9 @@ reviews:
   auto_review:
     enabled: true
     drafts: false
+    base_branches:
+      - main
+      - test
 
   # Pre-merge checks for SOLID principles and clean code
   pre_merge_checks:
