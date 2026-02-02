@@ -6,14 +6,13 @@ import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import useCreateSandbox from "@/hooks/useCreateSandbox";
-import type { Sandbox } from "@/lib/sandboxes/createSandbox";
 
 interface SandboxCreateSectionProps {
-  onSandboxCreated: (sandboxes: Sandbox[]) => void;
+  onSuccess: () => void;
 }
 
 export default function SandboxCreateSection({
-  onSandboxCreated,
+  onSuccess,
 }: SandboxCreateSectionProps) {
   const [prompt, setPrompt] = useState("");
   const { createSandbox, isCreating } = useCreateSandbox();
@@ -25,10 +24,10 @@ export default function SandboxCreateSection({
     }
 
     try {
-      const newSandboxes = await createSandbox(prompt);
-      onSandboxCreated(newSandboxes);
+      await createSandbox(prompt);
       toast.success("Sandbox created successfully");
       setPrompt("");
+      onSuccess();
     } catch {
       // Error is handled by the hook
     }
