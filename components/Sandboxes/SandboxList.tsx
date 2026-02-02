@@ -17,7 +17,7 @@ export default function SandboxList({ sandboxes }: SandboxListProps) {
   return (
     <div className="w-full max-w-md space-y-2">
       <h2 className="text-lg font-medium">Sandbox History</h2>
-      <div className="max-h-[200px] space-y-2 overflow-y-auto">
+      <div className="space-y-2">
         {sandboxes.map((sandbox) => (
           <SandboxListCard key={sandbox.sandboxId} sandbox={sandbox} />
         ))}
