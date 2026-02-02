@@ -7,6 +7,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: "Sandboxes | Recoupable",
     description: "Use sandboxes to build your own record label.",
+    images: "/backgrounds/marketing_screenshot.png",
   },
 };
 
