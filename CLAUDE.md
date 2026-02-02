@@ -12,6 +12,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 4. Before pushing, verify the current branch is not `main` or `test`
 5. **Open PRs against the `test` branch**, not `main`
 6. After pushing, check if a PR exists for the branch. If not, create one with `gh pr create --base test`
+7. **After creating a PR, always wait for explicit user approval before merging.** Never merge PRs autonomously.
 
 ### Starting a New Task
 
