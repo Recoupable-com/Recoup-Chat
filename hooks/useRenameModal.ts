@@ -26,7 +26,7 @@ const validateName = (value: string): string => {
 type UseRenameModalParams = {
   isOpen: boolean;
   chatRoom: ChatItem | null;
-  onRename: (newName: string) => void;
+  onRename: () => Promise<void>;
   onClose: () => void;
 };
 
@@ -105,7 +105,7 @@ export function useRenameModal({
           topic: name,
         });
 
-        onRename(name);
+        await onRename();
         onClose();
       } catch (err) {
         setError(

@@ -7,7 +7,7 @@ interface RenameModalProps {
   isOpen: boolean;
   onClose: () => void;
   chatRoom: Conversation | ArtistAgent | null;
-  onRename: (newName: string) => void;
+  onRename: () => Promise<void>;
 }
 
 const RenameModal = ({
