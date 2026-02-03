@@ -2,6 +2,8 @@ import { useState, useEffect } from "react";
 import Modal from "@/components/Modal";
 import type { Conversation } from "@/types/Chat";
 import type { ArtistAgent } from "@/lib/supabase/getArtistAgents";
+import { useAccessToken } from "@/hooks/useAccessToken";
+import { updateChat } from "@/lib/chats/updateChat";
 
 interface RenameModalProps {
   isOpen: boolean;
@@ -16,6 +18,8 @@ const getChatName = (item: Conversation | ArtistAgent): string => isChatRoom(ite
 const getChatId = (item: Conversation | ArtistAgent): string => isChatRoom(item) ? item.id : item.agentId;
 
 const RenameModal = ({ isOpen, onClose, chatRoom, onRename }: RenameModalProps) => {
+  const accessToken = useAccessToken();
+
   // Form state
   const [name, setName] = useState("");
   const [error, setError] = useState("");
@@ -72,38 +76,36 @@ const RenameModal = ({ isOpen, onClose, chatRoom, onRename }: RenameModalProps) 
   
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    
+
     const validationError = validateName(name);
     if (validationError) {
       setError(validationError);
       return;
     }
-    
+
+    if (!accessToken) {
+      setError('Authentication required');
+      return;
+    }
+
     setIsSubmitting(true);
-    
+
     try {
-      const roomId = getChatId(chatRoom);
-      const response = await fetch('/api/room/update', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ roomId, newName: name }),
+      const chatId = getChatId(chatRoom);
+      await updateChat({
+        accessToken,
+        chatId,
+        topic: name,
       });
-      
-      const result = await response.json();
-      
-      if (!response.ok) {
-        throw new Error(result.message || 'Failed to rename chat');
-      }
-      
+
       // Call the callback to update UI first
       onRename(name);
-      
+
       // Only close the modal after rename is complete
       onClose();
     } catch (err) {
-      console.error('Error renaming chat:', err);
       setError(err instanceof Error ? err.message : 'Failed to rename chat. Please try again.');
-      setIsSubmitting(false); // Make sure to reset isSubmitting on error
+      setIsSubmitting(false);
     }
   };
 
