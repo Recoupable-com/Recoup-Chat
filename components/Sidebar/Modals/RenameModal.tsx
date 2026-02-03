@@ -7,14 +7,12 @@ interface RenameModalProps {
   isOpen: boolean;
   onClose: () => void;
   chatRoom: Conversation | ArtistAgent | null;
-  onRename: () => Promise<void>;
 }
 
 const RenameModal = ({
   isOpen,
   onClose,
   chatRoom,
-  onRename,
 }: RenameModalProps) => {
   const {
     name,
@@ -25,7 +23,7 @@ const RenameModal = ({
     handleBlur,
     handleSubmit,
     handleModalClose,
-  } = useRenameModal({ isOpen, chatRoom, onRename, onClose });
+  } = useRenameModal({ isOpen, chatRoom, onClose });
 
   if (!isOpen || !chatRoom) return null;
 

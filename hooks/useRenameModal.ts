@@ -3,6 +3,7 @@ import type { Conversation } from "@/types/Chat";
 import type { ArtistAgent } from "@/lib/supabase/getArtistAgents";
 import { useAccessToken } from "@/hooks/useAccessToken";
 import { updateChat } from "@/lib/chats/updateChat";
+import { useConversationsProvider } from "@/providers/ConversationsProvider";
 
 type ChatItem = Conversation | ArtistAgent;
 
@@ -26,17 +27,16 @@ const validateName = (value: string): string => {
 type UseRenameModalParams = {
   isOpen: boolean;
   chatRoom: ChatItem | null;
-  onRename: () => Promise<void>;
   onClose: () => void;
 };
 
 export function useRenameModal({
   isOpen,
   chatRoom,
-  onRename,
   onClose,
 }: UseRenameModalParams) {
   const accessToken = useAccessToken();
+  const { updateConversationTopic } = useConversationsProvider();
 
   const [name, setName] = useState("");
   const [error, setError] = useState("");
@@ -105,7 +105,7 @@ export function useRenameModal({
           topic: name,
         });
 
-        await onRename();
+        updateConversationTopic(chatId, name);
         onClose();
       } catch (err) {
         setError(
@@ -116,7 +116,7 @@ export function useRenameModal({
         setIsSubmitting(false);
       }
     },
-    [name, accessToken, chatRoom, onRename, onClose]
+    [name, accessToken, chatRoom, updateConversationTopic, onClose]
   );
 
   const handleModalClose = useCallback(() => {
