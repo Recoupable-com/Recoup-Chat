@@ -20,6 +20,8 @@ import FileDragOverlay from "./FileDragOverlay";
 import { Loader } from "lucide-react";
 import { memo } from "react";
 import { useOrganization } from "@/providers/OrganizationProvider";
+import { useArtistConnectorCallback } from "@/hooks/useArtistConnectorCallback";
+import { ArtistConnectorSuccessBanner } from "../ArtistConnectorSuccessBanner";
 
 interface ChatProps {
   id: string;
@@ -51,6 +53,7 @@ function ChatContentMemoized({
   useAutoLogin();
   useArtistFromRoom(id);
   const { getRootProps, isDragActive } = useDropzone();
+  const { showSuccess, connectedToolkit } = useArtistConnectorCallback();
 
   const { isVisible } = useVisibilityDelay({
     shouldBeVisible: messages.length === 0 && !reportId && status === "ready",
@@ -87,6 +90,7 @@ function ChatContentMemoized({
       )}
       {...getRootProps()}
     >
+      <ArtistConnectorSuccessBanner show={showSuccess} toolkit={connectedToolkit} />
       {isDragActive && <FileDragOverlay />}
       <div className="absolute w-full h-6 bg-gradient-to-t from-transparent via-background/80 to-background z-10 top-0"></div>
       {isVisible ? (
