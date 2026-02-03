@@ -14,10 +14,12 @@ const statusColors: Record<Sandbox["sandboxStatus"], string> = {
 
 export default function SandboxListCard({ sandbox }: SandboxListCardProps) {
   return (
-    <div className="rounded-lg border border-border p-3">
-      <div className="flex items-center justify-between">
-        <p className="text-sm font-medium font-mono">{sandbox.sandboxId}</p>
-        <div className="flex items-center gap-2">
+    <div className="overflow-hidden rounded-lg border border-border p-3">
+      <div className="flex min-w-0 items-center justify-between gap-2">
+        <p className="min-w-0 truncate text-sm font-medium font-mono">
+          {sandbox.sandboxId}
+        </p>
+        <div className="flex shrink-0 items-center gap-2">
           <span
             className={`h-2 w-2 rounded-full ${statusColors[sandbox.sandboxStatus]}`}
           />
@@ -26,7 +28,7 @@ export default function SandboxListCard({ sandbox }: SandboxListCardProps) {
           </span>
         </div>
       </div>
-      <p className="mt-1 text-xs text-muted-foreground">
+      <p className="mt-1 truncate text-xs text-muted-foreground">
         Created: {new Date(sandbox.createdAt).toLocaleString()}
       </p>
     </div>
