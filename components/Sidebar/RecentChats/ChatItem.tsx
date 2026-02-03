@@ -1,4 +1,4 @@
-import { useState, type RefObject, type MouseEvent } from "react";
+import { useState, useEffect, type RefObject, type MouseEvent } from "react";
 import { MoreHorizontal, Pencil, Trash2, Check } from "lucide-react";
 import type { Conversation } from "@/types/Chat";
 import type { ArtistAgent } from "@/lib/supabase/getArtistAgents";
@@ -47,6 +47,10 @@ const ChatItem = ({
   const [displayName, setDisplayName] = useState(
     getChatDisplayInfo(chatRoom).displayName
   );
+
+  useEffect(() => {
+    setDisplayName(getChatDisplayInfo(chatRoom).displayName);
+  }, [chatRoom]);
 
   const showOptions = isMobile || isHovered || isActive;
   const isOptimisticChatItem =
