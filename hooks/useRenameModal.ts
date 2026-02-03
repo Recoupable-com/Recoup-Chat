@@ -36,7 +36,7 @@ export function useRenameModal({
   onClose,
 }: UseRenameModalParams) {
   const accessToken = useAccessToken();
-  const { updateConversationTopic } = useConversationsProvider();
+  const { refetchConversations } = useConversationsProvider();
 
   const [name, setName] = useState("");
   const [error, setError] = useState("");
@@ -105,7 +105,7 @@ export function useRenameModal({
           topic: name,
         });
 
-        updateConversationTopic(chatId, name);
+        await refetchConversations();
         onClose();
       } catch (err) {
         setError(
@@ -116,7 +116,7 @@ export function useRenameModal({
         setIsSubmitting(false);
       }
     },
-    [name, accessToken, chatRoom, updateConversationTopic, onClose]
+    [name, accessToken, chatRoom, refetchConversations, onClose]
   );
 
   const handleModalClose = useCallback(() => {

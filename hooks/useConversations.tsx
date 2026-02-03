@@ -108,17 +108,8 @@ const useConversations = () => {
     return chatId;
   };
 
-  const updateConversationTopic = (chatId: string, newTopic: string) => {
-    queryClient.setQueryData<Conversation[]>(queryKey, (prev = []) =>
-      prev.map((conv) =>
-        conv.id === chatId ? { ...conv, topic: newTopic } : conv
-      )
-    );
-  };
-
   return {
     addOptimisticConversation,
-    updateConversationTopic,
     refetchConversations: refetch,
     conversations,
     isLoading,
