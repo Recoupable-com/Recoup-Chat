@@ -87,7 +87,6 @@ const RecentChats = ({ toggleModal }: { toggleModal: () => void }) => {
         isOpen={isRenameModalOpen}
         onClose={closeModal}
         chatRoom={modalState.chatRoom}
-        onRename={handleApiAction}
       />
 
       <DeleteConfirmationModal
