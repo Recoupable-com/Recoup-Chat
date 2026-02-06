@@ -15,7 +15,7 @@ interface CreateSandboxResponse {
 }
 
 export async function createSandbox(
-  command: string,
+  prompt: string,
   accessToken: string
 ): Promise<Sandbox[]> {
   const response = await fetch(`${NEW_API_BASE_URL}/api/sandboxes`, {
@@ -24,7 +24,10 @@ export async function createSandbox(
       "Content-Type": "application/json",
       Authorization: `Bearer ${accessToken}`,
     },
-    body: JSON.stringify({ command }),
+    body: JSON.stringify({
+      command: "opencode",
+      args: ["run", prompt],
+    }),
   });
 
   const data: CreateSandboxResponse = await response.json();
