@@ -1,10 +1,14 @@
+import { useMemo } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { usePrivy } from "@privy-io/react-auth";
 import { getSandboxes } from "@/lib/sandboxes/getSandboxes";
+import { convertFileTreeEntries } from "@/lib/sandboxes/convertFileTreeEntries";
 import type { Sandbox } from "@/lib/sandboxes/createSandbox";
+import type { FileNode } from "@/lib/sandboxes/parseFileTree";
 
 interface UseSandboxesReturn {
   sandboxes: Sandbox[];
+  filetree: FileNode[];
   isLoading: boolean;
   error: Error | null;
   refetch: () => void;
@@ -25,8 +29,17 @@ export default function useSandboxes(): UseSandboxesReturn {
     enabled: authenticated,
   });
 
+  const filetree = useMemo(
+    () =>
+      query.data?.filetree
+        ? convertFileTreeEntries(query.data.filetree)
+        : [],
+    [query.data?.filetree]
+  );
+
   return {
-    sandboxes: query.data || [],
+    sandboxes: query.data?.sandboxes || [],
+    filetree,
     isLoading: query.isLoading,
     error: query.error,
     refetch: query.refetch,
