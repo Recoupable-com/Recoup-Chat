@@ -30,8 +30,8 @@ export default function SandboxesPage() {
         </div>
       ) : (
         <>
-          <SandboxList sandboxes={sandboxes} />
           <SandboxFileTree filetree={filetree} />
+          <SandboxList sandboxes={sandboxes} />
         </>
       )}
     </div>
