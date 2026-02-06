@@ -5,6 +5,7 @@ export interface Sandbox {
   sandboxStatus: "pending" | "running" | "stopping" | "stopped" | "failed";
   timeout: number;
   createdAt: string;
+  runId?: string;
 }
 
 interface CreateSandboxResponse {
@@ -14,7 +15,7 @@ interface CreateSandboxResponse {
 }
 
 export async function createSandbox(
-  prompt: string,
+  command: string,
   accessToken: string
 ): Promise<Sandbox[]> {
   const response = await fetch(`${NEW_API_BASE_URL}/api/sandboxes`, {
@@ -23,7 +24,7 @@ export async function createSandbox(
       "Content-Type": "application/json",
       Authorization: `Bearer ${accessToken}`,
     },
-    body: JSON.stringify({ prompt }),
+    body: JSON.stringify({ command }),
   });
 
   const data: CreateSandboxResponse = await response.json();
