@@ -9,7 +9,6 @@ import type { FileNode } from "@/lib/sandboxes/parseFileTree";
 
 interface SandboxFileTreeProps {
   filetree: FileNode[];
-  onSelect?: (path: string) => void;
 }
 
 function FileNodeComponent({ node }: { node: FileNode }) {
@@ -28,7 +27,6 @@ function FileNodeComponent({ node }: { node: FileNode }) {
 
 export default function SandboxFileTree({
   filetree,
-  onSelect,
 }: SandboxFileTreeProps) {
   if (filetree.length === 0) {
     return null;
@@ -37,7 +35,7 @@ export default function SandboxFileTree({
   return (
     <div className="w-full max-w-md">
       <h2 className="mb-2 text-lg font-medium">Repository Files</h2>
-      <FileTree onSelect={onSelect}>
+      <FileTree>
         {filetree.map((node) => (
           <FileNodeComponent key={node.path} node={node} />
         ))}
