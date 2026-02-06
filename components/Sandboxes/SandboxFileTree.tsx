@@ -1,28 +1,11 @@
 "use client";
 
-import {
-  FileTree,
-  FileTreeFile,
-  FileTreeFolder,
-} from "@/components/ai-elements/file-tree";
+import { FileTree } from "@/components/ai-elements/file-tree";
 import type { FileNode } from "@/lib/sandboxes/parseFileTree";
+import FileNodeComponent from "./FileNodeComponent";
 
 interface SandboxFileTreeProps {
   filetree: FileNode[];
-}
-
-function FileNodeComponent({ node }: { node: FileNode }) {
-  if (node.type === "folder") {
-    return (
-      <FileTreeFolder path={node.path} name={node.name}>
-        {node.children?.map((child) => (
-          <FileNodeComponent key={child.path} node={child} />
-        ))}
-      </FileTreeFolder>
-    );
-  }
-
-  return <FileTreeFile path={node.path} name={node.name} />;
 }
 
 export default function SandboxFileTree({
