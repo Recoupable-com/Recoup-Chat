@@ -3,10 +3,11 @@
 import { Loader } from "lucide-react";
 import SandboxCreateSection from "@/components/Sandboxes/SandboxCreateSection";
 import SandboxList from "@/components/Sandboxes/SandboxList";
+import SandboxFileTree from "@/components/Sandboxes/SandboxFileTree";
 import useSandboxes from "@/hooks/useSandboxes";
 
 export default function SandboxesPage() {
-  const { sandboxes, isLoading, error, refetch } = useSandboxes();
+  const { sandboxes, filetree, isLoading, error, refetch } = useSandboxes();
 
   return (
     <div className="flex h-screen flex-col items-center justify-center gap-6 p-4">
@@ -28,7 +29,10 @@ export default function SandboxesPage() {
           </button>
         </div>
       ) : (
-        <SandboxList sandboxes={sandboxes} />
+        <>
+          <SandboxFileTree filetree={filetree} />
+          <SandboxList sandboxes={sandboxes} />
+        </>
       )}
     </div>
   );

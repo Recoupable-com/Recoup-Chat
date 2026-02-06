@@ -1,13 +1,22 @@
 import { NEW_API_BASE_URL } from "@/lib/consts";
 import type { Sandbox } from "./createSandbox";
+import type { FileTreeEntry } from "./convertFileTreeEntries";
 
 interface GetSandboxesResponse {
   status: "success" | "error";
   sandboxes?: Sandbox[];
+  filetree?: FileTreeEntry[];
   error?: string;
 }
 
-export async function getSandboxes(accessToken: string): Promise<Sandbox[]> {
+export interface GetSandboxesResult {
+  sandboxes: Sandbox[];
+  filetree: FileTreeEntry[];
+}
+
+export async function getSandboxes(
+  accessToken: string
+): Promise<GetSandboxesResult> {
   const response = await fetch(`${NEW_API_BASE_URL}/api/sandboxes`, {
     method: "GET",
     headers: {
@@ -21,5 +30,8 @@ export async function getSandboxes(accessToken: string): Promise<Sandbox[]> {
     throw new Error(data.error || "Failed to fetch sandboxes");
   }
 
-  return data.sandboxes || [];
+  return {
+    sandboxes: data.sandboxes || [],
+    filetree: data.filetree || [],
+  };
 }
