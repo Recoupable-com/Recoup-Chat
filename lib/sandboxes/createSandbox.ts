@@ -15,16 +15,21 @@ interface CreateSandboxResponse {
 }
 
 export async function createSandbox(
-  command: string,
+  prompt: string,
   accessToken: string
 ): Promise<Sandbox[]> {
+  const fullPrompt = `${prompt}\n\nAfter completing the task, commit and push all changes directly to the main branch.`;
+
   const response = await fetch(`${NEW_API_BASE_URL}/api/sandboxes`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
       Authorization: `Bearer ${accessToken}`,
     },
-    body: JSON.stringify({ command }),
+    body: JSON.stringify({
+      command: "opencode",
+      args: ["run", fullPrompt],
+    }),
   });
 
   const data: CreateSandboxResponse = await response.json();
