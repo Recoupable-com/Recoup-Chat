@@ -2,6 +2,7 @@
 
 import { Loader } from "lucide-react";
 import SandboxCreateSection from "@/components/Sandboxes/SandboxCreateSection";
+import SandboxDeleteButton from "@/components/Sandboxes/SandboxDeleteButton";
 import SandboxList from "@/components/Sandboxes/SandboxList";
 import SandboxFileTree from "@/components/Sandboxes/SandboxFileTree";
 import useSandboxes from "@/hooks/useSandboxes";
@@ -11,7 +12,12 @@ export default function SandboxesPage() {
 
   return (
     <div className="flex h-screen flex-col items-center justify-center gap-6 p-4">
-      <h1 className="text-2xl font-semibold">Sandboxes</h1>
+      <div className="flex items-center gap-3">
+        <h1 className="text-2xl font-semibold">Sandboxes</h1>
+        {(sandboxes.length > 0 || filetree.length > 0) && (
+          <SandboxDeleteButton onSuccess={refetch} />
+        )}
+      </div>
       <SandboxCreateSection onSuccess={refetch} />
       {isLoading ? (
         <div className="flex items-center gap-2 text-muted-foreground">
