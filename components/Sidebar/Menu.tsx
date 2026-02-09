@@ -55,7 +55,7 @@ const Menu = ({ isExpanded }: { isExpanded: boolean }) => {
         <button
           type="button"
           className={cn(
-            "inline-flex items-center h-8 rounded-lg whitespace-nowrap overflow-hidden transition-all duration-200 text-sm font-medium text-foreground hover:bg-muted",
+            "inline-flex items-center h-8 rounded-lg whitespace-nowrap overflow-hidden transition-all duration-200 text-sm font-normal text-foreground hover:bg-muted",
             isExpanded ? "w-full justify-start gap-2 px-3" : "w-8 justify-center mx-auto gap-0"
           )}
           onClick={() => goToItem("chat")}

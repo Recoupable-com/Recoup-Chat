@@ -23,7 +23,7 @@ const Logo = ({ isExpanded = false }: { isExpanded?: boolean }) => {
       />
       {/* Brand name — fades in/out alongside sidebar */}
       <span className={cn(
-        "font-semibold text-lg text-foreground whitespace-nowrap overflow-hidden transition-all duration-200 font-heading",
+        "font-semibold text-base text-foreground whitespace-nowrap overflow-hidden transition-all duration-200 font-heading",
         isExpanded ? "opacity-100 max-w-[150px] ml-2" : "opacity-0 max-w-0 ml-0"
       )}>
         Recoupable

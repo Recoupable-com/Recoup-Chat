@@ -35,7 +35,7 @@ const NavButton = ({
       onClick={onClick}
       onMouseEnter={onHover}
       className={cn(
-        "rounded-lg whitespace-nowrap overflow-hidden transition-all duration-200 h-8 relative",
+        "rounded-lg whitespace-nowrap overflow-hidden transition-all duration-200 h-8 relative text-sm font-normal",
         isExpanded ? "w-full flex justify-start gap-2 px-3" : "w-8 mx-auto gap-0",
         {
           "bg-muted text-foreground hover:bg-muted": isActive,
