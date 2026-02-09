@@ -89,7 +89,7 @@ const ChatItem = ({
 
   return (
     <div
-      className={`flex gap-2 items-center w-full py-1.5 px-2 rounded-xl transition-all duration-150 relative ${
+      className={`flex gap-1.5 items-center w-full py-1 px-2 rounded-lg transition-all duration-150 relative ${
         isSelected
           ? "bg-primary/20 dark:bg-primary/30 border border-primary/30 dark:border-primary/40"
           : isActive
@@ -125,7 +125,7 @@ const ChatItem = ({
         type="button"
         onClick={handleClick}
       >
-        <p className={`text-sm truncate dark:text-muted-foreground ${isActive ? "font-medium" : ""}`}>
+        <p className={`text-xs truncate dark:text-muted-foreground ${isActive ? "font-medium" : ""}`}>
           {displayText}
         </p>
       </button>

@@ -1,9 +1,9 @@
 import UserProfileButton from "./UserProfileButton";
 
-const UserInfo = () => {
+const UserInfo = ({ isExpanded }: { isExpanded?: boolean }) => {
   return (
     <div className="w-full">
-      <UserProfileButton />
+      <UserProfileButton isExpanded={isExpanded} />
     </div>
   );
 };

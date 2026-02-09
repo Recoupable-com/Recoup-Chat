@@ -40,7 +40,7 @@ const RecentChats = ({ toggleModal }: { toggleModal: () => void }) => {
 
   return (
     <div className="w-full flex-grow min-h-0 flex flex-col">
-      <div className="h-[1px] bg-border w-full mt-1 mb-2 md:mt-2 md:mb-3 shrink-0" />
+      <div className="h-[1px] bg-border w-full mt-1 mb-1.5 md:mt-1.5 md:mb-2 shrink-0" />
 
       {isSelectionMode ? (
         <SelectionModeHeader
@@ -49,11 +49,11 @@ const RecentChats = ({ toggleModal }: { toggleModal: () => void }) => {
           onDelete={handleBulkDelete}
         />
       ) : (
-        <p className="text-xs font-medium text-muted-foreground px-2 shrink-0 mb-2">
+        <p className="text-[10px] uppercase tracking-wider font-medium text-muted-foreground px-2 shrink-0 mb-1">
           Recent Chats
         </p>
       )}
-      <div className="overflow-y-auto space-y-1 flex-grow">
+      <div className="overflow-y-auto space-y-0.5 flex-grow">
         {showSkeleton ? (
           <RecentChatSkeleton />
         ) : (

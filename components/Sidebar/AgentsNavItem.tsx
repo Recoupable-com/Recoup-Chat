@@ -3,9 +3,11 @@ import NavButton from "./NavButton";
 
 const AgentsNavItem = ({
   isActive,
+  isExpanded,
   onClick,
 }: {
   isActive: boolean;
+  isExpanded?: boolean;
   onClick: () => void;
 }) => {
   const { prefetchAgents } = useAgentData();
@@ -15,6 +17,7 @@ const AgentsNavItem = ({
       icon="robot"
       label="Agents"
       isActive={isActive}
+      isExpanded={isExpanded}
       onClick={onClick}
       aria-label="View agents"
       onHover={prefetchAgents}

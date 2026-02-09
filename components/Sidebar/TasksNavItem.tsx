@@ -2,9 +2,11 @@ import NavButton from "./NavButton";
 
 const TasksNavItem = ({
   isActive,
+  isExpanded,
   onClick,
 }: {
   isActive: boolean;
+  isExpanded?: boolean;
   onClick: () => void;
 }) => {
   return (
@@ -12,6 +14,7 @@ const TasksNavItem = ({
       icon="clock"
       label="Tasks"
       isActive={isActive}
+      isExpanded={isExpanded}
       onClick={onClick}
       aria-label="View tasks"
     />
