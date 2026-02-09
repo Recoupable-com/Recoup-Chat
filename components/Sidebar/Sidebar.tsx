@@ -1,31 +1,29 @@
 "use client";
 
 import { useState } from "react";
-import MiniMenu from "./MiniMenu";
 import { motion } from "framer-motion";
 import Menu from "./Menu";
 import AccountModal from "../AccountModal";
 import OrgSettingsModal from "../Organization/OrgSettingsModal";
 import CreateOrgModal from "../Organization/CreateOrgModal";
+import useIsMobile from "@/hooks/useIsMobile";
 
 const Sidebar = () => {
-  const [menuExpanded, setMenuExpanded] = useState(true);
-  const toggleMenuExpanded = () => setMenuExpanded(!menuExpanded);
-  const animate = { width: menuExpanded ? 265 : 80 };
-  const initial = { width: 265 };
+  const [menuExpanded, setMenuExpanded] = useState(false);
+  const isMobile = useIsMobile();
+  const animate = { width: menuExpanded ? 240 : 56 };
+  const initial = { width: 56 };
 
   return (
     <motion.div
-      className="bg-sidebar"
+      className="bg-sidebar overflow-hidden"
       animate={animate}
       initial={initial}
       transition={{ duration: 0.2 }}
+      onMouseEnter={() => setMenuExpanded(!isMobile)}
+      onMouseLeave={() => setMenuExpanded(false)}
     >
-      {menuExpanded ? (
-        <Menu toggleMenuExpanded={toggleMenuExpanded} />
-      ) : (
-        <MiniMenu toggleMenuExpanded={toggleMenuExpanded} />
-      )}
+      <Menu isExpanded={menuExpanded} />
       <AccountModal />
       <OrgSettingsModal />
       <CreateOrgModal />
