@@ -7,6 +7,7 @@ interface NavButtonProps {
   icon: IconsType;
   label: string;
   isActive: boolean;
+  isExpanded?: boolean;
   onClick: () => void;
   shouldRender?: boolean;
   "aria-label"?: string;
@@ -17,6 +18,7 @@ const NavButton = ({
   icon,
   label,
   isActive,
+  isExpanded = true,
   onClick,
   shouldRender = true,
   "aria-label": ariaLabel,
@@ -29,16 +31,30 @@ const NavButton = ({
   return (
     <Button
       variant="ghost"
+      size={isExpanded ? "sm" : "icon"}
       onClick={onClick}
       onMouseEnter={onHover}
-      className={cn("rounded-xl w-full flex justify-start", {
-        "bg-muted text-foreground ring-1 ring-border hover:bg-muted": isActive,
-        "text-foreground hover:bg-muted hover:ring-1 hover:ring-border": !isActive,
-      })}
-      aria-label={ariaLabel}
+      className={cn(
+        "rounded-lg whitespace-nowrap overflow-hidden transition-all duration-200 h-8 relative text-sm font-normal",
+        isExpanded ? "w-full flex justify-start gap-2 px-3" : "w-8 mx-auto gap-0",
+        {
+          "bg-muted text-foreground hover:bg-muted": isActive,
+          "text-foreground hover:bg-muted": !isActive,
+        }
+      )}
+      aria-label={ariaLabel || label}
     >
+      {/* Active page accent bar */}
+      {isActive && isExpanded && (
+        <div className="absolute left-0 top-1.5 bottom-1.5 w-[3px] rounded-r-full bg-[#345A5D]" />
+      )}
       <MenuItemIcon name={icon} />
-      {label}
+      <span className={cn(
+        "overflow-hidden transition-all duration-200",
+        isExpanded ? "opacity-100 max-w-[150px]" : "opacity-0 max-w-0"
+      )}>
+        {label}
+      </span>
     </Button>
   );
 };

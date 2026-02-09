@@ -11,6 +11,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { IconLogout, IconUser } from "@tabler/icons-react";
 import { useUserProvider } from "@/providers/UserProvder";
+import { usePaymentProvider } from "@/providers/PaymentProvider";
 import CreditsUsage from "./CreditsUsage";
 import AccountIdDisplay from "@/components/ArtistSetting/AccountIdDisplay";
 import ManageSubscriptionButton from "./ManageSubscriptionButton";
@@ -21,6 +22,7 @@ import { Check } from "lucide-react";
 
 const UserProfileDropdown = () => {
   const { toggleModal, signOut, userData } = useUserProvider();
+  const { isSubscribed } = usePaymentProvider();
   const { theme, setTheme } = useTheme();
 
   const getThemeIcon = () => {
@@ -34,6 +36,13 @@ const UserProfileDropdown = () => {
         <DropdownMenuLabel className="text-sm font-semibold">
           My Account
         </DropdownMenuLabel>
+        {isSubscribed && (
+          <div className="px-2 pb-1">
+            <div className="text-[10px] font-medium rounded-md bg-muted text-foreground px-2 py-1 text-center border border-border">
+              Recoupable Pro: Active
+            </div>
+          </div>
+        )}
         {userData?.account_id && (
           <div className="px-2 py-1.5">
             <AccountIdDisplay

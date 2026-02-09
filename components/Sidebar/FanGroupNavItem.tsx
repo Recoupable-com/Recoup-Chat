@@ -4,9 +4,11 @@ import NavButton from "./NavButton";
 
 const FanGroupNavItem = ({
   isActive,
+  isExpanded,
   onClick,
 }: {
   isActive: boolean;
+  isExpanded?: boolean;
   onClick: () => void;
 }) => {
   const { selectedArtist } = useArtistProvider();
@@ -19,6 +21,7 @@ const FanGroupNavItem = ({
       icon="segments"
       label="Fans"
       isActive={isActive}
+      isExpanded={isExpanded}
       onClick={onClick}
       shouldRender={shouldRender}
     />

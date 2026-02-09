@@ -9,8 +9,9 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { ChevronDown } from "lucide-react";
+import { cn } from "@/lib/utils";
 
-const UserProfileButton = () => {
+const UserProfileButton = ({ isExpanded = true }: { isExpanded?: boolean }) => {
   const { email, userData } = useUserProvider();
   const { selectedOrgId } = useOrganization();
   const { data: organizations } = useAccountOrganizations();
@@ -52,25 +53,25 @@ const UserProfileButton = () => {
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
         <button
-          className="w-full justify-start flex items-center gap-1.5 h-12 px-1.5 rounded-xl border border-transparent hover:border-muted-foreground/20 dark:hover:border-[#444] cursor-pointer focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2"
+          className="w-full justify-start flex items-center gap-1.5 h-9 px-1 rounded-xl border border-transparent hover:border-muted-foreground/20 dark:hover:border-[#444] cursor-pointer focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2"
           aria-label="Open user menu"
         >
-          <Avatar className="h-10 w-10">
+          <Avatar className="h-7 w-7 shrink-0">
             <AvatarImage src={avatarImage!} alt={primaryName} />
-            <AvatarFallback>{avatarInitials}</AvatarFallback>
+            <AvatarFallback className="text-[10px]">{avatarInitials}</AvatarFallback>
           </Avatar>
-          <div className="flex-1 min-w-0 text-left overflow-hidden">
-            <p className="text-xs font-semibold truncate dark:text-white leading-tight">
+          <div className={cn(
+            "min-w-0 text-left overflow-hidden transition-all duration-200",
+            isExpanded ? "opacity-100 max-w-[150px] flex-1" : "opacity-0 max-w-0"
+          )}>
+            <p className="text-xs font-medium truncate dark:text-white leading-tight">
               {primaryName}
             </p>
-            <p
-              className="text-[10px] text-muted-foreground dark:text-muted-foreground truncate leading-tight"
-              title={secondaryName}
-            >
-              {secondaryName}
-            </p>
           </div>
-          <ChevronDown className="h-4 w-4 shrink-0 text-muted-foreground ml-auto" />
+          <ChevronDown className={cn(
+            "h-3.5 w-3.5 shrink-0 text-muted-foreground transition-all duration-200",
+            isExpanded ? "opacity-100 ml-auto" : "opacity-0 max-w-0 overflow-hidden"
+          )} />
         </button>
       </DropdownMenuTrigger>
       <UserProfileDropdown />
