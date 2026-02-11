@@ -1,5 +1,6 @@
 import { useQuery, UseQueryResult } from "@tanstack/react-query";
 import { useUserProvider } from "@/providers/UserProvder";
+import { useAccessToken } from "@/hooks/useAccessToken";
 import { NEW_API_BASE_URL } from "@/lib/consts";
 
 export interface AccountOrganization {
@@ -14,12 +15,17 @@ interface OrganizationsResponse {
 }
 
 /**
- * Fetch account's organizations from the API
+ * Fetch account's organizations from the API.
+ * The API resolves the account from the Bearer token — no query params needed.
  */
 const fetchAccountOrganizations = async (
-  accountId: string
+  accessToken: string,
 ): Promise<AccountOrganization[]> => {
-  const response = await fetch(`${NEW_API_BASE_URL}/api/organizations?accountId=${accountId}`);
+  const response = await fetch(`${NEW_API_BASE_URL}/api/organizations`, {
+    headers: {
+      Authorization: `Bearer ${accessToken}`,
+    },
+  });
   if (!response.ok) {
     throw new Error(`Error: ${response.status}`);
   }
@@ -32,10 +38,11 @@ const fetchAccountOrganizations = async (
  */
 const useAccountOrganizations = (): UseQueryResult<AccountOrganization[]> => {
   const { userData } = useUserProvider();
+  const accessToken = useAccessToken();
   return useQuery({
     queryKey: ["accountOrganizations", userData?.account_id],
-    queryFn: () => fetchAccountOrganizations(userData?.account_id || ""),
-    enabled: !!userData?.account_id,
+    queryFn: () => fetchAccountOrganizations(accessToken!),
+    enabled: !!userData?.account_id && !!accessToken,
     staleTime: 10 * 60 * 1000, // 10 minutes
     refetchOnWindowFocus: false,
   });
