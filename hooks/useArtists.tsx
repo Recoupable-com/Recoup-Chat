@@ -9,7 +9,7 @@ import saveArtist from "@/lib/saveArtist";
 import useInitialArtists from "./useInitialArtists";
 import useCreateArtists from "./useCreateArtists";
 import { useAccessToken } from "@/hooks/useAccessToken";
-import { NEW_API_BASE_URL } from "@/lib/consts";
+import { fetchArtists } from "@/lib/artists/fetchArtists";
 
 // Helper function to sort artists with pinned first, then alphabetically
 const sortArtistsWithPinnedFirst = (artists: ArtistRecord[]): ArtistRecord[] => {
@@ -85,21 +85,7 @@ const useArtists = () => {
         return;
       }
 
-      // Build URL with org filter (account derived from Bearer token auth)
-      // When org_id is omitted, API defaults to personal artists
-      const params = new URLSearchParams();
-
-      if (selectedOrgId) {
-        params.set("org_id", selectedOrgId);
-      }
-
-      const response = await fetch(`${NEW_API_BASE_URL}/api/artists?${params.toString()}`, {
-        headers: {
-          Authorization: `Bearer ${accessToken}`,
-        },
-      });
-      const data = await response.json();
-      const newArtists: ArtistRecord[] = data.artists;
+      const newArtists = await fetchArtists(accessToken, selectedOrgId);
       setArtists(newArtists);
 
       if (newArtists.length === 0) {
