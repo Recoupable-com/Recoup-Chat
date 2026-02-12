@@ -86,12 +86,10 @@ const useArtists = () => {
       }
 
       // Build URL with org filter (account derived from Bearer token auth)
+      // When org_id is omitted, API defaults to personal artists
       const params = new URLSearchParams();
 
-      // Pass org filter: personal=true for personal only, org_id for specific org
-      if (selectedOrgId === null) {
-        params.set("personal", "true");
-      } else if (selectedOrgId) {
+      if (selectedOrgId) {
         params.set("org_id", selectedOrgId);
       }
 
