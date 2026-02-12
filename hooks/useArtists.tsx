@@ -8,6 +8,7 @@ import useArtistMode from "./useArtistMode";
 import saveArtist from "@/lib/saveArtist";
 import useInitialArtists from "./useInitialArtists";
 import useCreateArtists from "./useCreateArtists";
+import { useAccessToken } from "@/hooks/useAccessToken";
 import { NEW_API_BASE_URL } from "@/lib/consts";
 
 // Helper function to sort artists with pinned first, then alphabetically
@@ -29,6 +30,7 @@ const useArtists = () => {
   const [isLoading, setIsLoading] = useState(true);
   const { email, userData } = useUserProvider();
   const { selectedOrgId } = useOrganization();
+  const accessToken = useAccessToken();
   const [artists, setArtists] = useState<ArtistRecord[]>([]);
   const [selectedArtist, setSelectedArtist] = useState<ArtistRecord | null>(
     null
@@ -78,24 +80,26 @@ const useArtists = () => {
 
   const getArtists = useCallback(
     async (artistId?: string) => {
-      if (!userData?.id) {
+      if (!userData?.id || !accessToken) {
         setArtists([]);
         return;
       }
 
-      // Build URL with orgId filter
-      const params = new URLSearchParams({
-        accountId: userData.id as string,
-      });
-      
-      // Pass org filter: personal=true for personal only, orgId for specific org
+      // Build URL with org filter (account derived from Bearer token auth)
+      const params = new URLSearchParams();
+
+      // Pass org filter: personal=true for personal only, org_id for specific org
       if (selectedOrgId === null) {
         params.set("personal", "true");
       } else if (selectedOrgId) {
-        params.set("orgId", selectedOrgId);
+        params.set("org_id", selectedOrgId);
       }
 
-      const response = await fetch(`${NEW_API_BASE_URL}/api/artists?${params.toString()}`);
+      const response = await fetch(`${NEW_API_BASE_URL}/api/artists?${params.toString()}`, {
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
+      });
       const data = await response.json();
       const newArtists: ArtistRecord[] = data.artists;
       setArtists(newArtists);
@@ -129,7 +133,7 @@ const useArtists = () => {
 
       setIsLoading(false);
     },
-    [userData, selectedOrgId]
+    [userData, selectedOrgId, accessToken]
   );
 
   const saveSetting = async (
