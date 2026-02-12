@@ -8,7 +8,8 @@ import useArtistMode from "./useArtistMode";
 import saveArtist from "@/lib/saveArtist";
 import useInitialArtists from "./useInitialArtists";
 import useCreateArtists from "./useCreateArtists";
-import { NEW_API_BASE_URL } from "@/lib/consts";
+import { useAccessToken } from "@/hooks/useAccessToken";
+import { fetchArtists } from "@/lib/artists/fetchArtists";
 
 // Helper function to sort artists with pinned first, then alphabetically
 const sortArtistsWithPinnedFirst = (artists: ArtistRecord[]): ArtistRecord[] => {
@@ -29,6 +30,7 @@ const useArtists = () => {
   const [isLoading, setIsLoading] = useState(true);
   const { email, userData } = useUserProvider();
   const { selectedOrgId } = useOrganization();
+  const accessToken = useAccessToken();
   const [artists, setArtists] = useState<ArtistRecord[]>([]);
   const [selectedArtist, setSelectedArtist] = useState<ArtistRecord | null>(
     null
@@ -78,26 +80,12 @@ const useArtists = () => {
 
   const getArtists = useCallback(
     async (artistId?: string) => {
-      if (!userData?.id) {
+      if (!userData?.id || !accessToken) {
         setArtists([]);
         return;
       }
 
-      // Build URL with orgId filter
-      const params = new URLSearchParams({
-        accountId: userData.id as string,
-      });
-      
-      // Pass org filter: personal=true for personal only, orgId for specific org
-      if (selectedOrgId === null) {
-        params.set("personal", "true");
-      } else if (selectedOrgId) {
-        params.set("orgId", selectedOrgId);
-      }
-
-      const response = await fetch(`${NEW_API_BASE_URL}/api/artists?${params.toString()}`);
-      const data = await response.json();
-      const newArtists: ArtistRecord[] = data.artists;
+      const newArtists = await fetchArtists(accessToken, selectedOrgId);
       setArtists(newArtists);
 
       if (newArtists.length === 0) {
@@ -129,7 +117,7 @@ const useArtists = () => {
 
       setIsLoading(false);
     },
-    [userData, selectedOrgId]
+    [userData, selectedOrgId, accessToken]
   );
 
   const saveSetting = async (
